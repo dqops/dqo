@@ -19,7 +19,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -58,6 +61,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -182,7 +188,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -221,6 +230,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -345,7 +357,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -384,6 +399,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -507,7 +525,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_within_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -536,6 +557,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_within_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -650,7 +674,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_within_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -679,6 +706,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_within_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -793,7 +823,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_within_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -822,6 +855,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_within_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -937,7 +973,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -976,6 +1015,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1096,7 +1138,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1135,6 +1180,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1255,7 +1303,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1294,6 +1345,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1413,7 +1467,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_within_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1442,6 +1499,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_within_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1552,7 +1612,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_within_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1581,6 +1644,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_within_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1691,7 +1757,10 @@ Data quality rule that verifies if a data quality sensor readout value
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_within_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1720,6 +1789,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_within_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)

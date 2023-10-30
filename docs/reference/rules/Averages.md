@@ -18,7 +18,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/between_percent_moving_average_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -53,6 +56,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/between_percent_moving_average_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -140,7 +146,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/between_percent_moving_average_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -175,6 +184,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/between_percent_moving_average_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -262,7 +274,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/between_percent_moving_average_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -297,6 +312,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/between_percent_moving_average_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -384,7 +402,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/percent_moving_average.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -423,6 +444,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/percent_moving_average.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -509,7 +533,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/within_percent_moving_average_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -536,6 +563,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/within_percent_moving_average_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -621,7 +651,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/within_percent_moving_average_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -648,6 +681,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/within_percent_moving_average_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -733,7 +769,10 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *averages/within_percent_moving_average_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -760,6 +799,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *averages/within_percent_moving_average_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence

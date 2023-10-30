@@ -18,7 +18,10 @@ ___
 {{else}}
 {{/if}}
 {{#if ruleExample}}
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *{{fullRuleName}}.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 {{ruleExample}}
 ```
@@ -34,6 +37,9 @@ ___
 {{else}}
 {{/if}}
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *{{fullRuleName}}.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 {{{replace definition.rulePythonModuleContent.textContent '#
 # Copyright © 2021 DQOps (support@dqops.com)

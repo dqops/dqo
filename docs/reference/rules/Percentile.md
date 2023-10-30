@@ -19,7 +19,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_differencing_percentile_moving_average.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -51,6 +54,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_differencing_percentile_moving_average.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -173,7 +179,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_differencing_percentile_moving_average_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -204,6 +213,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_differencing_percentile_moving_average_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -325,7 +337,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_average.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -357,6 +372,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_stationary_percentile_moving_average.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -474,7 +492,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_average_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -505,6 +526,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_stationary_percentile_moving_average_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -624,7 +648,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/change_percentile_moving_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -667,6 +694,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/change_percentile_moving_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -798,7 +828,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/change_percentile_moving_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -841,6 +874,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/change_percentile_moving_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -972,7 +1008,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/change_percentile_moving_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1015,6 +1054,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/change_percentile_moving_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1145,7 +1187,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/percentile_moving_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1188,6 +1233,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/percentile_moving_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1315,7 +1363,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/percentile_moving_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1358,6 +1409,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/percentile_moving_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1485,7 +1539,10 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/percentile_moving_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1528,6 +1585,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/percentile_moving_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
