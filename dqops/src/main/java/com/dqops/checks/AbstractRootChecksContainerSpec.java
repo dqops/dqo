@@ -15,8 +15,11 @@
  */
 package com.dqops.checks;
 
+import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMatchCheckSpec;
+import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildFieldEntry;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -34,6 +37,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -132,6 +136,14 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     public boolean hasAnyConfiguredChecks() {
         for (ChildFieldEntry childFieldEntry : this.getChildMap().getChildEntries()) {
             HierarchyNode childNode = childFieldEntry.getGetChildFunc().apply(this);
+
+            if (this.getComparisons() != null) {
+                for (Object value : this.getComparisons().values()) {
+                    if (value instanceof AbstractCheckCategorySpec) {
+                        return true;
+                    }
+                }
+            }
 
             if (childNode instanceof AbstractCheckCategorySpec) {
                 AbstractCheckCategorySpec checkCategorySpec = (AbstractCheckCategorySpec)childNode;
