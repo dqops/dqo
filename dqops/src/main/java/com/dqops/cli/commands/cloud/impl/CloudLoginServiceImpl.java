@@ -24,7 +24,7 @@ import com.dqops.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
@@ -152,12 +152,12 @@ public class CloudLoginServiceImpl implements CloudLoginService {
     public void saveApiKeyInUserSettings(String apiKey) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        SettingsSpec settingsSpec = userHome.getSettings().getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            userHome.getSettings().setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            userHome.getSettings().setSpec(localSettingsSpec);
         }
-        settingsSpec.setApiKey(apiKey);
+        localSettingsSpec.setApiKey(apiKey);
         userHomeContext.flush();
 
         this.dqoCloudApiKeyProvider.invalidate();

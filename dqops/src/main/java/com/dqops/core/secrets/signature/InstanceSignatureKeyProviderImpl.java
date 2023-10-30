@@ -19,7 +19,7 @@ package com.dqops.core.secrets.signature;
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -80,12 +80,12 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
 
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
             SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-            SettingsSpec settingsSpec = settingsWrapper.getSpec();
+            LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
             String instanceKeyBase64String = null;
 
-            if (settingsSpec != null) {
+            if (localSettingsSpec != null) {
                 SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
-                SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+                LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
                 instanceKeyBase64String = settings.getInstanceSignatureKey();
             }
 
@@ -98,13 +98,13 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
                 instanceKeyBytes = new byte[32];
                 this.secureRandom.nextBytes(instanceKeyBytes);
 
-                if (settingsSpec == null) {
-                    settingsSpec = new SettingsSpec();
-                    settingsWrapper.setSpec(settingsSpec);
+                if (localSettingsSpec == null) {
+                    localSettingsSpec = new LocalSettingsSpec();
+                    settingsWrapper.setSpec(localSettingsSpec);
                 }
 
                 String encodedNewKey = Base64.getEncoder().encodeToString(instanceKeyBytes);
-                settingsSpec.setInstanceSignatureKey(encodedNewKey);
+                localSettingsSpec.setInstanceSignatureKey(encodedNewKey);
                 userHomeContext.flush();
             } else {
                 instanceKeyBytes = Base64.getDecoder().decode(instanceKeyBase64String);

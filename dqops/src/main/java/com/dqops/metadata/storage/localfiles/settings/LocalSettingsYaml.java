@@ -16,7 +16,7 @@
 package com.dqops.metadata.storage.localfiles.settings;
 
 import com.dqops.core.filesystem.ApiVersion;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
 
 /**
@@ -27,12 +27,12 @@ import com.dqops.metadata.storage.localfiles.SpecificationKind;
 public class LocalSettingsYaml {
 	private String apiVersion = ApiVersion.CURRENT_API_VERSION;
 	private SpecificationKind kind = SpecificationKind.SETTINGS;
-	private SettingsSpec spec = new SettingsSpec();
+	private LocalSettingsSpec spec = new LocalSettingsSpec();
 
 	public LocalSettingsYaml() {
 	}
 
-	public LocalSettingsYaml(SettingsSpec spec) {
+	public LocalSettingsYaml(LocalSettingsSpec spec) {
 		this.spec = spec;
 	}
 
@@ -72,7 +72,7 @@ public class LocalSettingsYaml {
 	 * Returns a data source specification.
 	 * @return Data source specification.
 	 */
-	public SettingsSpec getSpec() {
+	public LocalSettingsSpec getSpec() {
 		return spec;
 	}
 
@@ -80,7 +80,7 @@ public class LocalSettingsYaml {
 	 * Sets a data source specification.
 	 * @param spec Data source specification.
 	 */
-	public void setSpec(SettingsSpec spec) {
+	public void setSpec(LocalSettingsSpec spec) {
 		this.spec = spec;
 	}
 }

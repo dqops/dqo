@@ -18,7 +18,7 @@ DQOps local settings that are stored in the .localsettings.dqosettings.yaml file
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |[kind](#specificationkind)||[SpecificationKind](#specificationkind)|table<br/>default_schedules<br/>dashboards<br/>source<br/>sensor<br/>check<br/>default_checks<br/>rule<br/>file_index<br/>settings<br/>default_notifications<br/>provider_sensor<br/>| | |
-|[spec](#settingsspec)||[SettingsSpec](#settingsspec)| | | |
+|[spec](#localsettingsspec)||[LocalSettingsSpec](#localsettingsspec)| | | |
 
 
 
@@ -30,8 +30,8 @@ DQOps local settings that are stored in the .localsettings.dqosettings.yaml file
 
 ___  
 
-## SettingsSpec  
-Settings specification.  
+## LocalSettingsSpec  
+Local settings specification.  
   
 
 

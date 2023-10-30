@@ -28,7 +28,7 @@ import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
@@ -345,10 +345,10 @@ public class DefaultsController {
 
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -397,10 +397,10 @@ public class DefaultsController {
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -449,10 +449,10 @@ public class DefaultsController {
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -501,10 +501,10 @@ public class DefaultsController {
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -553,10 +553,10 @@ public class DefaultsController {
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -605,10 +605,10 @@ public class DefaultsController {
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome

@@ -29,7 +29,7 @@ import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -354,18 +354,18 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     public void applyDefaultConfigurationWhenMissing() {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        SettingsSpec settingsSpec = userHome.getSettings().getSpec();
-        if (settingsSpec != null &&
+        LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
+        if (localSettingsSpec != null &&
                 userHome.getDefaultObservabilityChecks() != null && userHome.getDefaultObservabilityChecks().getSpec() != null &&
                 userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() != null &&
                 userHome.getDashboards() != null && userHome.getDashboards().getSpec() != null &&
-                (settingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
+                (localSettingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
             return;
         }
 
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            userHome.getSettings().setSpec(settingsSpec);
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            userHome.getSettings().setSpec(localSettingsSpec);
         }
 
         if (userHome.getDefaultObservabilityChecks() == null || userHome.getDefaultObservabilityChecks().getSpec() == null) {
@@ -382,13 +382,13 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             userHome.getDashboards().setSpec(new DashboardsFolderListSpec());
         }
 
-        if (settingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {
+        if (localSettingsSpec.getInstanceSignatureKey() == null && this.dqoInstanceConfigurationProperties.getSignatureKey() == null) {
             SecureRandom secureRandom = new SecureRandom();
             byte[] instanceKeyBytes = new byte[32];
             secureRandom.nextBytes(instanceKeyBytes);
 
             String encodedNewKey = Base64.getEncoder().encodeToString(instanceKeyBytes);
-            settingsSpec.setInstanceSignatureKey(encodedNewKey);
+            localSettingsSpec.setInstanceSignatureKey(encodedNewKey);
         }
 
         userHomeContext.flush();

@@ -18,7 +18,7 @@ package com.dqops.core.dqocloud.apikey;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -81,12 +81,12 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
 
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
                 SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-                SettingsSpec settingsSpec = settingsWrapper.getSpec();
+                LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
                 String apiKey = null;
 
-                if (settingsSpec != null) {
+                if (localSettingsSpec != null) {
                     SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
-                    SettingsSpec settings = settingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+                    LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
                     apiKey = settings.getApiKey();
                 }
 

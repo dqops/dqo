@@ -64,7 +64,7 @@ import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.metadata.userhome.UserHome;
@@ -453,12 +453,12 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
 
     /**
      * Accepts a settings specific specification.
-     * @param settingsSpec Settings specific configuration.
+     * @param localSettingsSpec Settings specific configuration.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(SettingsSpec settingsSpec, T parameter) {
+    public TreeNodeTraversalResult accept(LocalSettingsSpec localSettingsSpec, T parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;//we don't want to enter SettingSpec anymore
     }
 

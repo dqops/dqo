@@ -30,13 +30,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Settings specification.
+ * Local settings specification.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SettingsSpec extends AbstractSpec {
-	private static final ChildHierarchyNodeFieldMapImpl<SettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class LocalSettingsSpec extends AbstractSpec {
+	private static final ChildHierarchyNodeFieldMapImpl<LocalSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
 		{
 		}
 	};
@@ -60,13 +60,13 @@ public class SettingsSpec extends AbstractSpec {
 	/**
 	 * Default constructor.
 	 */
-	public SettingsSpec() {
+	public LocalSettingsSpec() {
 	}
 
 	/**
 	 * Editor name constructor.
 	 */
-	public SettingsSpec(String editorName) {
+	public LocalSettingsSpec(String editorName) {
 		this.editorName = editorName;
 	}
 
@@ -169,8 +169,8 @@ public class SettingsSpec extends AbstractSpec {
 	 * Creates and returns a deep copy of this object.
 	 */
 	@Override
-	public SettingsSpec deepClone() {
-		return (SettingsSpec) super.deepClone();
+	public LocalSettingsSpec deepClone() {
+		return (LocalSettingsSpec) super.deepClone();
 	}
 
 	/**
@@ -179,8 +179,8 @@ public class SettingsSpec extends AbstractSpec {
 	 * @param lookupContext Secret lookup context.
 	 * @return Trimmed and expanded version of this object.
 	 */
-	public SettingsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-		SettingsSpec cloned = (SettingsSpec) super.deepClone();
+	public LocalSettingsSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+		LocalSettingsSpec cloned = (LocalSettingsSpec) super.deepClone();
 		cloned.apiKey = secretValueProvider.expandValue(this.apiKey, lookupContext);
 		cloned.instanceSignatureKey = secretValueProvider.expandValue(this.instanceSignatureKey, lookupContext);
 		cloned.editorPath = secretValueProvider.expandValue(this.editorPath, lookupContext);

@@ -62,6 +62,19 @@ Defines a single field that is a sensor parameter or a rule parameter.
 
 ___  
 
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
+
+
+
+
+
+
+
+
+___  
+
 ## SensorDefinitionSpec  
 Data Quality sensor definition specification. Provides the configuration for a data quality sensor definition, sensor&#x27;s parameters, etc.  
   
@@ -83,19 +96,6 @@ Data Quality sensor definition specification. Provides the configuration for a d
 |default_value|Default value that is used when the sensor returns no rows. A row count sensor may return no rows when a GROUP BY condition is added to capture the database server&#x27;s local time zone. In order to always return a value, a sensor may have a default value configured.|double| | | |
 |parameters|Additional sensor definition parameters|Dict[string, string]| | | |
 
-
-
-
-
-
-
-
-
-___  
-
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
-  
 
 
 

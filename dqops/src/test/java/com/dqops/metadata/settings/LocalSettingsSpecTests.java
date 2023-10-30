@@ -16,19 +16,18 @@
 package com.dqops.metadata.settings;
 
 import com.dqops.BaseTest;
-import com.dqops.metadata.settings.SettingsSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class SettingsSpecTests extends BaseTest {
-	private SettingsSpec sut;
+public class LocalSettingsSpecTests extends BaseTest {
+	private LocalSettingsSpec sut;
 
 	@BeforeEach
 	void setUp() {
-		this.sut = new SettingsSpec();
+		this.sut = new LocalSettingsSpec();
 	}
 
 	@Test

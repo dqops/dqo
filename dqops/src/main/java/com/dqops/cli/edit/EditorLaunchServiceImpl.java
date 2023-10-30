@@ -19,7 +19,7 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.id.HierarchyId;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -191,13 +191,13 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
      */
     public void launchEditorForFile(String pathToTextFile) {
         UserHome userHome = userHomeContextFactory.openLocalUserHome().getUserHome();
-        SettingsSpec settingsSpec = userHome.getSettings().getSpec();
-        if (settingsSpec == null) {
+        LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
+        if (localSettingsSpec == null) {
             defaultOpenFile(pathToTextFile);
             return;
         }
-        String editorName = settingsSpec.getEditorName();
-        String editorPath = settingsSpec.getEditorPath();
+        String editorName = localSettingsSpec.getEditorName();
+        String editorPath = localSettingsSpec.getEditorPath();
 
         if (Strings.isNullOrEmpty(editorName)) {
             defaultOpenFile(pathToTextFile);
