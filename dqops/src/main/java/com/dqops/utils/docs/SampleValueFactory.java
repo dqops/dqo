@@ -21,4 +21,9 @@ package com.dqops.utils.docs;
  * @param <T>
  */
 public interface SampleValueFactory<T> {
+    /**
+     * Creates a sample value of desired type.
+     * @return Sample object.
+     */
+    T createSample();
 }
