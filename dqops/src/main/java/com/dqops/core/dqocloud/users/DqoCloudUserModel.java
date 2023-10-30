@@ -17,6 +17,8 @@
 package com.dqops.core.dqocloud.users;
 
 import com.dqops.core.dqocloud.login.DqoUserRole;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
@@ -38,4 +40,14 @@ public class DqoCloudUserModel {
      */
     @JsonPropertyDescription("Account role.")
     private DqoUserRole accountRole;
+
+    public static class DqoCloudUserModelSampleFactory implements SampleValueFactory<DqoCloudUserModel> {
+        @Override
+        public DqoCloudUserModel createSample() {
+            return new DqoCloudUserModel() {{
+                setEmail(SampleStringsRegistry.getUserName() + "@mail.com");
+                setAccountRole(DqoUserRole.OPERATOR);
+            }};
+        }
+    }
 }

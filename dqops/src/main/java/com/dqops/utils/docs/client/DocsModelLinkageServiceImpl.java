@@ -293,6 +293,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
             CheckTarget checkTarget = checkCategorySpec.getCheckTarget();
             pathFileNameWords.add(checkTarget.name());
             if (checkType == CheckType.monitoring || checkType == CheckType.partitioned) {
+
                 CheckTimeScale checkTimeScale = checkCategorySpec.getCheckTimeScale();
                 pathFileNameWords.add(checkTimeScale.name());
             }

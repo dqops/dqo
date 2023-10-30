@@ -21,15 +21,16 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonMonthlyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.sql.TableSqlMonthlyPartitionedChecksSpec;
-import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessMonthlyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.checks.table.partitioned.volume.TableVolumeMonthlyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -222,5 +223,14 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.partitioned_monthly;
+    }
+
+    public static class TableMonthlyPartitionedCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableMonthlyPartitionedCheckCategoriesSpec> {
+        @Override
+        public TableMonthlyPartitionedCheckCategoriesSpec createSample() {
+            return new TableMonthlyPartitionedCheckCategoriesSpec() {{
+                setVolume(new TableVolumeMonthlyPartitionedChecksSpec.TableVolumeMonthlyPartitionedChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

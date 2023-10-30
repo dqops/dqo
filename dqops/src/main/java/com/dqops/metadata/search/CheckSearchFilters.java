@@ -21,6 +21,9 @@ import com.dqops.checks.CheckType;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.pattern.SearchPattern;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -380,6 +383,29 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Cannot clone the object", ex);
+        }
+    }
+
+    public static CheckSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
+        return new CheckSearchFilters() {{
+            setConnectionName(tableSearchFilters.getConnectionName());
+            setSchemaTableName(tableSearchFilters.getSchemaTableName());
+            setEnabled(tableSearchFilters.getEnabled());
+            setTags(tableSearchFilters.getTags());
+            setLabels(tableSearchFilters.getLabels());
+        }};
+    }
+
+    public static class CheckSearchFiltersSampleFactory implements SampleValueFactory<CheckSearchFilters> {
+        @Override
+        public CheckSearchFilters createSample() {
+            CheckSearchFilters checkSearchFilters = fromTableSearchFilters(new TableSearchFilters.TableSearchFiltersSampleFactory().createSample());
+            checkSearchFilters.setColumnName(SampleStringsRegistry.getColumnName());
+
+            ColumnTypeSnapshotSpec columnTypeSnapshotSpec = new ColumnTypeSnapshotSpec.ColumnTypeSnapshotSpecSampleFactory().createSample();
+            checkSearchFilters.setColumnDataType(columnTypeSnapshotSpec.getColumnType());
+
+            return checkSearchFilters;
         }
     }
 }

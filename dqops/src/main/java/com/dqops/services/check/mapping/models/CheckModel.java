@@ -24,6 +24,8 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.services.check.matching.SimilarCheckSensorRuleKey;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -315,5 +317,19 @@ public class CheckModel implements Cloneable {
             this.configurationRequirementsErrors = new ArrayList<>();
         }
         this.configurationRequirementsErrors.add(configurationRequirementsError);
+    }
+
+    public static class CheckModelSampleFactory implements SampleValueFactory<CheckModel> {
+        @Override
+        public CheckModel createSample() {
+            CheckModel checkModel = new CheckModel() {{
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setHelpText(SampleStringsRegistry.getHelpText());
+                setSensorName(SampleStringsRegistry.getFullSensorName());
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+            }};
+            checkModel.applySampleValues();
+            return checkModel;
+        }
     }
 }

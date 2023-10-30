@@ -17,6 +17,8 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -146,5 +148,20 @@ public class CheckDefinitionModel {
         checkDefinitionSpec.setHelpText(this.helpText);
 
         return checkDefinitionSpec;
+    }
+
+    public static class CheckDefinitionModelSampleFactory implements SampleValueFactory<CheckDefinitionModel> {
+        @Override
+        public CheckDefinitionModel createSample() {
+            return new CheckDefinitionModel() {{
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setSensorName(SampleStringsRegistry.getFullSensorName());
+                setRuleName(SampleStringsRegistry.getFullRuleName());
+                setHelpText(SampleStringsRegistry.getHelpText());
+                setCustom(false);
+                setBuiltIn(false);
+                setCanEdit(true);
+            }};
+        }
     }
 }

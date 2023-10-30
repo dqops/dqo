@@ -33,13 +33,14 @@ import com.dqops.checks.column.monitoring.schema.ColumnSchemaMonthlyMonitoringCh
 import com.dqops.checks.column.monitoring.sql.ColumnSqlMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.strings.ColumnStringsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessMonthlyMonitoringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -469,5 +470,14 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.monitoring_monthly;
+    }
+
+    public static class ColumnMonthlyMonitoringCheckCategoriesSpecSampleFactory implements SampleValueFactory<ColumnMonthlyMonitoringCheckCategoriesSpec> {
+        @Override
+        public ColumnMonthlyMonitoringCheckCategoriesSpec createSample() {
+            return new ColumnMonthlyMonitoringCheckCategoriesSpec() {{
+                setNulls(new ColumnNullsMonthlyMonitoringChecksSpec.ColumnNullsMonthlyMonitoringChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

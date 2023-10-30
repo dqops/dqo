@@ -18,6 +18,8 @@ package com.dqops.rules.comparison;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -83,5 +85,12 @@ public class MaxCountRule10ParametersSpec extends AbstractRuleParametersSpec {
     @Override
     public String getRuleDefinitionName() {
         return "comparison/max_count";
+    }
+
+    public static class MaxCountRule10ParametersSpecSampleFactory implements SampleValueFactory<MaxCountRule10ParametersSpec> {
+        @Override
+        public MaxCountRule10ParametersSpec createSample() {
+            return new MaxCountRule10ParametersSpec();
+        }
     }
 }

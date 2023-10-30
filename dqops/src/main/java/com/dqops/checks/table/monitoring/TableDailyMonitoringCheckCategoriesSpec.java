@@ -26,6 +26,8 @@ import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecks
 import com.dqops.checks.table.monitoring.sql.TableSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitoringChecksSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesMode;
@@ -33,6 +35,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -305,5 +308,14 @@ public class TableDailyMonitoringCheckCategoriesSpec extends AbstractRootChecksC
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.monitoring_daily;
+    }
+
+    public static class TableDailyMonitoringCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableDailyMonitoringCheckCategoriesSpec> {
+        @Override
+        public TableDailyMonitoringCheckCategoriesSpec createSample() {
+            return new TableDailyMonitoringCheckCategoriesSpec() {{
+                setVolume(new TableVolumeDailyMonitoringChecksSpec.TableVolumeDailyMonitoringChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

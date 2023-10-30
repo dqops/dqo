@@ -24,15 +24,16 @@ import com.dqops.checks.table.monitoring.availability.TableAvailabilityMonthlyMo
 import com.dqops.checks.table.monitoring.comparison.TableComparisonMonthlyMonitoringChecksSpecMap;
 import com.dqops.checks.table.monitoring.schema.TableSchemaMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.sql.TableSqlMonthlyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.timeliness.TableTimelinessMonthlyMonitoringChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -293,5 +294,14 @@ public class TableMonthlyMonitoringCheckCategoriesSpec extends AbstractRootCheck
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.monitoring_monthly;
+    }
+
+    public static class TableMonthlyMonitoringCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableMonthlyMonitoringCheckCategoriesSpec> {
+        @Override
+        public TableMonthlyMonitoringCheckCategoriesSpec createSample() {
+            return new TableMonthlyMonitoringCheckCategoriesSpec() {{
+                setVolume(new TableVolumeMonthlyMonitoringChecksSpec.TableVolumeMonthlyMonitoringChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

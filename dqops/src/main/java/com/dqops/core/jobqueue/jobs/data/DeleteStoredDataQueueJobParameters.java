@@ -16,8 +16,8 @@
 package com.dqops.core.jobqueue.jobs.data;
 
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -154,6 +154,13 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public static class DeleteStoredDataQueueJobParametersSampleFactory implements SampleValueFactory<DeleteStoredDataQueueJobParameters> {
+        @Override
+        public DeleteStoredDataQueueJobParameters createSample() {
+            return fromCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample());
         }
     }
 }

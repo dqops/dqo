@@ -17,6 +17,8 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -232,5 +234,15 @@ public class TableSearchFilters {
         }
 
         return labelsSearchPatterns[i];
+    }
+
+    public static class TableSearchFiltersSampleFactory implements SampleValueFactory<TableSearchFilters> {
+        @Override
+        public TableSearchFilters createSample() {
+            return new TableSearchFilters() {{
+                setConnectionName(SampleStringsRegistry.getConnectionName());
+                setSchemaTableName(SampleStringsRegistry.getSchemaTableName());
+            }};
+        }
     }
 }

@@ -21,6 +21,8 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -249,5 +251,18 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
+    }
+
+    public static class PostgresqlParametersSpecSampleFactory implements SampleValueFactory<PostgresqlParametersSpec> {
+        @Override
+        public PostgresqlParametersSpec createSample() {
+            return new PostgresqlParametersSpec() {{
+                setHost("localhost");
+                setPort("5432");
+                setDatabase("db");
+                setUser(SampleStringsRegistry.getUserName());
+                setUser("PASSWD");
+            }};
+        }
     }
 }

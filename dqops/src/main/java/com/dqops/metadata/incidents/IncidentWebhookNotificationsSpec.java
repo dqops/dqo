@@ -25,6 +25,8 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -248,4 +250,15 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
         return clonedWebhooks;
     }
 
+    public static class IncidentWebhookNotificationsSpecSampleFactory implements SampleValueFactory<IncidentWebhookNotificationsSpec> {
+        @Override
+        public IncidentWebhookNotificationsSpec createSample() {
+            return new IncidentWebhookNotificationsSpec() {{
+                setIncidentOpenedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/opened");
+                setIncidentAcknowledgedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
+                setIncidentResolvedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/resolved");
+                setIncidentMutedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/muted");
+            }};
+        }
+    }
 }

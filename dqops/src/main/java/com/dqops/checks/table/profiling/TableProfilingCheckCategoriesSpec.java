@@ -16,12 +16,13 @@
 package com.dqops.checks.table.profiling;
 
 import com.dqops.checks.*;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -306,5 +307,14 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.profiling;
+    }
+
+    public static class TableProfilingCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableProfilingCheckCategoriesSpec> {
+        @Override
+        public TableProfilingCheckCategoriesSpec createSample() {
+            return new TableProfilingCheckCategoriesSpec() {{
+                setVolume(new TableVolumeProfilingChecksSpec.TableVolumeProfilingChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

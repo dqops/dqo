@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -313,5 +314,14 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.daily;
+    }
+
+    public static class ColumnNullsDailyPartitionedChecksSpecSampleFactory implements SampleValueFactory<ColumnNullsDailyPartitionedChecksSpec> {
+        @Override
+        public ColumnNullsDailyPartitionedChecksSpec createSample() {
+            return new ColumnNullsDailyPartitionedChecksSpec() {{
+                setDailyPartitionNullsCount(new ColumnNullsCountCheckSpec.ColumnNullsCountCheckSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

@@ -15,6 +15,8 @@
  */
 package com.dqops.core.jobqueue.jobs.table;
 
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.EqualsAndHashCode;
 
@@ -91,5 +93,16 @@ public class ImportTablesQueueJobParameters {
      */
     public void setTableNames(List<String> tableNames) {
         this.tableNames = tableNames;
+    }
+
+    public static class ImportTablesQueueJobParametersSampleFactory implements SampleValueFactory<ImportTablesQueueJobParameters> {
+        @Override
+        public ImportTablesQueueJobParameters createSample() {
+            return new ImportTablesQueueJobParameters() {{
+                setConnectionName(SampleStringsRegistry.getConnectionName());
+                setSchemaName(SampleStringsRegistry.getSchemaName());
+                setTableNames(List.of(SampleStringsRegistry.getTableName()));
+            }};
+        }
     }
 }

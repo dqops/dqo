@@ -22,6 +22,8 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -250,5 +252,18 @@ public class ColumnListModel {
         targetColumnSpec.setSqlExpression(this.getSqlExpression());
         targetColumnSpec.setDisabled(this.isDisabled());
         targetColumnSpec.setTypeSnapshot(this.getTypeSnapshot());
+    }
+
+    public static class ColumnListModelSampleFactory implements SampleValueFactory<ColumnListModel> {
+        @Override
+        public ColumnListModel createSample() {
+            ColumnSpec columnSpec = new ColumnSpec.ColumnSpecSampleFactory().createSample();
+            return fromColumnSpecification(SampleStringsRegistry.getConnectionName(),
+                    new PhysicalTableName(SampleStringsRegistry.getSchemaName(), SampleStringsRegistry.getTableName()),
+                    SampleStringsRegistry.getColumnName(),
+                    columnSpec,
+                    false,
+                    true);
+        }
     }
 }

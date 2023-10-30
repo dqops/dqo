@@ -19,6 +19,8 @@ import com.dqops.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.TimestampColumnsSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -86,6 +88,16 @@ public class TablePartitioningModel {
         }
         else {
             targetTableSpec.setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec()); // default configuration because the object is not null
+        }
+    }
+
+    public static class TablePartitioningModelSampleFactory implements SampleValueFactory<TablePartitioningModel> {
+        @Override
+        public TablePartitioningModel createSample() {
+            return fromTableSpecification(
+                    SampleStringsRegistry.getConnectionName(),
+                    new TableSpec.TableSpecSampleFactory().createSample(),
+                    true);
         }
     }
 }

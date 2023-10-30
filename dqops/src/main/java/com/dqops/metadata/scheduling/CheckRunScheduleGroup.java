@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.scheduling;
 
+import com.dqops.utils.docs.SampleValueFactory;
+
 /**
  * The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.
  */
@@ -43,4 +45,11 @@ public enum CheckRunScheduleGroup {
      * Schedule for partition checks for monthly partitioned data.
      */
     partitioned_monthly;
+
+    public static class CheckRunScheduleGroupSampleFactory implements SampleValueFactory<CheckRunScheduleGroup> {
+        @Override
+        public CheckRunScheduleGroup createSample() {
+            return partitioned_daily;
+        }
+    }
 }

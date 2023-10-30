@@ -32,6 +32,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -553,5 +554,16 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
                 (ConnectionProviderSpecificParameters) providerConfigChild;
 
         return providerConfiguration;
+    }
+
+    public static class ConnectionSpecSampleFactory implements SampleValueFactory<ConnectionSpec> {
+        @Override
+        public ConnectionSpec createSample() {
+            return new ConnectionSpec() {{
+                setProviderType(ProviderType.postgresql);
+                setPostgresql(new PostgresqlParametersSpec.PostgresqlParametersSpecSampleFactory().createSample());
+                setParallelRunsLimit(4);
+            }};
+        }
     }
 }

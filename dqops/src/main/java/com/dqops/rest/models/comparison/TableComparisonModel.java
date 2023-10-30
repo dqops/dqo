@@ -28,6 +28,8 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -310,6 +312,22 @@ public class TableComparisonModel {
             }
 
             columnComparisonModel.copyToColumnSpec(columnSpec, referenceTableConfigurationName, checkType, checkTimeScale);
+        }
+    }
+
+    public static class TableComparisonModelSampleFactory implements SampleValueFactory<TableComparisonModel> {
+        @Override
+        public TableComparisonModel createSample() {
+            TableSpec.TableSpecSampleFactory tableSpecSampleFactory = new TableSpec.TableSpecSampleFactory();
+            TableSpec tableSpec1 = tableSpecSampleFactory.createSample();
+            TableSpec tableSpec2 = tableSpecSampleFactory.createSample();
+            return fromTableSpec(
+                    tableSpec1,
+                    tableSpec2,
+                    SampleStringsRegistry.getTableComparison(),
+                    new CheckType.CheckTypeSampleFactory().createSample(),
+                    new CheckTimeScale.CheckTimeScaleSampleFactory().createSample(),
+                    true);
         }
     }
 }

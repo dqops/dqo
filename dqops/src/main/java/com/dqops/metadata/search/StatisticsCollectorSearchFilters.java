@@ -19,6 +19,8 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.statistics.StatisticsCollectorTarget;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -256,6 +258,27 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Cannot clone the object", ex);
+        }
+    }
+
+    public static StatisticsCollectorSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
+        return new StatisticsCollectorSearchFilters() {{
+            setConnectionName(tableSearchFilters.getConnectionName());
+            setSchemaTableName(tableSearchFilters.getSchemaTableName());
+            setEnabled(tableSearchFilters.getEnabled());
+            setTags(tableSearchFilters.getTags());
+            setLabels(tableSearchFilters.getLabels());
+        }};
+    }
+
+    public static class StatisticsCollectorSearchFiltersSampleFactory implements SampleValueFactory<StatisticsCollectorSearchFilters> {
+        @Override
+        public StatisticsCollectorSearchFilters createSample() {
+            StatisticsCollectorSearchFilters statisticsCollectorSearchFilters = fromTableSearchFilters(new TableSearchFilters.TableSearchFiltersSampleFactory().createSample());
+            statisticsCollectorSearchFilters.setColumnNames(List.of(SampleStringsRegistry.getColumnName()));
+            statisticsCollectorSearchFilters.setCollectorCategory(SampleStringsRegistry.getCategoryName());
+
+            return statisticsCollectorSearchFilters;
         }
     }
 }

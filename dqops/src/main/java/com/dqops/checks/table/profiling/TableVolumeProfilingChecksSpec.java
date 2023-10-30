@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -254,5 +255,14 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return null;
+    }
+
+    public static class TableVolumeProfilingChecksSpecSampleFactory implements SampleValueFactory<TableVolumeProfilingChecksSpec> {
+        @Override
+        public TableVolumeProfilingChecksSpec createSample() {
+            return new TableVolumeProfilingChecksSpec() {{
+                setProfileRowCount(new TableRowCountCheckSpec.TableRowCountCheckSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

@@ -23,6 +23,8 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -261,5 +263,16 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
     public TableComparisonConfigurationSpec deepClone() {
         TableComparisonConfigurationSpec cloned = (TableComparisonConfigurationSpec) super.deepClone();
         return cloned;
+    }
+
+    public static class TableComparisonConfigurationSpecSampleFactory implements SampleValueFactory<TableComparisonConfigurationSpec> {
+        @Override
+        public TableComparisonConfigurationSpec createSample() {
+            return new TableComparisonConfigurationSpec() {{
+                setReferenceTableConnectionName(SampleStringsRegistry.getConnectionName());
+                setReferenceTableSchemaName(SampleStringsRegistry.getSchemaName());
+                setReferenceTableName(SampleStringsRegistry.getTableName());
+            }};
+        }
     }
 }
