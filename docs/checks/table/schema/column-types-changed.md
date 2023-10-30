@@ -33,13 +33,13 @@ dqo> check run -c=connection_name -ch=profile_column_types_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=profile_column_types_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_types_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_types_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_types_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   profiling_checks:
     schema:
@@ -48,7 +48,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
         error: {}
         fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -75,6 +77,11 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 
@@ -109,13 +116,13 @@ dqo> check run -c=connection_name -ch=daily_column_types_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_column_types_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_types_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_column_types_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_types_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     daily:
@@ -125,7 +132,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
           error: {}
           fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -153,6 +162,11 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 
@@ -187,13 +201,13 @@ dqo> check run -c=connection_name -ch=monthly_column_types_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_column_types_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_types_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_column_types_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_types_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     monthly:
@@ -203,7 +217,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
           error: {}
           fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -231,6 +247,11 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_types_hash](../../../../reference/sensors/table/schema-table-sensors/#column-types-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 

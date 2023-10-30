@@ -32,13 +32,13 @@ dqo> check run -c=connection_name -ch=profile_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=profile_table_availability
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_table_availability
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_table_availability
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   profiling_checks:
     availability:
@@ -50,7 +50,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_tab
         fatal:
           max_failures: 10
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -80,234 +82,245 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-            FROM `<target_table>` AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-    FROM
-        (
-            SELECT TOP 1
-                *
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-        ) AS tab_scan
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value
-    FROM
-        (
-            SELECT TOP 1
-                *
-            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            
-        ) AS tab_scan
-    ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+??? example "BigQuery"
+
+    === "Sensor template for BigQuery"
+
+        ```sql+jinja
+        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for BigQuery"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "MySQL"
+
+    === "Sensor template for MySQL"
+
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for MySQL"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "PostgreSQL"
+
+    === "Sensor template for PostgreSQL"
+
+        ```sql+jinja
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for PostgreSQL"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Redshift"
+
+    === "Sensor template for Redshift"
+
+        ```sql+jinja
+        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Redshift"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Snowflake"
+
+    === "Sensor template for Snowflake"
+
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Snowflake"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "SQL Server"
+
+    === "Sensor template for SQL Server"
+
+        ```sql+jinja
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+        FROM
+            (
+                SELECT TOP 1
+                    *
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+            ) AS tab_scan
+        ```
+    === "Rendered SQL for SQL Server"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value
+        FROM
+            (
+                SELECT TOP 1
+                    *
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                
+            ) AS tab_scan
+        ```
 
 
 
@@ -342,13 +355,13 @@ dqo> check run -c=connection_name -ch=daily_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_table_availability
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table_availability
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_table_availability
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     daily:
@@ -361,7 +374,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table
           fatal:
             max_failures: 10
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -392,234 +407,245 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
-            FROM `<target_table>` AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        CAST(LOCALTIMESTAMP AS date) AS time_period,
-        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        CAST(LOCALTIMESTAMP AS date) AS time_period,
-        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        CAST(LOCALTIMESTAMP AS date) AS time_period,
-        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        CAST(LOCALTIMESTAMP AS date) AS time_period,
-        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
-        TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-    FROM
-        (
-            SELECT TOP 1
-                *
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-        ) AS tab_scan
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value
-    FROM
-        (
-            SELECT TOP 1
-                *
-            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            
-        ) AS tab_scan
-    ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+??? example "BigQuery"
+
+    === "Sensor template for BigQuery"
+
+        ```sql+jinja
+        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for BigQuery"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "MySQL"
+
+    === "Sensor template for MySQL"
+
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for MySQL"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "PostgreSQL"
+
+    === "Sensor template for PostgreSQL"
+
+        ```sql+jinja
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for PostgreSQL"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(LOCALTIMESTAMP AS date) AS time_period,
+            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(LOCALTIMESTAMP AS date) AS time_period,
+            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Redshift"
+
+    === "Sensor template for Redshift"
+
+        ```sql+jinja
+        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Redshift"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(LOCALTIMESTAMP AS date) AS time_period,
+            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(LOCALTIMESTAMP AS date) AS time_period,
+            CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Snowflake"
+
+    === "Sensor template for Snowflake"
+
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Snowflake"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
+            TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "SQL Server"
+
+    === "Sensor template for SQL Server"
+
+        ```sql+jinja
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+        FROM
+            (
+                SELECT TOP 1
+                    *
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+            ) AS tab_scan
+        ```
+    === "Rendered SQL for SQL Server"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value
+        FROM
+            (
+                SELECT TOP 1
+                    *
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                
+            ) AS tab_scan
+        ```
 
 
 
@@ -654,13 +680,13 @@ dqo> check run -c=connection_name -ch=monthly_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_table_availability
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_table_availability
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     monthly:
@@ -673,7 +699,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_tab
           fatal:
             max_failures: 10
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -704,234 +732,245 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
-### **BigQuery**
-=== "Sensor template for BigQuery"
-      
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for BigQuery"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
-        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **MySQL**
-=== "Sensor template for MySQL"
-      
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for MySQL"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
-        FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
-            FROM `<target_table>` AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **PostgreSQL**
-=== "Sensor template for PostgreSQL"
-      
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for PostgreSQL"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **Redshift**
-=== "Sensor template for Redshift"
-      
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for Redshift"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **Snowflake**
-=== "Sensor template for Snowflake"
-      
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-        {{- lib.render_time_dimension_projection('tab_scan') }}
-    FROM
-        (
-            SELECT
-                *
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-=== "Rendered SQL for Snowflake"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM
-        (
-            SELECT
-                *,
-        DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
-        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            
-            LIMIT 1
-        ) AS tab_scan
-    GROUP BY time_period
-    ORDER BY time_period
-    ```
-### **SQL Server**
-=== "Sensor template for SQL Server"
-      
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    SELECT
-        0.0 AS actual_value
-    FROM
-        (
-            SELECT TOP 1
-                *
-            FROM {{ lib.render_target_table() }} AS analyzed_table
-            {{ lib.render_where_clause() }}
-        ) AS tab_scan
-    ```
-=== "Rendered SQL for SQL Server"
-      
-    ```sql
-    SELECT
-        0.0 AS actual_value
-    FROM
-        (
-            SELECT TOP 1
-                *
-            FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            
-        ) AS tab_scan
-    ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+??? example "BigQuery"
+
+    === "Sensor template for BigQuery"
+
+        ```sql+jinja
+        {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for BigQuery"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+            TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "MySQL"
+
+    === "Sensor template for MySQL"
+
+        ```sql+jinja
+        {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for MySQL"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
+            FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
+                FROM `<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "PostgreSQL"
+
+    === "Sensor template for PostgreSQL"
+
+        ```sql+jinja
+        {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for PostgreSQL"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Redshift"
+
+    === "Sensor template for Redshift"
+
+        ```sql+jinja
+        {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Redshift"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+            CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Snowflake"
+
+    === "Sensor template for Snowflake"
+
+        ```sql+jinja
+        {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Snowflake"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
+            TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "SQL Server"
+
+    === "Sensor template for SQL Server"
+
+        ```sql+jinja
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+        FROM
+            (
+                SELECT TOP 1
+                    *
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+            ) AS tab_scan
+        ```
+    === "Rendered SQL for SQL Server"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value
+        FROM
+            (
+                SELECT TOP 1
+                    *
+                FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                
+            ) AS tab_scan
+        ```
 
 
 
