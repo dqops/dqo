@@ -916,7 +916,7 @@ spec:
         - dashboard_name: History of execution errors
           url: https://lookerstudio.google.com/embed/reporting/e8bbf4ee-df17-407f-991d-1cba8217788d/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Details of execution errors
