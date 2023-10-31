@@ -437,6 +437,7 @@ theme:
   features:
     - navigation.indexes
     - navigation.footer
+    - navigation.instant
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
