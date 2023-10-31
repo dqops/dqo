@@ -922,7 +922,7 @@ spec:
         - dashboard_name: Details of execution errors
           url: https://lookerstudio.google.com/embed/reporting/4699f5b5-41bc-482c-bfea-fa7ee5cb6c94/page/c5B8C
           width: 1400
-          height: 2250
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
 
