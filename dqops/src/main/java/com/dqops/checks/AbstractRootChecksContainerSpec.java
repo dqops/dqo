@@ -140,11 +140,13 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
             if (this.getComparisons() != null) {
                 for (Object value : this.getComparisons().values()) {
                     if (value instanceof AbstractCheckCategorySpec) {
-                        return true;
+                        AbstractCheckCategorySpec checkCategorySpec = (AbstractCheckCategorySpec) value;
+                        if (checkCategorySpec.hasAnyConfiguredChecks()) {
+                            return true;
+                        }
                     }
                 }
             }
-
             if (childNode instanceof AbstractCheckCategorySpec) {
                 AbstractCheckCategorySpec checkCategorySpec = (AbstractCheckCategorySpec)childNode;
                 if (checkCategorySpec.hasAnyConfiguredChecks()) {
