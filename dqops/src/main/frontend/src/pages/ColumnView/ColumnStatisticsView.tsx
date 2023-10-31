@@ -16,6 +16,14 @@ type TStatistics = {
     sampleCount?: number
 }   
 
+const initColumnStatisticsObject : Record<string, TStatistics[]> = {
+  "Nulls" : [{type: "Not nulls count"}, {type: "Not nulls percent"}, {type: "Nulls percent"}, {type: "Not nulls Percent"}],
+  "Uniqueness" : [{type: "Duplicate count"}, {type: "Duplicate percent"}, {type: "Distinct count"}, {type: "Distinct percent"}],
+  "Range" : [{type: "Max value"}, {type: "Min value"}, {type: "Sum value"}, {type: "Median value"}],
+  "String length" : [{type: "String max length"}, {type: "String min length"}, {type: "String mean length"}],
+  "Top most common values" : [],
+}
+
 const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollectedIndicator?: boolean}) => {
   const {
     connection,
@@ -29,7 +37,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
     table: string;
     column: string;
   } = useParams();
-  const [columnStatistics, setColumnStatistics] = useState<Record<string, TStatistics[]>>({});
+  const [columnStatistics, setColumnStatistics] = useState<Record<string, TStatistics[]>>(initColumnStatisticsObject);
   const [tableStatistics, setTableStatistics] = useState<TStatistics[]>([]);
   const [rowCount, setRowCount] = useState<number>()
 
@@ -84,18 +92,21 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   const renderColumnStatisticsValue = (value : TStatistics) => {
     if (value.sampleCount) {
       return value.sampleCount  
-    } else if (value.type?.toLowerCase().includes("percent")) {
-      if (isInteger(Number(value.result))) {
-        return value.result + "%"
-      } else {
-        return Number(value.result).toFixed(2) + "%"
-      }
-    } else if (!isNaN(Number(value.result))) {
-      if (isInteger(Number(value.result))) {
-        return formatNumber(Number(value.result))
-      } else {
-        return formatNumber(Number(Number(value.result).toFixed(2)))
-      }
+    } 
+      if(!isNaN(Number(value.result))){
+        if (value.type?.toLowerCase().includes("percent")) {
+          if (isInteger(Number(value.result))) {
+            return value.result + "%"
+          } else {
+            return Number(value.result).toFixed(2) + "%"
+          }
+        } else if (!isNaN(Number(value.result))) {
+          if (isInteger(Number(value.result))) {
+            return formatNumber(Number(value.result))
+          } else {
+            return formatNumber(Number(Number(value.result).toFixed(2)))
+          } 
+        }
     } else if (isDate(value.result)) {
       moment(value.result).format('YYYY-MM-DD HH:mm:ss')
     }
@@ -105,25 +116,26 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   const getColumnStatisticsModel = (fetchedColumnsStatistics: ColumnStatisticsModel) => {
     const column_statistics_dictionary: Record<string, TStatistics[]> = {}
     const table_statistics_array : TStatistics[] = []
-    fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
-      if (item.collector !== "string_datatype_detect") {
-        if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
+    if(fetchedColumnsStatistics.statistics && fetchedColumnsStatistics?.statistics.length > 0) {
+      fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
+        if (item.collector !== "string_datatype_detect") {
+          if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
             column_statistics_dictionary[String(item.category)].push({type: item.collector, result: String(item.result), sampleCount: item.sampleCount})
           } else {
             column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: String(item.result), sampleCount: item.sampleCount}]
           }
-      } else {
-        table_statistics_array.push({type: "Detected Datatype:", result: getDetectedDatatype(item.result)})
-      }
-    })
-    table_statistics_array.push({type: "Datatype:", 
-    result: String(fetchedColumnsStatistics.type_snapshot?.column_type)})
-    
-    table_statistics_array.push({type: "Collected at:", 
-    result: moment(fetchedColumnsStatistics.statistics?.at(0)?.collectedAt).format('YYYY-MM-DD HH:mm:ss')})
-    
-    setColumnStatistics(column_statistics_dictionary)  
-    setTableStatistics(table_statistics_array)
+        } else {
+          table_statistics_array.push({type: "Detected Datatype:", result: getDetectedDatatype(item.result)})
+        }
+      })
+      table_statistics_array.push({type: "Datatype:", 
+      result: String(fetchedColumnsStatistics.type_snapshot?.column_type)})
+      
+      table_statistics_array.push({type: "Collected at:", 
+      result: moment(fetchedColumnsStatistics.statistics?.at(0)?.collectedAt).format('YYYY-MM-DD HH:mm:ss')})
+      setColumnStatistics(column_statistics_dictionary)  
+      setTableStatistics(table_statistics_array)
+    }
   }
 
   const getTableStatisticsModel = (fetchedTableStatistics: TableStatisticsModel) => {
