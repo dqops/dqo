@@ -18,6 +18,8 @@ package com.dqops.utils.docs;
 
 import com.dqops.metadata.sources.PhysicalTableName;
 
+import java.time.LocalDate;
+
 public class SampleStringsRegistry {
     public static String getConnectionName() {
         return "sample_connection";
@@ -79,6 +81,10 @@ public class SampleStringsRegistry {
         return "sample_user";
     }
 
+    public static String getEmail() {
+        return getUserName() + "@mail.com";
+    }
+
     public static String getComment() {
         return "Sample comment";
     }
@@ -103,6 +109,34 @@ public class SampleStringsRegistry {
         return "sample_table_comparison";
     }
 
+    public static String getMonthStart() {
+        return LocalDate.of(2007, 10,1).toString();
+    }
+
+    public static String getMonthEnd() {
+        return LocalDate.of(2007, 10,31).toString();
+    }
+
+    public static String getIncidentId() {
+        return "sample_incident";
+    }
+
+    public static String getIssueUrl() {
+        return getSampleUrl() + "/sample_issue";
+    }
+
+    public static String getFolder(int nestingLevel) {
+        return "sample_folder_" + nestingLevel;
+    }
+
+    public static String getDashboardName() {
+        return "sample_dashboard";
+    }
+
+    public static String getWindowLocationOrigin() {
+        return "window.location";
+    }
+
     /**
      * Gets sample string fitting the parameter.
      * @param parameterName Parameter name.
@@ -110,17 +144,55 @@ public class SampleStringsRegistry {
      */
     public static String getMatchingStringForParameter(String parameterName) {
         String parameterNameLower = parameterName.toLowerCase();
+        String folder = "folder";
 
-        if (parameterNameLower.contains("connection")) {
-            return getConnectionName();
+        if (parameterNameLower.contains("email")) {
+            return getEmail();
+        } else if (parameterNameLower.contains("credential")) {
+            return getCredential();
+        } else if (parameterNameLower.contains("incident_id")) {
+            return getIncidentId();
+        } else if (parameterNameLower.contains("issue_url")) {
+            return getIssueUrl();
+        } else if (parameterNameLower.contains("window_location")) {
+            return getWindowLocationOrigin();
+        } else if (parameterNameLower.contains("dashboard")) {
+            return getDashboardName();
+        } else if (parameterNameLower.contains(folder)) {
+            int nestingLevelIndex = parameterNameLower.indexOf(folder) + folder.length();
+            return getFolder(parameterNameLower.charAt(nestingLevelIndex) - '0');
+        } else if (parameterNameLower.contains("full_sensor")) {
+            return getFullSensorName();
         } else if (parameterNameLower.contains("sensor")) {
             return getSensorName();
+        } else if (parameterNameLower.contains("full_rule")) {
+            return getFullRuleName();
         } else if (parameterNameLower.contains("rule")) {
             return getRuleName();
         } else if (parameterNameLower.contains("category")) {
             return getCategoryName();
+        } else if (parameterNameLower.contains("quality_dimension")) {
+            return getQualityDimension();
+        } else if (parameterNameLower.contains("full_check")) {
+            return getFullCheckName();
         } else if (parameterNameLower.contains("check")) {
             return getCheckName();
+        } else if (parameterNameLower.contains("comparison")) {
+            return getTableComparison();
+        } else if (parameterNameLower.contains("connection")) {
+            return getConnectionName();
+        } else if (parameterNameLower.contains("schema")) {
+            return getSchemaName();
+        } else if (parameterNameLower.contains("table")) {
+            return getTableName();
+        } else if (parameterNameLower.contains("column")) {
+            return getColumnName();
+        } else if (parameterNameLower.contains("group")) {
+            return getDataGrouping();
+        } else if (parameterNameLower.contains("month_start")) {
+            return getMonthStart();
+        } else if (parameterNameLower.contains("month_end")) {
+            return getMonthEnd();
         }
 
         throw new IllegalArgumentException("No value found fitting the parameter \"" + parameterName + "\".");

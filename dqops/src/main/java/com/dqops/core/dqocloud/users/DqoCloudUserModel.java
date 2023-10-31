@@ -45,7 +45,7 @@ public class DqoCloudUserModel {
         @Override
         public DqoCloudUserModel createSample() {
             return new DqoCloudUserModel() {{
-                setEmail(SampleStringsRegistry.getUserName() + "@mail.com");
+                setEmail(SampleStringsRegistry.getEmail());
                 setAccountRole(DqoUserRole.OPERATOR);
             }};
         }
