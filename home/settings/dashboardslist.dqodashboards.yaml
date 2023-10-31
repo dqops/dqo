@@ -351,7 +351,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: History of data quality table results
+        - dashboard_name: Data quality failed checks per table and day
           url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
           width: 1400
           height: 2500
@@ -369,7 +369,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: History of data quality check results
+        - dashboard_name: Data quality failed checks per day
           url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/c5B8C
           width: 1400
           height: 2500
@@ -726,7 +726,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: History of data quality table results
+        - dashboard_name: Data quality failed checks per table and day
           url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
           width: 1400
           height: 2500
@@ -744,7 +744,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: History of data quality check results
+        - dashboard_name: Data quality failed checks per day
           url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/c5B8C
           width: 1400
           height: 2500
@@ -850,7 +850,7 @@ spec:
         - dashboard_name: History of completeness issues
           url: https://lookerstudio.google.com/embed/reporting/635dde1c-5e84-417c-b5b6-5a630f1c077d/page/c5B8C
           width: 1400
-          height: 2200
+          height: 2800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -955,7 +955,7 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: History of data quality table results
+      - dashboard_name: Data quality failed checks per table and day
         url: https://lookerstudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
         width: 1400
         height: 2500
@@ -973,7 +973,7 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: History of data quality check results
+      - dashboard_name: Data quality failed checks per day
         url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/c5B8C
         width: 1400
         height: 2500
