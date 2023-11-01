@@ -117,7 +117,7 @@ public class ConnectionSpec extends AbstractSpec {
     private OracleParametersSpec oracle;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
-    private Integer parallelRunsLimit;
+    private Integer parallelJobsLimit;
 
     @JsonPropertyDescription("Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. " +
             "Data groupings are configured in two cases: " +
@@ -329,17 +329,17 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the limit of parallel data quality checks that could be started at the same time on the connection.
      * @return Concurrency limit (number of parallel jobs) that are executing checks or null when no limits are enforced.
      */
-    public Integer getParallelRunsLimit() {
-        return parallelRunsLimit;
+    public Integer getParallelJobsLimit() {
+        return parallelJobsLimit;
     }
 
     /**
      * Sets the concurrency limit of the number of checks that can run in parallel on this connection.
-     * @param parallelRunsLimit New concurrency limit or null when no limit is applied.
+     * @param parallelJobsLimit New concurrency limit or null when no limit is applied.
      */
-    public void setParallelRunsLimit(Integer parallelRunsLimit) {
-        this.setDirtyIf(!Objects.equals(this.parallelRunsLimit, parallelRunsLimit));
-        this.parallelRunsLimit = parallelRunsLimit;
+    public void setParallelJobsLimit(Integer parallelJobsLimit) {
+        this.setDirtyIf(!Objects.equals(this.parallelJobsLimit, parallelJobsLimit));
+        this.parallelJobsLimit = parallelJobsLimit;
     }
 
     /**
