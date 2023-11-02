@@ -17,10 +17,11 @@ T = TypeVar("T", bound="CheckSearchFilters")
 
 @_attrs_define
 class CheckSearchFilters:
-    """Target data quality checks filter, identifies which checks on which tables and columns should be executed.
+    r"""Target data quality checks filter, identifies which checks on which tables and columns should be executed.
 
     Attributes:
-        connection_name (Union[Unset, str]):
+        connection_name (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
+            'source\*', '\*_prod', 'prefix\*suffix'.
         schema_table_name (Union[Unset, str]):
         enabled (Union[Unset, bool]):
         tags (Union[Unset, List[str]]):

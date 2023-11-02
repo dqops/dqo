@@ -21,6 +21,7 @@ Detailed results for a single sensor. Represent one row in the sensor readouts t
 |time_period|Time period.|datetime|
 |provider|Provider.|string|
 |quality_dimension|Quality dimension.|string|
+|table_comparison|Quality dimension.|string|
 
 
 ___  

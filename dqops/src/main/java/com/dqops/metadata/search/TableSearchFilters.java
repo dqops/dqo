@@ -19,21 +19,31 @@ import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Hierarchy node search filters.
+ * Target table search filters used to find tables in the DQOps metadata.
  */
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class TableSearchFilters {
+    @JsonPropertyDescription("The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
     private String connectionName;
+
+    @JsonPropertyDescription("")
     private String schemaTableName;
+
+    @JsonPropertyDescription("")
     private Boolean enabled = true;
+
+    @JsonPropertyDescription("")
     private String[] tags;
+
+    @JsonPropertyDescription("")
     private String[] labels;
 
     @JsonIgnore

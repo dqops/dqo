@@ -15,9 +15,10 @@ T = TypeVar("T", bound="StatisticsCollectorSearchFilters")
 
 @_attrs_define
 class StatisticsCollectorSearchFilters:
-    """
+    r"""
     Attributes:
-        connection_name (Union[Unset, str]):
+        connection_name (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
+            'source\*', '\*_prod', 'prefix\*suffix'.
         schema_table_name (Union[Unset, str]):
         enabled (Union[Unset, bool]):
         tags (Union[Unset, List[str]]):

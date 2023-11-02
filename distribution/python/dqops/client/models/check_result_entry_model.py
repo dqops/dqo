@@ -40,6 +40,7 @@ class CheckResultEntryModel:
         provider (Union[Unset, str]): Provider.
         quality_dimension (Union[Unset, str]): Quality dimension.
         sensor_name (Union[Unset, str]): Sensor name.
+        table_comparison (Union[Unset, str]): Table comparison name.
     """
 
     id: Union[Unset, str] = UNSET
@@ -68,6 +69,7 @@ class CheckResultEntryModel:
     provider: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
+    table_comparison: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -100,6 +102,7 @@ class CheckResultEntryModel:
         provider = self.provider
         quality_dimension = self.quality_dimension
         sensor_name = self.sensor_name
+        table_comparison = self.table_comparison
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -156,6 +159,8 @@ class CheckResultEntryModel:
             field_dict["qualityDimension"] = quality_dimension
         if sensor_name is not UNSET:
             field_dict["sensorName"] = sensor_name
+        if table_comparison is not UNSET:
+            field_dict["tableComparison"] = table_comparison
 
         return field_dict
 
@@ -219,6 +224,8 @@ class CheckResultEntryModel:
 
         sensor_name = d.pop("sensorName", UNSET)
 
+        table_comparison = d.pop("tableComparison", UNSET)
+
         check_result_entry_model = cls(
             id=id,
             check_hash=check_hash,
@@ -246,6 +253,7 @@ class CheckResultEntryModel:
             provider=provider,
             quality_dimension=quality_dimension,
             sensor_name=sensor_name,
+            table_comparison=table_comparison,
         )
 
         check_result_entry_model.additional_properties = d

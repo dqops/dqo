@@ -264,7 +264,7 @@ List of comments.
 ___  
 
 ## CheckSearchFilters  
-Hierarchy node search filters.  
+Target data quality checks filter, identifies which checks on which tables and columns should be executed.  
   
 
 **The structure of this object is described below**  
@@ -283,7 +283,7 @@ Hierarchy node search filters.
 |check_name||string|
 |sensor_name||string|
 |check_configured||boolean|
-|connection_name||string|
+|connection_name|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
 |schema_table_name||string|
 |enabled||boolean|
 
@@ -511,7 +511,7 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |sensor_name||string|
 |collector_category||string|
 |[target](#statisticscollectortarget)||[StatisticsCollectorTarget](#statisticscollectortarget)|
-|connection_name||string|
+|connection_name|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
 |schema_table_name||string|
 |enabled||boolean|
 

@@ -38,7 +38,7 @@ class Client:
     _base_url: str
     _cookies: Dict[str, str] = field(factory=dict, kw_only=True)
     _headers: Dict[str, str] = field(factory=dict, kw_only=True)
-    _timeout: Optional[httpx.Timeout] = field(default=None, kw_only=True)
+    _timeout: Optional[httpx.Timeout] = field(default=httpx.Timeout(120.0), kw_only=True)
     _verify_ssl: Union[str, bool, ssl.SSLContext] = field(default=True, kw_only=True)
     _follow_redirects: bool = field(default=False, kw_only=True)
     _httpx_args: Dict[str, Any] = field(factory=dict, kw_only=True)
@@ -168,7 +168,7 @@ class AuthenticatedClient:
     _base_url: str
     _cookies: Dict[str, str] = field(factory=dict, kw_only=True)
     _headers: Dict[str, str] = field(factory=dict, kw_only=True)
-    _timeout: Optional[httpx.Timeout] = field(default=None, kw_only=True)
+    _timeout: Optional[httpx.Timeout] = field(default=httpx.Timeout(120.0), kw_only=True)
     _verify_ssl: Union[str, bool, ssl.SSLContext] = field(default=True, kw_only=True)
     _follow_redirects: bool = field(default=False, kw_only=True)
     _httpx_args: Dict[str, Any] = field(factory=dict, kw_only=True)

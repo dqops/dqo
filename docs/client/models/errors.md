@@ -22,6 +22,7 @@ Detailed error statuses for a single check. Represent one row in the errors tabl
 |error_message|Error message.|string|
 |error_source|Error source.|string|
 |error_timestamp|Error timestamp.|datetime|
+|table_comparison|Table comparison name|string|
 
 
 ___  

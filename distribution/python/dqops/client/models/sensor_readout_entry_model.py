@@ -28,6 +28,7 @@ class SensorReadoutEntryModel:
         time_period (Union[Unset, datetime.datetime]): Time period.
         provider (Union[Unset, str]): Provider.
         quality_dimension (Union[Unset, str]): Quality dimension.
+        table_comparison (Union[Unset, str]): Quality dimension.
     """
 
     id: Union[Unset, str] = UNSET
@@ -44,6 +45,7 @@ class SensorReadoutEntryModel:
     time_period: Union[Unset, datetime.datetime] = UNSET
     provider: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
+    table_comparison: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -64,6 +66,7 @@ class SensorReadoutEntryModel:
 
         provider = self.provider
         quality_dimension = self.quality_dimension
+        table_comparison = self.table_comparison
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -96,6 +99,8 @@ class SensorReadoutEntryModel:
             field_dict["provider"] = provider
         if quality_dimension is not UNSET:
             field_dict["qualityDimension"] = quality_dimension
+        if table_comparison is not UNSET:
+            field_dict["tableComparison"] = table_comparison
 
         return field_dict
 
@@ -135,6 +140,8 @@ class SensorReadoutEntryModel:
 
         quality_dimension = d.pop("qualityDimension", UNSET)
 
+        table_comparison = d.pop("tableComparison", UNSET)
+
         sensor_readout_entry_model = cls(
             id=id,
             check_name=check_name,
@@ -150,6 +157,7 @@ class SensorReadoutEntryModel:
             time_period=time_period,
             provider=provider,
             quality_dimension=quality_dimension,
+            table_comparison=table_comparison,
         )
 
         sensor_readout_entry_model.additional_properties = d
