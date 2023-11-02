@@ -25,12 +25,12 @@ dqo> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-f`<br/>`--ext`<br/>|File type| |PYTHON<br/>YAML<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-r`<br/>`--rule`<br/>|Rule name| ||
+|<p id="rule edit-f">`-f`</p><br/><p id="rule edit--ext">`--ext`</p><br/>|File type| |PYTHON<br/>YAML<br/>|
+|<p id="rule edit-fw">`-fw`</p><br/><p id="rule edit--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="rule edit--headless">`--headless`</p><br/><p id="rule edit-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="rule edit-h">`-h`</p><br/><p id="rule edit--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="rule edit-of">`-of`</p><br/><p id="rule edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="rule edit-r">`-r`</p><br/><p id="rule edit--rule">`--rule`</p><br/>|Rule name| ||
 
 
 
