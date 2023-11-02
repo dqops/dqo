@@ -53,7 +53,7 @@ The `source_date` column of interest contains non-standard date format, in this 
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/graphical-interface-overview/graphical-interface-overview.md):
+To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks.png)
 

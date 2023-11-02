@@ -88,20 +88,22 @@ These topics introduce the basic concepts of DQOps.
     The data quality dimensions are the fundamental way to group data quality checks into groups of checks that detect similar issue.
     The most important data quality dimensions supported by DQOps are:
 
-    - `Validity` detects common field format issues, such as an *email* field does not meet the email format
-   
-    - `Completeness` detects missing data, for example columns with too many null values 
-   
-    - `Timeliness` tracks freshness of data, measuring the maximum allowed age of data
-   
     - `Availability` watches the tables in the data source, raising a data quality issue when the table is missing or returns errors
-   
+
+    - `Accuracy` checks compare the data to the "source of truth", which means comparing tables between stages and data sources
+
     - `Consistency` monitors the data over a period of time, looking for anomalies such as the usual percent of null values
-      per day was within the regular range, but an unusual increase of the percent of null values in a column was observed for one day 
+      per day was within the regular range, but an unusual increase of the percent of null values in a column was observed for one day
+
+    - `Completeness` detects missing data, for example columns with too many null values
+
+    - `Reasonableness` identifies values that are not making sense, falling out of expected range
+
+    - `Timeliness` tracks freshness of data, measuring the maximum allowed age of data
    
     - `Uniqueness` finds issues related to duplicate values
 
-    - `Reasonableness` identifies values that are not making sense, falling out of expected range
+    - `Validity` detects common field format issues, such as an *email* field does not meet the email format
 
 
 - **[Data grouping](./data-grouping/data-grouping.md)**
@@ -134,7 +136,11 @@ These topics introduce the basic concepts of DQOps.
     configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
 
-- **[Graphical interface overview](./yaml-files/yaml-files.md)**
+
+- **[User interface overview](./user-interface-overview/user-interface-overview.md)**
+
+    The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
+    Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
 
 
 - **[Command-line interface](./command-line-interface/command-line-interface.md)**

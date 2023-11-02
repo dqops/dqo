@@ -1,8 +1,8 @@
-# Graphical interface overview
+# User interface overview
 
-The DQO graphical interface is divided into three main areas.
+The DQOps web interface is divided into three main areas.
 
-![The DQO graphical interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/graphical-interface-overview.png)
+![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/graphical-interface-overview.png)
 
 1. The [navigation bar](./#navigation-bar) has links to the main DQO data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](./#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
@@ -34,11 +34,11 @@ The right side of the navigation bar provides access to the main settings and so
 
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/rigth-part-of-the-navigation-bar.png)
 
-- **Help** - Links to the support page, documentation, DQO account manager and configuration parameters settings set at 
-    the start of DQO. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
-- **Synchronize** - Synchronize locally stored results with your DQO account.
+- **Help** - Links to the support page, documentation, DQOps account manager and configuration parameters settings set at 
+    the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
+- **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
 - **Notifications** - You can view DQO notifications and enable or disable the scheduler. A NEW tag will appear when there is a new notification.
-- **User account** - Provide information about your account, current limits and access to the DQO account manager. 
+- **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
 
 ## Tree view
 

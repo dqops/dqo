@@ -45,7 +45,7 @@ The `email` column of interest contains both valid and invalid email values.
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/graphical-interface-overview/graphical-interface-overview.md):
+To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-email-count-checks.png)
 

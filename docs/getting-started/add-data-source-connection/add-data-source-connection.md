@@ -4,7 +4,7 @@ After [installation and starting DQO](../installation/installation.md), we descr
 using the graphical interface.
 
 For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO section](../../working-with-dqo/adding-data-source-connection/index.md).
-You can find more information about [navigating the DQO graphical interface here](../../dqo-concepts/graphical-interface-overview/graphical-interface-overview.md). 
+You can find more information about [navigating the DQO graphical interface here](../../dqo-concepts/user-interface-overview/user-interface-overview.md). 
 
 ## Prerequisite credentials
 
