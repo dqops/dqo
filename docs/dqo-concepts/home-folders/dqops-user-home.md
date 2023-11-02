@@ -43,7 +43,7 @@ The `rules` folder contains user-defined [data quality rules](../rules/rules.md)
 user-defined [data quality sensors](../sensors/sensors.md) in Jinja2 templating engine which are further rendered into a
 SQL queries.
 
-The `sources` folder contains [YAML configuration files](../working-with-yaml-files/working-with-yaml-files.md) for
+The `sources` folder contains [YAML configuration files](../yaml-files/yaml-files.md) for
 each connection and table. These files describe the metadata of imported data sources and contain a configuration
 of enabled data quality checks on a table and column level. The alerting thresholds for data quality rules
 are configured together with the list of enabled data quality checks.

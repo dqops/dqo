@@ -30,8 +30,9 @@ nav:
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
-      - Working with YAML files: "dqo-concepts/working-with-yaml-files/working-with-yaml-files.md"
-      - Working with CLI: "dqo-concepts/working-with-cli/working-with-cli.md"
+      - YAML files: "dqo-concepts/yaml-files/yaml-files.md"
+      - Graphical interface overview: "dqo-concepts/graphical-interface-overview/graphical-interface-overview.md"
+      - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
@@ -67,7 +68,6 @@ nav:
           - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
           - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
           - Install DQpsO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
-      - Navigating the graphical interface: "working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md"
       - Adding connections:
           - "working-with-dqo/adding-data-source-connection/index.md"
           - BigQuery: "working-with-dqo/adding-data-source-connection/bigquery.md"

@@ -6,7 +6,7 @@ Data quality checks can be also scheduled to run in regular intervals to continu
 DQOps uses an internal job scheduler that is based on a popular Quartz library. The schedules are defined as CRON
 expressions compatible with the Linux CRON format.
 
-Data quality checks can be queued for execution from the [DQOps command-line shell](../working-with-cli/working-with-cli.md)
+Data quality checks can be queued for execution from the [DQOps command-line shell](../command-line-interface/command-line-interface.md)
 by running the [check run](../../command-line-interface/check.md#dqo-check-run) command.
 It is the easiest way to understand how the data quality check targeting is used.
 
@@ -38,7 +38,7 @@ data quality checks for this table is stored in the file with a [.dqotable.yaml]
 The name of the target table is not defined inside the *public.fact_sales.dqotable.yaml*. Instead, the target
 table is identified by the file name, followed by the *.dqotable.yaml* file name extension.
 
-The example below shows how to run data quality checks from the [DQOps command-line shell](../working-with-cli/working-with-cli.md)
+The example below shows how to run data quality checks from the [DQOps command-line shell](../command-line-interface/command-line-interface.md)
 by running the [check run](../../command-line-interface/check.md#dqo-check-run) command.
 
 ``` { .asc .annotate }

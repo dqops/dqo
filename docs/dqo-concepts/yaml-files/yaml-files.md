@@ -1,4 +1,4 @@
-# Working with the YAML files
+# YAML files overview
 
 In DQO, the configuration of [data quality checks](../checks/index.md) is defined in the YAML files. YAML is a human-readable
 data serialization language that is often used for writing configuration files. 

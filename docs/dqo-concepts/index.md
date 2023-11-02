@@ -125,7 +125,7 @@ These topics introduce the basic concepts of DQOps.
     Please read the [data storage](./data-storage/data-storage.md) concept guide to understand the data lake structure.
  
 
-- **[Working with the YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
+- **[YAML files overview](./yaml-files/yaml-files.md)**
 
     DQOps uses YAML files to keep the configuration of data sources and the enabled data quality checks on monitored tables.
     The DQOps YAML file format is fully documented and the YAML schema files are published.
@@ -134,8 +134,10 @@ These topics introduce the basic concepts of DQOps.
     configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
 
+- **[Graphical interface overview](./yaml-files/yaml-files.md)**
 
-- **[Working with CLI](./working-with-cli/working-with-cli.md)**
+
+- **[Command-line interface](./command-line-interface/command-line-interface.md)**
 
     Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
 
