@@ -54,7 +54,7 @@ The `Migrants__net` column of interest contains negative values.
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/graphical-interface-overview/graphical-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-negative-percent-checks.png)
 
