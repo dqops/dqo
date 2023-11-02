@@ -69,7 +69,9 @@ The following steps are performed by the DQOps engine to run a data quality chec
      [.dqorule.yaml](../../reference/yaml/RuleDefinitionYaml.md) file to decide if the rule requires historical data
      to evaluate the *sensor readout*. The configuration fields in
      the [RuleDefinitionSpec](../../reference/yaml/RuleDefinitionYaml.md#RuleDefinitionSpec) are:
+
      -   *mode* - decides if the rule uses historical values or only evaluates the current *sensor readout*
+     
      -   *time_window* - configures the size of the time window for rules that use historical values
 
 6.   Data quality [rules](../rules/rules.md) are called to evaluate every captured *sensor readout*.
