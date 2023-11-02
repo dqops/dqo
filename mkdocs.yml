@@ -30,7 +30,7 @@ nav:
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
       - YAML files: "dqo-concepts/yaml-files/yaml-files.md"
-      - Graphical interface overview: "dqo-concepts/graphical-interface-overview/graphical-interface-overview.md"
+      - User interface overview: "dqo-concepts/graphical-interface-overview/graphical-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
   - Use cases:
       - "examples/index.md"
