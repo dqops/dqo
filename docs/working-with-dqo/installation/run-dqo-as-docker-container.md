@@ -2,7 +2,10 @@
 
 DQOps can be run as a Docker container in a server mode or in Shell mode. You can also build a custom DQOps container image.
 
-> Running DQOps as docker container is a preferred method for starting in a long-running production mode.
+!!! note
+
+    Running DQOps as docker container is a preferred method for starting in a long-running production mode.
+
 
 ## Prerequisites
 
@@ -14,6 +17,7 @@ To run DQOps as a Docker container you need
 - A `DQOps User Home` folder is created locally which will be mounted to your container. Volumes are the preferred mechanism for persisting data generated
     by and used by Docker containers. The `DQOps User Home` folder will locally store data such as sensor readouts, checkout results, and data source configurations.
     [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
+
 
 ## Start DQOps in Shell mode
 
