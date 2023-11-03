@@ -46,19 +46,19 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     @JsonPropertyDescription("The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files.")
     private LocalDate dateEnd;
 
-    @JsonPropertyDescription("Delete the data from the [errors](../../reference/parquetfiles/errors/errors.md) table. " +
+    @JsonPropertyDescription("Delete the data from the [errors](../../reference/parquetfiles/errors.md) table. " +
             "Because the default value is *false*, this parameter must be set to *true* to delete the errors.")
     private boolean deleteErrors = false;
 
-    @JsonPropertyDescription("Delete the data from the [statistics](../../reference/parquetfiles/statistics/statistics.md) table. " +
+    @JsonPropertyDescription("Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. " +
             "Because the default value is *false*, this parameter must be set to *true* to delete the statistics.")
     private boolean deleteStatistics = false;
 
-    @JsonPropertyDescription("Delete the data from the [check_results](../../reference/parquetfiles/check_results/check_results.md) table. " +
+    @JsonPropertyDescription("Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. " +
             "Because the default value is *false*, this parameter must be set to *true* to delete the check results.")
     private boolean deleteCheckResults = false;
 
-    @JsonPropertyDescription("Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts/sensor_readouts.md) table. " +
+    @JsonPropertyDescription("Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. " +
             "Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.")
     private boolean deleteSensorReadouts = false;
 

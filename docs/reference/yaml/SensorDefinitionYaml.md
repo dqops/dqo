@@ -1,38 +1,4 @@
 
-## ParameterDefinitionSpec  
-Defines a single field that is a sensor parameter or a rule parameter.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|field_name|Field name that matches the field name (snake_case) used in the YAML specification.|string| | | |
-|display_name|Field display name that should be shown as a label for the control.|string| | | |
-|help_text|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|string| | | |
-|[data_type](#parameterdatatype)|Parameter data type.|[ParameterDataType](#parameterdatatype)|date<br/>string<br/>enum<br/>string_list<br/>object<br/>datetime<br/>column_name<br/>boolean<br/>integer<br/>double<br/>integer_list<br/>long<br/>| | |
-|[display_hint](#displayhint)|UI control display hint.|[DisplayHint](#displayhint)|textarea<br/>| | |
-|required|True when the value for the parameter must be provided.|boolean| | | |
-|allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
-|sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## SensorDefinitionYaml  
 Data quality sensor definition YAML schema for a data quality sensor specification.  
   
@@ -52,6 +18,19 @@ Data quality sensor definition YAML schema for a data quality sensor specificati
 |[kind](#specificationkind)||[SpecificationKind](#specificationkind)|table<br/>default_schedules<br/>dashboards<br/>source<br/>sensor<br/>check<br/>default_checks<br/>rule<br/>file_index<br/>settings<br/>default_notifications<br/>provider_sensor<br/>| | |
 |[spec](#sensordefinitionspec)||[SensorDefinitionSpec](#sensordefinitionspec)| | | |
 
+
+
+
+
+
+
+
+
+___  
+
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
 
 
 
@@ -93,9 +72,30 @@ Data Quality sensor definition specification. Provides the configuration for a d
 
 ___  
 
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
+## ParameterDefinitionSpec  
+Defines a single field that is a sensor parameter or a rule parameter.  
   
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|field_name|Field name that matches the field name (snake_case) used in the YAML specification.|string| | | |
+|display_name|Field display name that should be shown as a label for the control.|string| | | |
+|help_text|Help text (full description) that will be shown to the user as a hint when the cursor is moved over the control.|string| | | |
+|[data_type](#parameterdatatype)|Parameter data type.|[ParameterDataType](#parameterdatatype)|date<br/>string<br/>enum<br/>string_list<br/>object<br/>datetime<br/>column_name<br/>boolean<br/>integer<br/>double<br/>integer_list<br/>long<br/>| | |
+|[display_hint](#displayhint)|UI control display hint.|[DisplayHint](#displayhint)|textarea<br/>| | |
+|required|True when the value for the parameter must be provided.|boolean| | | |
+|allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
+|sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
+
 
 
 

@@ -2,6 +2,19 @@
 
 These topics introduce the basic concepts of DQOps.
 
+ - **[Checks](./checks/index.md)**
+
+    A data quality check detects data quality issues. The check in DQOps is defined as a pair
+    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
+    For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the
+    [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
+    and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
+    of null values in a tested column is satisfied.
+
+    If the percent of null values in a column raises above the threshold (maximum allowed percent),
+    a data quality issue is raised.
+
+
  - **[Sensors](./sensors/sensors.md)**
 
     The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
@@ -16,18 +29,6 @@ These topics introduce the basic concepts of DQOps.
     The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
     For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
     of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
-
- - **[Checks](./checks/index.md)**
-
-    A data quality check detects data quality issues. The check in DQOps is defined as a pair
-    of a [sensor](./sensors/sensors.md) and a [rule](./rules/rules.md) that verifies the sensor's readout.
-    For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the
-    [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
-    and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
-    of null values in a tested column is satisfied.
-
-    If the percent of null values in a column raises above the threshold (maximum allowed percent),
-    a data quality issue is raised.
 
 
  - **[DQOps user home](./home-folders/dqops-user-home.md)**

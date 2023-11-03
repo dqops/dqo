@@ -13,13 +13,13 @@ nav:
       - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
-      - Sensors: "dqo-concepts/sensors/sensors.md"
-      - Rules: "dqo-concepts/rules/rules.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
           - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
           - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
+      - Sensors: "dqo-concepts/sensors/sensors.md"
+      - Rules: "dqo-concepts/rules/rules.md"
       - DQOps user home: "dqo-concepts/home-folders/dqops-user-home.md"
       - Running checks: "dqo-concepts/running-checks/running-checks.md"
       - Check execution flow: "dqo-concepts/architecture/check-execution-flow.md"

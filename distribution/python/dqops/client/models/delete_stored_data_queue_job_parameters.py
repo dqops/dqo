@@ -21,18 +21,17 @@ class DeleteStoredDataQueueJobParameters:
             *time_period* column in Parquet files.
         date_end (Union[Unset, datetime.date]): The end date (inclusive) to delete the data, based on the *time_period*
             column in Parquet files.
-        delete_errors (Union[Unset, bool]): Delete the data from the
-            [errors](../../reference/parquetfiles/errors/errors.md) table. Because the default value is *false*, this
-            parameter must be set to *true* to delete the errors.
+        delete_errors (Union[Unset, bool]): Delete the data from the [errors](../../reference/parquetfiles/errors.md)
+            table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.
         delete_statistics (Union[Unset, bool]): Delete the data from the
-            [statistics](../../reference/parquetfiles/statistics/statistics.md) table. Because the default value is *false*,
-            this parameter must be set to *true* to delete the statistics.
+            [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this
+            parameter must be set to *true* to delete the statistics.
         delete_check_results (Union[Unset, bool]): Delete the data from the
-            [check_results](../../reference/parquetfiles/check_results/check_results.md) table. Because the default value is
-            *false*, this parameter must be set to *true* to delete the check results.
+            [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this
+            parameter must be set to *true* to delete the check results.
         delete_sensor_readouts (Union[Unset, bool]): Delete the data from the
-            [sensor_readouts](../../reference/parquetfiles/sensor_readouts/sensor_readouts.md) table. Because the default
-            value is *false*, this parameter must be set to *true* to delete the sensor readouts.
+            [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*,
+            this parameter must be set to *true* to delete the sensor readouts.
         column_names (Union[Unset, List[str]]): The list of column names to delete the data for column level results or
             errors only for selected columns.
         check_category (Union[Unset, str]): The check category name, for example *volume* or *anomaly*.

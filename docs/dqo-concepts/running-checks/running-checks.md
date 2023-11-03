@@ -143,3 +143,9 @@ dqo> check run -c=sales-dwh -t=public.fact_sales -ct=profiling -ts=daily(1)
 
 1. The *monitoring* and *partitioned* checks time scale. The supported values are *daily* and *monthly*.
 
+
+## What's next
+
+- Learn how to [run checks from the user interface](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md).
+- Read about how the [check results are stored](../data-storage/data-storage.md).
+- Learn how DQOps [executed the checks](../architecture/check-execution-flow.md).

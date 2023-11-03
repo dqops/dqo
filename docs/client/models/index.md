@@ -302,10 +302,10 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. This filter does not support patterns.|string|
 |date_start|The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|date|
 |date_end|The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|date|
-|delete_errors|Delete the data from the [errors](../../reference/parquetfiles/errors/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.|boolean|
-|delete_statistics|Delete the data from the [statistics](../../reference/parquetfiles/statistics/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.|boolean|
-|delete_check_results|Delete the data from the [check_results](../../reference/parquetfiles/check_results/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|boolean|
-|delete_sensor_readouts|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|boolean|
+|delete_errors|Delete the data from the [errors](../../reference/parquetfiles/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.|boolean|
+|delete_statistics|Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.|boolean|
+|delete_check_results|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|boolean|
+|delete_sensor_readouts|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|boolean|
 |column_names|The list of column names to delete the data for column level results or errors only for selected columns.|string_list|
 |check_category|The check category name, for example *volume* or *anomaly*.|string|
 |table_comparison_name|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|string|
