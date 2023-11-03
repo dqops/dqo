@@ -319,8 +319,8 @@ export const DefinitionTree = () => {
                   ? 'bg-gray-300'
                   : ''
               )}
-              onClick={() => {
-                openSensorFirstLevelTab(sensor);
+              onClick={() => {!(sensor.yaml_parsing_error && sensor.yaml_parsing_error.length > 0) ?
+                openSensorFirstLevelTab(sensor) : undefined
               }}
             >
               <SvgIcon
@@ -403,8 +403,8 @@ export const DefinitionTree = () => {
                   ? 'bg-gray-300'
                   : ''
               )}
-              onClick={() => {
-                openRuleFirstLevelTab(rule);
+              onClick={() => {!(rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0) ?
+                openRuleFirstLevelTab(rule) : undefined
               }}
             >
               <SvgIcon
@@ -493,8 +493,8 @@ export const DefinitionTree = () => {
                       ? 'bg-gray-300'
                       : ''
                   )}
-                  onClick={() => {
-                    openCheckFirstLevelTab(check);
+                  onClick={() => {!(check.yaml_parsing_error && check.yaml_parsing_error.length > 0) ?
+                    openCheckFirstLevelTab(check) : undefined
                   }}
                 >
                   <SvgIcon
