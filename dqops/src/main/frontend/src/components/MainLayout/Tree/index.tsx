@@ -309,13 +309,15 @@ const Tree = () => {
   };
 
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
+    console.log(node.parsingYamlError)
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
           className={clsx(
             'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
-            (node.level === TREE_LEVEL.TABLE && checkTypes === CheckTypes.PARTITIONED) && node.configured ? 'text-red-900' : '',
+            (node.level === TREE_LEVEL.TABLE && checkTypes === CheckTypes.PARTITIONED) && node.configured ? 'text-orange-500' : '',
+            node?.parsingYamlError !== undefined ? 'text-red-900' : "" 
           )}
         >
           {renderIcon(node)}
@@ -329,17 +331,31 @@ const Tree = () => {
             />
             <Tooltip
               content={node.id}
-              className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
+              className="max-w-120 py-4 px-4  delay-300 "
               placement="top-start"
             >
-              <div className="flex flex-1 justify-between items-center">
+              <div className="flex justify-between items-center  w-full">
                 <div
                   className={clsx(
-                    `flex-1 truncate mr-7`,
+                    `flex-1 truncate`,
                     node.hasCheck ? 'font-bold' : ''
                   )}
                 >
                   {node.label}
+                </div>
+                <div className='flex items-center justify-center relative'>
+                  <div>
+                {(node.parsingYamlError && node.parsingYamlError.length > 0) ?     
+                <Tooltip
+                content={node.parsingYamlError}
+                className="max-w-120 z-50"
+                placement="right-start"
+                >
+                  <div style={{position: "absolute", right: "30px", top:"-9px", borderRadius: "3px"}} className='bg-white'>
+                <SvgIcon name='warning' className='w-5 h-5'/>
+                  </div>
+                </Tooltip>
+                : null}
                 </div>
                 <ContextMenu
                   node={node}
@@ -347,7 +363,8 @@ const Tree = () => {
                   openAddColumnDialog={openAddColumnDialog}
                   openAddTableDialog={openAddTableDialog}
                   openAddSchemaDialog={openAddSchemaDialog}
-                />
+                  />
+                </div>
               </div>
             </Tooltip>
           </div>

@@ -121,7 +121,8 @@ function TreeProvider(props: any) {
           ],
         collect_statistics_job_template: item.collect_statistics_job_template,
         data_clean_job_template: item.data_clean_job_template,
-        open: false
+        open: false,
+        parsingYamlError: item.yaml_parsing_error
       }));
       const treeDataMaps = [
         CheckTypes.MONITORING,
@@ -300,7 +301,8 @@ function TreeProvider(props: any) {
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
       open: false,
-      configured: table.partitioning_configuration_missing
+      configured: table.partitioning_configuration_missing,
+      parsingYamlError: table.yaml_parsing_error
     }));
     if (reset) {
       resetTreeData(node, items);
