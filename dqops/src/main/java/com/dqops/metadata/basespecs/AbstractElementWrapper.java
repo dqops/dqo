@@ -16,6 +16,7 @@
 package com.dqops.metadata.basespecs;
 
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -254,6 +255,21 @@ public abstract class AbstractElementWrapper<K, V extends DirtyStatus & Hierarch
         }
 
         return super.isDefault();
+    }
+
+    /**
+     * Assigns the new hierarchy ID on child nodes.
+     *
+     * @param hierarchyId New hierarchy id of the current node that should be propagated to the field getter map.
+     */
+    @Override
+    protected void propagateHierarchyIdToFields(HierarchyId hierarchyId) {
+        if (this.spec == null) {
+            super.propagateHierarchyIdToFieldsExcept(hierarchyId, "spec");
+            return;
+        }
+
+        super.propagateHierarchyIdToFields(hierarchyId);
     }
 
     /**

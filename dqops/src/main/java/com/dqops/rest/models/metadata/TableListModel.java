@@ -195,6 +195,14 @@ public class TableListModel {
     private boolean canDeleteData;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
      * This model is used for the table list screen and it has even less fields.
      * @param connectionName Connection name to store in the model.
@@ -224,6 +232,7 @@ public class TableListModel {
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
             setCanDeleteData(isOperator);
+            setYamlParsingError(tableSpec.getYamlParsingError());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -293,6 +302,8 @@ public class TableListModel {
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
             setCanDeleteData(isOperator);
+            setYamlParsingError(tableSpec.getYamlParsingError());
+
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);

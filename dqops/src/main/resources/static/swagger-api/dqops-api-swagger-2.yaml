@@ -12792,6 +12792,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Data quality check definition model"
   CheckListModel:
     type: "object"
@@ -19560,6 +19566,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Full column model"
   ColumnMonitoringChecksRootSpec:
     type: "object"
@@ -28247,6 +28259,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Connection model for with a subset of parameters, excluding all\
       \ nested objects."
   ConnectionSpec:
@@ -28350,6 +28368,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Full connection model"
   ConnectionTestModel:
     type: "object"
@@ -28551,6 +28575,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Data grouping configuration model containing nested objects and\
       \ the configuration of grouping dimensions."
   DataGroupingConfigurationSpec:
@@ -28596,6 +28626,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Data grouping configuration model with trimmed path"
   DataGroupingDimensionSpec:
     type: "object"
@@ -30095,6 +30131,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yamlParsingError:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Provider sensor model"
   QualityCategoryModel:
     type: "object"
@@ -30291,6 +30333,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Rule model"
   RuleParametersModel:
     type: "object"
@@ -30680,7 +30728,14 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
-    description: "Sensor model."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
+    description: "Sensor model that describes the configuration of a single built-in\
+      \ or custom sensor."
   SensorReadoutEntryModel:
     type: "object"
     properties:
@@ -32881,6 +32936,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Table list model with a subset of parameters, excluding all nested\
       \ objects."
   TableModel:
@@ -32901,6 +32962,12 @@ definitions:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
           \ delete this object."
+      yaml_parsing_error:
+        type: "string"
+        description: "Optional parsing error that was captured when parsing the YAML\
+          \ file. This field is null when the YAML file is valid. If an error was\
+          \ captured, this field returns the file parsing error message and the file\
+          \ location."
     description: "Full table model, including all nested objects like columns or checks."
   TableMonitoringChecksSpec:
     type: "object"

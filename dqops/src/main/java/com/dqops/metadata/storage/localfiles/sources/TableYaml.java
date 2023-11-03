@@ -18,14 +18,19 @@ package com.dqops.metadata.storage.localfiles.sources;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Table and column definition file that defines a list of tables and columns that are covered by data quality checks.
  */
-public class TableYaml {
+public class TableYaml implements InvalidYamlStatusHolder {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.TABLE;
     private TableSpec spec = new TableSpec();
+
+    @JsonIgnore
+    private String yamlParsingError;
 
     public TableYaml() {
     }
@@ -80,5 +85,28 @@ public class TableYaml {
      */
     public void setSpec(TableSpec spec) {
         this.spec = spec;
+    }
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        if (this.spec != null) {
+            this.spec.setYamlParsingError(yamlParsingError);
+        }
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
     }
 }

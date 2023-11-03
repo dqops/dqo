@@ -3,16 +3,20 @@ package com.dqops.metadata.storage.localfiles.defaultschedules;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The configuration of default schedules for running data quality checks.
- * The default schedules are stored in the settings/defaultschedules.dqoschedules.yaml file in the DQOps user's home folder.
+ * The default schedules are stored in the *$DQO_USER_HOME/settings/defaultschedules.dqoschedules.yaml* file in the DQOps user's home folder.
  */
-public class DefaultSchedulesYaml {
-
+public class DefaultSchedulesYaml implements InvalidYamlStatusHolder {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.DEFAULT_SCHEDULES;
     private DefaultSchedulesSpec spec = new DefaultSchedulesSpec();
+
+    @JsonIgnore
+    private String yamlParsingError;
 
     public DefaultSchedulesYaml() {
     }
@@ -69,4 +73,26 @@ public class DefaultSchedulesYaml {
         this.spec = spec;
     }
 
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        if (this.spec != null) {
+            this.spec.setYamlParsingError(yamlParsingError);
+        }
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 }

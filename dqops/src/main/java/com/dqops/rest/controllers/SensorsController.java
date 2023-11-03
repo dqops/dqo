@@ -166,6 +166,7 @@ public class SensorsController {
             sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
             sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
             sensorModel.setCustom(true);
+            sensorModel.setYamlParsingError(sensorDefinitionWrapper.getSpec().getYamlParsingError());
             List<ProviderSensorModel> providerSensorBasicModelList = sensorDefinitionWrapper.getProviderSensors()
                     .toList().stream()
                     .map(providerSensorWrapper -> new ProviderSensorModel(

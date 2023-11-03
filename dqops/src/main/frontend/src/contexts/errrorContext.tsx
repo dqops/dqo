@@ -39,7 +39,7 @@ function ErrorProvider({ children }: any) {
         setIsOpen(true);
       }
       if (response.status < 500) {
-        if (response.request.responseURL.indexOf("api/logs/error") < 0) {
+        if (response.request?.responseURL?.indexOf("api/logs/error") < 0) {
           LogErrorsApi.logError({
             window_location: window.location.href,
             message: response?.data?.trace
