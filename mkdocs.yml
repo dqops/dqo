@@ -444,6 +444,7 @@ theme:
     - content.code.annotate
   logo: images/logo.svg
   favicon: images/favicon.ico
+  language: en
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -463,7 +464,9 @@ theme:
         name: Switch to light mode
   font: false
 # Disable search, the index is too big
-plugins: []
+plugins:
+  - glightbox
+  - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
