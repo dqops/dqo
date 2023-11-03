@@ -18,6 +18,7 @@ package com.dqops.core.jobqueue.jobs.data;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -37,8 +38,6 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
 
     @JsonPropertyDescription("The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns.")
     private String schemaTableName;
-    // TODO: Add proper descriptions using this annotation.
-    // @JsonPropertyDescription("Data start data")
 
     @JsonPropertyDescription("The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.")
     private LocalDate dateStart;

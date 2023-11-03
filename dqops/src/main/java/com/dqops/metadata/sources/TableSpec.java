@@ -39,6 +39,7 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
 import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -973,10 +974,12 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     public static class TableSpecSampleFactory implements SampleValueFactory<TableSpec> {
         @Override
         public TableSpec createSample() {
+            String schemaTableName = SampleStringsRegistry.getSchemaTableName();
             return new TableSpec() {{
                 setDisabled(false);
                 setTimestampColumns(new TimestampColumnsSpec.TimestampColumnsSpecSampleFactory().createSample());
                 setProfilingChecks(new TableProfilingCheckCategoriesSpec.TableProfilingCheckCategoriesSpecSampleFactory().createSample());
+                setPhysicalTableName(PhysicalTableName.fromSchemaTableFilter(schemaTableName));
             }};
         }
     }

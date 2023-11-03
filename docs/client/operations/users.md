@@ -28,9 +28,11 @@ http://localhost:8888/api/mypassword
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/mypassword
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d 'sample_string_value'
     ```
 === "python_sync"
       
@@ -78,9 +80,11 @@ http://localhost:8888/api/users/{email}/password
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d 'sample_string_value'
     ```
 === "python_sync"
       
@@ -121,9 +125,14 @@ http://localhost:8888/api/users
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/users
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "email" : "sample_user@mail.com",
+		  "accountRole" : "operator"
+		}'
     ```
 === "python_sync"
       
@@ -164,7 +173,7 @@ http://localhost:8888/api/users/{email}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com
 		-H "Accept: application/json"
     ```
@@ -207,7 +216,7 @@ http://localhost:8888/api/users
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/users
 		-H "Accept: application/json"
     ```
@@ -257,7 +266,7 @@ http://localhost:8888/api/users/{email}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/users/sample_user@mail.com
 		-H "Accept: application/json"
     ```
@@ -307,9 +316,14 @@ http://localhost:8888/api/users/{email}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "email" : "sample_user@mail.com",
+		  "accountRole" : "operator"
+		}'
     ```
 === "python_sync"
       

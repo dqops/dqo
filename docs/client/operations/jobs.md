@@ -28,8 +28,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl -X DELETE http://localhost:8888/api/jobs/jobs/other
+    ```bash
+    curl -X DELETE http://localhost:8888/api/jobs/jobs/10832
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -86,9 +86,17 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "connectionName" : "sample_connection",
+		  "schemaTableName" : "sample_schema.sample_table",
+		  "enabled" : true,
+		  "columnNames" : [ "sample_column" ],
+		  "collectorCategory" : "sample_category"
+		}'
     ```
 === "python_sync"
       
@@ -144,9 +152,17 @@ http://localhost:8888/api/jobs/collectstatistics/table
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/collectstatistics/table
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "connectionName" : "sample_connection",
+		  "schemaTableName" : "sample_schema.sample_table",
+		  "enabled" : true,
+		  "columnNames" : [ "sample_column" ],
+		  "collectorCategory" : "sample_category"
+		}'
     ```
 === "python_sync"
       
@@ -202,9 +218,19 @@ http://localhost:8888/api/jobs/deletestoreddata
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/deletestoreddata
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "connectionName" : "sample_connection",
+		  "schemaTableName" : "sample_schema.sample_table",
+		  "deleteErrors" : true,
+		  "deleteStatistics" : true,
+		  "deleteCheckResults" : true,
+		  "deleteSensorReadouts" : true,
+		  "columnNames" : [ "sample_column" ]
+		}'
     ```
 === "python_sync"
       
@@ -245,7 +271,7 @@ http://localhost:8888/api/jobs/jobs
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/jobs/jobs
 		-H "Accept: application/json"
     ```
@@ -295,8 +321,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/jobs/jobs/other
+    ```bash
+    curl http://localhost:8888/api/jobs/jobs/10832
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -345,8 +371,8 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/jobs/jobchangessince/other
+    ```bash
+    curl http://localhost:8888/api/jobs/jobchangessince/3854372
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -403,9 +429,15 @@ http://localhost:8888/api/jobs/importtables
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/importtables
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "connectionName" : "sample_connection",
+		  "schemaName" : "sample_schema",
+		  "tableNames" : [ "sample_table" ]
+		}'
     ```
 === "python_sync"
       
@@ -439,7 +471,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/jobs/scheduler/isrunning
 		-H "Accept: application/json"
     ```
@@ -497,9 +529,20 @@ http://localhost:8888/api/jobs/runchecks
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/runchecks
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "check_search_filters" : {
+		    "connectionName" : "sample_connection",
+		    "schemaTableName" : "sample_schema.sample_table",
+		    "enabled" : true,
+		    "columnName" : "sample_column",
+		    "columnDataType" : "string"
+		  },
+		  "dummy_execution" : false
+		}'
     ```
 === "python_sync"
       
@@ -533,7 +576,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/scheduler/status/start
 		-H "Accept: application/json"
     ```
@@ -569,7 +612,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/scheduler/status/stop
 		-H "Accept: application/json"
     ```
@@ -627,9 +670,27 @@ http://localhost:8888/api/jobs/synchronize
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/jobs/synchronize
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "direction" : "full",
+		  "forceRefreshNativeTables" : false,
+		  "detectCronSchedules" : false,
+		  "sources" : true,
+		  "sensors" : true,
+		  "rules" : true,
+		  "checks" : true,
+		  "settings" : true,
+		  "credentials" : true,
+		  "dataSensorReadouts" : true,
+		  "dataCheckResults" : true,
+		  "dataStatistics" : true,
+		  "dataErrors" : true,
+		  "dataIncidents" : true,
+		  "synchronizeFolderWithLocalChanges" : false
+		}'
     ```
 === "python_sync"
       
@@ -678,8 +739,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/jobs/jobs/other/wait
+    ```bash
+    curl http://localhost:8888/api/jobs/jobs/10832/wait
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -729,8 +790,8 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/jobs/runchecks/other/wait
+    ```bash
+    curl http://localhost:8888/api/jobs/runchecks/10832/wait
 		-H "Accept: application/json"
     ```
 === "python_sync"

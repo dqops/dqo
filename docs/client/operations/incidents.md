@@ -28,7 +28,7 @@ http://localhost:8888/api/incidentstat
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/incidentstat
 		-H "Accept: application/json"
     ```
@@ -88,7 +88,7 @@ http://localhost:8888/api/incidents/{connectionName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/incidents/sample_connection
 		-H "Accept: application/json"
     ```
@@ -141,8 +141,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/incidents/sample_connection/other/other/sample_incident
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -199,8 +199,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/incidents/sample_connection/other/other/sample_incident/histogram
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -261,8 +261,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/incidents/sample_connection/other/other/sample_incident/issues
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -308,8 +308,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl -X POST http://localhost:8888/api/incidents/sample_connection/other/other/sample_incident/issueurl
+    ```bash
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -355,8 +355,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 **Usage examples**  
 === "curl"
       
-    ```
-    curl -X POST http://localhost:8888/api/incidents/sample_connection/other/other/sample_incident/status
+    ```bash
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status
 		-H "Accept: application/json"
     ```
 === "python_sync"

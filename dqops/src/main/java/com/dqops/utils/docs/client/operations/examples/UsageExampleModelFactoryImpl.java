@@ -2,15 +2,20 @@ package com.dqops.utils.docs.client.operations.examples;
 
 import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.docs.client.operations.OperationParameterDocumentationModel;
+import com.dqops.utils.docs.client.operations.OperationsDocumentationModel;
+import com.dqops.utils.docs.client.operations.OperationsOperationDocumentationModel;
 import io.swagger.v3.oas.models.PathItem;
+import io.swagger.v3.oas.models.media.MediaType;
 
 import java.util.List;
 
 public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
     @Override
     public OperationUsageExampleDocumentationModel createOperationUsageExample(OperationExecutionMethod executionMethod,
-                                                                               OperationModel operationModel,
-                                                                               List<OperationParameterDocumentationModel> operationParameters) {
+                                                                               OperationsOperationDocumentationModel operationsOperationDocumentationModel) {
+        OperationModel operationModel = operationsOperationDocumentationModel.getOperationModel();
+        List<OperationParameterDocumentationModel> operationParameters = operationsOperationDocumentationModel.getParametersFields();
+
         OperationUsageExampleDocumentationModel model = new OperationUsageExampleDocumentationModel();
         model.setExecutionMethod(executionMethod);
         model.setOperation(operationModel);
@@ -18,7 +23,10 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
         String renderedExample;
         switch (executionMethod) {
             case curl:
-                renderedExample = renderedCurlUsageExample(operationModel, operationParameters);
+                renderedExample = renderedCurlUsageExample(operationModel,
+                        operationsOperationDocumentationModel.getRequestBodyField(),
+                        operationParameters);
+                model.setExecutionCodeFormatting("bash");
                 break;
             default:
                 renderedExample = "No render";
@@ -30,6 +38,7 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
     }
 
     protected String renderedCurlUsageExample(OperationModel operationModel,
+                                              OperationParameterDocumentationModel requestBody,
                                               List<OperationParameterDocumentationModel> operationParameters) {
         StringBuilder renderedExample = new StringBuilder("curl");
 
@@ -42,8 +51,18 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
 
         String callUrl = PathParameterFillerUtility.getSampleCallPath(operationModel.getPath(), operationParameters);
         renderedExample.append(" ").append(callUrl);
-        renderedExample.append("\n\t\t");
-        renderedExample.append("-H \"Accept: application/json\"");
+        renderedExample.append("\n\t\t-H \"Accept: application/json\"");
+
+        if (requestBody != null) {
+            renderedExample.append("\n\t\t-H \"Content-Type: application/json\"");
+            renderedExample.append("\n\t\t-d ");
+
+            String payload = PathParameterFillerUtility.getSampleFromTypeModel(requestBody.getTypeModel());
+            String payloadPadded = payload.replace("\n", "\n\t\t");
+            renderedExample.append("'")
+                    .append(payloadPadded)
+                    .append("'");
+        }
 
         return renderedExample.toString();
     }

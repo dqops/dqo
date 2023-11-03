@@ -272,6 +272,7 @@ public class TableComparisonConfigurationSpec extends AbstractSpec {
                 setReferenceTableConnectionName(SampleStringsRegistry.getConnectionName());
                 setReferenceTableSchemaName(SampleStringsRegistry.getSchemaName());
                 setReferenceTableName(SampleStringsRegistry.getTableName());
+                setHierarchyId(new HierarchyId(SampleStringsRegistry.getConnectionName(), SampleStringsRegistry.getSchemaTableName()));
             }};
         }
     }

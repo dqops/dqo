@@ -562,7 +562,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             return new ConnectionSpec() {{
                 setProviderType(ProviderType.postgresql);
                 setPostgresql(new PostgresqlParametersSpec.PostgresqlParametersSpecSampleFactory().createSample());
-                setParallelRunsLimit(4);
+                setParallelJobsLimit(4);
             }};
         }
     }

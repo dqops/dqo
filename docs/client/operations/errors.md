@@ -46,8 +46,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/errors
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/errors
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -107,8 +107,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/errors
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/errors
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -167,7 +167,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/errors
 		-H "Accept: application/json"
     ```
@@ -227,8 +227,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/errors
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/errors
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -287,8 +287,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/errors
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/errors
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -346,7 +346,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/errors
 		-H "Accept: application/json"
     ```

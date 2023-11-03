@@ -28,7 +28,7 @@ http://localhost:8888/api/timezones
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/timezones
 		-H "Accept: application/json"
     ```

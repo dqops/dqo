@@ -28,9 +28,15 @@ http://localhost:8888/api/credentials
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/credentials
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "credential_name" : "sample_credential",
+		  "type" : "text",
+		  "text_value" : "sample_credential_text_value"
+		}'
     ```
 === "python_sync"
       
@@ -71,7 +77,7 @@ http://localhost:8888/api/credentials/{credentialName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X DELETE http://localhost:8888/api/credentials/sample_credential
 		-H "Accept: application/json"
     ```
@@ -114,7 +120,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/credentials/sample_credential/download
 		-H "Accept: application/json"
     ```
@@ -157,7 +163,7 @@ http://localhost:8888/api/credentials
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/credentials
 		-H "Accept: application/json"
     ```
@@ -207,7 +213,7 @@ http://localhost:8888/api/credentials/{credentialName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/credentials/sample_credential
 		-H "Accept: application/json"
     ```
@@ -257,9 +263,15 @@ http://localhost:8888/api/credential/{credentialName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/credential/sample_credential
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "credential_name" : "sample_credential",
+		  "type" : "text",
+		  "text_value" : "sample_credential_text_value"
+		}'
     ```
 === "python_sync"
       

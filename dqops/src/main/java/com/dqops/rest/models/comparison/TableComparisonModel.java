@@ -321,10 +321,13 @@ public class TableComparisonModel {
             TableSpec.TableSpecSampleFactory tableSpecSampleFactory = new TableSpec.TableSpecSampleFactory();
             TableSpec tableSpec1 = tableSpecSampleFactory.createSample();
             TableSpec tableSpec2 = tableSpecSampleFactory.createSample();
+            String tableComparisonName = SampleStringsRegistry.getTableComparison();
+            TableComparisonConfigurationSpec tableComparisonConfigurationSpec = new TableComparisonConfigurationSpec.TableComparisonConfigurationSpecSampleFactory().createSample();
+            tableSpec1.getTableComparisons().put(tableComparisonName, tableComparisonConfigurationSpec);
             return fromTableSpec(
                     tableSpec1,
                     tableSpec2,
-                    SampleStringsRegistry.getTableComparison(),
+                    tableComparisonName,
                     new CheckType.CheckTypeSampleFactory().createSample(),
                     new CheckTimeScale.CheckTimeScaleSampleFactory().createSample(),
                     true);

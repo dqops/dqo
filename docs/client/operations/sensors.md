@@ -35,9 +35,27 @@ http://localhost:8888/api/sensors/{fullSensorName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "sensor_definition_spec" : {
+		    "fields" : [ {
+		      "field_name" : "sample_string_param",
+		      "data_type" : "string"
+		    }, {
+		      "field_name" : "sample_double_param",
+		      "data_type" : "double"
+		    } ],
+		    "default_value" : 0.0
+		  },
+		  "provider_sensor_list" : [ ],
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}'
     ```
 === "python_sync"
       
@@ -78,7 +96,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
 		-H "Accept: application/json"
     ```
@@ -121,7 +139,7 @@ http://localhost:8888/api/sensors
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/sensors
 		-H "Accept: application/json"
     ```
@@ -171,7 +189,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
 		-H "Accept: application/json"
     ```
@@ -214,7 +232,7 @@ http://localhost:8888/api/definitions/sensors
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/definitions/sensors
 		-H "Accept: application/json"
     ```
@@ -265,9 +283,27 @@ http://localhost:8888/api/sensors/{fullSensorName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "sensor_definition_spec" : {
+		    "fields" : [ {
+		      "field_name" : "sample_string_param",
+		      "data_type" : "string"
+		    }, {
+		      "field_name" : "sample_double_param",
+		      "data_type" : "double"
+		    } ],
+		    "default_value" : 0.0
+		  },
+		  "provider_sensor_list" : [ ],
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}'
     ```
 === "python_sync"
       

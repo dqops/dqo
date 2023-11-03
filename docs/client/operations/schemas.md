@@ -45,8 +45,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/daily/model
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/"daily"/model
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -100,8 +100,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/daily
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/"daily"
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -160,8 +160,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/daily/model
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/"daily"/model
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -215,8 +215,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 **Usage examples**  
 === "curl"
       
-    ```
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/daily
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/"daily"
 		-H "Accept: application/json"
     ```
 === "python_sync"
@@ -274,7 +274,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model
 		-H "Accept: application/json"
     ```
@@ -328,7 +328,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling
 		-H "Accept: application/json"
     ```
@@ -378,7 +378,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas
 		-H "Accept: application/json"
     ```

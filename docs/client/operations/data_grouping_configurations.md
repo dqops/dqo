@@ -37,9 +37,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "data_grouping_configuration_name" : "sample_data_grouping",
+		  "spec" : {
+		    "level_3" : {
+		      "source" : "column_value",
+		      "column" : "sample_column"
+		    }
+		  },
+		  "can_edit" : true
+		}'
     ```
 === "python_sync"
       
@@ -83,7 +94,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping
 		-H "Accept: application/json"
     ```
@@ -136,7 +147,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping
 		-H "Accept: application/json"
     ```
@@ -188,7 +199,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings
 		-H "Accept: application/json"
     ```
@@ -234,7 +245,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PATCH http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/setdefault
 		-H "Accept: application/json"
     ```
@@ -287,9 +298,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "data_grouping_configuration_name" : "sample_data_grouping",
+		  "spec" : {
+		    "level_3" : {
+		      "source" : "column_value",
+		      "column" : "sample_column"
+		    }
+		  },
+		  "can_edit" : true
+		}'
     ```
 === "python_sync"
       

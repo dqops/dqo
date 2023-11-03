@@ -28,9 +28,14 @@ http://localhost:8888/api/logs/debug
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/logs/debug
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "window_location" : "window.location",
+		  "message" : "Sample log message."
+		}'
     ```
 === "python_sync"
       
@@ -71,9 +76,14 @@ http://localhost:8888/api/logs/error
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/logs/error
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "window_location" : "window.location",
+		  "message" : "Sample log message."
+		}'
     ```
 === "python_sync"
       
@@ -114,9 +124,14 @@ http://localhost:8888/api/logs/info
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/logs/info
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "window_location" : "window.location",
+		  "message" : "Sample log message."
+		}'
     ```
 === "python_sync"
       
@@ -157,9 +172,14 @@ http://localhost:8888/api/logs/warn
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/logs/warn
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "window_location" : "window.location",
+		  "message" : "Sample log message."
+		}'
     ```
 === "python_sync"
       

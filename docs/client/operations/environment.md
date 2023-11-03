@@ -28,7 +28,7 @@ http://localhost:8888/api/environment/settings
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/environment/settings
 		-H "Accept: application/json"
     ```
@@ -71,7 +71,7 @@ http://localhost:8888/api/environment/profile
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/environment/profile
 		-H "Accept: application/json"
     ```
@@ -114,7 +114,7 @@ http://localhost:8888/api/environment/issueapikey
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/environment/issueapikey
 		-H "Accept: application/json"
     ```

@@ -65,8 +65,7 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
                 for (OperationExecutionMethod operationExecutionMethod : OperationExecutionMethod.values()) {
                     OperationUsageExampleDocumentationModel usageExampleDocumentationModel = usageExampleModelFactory.createOperationUsageExample(
                             operationExecutionMethod,
-                            operationDocumentationModel.getOperationModel(),
-                            operationDocumentationModel.getParametersFields()
+                            operationDocumentationModel
                     );
                     operationDocumentationModel.getUsageExamples().add(usageExampleDocumentationModel);
                 }

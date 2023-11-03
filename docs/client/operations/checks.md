@@ -35,9 +35,19 @@ http://localhost:8888/api/checks/{fullCheckName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "check_name" : "sample_check",
+		  "sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "rule_name" : "sample_target/sample_category/sample_rule",
+		  "help_text" : "Sample help text",
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}'
     ```
 === "python_sync"
       
@@ -78,7 +88,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check
 		-H "Accept: application/json"
     ```
@@ -121,7 +131,7 @@ http://localhost:8888/api/checks
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/checks
 		-H "Accept: application/json"
     ```
@@ -171,7 +181,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check
 		-H "Accept: application/json"
     ```
@@ -214,7 +224,7 @@ http://localhost:8888/api/definitions/checks
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl http://localhost:8888/api/definitions/checks
 		-H "Accept: application/json"
     ```
@@ -264,9 +274,19 @@ http://localhost:8888/api/checks/{fullCheckName}
 **Usage examples**  
 === "curl"
       
-    ```
+    ```bash
     curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check
 		-H "Accept: application/json"
+		-H "Content-Type: application/json"
+		-d '{
+		  "check_name" : "sample_check",
+		  "sensor_name" : "sample_target/sample_category/sample_sensor",
+		  "rule_name" : "sample_target/sample_category/sample_rule",
+		  "help_text" : "Sample help text",
+		  "custom" : false,
+		  "built_in" : false,
+		  "can_edit" : true
+		}'
     ```
 === "python_sync"
       
