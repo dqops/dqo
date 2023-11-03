@@ -272,26 +272,25 @@ Target data quality checks filter, identifies which checks on which tables and c
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|column_name||string|
-|column_data_type||string|
-|column_nullable||boolean|
-|[check_target](\docs\client\models\#checktarget)||[CheckTarget](\docs\client\models\#checktarget)|
-|[check_type](\docs\client\models\#checktype)||[CheckType](\docs\client\models\#checktype)|
-|[time_scale](\docs\client\models\#checktimescale)||[CheckTimeScale](\docs\client\models\#checktimescale)|
-|check_category||string|
-|table_comparison_name||string|
-|check_name||string|
-|sensor_name||string|
-|check_configured||boolean|
+|column_name|The column name. This field accepts search patterns in the format: &#x27;fk_\*&#x27;, &#x27;\*_id&#x27;, &#x27;prefix\*suffix&#x27;.|string|
+|column_data_type|The column data type that was imported from the data source and is stored in the [columns -&gt; column_name -&gt; type_snapshot -&gt; column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.|string|
+|column_nullable|Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -&gt; column_name -&gt; type_snapshot -&gt; nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.|boolean|
+|[check_target](\docs\client\models\#checktarget)|The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.|[CheckTarget](\docs\client\models\#checktarget)|
+|[check_type](\docs\client\models\#checktype)|The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.|[CheckType](\docs\client\models\#checktype)|
+|[time_scale](\docs\client\models\#checktimescale)|The time scale of *monitoring* or *partitioned* checks to run. Supports running only *daily* or *monthly* checks. Daily monitoring checks will replace today&#x27;s value for all captured check results.|[CheckTimeScale](\docs\client\models\#checktimescale)|
+|check_category|The target check category, for example: *nulls*, *volume*, *anomaly*.|string|
+|table_comparison_name|The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables.|string|
+|check_name|The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: &#x27;profiling_\*&#x27;, &#x27;\*_count&#x27;, &#x27;profiling_\*_percent&#x27;.|string|
+|sensor_name|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: &#x27;table/volume/row_\*&#x27;, &#x27;\*_count&#x27;, &#x27;table/volume/prefix_\*_suffix&#x27;.|string|
 |connection_name|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
-|schema_table_name||string|
-|enabled||boolean|
+|schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|string|
+|enabled|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|boolean|
 
 
 ___  
 
 ## DeleteStoredDataQueueJobParameters  
-Parameters for the {@link DeleteStoredDataQueueJob DeleteStoredDataQueueJob} job that deletes data stored in user&#x27;s &quot;.data&quot; directory.  
+Parameters for the &quot;delete stored data* queue job that deletes data from parquet files stored in DQOps user home&#x27;s *.data* directory.  
   
 
 **The structure of this object is described below**  
@@ -299,26 +298,26 @@ Parameters for the {@link DeleteStoredDataQueueJob DeleteStoredDataQueueJob} job
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name||string|
-|schema_table_name||string|
-|date_start||date|
-|date_end||date|
-|delete_errors||boolean|
-|delete_statistics||boolean|
-|delete_check_results||boolean|
-|delete_sensor_readouts||boolean|
-|column_names||string_list|
-|check_category||string|
-|table_comparison_name||string|
-|check_name||string|
-|check_type||string|
-|sensor_name||string|
-|data_group_tag||string|
-|quality_dimension||string|
-|time_gradient||string|
-|collector_category||string|
-|collector_name||string|
-|collector_target||string|
+|connection_name|The connection name.|string|
+|schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. This filter does not support patterns.|string|
+|date_start|The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|date|
+|date_end|The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|date|
+|delete_errors|Delete the data from the [errors](../../reference/parquetfiles/errors/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.|boolean|
+|delete_statistics|Delete the data from the [statistics](../../reference/parquetfiles/statistics/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.|boolean|
+|delete_check_results|Delete the data from the [check_results](../../reference/parquetfiles/check_results/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|boolean|
+|delete_sensor_readouts|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|boolean|
+|column_names|The list of column names to delete the data for column level results or errors only for selected columns.|string_list|
+|check_category|The check category name, for example *volume* or *anomaly*.|string|
+|table_comparison_name|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|string|
+|check_name|The name of a data quality check. Uses the short check name, for example *daily_row_count*.|string|
+|check_type|The type of checks whose results and errors should be deleted. For example, use *monitoring* to delete only monitoring checks data.|string|
+|sensor_name|The full sensor name whose results, checks based on the sensor, statistics and errors generated by the sensor sound be deleted. Uses a full sensor name, for example: *table/volume/row_count*.|string|
+|data_group_tag|The names of data groups in any of the *grouping_level_1*...*grouping_level_9* columns in the Parquet tables. Enables deleting data tagged for one data source or a subset of results when the group level is captured from a column in a monitored table.|string|
+|quality_dimension|The data quality dimension name, for example *Timeliness* or *Completeness*.|string|
+|time_gradient|The time gradient (time scale) of the sensor and check results that are captured.|string|
+|collector_category|The statistics collector category when statistics should be deleted. A statistics category is a group of statistics, for example *sampling* for the column value samples.|string|
+|collector_name|The statistics collector name when only statistics are deleted for a selected collector, for example *sample_values*.|string|
+|collector_target|The type of the target object for which the basic statistics are deleted. Supported values are *table* and *column*.|string|
 
 
 ___  
@@ -507,13 +506,13 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|collector_name||string|
-|sensor_name||string|
-|collector_category||string|
-|[target](#statisticscollectortarget)||[StatisticsCollectorTarget](#statisticscollectortarget)|
+|collector_name|The target statistics collector name to capture only selected statistics. Uses the short collector nameThis field supports search patterns such as: &#x27;prefix\*&#x27;, &#x27;\*suffix&#x27;, &#x27;prefix_\*_suffix&#x27;. In order to collect only top 10 most common column samples, use &#x27;column_samples&#x27;.|string|
+|sensor_name|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: &#x27;table/volume/row_\*&#x27;, &#x27;\*_count&#x27;, &#x27;table/volume/prefix_\*_suffix&#x27;.|string|
+|collector_category|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|string|
+|[target](#statisticscollectortarget)|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|[StatisticsCollectorTarget](#statisticscollectortarget)|
 |connection_name|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
-|schema_table_name||string|
-|enabled||boolean|
+|schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|string|
+|enabled|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|boolean|
 
 
 ___  
@@ -548,6 +547,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

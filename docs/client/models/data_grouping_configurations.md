@@ -33,6 +33,7 @@ Model of data grouping configuration on a table returned by the rest api, includ
 |data_grouping_configuration_name|Data grouping configuration name.|string|
 |[spec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|Data stream specification.|[DataGroupingConfigurationSpec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  
@@ -49,6 +50,7 @@ Data grouping on a table model with trimmed access path.
 |data_grouping_configuration_name|Data grouping configuration name.|string|
 |[spec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|Data grouping configuration specification.|[DataGroupingConfigurationSpec](\docs\reference\yaml\connectionyaml\#datagroupingconfigurationspec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  
