@@ -11,8 +11,11 @@ DQOps comes with more than 140 predefined data quality checks which helps you mo
 - Daily and monthly date partition testing
 - Data segmentation by up to 9 different data streams
 - Built-in scheduling
-- Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
-- Incident analysis
+- Calculation of data quality KPIs
+- Built-in data quality dashboards
+- Cloud hosted Data Quality Data Warehouse
+- Incident management
+- Incident notifications using webhooks
 
 ## Getting started
 
@@ -46,7 +49,7 @@ Visual Studio Code for data quality.
 Want to learn more about data quality? 
 
 Check out eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
-created by the DQOps Team based on their experience in data cleansing and data quality monitoring.
+created by the DQOps team based on their experience in data cleansing and data quality monitoring.
 
 ![A step-by-step guide to improve data quality](./images/ebook.png "A step-by-step guide to improve data quality")
 

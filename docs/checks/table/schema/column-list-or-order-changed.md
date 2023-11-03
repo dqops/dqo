@@ -12,9 +12,9 @@ ___
 **Check description**  
 Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_list_or_order_changed|profiling| |[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_list_or_order_changed|profiling| |Consistency|[column_list_ordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -32,13 +32,13 @@ dqo> check run -c=connection_name -ch=profile_column_list_or_order_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=profile_column_list_or_order_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_list_or_order_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_list_or_order_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_list_or_order_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   profiling_checks:
     schema:
@@ -47,7 +47,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
         error: {}
         fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -75,6 +77,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_list_ordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-ordered-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -88,9 +95,9 @@ ___
 **Check description**  
 Detects if new columns were added, existing columns were removed or the columns were reordered since the most recent day. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_list_or_order_changed|monitoring|daily|[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_list_or_order_changed|monitoring|daily|Consistency|[column_list_ordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -108,13 +115,13 @@ dqo> check run -c=connection_name -ch=daily_column_list_or_order_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_column_list_or_order_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_list_or_order_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_column_list_or_order_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_list_or_order_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     daily:
@@ -124,7 +131,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
           error: {}
           fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -153,6 +162,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_list_ordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-ordered-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -166,9 +180,9 @@ ___
 **Check description**  
 Detects if new columns were added, existing columns were removed or the columns were reordered since the last month. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_list_or_order_changed|monitoring|monthly|[column_list_ordered_hash](../../../../reference/sensors/Table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_list_or_order_changed|monitoring|monthly|Consistency|[column_list_ordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-ordered-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -186,13 +200,13 @@ dqo> check run -c=connection_name -ch=monthly_column_list_or_order_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_column_list_or_order_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_list_or_order_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_column_list_or_order_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_list_or_order_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     monthly:
@@ -202,7 +216,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
           error: {}
           fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="11-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -230,6 +246,11 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_list_ordered_hash](../../../../reference/sensors/table/schema-table-sensors/#column-list-ordered-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 

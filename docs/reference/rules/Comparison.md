@@ -18,7 +18,10 @@ Data quality rule that verifies if a data quality check readout is between from 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/between_floats.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -47,6 +50,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/between_floats.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -130,7 +136,10 @@ Data quality rule that verifies if a data quality check readout is between begin
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/between_ints.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -159,6 +168,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/between_ints.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -243,7 +255,10 @@ Data quality rule that verifies that a data quality check readout of a string_da
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/datatype_equals.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -266,6 +281,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/datatype_equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -342,7 +360,10 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/diff_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -362,6 +383,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/diff_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -448,7 +472,10 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/equals.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -476,6 +503,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -553,7 +583,10 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/equals_integer.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -575,6 +608,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/equals_integer.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -651,7 +687,10 @@ Data quality rule that verifies if a data quality check readsout is less or equa
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -673,6 +712,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -750,7 +792,10 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_count.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -770,6 +815,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -847,7 +895,10 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -867,6 +918,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -944,7 +998,10 @@ Data quality rule that verifies if the number of executive failures (the sensor 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_failures.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -969,6 +1026,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_failures.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1067,7 +1127,10 @@ Data quality rule that verifies the results of the data quality checks that coun
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_missing.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1089,6 +1152,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_missing.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1170,7 +1236,10 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1190,6 +1259,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1267,7 +1339,10 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_value.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1289,6 +1364,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1366,7 +1444,10 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1388,6 +1469,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1465,7 +1549,10 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_count.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1487,6 +1574,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1564,7 +1654,10 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1584,6 +1677,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1661,7 +1757,10 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_value.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1683,6 +1782,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1754,7 +1856,10 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/value_changed.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 apiVersion: dqo/v1
 kind: rule
@@ -1770,6 +1875,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/value_changed.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence

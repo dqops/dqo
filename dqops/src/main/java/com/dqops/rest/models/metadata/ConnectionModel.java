@@ -184,7 +184,7 @@ public class ConnectionModel {
             boolean isOperator) {
         return new ConnectionModel() {{
             setConnectionName(connectionName);
-            setParallelRunsLimit(connectionSpec.getParallelRunsLimit());
+            setParallelRunsLimit(connectionSpec.getParallelJobsLimit());
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
             setBigquery(connectionSpec.getBigquery());
@@ -247,7 +247,7 @@ public class ConnectionModel {
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setParallelRunsLimit(this.parallelRunsLimit);
+        targetConnectionSpec.setParallelJobsLimit(this.parallelRunsLimit);
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());

@@ -70,7 +70,7 @@ To run the examples, follow the steps below.
 
 ### **Executing the checks using the graphical interface**
 
-You can execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
+You can execute the checks using the [graphical interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
 Simply, open the DQO User Interface Console (http://localhost:8888).
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)

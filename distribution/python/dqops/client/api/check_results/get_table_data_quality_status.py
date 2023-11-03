@@ -19,6 +19,11 @@ def _get_kwargs(
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
@@ -36,6 +41,16 @@ def _get_kwargs(
         json_check_time_scale = check_time_scale.value if check_time_scale else None
 
     params["checkTimeScale"] = json_check_time_scale
+
+    params["dataGroup"] = data_group
+
+    params["checkName"] = check_name
+
+    params["category"] = category
+
+    params["tableComparison"] = table_comparison
+
+    params["qualityDimension"] = quality_dimension
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -83,6 +98,11 @@ def sync_detailed(
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Response[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -99,6 +119,11 @@ def sync_detailed(
         months (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -115,6 +140,11 @@ def sync_detailed(
         months=months,
         check_type=check_type,
         check_time_scale=check_time_scale,
+        data_group=data_group,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        quality_dimension=quality_dimension,
     )
 
     response = client.get_httpx_client().request(
@@ -133,6 +163,11 @@ def sync(
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Optional[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -149,6 +184,11 @@ def sync(
         months (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,6 +206,11 @@ def sync(
         months=months,
         check_type=check_type,
         check_time_scale=check_time_scale,
+        data_group=data_group,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        quality_dimension=quality_dimension,
     ).parsed
 
 
@@ -178,6 +223,11 @@ async def asyncio_detailed(
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Response[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -194,6 +244,11 @@ async def asyncio_detailed(
         months (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -210,6 +265,11 @@ async def asyncio_detailed(
         months=months,
         check_type=check_type,
         check_time_scale=check_time_scale,
+        data_group=data_group,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        quality_dimension=quality_dimension,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -226,6 +286,11 @@ async def asyncio(
     months: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Optional[TableDataQualityStatusModel]:
     """getTableDataQualityStatus
 
@@ -242,6 +307,11 @@ async def asyncio(
         months (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -260,5 +330,10 @@ async def asyncio(
             months=months,
             check_type=check_type,
             check_time_scale=check_time_scale,
+            data_group=data_group,
+            check_name=check_name,
+            category=category,
+            table_comparison=table_comparison,
+            quality_dimension=quality_dimension,
         )
     ).parsed

@@ -37,7 +37,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -175,7 +175,7 @@ public class TableSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringSchedulesSpec schedulesOverride;
+    private DefaultSchedulesSpec schedulesOverride;
 
     @JsonPropertyDescription("Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.")
     private ColumnSpecMap columns = new ColumnSpecMap();
@@ -460,7 +460,7 @@ public class TableSpec extends AbstractSpec {
      * Returns the table specific configuration of schedules for each type of checks that have a separate schedule.
      * @return Configuration of schedules for each type of schedules.
      */
-    public MonitoringSchedulesSpec getSchedulesOverride() {
+    public DefaultSchedulesSpec getSchedulesOverride() {
         return schedulesOverride;
     }
 
@@ -468,7 +468,7 @@ public class TableSpec extends AbstractSpec {
      * Sets the table specific configuration of schedules for running checks.
      * @param schedulesOverride Configuration of schedules for running checks.
      */
-    public void setSchedulesOverride(MonitoringSchedulesSpec schedulesOverride) {
+    public void setSchedulesOverride(DefaultSchedulesSpec schedulesOverride) {
         setDirtyIf(!Objects.equals(this.schedulesOverride, schedulesOverride));
         this.schedulesOverride = schedulesOverride;
         propagateHierarchyIdToField(schedulesOverride, "schedules_override");

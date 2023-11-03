@@ -21,7 +21,7 @@ import { formatNumber, dateToString } from '../../shared/constants';
 import { IRootState } from '../../redux/reducers';
 import Checkbox from '../../components/Checkbox';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { datatype_detected } from '../../shared/constants';
+import { getDetectedDatatype } from '../../utils';
 
 const spec: DataGroupingConfigurationSpec = {
   level_1: {
@@ -616,7 +616,7 @@ const TableColumns = ({
         </td>
         <td className="border-b border-gray-100 px-4 py-2">
           <div key={index} className="truncate">
-            {datatype_detected(column.detectedDatatypeVar)}
+            {getDetectedDatatype(column.detectedDatatypeVar)}
           </div>
         </td>
         <td className="border-b border-gray-100 text-left px-4 py-2">

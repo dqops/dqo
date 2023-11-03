@@ -20,6 +20,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import com.dqops.statistics.StatisticsCollectorTarget;
 import com.dqops.statistics.table.volume.TableVolumeStatisticsCollectorsSpec;
+import com.dqops.statistics.table.schema.TableSchemaStatisticsCollectorsSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,6 +41,7 @@ public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootSta
     public static final ChildHierarchyNodeFieldMapImpl<TableStatisticsCollectorsRootCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootStatisticsCollectorsContainerSpec.FIELDS) {
         {
             put("volume", o -> o.volume);
+            put("schema", o -> o.schema);
         }
     };
 
@@ -47,6 +49,7 @@ public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootSta
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableVolumeStatisticsCollectorsSpec volume = new TableVolumeStatisticsCollectorsSpec();
+    private TableSchemaStatisticsCollectorsSpec schema = new TableSchemaStatisticsCollectorsSpec();
 
     /**
      * Returns the configuration of volume profilers on a table level.
@@ -57,6 +60,15 @@ public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootSta
     }
 
     /**
+     * Returns the configuration of schema profilers on a table level.
+     * @return Configuration of schema profilers.
+     */
+    public TableSchemaStatisticsCollectorsSpec getSchema() {
+        return schema;
+    }
+
+
+    /**
      * Sets a configuration of volume profilers on a table level.
      * @param volume Volume profilers.
      */
@@ -64,6 +76,16 @@ public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootSta
         this.setDirtyIf(!Objects.equals(this.volume, volume));
         this.volume = volume;
         this.propagateHierarchyIdToField(volume, "volume");
+    }
+
+    /**
+     * Sets a configuration of schema profilers on a table level.
+     * @param schema Volume profilers.
+     */
+    public void setChema(TableSchemaStatisticsCollectorsSpec schema) {
+        this.setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+        this.propagateHierarchyIdToField(schema, "schema");
     }
 
     /**

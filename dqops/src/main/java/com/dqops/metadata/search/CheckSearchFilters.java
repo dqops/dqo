@@ -34,7 +34,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Hierarchy node search filters.
+ * Target data quality checks filter, identifies which checks on which tables and columns should be executed.
  */
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)

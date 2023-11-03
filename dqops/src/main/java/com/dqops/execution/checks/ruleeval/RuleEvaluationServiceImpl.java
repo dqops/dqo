@@ -222,7 +222,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         highestSeverity = 2;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultError.getExpectedValue() != null) {
+                    if (ruleExecutionResultError.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultError.getExpectedValue();
                     }
 
@@ -240,7 +240,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                         highestSeverity = 1;
                     }
 
-                    if (expectedValue == null && ruleExecutionResultWarning.getExpectedValue() != null) {
+                    if (ruleExecutionResultWarning.getExpectedValue() != null) {
                         expectedValue = ruleExecutionResultWarning.getExpectedValue();
                     }
 
@@ -249,9 +249,12 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                     }
                 }
 
+                boolean hasRuleResult;
                 if (warningRule == null && errorRule == null && fatalRule == null) {
-                    // no rules are enabled, we are appending the check result as passed
+                    // no rules are enabled, we are appending the check result as passed, but excluding it from KPI
+                    hasRuleResult = false;
                 } else {
+                    hasRuleResult = true;
                     if ((ruleExecutionResultFatal == null || ruleExecutionResultFatal.getPassed() == null) &&
                             (ruleExecutionResultError == null || ruleExecutionResultError.getPassed() == null) &&
                             (ruleExecutionResultWarning == null || ruleExecutionResultWarning.getPassed() == null)) {
@@ -269,8 +272,8 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 Row targetRuleResultRow = result.appendRow();
                 int targetRowIndex = targetRuleResultRow.getRowNumber();
                 result.copyRowFrom(targetRowIndex, sensorResultsTable, allSensorResultsRowIndex);
-                result.getIncludeInKpiColumn().set(targetRowIndex, !checkSpec.isExcludeFromKpi());
-                result.getIncludeInSlaColumn().set(targetRowIndex, checkSpec.isIncludeInSla());
+                result.getIncludeInKpiColumn().set(targetRowIndex, hasRuleResult && !checkSpec.isExcludeFromKpi());
+                result.getIncludeInSlaColumn().set(targetRowIndex, hasRuleResult && checkSpec.isIncludeInSla());
 
                 if (tableComparisonConfiguration != null) {
                     result.getReferenceConnectionColumn().set(targetRowIndex, tableComparisonConfiguration.getReferenceTableConnectionName());

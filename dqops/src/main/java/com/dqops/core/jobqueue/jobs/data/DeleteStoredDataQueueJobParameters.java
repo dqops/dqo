@@ -17,6 +17,7 @@ package com.dqops.core.jobqueue.jobs.data;
 
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,6 +34,8 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     // @NotNull  // should be NotNull, but there are errors in TypeScript (CheckTableHeader.tsx)
     private String connectionName;
     private String schemaTableName;
+    // TODO: Add proper descriptions using this annotation.
+    // @JsonPropertyDescription("Data start data")
     private LocalDate dateStart;
     private LocalDate dateEnd;
 

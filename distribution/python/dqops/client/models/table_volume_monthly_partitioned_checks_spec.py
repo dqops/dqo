@@ -23,14 +23,14 @@ class TableVolumeMonthlyPartitionedChecksSpec:
         custom_checks (Union[Unset, TableVolumeMonthlyPartitionedChecksSpecCustomChecks]): Dictionary of additional
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
-        monthly_partition_min_row_count (Union[Unset, TableRowCountCheckSpec]):
+        monthly_partition_row_count (Union[Unset, TableRowCountCheckSpec]):
         monthly_partition_row_count_change (Union[Unset, TableChangeRowCountCheckSpec]):
     """
 
     custom_checks: Union[
         Unset, "TableVolumeMonthlyPartitionedChecksSpecCustomChecks"
     ] = UNSET
-    monthly_partition_min_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
+    monthly_partition_row_count: Union[Unset, "TableRowCountCheckSpec"] = UNSET
     monthly_partition_row_count_change: Union[
         Unset, "TableChangeRowCountCheckSpec"
     ] = UNSET
@@ -41,11 +41,9 @@ class TableVolumeMonthlyPartitionedChecksSpec:
         if not isinstance(self.custom_checks, Unset):
             custom_checks = self.custom_checks.to_dict()
 
-        monthly_partition_min_row_count: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.monthly_partition_min_row_count, Unset):
-            monthly_partition_min_row_count = (
-                self.monthly_partition_min_row_count.to_dict()
-            )
+        monthly_partition_row_count: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.monthly_partition_row_count, Unset):
+            monthly_partition_row_count = self.monthly_partition_row_count.to_dict()
 
         monthly_partition_row_count_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.monthly_partition_row_count_change, Unset):
@@ -58,10 +56,8 @@ class TableVolumeMonthlyPartitionedChecksSpec:
         field_dict.update({})
         if custom_checks is not UNSET:
             field_dict["custom_checks"] = custom_checks
-        if monthly_partition_min_row_count is not UNSET:
-            field_dict[
-                "monthly_partition_min_row_count"
-            ] = monthly_partition_min_row_count
+        if monthly_partition_row_count is not UNSET:
+            field_dict["monthly_partition_row_count"] = monthly_partition_row_count
         if monthly_partition_row_count_change is not UNSET:
             field_dict[
                 "monthly_partition_row_count_change"
@@ -91,15 +87,13 @@ class TableVolumeMonthlyPartitionedChecksSpec:
                 )
             )
 
-        _monthly_partition_min_row_count = d.pop(
-            "monthly_partition_min_row_count", UNSET
-        )
-        monthly_partition_min_row_count: Union[Unset, TableRowCountCheckSpec]
-        if isinstance(_monthly_partition_min_row_count, Unset):
-            monthly_partition_min_row_count = UNSET
+        _monthly_partition_row_count = d.pop("monthly_partition_row_count", UNSET)
+        monthly_partition_row_count: Union[Unset, TableRowCountCheckSpec]
+        if isinstance(_monthly_partition_row_count, Unset):
+            monthly_partition_row_count = UNSET
         else:
-            monthly_partition_min_row_count = TableRowCountCheckSpec.from_dict(
-                _monthly_partition_min_row_count
+            monthly_partition_row_count = TableRowCountCheckSpec.from_dict(
+                _monthly_partition_row_count
             )
 
         _monthly_partition_row_count_change = d.pop(
@@ -115,7 +109,7 @@ class TableVolumeMonthlyPartitionedChecksSpec:
 
         table_volume_monthly_partitioned_checks_spec = cls(
             custom_checks=custom_checks,
-            monthly_partition_min_row_count=monthly_partition_min_row_count,
+            monthly_partition_row_count=monthly_partition_row_count,
             monthly_partition_row_count_change=monthly_partition_row_count_change,
         )
 

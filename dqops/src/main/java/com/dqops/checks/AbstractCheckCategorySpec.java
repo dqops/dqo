@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -93,4 +94,25 @@ public abstract class AbstractCheckCategorySpec extends AbstractSpec {
 
         return false;
     }
+
+    /**
+     * Gets the check target appropriate for all checks in this category.
+     * @return Corresponding check target.
+     */
+    @JsonIgnore
+    public abstract CheckTarget getCheckTarget();
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     * @return Corresponding check type.
+     */
+    @JsonIgnore
+    public abstract CheckType getCheckType();
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     * @return Corresponding check timescale.
+     */
+    @JsonIgnore
+    public abstract CheckTimeScale getCheckTimeScale();
 }

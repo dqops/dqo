@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.postgreql_sslmode import PostgreqlSslmode
+from ..models.postgresql_ssl_mode import PostgresqlSslMode
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -32,7 +32,7 @@ class PostgresqlParametersSpec:
         options (Union[Unset, str]): PostgreSQL connection 'options' initialization parameter. For example setting this
             to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports
             also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.
-        sslmode (Union[Unset, PostgreqlSslmode]):
+        sslmode (Union[Unset, PostgresqlSslMode]):
         properties (Union[Unset, PostgresqlParametersSpecProperties]):
     """
 
@@ -42,7 +42,7 @@ class PostgresqlParametersSpec:
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
-    sslmode: Union[Unset, PostgreqlSslmode] = UNSET
+    sslmode: Union[Unset, PostgresqlSslMode] = UNSET
     properties: Union[Unset, "PostgresqlParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -103,11 +103,11 @@ class PostgresqlParametersSpec:
         options = d.pop("options", UNSET)
 
         _sslmode = d.pop("sslmode", UNSET)
-        sslmode: Union[Unset, PostgreqlSslmode]
+        sslmode: Union[Unset, PostgresqlSslMode]
         if isinstance(_sslmode, Unset):
             sslmode = UNSET
         else:
-            sslmode = PostgreqlSslmode(_sslmode)
+            sslmode = PostgresqlSslMode(_sslmode)
 
         _properties = d.pop("properties", UNSET)
         properties: Union[Unset, PostgresqlParametersSpecProperties]

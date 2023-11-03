@@ -22,7 +22,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudLimit;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -57,9 +57,9 @@ public class SettingsServiceImpl implements SettingsService {
 	}
 
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
-		SettingsSpec settingsSpec = new SettingsSpec();
+		LocalSettingsSpec localSettingsSpec = new LocalSettingsSpec();
 		SettingsWrapper settings = userHome.getSettings();
-		settings.setSpec(settingsSpec);
+		settings.setSpec(localSettingsSpec);
 		settings.setStatus(InstanceStatus.ADDED);
 
 		return settings;
@@ -77,7 +77,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -105,7 +105,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -136,7 +136,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -166,15 +166,15 @@ public class SettingsServiceImpl implements SettingsService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
 
-		SettingsSpec settingsSpec = new SettingsSpec();
-		settingsSpec.setEditorName(editorName);
-		settingsSpec.setEditorPath(editorPath);
+		LocalSettingsSpec localSettingsSpec = new LocalSettingsSpec();
+		localSettingsSpec.setEditorName(editorName);
+		localSettingsSpec.setEditorPath(editorPath);
 		SettingsWrapper settings = userHomeContext.getUserHome().getSettings();
 		if (settings != null && settings.getSpec() != null) {
 			cliOperationStatus.setFailedMessage("Settings file has been already initialized");
 			return cliOperationStatus;
 		}
-		settings.setSpec(settingsSpec);
+		settings.setSpec(localSettingsSpec);
 		settings.setStatus(InstanceStatus.ADDED);
 		userHomeContext.flush();
 
@@ -214,7 +214,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -241,7 +241,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -274,7 +274,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -350,7 +350,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -377,7 +377,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}
@@ -410,7 +410,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
 		UserHome userHome = userHomeContext.getUserHome();
-		SettingsSpec settings;
+		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
 			settings = createEmptySettingFile(userHome).getSpec();
 		}

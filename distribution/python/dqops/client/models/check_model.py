@@ -74,6 +74,7 @@ class CheckModel:
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.
         can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
         can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
+        check_hash (Union[Unset, int]): The check hash code that identifies the check instance.
     """
 
     check_name: Union[Unset, str] = UNSET
@@ -102,6 +103,7 @@ class CheckModel:
     can_edit: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
+    check_hash: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -179,6 +181,7 @@ class CheckModel:
         can_edit = self.can_edit
         can_run_checks = self.can_run_checks
         can_delete_data = self.can_delete_data
+        check_hash = self.check_hash
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -237,6 +240,8 @@ class CheckModel:
             field_dict["can_run_checks"] = can_run_checks
         if can_delete_data is not UNSET:
             field_dict["can_delete_data"] = can_delete_data
+        if check_hash is not UNSET:
+            field_dict["check_hash"] = check_hash
 
         return field_dict
 
@@ -374,6 +379,8 @@ class CheckModel:
 
         can_delete_data = d.pop("can_delete_data", UNSET)
 
+        check_hash = d.pop("check_hash", UNSET)
+
         check_model = cls(
             check_name=check_name,
             help_text=help_text,
@@ -401,6 +408,7 @@ class CheckModel:
             can_edit=can_edit,
             can_run_checks=can_run_checks,
             can_delete_data=can_delete_data,
+            check_hash=check_hash,
         )
 
         check_model.additional_properties = d

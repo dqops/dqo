@@ -287,7 +287,7 @@ const Tree = () => {
 
   const renderIcon = (node: CustomTreeNode) => {
     if (node.level === TREE_LEVEL.TABLE_INCIDENTS || node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)) {
-      return <div className="w-0 shrink-0" />;
+      return <div className="w-4 min-w-4 shrink-0" />;
     }
     if (loadingNodes[node.id]) {
       return (
@@ -328,7 +328,7 @@ const Tree = () => {
               className={clsx('w-4 shrink-0 min-w-4')}
             />
             <Tooltip
-              content={node.tooltip}
+              content={node.id}
               className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
               placement="top-start"
             >

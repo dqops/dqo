@@ -165,6 +165,7 @@ const ProfilingView = () => {
       )
     );
   };
+  
   const updateData2 = (nameOfDS: string): void => {
     setNameOfDataStream(nameOfDS);
   };
@@ -304,6 +305,7 @@ const ProfilingView = () => {
         <TableReferenceComparisons
           checkTypes={checkTypes}
           checksUI={checksUI}
+          onUpdateChecks = {onUpdate}
         />
       )}
     </div>

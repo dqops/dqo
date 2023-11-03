@@ -29,6 +29,7 @@ class ErrorEntryModel:
         error_message (Union[Unset, str]): Error message.
         error_source (Union[Unset, str]): Error source.
         error_timestamp (Union[Unset, datetime.datetime]): Error timestamp.
+        table_comparison (Union[Unset, str]): Table comparison name
     """
 
     actual_value: Union[Unset, float] = UNSET
@@ -46,6 +47,7 @@ class ErrorEntryModel:
     error_message: Union[Unset, str] = UNSET
     error_source: Union[Unset, str] = UNSET
     error_timestamp: Union[Unset, datetime.datetime] = UNSET
+    table_comparison: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -69,6 +71,8 @@ class ErrorEntryModel:
         error_timestamp: Union[Unset, str] = UNSET
         if not isinstance(self.error_timestamp, Unset):
             error_timestamp = self.error_timestamp.isoformat()
+
+        table_comparison = self.table_comparison
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -103,6 +107,8 @@ class ErrorEntryModel:
             field_dict["errorSource"] = error_source
         if error_timestamp is not UNSET:
             field_dict["errorTimestamp"] = error_timestamp
+        if table_comparison is not UNSET:
+            field_dict["tableComparison"] = table_comparison
 
         return field_dict
 
@@ -149,6 +155,8 @@ class ErrorEntryModel:
         else:
             error_timestamp = isoparse(_error_timestamp)
 
+        table_comparison = d.pop("tableComparison", UNSET)
+
         error_entry_model = cls(
             actual_value=actual_value,
             expected_value=expected_value,
@@ -165,6 +173,7 @@ class ErrorEntryModel:
             error_message=error_message,
             error_source=error_source,
             error_timestamp=error_timestamp,
+            table_comparison=table_comparison,
         )
 
         error_entry_model.additional_properties = d

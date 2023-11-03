@@ -60,7 +60,7 @@ To initiate a scheduler in the DQO Shell, simply enter the command `scheduler st
 command `scheduler stop`.
 
 You can also use the graphical interface to start the scheduler. Simply enable **Jobs scheduler** located in the Notifications
-on the [right side of the navigation bar.](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md)
+on the [right side of the navigation bar.](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
 
 For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md). 
 

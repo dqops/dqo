@@ -17,6 +17,9 @@ package com.dqops.utils.reflection;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.AbstractCheckCategorySpec;
+import com.dqops.checks.CheckTarget;
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.fields.ParameterDataType;
@@ -31,6 +34,7 @@ import com.dqops.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSe
 import com.dqops.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
 import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
 import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -376,6 +380,8 @@ public class ReflectionServiceImplTests extends BaseTest {
             this.ordinarilyNamedCheck = ordinarilyNamedCheck;
         }
 
+
+
         /**
          * Returns the child map on the spec class with all fields.
          *
@@ -384,6 +390,39 @@ public class ReflectionServiceImplTests extends BaseTest {
         @Override
         protected ChildHierarchyNodeFieldMap getChildMap() {
             return FIELDS;
+        }
+
+        /**
+         * Gets the check target appropriate for all checks in this category.
+         *
+         * @return Corresponding check target.
+         */
+        @Override
+        //@JsonIgnore
+        public CheckTarget getCheckTarget() {
+            return null;
+        }
+
+        /**
+         * Gets the check type appropriate for all checks in this category.
+         *
+         * @return Corresponding check type.
+         */
+        @Override
+        //@JsonIgnore
+        public CheckType getCheckType() {
+            return null;
+        }
+
+        /**
+         * Gets the check timescale appropriate for all checks in this category.
+         *
+         * @return Corresponding check timescale.
+         */
+        @Override
+        //@JsonIgnore
+        public CheckTimeScale getCheckTimeScale() {
+            return null;
         }
     }
 

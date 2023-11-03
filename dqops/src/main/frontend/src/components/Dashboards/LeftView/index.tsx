@@ -25,7 +25,7 @@ const LeftView = () => {
   const { dashboardFolders } = useSelector(
     (state: IRootState) => state.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth, } = useDashboard();
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth,} = useDashboard();
   const dispatch = useActionDispatch()
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -79,12 +79,11 @@ const LeftView = () => {
       },[activeTab]);
       
     const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
-
     const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
       setMouseEnterTimeout(setTimeout(() => {
         const height = e.clientY;
         dispatch(getDashboardTooltipState({height, label, url}));
-      }, 50))
+      }, 100))
     };
 
     const handleMouseLeave = () => {
@@ -93,7 +92,7 @@ const LeftView = () => {
       }
       dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
     };
-    
+
     return (
       <div>
         <div
@@ -160,7 +159,7 @@ const LeftView = () => {
 
   return (
     <div
-      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-6 bg-white overflow-x-hidden"
+      className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 pl-4 pt-6 bg-white overflow-x-hidden"
       ref={sidebarRef}
       style={{ width: sidebarWidth }}
     >

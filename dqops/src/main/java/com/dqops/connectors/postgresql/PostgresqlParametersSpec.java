@@ -71,7 +71,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--postgresql-sslmode"}, description = "Connect to PostgreSQL using sslmode connection parameter")
     @JsonPropertyDescription("Sslmode PostgreSQL connection parameter. The default value is disabled.")
-    private PostgreqlSslmode sslmode = PostgreqlSslmode.disable;
+    private PostgresqlSslMode sslmode = PostgresqlSslMode.disable;
 
     @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -183,7 +183,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
      * Returns the flag to require SSL connection.
      * @return True - require an SSL connection.
      */
-    public PostgreqlSslmode getSslmode() {
+    public PostgresqlSslMode getSslmode() {
         return sslmode;
     }
 
@@ -191,7 +191,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
      * Sets a flag to require an SSL connection.
      * @param ssl True - ssl connection is required.
      */
-    public void setSslmode(PostgreqlSslmode sslmode) {
+    public void setSslmode(PostgresqlSslMode sslmode) {
         setDirtyIf(!Objects.equals(this.sslmode, sslmode));
         this.sslmode = sslmode;
     }

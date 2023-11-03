@@ -16,7 +16,7 @@
 package com.dqops.utils.docs.yaml;
 
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.github.jknack.handlebars.Template;
@@ -43,7 +43,7 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderYamlDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, List<YamlDocumentationSchemaNode> yamlDocumentationSchema) {
+    public DocumentationFolder renderYamlDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, List<YamlDocumentationSchemaNode> yamlDocumentationSchema) {
         DocumentationFolder yamlFolder = new DocumentationFolder();
         yamlFolder.setFolderName("reference/yaml");
         yamlFolder.setLinkName("Yaml");

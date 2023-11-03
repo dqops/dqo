@@ -86,7 +86,7 @@ to modify the parameter values.
 
 ![allow_parameter_sharing](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/allow-parameter-sharing.png)
  
-Confirm connection changes by clicking **Apply** on a po-pup window that will appear.
+Confirm connection changes by clicking **Apply** on a pop-up window that will appear.
  
 ![apply_connection_changes](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/apply-connection-changes.png)
  

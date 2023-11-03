@@ -392,7 +392,7 @@ public class TablesControllerUTTests extends BaseTest {
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
-                Optional.of(sampleProfilingCheck));
+                sampleProfilingCheck);
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
@@ -423,7 +423,7 @@ public class TablesControllerUTTests extends BaseTest {
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
-                Optional.of(sampleMonitoring.getDaily()));
+                sampleMonitoring.getDaily());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
@@ -456,7 +456,7 @@ public class TablesControllerUTTests extends BaseTest {
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
-                Optional.of(samplePartitionedCheck.getDaily()));
+                samplePartitionedCheck.getDaily());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);

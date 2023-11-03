@@ -31,7 +31,7 @@ import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -117,7 +117,7 @@ public class ConnectionSpec extends AbstractSpec {
     private OracleParametersSpec oracle;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
-    private Integer parallelRunsLimit;
+    private Integer parallelJobsLimit;
 
     @JsonPropertyDescription("Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. " +
             "Data groupings are configured in two cases: " +
@@ -132,7 +132,7 @@ public class ConnectionSpec extends AbstractSpec {
     @ToString.Exclude
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MonitoringSchedulesSpec schedules;
+    private DefaultSchedulesSpec schedules;
 
     @JsonPropertyDescription("Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.")
     @ToString.Exclude
@@ -311,7 +311,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
-    public MonitoringSchedulesSpec getSchedules() {
+    public DefaultSchedulesSpec getSchedules() {
         return schedules;
     }
 
@@ -319,7 +319,7 @@ public class ConnectionSpec extends AbstractSpec {
      * Sets the configuration of schedules for running each type of checks.
      * @param schedules Configuration of schedules.
      */
-    public void setSchedules(MonitoringSchedulesSpec schedules) {
+    public void setSchedules(DefaultSchedulesSpec schedules) {
         setDirtyIf(!Objects.equals(this.schedules, schedules));
         this.schedules = schedules;
         propagateHierarchyIdToField(schedules, "schedules");
@@ -329,17 +329,17 @@ public class ConnectionSpec extends AbstractSpec {
      * Returns the limit of parallel data quality checks that could be started at the same time on the connection.
      * @return Concurrency limit (number of parallel jobs) that are executing checks or null when no limits are enforced.
      */
-    public Integer getParallelRunsLimit() {
-        return parallelRunsLimit;
+    public Integer getParallelJobsLimit() {
+        return parallelJobsLimit;
     }
 
     /**
      * Sets the concurrency limit of the number of checks that can run in parallel on this connection.
-     * @param parallelRunsLimit New concurrency limit or null when no limit is applied.
+     * @param parallelJobsLimit New concurrency limit or null when no limit is applied.
      */
-    public void setParallelRunsLimit(Integer parallelRunsLimit) {
-        this.setDirtyIf(!Objects.equals(this.parallelRunsLimit, parallelRunsLimit));
-        this.parallelRunsLimit = parallelRunsLimit;
+    public void setParallelJobsLimit(Integer parallelJobsLimit) {
+        this.setDirtyIf(!Objects.equals(this.parallelJobsLimit, parallelJobsLimit));
+        this.parallelJobsLimit = parallelJobsLimit;
     }
 
     /**

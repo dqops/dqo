@@ -18,7 +18,7 @@ package com.dqops.metadata.storage.localfiles.settings;
 import com.dqops.BaseTest;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.utils.serialization.YamlSerializer;
@@ -45,7 +45,7 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 
 	@Test
 	void flush_whenNew_thenSavesSpec() {
-		SettingsSpec spec = new SettingsSpec();
+		LocalSettingsSpec spec = new LocalSettingsSpec();
 		spec.setEditorName("vsc");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
@@ -56,13 +56,13 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 		Assertions.assertFalse(this.sut.getSpec().isDirty());
 		Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
 		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(this.settingsFolder, this.yamlSerializer);
-		SettingsSpec spec2 = sut2.getSpec();
+		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertEquals("vsc", spec2.getEditorName());
 	}
 
 	@Test
 	void flush_whenModified_thenSavesSpec() {
-		SettingsSpec spec = new SettingsSpec();
+		LocalSettingsSpec spec = new LocalSettingsSpec();
 		spec.setEditorName("vsc");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
@@ -75,14 +75,14 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 
 		Assertions.assertEquals(InstanceStatus.UNCHANGED, this.sut.getStatus());
 		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer);
-		SettingsSpec spec2 = sut2.getSpec();
+		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertEquals("intellj", spec2.getEditorName());
 	}
 
 
 	@Test
 	void getSpec_whenSpecFilePresentInFolder_thenReturnsSpec() {
-		SettingsSpec spec = new SettingsSpec();
+		LocalSettingsSpec spec = new LocalSettingsSpec();
 		spec.setEditorName("vsc");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
@@ -90,13 +90,13 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 		userHomeContext.flush();
 
 		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer);
-		SettingsSpec spec2 = sut2.getSpec();
+		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertNotNull(spec2);
 	}
 
 	@Test
 	void getSpec_whenCalledTwice_thenReturnsTheSameInstance() {
-		SettingsSpec spec = new SettingsSpec();
+		LocalSettingsSpec spec = new LocalSettingsSpec();
 		spec.setEditorName("vsc");
 		this.sut.setSpec(spec);
 		this.sut.setStatus(InstanceStatus.ADDED);
@@ -104,7 +104,7 @@ public class FileSettingsWrapperImplTests extends BaseTest {
 		userHomeContext.flush();
 
 		FileSettingsWrapperImpl sut2 = new FileSettingsWrapperImpl(settingsFolder, this.yamlSerializer);
-		SettingsSpec spec2 = sut2.getSpec();
+		LocalSettingsSpec spec2 = sut2.getSpec();
 		Assertions.assertNotNull(spec2);
 		Assertions.assertSame(spec2, sut2.getSpec());
 	}

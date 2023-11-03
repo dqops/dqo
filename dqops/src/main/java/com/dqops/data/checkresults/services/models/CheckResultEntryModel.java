@@ -93,6 +93,8 @@ public class CheckResultEntryModel {
     String qualityDimension;
     @JsonPropertyDescription("Sensor name.")
     String sensorName;
+    @JsonPropertyDescription("Table comparison name.")
+    String tableComparison;
 
     /**
      * Checks if any filtered field name matches a pattern.

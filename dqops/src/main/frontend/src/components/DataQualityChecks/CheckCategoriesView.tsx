@@ -153,8 +153,7 @@ const CheckCategoriesView = ({
             }
             checkResult={checkResultsOverview.find(
               (item) =>
-                item.checkName === check.check_name &&
-                category.category === item.checkCategory
+                item.checkHash == check.check_hash
             )}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}

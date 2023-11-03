@@ -11,9 +11,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_exists|profiling| |[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_exists|profiling| |Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -31,13 +31,13 @@ dqo> check run -c=connection_name -ch=profile_column_exists
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=profile_column_exists
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_exists
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_exists
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_exists
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
       profiling_checks:
         schema:
@@ -49,7 +49,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
             fatal:
               expected_value: 1
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -83,6 +85,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -96,9 +103,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_exists|monitoring|daily|[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_exists|monitoring|daily|Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -116,13 +123,13 @@ dqo> check run -c=connection_name -ch=daily_column_exists
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_column_exists
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_exists
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_column_exists
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_exists
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
       monitoring_checks:
         daily:
@@ -135,7 +142,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
               fatal:
                 expected_value: 1
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -170,6 +179,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -183,9 +197,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_exists|monitoring|monthly|[column_exists](../../../../reference/sensors/Column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_exists|monitoring|monthly|Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -203,13 +217,13 @@ dqo> check run -c=connection_name -ch=monthly_column_exists
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_column_exists
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_exists
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_column_exists
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_exists
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
       monitoring_checks:
         monthly:
@@ -222,7 +236,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
               fatal:
                 expected_value: 1
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -256,6 +272,11 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 

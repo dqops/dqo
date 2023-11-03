@@ -21,7 +21,7 @@ Next, define the frequency at which the check should be run using the `cron_expr
 
 For example, to schedule checks to run every day at 12:00 for all check types, the YAML file will look like the one provided below:
 
-``` yaml hl_lines="9-19"
+``` yaml hl_lines="10-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
@@ -33,7 +33,7 @@ spec:
     jobs_create_project: create_jobs_in_default_project_from_credentials
   schedules:
     profiling:
-      cron_expression: 0 12 * * *
+      cron_expression: 0 12 1 * *
     monitoring_daily:
       cron_expression: 0 12 * * *
     monitoring_monthly:

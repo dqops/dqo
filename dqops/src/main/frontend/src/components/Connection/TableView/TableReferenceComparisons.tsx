@@ -15,21 +15,21 @@ type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
   checksUI?: any;
+  onUpdateChecks: () => void;
 };
 
 export const TableReferenceComparisons = ({
   checkTypes,
   timePartitioned,
   checksUI,
+  onUpdateChecks
 }: TableReferenceComparisonsProps) => {
   const {
     connection,
     schema,
     table
   }: { connection: string; schema: string; table: string } = useParams();
-  const [references, setReferences] = useState<
-    TableComparisonConfigurationModel[]
-  >([]);
+  const [references, setReferences] = useState<TableComparisonConfigurationModel[]>([]);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
@@ -72,8 +72,7 @@ export const TableReferenceComparisons = ({
         connection,
         schema,
         table,
-        checkTypes,
-        timePartitioned
+        checkTypes
       ).then((res) => {
         setReferences(res.data);
       });
@@ -82,8 +81,7 @@ export const TableReferenceComparisons = ({
         connection,
         schema,
         table,
-        checkTypes,
-        timePartitioned
+        checkTypes
       ).then((res) => {
         setReferences(res.data);
       });
@@ -222,10 +220,13 @@ export const TableReferenceComparisons = ({
           listOfExistingReferences={references.map(
             (x) => x.table_comparison_configuration_name
           )}
+          checksUI={checksUI}
+          onUpdateChecks = {onUpdateChecks}
+          
         />
       ) : (
         <ProfilingReferenceTableList
-          references={references}
+          references={references.filter((x) => x.time_scale === timePartitioned)}
           onCreate={onCreate}
           selectReference={onEditProfilingReference}
           canUserCreateTableComparison={userProfile.can_manage_data_sources}

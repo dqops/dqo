@@ -18,7 +18,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_change.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -49,6 +52,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_change.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -157,7 +163,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_change_1_day.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -198,6 +207,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_change_1_day.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -315,7 +327,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_change_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -356,6 +371,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_change_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -473,7 +491,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_change_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -514,6 +535,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_change_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -630,7 +654,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_percent_change.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -661,6 +688,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_percent_change.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -764,7 +794,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_percent_change_1_day.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -805,6 +838,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_percent_change_1_day.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -916,7 +952,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_percent_change_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -957,6 +996,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_percent_change_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1068,7 +1110,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/between_percent_change_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1109,6 +1154,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/between_percent_change_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1218,7 +1266,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_difference.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1243,6 +1294,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_difference.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1344,7 +1398,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_difference_1_day.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1379,6 +1436,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_difference_1_day.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1488,7 +1548,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_difference_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1523,6 +1586,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_difference_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1632,7 +1698,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_difference_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1667,6 +1736,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_difference_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1775,7 +1847,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1801,6 +1876,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1902,7 +1980,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_percent_1_day.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1937,6 +2018,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_percent_1_day.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -2046,7 +2130,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_percent_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -2081,6 +2168,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_percent_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -2190,7 +2280,10 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *change/change_percent_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -2225,6 +2318,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *change/change_percent_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)

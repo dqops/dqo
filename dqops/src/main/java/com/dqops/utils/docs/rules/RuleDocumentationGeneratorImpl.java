@@ -19,10 +19,9 @@ import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
-import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import com.dqops.utils.reflection.TargetClassSearchUtility;
 import com.github.jknack.handlebars.Template;
 
@@ -49,7 +48,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderRuleDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome) {
+    public DocumentationFolder renderRuleDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder rulesFolder = new DocumentationFolder();
         rulesFolder.setFolderName("reference/rules");
         rulesFolder.setLinkName("Rules");

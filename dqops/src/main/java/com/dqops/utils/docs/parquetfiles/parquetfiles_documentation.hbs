@@ -1,9 +1,14 @@
-##{{parquetFileFullName}}{{#with "  "}}{{.}}{{/with}}
-{{parquetFileDescription}}{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
-**The columns of this table is described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
-| Column name | Description | Data type |
-|-------------|-------------|-----------|
-{{#each parquetColumnDetailsDocumentationModels}} | {{columnName}} | {{#if columnDescription}}{{columnDescription}}{{else}}Column name for the data stream.{{/if}} | {{lower columnType}} |
+# {{parquetFileFullName}}
+
+## Table description
+
+{{parquetFileDescription}}
+
+
+## Parquet table schema
+The columns of this table are described below.
+
+| Column&nbsp;name | Description | Hive&nbsp;data&nbsp;type |
+|------------------|-------------|--------------------------|
+{{#each parquetColumnDetailsDocumentationModels}} | {{columnName}} | {{#if columnDescription}}{{columnDescription}}{{else}}Data group value at a single level.{{/if}} | {{columnType}} |
 {{/each}}
