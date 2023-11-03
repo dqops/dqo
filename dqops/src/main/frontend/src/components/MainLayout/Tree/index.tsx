@@ -302,14 +302,13 @@ const Tree = () => {
         className="w-4 min-w-4 cursor-pointer shrink-0"
         name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
-          toggleOpenNode(node.id);
+          !(node.parsingYamlError && node.parsingYamlError.length > 0) ?  toggleOpenNode(node.id) : undefined
         }}
       />
     );
   };
 
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
-    console.log(node.parsingYamlError)
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
@@ -323,7 +322,7 @@ const Tree = () => {
           {renderIcon(node)}
           <div
             className="flex space-x-2 py-1 flex-1 w-full text-[13px]"
-            onClick={() => handleNodeClick(node)}
+            onClick={() => {!(node.parsingYamlError && node.parsingYamlError.length > 0) ?  handleNodeClick(node) : undefined}}
           >
             <SvgIcon
               name={getIcon(node.level)}
