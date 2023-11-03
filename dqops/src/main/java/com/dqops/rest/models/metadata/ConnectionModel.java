@@ -170,6 +170,14 @@ public class ConnectionModel {
     private boolean canDeleteData;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
      * @param connectionSpec Source connection specification.
@@ -198,6 +206,7 @@ public class ConnectionModel {
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
             setCanDeleteData(isOperator);
+            setYamlParsingError(connectionSpec.getYamlParsingError());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);

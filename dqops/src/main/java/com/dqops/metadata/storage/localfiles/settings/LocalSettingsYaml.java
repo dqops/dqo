@@ -18,16 +18,21 @@ package com.dqops.metadata.storage.localfiles.settings;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
- * DQOps local settings that are stored in the .localsettings.dqosettings.yaml file in the user's DQOps home folder.
+ * DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqosettings.yaml* file in the user's DQOps home folder.
  * The local settings contain the current DQOps Cloud API Key and other settings. The local settings take precedence over parameters
  * passed when starting DQOps.
  */
-public class LocalSettingsYaml {
+public class LocalSettingsYaml implements InvalidYamlStatusHolder {
 	private String apiVersion = ApiVersion.CURRENT_API_VERSION;
 	private SpecificationKind kind = SpecificationKind.SETTINGS;
 	private LocalSettingsSpec spec = new LocalSettingsSpec();
+
+	@JsonIgnore
+	private String yamlParsingError;
 
 	public LocalSettingsYaml() {
 	}
@@ -82,5 +87,28 @@ public class LocalSettingsYaml {
 	 */
 	public void setSpec(LocalSettingsSpec spec) {
 		this.spec = spec;
+	}
+
+	/**
+	 * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+	 *
+	 * @param yamlParsingError YAML parsing error.
+	 */
+	@Override
+	public void setYamlParsingError(String yamlParsingError) {
+		if (this.spec != null) {
+			this.spec.setYamlParsingError(yamlParsingError);
+		}
+		this.yamlParsingError = yamlParsingError;
+	}
+
+	/**
+	 * Returns the YAML parsing error that was captured.
+	 *
+	 * @return YAML parsing error.
+	 */
+	@Override
+	public String getYamlParsingError() {
+		return this.yamlParsingError;
 	}
 }

@@ -18,14 +18,19 @@ package com.dqops.metadata.storage.localfiles.dashboards;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Data quality dashboard definition YAML schema for a data quality dashboards list specification.
  */
-public class DashboardYaml {
+public class DashboardYaml implements InvalidYamlStatusHolder {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.DASHBOARDS;
     private DashboardsFolderListSpec spec = new DashboardsFolderListSpec();
+
+    @JsonIgnore
+    private String yamlParsingError;
 
     public DashboardYaml() {
     }
@@ -80,5 +85,28 @@ public class DashboardYaml {
      */
     public void setSpec(DashboardsFolderListSpec spec) {
         this.spec = spec;
+    }
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        if (this.spec != null) {
+            this.spec.setYamlParsingError(yamlParsingError);
+        }
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
     }
 }

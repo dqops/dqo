@@ -154,6 +154,10 @@ public class YamlSerializerImpl implements YamlSerializer {
 
             try {
                 T emptyInstance = clazz.getDeclaredConstructor().newInstance();
+                if (emptyInstance instanceof InvalidYamlStatusHolder) {
+                    InvalidYamlStatusHolder invalidYamlStatusHolder = (InvalidYamlStatusHolder)emptyInstance;
+                    invalidYamlStatusHolder.setYamlParsingError(message);
+                }
                 return emptyInstance;
             }
             catch (Exception ex) {

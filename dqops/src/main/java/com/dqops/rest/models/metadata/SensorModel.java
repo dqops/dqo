@@ -35,9 +35,8 @@ import java.util.Objects;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SensorModel", description = "Sensor model.")
+@ApiModel(value = "SensorModel", description = "Sensor model that describes the configuration of a single built-in or custom sensor.")
 public class SensorModel {
-
     @JsonPropertyDescription("Full sensor name.")
     private String fullSensorName;
 
@@ -58,6 +57,14 @@ public class SensorModel {
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
+
+    /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
 
     public SensorModel() {
     }

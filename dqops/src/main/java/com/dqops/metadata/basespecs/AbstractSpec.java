@@ -110,6 +110,16 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     }
 
     /**
+     * Assigns the new hierarchy ID on child nodes, ignoring one child node.
+     * @param hierarchyId New hierarchy id of the current node that should be propagated to the field getter map.
+     * @param ignoredNode Child node name to ignore.
+     */
+    protected void propagateHierarchyIdToFieldsExcept(HierarchyId hierarchyId, String ignoredNode) {
+        ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
+        childFieldMap.propagateHierarchyIdToChildrenExcept(this, hierarchyId, ignoredNode);
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      * @return Return the field map.
      */

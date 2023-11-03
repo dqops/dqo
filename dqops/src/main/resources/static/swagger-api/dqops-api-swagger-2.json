@@ -15110,6 +15110,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Data quality check definition model"
@@ -21370,6 +21374,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Full column model"
@@ -29564,6 +29572,10 @@
         "can_delete_data" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Connection model for with a subset of parameters, excluding all nested objects."
@@ -29656,6 +29668,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Full connection model"
@@ -29878,6 +29894,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Data grouping configuration model containing nested objects and the configuration of grouping dimensions."
@@ -29937,6 +29957,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Data grouping configuration model with trimmed path"
@@ -31612,6 +31636,10 @@
         "canEdit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yamlParsingError" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Provider sensor model"
@@ -31839,6 +31867,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Rule model"
@@ -32223,9 +32255,13 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
-      "description" : "Sensor model."
+      "description" : "Sensor model that describes the configuration of a single built-in or custom sensor."
     },
     "SensorReadoutEntryModel" : {
       "type" : "object",
@@ -34336,6 +34372,10 @@
         "can_delete_data" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Table list model with a subset of parameters, excluding all nested objects."
@@ -34359,6 +34399,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Full table model, including all nested objects like columns or checks."

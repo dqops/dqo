@@ -77,6 +77,14 @@ public class CheckDefinitionModel {
     private boolean canEdit;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Default constructor for CheckModel.
      */
     public CheckDefinitionModel() {
@@ -92,9 +100,11 @@ public class CheckDefinitionModel {
      */
     public CheckDefinitionModel(CheckDefinitionWrapper checkDefinitionWrapper, boolean custom, boolean builtIn, boolean canEdit) {
         this.checkName = checkDefinitionWrapper.getCheckName();
-        this.sensorName = checkDefinitionWrapper.getSpec().getSensorName();
-        this.ruleName = checkDefinitionWrapper.getSpec().getRuleName();
-        this.helpText = checkDefinitionWrapper.getSpec().getHelpText();
+        CheckDefinitionSpec checkDefinitionSpec = checkDefinitionWrapper.getSpec();
+        this.sensorName = checkDefinitionSpec.getSensorName();
+        this.ruleName = checkDefinitionSpec.getRuleName();
+        this.helpText = checkDefinitionSpec.getHelpText();
+        this.yamlParsingError = checkDefinitionSpec.getYamlParsingError();
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;

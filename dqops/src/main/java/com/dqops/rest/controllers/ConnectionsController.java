@@ -143,6 +143,7 @@ public class ConnectionsController {
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setSpec(connectionSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(connectionSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(connectionSpecificationModel), HttpStatus.OK); // 200

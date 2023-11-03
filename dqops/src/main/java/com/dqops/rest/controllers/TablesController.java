@@ -218,6 +218,7 @@ public class TablesController {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setSpec(tableSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200

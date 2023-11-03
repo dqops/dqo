@@ -20,6 +20,8 @@ import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -36,7 +38,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class SensorDefinitionSpec extends AbstractSpec {
+public class SensorDefinitionSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<SensorDefinitionSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("fields", o -> o.fields);
@@ -67,6 +69,29 @@ public class SensorDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Additional sensor definition parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> parameters;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 
     /**
      * Returns a list of parameters (fields) used on this sensor. Those parameters are shown by the DQOps UI.
