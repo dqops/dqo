@@ -14,7 +14,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -31,6 +31,26 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## delete_sensor  
 Deletes a custom sensor definition  
@@ -44,7 +64,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -52,6 +72,26 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -77,6 +117,26 @@ http://localhost:8888/api/sensors
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/sensors
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_sensor  
 Returns a sensor model  
@@ -97,7 +157,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -105,6 +165,26 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -130,6 +210,26 @@ http://localhost:8888/api/definitions/sensors
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/definitions/sensors
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_sensor  
 Updates an existing sensor, making a custom sensor definition if it is not present. 
@@ -144,7 +244,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -159,5 +259,25 @@ http://localhost:8888/api/sensors/{fullSensorName}
 |---------------------------------|-----------|-----------------|
 |Dictionary of sensor definitions|[SensorModel](\docs\client\models\sensors\#sensormodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 

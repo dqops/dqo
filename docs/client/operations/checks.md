@@ -14,7 +14,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -31,6 +31,26 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## delete_check  
 Deletes a custom check definition  
@@ -44,7 +64,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -52,6 +72,26 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -77,6 +117,26 @@ http://localhost:8888/api/checks
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/checks
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_check  
 Returns a check definition  
@@ -97,7 +157,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -105,6 +165,26 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -130,6 +210,26 @@ http://localhost:8888/api/definitions/checks
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/definitions/checks
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_check  
 Updates an existing check, making a custom check definition if it is not present  
@@ -143,7 +243,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -158,5 +258,25 @@ http://localhost:8888/api/checks/{fullCheckName}
 |---------------------------------|-----------|-----------------|
 |List of check definitions|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 

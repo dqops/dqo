@@ -24,6 +24,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_default_data_observability_daily_monitoring_table_checks  
 Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.  
@@ -45,6 +65,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -70,6 +110,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_default_data_observability_monthly_monitoring_table_checks  
 Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.  
@@ -91,6 +151,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -116,6 +196,26 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultchecks/profiling/column
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_default_profiling_table_checks  
 Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.  
@@ -139,6 +239,26 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultchecks/profiling/table
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_default_schedule  
 Returns spec to show and edit the default configuration of schedules.  
@@ -159,7 +279,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -167,6 +287,26 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultschedule/partitioned_daily
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -192,6 +332,26 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/defaults/defaultwebhooks
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_default_data_observability_daily_monitoring_column_checks  
 New configuration of the default daily monitoring (data observability) checks on a column level. These checks will be applied on new columns.  
@@ -213,6 +373,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 |---------------------------------|-----------|-----------------|
 |Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -238,6 +418,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_default_data_observability_monthly_monitoring_column_checks  
 New configuration of the default monthly monitoring checkpoints on a column level. These checks will be applied on new columns.  
@@ -259,6 +459,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 |---------------------------------|-----------|-----------------|
 |Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -284,6 +504,26 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_default_profiling_column_checks  
 New configuration of the default profiling checks on a column level. These checks will be applied to new columns.  
@@ -305,6 +545,26 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 |---------------------------------|-----------|-----------------|
 |Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](\docs\client\models\#checkcontainermodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/column
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -330,6 +590,26 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/table
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_default_schedules  
 New configuration of the default schedules.  
@@ -343,7 +623,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -358,6 +638,26 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 |---------------------------------|-----------|-----------------|
 |Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultschedule/partitioned_daily
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -381,5 +681,25 @@ http://localhost:8888/api/defaults/defaultwebhooks
 |---------------------------------|-----------|-----------------|
 |Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](\docs\reference\yaml\connectionyaml\#incidentwebhooknotificationsspec)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/defaults/defaultwebhooks
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 

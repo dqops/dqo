@@ -24,3 +24,23 @@ http://localhost:8888/api/timezones
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/timezones
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+

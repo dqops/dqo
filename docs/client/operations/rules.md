@@ -14,7 +14,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -31,6 +31,26 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## delete_rule  
 Deletes a custom rule definition  
@@ -44,7 +64,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -52,6 +72,26 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -77,6 +117,26 @@ http://localhost:8888/api/rules
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/rules
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## get_rule  
 Returns a rule definition  
@@ -97,7 +157,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -105,6 +165,26 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 
 ___  
@@ -130,6 +210,26 @@ http://localhost:8888/api/definitions/rules
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl http://localhost:8888/api/definitions/rules
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
+
+
 ___  
 ## update_rule  
 Updates an existing rule, making a custom rule definition if it is not present  
@@ -143,7 +243,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -158,5 +258,25 @@ http://localhost:8888/api/rules/{fullRuleName}
 |---------------------------------|-----------|-----------------|
 |List of rule definitions|[RuleModel](\docs\client\models\rules\#rulemodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```
+    curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
+		-H "Accept: application/json"
+    ```
+=== "python_sync"
+      
+    ```
+    No render
+    ```
+=== "python_async"
+      
+    ```
+    No render
+    ```
 
 

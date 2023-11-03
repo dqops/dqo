@@ -18,12 +18,16 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
+import com.dqops.utils.docs.client.operations.examples.OperationExecutionMethod;
+import com.dqops.utils.docs.client.operations.examples.OperationUsageExampleDocumentationModel;
+import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactory;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -32,9 +36,12 @@ import java.util.List;
  */
 public class OperationsDocumentationGeneratorImpl implements OperationsDocumentationGenerator {
     private final OperationsDocumentationModelFactory operationsDocumentationModelFactory;
+    private final UsageExampleModelFactory usageExampleModelFactory;
 
-    public OperationsDocumentationGeneratorImpl(OperationsDocumentationModelFactory operationsDocumentationModelFactory) {
+    public OperationsDocumentationGeneratorImpl(OperationsDocumentationModelFactory operationsDocumentationModelFactory,
+                                                UsageExampleModelFactory usageExampleModelFactory) {
         this.operationsDocumentationModelFactory = operationsDocumentationModelFactory;
+        this.usageExampleModelFactory = usageExampleModelFactory;
     }
 
     /**
@@ -53,6 +60,18 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
 
         List<OperationsSuperiorObjectDocumentationModel> operationsSuperiorObjectDocumentationModels =
                 operationsDocumentationModelFactory.createDocumentationForOperations(openAPIModel);
+        for (OperationsSuperiorObjectDocumentationModel operationsSuperiorDocumentationModel : operationsSuperiorObjectDocumentationModels) {
+            for (OperationsOperationDocumentationModel operationDocumentationModel : operationsSuperiorDocumentationModel.getOperationObjects()) {
+                for (OperationExecutionMethod operationExecutionMethod : OperationExecutionMethod.values()) {
+                    OperationUsageExampleDocumentationModel usageExampleDocumentationModel = usageExampleModelFactory.createOperationUsageExample(
+                            operationExecutionMethod,
+                            operationDocumentationModel.getOperationModel(),
+                            operationDocumentationModel.getParametersFields()
+                    );
+                    operationDocumentationModel.getUsageExamples().add(usageExampleDocumentationModel);
+                }
+            }
+        }
 
         operationsSuperiorObjectDocumentationModels.sort(Comparator.comparing(OperationsSuperiorObjectDocumentationModel::getSuperiorClassSimpleName));
 

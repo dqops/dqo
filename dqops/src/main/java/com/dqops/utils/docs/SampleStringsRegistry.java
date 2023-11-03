@@ -17,6 +17,7 @@
 package com.dqops.utils.docs;
 
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.google.common.base.CaseFormat;
 
 import java.time.LocalDate;
 
@@ -143,7 +144,7 @@ public class SampleStringsRegistry {
      * @return Sample string for the parameter.
      */
     public static String getMatchingStringForParameter(String parameterName) {
-        String parameterNameLower = parameterName.toLowerCase();
+        String parameterNameLower = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, parameterName);
         String folder = "folder";
 
         if (parameterNameLower.contains("email")) {
@@ -160,7 +161,13 @@ public class SampleStringsRegistry {
             return getDashboardName();
         } else if (parameterNameLower.contains(folder)) {
             int nestingLevelIndex = parameterNameLower.indexOf(folder) + folder.length();
-            return getFolder(parameterNameLower.charAt(nestingLevelIndex) - '0');
+            int nestingLevel;
+            if (nestingLevelIndex >= parameterNameLower.length()) {
+                nestingLevel = 0;
+            } else {
+                nestingLevel = parameterNameLower.charAt(nestingLevelIndex) - '0';
+            }
+            return getFolder(nestingLevel);
         } else if (parameterNameLower.contains("full_sensor")) {
             return getFullSensorName();
         } else if (parameterNameLower.contains("sensor")) {

@@ -112,6 +112,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             OperationModel operationModel,
             Map<String, ComponentModel> componentModelMap) {
         OperationsOperationDocumentationModel operationsOperationDocumentationModel = new OperationsOperationDocumentationModel();
+        operationsOperationDocumentationModel.setOperationModel(operationModel);
         operationsOperationDocumentationModel.setOperationJavaName(operationModel.getOperation().getOperationId());
         operationsOperationDocumentationModel.setOperationPythonName(getObjectSimpleName(operationModel.getOperation().getOperationId()));
         operationsOperationDocumentationModel.setOperationDescription(operationModel.getOperation().getDescription());
