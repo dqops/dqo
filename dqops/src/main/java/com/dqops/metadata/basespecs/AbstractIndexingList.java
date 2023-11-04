@@ -312,7 +312,7 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
      * Flushes all changes to the persistence store (file store or the database).
      */
     public void flush() {
-        for(V modelWrapper : this.list) {
+        for (V modelWrapper : this.list) {
             modelWrapper.flush();
         }
 		this.clearDirty(false);
