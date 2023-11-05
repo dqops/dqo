@@ -356,6 +356,9 @@ spec:
 
 ## Configuring columns
 
+
+### **Column schema** 
+
 ### **Column profiling checks**
 
 ### **Column monitoring checks**
@@ -363,6 +366,18 @@ spec:
 ### **Column partitioned checks**
 
 ### **Calculated columns**
+
+
+## Additional table configuration
+
+### **Table filter predicate**
+
+### **Table stage**
+
+### **Table priority**
+
+### **Table labels**
+
 
 
 ``` { .yaml .annotate linenums="1" }

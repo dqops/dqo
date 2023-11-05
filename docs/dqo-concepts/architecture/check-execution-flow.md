@@ -82,7 +82,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      First, the rule for the *fatal* severity level is called. If the rule fails, the check result is a failure and
      is scored at a *fatal* severity level and no further rules (*error* or *warning* severity level rules) are evaluated.
 
-     If the *fatal* severity rule is not enabled or passed (accepting the *sensor readout* as a valid result), DQOps continues
+     If the *fatal* severity rule is not enabled or has passed (accepting the *sensor readout* as a valid result), DQOps continues
      the rule evaluation by evaluating the *error* severity rule. If the *error* severity rule also passes, the *warning* severity
      rule is evaluated. Failed data quality checks are called *data quality issues* or just `issues` on the 
      [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md).
@@ -141,6 +141,7 @@ Check execution errors that are captured during the data quality check execution
 The following diagram shows a full check execution flow, including usage of custom definitions and error reporting.
 This diagram shows the check execution process for running just one data quality check, allowing to stop the `run checks` job
 after reaching an execution error. The *$D.U.H* shortcut on the diagram is the path to the *DQOps user home* folder.
+Click the image to zoom it out.
 
 ![DQOps data quality checks and incidents workflow](https://dqops.com/docs/images/architecture/DQOps-data-quality-incident-flow-diagram-min.png)
 
@@ -234,6 +235,8 @@ The steps are described below.
 ## DQOps engine internal components
 The diagrams above showed the check execution data flows.
 The following diagram shows DQOps internal components that are used during the data quality check execution.
+DQOps core engine is a Java Spring Boot application. Please notice how the DQOps core engine communicates
+with spawned Python processes that run the Jinja2 templating engine, and the Python data quality rules.
 
 ![DQOps engine components](https://dqops.com/docs/images/architecture/DQOps-engine-components-min.png)
 
@@ -264,14 +267,14 @@ The following list describes the role of each internal component.
        the DQOps instance. The parallel jobs limit depends on the DQOps license type. A *FREE* (community) instance
        is limited to run 1 job at a time.
      
-     - `running` is a job that is currently running.
+     - `running` is a job that is currently running. The job can be cancelled by the user, switching the status to `cancel_requested`.
      
      - `waiting` is a job that was about to be executed, but the capacity constraints of parallel queries on the data source
        (the *spec.parallel_jobs_limit* field value) prevented from starting the job. The job will be executed as soon as
        any other `run checks on table` job on the same data source finishes. If a job is put aside in a `waiting` status,
        DQOps may try to run another `run checks on table` job on a different data source that is not yet capacity limited.
      
-     - `succeeded` is a status for a job that finished without any DQOps engine bugs. Even if all data quality checks failed
+     - `succeeded` is a status for a job that has finished without any DQOps engine bugs. Even if all data quality checks failed
        or all data quality checks cannot be executed due to execution errors in invalid Jinja2 templates or exceptions raised
        by the Python rules, DQOps will still return a `succeeded` status.
        The only correct way to detect data quality issues identified during a data quality check execution queued by the
@@ -279,7 +282,7 @@ The following list describes the role of each internal component.
        found in the [RunChecksQueueJobResult](../../client/models/jobs.md/#RunChecksQueueJobResult) object,
        in the *result.highest_severity* field.
      
-     - `failed` is a status for a job that failed due to some serious DQOps engine issues. The error details will be written
+     - `failed` is a status for a job that has failed due to some serious DQOps engine issues. The error details will be written
        to a local logging folder *$DQO_USER_HOME/.logs*.
        
      - `cancel_requested` is a status of a job that was requested to cancel, but was `running` at the time of cancellation.
@@ -293,7 +296,8 @@ The following list describes the role of each internal component.
 3.   `Run data quality checks job` runs the `run checks` and its `run checks on table` jobs, orchestrating the process
      between other components.
 
-4.   `YAML metadata search` step references the YAML in-memory cache and finds target checks that are selected by filters.
+4.   `YAML metadata search` step references the YAML in-memory cache and finds target checks that are selected by filters
+     provided as the `run checks` job parameters.
 
 5.   `YAML metadata in-memory cache` stores parsed YAML files in-memory, allowing instant access to all definitions.
      The in-memory cache is continuously refreshed by a file system change watcher. DQOps engine depends on the file system
