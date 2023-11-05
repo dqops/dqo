@@ -317,7 +317,7 @@ DQOps instance that is started for development as a Python module by running `py
 *rules/requirements.txt* file at all. Instead, DQOps will require that all necessary packages were already installed
 in the Python's system or virtual environment that is used to start the `python -m dqops` command.
 
-In a production DQOps instance that was started from [docker](../../working-with-dqo/installation/run-dqo-as-docker-container.md),
+A production DQOps instance that was started from [docker](../../working-with-dqo/installation/run-dqo-as-docker-container.md),
 DQOps will detect changes to the *rules/requirements.txt* file on startup and will reinstall required packages.
 
 

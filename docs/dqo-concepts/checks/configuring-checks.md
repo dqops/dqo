@@ -67,7 +67,7 @@ spec: # (2)!
 14. The node where daily [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.
 15. The node where monthly [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.
 16. The node with a list of columns.
-17. One example column name. The column level checks for this column are defined inside the node.
+17. One example column name. The column-level checks for this column are defined inside the node.
 
 
 ### **Table YAML core elements**
@@ -95,13 +95,13 @@ The core elements found on the *.dqotable.yaml* file are described in the table 
 | 24   | `spec.columns.<first_column_name>`                                                                     | An example column named *first_column_name*. The column level data quality checks for this column are configured inside this node.                                                                                                  |               |
 
 
-## Configuring table level checks
+## Configuring table-level checks
 The data quality checks can be configured both at a table level and at a column level, depending on the type of the check.
 
 The configuration of data quality checks will be shown on the example of a profiling check.
 
 
-### **Table level profiling checks**
+### **Table-level profiling checks**
 The table [profiling checks](./profiling-checks/profiling-checks.md) are meant to capture advanced data quality
 statistics and store the most current value for each month. Their role is to track the overall quality of data,
 without affecting the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md).
@@ -141,7 +141,7 @@ The elements of the profiling checks configuration are listed in the table below
 
 | Line  | Element&nbsp;path (within the `spec` node)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                             |
 |-------|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 6     | `profiling_checks`                                                                                                             | The table level [profiling checks containerprofiling checks specification](../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                       |
+| 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks containerprofiling checks specification](../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                       |
 | 7     | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                       |
 | 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node, it check becomes enabled. |
 | 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](../rules/rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.          |
@@ -149,7 +149,7 @@ The elements of the profiling checks configuration are listed in the table below
 | 11    | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                        |   
 
 
-### **Table level monitoring checks**
+### **Table-level monitoring checks**
 The [monitoring checks](./monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
 used in DQOps for continuous monitoring of the data quality of the data source. 
 The data quality issues raised by these checks are decreasing the [data quality KPI](../data-quality-kpis/data-quality-kpis.md). 
@@ -193,7 +193,7 @@ spec:
 5.  The configuration of the [monthly_row_count](../../checks/table/volume/row-count.md#monthly-row-count) data quality check.
 
 
-### **Table level partitioned checks**
+### **Table-level partitioned checks**
 Table [partitioned checks](./partition-checks/partition-checks.md) allow analyzing even petabyte scale
 tables that are constantly growing, because new data are appended to new partitions. 
 Running data quality checks as queries on such big tables is time consuming, and can generate high charges
@@ -332,6 +332,7 @@ spec:
         daily_row_count: {}
 ```
 
+
 ## Rules without parameters
 Some data quality [rules](../rules/rules.md) do not have any parameters (thresholds).
 Configuring these rules uses the same YAML/JSON trick to set the value of the rule to a JSON `{}` object,
@@ -354,329 +355,489 @@ spec:
           warning: {}
 ```
 
-## Configuring columns
+## Checks with sensor's parameters
+Some data quality [sensors](../sensors/sensors.md) are parametrized. The parameters are used
+in the SQL template and will be rendered in the SQL query that is generated from the sensor.
 
+The following example shows how to use the
+[daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md#daily-string-value-in-set-percent)
+check that uses a `expected_values` parameter that is an array of strings which are the valid values expected in the column.
+This check counts the percentage of rows that have one of the expected values stored in the *country* column.
 
-### **Column schema** 
-
-### **Column profiling checks**
-
-### **Column monitoring checks**
-
-### **Column partitioned checks**
-
-### **Calculated columns**
-
-
-## Additional table configuration
-
-### **Table filter predicate**
-
-### **Table stage**
-
-### **Table priority**
-
-### **Table labels**
-
-
-
-``` { .yaml .annotate linenums="1" }
+``` { .yaml .annotate linenums="1" hl_lines="14-17" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
-kind: table # (1)!
-spec: # (2)!
-  timestamp_columns: # (3)!
-    event_timestamp_column: date # (4)!
-    partition_by_column: date # (5)!
-  incremental_time_window: # (6)!
-    daily_partitioning_recent_days: 7 # (7)!
-    monthly_partitioning_recent_months: 1 # (8)!
-  profiling_checks: # (9)!
-    volume: # (10)!
-      profile_row_count: # (11)!
-        warning: # (12)!
-          min_count: 1 # (13)!
-  monitoring_checks: # (14)!
-    daily: # (15)!
-      volume:
-        daily_row_count: # (16)!
-          warning: # (17)!
-            min_count: 1000
-          error: # (18)!
-            min_count: 100
-          fatal: # (19)!
-            min_count: 1           
-  partitioned_checks: # (20)!
-    daily: # (21)!
-      volume:
-        daily_partition_row_count:
-          error:
-            min_count: 1
-  columns: # (22)!
-    date: # (23)!
-      type_snapshot: # (24)!
-        column_type: DATE
+kind: table
+spec:
+  columns:
+    country:
+      type_snapshot:
+        column_type: STRING
         nullable: true
-      profiling_checks: # (25)!
-        nulls:
-          profile_nulls_count: {} # (26)!
-          profile_nulls_percent: {}
-        schema:
-          profile_column_exists:
-            warning:
-              expected_value: 1
-          profile_column_type_changed:
-            warning: {}
-      monitoring_checks: # (27)!
+      monitoring_checks:
         daily:
-          nulls:
-            daily_nulls_count: {}
-      partitioned_checks: # (28)!
-        daily:
-          nulls:
-            daily_partition_not_nulls_percent:
-              warning:
-                min_percent: 100.0    
+          strings:
+            daily_string_value_in_set_percent:
+              parameters:
+                expected_values:
+                  - "US" # (1)!
+                  - "UK"
+              error:
+                min_percent: 100
 ```
 
-1.  The type of the file is identified in the `kind` element.
-2.  The `spec` [table specification](../../reference/yaml/TableYaml.md#tablespec) object that describes the table, its columns
-    and enabled data quality checks.
-3.  The configuration of timestamp columns that are used for timeliness checks such as freshness, and for running partitioned checks.
-4.  The column name (*date* in this example) that contains an event timestamp that is used to measure timeliness.
-5.  The column name (*date* in this example) that will be used in **GROUP BY** queries to measure the data quality at a partition level.
-    The table does not need to be partitioned by this column physically. DQOps uses this column to detect data quality issues
-    within time ranges.
-6.  in t
-7.  daily days
-8.  monthly days
-9.   9
-10. 10
-11. 11
-12. 12
-13. 13
-14. 14
-15. 15
-16. 16
-17. 17
-18. 18
-19. 19
-20. 20
-21. 21
-22. 22
-23. 23
-24. 24
-25. 25
-26. 26
-27. 27
-28. 28
+1.  The value that is expected in the column.
+
+The `parameters` node is present in every data quality check, but it is not saved to the *.dqotable.yaml* file
+when no parameters are specified.
 
 
-The elements are described in the table below.
+## Configuring columns
+The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.
+The `spec.columns` node is a dictionary of [column specifications](../../reference/yaml/TableYaml.md#columnspec),
+the keys are the column names.
 
-| Line | Element&nbsp;path | Description                                                                                                    | Default value |
-|------|-------------------|----------------------------------------------------------------------------------------------------------------|--------------|
-| 2    | `apiVersion`      | The version of the DQOps file format                                                                           | dqo/v1       |
-| 3    | `kind`            | The file type                                                                                                  | table        |
-| 4    | `spec`            | The main content of the file, contains the [table specification](../../reference/yaml/TableYaml.md#tablespec). ||
+Columns are added to the *.dqotable.yaml* when a table's metadata is imported into DQOps.
 
+### **Column schema** 
+The following example shows a *.dqotable.yaml* file with two columns.
 
-
-``` { .yaml .annotate }
+``` { .yaml .annotate linenums="1" hl_lines="6 10" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
-kind: table(1)
-spec:(2)
-  timestamp_columns:(3)
-    event_timestamp_column: date(4)
-    partition_by_column: date(5)
-  incremental_time_window:(6)
-    daily_partitioning_recent_days: 7(7)
-    monthly_partitioning_recent_months: 1(8)
-  profiling_checks:(9)
-    volume:(10)
-      profile_row_count:(11)
-        warning:(12)
-          min_count: 1(13)
-  monitoring_checks:(14)
-    daily:(15)
-      volume:
-        daily_row_count:
-          warning:
-            min_count: 1000
-          error:
-            min_count: 100
-          fatal:
-            min_count: 1           
-    monthly:(16)
-      volume:
-        monthly_row_count:
-          warning:
-            min_count: 1
-  partitioned_checks:(17)
-    daily:(18)
-      volume:
-        daily_partition_row_count:
-          error:
-            min_count: 1
-  columns:
+kind: table
+spec:
+  columns: # (1)!
+    cumulative_confirmed: # (2)!
+      type_snapshot: # (3)!
+        column_type: INT64 # (4)!
+        nullable: true
     date:
       type_snapshot:
         column_type: DATE
         nullable: true
-      profiling_checks:
+```
+
+1.  The column dictionary node. The nodes below it are the column names.
+2.  The configuration and captured metadata of the first column *cumulative_confirmed*.
+3.  Data type snapshot contains the last imported physical data type of the column. DQOps uses these data types
+    to decide if some data type specific data quality checks could be enabled on the column.
+4.  The data type of the column, it is a physical data type introspected from the monitored table.
+
+The node for each column contains a [type snapshot](../../reference/yaml/TableYaml.md#columntypesnapshotspec) object
+that is used by DQOps in the following cases:
+
+- The default [data quality checks](#default-data-quality-checks) are enabled depending on the column's data type.
+  Numeric anomaly checks are enabled only on numeric columns such as the *cumulative_confirmed* column in the example above.
+
+- The data quality [sensors](../sensors/sensors.md) may use the column's data type to decide if an additional type casting
+  must be generated in the SQL query that will capture the metrics for the data quality check.
+
+DQOps does not require that each column has the `type_snapshot` node defined. All the data quality checks will work
+without knowing the column's data type.
+
+
+### **Column profiling checks**
+[Profiling checks](./profiling-checks/profiling-checks.md) are configured on columns the same way as on tables.
+Only a different set of data quality checks is available, because column-level checks must be executed on a column.
+The column name is included in the generated SQL query rendered from a sensor's template.
+
+The following example shows column profiling checks configured on a column.
+
+``` { .yaml .annotate linenums="1" hl_lines="10-21" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      profiling_checks: # (1)!
         nulls:
-          profile_nulls_count: {}
-          profile_nulls_percent: {}
-      monitoring_checks:
-        daily:
+          profile_nulls_count: {} # (2)!
+          profile_nulls_percent:  # (3)!
+            warning:
+              max_percent: 0
+            error:
+              max_percent: 1
+        schema:
+          profile_column_exists: # (4)!
+            warning:
+              expected_value: 1 # (5)!
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+```
+
+1.  The container of the column-level [profiling checks](./profiling-checks/profiling-checks.md).
+2.  [profile_nulls_count](../../checks/column/nulls/nulls-count.md#profile-nulls-count) check without any rules,
+    the check will only capture the number of rows with a null value in the *cumulative_confirmed* column.
+3.  [profile_nulls_percent](../../checks/column/nulls/nulls-percent.md#profile-nulls-percent) check that measures a percentage
+    of rows with null values, instead of returning the number of rows. The check is configured to raise a **warning** severity
+    issue when any null rows were detected (the percentage of null values is above 0%). An **error** severity issue is raised
+    when the percentage of rows with null values exceeds 1%.
+4.  [profile_column_exists](../../checks/column/schema/column-exists.md#profile-column-exists) check that verifies that the
+    column is present in the table by reading the metadata of the table. 
+5.  The *expected_value* rule parameter's value is 1, which means that DQOps requires that the column was found.
+
+### **Column monitoring checks**
+Column-level [monitoring checks](./monitoring-checks/monitoring-checks.md) are also configured in a very similar way.
+
+The following example shows using the daily monitoring variants of the profiling checks shown in the previous example.
+
+``` { .yaml .annotate linenums="1" hl_lines="10-22" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    cumulative_confirmed:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      monitoring_checks: # (1)!
+        daily: # (2)!
           nulls:
             daily_nulls_count: {}
-            daily_nulls_percent: {}
-            daily_nulls_percent_anomaly_stationary:
+            daily_nulls_percent:
               warning:
-                anomaly_percent: 1.0
-            daily_nulls_percent_change_yesterday:
-              warning:
-                max_percent: 10.0
-                exact_day: false
-            daily_not_nulls_percent: {}
+                max_percent: 0
+              error:
+                max_percent: 1
           schema:
             daily_column_exists:
               warning:
                 expected_value: 1
-            daily_column_type_changed:
-              warning: {}
-      partitioned_checks:
-        daily:
-          nulls:
-            daily_partition_not_nulls_percent:
-              warning:
-                min_percent: 100.0
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
 ```
 
-1.  The type of the file is identified in the `kind` element.
-2.  The `spec` object 
+1.  The container of the column-level [monitoring checks](./monitoring-checks/monitoring-checks.md).
+2.  The container of the daily monitoring checks.
+
+When the [scheduling](../../working-with-dqo/schedules/index.md) is enabled, these checks will be executed daily,
+detecting if any rows with null values were identified (measuring the completeness of the *cumulative_confirmed* column).
+Also, DQOps will retrieve the table schema from the data source and verify if the column is still found in the table's metadata. 
 
 
+### **Column partitioned checks**
+Configuring column-level [partitioned checks](./partition-checks/partition-checks.md) is also
+not different from configuring them on a table level.
 
-``` { .yaml .annotate }
+The following example shows using the completeness checks on a partition level. Please also notice that
+there is no *daily_partition_column_exists* check,
+because schema checks can be measured only on a whole table level by the monitoring type of checks.
+Table schema drift checks cannot operate on partitions.
+
+``` { .yaml .annotate linenums="1" hl_lines="12-20" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: date
-    partition_by_column: date
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  profiling_checks:
-    volume:
-      profile_row_count:
-        warning:
-          min_count: 1
-    availability:
-      profile_table_availability:
-        warning:
-          max_failures: 0
-    schema:
-      profile_column_count: {}
-  monitoring_checks:
-    daily:
-      volume:
-        daily_row_count:
-          warning:
-            min_count: 1
-        daily_row_count_change:
-          warning:
-            max_percent: 10.0
-        daily_row_count_anomaly_differencing:
-          warning:
-            anomaly_percent: 1.0
-      availability:
-        daily_table_availability:
-          warning:
-            max_failures: 0
-      schema:
-        daily_column_count_changed:
-          warning: {}
-        daily_column_list_changed:
-          warning: {}
-        daily_column_list_or_order_changed:
-          warning: {}
-        daily_column_types_changed:
-          warning: {}
-    monthly:
-      volume:
-        monthly_row_count:
-          warning:
-            min_count: 1
-      availability:
-        monthly_table_availability:
-          warning:
-            max_failures: 0
-      schema:
-        monthly_column_count: {}
-        monthly_column_count_changed:
-          warning: {}
-        monthly_column_list_changed:
-          warning: {}
-        monthly_column_list_or_order_changed:
-          warning: {}
-        monthly_column_types_changed:
-          warning: {}
-  partitioned_checks:
-    daily:
-      volume:
-        daily_partition_row_count:
-          error:
-            min_count: 1
+    partition_by_column: date # (1)!  
+  columns:
+    cumulative_confirmed:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+      partitioned_checks: # (2)!
+        daily:
+          nulls:
+            daily_partition_nulls_count: {}
+            daily_partition_nulls_percent:
+              warning:
+                max_percent: 0
+              error:
+                max_percent: 1
+```
+
+1.  The selection of the column that will be used for date partitioning in the **GROUP BY** SQL clause.
+2.  The container of the column-level [partitioned checks](./partition-checks/partition-checks.md).
+
+
+### **Calculated columns**
+DQOps goes beyond monitoring columns that are already present in the table.
+Quite often, the values that will be monitored must be first extracted from complex text columns.
+
+Let's take an example of a table that contains just one column, named *message*.
+Each *message* column stores a single line of a HL7 message.
+
+``` asc
+EVN|A01|198808181123
+```
+
+We want to analyze a table that contains HL7 messages, verifying that the trigger event type is
+one of accepted values, 'A01' and 'A02' in this example.
+
+Calculated columns are defined in the *.dqotable.yaml* file also in the `spec.columns` section.
+The column name becomes a virtual column name. Data quality checks may be applied to this virtual column.
+The following example shows a *event_type_code* virtual column that extracts the second element from
+the message lines that are the 'EVN' event messages.
+
+``` { .yaml .annotate linenums="1" hl_lines="10 14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    message: # (1)!
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    event_type_code: # (2)!
+      type_snapshot:
+        column_type: STRING # (3)!
+        nullable: true
+      sql_expression: "CASE WHEN SPLIT({alias}.message, '|')[0] = 'EVN' THEN SPLIT({alias}.message, '|')[1] ELSE NULL END" # (4)!
+      monitoring_checks:
+        daily:
+          strings:
+            daily_string_value_in_set_percent:
+              parameters:
+                expected_values:
+                  - "A01" # (5)!
+                  - "A02"
+              error:
+                min_percent: 100
+```
+
+1.  The *message* column that contains one line of a HL7 message.
+2.  The name of the virtual (calculated) column that was created.
+3.  The data type of the calculated column. It is not required to configure it, but the data quality checks may use it as a hint
+    to avoid additional type casting.
+4.  The SQL expression using the SQL grammar of the monitored data source that extracts the value of a calculated column.
+    The `{alias}.message` expression references the *message* column from the monitored source. DQOps will replace the `{alias}`
+    token with the table alias used in the SQL query that is generated from the sensor's template.
+5.  We are validating that the column contains a 'A01' value.
+
+The calculated column is defined using the SQL grammar of the monitored data source
+The `sql_expression` field must contain an SQL extracts the value of a calculated column.
+
+The `{alias}.message` expression references the *message* column from the monitored source. DQOps will replace the `{alias}`
+token with the table alias used in the SQL query that is generated from the sensor's template.
+
+This example also shows that the `type_snapshot.column_type` value is set to a result data type of the expression.
+Setting the data type is not required to run checks, but DQOps may use it as a hint to avoid additional type casting.
+
+
+### **Transforming column values**
+The tables found in the data landing zones are often CSV files with all columns defined as a character data type.
+These columns must be casted to a correct data type before they could be used to perform some kind of data transformations.
+
+Let's assume that the monitored table is an external table, backed by the following CSV file.
+
+```
+date,message
+2023-11-06,Hello world
+```
+
+The *date* column contains a text value that is a valid ISO 8601 date.
+We want to replace all usages of the column reference with an SQL expression that will cast the column's value to a DATE.
+
+When the *date* column is casted to a *DATE* type, we can use it as a partitioning column for partitioned checks
+or run date specific data quality checks such as 
+the [daily-date-values-in-future-percent](../../checks/column/datetime/date-values-in-future-percent.md#daily-date-values-in-future-percent)
+check that detects if any dates are in the future.
+
+The next example shows how to apply additional transformations such as type casting on a column that is present in the table.
+
+``` { .yaml .annotate linenums="1" hl_lines="6 8 10" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    date: # (1)!
+      type_snapshot:
+        column_type: DATE # (2)!
+        nullable: true
+      sql_expression: "CAST({alias}.{column} AS DATE)" # (3)!
+```
+
+1.  A column that is already present in the table, but we want to apply a transformation.
+2.  The new data type that is the result of the SQL expression.
+3.  An SQL expression that is applied on the column. DQOps will use this expression to access the column
+    instead of using the raw column value. The SQL expression uses a token `{alias}.{column}` to reference the
+    raw value of the overwritten column.
+
+The `sql_expression` parameter is an SQL expression that uses a token `{alias}.{column}` to reference the
+raw value of the overwritten column.
+
+
+## Additional table configuration
+The following examples show how to apply additional configuration on a table level.
+
+### **Table filter predicate**
+DQOps analyzes all rows in a table. This behavior may not be always desired.
+In order to analyze only a subset of rows, a filter predicate that is added to the **WHERE** SQL clause
+should be defined. The filter predicate may use a `{alias}.` token to reference the analyzed table.
+The `{alias}` is replaced with the table alias that is used in the query.
+
+Almost all data quality sensors in DQOps use `analyzed_table` as the name of the alias, but some more complex
+sensors that need to apply joins and other SQL clauses may use a different alias.
+
+The following example shows a table alias that will analyze the data only after 2023-11-06.
+
+``` { .yaml .annotate linenums="1" hl_lines="5" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  filter: "{alias}.date >= '2023-11-06'" # (1)!
   columns:
     date:
       type_snapshot:
         column_type: DATE
         nullable: true
-      profiling_checks:
-        nulls:
-          profile_nulls_count: {}
-          profile_nulls_percent: {}
-        schema:
-          profile_column_exists:
-            warning:
-              expected_value: 1
-          profile_column_type_changed:
-            warning: {}
+    cumulative_confirmed:
       monitoring_checks:
         daily:
           nulls:
-            daily_nulls_count: {}
-            daily_nulls_percent: {}
-            daily_nulls_percent_anomaly_stationary:
+            daily_nulls_percent:
               warning:
-                anomaly_percent: 1.0
-            daily_nulls_percent_change_yesterday:
-              warning:
-                max_percent: 10.0
-                exact_day: false
-            daily_not_nulls_percent: {}
-          schema:
-            daily_column_exists:
-              warning:
-                expected_value: 1
-            daily_column_type_changed:
-              warning: {}
-        monthly:
-          nulls:
-            monthly_nulls_count: {}
-            monthly_nulls_percent: {}
-          schema:
-            monthly_column_exists:
-              warning:
-                expected_value: 1
-            monthly_column_type_changed:
-              warning: {}
+                max_percent: 0
 ```
+
+1. The table filter using a token `{alias}` that is replaced with the real table alias that is used in the SQL query.
+
+DQOps also supports setting the filter at a check level. The filter will affect only a single check, while all other
+checks defined on the table will analyze the whole table or use the table-level filter. The filter predicate
+is specified in the `parameters.filter` node inside the check's configuration as shown on the following example.
+
+``` { .yaml .annotate linenums="1" hl_lines="15-16" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    date:
+      type_snapshot:
+        column_type: DATE
+        nullable: true
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              parameters:
+                filter: "{alias}.date >= '2023-11-06'"
+              warning:
+                max_percent: 0
+```
+
+
+### **Table stage**
+The tables can be grouped into stages, allowing to detect data quality issues for different stages, such as
+landing zones, staging, cleansing, data marts, or other stage names specific to the environment.
+Dividing tables by stage allows to calculate the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
+for each stage.
+
+DQOps does not enforce any naming convention for stages. The stages are free-form string values assigned to
+a table in the *.dqotable.yaml* file.
+
+The value of the `stage` field that was configured on the table at the time of running the check is saved in the
+[sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) and the
+[check_results](../../reference/parquetfiles/check_results.md) parquet tables. 
+The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps are designed
+to allow filtering by the stage, using the `stage` value from the tables mentioned above.
+
+The following example shows how the `stage` field is configured.
+
+``` { .yaml .annotate linenums="1" hl_lines="5" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  stage: landing
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+```
+
+
+### **Table priority**
+The table priority is a concept practices by the DQOps data quality engineers when running data quality projects in an agile way.
+
+The principle of agile software development is dividing the work load into iterations. The agile principles are realized
+in DQOps by assigning numerical priorities to all tables that are initially imported at the beginning of a data quality project.
+
+When the tables are assigned to priorities (1, 2, 3, ...), an agile data quality project should focus on improving the
+data quality of the priority `1` tables first. When a satisfactory level of data quality, measured using
+the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md) is achieved, the tables from the next priority
+level are assigned to improve in the next interation.
+
+The value of the `priority` field that was configured on the table at the time of running the check is saved in the
+[sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) and the
+[check_results](../../reference/parquetfiles/check_results.md) parquet tables.
+The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps use a filter for the table priorities,
+allowing to separate data quality issues between high priority tables that should be already cleansed and lower priority tables
+that are still in the data cleansing process.
+
+The following example shows how the `priority` field is configured.
+
+``` { .yaml .annotate linenums="1" hl_lines="5" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  priority: 1 # (1)!
+  columns:
+    cumulative_confirmed:
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+```
+
+1.  The priority **1** is the highest priority.
+
+DQOps team has wrote a free eBook [Best practices for effective data quality improvement](https://dqops.com/best-practices-for-effective-data-quality-improvement/)
+that describes the iterative data quality process based on table priorities in details.
+Please download the eBook to learn more about the concept.
+
+
+### **Labels**
+Tables and columns can be tagged with labels. The labels are used by DQOps for targeting data quality checks
+when the [checks are run](../running-checks/running-checks.md).
+
+Labels are defined in a `labels` section below the `spec` node (for a table-level label)
+or below the column's node for column-level labels. The labels are defined as a list of strings values.
+
+The following example shows how to assign one label on a table level and two labels on a column level.
+
+``` { .yaml .annotate linenums="1" hl_lines="5-6 9-11" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  labels:
+    - "fact"
+  columns:
+    cumulative_confirmed:
+      labels:
+        - "measure"
+        - "not null"
+      monitoring_checks:
+        daily:
+          nulls:
+            daily_nulls_percent:
+              warning:
+                max_percent: 0
+```
+
 
 ## Default data quality checks
 DQOps maintains a configuration of the [default data quality checks](../home-folders/dqops-user-home.md#shared-settings)
@@ -688,8 +849,7 @@ This column is numeric, which allowed to activate some numeric anomaly checks,
 such as the [daily_sum_anomaly_differencing](../../checks/column/anomaly/sum-anomaly-differencing.md#daily-sum-anomaly-differencing)
 check that will compare the sum of values per day and raise a warning if the change since yesterday is greater than 10%.
 
-
-??? info "Click to see a full *.dqotable.yaml* file with all default observability checks enabled"
+??? info "Click to see a full *.dqotable.yaml* file with all default data observability checks enabled"
 
     ``` yaml
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -767,3 +927,4 @@ check that will compare the sum of values per day and raise a warning if the cha
                 daily_column_type_changed:
                   warning: {}
     ```
+
