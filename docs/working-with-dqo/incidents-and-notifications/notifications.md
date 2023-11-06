@@ -1,6 +1,6 @@
 # Notifications overview
 
-DQO can send alert notifications whenever a new incident is created or modified.
+DQOps can send alert notifications whenever a new incident is created or modified.
 
 An incident aggregates data quality issues based on different categories such as a table, data quality, dimension, check category, or check type. Thanks to the issue grouping the number of notifications is reduced. 
 You can read [more about incidents and their configuration here](incidents.md).
@@ -26,7 +26,7 @@ To configure Webhooks, follow these steps:
 ## Content of notification message
 
 An incident notification message contains complete information about the incident. 
-In DQO the notification is a message payload that is posted through an HTTP POST request to a notification endpoint. 
+In DQOps the notification is a message payload that is posted through an HTTP POST request to a notification endpoint. 
 A payload has a JSON format with multiple fields that together create a message.
 
 The fields of a JSON payload include the following:
@@ -77,7 +77,7 @@ The json object presents as below:
 
 Notification message can have the following status:
 
-- **Open**: This is the initial status of a new incident, which is automatically assigned by DQO. The remaining statuses of the incidents (Acknowledged, Resolved, and Muted) have to be set manually. An open incident indicates that a data quality team together with the data owner or someone else responsible for identifying issues should take action to address the data quality issue. You can change an incident's status back to Open at any time.
+- **Open**: This is the initial status of a new incident, which is automatically assigned by DQOps. The remaining statuses of the incidents (Acknowledged, Resolved, and Muted) have to be set manually. An open incident indicates that a data quality team together with the data owner or someone else responsible for identifying issues should take action to address the data quality issue. You can change an incident's status back to Open at any time.
 - **Acknowledged**: This status indicates that the incident has been acknowledged, and someone has begun to investigate the data quality issue. The Acknowledged status has to be manually marked in the Incident section. Usually, the data quality issues present at the data source level can be fixed by the data producer. Issues caused by a bug in the data pipeline or an ETL process should be fixed by the Data Engineering Team.
 - **Resolved**: This status indicates that the root cause of the issue has been identified and fixed. The resolved status has to be set manually in the Incident section.
 - **Muted**: This status hides the incident from your list. By default, any data quality issues associated with the incident will be muted for 60 days. If an incident is muted, DQO will not create a new one for 60 days. You can change the duration for muted incidents, by simply clicking the **Configure button** and changing the **Incidents and Notifications** settings. Muting the incident might be useful, when, for example, vendor’s data has been intentionally changed in comparison to the previous version.
@@ -99,8 +99,8 @@ Payload's text field is built with the use of the following data:
 
 In the text field you can find links to:
 
-  - **incident**: the "View in DQOps" link at the bottom of a message that redirects to the incident in the DQO application.
-  - **full table name**: the full table name present in the message header that leads to the table details in the DQO application.
+  - **incident**: the "View in DQOps" link at the bottom of a message that redirects to the incident in the DQOps application.
+  - **full table name**: the full table name present in the message header that leads to the table details in the DQOps application.
   - **issue URL**: a link to an external ticketing system. It is present when set manually on the incident. Check the [External system linking](#external-system-linking) section.
 
 **Markdown format**

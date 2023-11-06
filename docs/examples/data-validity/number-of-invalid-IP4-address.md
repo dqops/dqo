@@ -27,7 +27,7 @@ If the number of IP4 address values exceed 0, a warning alert will be triggered.
 
 ## Data structure
 
-The following is a fragment of the `DQO` dataset. Some columns were omitted for clarity.  
+The following is a fragment of the `DQOps` dataset. Some columns were omitted for clarity.  
 The `ip4` column of interest contains both valid and invalid IP4 address values.
 
 | ip4                 | result | date      |
@@ -111,7 +111,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.

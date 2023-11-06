@@ -1,6 +1,6 @@
 # YAML files overview
 
-In DQO, the configuration of [data quality checks](../checks/index.md) is defined in the YAML files. YAML is a human-readable
+In DQOps, the configuration of [data quality checks](../checks/index.md) is defined in the YAML files. YAML is a human-readable
 data serialization language that is often used for writing configuration files. 
 
 Defining data quality checks in the YAML files allows checks definitions to be stored in a source code repository and 
@@ -45,10 +45,10 @@ be raised.
 
 ## Editing the YAML files
 
-YAMl configuration files are located in the `./sources` folder. The complete DQO YAML schema can e found 
+YAMl configuration files are located in the `./sources` folder. The complete DQOps YAML schema can e found 
 [here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json). 
 
-The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
+The YAML files in DQOps support code completion in code editors such as Visual Studio Code. Remember to install the YAML
 extension by RedHat and Better Jinja by Samuel Colvin.
 
 ![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)

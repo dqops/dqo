@@ -1,6 +1,6 @@
 # Creating a custom dashboard
 
-With DQO, you can use dashboards to visualize your results and simplify the detection of anomalies in your data. DQO
+With DQOps, you can use dashboards to visualize your results and simplify the detection of anomalies in your data. DQOps
 provides the tools for creating your own customized dashboard to house your data.
 
 This guide will walk you through creating a dashboard in DQOps, starting with setting up an account in Looker Studio, 
@@ -77,7 +77,7 @@ at the beginning. After that, select **Authorize** again and confirm access to t
 
 ![select_authorize-s](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/select-authorize-s.png)
 
-On the screen with parameter settings, select **Allow Enter DQO AI API Key for Looker Studio** option, enter the parameter value as 0, and click on the **Reconnect** button in the top right corner.
+On the screen with parameter settings, select **Allow Enter DQOps AI API Key for Looker Studio** option, enter the parameter value as 0, and click on the **Reconnect** button in the top right corner.
 
 ![Allow](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/allow-s.png)
 
