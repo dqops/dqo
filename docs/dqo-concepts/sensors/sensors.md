@@ -68,14 +68,15 @@ in a table.
     ```
 The file starts with an import of reusable dialects specific to the database.
 
-| Maro name                        | Description                                                                                                                                       |
-|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| render_target_table              | Adds target table name.                                                                                                                           |
-| render_data_stream_projections   | Optional data stream projection that allows tracking data quality results for different data streams aggregated in the same table.                |
-| render_time_dimension_projection | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately. |
-| render_where_clause              | WHERE clause is used to filter records.                                                                                                           |
-| render_group_by                  | GROUP BY statement group rows by dates, partitions or additional columns.                                                                         |
-| render_order_by                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                             |
+| Maro name                          | Description                                                                                                                                       |
+|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `render_target_table`              | Adds target table name.                                                                                                                           |
+| `render_data_stream_projections`   | Optional data stream projection that allows tracking data quality results for different data streams aggregated in the same table.                |
+| `render_time_dimension_projection` | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately. |
+| `render_where_clause`              | WHERE clause is used to filter records.                                                                                                           |
+| `render_group_by`                  | GROUP BY statement group rows by dates, partitions or additional columns.                                                                         |
+| `render_order_by`                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                             |
+
 
 ## Sensor types and categories
 

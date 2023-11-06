@@ -123,7 +123,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
-    @CommandLine.Option(names = {"-tag", "--data-stream-level-tag"}, description = "Data stream hierarchy level filter (tag)",
+    @CommandLine.Option(names = {"-tag", "--data-grouping-level-tag"}, description = "Data grouping hierarchy level filter (tag)",
             required = false)
     private String[] tags;
 
