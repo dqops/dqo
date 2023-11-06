@@ -345,12 +345,12 @@ public class ChecksController {
 
         for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
             String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
-            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions);
+            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions, checkDefinitionWrapperUserHome.getSpec().getYamlParsingError());
         }
 
         for (CheckDefinitionWrapper checkDefinitionWrapperDqoHome : checkDefinitionWrapperListDqoHome) {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
-            checkDefinitionFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true, canEditDefinitions);
+            checkDefinitionFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true, canEditDefinitions, checkDefinitionWrapperDqoHome.getSpec().getYamlParsingError());
         }
 
         checkDefinitionFolderModel.addFolderIfMissing("table/profiling/custom");

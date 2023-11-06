@@ -1,5 +1,5 @@
 import React from 'react';
-import { useEffect} from 'react';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
   addFirstLevelTab,
@@ -12,7 +12,7 @@ import {
   openSensorFolderTree,
   getdataQualityChecksFolderTree,
   toggledataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree,
+  opendataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
@@ -31,6 +31,7 @@ import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import DataQualityContextMenu from './DataQualityContextMenu';
 import { urlencodeEncoder } from '../../utils';
+import { Tooltip } from '@material-tailwind/react';
 
 const defaultChecks = [
   'Profiling checks',
@@ -51,7 +52,7 @@ export const DefinitionTree = () => {
     tabs,
     activeTab,
     refreshChecksTreeIndicator,
-    refreshRulesTreeIndicator ,
+    refreshRulesTreeIndicator,
     refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
 
@@ -94,7 +95,9 @@ export const DefinitionTree = () => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.SENSOR_DETAIL(urlencodeEncoder(sensor.sensor_name) ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(urlencodeEncoder(sensor.sensor_name) ?? ''),
+        value: ROUTES.SENSOR_DETAIL_VALUE(
+          urlencodeEncoder(sensor.sensor_name) ?? ''
+        ),
         state: {
           full_sensor_name: urlencodeEncoder(sensor.full_sensor_name)
         },
@@ -120,7 +123,9 @@ export const DefinitionTree = () => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.CHECK_DETAIL(urlencodeEncoder(check.check_name) ?? ''),
-        value: ROUTES.CHECK_DETAIL_VALUE(urlencodeEncoder(check.check_name) ?? ''),
+        value: ROUTES.CHECK_DETAIL_VALUE(
+          urlencodeEncoder(check.check_name) ?? ''
+        ),
         state: {
           full_check_name: urlencodeEncoder(check.full_check_name),
           custom: check.custom
@@ -150,7 +155,7 @@ export const DefinitionTree = () => {
       addFirstLevelTab({
         url: ROUTES.USERS_LIST_DETAIL(),
         value: ROUTES.USERS_LIST_DETAIL_VALUE(),
-        label: "All users"
+        label: 'All users'
       })
     );
   };
@@ -160,7 +165,7 @@ export const DefinitionTree = () => {
       addFirstLevelTab({
         url: ROUTES.SCHEDULES_DEFAULT_DETAIL(),
         value: ROUTES.SCHEDULES_DEFAULT_DETAIL_VALUE(),
-        label: "Default schedules"
+        label: 'Default schedules'
       })
     );
   };
@@ -170,7 +175,7 @@ export const DefinitionTree = () => {
       addFirstLevelTab({
         url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
         value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
-        label: "Default webhooks"
+        label: 'Default webhooks'
       })
     );
   };
@@ -180,7 +185,7 @@ export const DefinitionTree = () => {
       addFirstLevelTab({
         url: ROUTES.SHARED_CREDENTAILS_LIST_DETAIL(),
         value: ROUTES.SHARED_CREDENTAILS_LIST_DETAIL_VALUE(),
-        label: "Shared credentails"
+        label: 'Shared credentails'
       })
     );
   };
@@ -221,40 +226,40 @@ export const DefinitionTree = () => {
       { category: 'Data quality checks', isOpen: false },
       { category: 'Default checks configuration', isOpen: false }
     ];
-    if(tabs && tabs.length !== 0){
+    if (tabs && tabs.length !== 0) {
       for (let i = 0; i < tabs.length; i++) {
         if (tabs[i].url?.includes('default_checks')) {
           configuration[3].isOpen = true;
-      } else if (tabs[i]?.url?.includes('sensors')) {
-        configuration[0].isOpen = true;
-        const arrayOfElemsToToggle = (
-          tabs[i].state.full_sensor_name as string
-        )?.split('/');
-        if (arrayOfElemsToToggle) {
-          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
+        } else if (tabs[i]?.url?.includes('sensors')) {
+          configuration[0].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_sensor_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
+          }
+        } else if (tabs[i]?.url?.includes('checks')) {
+          configuration[2].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.fullCheckName as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+          }
+        } else if (tabs[i]?.url?.includes('rules')) {
+          configuration[1].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_rule_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
+          }
         }
-      } else if (tabs[i]?.url?.includes('checks')) {
-        configuration[2].isOpen = true;
-        const arrayOfElemsToToggle = (
-          tabs[i].state.fullCheckName as string
-        )?.split('/');
-        if (arrayOfElemsToToggle) {
-          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-        }
-      } else if (tabs[i]?.url?.includes('rules')) {
-        configuration[1].isOpen = true;
-        const arrayOfElemsToToggle = (
-          tabs[i].state.full_rule_name as string
-        )?.split('/');
-        if (arrayOfElemsToToggle) {
-          toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-        }
+        dispatch(toggleFirstLevelFolder(configuration));
       }
+    } else {
       dispatch(toggleFirstLevelFolder(configuration));
     }
-  }else{
-    dispatch(toggleFirstLevelFolder(configuration));
-  }
   }, []);
 
   const renderSensorFolderTree = (
@@ -320,7 +325,12 @@ export const DefinitionTree = () => {
                   : ''
               )}
               onClick={() => {
-                openSensorFirstLevelTab(sensor);
+                !(
+                  sensor.yaml_parsing_error &&
+                  sensor.yaml_parsing_error.length > 0
+                )
+                  ? openSensorFirstLevelTab(sensor)
+                  : undefined;
               }}
             >
               <SvgIcon
@@ -328,12 +338,31 @@ export const DefinitionTree = () => {
                 className="w-4 h-4 min-w-4 shrink-0"
               />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
-              {urlencodeEncoder(sensor.sensor_name ?? '')}
+                {urlencodeEncoder(sensor.sensor_name ?? '')}
               </div>
-              <SensorContextMenu
-                singleSensor={true}
-                sensor={sensor}
-              />
+              {sensor.yaml_parsing_error &&
+              sensor.yaml_parsing_error.length > 0 ? (
+                <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                  <Tooltip
+                    content={sensor.yaml_parsing_error}
+                    className="max-w-120 z-50"
+                    placement="right-start"
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        right: '30px',
+                        top: '4px',
+                        borderRadius: '3px'
+                      }}
+                      className="bg-white"
+                    >
+                      <SvgIcon name="warning" className="w-5 h-5" />
+                    </div>
+                  </Tooltip>
+                </div>
+              ) : null}
+              <SensorContextMenu singleSensor={true} sensor={sensor} />
             </div>
           ))}
         </div>
@@ -404,7 +433,9 @@ export const DefinitionTree = () => {
                   : ''
               )}
               onClick={() => {
-                openRuleFirstLevelTab(rule);
+                !(rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0)
+                  ? openRuleFirstLevelTab(rule)
+                  : undefined;
               }}
             >
               <SvgIcon
@@ -414,10 +445,28 @@ export const DefinitionTree = () => {
               <div className="text-[13px] leading-1.5 whitespace-nowrap">
                 {urlencodeEncoder(rule.rule_name ?? '')}
               </div>
-              <RuleContextMenu
-                singleRule={true}
-                rule={rule}
-              />
+              {rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0 ? (
+                <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                  <Tooltip
+                    content={rule.yaml_parsing_error}
+                    className="max-w-120 z-50"
+                    placement="right-start"
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        right: '30px',
+                        top: '4px',
+                        borderRadius: '3px'
+                      }}
+                      className="bg-white"
+                    >
+                      <SvgIcon name="warning" className="w-5 h-5" />
+                    </div>
+                  </Tooltip>
+                </div>
+              ) : null}
+              <RuleContextMenu singleRule={true} rule={rule} />
             </div>
           ))}
         </div>
@@ -485,7 +534,7 @@ export const DefinitionTree = () => {
               <div key={check.check_name}>
                 <div
                   className={clsx(
-                    'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
+                    'cursor-pointer flex w-full space-between items-center mb-1 h-5  hover:bg-gray-300',
                     check.custom ? 'font-bold' : '',
                     activeTab
                       ?.split('/')
@@ -494,7 +543,12 @@ export const DefinitionTree = () => {
                       : ''
                   )}
                   onClick={() => {
-                    openCheckFirstLevelTab(check);
+                    !(
+                      check.yaml_parsing_error &&
+                      check.yaml_parsing_error.length > 0
+                    )
+                      ? openCheckFirstLevelTab(check)
+                      : undefined;
                   }}
                 >
                   <SvgIcon
@@ -504,10 +558,29 @@ export const DefinitionTree = () => {
                   <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
                     {urlencodeEncoder(check.check_name ?? '')}
                   </div>
-                  <DataQualityContextMenu
-                    singleCheck={true}
-                    check={check}
-                  />
+                  {check.yaml_parsing_error &&
+                  check.yaml_parsing_error.length > 0 ? (
+                    <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                      <Tooltip
+                        content={check.yaml_parsing_error}
+                        className="max-w-120 z-50"
+                        placement="right-start"
+                      >
+                        <div
+                          style={{
+                            position: 'absolute',
+                            right: '30px',
+                            top: '4px',
+                            borderRadius: '3px'
+                          }}
+                          className="bg-white"
+                        >
+                          <SvgIcon name="warning" className="w-5 h-5" />
+                        </div>
+                      </Tooltip>
+                    </div>
+                  ) : null}
+                  <DataQualityContextMenu singleCheck={true} check={check} />
                 </div>
               </div>
             ))}
@@ -587,42 +660,38 @@ export const DefinitionTree = () => {
             )}
         </div>
       ))}
-      <div onClick={openAllUsersFirstLevelTab} 
-        className='cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300' >
-        <SvgIcon
-           name="userprofile"
-            className="w-4 h-4 min-w-4 "
-        />
+      <div
+        onClick={openAllUsersFirstLevelTab}
+        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
+      >
+        <SvgIcon name="userprofile" className="w-4 h-4 min-w-4 " />
         <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Manage users
         </div>
       </div>
-      <div onClick={openDefaultSchedulesFirstLevelTab} 
-        className='cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300' >
-        <SvgIcon
-           name="clock"
-            className="w-4 h-4 min-w-4 "
-        />
+      <div
+        onClick={openDefaultSchedulesFirstLevelTab}
+        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
+      >
+        <SvgIcon name="clock" className="w-4 h-4 min-w-4 " />
         <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Default schedules
         </div>
       </div>
-      <div onClick={openDefaultWebhooksFirstLevelTab} 
-        className='cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300' >
-        <SvgIcon
-           name="webhooks"
-            className="w-4 h-4 min-w-4 "
-        />
+      <div
+        onClick={openDefaultWebhooksFirstLevelTab}
+        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
+      >
+        <SvgIcon name="webhooks" className="w-4 h-4 min-w-4 " />
         <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Default webhooks
         </div>
       </div>
-      <div onClick={openSharedCredentailsFirstLevelTab} 
-        className='cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300' >
-        <SvgIcon
-           name="definitionsrules"
-            className="w-4 h-4 min-w-4 "
-        />
+      <div
+        onClick={openSharedCredentailsFirstLevelTab}
+        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
+      >
+        <SvgIcon name="definitionsrules" className="w-4 h-4 min-w-4 " />
         <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Shared credentials
         </div>
