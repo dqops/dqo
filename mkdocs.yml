@@ -89,7 +89,7 @@ nav:
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
       - Compare tables: "working-with-dqo/table-comparison/table-comparison.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
-      - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
+      - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboards.md"
   - Integrations:
       - "integrations/index.md"
       - Airflow:
@@ -98,6 +98,7 @@ nav:
           - Collect statistics operator: "integrations/airflow/collect-statistics-operator.md"
           - Table import operator: "integrations/airflow/table-import-operator.md"
           - Table status operator: "integrations/airflow/table-status-operator.md"
+      - Looker Studio: "integrations/looker-studio/creating-custom-dashboards.md"
       - Slack: "integrations/slack/configuring-slack-notifications.md"
       - Visual Studio Code: "integrations/visual-studio-code/index.md"
       - Webhooks: "integrations/webhooks/index.md"

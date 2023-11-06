@@ -12,7 +12,7 @@ Operators are available for actions such as:
   the operator breaks DAG processing if any **fatal** severity issues are detected in the most recent data quality check run 
 
 
-## DQOps python package for airflow
+## DQOps python package for Airflow
 
 To use DQOps Airflow Operator an installation of the python package is required.
 DQOps publishes the package on the official repository Python Package Index (PyPI). https://pypi.org/project/dqops/

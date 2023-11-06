@@ -13,7 +13,7 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     The [DQOps Python package](https://pypi.org/project/dqops/) is available on PyPI.
 
 
-- **[Looker Studio](./looker-studio/creating-custom-dashboard.md)**
+- **[Looker Studio](./looker-studio/creating-custom-dashboards.md)**
     
     Data Quality Dashboards are a fundamental way to communicate the current state of data quality
     to stakeholders. 
