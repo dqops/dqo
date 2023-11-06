@@ -27,8 +27,8 @@ A welcome message will appear, and you can start entering commands in the DQO Sh
  :: DQOps Data Quality Operations Center ::    
 
 Press CTRL and click the link to open it in the browser:
-- DQO User Interface Console (http://localhost:8888)
-- DQO API Reference (http://localhost:8888/swagger-ui/)
+- DQOps User Interface Console (http://localhost:8888)
+- DQOps API Reference (http://localhost:8888/swagger-ui/)
 dqo>
 
 ```
