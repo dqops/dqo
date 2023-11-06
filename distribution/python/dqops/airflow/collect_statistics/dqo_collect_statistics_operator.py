@@ -1,21 +1,31 @@
 import json
 import logging
-from typing import Any, Dict, Union, List
+from typing import Any, Dict, List, Union
 
 from airflow.models.baseoperator import BaseOperator
 from httpx import ReadTimeout
 
-from dqops.airflow.common.exceptions.dqops_job_failed_exception import DqopsJobFailedException
+from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
+    DqopsJobFailedException,
+)
 from dqops.airflow.common.tools.client_creator import create_client
-from dqops.airflow.common.tools.server_response_verifier import verify_server_response_correctness
+from dqops.airflow.common.tools.server_response_verifier import (
+    verify_server_response_correctness,
+)
 from dqops.airflow.common.tools.timeout.dqo_timeout import handle_dqo_timeout
-from dqops.airflow.common.tools.timeout.python_client_timeout import handle_python_timeout
+from dqops.airflow.common.tools.timeout.python_client_timeout import (
+    handle_python_timeout,
+)
 from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.jobs.collect_statistics_on_table import sync_detailed
-from dqops.client.models.collect_statistics_queue_job_result import CollectStatisticsQueueJobResult
+from dqops.client.models.collect_statistics_queue_job_result import (
+    CollectStatisticsQueueJobResult,
+)
 from dqops.client.models.dqo_job_status import DqoJobStatus
-from dqops.client.models.statistics_collector_search_filters import StatisticsCollectorSearchFilters
+from dqops.client.models.statistics_collector_search_filters import (
+    StatisticsCollectorSearchFilters,
+)
 from dqops.client.models.statistics_collector_target import StatisticsCollectorTarget
 from dqops.client.types import UNSET, Response, Unset
 
@@ -36,7 +46,6 @@ class DqoCollectStatisticsOperator(BaseOperator):
         column_names: Union[Unset, List[str]] = UNSET,
         sensor_name: Union[Unset, str] = UNSET,
         target: Union[Unset, StatisticsCollectorTarget] = UNSET,
-
         base_url: str = "http://localhost:8888/",
         wait_timeout: Union[Unset, None, int] = UNSET,
         fail_on_timeout: bool = True,
@@ -83,24 +92,28 @@ class DqoCollectStatisticsOperator(BaseOperator):
         self.fail_on_timeout: bool = fail_on_timeout
 
     def execute(self, context):
-        client: Client = create_client(base_url=self.base_url, wait_timeout=self.wait_timeout)
+        client: Client = create_client(
+            base_url=self.base_url, wait_timeout=self.wait_timeout
+        )
 
         try:
-            search_filters: StatisticsCollectorSearchFilters = StatisticsCollectorSearchFilters(
-                connection_name=self.connection_name,
-                schema_table_name=self.schema_table_name,
-                enabled=self.enabled,
-                labels=self.labels,
-                column_names=self.column_names,
-                sensor_name=self.sensor_name,
-                target=self.target
+            search_filters: StatisticsCollectorSearchFilters = (
+                StatisticsCollectorSearchFilters(
+                    connection_name=self.connection_name,
+                    schema_table_name=self.schema_table_name,
+                    enabled=self.enabled,
+                    labels=self.labels,
+                    column_names=self.column_names,
+                    sensor_name=self.sensor_name,
+                    target=self.target,
+                )
             )
 
             response: Response[CollectStatisticsQueueJobResult] = sync_detailed(
                 client=client,
                 json_body=search_filters,
                 wait=True,
-                wait_timeout=self.wait_timeout
+                wait_timeout=self.wait_timeout,
             )
         except ReadTimeout as exception:
             handle_python_timeout(exception, self.fail_on_timeout)
@@ -108,8 +121,10 @@ class DqoCollectStatisticsOperator(BaseOperator):
 
         verify_server_response_correctness(response)
 
-        job_result: CollectStatisticsQueueJobResult = CollectStatisticsQueueJobResult.from_dict(
-            json.loads(response.content.decode("utf-8"))
+        job_result: CollectStatisticsQueueJobResult = (
+            CollectStatisticsQueueJobResult.from_dict(
+                json.loads(response.content.decode("utf-8"))
+            )
         )
         logging.info(job_result.to_dict())
 
