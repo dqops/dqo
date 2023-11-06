@@ -143,6 +143,12 @@ public class DataGroupingConfigurationsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Data grouping configuration name") @PathVariable String groupingConfigurationName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+
+        TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
+        if (tableSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
         DataGroupingConfigurationSpecMap dataGroupingMapping = this.readGroupingConfigurations(userHomeContext, connectionName, schemaName, tableName);
         if (dataGroupingMapping == null || !dataGroupingMapping.containsKey(groupingConfigurationName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -155,6 +161,7 @@ public class DataGroupingConfigurationsController {
             setDataGroupingConfigurationName(groupingConfigurationName);
             setSpec(dataGroupingMapping.get(groupingConfigurationName));
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
         return new ResponseEntity<>(Mono.just(result), HttpStatus.OK); // 200
     }

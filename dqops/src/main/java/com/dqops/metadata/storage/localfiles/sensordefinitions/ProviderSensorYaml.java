@@ -18,14 +18,19 @@ package com.dqops.metadata.storage.localfiles.sensordefinitions;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * Provider specific data quality sensor definition YAML schema for a data quality sensor configuration specification.
  */
-public class ProviderSensorYaml {
+public class ProviderSensorYaml implements InvalidYamlStatusHolder {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.PROVIDER_SENSOR;
     private ProviderSensorDefinitionSpec spec = new ProviderSensorDefinitionSpec();
+
+    @JsonIgnore
+    private String yamlParsingError;
 
     /**
      * Creates an empty yaml object.
@@ -87,5 +92,28 @@ public class ProviderSensorYaml {
      */
     public void setSpec(ProviderSensorDefinitionSpec spec) {
         this.spec = spec;
+    }
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        if (this.spec != null) {
+            this.spec.setYamlParsingError(yamlParsingError);
+        }
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
     }
 }

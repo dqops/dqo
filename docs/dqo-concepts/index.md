@@ -2,25 +2,10 @@
 
 These topics introduce the basic concepts of DQOps.
 
- - **[Sensors](./sensors/sensors.md)**
-
-    The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
-    to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
-    a `sensor readout` in DQOps.
-
-
- - **[Rules](./rules/rules.md)**
-
-    Data quality rules in DQOps are Python functions that receive the `sensor readout`
-    that was captured by sensor (a result of an SQL query).
-    The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
-    For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
-    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
-
  - **[Checks](./checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
-    of a [sensor](./sensors/sensors.md) and a [rule](./rules/rules.md) that verifies the sensor's readout.
+    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
     For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the
     [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
     and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
@@ -28,6 +13,13 @@ These topics introduce the basic concepts of DQOps.
 
     If the percent of null values in a column raises above the threshold (maximum allowed percent),
     a data quality issue is raised.
+
+
+ - **[Configuring checks](./checks/configuring-checks.md)**
+
+    The data quality checks are configured on tables and columns in DQOps YAML files.
+
+    The parameters for the check (sensor) and the data quality rule thresholds must be set.
 
 
  - **[DQOps user home](./home-folders/dqops-user-home.md)**
@@ -43,6 +35,22 @@ These topics introduce the basic concepts of DQOps.
 
     Data quality checks configured for each table and column are executed by targeting the data source, table, column,
     check name, check type, check category or even labels assigned to tables or columns. 
+
+
+ - **[Sensors](./sensors/sensors.md)**
+
+    The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
+    to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
+    a `sensor readout` in DQOps.
+
+
+ - **[Rules](./rules/rules.md)**
+
+    Data quality rules in DQOps are Python functions that receive the `sensor readout`
+    that was captured by sensor (a result of an SQL query).
+    The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
+    For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
+    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
 
 
  - **[Check execution flow](./architecture/check-execution-flow.md)**
@@ -88,20 +96,22 @@ These topics introduce the basic concepts of DQOps.
     The data quality dimensions are the fundamental way to group data quality checks into groups of checks that detect similar issue.
     The most important data quality dimensions supported by DQOps are:
 
-    - `Validity` detects common field format issues, such as an *email* field does not meet the email format
-   
-    - `Completeness` detects missing data, for example columns with too many null values 
-   
-    - `Timeliness` tracks freshness of data, measuring the maximum allowed age of data
-   
     - `Availability` watches the tables in the data source, raising a data quality issue when the table is missing or returns errors
-   
+
+    - `Accuracy` checks compare the data to the "source of truth", which means comparing tables between stages and data sources
+
     - `Consistency` monitors the data over a period of time, looking for anomalies such as the usual percent of null values
-      per day was within the regular range, but an unusual increase of the percent of null values in a column was observed for one day 
+      per day was within the regular range, but an unusual increase of the percent of null values in a column was observed for one day
+
+    - `Completeness` detects missing data, for example columns with too many null values
+
+    - `Reasonableness` identifies values that are not making sense, falling out of expected range
+
+    - `Timeliness` tracks freshness of data, measuring the maximum allowed age of data
    
     - `Uniqueness` finds issues related to duplicate values
 
-    - `Reasonableness` identifies values that are not making sense, falling out of expected range
+    - `Validity` detects common field format issues, such as an *email* field does not meet the email format
 
 
 - **[Data grouping](./data-grouping/data-grouping.md)**
@@ -125,7 +135,7 @@ These topics introduce the basic concepts of DQOps.
     Please read the [data storage](./data-storage/data-storage.md) concept guide to understand the data lake structure.
  
 
-- **[Working with the YAML files](./working-with-yaml-files/working-with-yaml-files.md)**
+- **[YAML files overview](./yaml-files/yaml-files.md)**
 
     DQOps uses YAML files to keep the configuration of data sources and the enabled data quality checks on monitored tables.
     The DQOps YAML file format is fully documented and the YAML schema files are published.
@@ -135,7 +145,13 @@ These topics introduce the basic concepts of DQOps.
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
 
 
-- **[Working with CLI](./working-with-cli/working-with-cli.md)**
+- **[User interface overview](./user-interface-overview/user-interface-overview.md)**
+
+    The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
+    Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
+
+
+- **[Command-line interface](./command-line-interface/command-line-interface.md)**
 
     Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
 

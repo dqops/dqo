@@ -26,6 +26,7 @@ server:
   shutdown: graceful
   error:
     include-stacktrace: always
+    include-message: always
   compression:
      enabled: true
      mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm

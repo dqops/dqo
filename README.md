@@ -22,7 +22,7 @@ To use DQOps you need:
 
 - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 - Ability to install Python packages with pip.
-- Installed JDK software (version 17) and set the JAVA_HOME environment variable.
+- If you want to compile DQOps locally, also Java JDK (version 17 or higher), and a configured JAVA_HOME environment variable.
 
 
 DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
@@ -63,7 +63,12 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 
 ## Documentation
 
-For full documentation with guides and use cases, visit https://dqops.com/docs
+For full documentation with guides and use cases, visit https://dqops.com/docs/
+
+The [getting started](https://dqops.com/docs/getting-started/) guide shows how to start using DQOps.
+
+Also, read the [DQOps concept](https://dqops.com/docs/dqo-concepts/) guide to know how DQOps operates,
+and how to configure data quality checks.
 
 ## Contact and issues
 

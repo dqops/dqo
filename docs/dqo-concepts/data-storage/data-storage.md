@@ -8,11 +8,6 @@ The data files are stored locally in the `.data` subfolder inside the **[DQOps U
 **[DQOps User Home](../home-folders/dqops-user-home.md)** folder is the place on the disk where DQOps
 stores both the configuration files and the data result files.
 
-The configuration files are YAML files that scribe the metadata of monitored data sources and the rule parameters for enabled data checks.
-It is usually the current folder where DQOPs was started, which means that DQOps will create all configuration and data files
-in the current folder. It is also possible to select a different folder to store the files by setting the `$DQO_USER_HOME`
-environment variable before starting DQOps.
-
 The `.data` folder is organized as an offline Data Quality Data Lake, storing files in a Hive-compatible partitioning folder structure.
 DQOps synchronizes the files between the `.data` folder and a Data Quality Data Lake hosted as a DQOps Cloud SaaS platform.
 DQOps Cloud continuously refreshed the Data Quality Data Warehouse by loading the parquet data files

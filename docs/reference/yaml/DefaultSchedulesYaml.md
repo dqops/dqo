@@ -1,7 +1,7 @@
 
 ## DefaultSchedulesYaml  
 The configuration of default schedules for running data quality checks.
- The default schedules are stored in the settings/defaultschedules.dqoschedules.yaml file in the DQOps user&#x27;s home folder.  
+ The default schedules are stored in the *$DQO_USER_HOME/settings/defaultschedules.dqoschedules.yaml* file in the DQOps user&#x27;s home folder.  
   
 
 

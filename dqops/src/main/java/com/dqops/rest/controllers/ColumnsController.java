@@ -275,6 +275,7 @@ public class ColumnsController {
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setSpec(columnSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200

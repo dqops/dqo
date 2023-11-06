@@ -100,8 +100,8 @@
 								<configuration>
 									<mainClass>com.dqops.rest.server.client.GeneratePythonClientPostProcessor</mainClass>
 									<arguments>
-										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-2.json</argument>
-										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
+										<argument>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-swagger-2.json</argument>
+										<argument>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-openapi-3.json</argument>
 										<argument>${project.basedir}</argument>
 									</arguments>
 								</configuration>
@@ -131,7 +131,7 @@
 									<mainClass>com.dqops.utils.docs.client.GeneratePythonDocumentationPostProcessor</mainClass>
 									<arguments>
 										<argument>${project.basedir}</argument>
-										<argument>${project.basedir}/target/swagger/dqo-ui-swagger-3-python-client.json</argument>
+										<argument>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-openapi-3.json</argument>
 									</arguments>
 								</configuration>
 							</execution>
@@ -274,21 +274,6 @@
 									<resources>
 										<resource>
 											<directory>src/main/frontend/build</directory>
-										</resource>
-									</resources>
-								</configuration>
-							</execution>
-							<execution>
-								<id>copy-swagger-json</id>
-								<phase>process-classes</phase>
-								<goals>
-									<goal>copy-resources</goal>
-								</goals>
-								<configuration>
-									<outputDirectory>${project.basedir}/target/classes/static</outputDirectory>
-									<resources>
-										<resource>
-											<directory>${project.basedir}/target/swagger</directory>
 										</resource>
 									</resources>
 								</configuration>
@@ -904,8 +889,8 @@
 							<springmvc>true</springmvc>
 							<locations>com.dqops.rest.controllers</locations>
 							<basePath>/</basePath>
-							<swaggerDirectory>${project.basedir}/target/swagger</swaggerDirectory>
-							<swaggerFileName>dqo-ui-swagger-2</swaggerFileName>
+							<swaggerDirectory>${project.basedir}/src/main/resources/static/swagger-api</swaggerDirectory>
+							<swaggerFileName>dqops-api-swagger-2</swaggerFileName>
 							<outputFormats>JSON,YAML</outputFormats>
 							<info>
 								<title>DQOps</title>
@@ -952,7 +937,7 @@
 						</goals>
 						<phase>compile</phase>
 						<configuration>
-							<inputSpec>${project.build.directory}/swagger/dqo-ui-swagger-2.json</inputSpec>
+							<inputSpec>${project.basedir}/src/main/resources/static/swagger-api/dqops-api-swagger-2.json</inputSpec>
 							<generatorName>typescript-axios</generatorName>
 							<output>${project.basedir}/src/main/frontend/src/api</output>
 							<configOptions>
@@ -1088,28 +1073,6 @@
 							<resources>
 								<resource>
 									<directory>src/integration-test/resources</directory>
-								</resource>
-							</resources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>3.3.0</version>
-				<executions>
-					<execution>
-						<id>copy-swagger-json</id>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${basedir}/target/classes/static</outputDirectory>
-							<resources>
-								<resource>
-									<directory>${basedir}/target/swagger</directory>
 								</resource>
 							</resources>
 						</configuration>

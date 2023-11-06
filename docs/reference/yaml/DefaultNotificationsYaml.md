@@ -1,7 +1,7 @@
 
 ## DefaultNotificationsYaml  
 The default configuration of notifications. Notifications are published by calling webhooks defined in this object.
- The default notification settings are stored in the settings/defaultnotifications.dqonotifications.yaml file in the DQOps user&#x27;s home folder.  
+ The default notification settings are stored in the *$DQO_USER_HOME/settings/defaultnotifications.dqonotifications.yaml* file in the DQOps user&#x27;s home folder.  
   
 
 

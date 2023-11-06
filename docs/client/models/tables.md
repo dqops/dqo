@@ -133,6 +133,7 @@ Table list model returned by the rest api that is limited only to the basic fiel
 |can_collect_statistics|Boolean flag that decides if the current user can collect statistics.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
 |can_delete_data|Boolean flag that decides if the current user can delete data (results).|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  
@@ -150,6 +151,7 @@ Full table model that returns the specification of a single table in the REST Ap
 |table_hash|Table hash that identifies the table using a unique hash code.|long|
 |[spec](\docs\reference\yaml\tableyaml\#tablespec)|Full table specification including all nested information, the table name is inside the &#x27;target&#x27; property.|[TableSpec](\docs\reference\yaml\tableyaml\#tablespec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

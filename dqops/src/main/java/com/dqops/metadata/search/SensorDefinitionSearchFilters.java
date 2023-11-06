@@ -17,12 +17,16 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Hierarchy node search filters.
  */
 public class SensorDefinitionSearchFilters {
+    @JsonPropertyDescription("The target sensor name. This filter supports search patterns such as 'prefix_\\*', '\\*_suffix', 'prefix\\*suffix'.")
     private String sensorName;
+
+    @JsonPropertyDescription("Boolean flag to search only for enabled sensors or only disabled sensors. The default value is *true*, which prevents searching for all rules despite their enabled status.")
     private Boolean enabled = true;
 
     @JsonIgnore

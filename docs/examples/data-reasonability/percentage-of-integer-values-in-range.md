@@ -53,7 +53,7 @@ The `value` column of interest contains values in range between 0 and 100,000.
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-values-in-range-numeric-percent-checks.png)
 

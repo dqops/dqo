@@ -17,25 +17,45 @@ T = TypeVar("T", bound="CheckSearchFilters")
 
 @_attrs_define
 class CheckSearchFilters:
-    """Target data quality checks filter, identifies which checks on which tables and columns should be executed.
+    r"""Target data quality checks filter, identifies which checks on which tables and columns should be executed.
 
     Attributes:
-        connection_name (Union[Unset, str]):
-        schema_table_name (Union[Unset, str]):
-        enabled (Union[Unset, bool]):
-        tags (Union[Unset, List[str]]):
-        labels (Union[Unset, List[str]]):
-        column_name (Union[Unset, str]):
-        column_data_type (Union[Unset, str]):
-        column_nullable (Union[Unset, bool]):
+        connection_name (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
+            'source\*', '\*_prod', 'prefix\*suffix'.
+        schema_table_name (Union[Unset, str]): The schema and table name. It is provided as
+            *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in
+            the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*',
+            'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.
+        enabled (Union[Unset, bool]): A boolean flag to target enabled tables, columns or checks. When the value of this
+            field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are
+            not implicitly disabled.
+        tags (Union[Unset, List[str]]): An array of tags assigned to the table. All tags must be present on a table to
+            match. The tags can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The tags are assigned to the table
+            on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a
+            tag.
+        labels (Union[Unset, List[str]]): An array of labels assigned to the table. All labels must be present on a
+            table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
+            on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
+        column_name (Union[Unset, str]): The column name. This field accepts search patterns in the format: 'fk_\*',
+            '\*_id', 'prefix\*suffix'.
+        column_data_type (Union[Unset, str]): The column data type that was imported from the data source and is stored
+            in the [columns -> column_name -> type_snapshot ->
+            column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
+        column_nullable (Union[Unset, bool]): Optional filter to find only nullable (when the value is *true*) or not
+            nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot
+            -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
         check_target (Union[Unset, CheckTarget]):
         check_type (Union[Unset, CheckType]):
         time_scale (Union[Unset, CheckTimeScale]):
-        check_category (Union[Unset, str]):
-        table_comparison_name (Union[Unset, str]):
-        check_name (Union[Unset, str]):
-        sensor_name (Union[Unset, str]):
-        check_configured (Union[Unset, bool]):
+        check_category (Union[Unset, str]): The target check category, for example: *nulls*, *volume*, *anomaly*.
+        table_comparison_name (Union[Unset, str]): The name of a configured table comparison. When the table comparison
+            is provided, DQOps will only perform table comparison checks that compare data between tables.
+        check_name (Union[Unset, str]): The target check name to run only this named check. Uses the short check name
+            which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as:
+            'profiling_\*', '\*_count', 'profiling_\*_percent'.
+        sensor_name (Union[Unset, str]): The target sensor name to run only data quality checks that are using this
+            sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports
+            search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.
         check_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
@@ -54,7 +74,6 @@ class CheckSearchFilters:
     table_comparison_name: Union[Unset, str] = UNSET
     check_name: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
-    check_configured: Union[Unset, bool] = UNSET
     check_hierarchy_ids_models: Union[Unset, List["HierarchyIdModel"]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -89,7 +108,6 @@ class CheckSearchFilters:
         table_comparison_name = self.table_comparison_name
         check_name = self.check_name
         sensor_name = self.sensor_name
-        check_configured = self.check_configured
         check_hierarchy_ids_models: Union[Unset, List[Dict[str, Any]]] = UNSET
         if not isinstance(self.check_hierarchy_ids_models, Unset):
             check_hierarchy_ids_models = []
@@ -133,8 +151,6 @@ class CheckSearchFilters:
             field_dict["checkName"] = check_name
         if sensor_name is not UNSET:
             field_dict["sensorName"] = sensor_name
-        if check_configured is not UNSET:
-            field_dict["checkConfigured"] = check_configured
         if check_hierarchy_ids_models is not UNSET:
             field_dict["checkHierarchyIdsModels"] = check_hierarchy_ids_models
 
@@ -190,8 +206,6 @@ class CheckSearchFilters:
 
         sensor_name = d.pop("sensorName", UNSET)
 
-        check_configured = d.pop("checkConfigured", UNSET)
-
         check_hierarchy_ids_models = []
         _check_hierarchy_ids_models = d.pop("checkHierarchyIdsModels", UNSET)
         for check_hierarchy_ids_models_item_data in _check_hierarchy_ids_models or []:
@@ -217,7 +231,6 @@ class CheckSearchFilters:
             table_comparison_name=table_comparison_name,
             check_name=check_name,
             sensor_name=sensor_name,
-            check_configured=check_configured,
             check_hierarchy_ids_models=check_hierarchy_ids_models,
         )
 

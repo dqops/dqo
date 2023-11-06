@@ -81,6 +81,14 @@ public class RuleModel {
     private boolean canEdit;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Default constructor for RuleModel.
      */
     public RuleModel() {
@@ -97,15 +105,17 @@ public class RuleModel {
     public RuleModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn, boolean canEdit) {
         this.ruleName = ruleDefinitionWrapper.getRuleName();
         this.rulePythonModuleContent = ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent();
-        this.type = ruleDefinitionWrapper.getSpec().getType();
-        this.javaClassName = ruleDefinitionWrapper.getSpec().getJavaClassName();
-        this.mode = ruleDefinitionWrapper.getSpec().getMode();
-        this.timeWindow = ruleDefinitionWrapper.getSpec().getTimeWindow();
-        this.fields = ruleDefinitionWrapper.getSpec().getFields();
-        this.parameters = ruleDefinitionWrapper.getSpec().getParameters();
+        RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionWrapper.getSpec();
+        this.type = ruleDefinitionSpec.getType();
+        this.javaClassName = ruleDefinitionSpec.getJavaClassName();
+        this.mode = ruleDefinitionSpec.getMode();
+        this.timeWindow = ruleDefinitionSpec.getTimeWindow();
+        this.fields = ruleDefinitionSpec.getFields();
+        this.parameters = ruleDefinitionSpec.getParameters();
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
+        this.yamlParsingError = ruleDefinitionSpec.getYamlParsingError();
     }
 
     /**

@@ -218,6 +218,7 @@ public class TablesController {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setSpec(tableSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200
@@ -2041,7 +2042,6 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         tablePartitioningModel.copyToTableSpecification(tableSpec);
         userHomeContext.flush();

@@ -1,8 +1,8 @@
-# Navigating the DQO graphical interface
+# User interface overview
 
-The DQO graphical interface is divided into three main areas.
+The DQOps web interface is divided into three main areas.
 
-![The DQO graphical interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/graphical-interface-overview.png)
+![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/graphical-interface-overview.png)
 
 1. The [navigation bar](./#navigation-bar) has links to the main DQO data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](./#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
@@ -14,19 +14,19 @@ The navigation bar allows you to select the specific sections that you want to f
 
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar.png)
 
-- The **Data Sources** section allows you to [add new connections](../adding-data-source-connection/index.md), import schemas and 
-    tables, [set up schedules](../schedules/index.md), add comments and labels, [configure data streams](../set-up-data-grouping/set-up-data-grouping.md),
+- The **Data Sources** section allows you to [add new connections](../../working-with-dqo/adding-data-source-connection/index.md), import schemas and 
+    tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data streams](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../run-data-quality-checks/run-data-quality-checks.md/#configure-date-or-datetime-column-for-partition-checks), 
-    and [modify the settings of the incidents and notifications](../incidents-and-notifications/incidents.md).
-- The **Profiling** section allows you to [collect and review basic data statistics](../basic-data-statistics/basic-data-statistics.md),
-    as well as [enable and run profiling data quality checks](../run-data-quality-checks/run-data-quality-checks.md)
+    and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
+- The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md),
+    as well as [enable and run profiling data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
     that should be used to profile data and run experiments to see which check would be most appropriate for monitoring the quality of data. 
-- The **Monitoring Checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../run-data-quality-checks/run-data-quality-checks.md)
+- The **Monitoring Checks** section allows you to [enable and run daily or monthly monitoring data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
     that are standard checks that monitor data quality.
-- The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../run-data-quality-checks/run-data-quality-checks.md)
+- The **Partition Checks** section allows you to [enable and run daily or monthly partition data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
 - The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
-- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../incidents-and-notifications/incidents.md).
+- The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../../working-with-dqo/incidents-and-notifications/incidents.md).
 - The **Definitions** section lets you customize built-in data quality sensors and rules.  
 
 
@@ -34,11 +34,11 @@ The right side of the navigation bar provides access to the main settings and so
 
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/rigth-part-of-the-navigation-bar.png)
 
-- **Help** - Links to the support page, documentation, DQO account manager and configuration parameters settings set at 
-    the start of DQO. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
-- **Synchronize** - Synchronize locally stored results with your DQO account.
+- **Help** - Links to the support page, documentation, DQOps account manager and configuration parameters settings set at 
+    the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
+- **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
 - **Notifications** - You can view DQO notifications and enable or disable the scheduler. A NEW tag will appear when there is a new notification.
-- **User account** - Provide information about your account, current limits and access to the DQO account manager. 
+- **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
 
 ## Tree view
 

@@ -263,7 +263,7 @@ spec:
 
 ## Evaluating the schedule settings using the graphical interface
 
-To evaluate schedule settings that have been configured in YAML files open the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md)
+To evaluate schedule settings that have been configured in YAML files open the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
 
 To view the connection-level schedule:
 

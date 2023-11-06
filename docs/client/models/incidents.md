@@ -33,6 +33,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |provider|Provider.|string|
 |quality_dimension|Quality dimension.|string|
 |sensor_name|Sensor name.|string|
+|table_comparison|Table comparison name.|string|
 
 
 ___  

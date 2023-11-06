@@ -37,7 +37,7 @@ class ConnectionSpec:
         sqlserver (Union[Unset, SqlServerParametersSpec]):
         mysql (Union[Unset, MysqlParametersSpec]):
         oracle (Union[Unset, OracleParametersSpec]):
-        parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
+        parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
         schedules (Union[Unset, DefaultSchedulesSpec]):
@@ -57,7 +57,7 @@ class ConnectionSpec:
     sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
-    parallel_runs_limit: Union[Unset, int] = UNSET
+    parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[
         Unset, "DataGroupingConfigurationSpec"
     ] = UNSET
@@ -100,7 +100,7 @@ class ConnectionSpec:
         if not isinstance(self.oracle, Unset):
             oracle = self.oracle.to_dict()
 
-        parallel_runs_limit = self.parallel_runs_limit
+        parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
             default_grouping_configuration = (
@@ -146,8 +146,8 @@ class ConnectionSpec:
             field_dict["mysql"] = mysql
         if oracle is not UNSET:
             field_dict["oracle"] = oracle
-        if parallel_runs_limit is not UNSET:
-            field_dict["parallel_runs_limit"] = parallel_runs_limit
+        if parallel_jobs_limit is not UNSET:
+            field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
             field_dict[
                 "default_grouping_configuration"
@@ -238,7 +238,7 @@ class ConnectionSpec:
         else:
             oracle = OracleParametersSpec.from_dict(_oracle)
 
-        parallel_runs_limit = d.pop("parallel_runs_limit", UNSET)
+        parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
         default_grouping_configuration: Union[Unset, DataGroupingConfigurationSpec]
@@ -283,7 +283,7 @@ class ConnectionSpec:
             sqlserver=sqlserver,
             mysql=mysql,
             oracle=oracle,
-            parallel_runs_limit=parallel_runs_limit,
+            parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,
             incident_grouping=incident_grouping,
