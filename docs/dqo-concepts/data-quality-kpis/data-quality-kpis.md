@@ -1,6 +1,6 @@
 # Data quality KPIs
 
-The results of data quality measurements are defined as data quality key performance indicators (KPIs). DQO calculates 
+The results of data quality measurements are defined as data quality key performance indicators (KPIs). DQOps calculates 
 data quality KPIs as a percentage of passed [data quality checks](../checks/index.md) for each table, database, or connection.
 
 We can divide the data quality KPIs into business-focused and data engineering-focused. 
@@ -8,7 +8,7 @@ We can divide the data quality KPIs into business-focused and data engineering-f
 - The data quality KPIs for business help monitor data quality to create insights, optimize processes, and improve decision-making.
 - The data quality KPIs for data engineering monitor the problems with the data pipelines, file skipping, pipeline failure, etc.
 
-The data model used in DQO tool for storing data quality test results supports reporting various data quality KPIs. DQO 
+The data model used in DQOps tool for storing data quality test results supports reporting various data quality KPIs. DQOps 
 stores the result for both passed (no alert raised or only a warning raised) and failed (errors or fatal alerts raised)
 [data quality checks](../checks/index.md) evaluations. 
 

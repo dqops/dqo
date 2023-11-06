@@ -1,10 +1,10 @@
 # Review the results of data quality monitoring on dashboards
 
-DQO has multiple built-in data quality dashboards for displaying [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business
 intelligence environment.
 
-In DQO, you can choose from a variety of built-in dashboard groups.
+In DQOps, you can choose from a variety of built-in dashboard groups.
 
 - **Governance dashboards** allows to review summarized key data metrics per [check category](../../checks/#categories-of-checks),
 [data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md) or [data streams](../../dqo-concepts/data-grouping/data-grouping.md).
@@ -21,8 +21,8 @@ Learn more about [different groups of dashboards here](../../dqo-concepts/data-q
 
 ## Prerequisite
 
-To be able to display results on data quality dashboards, you need to have a DQO account and synchronize locally stored results with it.  
-To synchronize the data just click on the **Synchronize** button in the upper right corner of the navigation tab or run `cloud sync all` command in DQO Shell.
+To be able to display results on data quality dashboards, you need to have a DQOps account and synchronize locally stored results with it.  
+To synchronize the data just click on the **Synchronize** button in the upper right corner of the navigation tab or run `cloud sync all` command in DQOps Shell.
 
 You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
 
@@ -37,7 +37,7 @@ You can find it in the Governance (KPIs) group.
     
 2. From the tree view on the left, select the **KPIs** dashboard folder in the **Government (KPIs)** group, and then the **KPIs** dashboard. 
 
-    ![Total DQO KPIs dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-dashboards.png)
+    ![Total DQOps KPIs dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-dashboards.png)
 
 
 ## Affected tables dashboard
@@ -47,7 +47,7 @@ You can find it in the **Operational** group.
 
 1. From the tree view on the left of the **Data Quality Dashboard** section, select the **Affected Tables** dashboard in the **Operational** group.
 
-    ![Addected Tables dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/affected-tables-dashboard.png)
+    ![Affected Tables dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/affected-tables-dashboard.png)
 
     The **Affected Table** dashboard displays issues categorized by connection, schema, data quality dimension, and check 
     category. You can filter results in other tables by clicking on any element in these tables, which can help you locate the issue.

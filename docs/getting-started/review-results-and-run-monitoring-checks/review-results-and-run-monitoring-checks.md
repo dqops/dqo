@@ -31,7 +31,7 @@ Once new tables are imported, DQO automatically enables the following profiling 
 
 All checks are scheduled to run daily at 12:00 p.m.
 
-For more general information about checks, see [DQO concepts section](../../dqo-concepts/checks/index.md). 
+For more general information about checks, see [DQOps concepts section](../../dqo-concepts/checks/index.md). 
 
 ## Review basic statistics results
 

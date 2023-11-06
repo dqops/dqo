@@ -1,13 +1,13 @@
 # Data quality dashboards
 
-DQO has multiple built-in data quality dashboards for displaying [data quality KPI](../data-quality-kpis/data-quality-kpis.md).
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../data-quality-kpis/data-quality-kpis.md).
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business 
 intelligence environment. We chose Looker Studio because there is no per-user license fee, which allows granting access
 to all parties that might be involved in the issue resolution process.
 
 All data quality results are synchronized to a private data quality data warehouse in the Google Cloud. 
-Data quality projects implemented with DQO receive a complementary Looker Studio instance connected to a data quality 
-data warehouse. DQO customers can ask the vendor to access a custom Looker Studio data source, providing direct access 
+Data quality projects implemented with DQOps receive a complementary Looker Studio instance connected to a data quality 
+data warehouse. DQOps customers can ask the vendor to access a custom Looker Studio data source, providing direct access 
 to the data quality lakehouse.
 
 ## Groups of dashboards
@@ -21,7 +21,7 @@ There are several groups and subgroups of data quality dashboards dedicated to a
 
 2. **Statistics of data sources**  group of dashboards contains summaries for check categories such as availability, volume, data completeness, and timeliness.
 
-3. **DQO usage** group of dashboards contains summaries of executed checks per table, column, [data grouping](../data-grouping/data-grouping.md), and [check category](../../checks/#categories-of-checks). Within this group, there are also dashboards showing checks that are no longer in use.
+3. **DQOps usage** group of dashboards contains summaries of executed checks per table, column, [data grouping](../data-grouping/data-grouping.md), and [check category](../../checks/#categories-of-checks). Within this group, there are also dashboards showing checks that are no longer in use.
 
 4. **Aggregated results for all check types** group is similar to the first category but contains aggregates for all check types (profiling, monitoring, and partitions)
 

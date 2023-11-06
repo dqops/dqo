@@ -3,7 +3,7 @@
 By default, the scheduler uses the time zone of the local system. However, users are able to change the time zone 
 settings in three different ways.
 
-1. Use the command `setting timezone set <timeZone>` in DQO Shell
+1. Use the command `setting timezone set <timeZone>` in DQOps Shell
 
     For example to set the time zone for the America/New_York run
     ```

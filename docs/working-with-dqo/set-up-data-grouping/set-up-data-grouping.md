@@ -2,16 +2,16 @@
 
 Data group is a group of rows that were loaded from a single or different sources and aggregated into one table. 
 
-In  DQO, data grouping in a single table can be identified by a discriminator column containing data such as location, business units,
+In  DQOps, data grouping in a single table can be identified by a discriminator column containing data such as location, business units,
 vendor, data provider or subsidiary. Data from separate tables can also be aggregated into single data group by adding a tag with the name
 of the data source.
 
 Data groups are used to calculate separate [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md) scores for
 different groups of rows. 
 
-For more information about data grouping, see [data grouping in the DQO concepts section](../../dqo-concepts/data-grouping/data-grouping.md).
+For more information about data grouping, see [data grouping in the DQOps concepts section](../../dqo-concepts/data-grouping/data-grouping.md).
 
-In DQO, you can set up data grouping globally at the data source level, in which case the configuration will be copied to the data grouping
+In DQOps, you can set up data grouping globally at the data source level, in which case the configuration will be copied to the data grouping
 configuration of the tables that will be imported. Note that this configuration does not affect tables that have already been imported.
 
 The data grouping should be configured individually for each table, which allows to select columns from the monitored
@@ -22,7 +22,7 @@ table that will be used in the **GROUP BY** clause to identify each group of dat
 
 To set up the default data grouping configuration template at the data source level, follow the steps below.
 
-1. In DQO graphical interface, go to the **Data Source** section, select the data source of interest in the tree view on the left
+1. In DQOps graphical interface, go to the **Data Source** section, select the data source of interest in the tree view on the left
     side, and select **Default Grouping Template** tab.
 
     ![Default data stream template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/default-data-stream-template.jpg)
@@ -39,7 +39,7 @@ tables that will be **imported in the future**. Note that this configuration doe
 
 To set up data grouping configuration at the table level:
 
-1.  In DQO graphical interface, go to the **Data Source** section, select the table of interest in the tree view on the left
+1.  In DQOps graphical interface, go to the **Data Source** section, select the table of interest in the tree view on the left
     side, and select **Data Grouping** tab.
 
     ![Adding table-level data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-table-level-data-stream.jpg)
@@ -61,12 +61,12 @@ To set up data grouping configuration at the table level:
     
     On this screen you can also edit or delete data grouping configurations. 
 
-## Set up data grouping configuration using the DQO Shell
+## Set up data grouping configuration using the DQOps Shell
 
 Data quality checks are stored in YAML configuration files. YAML configuration files are located in the `./sources` folder.
-The complete [DQO YAML schema can be found here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
+The complete [DQOps YAML schema can be found here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
 
-The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
+The YAML files in DQOps support code completion in code editors such as Visual Studio Code. Remember to install the YAML
 extension by RedHat and Better Jinja by Samuel Colvin.
 
 ![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
@@ -75,7 +75,7 @@ extension by RedHat and Better Jinja by Samuel Colvin.
 
 To set up a default data grouping configuration at the data source level, follow the steps below.
 
-1. Run the following command in DQO Shell to edit YAML configuration file and define data stream.
+1. Run the following command in DQOps Shell to edit YAML configuration file and define data stream.
 
     ```
     dqo> connection edit
@@ -139,7 +139,7 @@ To set up a default data grouping configuration at the data source level, follow
 
 To set up a data grouping configuration at the table level
 
-1. Run the following command in DQO Shell to edit YAML configuration file and define data stream.
+1. Run the following command in DQOps Shell to edit YAML configuration file and define data stream.
 
     ```
     dqo> table edit

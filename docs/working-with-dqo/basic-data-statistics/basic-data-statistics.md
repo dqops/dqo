@@ -1,6 +1,6 @@
 # Basic data statistics
 
-DQO provides you with summary information about your tables and columns through basic statistics. This information is 
+DQOps provides you with summary information about your tables and columns through basic statistics. This information is 
 valuable in deciding which data quality checks and threshold levels should be set to monitor data quality.
 
 You have the option to collect statistics either on the table or column summary view or on an individual column level.
