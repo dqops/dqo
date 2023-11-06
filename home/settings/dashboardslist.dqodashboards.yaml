@@ -410,7 +410,7 @@ spec:
         - dashboard_name: KPIs per table and day
           url: https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -419,7 +419,7 @@ spec:
         - dashboard_name: KPIs per column and day
           url: https://lookerstudio.google.com/embed/reporting/9c4baa39-8876-4cde-8906-7ecb4df81344/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -1034,7 +1034,7 @@ spec:
       - dashboard_name: KPIs per table and day
         url: https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/c5B8C
         width: 1400
-        height: 1600
+        height: 2100
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
@@ -1043,7 +1043,7 @@ spec:
       - dashboard_name: KPIs per column and day
         url: https://lookerstudio.google.com/embed/reporting/9c4baa39-8876-4cde-8906-7ecb4df81344/page/c5B8C
         width: 1400
-        height: 1600
+        height: 2100
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
