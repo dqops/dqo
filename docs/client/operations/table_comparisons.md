@@ -38,32 +38,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_schema.sample_table",
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "check_type" : "profiling",
-		  "grouping_columns" : [ ],
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_schema.sample_table\",\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"check_type\":\"profiling\",\"grouping_columns\":[],\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -104,64 +84,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/daily
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/daily^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -202,64 +130,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/monthly
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/monthly^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -300,64 +176,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/daily
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/daily^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -398,64 +222,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/monthly
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/monthly^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -496,64 +268,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/profiling
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/profiling^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -588,18 +308,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison
+    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -641,18 +352,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -695,18 +397,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -748,18 +441,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/daily
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/daily^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -801,18 +485,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/monthly
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/monthly^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -854,18 +529,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/daily
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/daily^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -907,18 +573,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/monthly
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/monthly^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -960,18 +617,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/profiling
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/profiling^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1013,32 +661,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_schema.sample_table",
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "check_type" : "profiling",
-		  "grouping_columns" : [ ],
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_schema.sample_table\",\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"check_type\":\"profiling\",\"grouping_columns\":[],\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1080,64 +708,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/daily/sample_table_comparison
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/daily/sample_table_comparison^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1179,64 +755,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/monthly/sample_table_comparison
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/monthly/sample_table_comparison^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1278,64 +802,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/daily/sample_table_comparison
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/daily/sample_table_comparison^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1377,64 +849,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/monthly/sample_table_comparison
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/monthly/sample_table_comparison^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1476,64 +896,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/profiling/sample_table_comparison
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "table_comparison_configuration_name" : "sample_table_comparison",
-		  "compared_connection" : "unknown",
-		  "compared_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "reference_connection" : "sample_connection",
-		  "reference_table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "grouping_columns" : [ ],
-		  "default_compare_thresholds" : {
-		    "warning_difference_percent" : 0.0,
-		    "error_difference_percent" : 1.0,
-		    "fatal_difference_percent" : 5.0
-		  },
-		  "supports_compare_column_count" : false,
-		  "columns" : [ ],
-		  "compare_table_run_checks_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "checkType" : "partitioned",
-		    "timeScale" : "daily",
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison"
-		  },
-		  "compare_table_clean_data_job_template" : {
-		    "connectionName" : "unknown",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true,
-		    "checkCategory" : "comparisons",
-		    "tableComparisonName" : "sample_table_comparison",
-		    "checkType" : "partitioned",
-		    "timeGradient" : "day"
-		  },
-		  "can_edit" : true,
-		  "can_run_compare_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/profiling/sample_table_comparison^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0,\"fatal_difference_percent\":5.0},\"supports_compare_column_count\":false,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connectionName\":\"unknown\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"partitioned\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 

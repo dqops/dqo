@@ -29,23 +29,12 @@ http://localhost:8888/api/logs/debug
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/logs/debug
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "window_location" : "window.location",
-		  "message" : "Sample log message."
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/logs/debug^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
     ```
 
 
@@ -77,23 +66,12 @@ http://localhost:8888/api/logs/error
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/logs/error
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "window_location" : "window.location",
-		  "message" : "Sample log message."
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/logs/error^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
     ```
 
 
@@ -125,23 +103,12 @@ http://localhost:8888/api/logs/info
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/logs/info
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "window_location" : "window.location",
-		  "message" : "Sample log message."
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/logs/info^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
     ```
 
 
@@ -173,23 +140,12 @@ http://localhost:8888/api/logs/warn
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/logs/warn
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "window_location" : "window.location",
-		  "message" : "Sample log message."
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/logs/warn^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
     ```
 
 

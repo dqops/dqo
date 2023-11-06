@@ -29,24 +29,12 @@ http://localhost:8888/api/credentials
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/credentials
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "credential_name" : "sample_credential",
-		  "type" : "text",
-		  "text_value" : "sample_credential_text_value"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/credentials^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
+
     ```
 
 
@@ -78,18 +66,9 @@ http://localhost:8888/api/credentials/{credentialName}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/credentials/sample_credential
+    curl -X DELETE http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -121,18 +100,9 @@ http://localhost:8888/api/credentials/{credentialName}/download
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/credentials/sample_credential/download
+    curl http://localhost:8888/api/credentials/sample_credential/download^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -164,18 +134,9 @@ http://localhost:8888/api/credentials
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/credentials
+    curl http://localhost:8888/api/credentials^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -214,18 +175,9 @@ http://localhost:8888/api/credentials/{credentialName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/credentials/sample_credential
+    curl http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -264,24 +216,12 @@ http://localhost:8888/api/credential/{credentialName}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/credential/sample_credential
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "credential_name" : "sample_credential",
-		  "type" : "text",
-		  "text_value" : "sample_credential_text_value"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/credential/sample_credential^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
+
     ```
 
 

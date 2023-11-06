@@ -29,18 +29,9 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/jobs/jobs/10832
+    curl -X DELETE http://localhost:8888/api/jobs/jobs/10832^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -87,26 +78,12 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/collectstatistics/withgrouping
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connectionName" : "sample_connection",
-		  "schemaTableName" : "sample_schema.sample_table",
-		  "enabled" : true,
-		  "columnNames" : [ "sample_column" ],
-		  "collectorCategory" : "sample_category"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/jobs/collectstatistics/withgrouping^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
+
     ```
 
 
@@ -153,26 +130,12 @@ http://localhost:8888/api/jobs/collectstatistics/table
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/collectstatistics/table
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connectionName" : "sample_connection",
-		  "schemaTableName" : "sample_schema.sample_table",
-		  "enabled" : true,
-		  "columnNames" : [ "sample_column" ],
-		  "collectorCategory" : "sample_category"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/jobs/collectstatistics/table^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
+
     ```
 
 
@@ -219,28 +182,12 @@ http://localhost:8888/api/jobs/deletestoreddata
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/deletestoreddata
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connectionName" : "sample_connection",
-		  "schemaTableName" : "sample_schema.sample_table",
-		  "deleteErrors" : true,
-		  "deleteStatistics" : true,
-		  "deleteCheckResults" : true,
-		  "deleteSensorReadouts" : true,
-		  "columnNames" : [ "sample_column" ]
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/jobs/deletestoreddata^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
+
     ```
 
 
@@ -272,18 +219,9 @@ http://localhost:8888/api/jobs/jobs
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/jobs/jobs
+    curl http://localhost:8888/api/jobs/jobs^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -322,18 +260,9 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/jobs/jobs/10832
+    curl http://localhost:8888/api/jobs/jobs/10832^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -372,18 +301,9 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/jobs/jobchangessince/3854372
+    curl http://localhost:8888/api/jobs/jobchangessince/3854372^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -430,24 +350,12 @@ http://localhost:8888/api/jobs/importtables
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/importtables
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connectionName" : "sample_connection",
-		  "schemaName" : "sample_schema",
-		  "tableNames" : [ "sample_table" ]
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/jobs/importtables^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connectionName\":\"sample_connection\",\"schemaName\":\"sample_schema\",\"tableNames\":[\"sample_table\"]}"
+
     ```
 
 
@@ -472,18 +380,9 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/jobs/scheduler/isrunning
+    curl http://localhost:8888/api/jobs/scheduler/isrunning^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -530,29 +429,12 @@ http://localhost:8888/api/jobs/runchecks
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/runchecks
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "check_search_filters" : {
-		    "connectionName" : "sample_connection",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "columnName" : "sample_column",
-		    "columnDataType" : "string"
-		  },
-		  "dummy_execution" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/jobs/runchecks^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"check_search_filters\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnName\":\"sample_column\",\"columnDataType\":\"string\"},\"dummy_execution\":false}"
+
     ```
 
 
@@ -577,18 +459,9 @@ http://localhost:8888/api/jobs/scheduler/status/start
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/scheduler/status/start
+    curl -X POST http://localhost:8888/api/jobs/scheduler/status/start^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -613,18 +486,9 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/scheduler/status/stop
+    curl -X POST http://localhost:8888/api/jobs/scheduler/status/stop^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -671,36 +535,12 @@ http://localhost:8888/api/jobs/synchronize
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/jobs/synchronize
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "direction" : "full",
-		  "forceRefreshNativeTables" : false,
-		  "detectCronSchedules" : false,
-		  "sources" : true,
-		  "sensors" : true,
-		  "rules" : true,
-		  "checks" : true,
-		  "settings" : true,
-		  "credentials" : true,
-		  "dataSensorReadouts" : true,
-		  "dataCheckResults" : true,
-		  "dataStatistics" : true,
-		  "dataErrors" : true,
-		  "dataIncidents" : true,
-		  "synchronizeFolderWithLocalChanges" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/jobs/synchronize^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"direction\":\"full\",\"forceRefreshNativeTables\":false,\"detectCronSchedules\":false,\"sources\":true,\"sensors\":true,\"rules\":true,\"checks\":true,\"settings\":true,\"credentials\":true,\"dataSensorReadouts\":true,\"dataCheckResults\":true,\"dataStatistics\":true,\"dataErrors\":true,\"dataIncidents\":true,\"synchronizeFolderWithLocalChanges\":false}"
+
     ```
 
 
@@ -740,18 +580,9 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/jobs/jobs/10832/wait
+    curl http://localhost:8888/api/jobs/jobs/10832/wait^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -791,18 +622,9 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/jobs/runchecks/10832/wait
+    curl http://localhost:8888/api/jobs/runchecks/10832/wait^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

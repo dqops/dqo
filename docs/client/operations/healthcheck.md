@@ -29,18 +29,9 @@ http://localhost:8888/api/ishealthy
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/ishealthy
+    curl http://localhost:8888/api/ishealthy^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

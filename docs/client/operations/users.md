@@ -29,20 +29,12 @@ http://localhost:8888/api/mypassword
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/mypassword
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d 'sample_string_value'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/mypassword^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"sample_string_value"
+
     ```
 
 
@@ -81,20 +73,12 @@ http://localhost:8888/api/users/{email}/password
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d 'sample_string_value'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"sample_string_value"
+
     ```
 
 
@@ -126,23 +110,12 @@ http://localhost:8888/api/users
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/users
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "email" : "sample_user@mail.com",
-		  "accountRole" : "operator"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/users^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
+
     ```
 
 
@@ -174,18 +147,9 @@ http://localhost:8888/api/users/{email}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com
+    curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -217,18 +181,9 @@ http://localhost:8888/api/users
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/users
+    curl http://localhost:8888/api/users^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -267,18 +222,9 @@ http://localhost:8888/api/users/{email}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/users/sample_user@mail.com
+    curl http://localhost:8888/api/users/sample_user@mail.com^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -317,23 +263,12 @@ http://localhost:8888/api/users/{email}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/users/sample_user@mail.com
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "email" : "sample_user@mail.com",
-		  "accountRole" : "operator"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/users/sample_user@mail.com^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
+
     ```
 
 

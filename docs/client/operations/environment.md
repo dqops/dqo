@@ -29,18 +29,9 @@ http://localhost:8888/api/environment/settings
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/environment/settings
+    curl http://localhost:8888/api/environment/settings^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -72,18 +63,9 @@ http://localhost:8888/api/environment/profile
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/environment/profile
+    curl http://localhost:8888/api/environment/profile^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -115,18 +97,9 @@ http://localhost:8888/api/environment/issueapikey
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/environment/issueapikey
+    curl http://localhost:8888/api/environment/issueapikey^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

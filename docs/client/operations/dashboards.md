@@ -29,18 +29,9 @@ http://localhost:8888/api/dashboards
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/dashboards
+    curl http://localhost:8888/api/dashboards^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -81,18 +72,9 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/dashboards/sample_folder_0/sample_dashboard
+    curl http://localhost:8888/api/dashboards/sample_folder_0/sample_dashboard^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -134,18 +116,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_dashboard
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_dashboard^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -188,18 +161,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_dashboard
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_dashboard^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -243,18 +207,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_dashboard
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_dashboard^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -299,18 +254,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_folder_5/sample_dashboard
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_folder_5/sample_dashboard^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

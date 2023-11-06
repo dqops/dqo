@@ -36,36 +36,12 @@ http://localhost:8888/api/sensors/{fullSensorName}
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
-		  "sensor_definition_spec" : {
-		    "fields" : [ {
-		      "field_name" : "sample_string_param",
-		      "data_type" : "string"
-		    }, {
-		      "field_name" : "sample_double_param",
-		      "data_type" : "double"
-		    } ],
-		    "default_value" : 0.0
-		  },
-		  "provider_sensor_list" : [ ],
-		  "custom" : false,
-		  "built_in" : false,
-		  "can_edit" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
     ```
 
 
@@ -97,18 +73,9 @@ http://localhost:8888/api/sensors/{fullSensorName}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
+    curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -140,18 +107,9 @@ http://localhost:8888/api/sensors
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/sensors
+    curl http://localhost:8888/api/sensors^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -190,18 +148,9 @@ http://localhost:8888/api/sensors/{fullSensorName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
+    curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -233,18 +182,9 @@ http://localhost:8888/api/definitions/sensors
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/definitions/sensors
+    curl http://localhost:8888/api/definitions/sensors^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -284,36 +224,12 @@ http://localhost:8888/api/sensors/{fullSensorName}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
-		  "sensor_definition_spec" : {
-		    "fields" : [ {
-		      "field_name" : "sample_string_param",
-		      "data_type" : "string"
-		    }, {
-		      "field_name" : "sample_double_param",
-		      "data_type" : "double"
-		    } ],
-		    "default_value" : 0.0
-		  },
-		  "provider_sensor_list" : [ ],
-		  "custom" : false,
-		  "built_in" : false,
-		  "can_edit" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
     ```
 
 

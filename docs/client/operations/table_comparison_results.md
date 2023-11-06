@@ -40,18 +40,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/comparisons/sample_table_comparison/results
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -94,18 +85,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/comparisons/sample_table_comparison/results
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -147,18 +129,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/comparisons/sample_table_comparison/results
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

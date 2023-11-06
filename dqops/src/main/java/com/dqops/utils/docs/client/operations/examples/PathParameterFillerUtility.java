@@ -56,7 +56,12 @@ public class PathParameterFillerUtility {
             }
         }
 
-        return String.join("/", pathSplit);
+        String sampleCallPath = String.join("/", pathSplit);
+        if (sampleCallPath.charAt(sampleCallPath.length() - 1) == '/') {
+            sampleCallPath = sampleCallPath.substring(0, sampleCallPath.length() - 1);
+        }
+
+        return sampleCallPath;
     }
 
     protected static String getSampleParameterValue(String parameterName, TypeModel parameterType) {
@@ -100,7 +105,7 @@ public class PathParameterFillerUtility {
                             throw new RuntimeException(e);
                         }
 
-                        return jsonSerializer.serializePrettyPrint(sample);
+                        return jsonSerializer.serialize(sample);
                 }
             case string_list_type:
             case integer_list_type:

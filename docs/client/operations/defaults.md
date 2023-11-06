@@ -29,18 +29,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -72,18 +63,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -115,18 +97,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -158,18 +131,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table
+    curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -201,18 +165,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultchecks/profiling/column
+    curl http://localhost:8888/api/defaults/defaultchecks/profiling/column^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -244,18 +199,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultchecks/profiling/table
+    curl http://localhost:8888/api/defaults/defaultchecks/profiling/table^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -294,18 +240,9 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultschedule/"partitioned_daily"
+    curl http://localhost:8888/api/defaults/defaultschedule/"partitioned_daily"^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -337,18 +274,9 @@ http://localhost:8888/api/defaults/defaultwebhooks
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultwebhooks
+    curl http://localhost:8888/api/defaults/defaultwebhooks^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -380,43 +308,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -448,43 +345,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -516,43 +382,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -584,43 +419,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -652,43 +456,12 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/column
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/column^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -720,43 +493,12 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/table
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/table^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -795,22 +537,12 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultschedule/"partitioned_daily"
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "cron_expression" : "0 12 1 * *"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultschedule/"partitioned_daily"^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"cron_expression\":\"0 12 1 * *\"}"
+
     ```
 
 
@@ -842,25 +574,12 @@ http://localhost:8888/api/defaults/defaultwebhooks
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultwebhooks
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "incident_opened_webhook_url" : "https://sample_url.com/opened",
-		  "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
-		  "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
-		  "incident_muted_webhook_url" : "https://sample_url.com/muted"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/defaults/defaultwebhooks^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}"
+
     ```
 
 

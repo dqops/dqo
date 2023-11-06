@@ -29,18 +29,9 @@ http://localhost:8888/api/timezones
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/timezones
+    curl http://localhost:8888/api/timezones^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

@@ -39,35 +39,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "type_snapshot" : {
-		    "column_type" : "string",
-		    "nullable" : false,
-		    "length" : 256
-		  },
-		  "profiling_checks" : {
-		    "nulls" : {
-		      "profile_nulls_count" : {
-		        "error" : {
-		          "max_count" : 10
-		        }
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"profiling_checks\":{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":10}}}}}"
+
     ```
 
 
@@ -109,18 +86,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column
+    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -162,18 +130,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -215,18 +174,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -268,18 +218,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/comments
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/comments^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -321,18 +262,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -375,18 +307,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model/basic
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model/basic^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -428,18 +351,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -482,18 +396,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -538,18 +443,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model/filter/sample_category/sample_check
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model/filter/sample_category/sample_check^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -591,18 +487,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -645,18 +532,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model/basic
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model/basic^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -698,18 +576,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -752,18 +621,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -808,18 +668,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model/filter/sample_category/sample_check
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model/filter/sample_category/sample_check^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -861,18 +712,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -914,18 +756,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -967,18 +800,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model/basic
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model/basic^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1020,18 +844,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1075,18 +890,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model/filter/sample_category/sample_check
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model/filter/sample_category/sample_check^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1128,18 +934,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/statistics
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/statistics^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1180,18 +977,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1232,18 +1020,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/statistics
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/statistics^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -1285,35 +1064,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "type_snapshot" : {
-		    "column_type" : "string",
-		    "nullable" : false,
-		    "length" : 256
-		  },
-		  "profiling_checks" : {
-		    "nulls" : {
-		      "profile_nulls_count" : {
-		        "error" : {
-		          "max_count" : 10
-		        }
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"profiling_checks\":{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":10}}}}}"
+
     ```
 
 
@@ -1355,38 +1111,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connection_name" : "sample_connection",
-		  "table" : {
-		    "schema_name" : "sample_schema",
-		    "table_name" : "sample_table"
-		  },
-		  "column_name" : "sample_column",
-		  "has_any_configured_checks" : true,
-		  "has_any_configured_profiling_checks" : true,
-		  "type_snapshot" : {
-		    "column_type" : "string",
-		    "nullable" : false,
-		    "length" : 256
-		  },
-		  "can_edit" : false,
-		  "can_collect_statistics" : true,
-		  "can_run_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connection_name\":\"sample_connection\",\"table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"column_name\":\"sample_column\",\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"type_snapshot\":{\"column_type\":\"string\",\"nullable\":false,\"length\":256},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1428,20 +1158,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/comments
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '[]'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/comments^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"[]"
+
     ```
 
 
@@ -1483,20 +1205,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '[]'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"[]"
+
     ```
 
 
@@ -1538,28 +1252,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "nulls" : {
-		    "daily_nulls_count" : {
-		      "error" : {
-		        "max_count" : 10
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"nulls\":{\"daily_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+
     ```
 
 
@@ -1602,43 +1300,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -1680,28 +1347,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "nulls" : {
-		    "monthly_nulls_count" : {
-		      "error" : {
-		        "max_count" : 10
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"nulls\":{\"monthly_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+
     ```
 
 
@@ -1743,28 +1394,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "nulls" : {
-		    "daily_partition_nulls_count" : {
-		      "error" : {
-		        "max_count" : 10
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"nulls\":{\"daily_partition_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+
     ```
 
 
@@ -1807,43 +1442,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 
@@ -1885,28 +1489,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "nulls" : {
-		    "monthly_partition_nulls_count" : {
-		      "error" : {
-		        "max_count" : 10
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"nulls\":{\"monthly_partition_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+
     ```
 
 
@@ -1948,28 +1536,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "nulls" : {
-		    "profile_nulls_count" : {
-		      "error" : {
-		        "max_count" : 10
-		      }
-		    }
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"nulls\":{\"profile_nulls_count\":{\"error\":{\"max_count\":10}}}}"
+
     ```
 
 
@@ -2011,43 +1583,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "categories" : [ {
-		    "category" : "sample_category",
-		    "help_text" : "Sample help text",
-		    "checks" : [ {
-		      "check_name" : "sample_check",
-		      "help_text" : "Sample help text",
-		      "sensor_parameters" : [ ],
-		      "sensor_name" : "sample_target/sample_category/sample_sensor",
-		      "quality_dimension" : "sample_quality_dimension",
-		      "supports_grouping" : false,
-		      "disabled" : false,
-		      "exclude_from_kpi" : false,
-		      "include_in_sla" : false,
-		      "configured" : false,
-		      "can_edit" : false,
-		      "can_run_checks" : false,
-		      "can_delete_data" : false
-		    } ]
-		  } ],
-		  "can_edit" : false,
-		  "can_run_checks" : false,
-		  "can_delete_data" : false
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
     ```
 
 

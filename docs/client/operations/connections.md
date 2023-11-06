@@ -37,28 +37,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdi
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkdisable
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "check_search_filters" : {
-		    "connectionName" : "sample_connection",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "columnName" : "sample_column",
-		    "columnDataType" : "string"
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkdisable^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"check_search_filters\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnName\":\"sample_column\",\"columnDataType\":\"string\"}}"
+
     ```
 
 
@@ -98,44 +82,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulken
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkenable
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "check_search_filters" : {
-		    "connectionName" : "sample_connection",
-		    "schemaTableName" : "sample_schema.sample_table",
-		    "enabled" : true,
-		    "columnName" : "sample_column",
-		    "columnDataType" : "string"
-		  },
-		  "check_model_patch" : {
-		    "check_name" : "sample_check",
-		    "help_text" : "Sample help text",
-		    "sensor_parameters" : [ ],
-		    "sensor_name" : "sample_target/sample_category/sample_sensor",
-		    "quality_dimension" : "sample_quality_dimension",
-		    "supports_grouping" : false,
-		    "disabled" : false,
-		    "exclude_from_kpi" : false,
-		    "include_in_sla" : false,
-		    "configured" : false,
-		    "can_edit" : false,
-		    "can_run_checks" : false,
-		    "can_delete_data" : false
-		  },
-		  "override_conflicts" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkenable^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"check_search_filters\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnName\":\"sample_column\",\"columnDataType\":\"string\"},\"check_model_patch\":{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false},\"override_conflicts\":true}"
+
     ```
 
 
@@ -174,36 +126,12 @@ http://localhost:8888/api/connections/{connectionName}
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "provider_type" : "postgresql",
-		  "postgresql" : {
-		    "host" : "localhost",
-		    "port" : "5432",
-		    "database" : "db",
-		    "user" : "PASSWD",
-		    "sslmode" : "disable"
-		  },
-		  "parallel_jobs_limit" : 4,
-		  "incident_grouping" : {
-		    "grouping_level" : "table_dimension_category",
-		    "minimum_severity" : "warning",
-		    "max_incident_length_days" : 60,
-		    "mute_for_days" : 60
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"parallel_jobs_limit\":4,\"incident_grouping\":{\"grouping_level\":\"table_dimension_category\",\"minimum_severity\":\"warning\",\"max_incident_length_days\":60,\"mute_for_days\":60}}"
+
     ```
 
 
@@ -242,66 +170,12 @@ http://localhost:8888/api/connections/{connectionName}/basic
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/connections/sample_connection/basic
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connection_name" : "sample_connection",
-		  "parallel_runs_limit" : 4,
-		  "provider_type" : "postgresql",
-		  "postgresql" : {
-		    "host" : "localhost",
-		    "port" : "5432",
-		    "database" : "db",
-		    "user" : "PASSWD",
-		    "sslmode" : "disable"
-		  },
-		  "run_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true
-		  },
-		  "run_profiling_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "checkType" : "profiling"
-		  },
-		  "run_monitoring_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "checkType" : "monitoring"
-		  },
-		  "run_partition_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "checkType" : "partitioned"
-		  },
-		  "collect_statistics_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "columnNames" : [ ]
-		  },
-		  "data_clean_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true
-		  },
-		  "can_edit" : false,
-		  "can_collect_statistics" : true,
-		  "can_run_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/connections/sample_connection/basic^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connection_name\":\"sample_connection\",\"parallel_runs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connectionName\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -340,18 +214,9 @@ http://localhost:8888/api/connections/{connectionName}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/connections/sample_connection
+    curl -X DELETE http://localhost:8888/api/connections/sample_connection^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -383,18 +248,9 @@ http://localhost:8888/api/connections
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections
+    curl http://localhost:8888/api/connections^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -433,18 +289,9 @@ http://localhost:8888/api/connections/{connectionName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection
+    curl http://localhost:8888/api/connections/sample_connection^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -483,18 +330,9 @@ http://localhost:8888/api/connections/{connectionName}/basic
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/basic
+    curl http://localhost:8888/api/connections/sample_connection/basic^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -533,18 +371,9 @@ http://localhost:8888/api/connections/{connectionName}/comments
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/comments
+    curl http://localhost:8888/api/connections/sample_connection/comments^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -583,18 +412,9 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/commoncolumns
+    curl http://localhost:8888/api/connections/sample_connection/commoncolumns^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -633,18 +453,9 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration
+    curl http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -683,18 +494,9 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/incidentgrouping
+    curl http://localhost:8888/api/connections/sample_connection/incidentgrouping^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -733,18 +535,9 @@ http://localhost:8888/api/connections/{connectionName}/labels
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/labels
+    curl http://localhost:8888/api/connections/sample_connection/labels^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -784,18 +577,9 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schedules/"partitioned_daily"
+    curl http://localhost:8888/api/connections/sample_connection/schedules/"partitioned_daily"^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -834,36 +618,12 @@ http://localhost:8888/api/connections/{connectionName}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "provider_type" : "postgresql",
-		  "postgresql" : {
-		    "host" : "localhost",
-		    "port" : "5432",
-		    "database" : "db",
-		    "user" : "PASSWD",
-		    "sslmode" : "disable"
-		  },
-		  "parallel_jobs_limit" : 4,
-		  "incident_grouping" : {
-		    "grouping_level" : "table_dimension_category",
-		    "minimum_severity" : "warning",
-		    "max_incident_length_days" : 60,
-		    "mute_for_days" : 60
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"parallel_jobs_limit\":4,\"incident_grouping\":{\"grouping_level\":\"table_dimension_category\",\"minimum_severity\":\"warning\",\"max_incident_length_days\":60,\"mute_for_days\":60}}"
+
     ```
 
 
@@ -902,66 +662,12 @@ http://localhost:8888/api/connections/{connectionName}/basic
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/basic
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "connection_name" : "sample_connection",
-		  "parallel_runs_limit" : 4,
-		  "provider_type" : "postgresql",
-		  "postgresql" : {
-		    "host" : "localhost",
-		    "port" : "5432",
-		    "database" : "db",
-		    "user" : "PASSWD",
-		    "sslmode" : "disable"
-		  },
-		  "run_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true
-		  },
-		  "run_profiling_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "checkType" : "profiling"
-		  },
-		  "run_monitoring_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "checkType" : "monitoring"
-		  },
-		  "run_partition_checks_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "checkType" : "partitioned"
-		  },
-		  "collect_statistics_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "enabled" : true,
-		    "columnNames" : [ ]
-		  },
-		  "data_clean_job_template" : {
-		    "connectionName" : "sample_connection",
-		    "deleteErrors" : true,
-		    "deleteStatistics" : true,
-		    "deleteCheckResults" : true,
-		    "deleteSensorReadouts" : true
-		  },
-		  "can_edit" : false,
-		  "can_collect_statistics" : true,
-		  "can_run_checks" : true,
-		  "can_delete_data" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/basic^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connection_name\":\"sample_connection\",\"parallel_runs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connectionName\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connectionName\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+
     ```
 
 
@@ -1000,20 +706,12 @@ http://localhost:8888/api/connections/{connectionName}/comments
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/comments
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '[]'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/comments^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"[]"
+
     ```
 
 
@@ -1052,25 +750,12 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "level_3" : {
-		    "source" : "column_value",
-		    "column" : "sample_column"
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"level_3\":{\"source\":\"column_value\",\"column\":\"sample_column\"}}"
+
     ```
 
 
@@ -1109,32 +794,12 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/incidentgrouping
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "grouping_level" : "table_dimension",
-		  "minimum_severity" : "warning",
-		  "divide_by_data_groups" : true,
-		  "max_incident_length_days" : 60,
-		  "mute_for_days" : 60,
-		  "webhooks" : {
-		    "incident_opened_webhook_url" : "https://sample_url.com/opened",
-		    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
-		    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
-		    "incident_muted_webhook_url" : "https://sample_url.com/muted"
-		  }
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/incidentgrouping^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"grouping_level\":\"table_dimension\",\"minimum_severity\":\"warning\",\"divide_by_data_groups\":true,\"max_incident_length_days\":60,\"mute_for_days\":60,\"webhooks\":{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}}"
+
     ```
 
 
@@ -1173,20 +838,12 @@ http://localhost:8888/api/connections/{connectionName}/labels
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/labels
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '[]'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/labels^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"[]"
+
     ```
 
 
@@ -1226,22 +883,12 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/schedules/"partitioned_daily"
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "cron_expression" : "0 12 1 * *"
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schedules/"partitioned_daily"^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"cron_expression\":\"0 12 1 * *\"}"
+
     ```
 
 

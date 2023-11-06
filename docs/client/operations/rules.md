@@ -36,28 +36,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "rule_name" : "sample_rule",
-		  "type" : "python",
-		  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
-		  "mode" : "current_value",
-		  "custom" : false,
-		  "built_in" : false,
-		  "can_edit" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"rule_name\":\"sample_rule\",\"type\":\"python\",\"java_class_name\":\"com.dqops.execution.rules.runners.python.PythonRuleRunner\",\"mode\":\"current_value\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
     ```
 
 
@@ -89,18 +73,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
+    curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -132,18 +107,9 @@ http://localhost:8888/api/rules
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/rules
+    curl http://localhost:8888/api/rules^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -182,18 +148,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
+    curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -225,18 +182,9 @@ http://localhost:8888/api/definitions/rules
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/definitions/rules
+    curl http://localhost:8888/api/definitions/rules^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -275,28 +223,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "rule_name" : "sample_rule",
-		  "type" : "python",
-		  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
-		  "mode" : "current_value",
-		  "custom" : false,
-		  "built_in" : false,
-		  "can_edit" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"rule_name\":\"sample_rule\",\"type\":\"python\",\"java_class_name\":\"com.dqops.execution.rules.runners.python.PythonRuleRunner\",\"mode\":\"current_value\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
     ```
 
 

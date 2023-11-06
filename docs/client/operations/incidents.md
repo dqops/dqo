@@ -29,18 +29,9 @@ http://localhost:8888/api/incidentstat
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/incidentstat
+    curl http://localhost:8888/api/incidentstat^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -89,18 +80,9 @@ http://localhost:8888/api/incidents/{connectionName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/incidents/sample_connection
+    curl http://localhost:8888/api/incidents/sample_connection^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -142,18 +124,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -200,18 +173,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -262,18 +226,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -309,18 +264,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -356,18 +302,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

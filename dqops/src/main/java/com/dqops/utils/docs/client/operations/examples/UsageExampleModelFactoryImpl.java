@@ -40,6 +40,7 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
     protected String renderedCurlUsageExample(OperationModel operationModel,
                                               OperationParameterDocumentationModel requestBody,
                                               List<OperationParameterDocumentationModel> operationParameters) {
+        final String newLine = "^\n\t\t";
         StringBuilder renderedExample = new StringBuilder("curl");
 
         if (operationModel.getHttpMethod().equals(PathItem.HttpMethod.HEAD)) {
@@ -51,18 +52,22 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
 
         String callUrl = PathParameterFillerUtility.getSampleCallPath(operationModel.getPath(), operationParameters);
         renderedExample.append(" ").append(callUrl);
-        renderedExample.append("\n\t\t-H \"Accept: application/json\"");
+        renderedExample.append(newLine)
+                .append("-H \"Accept: application/json\"");
 
         if (requestBody != null) {
-            renderedExample.append("\n\t\t-H \"Content-Type: application/json\"");
-            renderedExample.append("\n\t\t-d ");
+            renderedExample.append(newLine)
+                    .append("-H \"Content-Type: application/json\"").append(newLine)
+                    .append("-d").append(newLine);
 
             String payload = PathParameterFillerUtility.getSampleFromTypeModel(requestBody.getTypeModel());
-            String payloadPadded = payload.replace("\n", "\n\t\t");
-            renderedExample.append("'")
+            String payloadPadded = payload.replace("\"", "\\\"")
+                    .replace(System.lineSeparator(), " ");
+            renderedExample.append("\"")
                     .append(payloadPadded)
-                    .append("'");
+                    .append("\"");
         }
+        renderedExample.append("\n");
 
         return renderedExample.toString();
     }

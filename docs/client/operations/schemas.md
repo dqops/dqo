@@ -46,18 +46,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/"daily"/model
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/"daily"/model^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -101,18 +92,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/"daily"
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/"daily"^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -161,18 +143,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/"daily"/model
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/"daily"/model^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -216,18 +189,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/"daily"
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/"daily"^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -275,18 +239,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -329,18 +284,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -379,18 +325,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas
+    curl http://localhost:8888/api/connections/sample_connection/schemas^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 

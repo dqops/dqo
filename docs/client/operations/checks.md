@@ -36,28 +36,12 @@ http://localhost:8888/api/checks/{fullCheckName}
 === "curl"
       
     ```bash
-    curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "check_name" : "sample_check",
-		  "sensor_name" : "sample_target/sample_category/sample_sensor",
-		  "rule_name" : "sample_target/sample_category/sample_rule",
-		  "help_text" : "Sample help text",
-		  "custom" : false,
-		  "built_in" : false,
-		  "can_edit" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
     ```
 
 
@@ -89,18 +73,9 @@ http://localhost:8888/api/checks/{fullCheckName}
 === "curl"
       
     ```bash
-    curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check
+    curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -132,18 +107,9 @@ http://localhost:8888/api/checks
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/checks
+    curl http://localhost:8888/api/checks^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -182,18 +148,9 @@ http://localhost:8888/api/checks/{fullCheckName}
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check
+    curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -225,18 +182,9 @@ http://localhost:8888/api/definitions/checks
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/definitions/checks
+    curl http://localhost:8888/api/definitions/checks^
 		-H "Accept: application/json"
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+
     ```
 
 
@@ -275,28 +223,12 @@ http://localhost:8888/api/checks/{fullCheckName}
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check
-		-H "Accept: application/json"
-		-H "Content-Type: application/json"
-		-d '{
-		  "check_name" : "sample_check",
-		  "sensor_name" : "sample_target/sample_category/sample_sensor",
-		  "rule_name" : "sample_target/sample_category/sample_rule",
-		  "help_text" : "Sample help text",
-		  "custom" : false,
-		  "built_in" : false,
-		  "can_edit" : true
-		}'
-    ```
-=== "python_sync"
-      
-    ```
-    No render
-    ```
-=== "python_async"
-      
-    ```
-    No render
+    curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
     ```
 
 

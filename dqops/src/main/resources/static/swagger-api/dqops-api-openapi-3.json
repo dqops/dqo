@@ -76081,17 +76081,17 @@
       "DatetimeBuiltInDateFormats" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "DayDotMonthDotYear", "DayDashMonthDashYear", "ISO8601", "DaySlashMonthSlashYear" ]
+        "enum" : [ "YYYY-MM-DD", "DD/MM/YYYY", "DD.MM.YYYY", "DD-MM-YYYY" ]
       },
       "StringsBuiltInDateFormats" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "ISO8601", "DayMonthYear", "MonthNameDayYear", "YearMonthDay", "MonthDayYear" ]
+        "enum" : [ "YYYY-MM-DD", "Month D, YYYY", "MM/DD/YYYY", "YYYY/MM/DD", "DD/MM/YYYY" ]
       },
       "IncidentGroupingLevel" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "table_dimension_category_check_type", "table_dimension", "table", "table_dimension_category", "table_dimension_category_check_name" ]
+        "enum" : [ "table_dimension_category_name", "table_dimension", "table_dimension_category_type", "table", "table_dimension_category" ]
       },
       "MinimumGroupingSeverityLevel" : {
         "type" : "string",
@@ -76116,12 +76116,12 @@
       "DqoUserRole" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "EDITOR", "OPERATOR", "VIEWER", "ADMIN", "NONE" ]
+        "enum" : [ "editor", "viewer", "admin", "none", "operator" ]
       },
       "DqoJobType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "COLLECT_STATISTICS", "IMPORT_SCHEMA", "QUEUE_THREAD_SHUTDOWN", "REPAIR_STORED_DATA", "RUN_CHECKS", "IMPORT_TABLES", "RUN_CHECKS_ON_TABLE", "COLLECT_STATISTICS_ON_TABLE", "RUN_SCHEDULED_CHECKS_CRON", "SYNCHRONIZE_FOLDER", "SYNCHRONIZE_MULTIPLE_FOLDERS", "DELETE_STORED_DATA" ]
+        "enum" : [ "delete stored data", "synchronize folder", "synchronize multiple folders", "import selected tables", "repair stored data", "collect statistics", "run checks on table", "collect statistics on table", "run checks", "import schema", "queue thread shutdown", "run scheduled checks by cron" ]
       },
       "EffectiveScheduleLevelModel" : {
         "type" : "string",
@@ -76136,7 +76136,7 @@
       "ParameterDataType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "date_type", "string_type", "enum_type", "string_list_type", "object_type", "datetime_type", "column_name_type", "boolean_type", "integer_type", "double_type", "integer_list_type", "long_type" ]
+        "enum" : [ "date", "datetime", "boolean", "integer_list", "string", "double", "column_name", "string_list", "integer", "long", "enum", "object" ]
       },
       "DisplayHint" : {
         "type" : "string",
@@ -76146,7 +76146,7 @@
       "PostgresqlSslMode" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "allow", "prefer", "disable", "require", "verify_full", "verify_ca" ]
+        "enum" : [ "allow", "prefer", "disable", "verify-ca", "require", "verify-full" ]
       },
       "ProviderSensorRunnerType" : {
         "type" : "string",
@@ -76156,7 +76156,7 @@
       "RuleRunnerType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "python", "custom_class" ]
+        "enum" : [ "python", "java_class" ]
       },
       "RuleTimeWindowMode" : {
         "type" : "string",
@@ -76186,7 +76186,7 @@
       "StatisticsResultDataType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "DATE", "FLOAT", "NULL", "DATETIME", "INSTANT", "STRING", "TIME", "BOOLEAN", "INTEGER" ]
+        "enum" : [ "date", "datetime", "boolean", "null", "string", "integer", "time", "float", "instant" ]
       },
       "FileSynchronizationDirection" : {
         "type" : "string",
