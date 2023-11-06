@@ -113,13 +113,93 @@ Alternatively, create an editing group and add the employees' email address in t
 
 ![groups](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/groups.png)
 
-Once you have completed the configuration steps, you can edit the dashboard to meet your requirements.
+Once you have completed the configuration steps, you can edit the dashboard and complete the dashboard according to your needs.
 
-Finally, to make the dashboard visible, you need to add it to YAML configuration file in DQOps, which is located in DQOps
-home catalog (home/settings/dashboardslist.dqodashboards.yaml). This will make the dashboard visible in the user interface.
+Finally, to make the dashboard visible, you need to add it to YAML configuration file in DQOps, which should be located in DQOps
+home catalog  for example: (home/settings/dashboardslist.dqodashboards.yaml). This will make the dashboard visible in the user interface.
+
+Enter the DQOps repository. If you open the repository in IntelliJ IDEA, you will see folders and files on the left side.
+Ideally, in the Home folder, in the settings, create a yaml file where your dashboards will be located. To do this, right-click on settings and select 'New file'. You can name the file, for example: 'dashboardlists.yaml'. Your file will appear in the Settings tab.
+Enter the file. It is empty. Now you need to add content.
+
+The beginning of the yaml file has been added below.
+The dashboard file contains folders and subfolders. As you can see below, the dashboard names, the url (the one generated in Looker Studio, with the name 'embed'), the dashboard size (the one that is set in Looker Studio in the Theme and Layout section) have also been added. You should also add parameters if you want to pass them in.
+You can copy the following section of the yaml file, edit it and create your own yaml with the dashboard list based on it.
+It is important to note all indentation in the text.
+Each folder should be indented at the same tab level as the previous one. Similarly, subfolders, dashboard names and the rest of the yaml file. If you add incorrectly, you may not see the dashboard on the dqops page. To do this, it is a good idea to go into the logs and see where ( in which line of the yaml file) the error is.
+
 
 The section of the yaml file that you complete looks like this:
-![yaml_file](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/yaml_file.png)
+
+``` { .yaml .annotate linenums="1" hl_lines="6 8 10 11 12 14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json
+apiVersion: dqo/v1
+kind: dashboards
+spec:
+
+- folder_name: Profiling # (1)!
+  folders:
+    - folder_name: Table profiling status # (2)!
+      dashboards:
+        - dashboard_name: Table profiling status per data quality dimension # (3)!
+          url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C # (4)!
+          width: 1400 # (5)!
+          height: 1400
+          parameters: # (6)!
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Table profiling status per check category
+          url: https://lookerstudio.google.com/embed/reporting/4ff08521-65d9-448d-9d78-fd3fe415a557/page/c5B8C
+          width: 1400
+          height: 1400
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column profiling status per data quality dimension
+          url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
+          width: 1400
+          height: 1760
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+        - dashboard_name: Column profiling status per check category
+          url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
+          width: 1400
+          height: 1760
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+```
+
+1. Folder name: Main folder which may contain subfolders
+2. Folder name: The subfolder where we put the dashboards
+3. Dashboard name: The name of the dashboard that will be visible in the application
+4. URL: The URL of a given dashboard, substituting "embed" in the name
+5. Size: The size of the dashboard, which is set in Looker studio in the Theme and Layout section
+6. Parameters: List of parameters that we pass to the yaml file
+
+**Brief description of the yaml file elements:**
+
+*folder_name: Profiling* - Main folder which may contain subfolders 
+
+*folder_name: Table profiling status* - The subfolder where we put the dashboards 
+
+*dashboard_name: Table profiling status per data quality dimension* - The name of the dashboard that will be visible in the application
+
+*url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C* - The URL of a given dashboard, substituting "embed" in the name
+
+*width: 1400 height: 1400* - The size of the dashboard, which is set in Looker studio in the Theme and Layout section
+
+*parameters:* List of parameters that we pass to the yaml file
+
 
 We add a folder where the dashboard will be placed. Enter the name of the dashboard, the url generated in Looker(see below for a description of how to generate URL).
 When creating a dashboard in a yaml file, you should also specify its width and height. These parameters can be found in Looker studio in the edition of the dashboard by clicking on Layout.
