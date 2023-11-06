@@ -13158,48 +13158,94 @@ definitions:
           \ in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'."
       schemaTableName:
         type: "string"
+        description: "The schema and table name. It is provided as *<schema_name>.<table_name>*,\
+          \ for example *public.fact_sales*. The schema and table name accept patterns\
+          \ both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\\
+          *', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\\
+          *_suffix'."
       enabled:
         type: "boolean"
+        description: "A boolean flag to target enabled tables, columns or checks.\
+          \ When the value of this field is not set, the default value of this field\
+          \ is *true*, targeting only tables, columns and checks that are not implicitly\
+          \ disabled."
       tags:
         type: "array"
+        description: "An array of tags assigned to the table. All tags must be present\
+          \ on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix',\
+          \ 'prefix\\*suffix'. The tags are assigned to the table on the data grouping\
+          \ screen when any of the data grouping hierarchy level is assigned a static\
+          \ value, which is a tag."
         items:
           type: "string"
       labels:
         type: "array"
+        description: "An array of labels assigned to the table. All labels must be\
+          \ present on a table to match. The labels can use patterns:  'prefix\\*',\
+          \ '\\*suffix', 'prefix\\*suffix'. The labels are assigned on the labels\
+          \ screen and stored in the *labels* node in the *.dqotable.yaml* file."
         items:
           type: "string"
       columnName:
         type: "string"
+        description: "The column name. This field accepts search patterns in the format:\
+          \ 'fk_\\*', '\\*_id', 'prefix\\*suffix'."
       columnDataType:
         type: "string"
+        description: "The column data type that was imported from the data source\
+          \ and is stored in the [columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec)\
+          \ field in the *.dqotable.yaml* file."
       columnNullable:
         type: "boolean"
+        description: "Optional filter to find only nullable (when the value is *true*)\
+          \ or not nullable (when the value is *false*) columns, based on the value\
+          \ of the [columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec)\
+          \ field in the *.dqotable.yaml* file."
       checkTarget:
         type: "string"
+        description: "The target type of object to run checks. Supported values are:\
+          \ *table* to run only table level checks or *column* to run only column\
+          \ level checks."
         enum:
         - "table"
         - "column"
       checkType:
         type: "string"
+        description: "The target type of checks to run. Supported values are *profiling*,\
+          \ *monitoring* and *partitioned*."
         enum:
         - "profiling"
         - "monitoring"
         - "partitioned"
       timeScale:
         type: "string"
+        description: "The time scale of *monitoring* or *partitioned* checks to run.\
+          \ Supports running only *daily* or *monthly* checks. Daily monitoring checks\
+          \ will replace today's value for all captured check results."
         enum:
         - "daily"
         - "monthly"
       checkCategory:
         type: "string"
+        description: "The target check category, for example: *nulls*, *volume*, *anomaly*."
       tableComparisonName:
         type: "string"
+        description: "The name of a configured table comparison. When the table comparison\
+          \ is provided, DQOps will only perform table comparison checks that compare\
+          \ data between tables."
       checkName:
         type: "string"
+        description: "The target check name to run only this named check. Uses the\
+          \ short check name which is the name of the deepest folder in the *checks*\
+          \ folder. This field supports search patterns such as: 'profiling_\\*',\
+          \ '\\*_count', 'profiling_\\*_percent'."
       sensorName:
         type: "string"
-      checkConfigured:
-        type: "boolean"
+        description: "The target sensor name to run only data quality checks that\
+          \ are using this sensor. Uses the full sensor name which is the full folder\
+          \ path within the *sensors* folder. This field supports search patterns\
+          \ such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\\
+          *_suffix'."
       checkHierarchyIdsModels:
         type: "array"
         items:
@@ -28695,48 +28741,94 @@ definitions:
     properties:
       connectionName:
         type: "string"
+        description: "The connection name."
       schemaTableName:
         type: "string"
+        description: "The schema and table name. It is provided as *<schema_name>.<table_name>*,\
+          \ for example *public.fact_sales*. This filter does not support patterns."
       dateStart:
         type: "string"
         format: "date"
+        description: "The start date (inclusive) to delete the data, based on the\
+          \ *time_period* column in Parquet files."
       dateEnd:
         type: "string"
         format: "date"
+        description: "The end date (inclusive) to delete the data, based on the *time_period*\
+          \ column in Parquet files."
       deleteErrors:
         type: "boolean"
+        description: "Delete the data from the [errors](../../reference/parquetfiles/errors.md)\
+          \ table. Because the default value is *false*, this parameter must be set\
+          \ to *true* to delete the errors."
       deleteStatistics:
         type: "boolean"
+        description: "Delete the data from the [statistics](../../reference/parquetfiles/statistics.md)\
+          \ table. Because the default value is *false*, this parameter must be set\
+          \ to *true* to delete the statistics."
       deleteCheckResults:
         type: "boolean"
+        description: "Delete the data from the [check_results](../../reference/parquetfiles/check_results.md)\
+          \ table. Because the default value is *false*, this parameter must be set\
+          \ to *true* to delete the check results."
       deleteSensorReadouts:
         type: "boolean"
+        description: "Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md)\
+          \ table. Because the default value is *false*, this parameter must be set\
+          \ to *true* to delete the sensor readouts."
       columnNames:
         type: "array"
+        description: "The list of column names to delete the data for column level\
+          \ results or errors only for selected columns."
         items:
           type: "string"
       checkCategory:
         type: "string"
+        description: "The check category name, for example *volume* or *anomaly*."
       tableComparisonName:
         type: "string"
+        description: "The name of a table comparison configuration. Deletes only table\
+          \ comparison results (and errors) for a given comparison."
       checkName:
         type: "string"
+        description: "The name of a data quality check. Uses the short check name,\
+          \ for example *daily_row_count*."
       checkType:
         type: "string"
+        description: "The type of checks whose results and errors should be deleted.\
+          \ For example, use *monitoring* to delete only monitoring checks data."
       sensorName:
         type: "string"
+        description: "The full sensor name whose results, checks based on the sensor,\
+          \ statistics and errors generated by the sensor sound be deleted. Uses a\
+          \ full sensor name, for example: *table/volume/row_count*."
       dataGroupTag:
         type: "string"
+        description: "The names of data groups in any of the *grouping_level_1*...*grouping_level_9*\
+          \ columns in the Parquet tables. Enables deleting data tagged for one data\
+          \ source or a subset of results when the group level is captured from a\
+          \ column in a monitored table."
       qualityDimension:
         type: "string"
+        description: "The data quality dimension name, for example *Timeliness* or\
+          \ *Completeness*."
       timeGradient:
         type: "string"
+        description: "The time gradient (time scale) of the sensor and check results\
+          \ that are captured."
       collectorCategory:
         type: "string"
+        description: "The statistics collector category when statistics should be\
+          \ deleted. A statistics category is a group of statistics, for example *sampling*\
+          \ for the column value samples."
       collectorName:
         type: "string"
+        description: "The statistics collector name when only statistics are deleted\
+          \ for a selected collector, for example *sample_values*."
       collectorTarget:
         type: "string"
+        description: "The type of the target object for which the basic statistics\
+          \ are deleted. Supported values are *table* and *column*."
   DeleteStoredDataQueueJobResult:
     type: "object"
     properties:
@@ -31012,28 +31104,62 @@ definitions:
           \ in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'."
       schemaTableName:
         type: "string"
+        description: "The schema and table name. It is provided as *<schema_name>.<table_name>*,\
+          \ for example *public.fact_sales*. The schema and table name accept patterns\
+          \ both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\\
+          *', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\\
+          *_suffix'."
       enabled:
         type: "boolean"
+        description: "A boolean flag to target enabled tables, columns or checks.\
+          \ When the value of this field is not set, the default value of this field\
+          \ is *true*, targeting only tables, columns and checks that are not implicitly\
+          \ disabled."
       tags:
         type: "array"
+        description: "An array of tags assigned to the table. All tags must be present\
+          \ on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix',\
+          \ 'prefix\\*suffix'. The tags are assigned to the table on the data grouping\
+          \ screen when any of the data grouping hierarchy level is assigned a static\
+          \ value, which is a tag."
         items:
           type: "string"
       labels:
         type: "array"
+        description: "An array of labels assigned to the table. All labels must be\
+          \ present on a table to match. The labels can use patterns:  'prefix\\*',\
+          \ '\\*suffix', 'prefix\\*suffix'. The labels are assigned on the labels\
+          \ screen and stored in the *labels* node in the *.dqotable.yaml* file."
         items:
           type: "string"
       columnNames:
         type: "array"
+        description: "The list of column names or column name patters. This field\
+          \ accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'."
         items:
           type: "string"
       collectorName:
         type: "string"
+        description: "The target statistics collector name to capture only selected\
+          \ statistics. Uses the short collector nameThis field supports search patterns\
+          \ such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. In order to collect\
+          \ only top 10 most common column samples, use 'column_samples'."
       sensorName:
         type: "string"
+        description: "The target sensor name to run only data quality checks that\
+          \ are using this sensor. Uses the full sensor name which is the full folder\
+          \ path within the *sensors* folder. This field supports search patterns\
+          \ such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\\
+          *_suffix'."
       collectorCategory:
         type: "string"
+        description: "The target statistics collector category, for example: *nulls*,\
+          \ *volume*, *sampling*."
       target:
         type: "string"
+        description: "The target type of object to collect statistics from. Supported\
+          \ values are: *table* to collect only table level statistics or *column*\
+          \ to collect only column level statistics."
         enum:
         - "table"
         - "column"

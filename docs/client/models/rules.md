@@ -92,6 +92,7 @@ Rule model that is returned by the REST API. Describes a single unique rule name
 |custom|This rule has a custom (user level) definition.|boolean|
 |built_in|This rule has is a built-in rule.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

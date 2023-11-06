@@ -2,25 +2,10 @@
 
 These topics introduce the basic concepts of DQOps.
 
- - **[Sensors](./sensors/sensors.md)**
-
-    The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
-    to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
-    a `sensor readout` in DQOps.
-
-
- - **[Rules](./rules/rules.md)**
-
-    Data quality rules in DQOps are Python functions that receive the `sensor readout`
-    that was captured by sensor (a result of an SQL query).
-    The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
-    For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
-    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
-
  - **[Checks](./checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
-    of a [sensor](./sensors/sensors.md) and a [rule](./rules/rules.md) that verifies the sensor's readout.
+    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
     For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the
     [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
     and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
@@ -28,6 +13,13 @@ These topics introduce the basic concepts of DQOps.
 
     If the percent of null values in a column raises above the threshold (maximum allowed percent),
     a data quality issue is raised.
+
+
+ - **[Configuring checks](./checks/configuring-checks.md)**
+
+    The data quality checks are configured on tables and columns in DQOps YAML files.
+
+    The parameters for the check (sensor) and the data quality rule thresholds must be set.
 
 
  - **[DQOps user home](./home-folders/dqops-user-home.md)**
@@ -43,6 +35,22 @@ These topics introduce the basic concepts of DQOps.
 
     Data quality checks configured for each table and column are executed by targeting the data source, table, column,
     check name, check type, check category or even labels assigned to tables or columns. 
+
+
+ - **[Sensors](./sensors/sensors.md)**
+
+    The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
+    to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
+    a `sensor readout` in DQOps.
+
+
+ - **[Rules](./rules/rules.md)**
+
+    Data quality rules in DQOps are Python functions that receive the `sensor readout`
+    that was captured by sensor (a result of an SQL query).
+    The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
+    For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
+    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
 
 
  - **[Check execution flow](./architecture/check-execution-flow.md)**

@@ -65,6 +65,7 @@ Provider sensor model returned from REST API.
 |custom|Whether the provider sensor is a User Home provider sensor|boolean|
 |built_in|This is a DQOps built-in provider sensor, whose parameters cannot be changed.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  
@@ -84,6 +85,7 @@ Sensor model returned from REST API.
 |custom|Whether the sensor is a User Home sensor|boolean|
 |built_in|This is a DQOps built-in sensor, whose parameters cannot be changed.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

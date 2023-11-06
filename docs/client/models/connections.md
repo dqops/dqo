@@ -60,6 +60,7 @@ Connection model returned by the rest api.
 |connection_hash|Connection hash that identifies the connection using a unique hash code.|long|
 |[spec](\docs\reference\yaml\connectionyaml\#connectionspec)|Full connection specification, including all nested objects (but not a list of tables).|[ConnectionSpec](\docs\reference\yaml\connectionyaml\#connectionspec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

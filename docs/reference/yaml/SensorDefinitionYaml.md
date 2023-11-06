@@ -28,6 +28,19 @@ Data quality sensor definition YAML schema for a data quality sensor specificati
 
 ___  
 
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
+
+
+
+
+
+
+
+
+___  
+
 ## SensorDefinitionSpec  
 Data Quality sensor definition specification. Provides the configuration for a data quality sensor definition, sensor&#x27;s parameters, etc.  
   
@@ -83,19 +96,6 @@ Defines a single field that is a sensor parameter or a rule parameter.
 |allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
 |sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
 
-
-
-
-
-
-
-
-
-___  
-
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
-  
 
 
 

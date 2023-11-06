@@ -56,7 +56,7 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Table specification that defines data quality tests that are enabled on a table and columns.
+ * Table specification that defines data quality tests that are enabled on a table and its columns.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -2042,7 +2042,6 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         tablePartitioningModel.copyToTableSpecification(tableSpec);
         userHomeContext.flush();

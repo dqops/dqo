@@ -64,7 +64,8 @@ def sync_detailed(
 
     Args:
         full_sensor_name (str):
-        json_body (SensorModel): Sensor model.
+        json_body (SensorModel): Sensor model that describes the configuration of a single built-
+            in or custom sensor.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -98,7 +99,8 @@ def sync(
 
     Args:
         full_sensor_name (str):
-        json_body (SensorModel): Sensor model.
+        json_body (SensorModel): Sensor model that describes the configuration of a single built-
+            in or custom sensor.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -127,7 +129,8 @@ async def asyncio_detailed(
 
     Args:
         full_sensor_name (str):
-        json_body (SensorModel): Sensor model.
+        json_body (SensorModel): Sensor model that describes the configuration of a single built-
+            in or custom sensor.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -159,7 +162,8 @@ async def asyncio(
 
     Args:
         full_sensor_name (str):
-        json_body (SensorModel): Sensor model.
+        json_body (SensorModel): Sensor model that describes the configuration of a single built-
+            in or custom sensor.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -164,6 +164,7 @@ Table model that returns the specification of a single column in the REST Api.
 |column_hash|Column hash that identifies the column using a unique hash code.|long|
 |[spec](\docs\reference\yaml\tableyaml\#columnspec)|Full column specification.|[ColumnSpec](\docs\reference\yaml\tableyaml\#columnspec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

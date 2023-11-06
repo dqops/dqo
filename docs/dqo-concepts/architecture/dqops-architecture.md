@@ -108,7 +108,7 @@ sensors, rules, and dashboard configuration files. The folders in the `DQOps hom
 
 DQOps runs as a Java JVM process that starts two additional Python processes to run the Jinja2 template engine
 and call data quality rules as Python functions. 
-DQOps java process also exposes a http web server. The default port is 8888, but could be changed 
+DQOps java process also exposes a http web server. The default port is 8888, but it could be changed 
 by setting the [--server.port](../../command-line-interface/dqo.md) startup parameter.
 
 
@@ -119,67 +119,7 @@ and the data folders. The detailed description of the folder is [here](../data-s
 DQOps uses the current working folder as the *DQOps user home*, unless a different folder was specified
 by setting the `$DQO_USER_HOME` environment variable or passing a *--dqo.user.home=&lt;alternative_user_home_location&gt;* startup parameter.
 
-The most important folders in the *DQOps user home* are:
-
-- `*./sources` (or `$DQO_USER_HOME/sources`) stores the metadata of data sources with the configuration of enabled data quality checks.
-  This is the folder that will be actively used to change the data quality check configuration directly in YAML files.
-  The *./sources* folder has nested folders for data sources, the name of the data source is simply the folder name.
-  Each data source's subfolder contains the data source configuration file [connection.dqoconnection.yaml](../../reference/yaml/ConnectionYaml.md).
-  The remaining files are the metadata files for each table, named as [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../reference/yaml/TableYaml.md). 
-
-- `./sensors` (or `$DQO_USER_HOME/sensors`) is a place to create custom data quality sensor definitions. The data quality sensors
-  are defined as Jinja2 templates of SQL queries.
-
-- `./rules` (or `$DQO_USER_HOME/rules`) is a place to create custom data quality rules. The data quality rules are Python modules
-  that are called by DQOps to verify the results of the data quality metrics captured by the sensors.
-
-- `./checks` (or `$DQO_USER_HOME/checks`) is a folder where custom data quality checks are defined. A custom data quality check
-  is defined in [.checkspec.yaml](../../reference/yaml/CheckDefinitionYaml.md) files. The data quality check definition is a pair
-  of a data quality sensor that captures a metric value and a data quality rule that will assess if the metric value is an issue or not.
-
-- `./settings` (or *$DQO_USER_HOME/settings*) contains shared configuration that is synchronized to the DQOps Cloud data lake.
-  Notable files in the *settings* folder are: 
-
-    * [dashboardslist.dqodashboards.yaml](../../reference/yaml/DashboardYaml.md) - the list of custom data quality dashboards,
-      these dashboards are shown in the [Data Quality Dashboard](../data-quality-dashboards/data-quality-dashboards.md) section
-  
-    * [defaultnotifications.dqonotifications.yaml](../../reference/yaml/DefaultNotificationsYaml.md) - external REST API webhook
-      URLs for calling [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md)
-      when data quality incidents are detected or updated.
-  
-    * [defaultchecks.dqochecks.yaml](../../reference/yaml/DefaultObservabilityChecksYaml.md) - the template of the configuration
-      of standard data quality checks that are applied on all imported tables and columns. The selection of default quality checks
-      provided by DQOps activates data observability and anomaly detection checks. The user can modify the list and configure
-      additional checks to be enabled on data sources.
-  
-    * [defaultschedules.dqoschedules.yaml](../../reference/yaml/DefaultSchedulesYaml.md) - the configuration of the default schedules
-      for running profiling, monitoring and partition data quality checks. The [schedules](../../working-with-dqo/schedules/index.md)
-      are defined as a Linux CRON compatible expressions. 
-
-- `./.data` (or `$DQO_USER_HOME/.data`) is the local data quality data warehouse location. The storage format
-  of the sensor readouts (the metrics captured by the sensors), data quality checks, statistics, execution errors and incidents
-  is a Hive-compatible folder structure that stores all files in the Parquet format. The table partitioning pattern
-  is described in the [data storage](../data-storage/data-storage.md) section. The files from the *.data* folder are synchronized
-  with the DQOps Cloud Data Lake, to allow showing the data quality dashboards. However, the *.data* folder is added to the *./.gitignore* file
-  and the results should not be committed to a Git source code repository.
-
-- `./.credentials` (or `$DQO_USER_HOME/.credentials`) is a folder where shared credentials such as passwords, certificates,
-  API keys or similar sensitive files should be stored. DQOps does not require any file formats, supporting both text and binary files.
-  The shared credentials are also ignored in the *./.gitignore* file, avoiding the leakage of sensitive information, but the files
-  are synchronized to DQOps Cloud.
-
-- `./.index` (or `$DQO_USER_HOME/.index`) is a DQOps internal folder that stores the DQOps Cloud file synchronization status for
-  each file that is synchronized between the local DQOps instance and the DQOps Cloud Data Lake. The files should not be modified manually.
-
-- `./.logs` (or `$DQO_USER_HOME/.logs`) stores error logs. DQOps uses Logback library for logging.
-
-- `.gitignore` (or `$DQO_USER_HOME/.gitignore`) contains the list of folders that should not be committed to Git. 
-
-- `.DQO_USER_HOME` (or `$DQO_USER_HOME/.DQO_USER_HOME`) is just a placeholder file that marks the root folder of the *DQOps user home*.
-  DQOps creates this file when the *DQOps user home* is initialized. The only purpose of this file is to avoid the folder reinitialization.
-
-- `.localsettings.dqosettings.yaml` (or *$DQO_USER_HOME/.localsettings.dqosettings.yaml*) - contains some local settings that
-  should not be committed to Git and should not be synchronized to DQOps Cloud. The DQOps Cloud Pairing API key is stored in this file. 
+The structure of the *DQOps user home* folder is fully described in the [DQOps use home](../home-folders/dqops-user-home.md) article.
 
 
 ### **Git repository**
@@ -295,7 +235,7 @@ For detailed steps required to start DQOps as a docker container, please read th
 
 ## Local and hybrid deployment components
 
-### *DQOps SaaS and hybrid deployments*
+### **DQOps SaaS and hybrid deployments**
 Paid instances of DQOps can fully utilize all DQOps Cloud features, including support for user roles, SSO integration
 and hybrid deployments.
 
@@ -306,7 +246,7 @@ DQOps deployment without a SaaS hosted DQOps instance is shown below.
 The additional components shown on this diagram are the DQOps SaaS Servers that provide the user management and
 the data quality data warehouse management operations.
 
-### *Hybrid deployments*
+### **Hybrid deployments**
 Paid subscriptions of DQOps are offered a DQOps instance hosted in the DQOps cloud.
 The DQOps cloud instance can cooperate with additional on-premise instances that are synchronizing with the shared
 DQOps Cloud Data Lake.

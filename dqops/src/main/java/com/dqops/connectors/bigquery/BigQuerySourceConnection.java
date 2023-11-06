@@ -139,7 +139,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 datasetPage = bigQueryClient.listDatasets(projectId, BigQuery.DatasetListOption.all());
             }
 
-            for( Dataset dataset : datasetPage.iterateAll() ) {
+            for (Dataset dataset : datasetPage.iterateAll() ) {
                 DatasetId datasetId = dataset.getDatasetId();
                 if (datasetId.getDataset().startsWith("_")) {
                     continue; // hidden datasets (https://cloud.google.com/bigquery/docs/datasets#create-dataset)
@@ -154,7 +154,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             return schemas;
         }
         catch (Exception ex) {
-            throw new ConnectionQueryException(ex);
+            throw new ConnectionQueryException(ex.getMessage(), ex);
         }
     }
 
@@ -181,7 +181,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 tablePages = bigQueryClient.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
             }
 
-            for( Table table : tablePages.iterateAll()) {
+            for (Table table : tablePages.iterateAll()) {
                 SourceTableModel sourceTableModel = new SourceTableModel();
                 String datasetName = table.getTableId().getDataset();
                 PhysicalTableName physicalTableName = new PhysicalTableName(datasetName, table.getTableId().getTable());
@@ -194,7 +194,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             return tables;
         }
         catch (Exception ex) {
-            throw new ConnectionQueryException(ex);
+            throw new ConnectionQueryException(ex.getMessage(), ex);
         }
     }
 

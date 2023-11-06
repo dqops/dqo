@@ -20836,6 +20836,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Data quality check definition model",
@@ -20871,6 +20878,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Data quality check definition model"
@@ -21945,18 +21956,21 @@
           },
           "schemaTableName" : {
             "type" : "string",
+            "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "enabled" : {
             "type" : "boolean",
+            "description" : "A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "tags" : {
             "type" : "array",
+            "description" : "An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -21969,6 +21983,7 @@
           },
           "labels" : {
             "type" : "array",
+            "description" : "An array of labels assigned to the table. All labels must be present on a table to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -21981,18 +21996,21 @@
           },
           "columnName" : {
             "type" : "string",
+            "description" : "The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "columnDataType" : {
             "type" : "string",
+            "description" : "The column data type that was imported from the data source and is stored in the [columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "columnNullable" : {
             "type" : "boolean",
+            "description" : "Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
@@ -22011,33 +22029,31 @@
           },
           "checkCategory" : {
             "type" : "string",
+            "description" : "The target check category, for example: *nulls*, *volume*, *anomaly*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "tableComparisonName" : {
             "type" : "string",
+            "description" : "The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkName" : {
             "type" : "string",
+            "description" : "The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: 'profiling_\\*', '\\*_count', 'profiling_\\*_percent'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "sensorName" : {
             "type" : "string",
+            "description" : "The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\*_suffix'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
-          },
-          "checkConfigured" : {
-            "type" : "boolean",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "boolean" ]
           },
           "checkHierarchyIdsModels" : {
             "type" : "array",
@@ -22062,58 +22078,69 @@
               "description" : "The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'."
             },
             "schemaTableName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'."
             },
             "enabled" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled."
             },
             "tags" : {
               "type" : "array",
+              "description" : "An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.",
               "items" : {
                 "type" : "string"
               }
             },
             "labels" : {
               "type" : "array",
+              "description" : "An array of labels assigned to the table. All labels must be present on a table to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.",
               "items" : {
                 "type" : "string"
               }
             },
             "columnName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'."
             },
             "columnDataType" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The column data type that was imported from the data source and is stored in the [columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file."
             },
             "columnNullable" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file."
             },
             "checkTarget" : {
               "type" : "string",
+              "description" : "The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.",
               "enum" : [ "table", "column" ]
             },
             "checkType" : {
               "type" : "string",
+              "description" : "The target type of checks to run. Supported values are *profiling*, *monitoring* and *partitioned*.",
               "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "timeScale" : {
               "type" : "string",
+              "description" : "The time scale of *monitoring* or *partitioned* checks to run. Supports running only *daily* or *monthly* checks. Daily monitoring checks will replace today's value for all captured check results.",
               "enum" : [ "daily", "monthly" ]
             },
             "checkCategory" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The target check category, for example: *nulls*, *volume*, *anomaly*."
             },
             "tableComparisonName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables."
             },
             "checkName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: 'profiling_\\*', '\\*_count', 'profiling_\\*_percent'."
             },
             "sensorName" : {
-              "type" : "string"
-            },
-            "checkConfigured" : {
-              "type" : "boolean"
+              "type" : "string",
+              "description" : "The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\*_suffix'."
             },
             "checkHierarchyIdsModels" : {
               "type" : "array",
@@ -37378,6 +37405,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Full column model",
@@ -37412,6 +37446,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Full column model"
@@ -58684,6 +58722,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Connection model for with a subset of parameters, excluding all nested objects.",
@@ -58791,6 +58836,10 @@
             "can_delete_data" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can delete data (results)."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Connection model for with a subset of parameters, excluding all nested objects."
@@ -58999,6 +59048,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Full connection model",
@@ -59024,6 +59080,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Full connection model"
@@ -59580,6 +59640,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Data grouping configuration model containing nested objects and the configuration of grouping dimensions.",
@@ -59612,6 +59679,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Data grouping configuration model containing nested objects and the configuration of grouping dimensions."
@@ -59740,6 +59811,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Data grouping configuration model with trimmed path",
@@ -59760,6 +59838,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Data grouping configuration model with trimmed path"
@@ -59911,18 +59993,21 @@
         "properties" : {
           "connectionName" : {
             "type" : "string",
+            "description" : "The connection name.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "schemaTableName" : {
             "type" : "string",
+            "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dateStart" : {
             "type" : "string",
+            "description" : "The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.",
             "format" : "date",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -59930,6 +60015,7 @@
           },
           "dateEnd" : {
             "type" : "string",
+            "description" : "The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files.",
             "format" : "date",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -59937,30 +60023,35 @@
           },
           "deleteErrors" : {
             "type" : "boolean",
+            "description" : "Delete the data from the [errors](../../reference/parquetfiles/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "deleteStatistics" : {
             "type" : "boolean",
+            "description" : "Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "deleteCheckResults" : {
             "type" : "boolean",
+            "description" : "Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "deleteSensorReadouts" : {
             "type" : "boolean",
+            "description" : "Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "columnNames" : {
             "type" : "array",
+            "description" : "The list of column names to delete the data for column level results or errors only for selected columns.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -59973,66 +60064,77 @@
           },
           "checkCategory" : {
             "type" : "string",
+            "description" : "The check category name, for example *volume* or *anomaly*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "tableComparisonName" : {
             "type" : "string",
+            "description" : "The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkName" : {
             "type" : "string",
+            "description" : "The name of a data quality check. Uses the short check name, for example *daily_row_count*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkType" : {
             "type" : "string",
+            "description" : "The type of checks whose results and errors should be deleted. For example, use *monitoring* to delete only monitoring checks data.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "sensorName" : {
             "type" : "string",
+            "description" : "The full sensor name whose results, checks based on the sensor, statistics and errors generated by the sensor sound be deleted. Uses a full sensor name, for example: *table/volume/row_count*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dataGroupTag" : {
             "type" : "string",
+            "description" : "The names of data groups in any of the *grouping_level_1*...*grouping_level_9* columns in the Parquet tables. Enables deleting data tagged for one data source or a subset of results when the group level is captured from a column in a monitored table.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "qualityDimension" : {
             "type" : "string",
+            "description" : "The data quality dimension name, for example *Timeliness* or *Completeness*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "timeGradient" : {
             "type" : "string",
+            "description" : "The time gradient (time scale) of the sensor and check results that are captured.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "collectorCategory" : {
             "type" : "string",
+            "description" : "The statistics collector category when statistics should be deleted. A statistics category is a group of statistics, for example *sampling* for the column value samples.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "collectorName" : {
             "type" : "string",
+            "description" : "The statistics collector name when only statistics are deleted for a selected collector, for example *sample_values*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "collectorTarget" : {
             "type" : "string",
+            "description" : "The type of the target object for which the basic statistics are deleted. Supported values are *table* and *column*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -60044,69 +60146,89 @@
           "type" : "object",
           "properties" : {
             "connectionName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The connection name."
             },
             "schemaTableName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns."
             },
             "dateStart" : {
               "type" : "string",
-              "format" : "date"
+              "format" : "date",
+              "description" : "The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files."
             },
             "dateEnd" : {
               "type" : "string",
-              "format" : "date"
+              "format" : "date",
+              "description" : "The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files."
             },
             "deleteErrors" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "Delete the data from the [errors](../../reference/parquetfiles/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors."
             },
             "deleteStatistics" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics."
             },
             "deleteCheckResults" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results."
             },
             "deleteSensorReadouts" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts."
             },
             "columnNames" : {
               "type" : "array",
+              "description" : "The list of column names to delete the data for column level results or errors only for selected columns.",
               "items" : {
                 "type" : "string"
               }
             },
             "checkCategory" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The check category name, for example *volume* or *anomaly*."
             },
             "tableComparisonName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison."
             },
             "checkName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The name of a data quality check. Uses the short check name, for example *daily_row_count*."
             },
             "checkType" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The type of checks whose results and errors should be deleted. For example, use *monitoring* to delete only monitoring checks data."
             },
             "sensorName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The full sensor name whose results, checks based on the sensor, statistics and errors generated by the sensor sound be deleted. Uses a full sensor name, for example: *table/volume/row_count*."
             },
             "dataGroupTag" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The names of data groups in any of the *grouping_level_1*...*grouping_level_9* columns in the Parquet tables. Enables deleting data tagged for one data source or a subset of results when the group level is captured from a column in a monitored table."
             },
             "qualityDimension" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The data quality dimension name, for example *Timeliness* or *Completeness*."
             },
             "timeGradient" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The time gradient (time scale) of the sensor and check results that are captured."
             },
             "collectorCategory" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The statistics collector category when statistics should be deleted. A statistics category is a group of statistics, for example *sampling* for the column value samples."
             },
             "collectorName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The statistics collector name when only statistics are deleted for a selected collector, for example *sample_values*."
             },
             "collectorTarget" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The type of the target object for which the basic statistics are deleted. Supported values are *table* and *column*."
             }
           }
         }
@@ -64135,6 +64257,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yamlParsingError" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Provider sensor model",
@@ -64168,6 +64297,10 @@
             "canEdit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yamlParsingError" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Provider sensor model"
@@ -64725,6 +64858,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Rule model",
@@ -64786,6 +64926,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Rule model"
@@ -65747,9 +65891,16 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
-        "description" : "Sensor model.",
+        "description" : "Sensor model that describes the configuration of a single built-in or custom sensor.",
         "exampleSetFlag" : false,
         "types" : [ "object" ],
         "jsonSchema" : {
@@ -65783,9 +65934,13 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
-          "description" : "Sensor model."
+          "description" : "Sensor model that describes the configuration of a single built-in or custom sensor."
         }
       },
       "SensorReadoutEntryModel" : {
@@ -66586,18 +66741,21 @@
           },
           "schemaTableName" : {
             "type" : "string",
+            "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "enabled" : {
             "type" : "boolean",
+            "description" : "A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "tags" : {
             "type" : "array",
+            "description" : "An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -66610,6 +66768,7 @@
           },
           "labels" : {
             "type" : "array",
+            "description" : "An array of labels assigned to the table. All labels must be present on a table to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -66622,6 +66781,7 @@
           },
           "columnNames" : {
             "type" : "array",
+            "description" : "The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -66634,18 +66794,21 @@
           },
           "collectorName" : {
             "type" : "string",
+            "description" : "The target statistics collector name to capture only selected statistics. Uses the short collector nameThis field supports search patterns such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. In order to collect only top 10 most common column samples, use 'column_samples'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "sensorName" : {
             "type" : "string",
+            "description" : "The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\*_suffix'.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "collectorCategory" : {
             "type" : "string",
+            "description" : "The target statistics collector category, for example: *nulls*, *volume*, *sampling*.",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -66676,40 +66839,49 @@
               "description" : "The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'."
             },
             "schemaTableName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'."
             },
             "enabled" : {
-              "type" : "boolean"
+              "type" : "boolean",
+              "description" : "A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled."
             },
             "tags" : {
               "type" : "array",
+              "description" : "An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.",
               "items" : {
                 "type" : "string"
               }
             },
             "labels" : {
               "type" : "array",
+              "description" : "An array of labels assigned to the table. All labels must be present on a table to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.",
               "items" : {
                 "type" : "string"
               }
             },
             "columnNames" : {
               "type" : "array",
+              "description" : "The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.",
               "items" : {
                 "type" : "string"
               }
             },
             "collectorName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The target statistics collector name to capture only selected statistics. Uses the short collector nameThis field supports search patterns such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. In order to collect only top 10 most common column samples, use 'column_samples'."
             },
             "sensorName" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\*_suffix'."
             },
             "collectorCategory" : {
-              "type" : "string"
+              "type" : "string",
+              "description" : "The target statistics collector category, for example: *nulls*, *volume*, *sampling*."
             },
             "target" : {
               "type" : "string",
+              "description" : "The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.",
               "enum" : [ "table", "column" ]
             },
             "collectorsHierarchyIdsModels" : {
@@ -71283,6 +71455,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Table list model with a subset of parameters, excluding all nested objects.",
@@ -71397,6 +71576,10 @@
             "can_delete_data" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can delete data (results)."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Table list model with a subset of parameters, excluding all nested objects."
@@ -71431,6 +71614,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Full table model, including all nested objects like columns or checks.",
@@ -71456,6 +71646,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Full table model, including all nested objects like columns or checks."

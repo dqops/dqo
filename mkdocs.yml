@@ -13,15 +13,16 @@ nav:
       - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
-      - Sensors: "dqo-concepts/sensors/sensors.md"
-      - Rules: "dqo-concepts/rules/rules.md"
       - Checks:
           - "dqo-concepts/checks/index.md"
           - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
           - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
           - Partition checks: "dqo-concepts/checks/partition-checks/partition-checks.md"
+      - Configuring checks: "dqo-concepts/checks/configuring-checks.md"
       - DQOps user home: "dqo-concepts/home-folders/dqops-user-home.md"
       - Running checks: "dqo-concepts/running-checks/running-checks.md"
+      - Sensors: "dqo-concepts/sensors/sensors.md"
+      - Rules: "dqo-concepts/rules/rules.md"
       - Check execution flow: "dqo-concepts/architecture/check-execution-flow.md"
       - DQOps architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
@@ -444,6 +445,7 @@ theme:
     - content.code.annotate
   logo: images/logo.svg
   favicon: images/favicon.ico
+  language: en
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -463,7 +465,9 @@ theme:
         name: Switch to light mode
   font: false
 # Disable search, the index is too big
-plugins: []
+plugins:
+  - glightbox
+#  - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets

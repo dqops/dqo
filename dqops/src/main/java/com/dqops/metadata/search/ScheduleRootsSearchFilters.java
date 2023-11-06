@@ -16,12 +16,16 @@
 package com.dqops.metadata.search;
 
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Hierarchy node search filters to find nodes that have a configured schedule and match a cron expression.
  */
 public class ScheduleRootsSearchFilters {
+    @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled scheduling root objects - objects that have their own CRON schedule defined. The default value is *true*.")
     private Boolean enabled = true;
+
     private MonitoringScheduleSpec schedule;
 
     public ScheduleRootsSearchFilters() {

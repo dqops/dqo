@@ -34,16 +34,21 @@ public class TableSearchFilters {
     @JsonPropertyDescription("The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
     private String connectionName;
 
-    @JsonPropertyDescription("")
+    @JsonPropertyDescription("The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. " +
+            "The schema and table name accept patterns both in the schema name and table name parts. " +
+            "Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.")
     private String schemaTableName;
 
-    @JsonPropertyDescription("")
+    @JsonPropertyDescription("A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, " +
+            "the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.")
     private Boolean enabled = true;
 
-    @JsonPropertyDescription("")
+    @JsonPropertyDescription("An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.")
     private String[] tags;
 
-    @JsonPropertyDescription("")
+    @JsonPropertyDescription("An array of labels assigned to the table. All labels must be present on a table to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.")
     private String[] labels;
 
     @JsonIgnore

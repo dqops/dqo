@@ -32,6 +32,7 @@ The data in the table often comes from different data sources, different vendors
 That is why DQO supports the setting of up to 9 different data grouping dimensions (levels). 
 [Read more about the data grouping here](../data-grouping/data-grouping.md)
 
+
 ## Categories of checks
 
 Each type of checks is divided into two main categories: table and column. Table-level data quality checks are used to 
@@ -51,6 +52,7 @@ You can access the full lists of available checks with detailed descriptions by 
 | [Availability](../../checks/#availability) | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
 | [Schema](../../checks/#schema)             | Detects changes in the schema.                                                                                                                                                                                                              |                                                                                                                                                                                                                                            |
 
+
 ### **Column checks**
 
 | Subcategory                            | Description                                                                                                                                                                                                                                |
@@ -68,6 +70,7 @@ You can access the full lists of available checks with detailed descriptions by 
 | [Datatype](../../checks/#datatype)     | Detects changes in the datatype.                                                                                                                                                                                                           |
 | [Anomaly](../../checks/#anomaly)       | Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.                                                                                                            |
 | [Schema](../../checks/#schema)         | Detects changes in the schema.                                                                                                                                                                                                             |
+
 
 ## Severity levels
 
@@ -221,16 +224,16 @@ not group the data by day and calculated an aggregate score for the table only d
 too far from the average score. The examples above only show 5 days of data, but in a real database, this drop will be 
 below the average daily change in the metric value.
 
-## Data stream segmentation
+## Data grouping
 
 An important aspect of data monitoring is the ability to calculate data quality metrics for different groups of rows
 stored in the same table. Data in the fact table can be loaded from different sources such as countries, states, or
 received from different external sources. Each stream of data would be loaded by a different pipeline. Data pipelines
 for different data streams may fail independently of each other.
 
-Data streams can be identified by a discriminator column, such as country or state. DQO can analyze data within separate
+Data groups can be identified by a discriminator column, such as country or state. DQO can analyze data within separate
 segments with a GROUP BY <data_stream_discriminator_column> clause to the data quality queries. DQO support setting of up
-to 9 different data streams. Below is an example of a query with grouping by country.
+to 9 different data grouping hierarchy levels. Below is an example of a query with grouping by country.
 
 ``` sql hl_lines="4 5"
 SELECT CURRENT_DATETIME() as time_window,
@@ -250,7 +253,7 @@ Data quality scores, which are calculated for each data source or vendor separat
 analysis by linking the data quality incident to a data source, a data stream, an external data supplier or simply
 a separate data pipeline that has loaded invalid data.
 
-## Integration of data partitions with data segmentation by data streams
+## Integration of data partitions with data grouping
 
 Data partitions can be integrated with data segmentation by data streams. 
 

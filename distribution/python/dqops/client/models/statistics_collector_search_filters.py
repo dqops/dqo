@@ -19,14 +19,30 @@ class StatisticsCollectorSearchFilters:
     Attributes:
         connection_name (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
             'source\*', '\*_prod', 'prefix\*suffix'.
-        schema_table_name (Union[Unset, str]):
-        enabled (Union[Unset, bool]):
-        tags (Union[Unset, List[str]]):
-        labels (Union[Unset, List[str]]):
-        column_names (Union[Unset, List[str]]):
-        collector_name (Union[Unset, str]):
-        sensor_name (Union[Unset, str]):
-        collector_category (Union[Unset, str]):
+        schema_table_name (Union[Unset, str]): The schema and table name. It is provided as
+            *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in
+            the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*',
+            'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.
+        enabled (Union[Unset, bool]): A boolean flag to target enabled tables, columns or checks. When the value of this
+            field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are
+            not implicitly disabled.
+        tags (Union[Unset, List[str]]): An array of tags assigned to the table. All tags must be present on a table to
+            match. The tags can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The tags are assigned to the table
+            on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a
+            tag.
+        labels (Union[Unset, List[str]]): An array of labels assigned to the table. All labels must be present on a
+            table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
+            on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
+        column_names (Union[Unset, List[str]]): The list of column names or column name patters. This field accepts
+            search patterns in the format: 'fk_\*', '\*_id', 'prefix\*suffix'.
+        collector_name (Union[Unset, str]): The target statistics collector name to capture only selected statistics.
+            Uses the short collector nameThis field supports search patterns such as: 'prefix\*', '\*suffix',
+            'prefix_\*_suffix'. In order to collect only top 10 most common column samples, use 'column_samples'.
+        sensor_name (Union[Unset, str]): The target sensor name to run only data quality checks that are using this
+            sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports
+            search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.
+        collector_category (Union[Unset, str]): The target statistics collector category, for example: *nulls*,
+            *volume*, *sampling*.
         target (Union[Unset, StatisticsCollectorTarget]):
         collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
