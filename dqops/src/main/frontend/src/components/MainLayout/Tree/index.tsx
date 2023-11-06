@@ -40,7 +40,7 @@ const Tree = () => {
   const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
 
   useEffect(() => {
-    const jobs = Object.values(job_dictionary_state).filter(item => item.jobType === DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables);
+    const jobs = Object.values(job_dictionary_state).filter(item => item.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_selected_tables);
 
     jobs.forEach((job: DqoJobHistoryEntryModel) => {
       const key = (job?.jobId?.jobId || 0).toString();

@@ -20,6 +20,7 @@ import {
   DataGroupingConfigurationSpec,
   DqoJobChangeModel,
   DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobQueueInitialSnapshotModel,
   DqoUserProfileModel,
   ImportTablesQueueJobParameters
@@ -127,9 +128,9 @@ const schemaReducer = (state = initialState, action: any) => {
           const reversedKeys = Object.keys(filteredObject).reverse();
           
           for (const key of reversedKeys) {
-            if (filteredObject[key]?.jobType === "synchronize multiple folders") {
-              typeOccurrences["synchronize multiple folders"] = (typeOccurrences["synchronize multiple folders"] || 0) + 1;
-              if (typeOccurrences["synchronize multiple folders"] > 1) {
+            if (filteredObject[key]?.jobType === DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders) {
+              typeOccurrences[DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders] = (typeOccurrences[DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders] || 0) + 1;
+              if (typeOccurrences[DqoJobHistoryEntryModelJobTypeEnum.synchronize_multiple_folders] > 1) {
                 delete filteredObject[key];
               }
             }

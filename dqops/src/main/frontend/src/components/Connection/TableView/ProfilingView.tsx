@@ -21,6 +21,7 @@ import Tabs from '../../Tabs';
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
@@ -244,7 +245,7 @@ const ProfilingView = () => {
   useEffect(() => {
     setFilteredJob(Object.values(job_dictionary_state)?.find(
       (x) =>
-        x.jobType === 'collect statistics' &&
+        x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
         x.parameters?.collectStatisticsParameters
           ?.statistics_collector_search_filters?.schemaTableName ===
           schemaName + '.' + tableName &&

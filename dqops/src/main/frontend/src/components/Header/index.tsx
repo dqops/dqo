@@ -15,6 +15,10 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import {
+  DqoJobHistoryEntryModelJobTypeEnum
+} from '../../api';
+
+import {
   COLUMN_LEVEL_TABS,
   CONNECTION_LEVEL_TABS,
   PageTab,
@@ -170,7 +174,7 @@ const Header = () => {
   useEffect(() => {
     if (
       Object.values(job_dictionary_state)
-        .filter((x) => x.jobType === 'import selected tables')
+        .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_selected_tables)
         .find(
           (y) =>
             y.status === 'queued' ||
@@ -185,7 +189,7 @@ const Header = () => {
               (key) =>
                 job_dictionary_state[key] ===
                 Object.values(job_dictionary_state)
-                  .filter((x) => x.jobType === 'import selected tables')
+                  .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_selected_tables)
                   ?.find(
                     (y) =>
                       y.status === 'queued' ||
@@ -199,7 +203,7 @@ const Header = () => {
       dispatch(
         setAdvisorObject(
           Object.values(job_dictionary_state).find(
-            (x) => x.jobType === 'import selected tables'
+            (x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_selected_tables
           )?.parameters?.importTableParameters ?? {}
         )
       );
