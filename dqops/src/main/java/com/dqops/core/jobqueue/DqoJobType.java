@@ -21,39 +21,39 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Job type that identifies a job by type.
  */
 public enum DqoJobType {
-    @JsonProperty("run checks")
+    @JsonProperty("run_checks")
     RUN_CHECKS,
 
-    @JsonProperty("run checks on table")
+    @JsonProperty("run_checks_on_table")
     RUN_CHECKS_ON_TABLE,
 
-    @JsonProperty("collect statistics")
+    @JsonProperty("collect_statistics")
     COLLECT_STATISTICS,
 
-    @JsonProperty("collect statistics on table")
+    @JsonProperty("collect_statistics_on_table")
     COLLECT_STATISTICS_ON_TABLE,
 
-    @JsonProperty("queue thread shutdown")
+    @JsonProperty("queue_thread_shutdown")
     QUEUE_THREAD_SHUTDOWN,
 
-    @JsonProperty("synchronize folder")
+    @JsonProperty("synchronize_folder")
     SYNCHRONIZE_FOLDER,
 
-    @JsonProperty("synchronize multiple folders")
+    @JsonProperty("synchronize_multiple_folders")
     SYNCHRONIZE_MULTIPLE_FOLDERS,
 
-    @JsonProperty("run scheduled checks by cron")
+    @JsonProperty("run_scheduled_checks_by_cron")
     RUN_SCHEDULED_CHECKS_CRON,
 
-    @JsonProperty("import schema")
+    @JsonProperty("import_schema")
     IMPORT_SCHEMA,
 
-    @JsonProperty("import selected tables")
+    @JsonProperty("import_selected_tables")
     IMPORT_TABLES,
 
-    @JsonProperty("delete stored data")
+    @JsonProperty("delete_stored_data")
     DELETE_STORED_DATA,
 
-    @JsonProperty("repair stored data")
+    @JsonProperty("repair_stored_data")
     REPAIR_STORED_DATA,
 }
