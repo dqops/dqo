@@ -1,4 +1,4 @@
-# Airflow setup 
+# Airflow integration overview 
 
 DQOps integrates with Apache Airflow. 
 

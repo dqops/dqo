@@ -90,7 +90,7 @@ Within the Advisor, you can collect basic statistics, run profiling checks or mo
     - **Labels** - allows adding labels to your connection.
     - **Schemas** - displays currently imported schemas and allows importing more schemas and tables.
     - **Default grouping template** - allows setting up data grouping globally at the data source level. [Learn how to configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md).
-    - **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../working-with-dqo/incidents-and-notifications/notifications.md) whenever a new incident is created or modified.
+    - **Incidents and notifications** - allows configuring incidents and Webhooks for notifications. [Learn more about incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) that let you keep track of the issues that arise during data quality monitoring. [Learn how to configure notifications](../../integrations/webhooks/index.md) whenever a new incident is created or modified.
 
 3. Check the details of the imported table by expanding the tree view on the left and selecting the "crime" table.
 

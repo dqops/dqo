@@ -2,7 +2,7 @@
 
 The collect statistics airflow operator **DqoCollectStatisticsOperator** is used to gather statistics for existing tables in DQOps platform.
 
-You can learn more about [the basic data statistics here](../../basic-data-statistics/basic-data-statistics.md).
+You can learn more about [the basic data statistics here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
 
 ## Operator parameters
 
@@ -82,7 +82,7 @@ The status details will appear in a one line as an info level log from the opera
 }
 ```
 
-Technically, the executed operator returns the [CollectStatisticsQueueJobResult](../../../client/models/jobs.md#CollectStatisticsQueueJobResult) object with status details.
+Technically, the executed operator returns the [CollectStatisticsQueueJobResult](../../client/models/jobs.md#CollectStatisticsQueueJobResult) object with status details.
 When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
 
 CollectStatisticsQueueJobResult includes:

@@ -39,15 +39,15 @@ To use DQO you need:
 
 ## Installation
 
-1. Create an empty catalogue.
+1.  Create an empty catalogue.
 
-2. Download zipped source code archive from [DQO GitHub](https://github.com/dqops/dqo). 
+2.  Download zipped source code archive from [DQO GitHub](https://github.com/dqops/dqo). 
 
     You can learn how to download the source code archives in [GitHub Docs](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives).
 
-3. Extract the content of the zipped file. 
+3.  Extract the content of the zipped file. 
 
-4. Change the directory to the one with the extracted repository and start the compilation by running the following command.
+4.  Change the directory to the one with the extracted repository and start the compilation by running the following command.
 
     === "Windows"
         ```

@@ -30,7 +30,6 @@ nav:
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
-      - YAML files: "dqo-concepts/yaml-files/yaml-files.md"
       - User interface overview: "dqo-concepts/user-interface-overview/user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
   - Use cases:
@@ -67,7 +66,7 @@ nav:
           - Install DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
           - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
           - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
-          - Install DQpsO from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
+          - Install DQOps from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
       - Adding connections:
           - "working-with-dqo/adding-data-source-connection/index.md"
           - BigQuery: "working-with-dqo/adding-data-source-connection/bigquery.md"
@@ -86,21 +85,22 @@ nav:
           - Configuring the schedules by modifying the YAML files: "working-with-dqo/schedules/configuring-schedules-by-modifying-yaml-file.md"
           - Time zone configuration: "working-with-dqo/schedules/timezone-configuration.md"
           - Cron formatting: "working-with-dqo/schedules/cron-formatting.md"
-      - Incidents and notifications:
-          - Incidents: "working-with-dqo/incidents-and-notifications/incidents.md"
-          - Notifications: "working-with-dqo/incidents-and-notifications/notifications.md"
-          - Configuring Slack notifications: "working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md"
+      - Incidents and notifications: "working-with-dqo/incidents-and-notifications/incidents.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
-      - Create and run table comparisons: "working-with-dqo/table-comparison/table-comparison.md"
+      - Compare tables: "working-with-dqo/table-comparison/table-comparison.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
       - Creating custom dashboard: "working-with-dqo/creating-custom-dashboard/creating-custom-dashboard.md"
-      - Integration with external tools:
-          - Airflow:
-              - Setup: "working-with-dqo/integration-with-external-tools/airflow/airflow-setup.md"
-              - Run check operator: "working-with-dqo/integration-with-external-tools/airflow/run-checks-operator.md"
-              - Collect statistics operator: "working-with-dqo/integration-with-external-tools/airflow/collect-statistics-operator.md"
-              - Table import operator: "working-with-dqo/integration-with-external-tools/airflow/table-import-operator.md"
-              - Table status operator: "working-with-dqo/integration-with-external-tools/airflow/table-status-operator.md"
+  - Integrations:
+      - "integrations/index.md"
+      - Airflow:
+          - Setup: "integrations/airflow/index.md"
+          - Run check operator: "integrations/airflow/run-checks-operator.md"
+          - Collect statistics operator: "integrations/airflow/collect-statistics-operator.md"
+          - Table import operator: "integrations/airflow/table-import-operator.md"
+          - Table status operator: "integrations/airflow/table-status-operator.md"
+      - Slack: "integrations/slack/configuring-slack-notifications.md"
+      - Visual Studio Code: "integrations/visual-studio-code/index.md"
+      - Webhooks: "integrations/webhooks/index.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - index: 'command-line-interface/index.md'

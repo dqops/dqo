@@ -3,7 +3,7 @@
 DQO can send alert notifications whenever a new incident is created or modified.
 
 An incident aggregates data quality issues based on different categories such as a table, data quality, dimension, check category, or check type. Thanks to the issue grouping the number of notifications is reduced. 
-You can read [more about incidents and their configuration here](incidents.md).
+You can read [more about incidents and their configuration here](../../working-with-dqo/incidents-and-notifications/incidents.md).
 
 Notifications allow you to monitor data in real-time and receive alerts when active data quality checks exceed alerting thresholds..
 
@@ -138,4 +138,4 @@ Adding an Issue URL to an incident allows easy access to the issue in the ticket
 
 ## Next steps
 
-Now that you have learned about notifications, [set up Slack integration](configuring-slack-notifications.md) to receive them directly in Slack.
+Now that you have learned about notifications, [set up Slack integration](../slack/configuring-slack-notifications.md) to receive them directly in Slack.

@@ -184,12 +184,12 @@ data quality checks directly using the [run_checks](../../client/operations/jobs
 ### **Apache Airflow operators**
 DQOps can be used in Airflow's DAGs using DQOps operators. The most important DQOps Airflow operators are listed below.
 
-- [run_checks_operator](../../working-with-dqo/integration-with-external-tools/airflow/run-checks-operator.md) that executes
+- [run_checks_operator](../../integrations/airflow/run-checks-operator.md) that executes
   data quality checks as part of a DAG data pipeline. The operator can be executed before a data load operation to assess the quality
   of data sources and after the data loading operation to verify the loaded data. The DQOps operators are able to stop the data
   pipeline if any **fatal** severity data quality issues were detected.
 
-- [assert_table_status_operator](../../working-with-dqo/integration-with-external-tools/airflow/table-status-operator.md) verifies
+- [assert_table_status_operator](../../integrations/airflow/table-status-operator.md) verifies
   the status of a source table that was already analyzed for data quality issues as a separate process.
 
 

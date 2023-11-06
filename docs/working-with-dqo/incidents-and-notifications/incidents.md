@@ -142,4 +142,4 @@ To sort the issue table, simply click on the sorting icon next to any column hea
 
 ## What's next
 
-- [Learn more about incident notifications](notifications.md)
+- [Learn more about incident notifications](../../integrations/webhooks/index.md)

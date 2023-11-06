@@ -9,7 +9,7 @@ The role and layout of the `DQOps user home` folder is described on the [DQOps u
 ## DQOps table YAML file
 The [\*.dqotable.yaml](../../reference/yaml/TableYaml.md) files are similar to Kubernetes specification files.
 Additionally, the first line references a YAML schema file that is used by Visual Studio Code for code completion,
-validation, and showing the documentation of checks. The concept of working with [YAML files](../yaml-files/yaml-files.md)
+validation, and showing the documentation of checks. The concept of working with [YAML files](../../integrations/visual-studio-code/index.md)
 shows the editing experience in Visual Studio Code.
 
 
