@@ -28,7 +28,7 @@ from dqops.client.models.table_data_quality_status_model import (
 from dqops.client.types import UNSET, Response, Unset
 
 
-class DqoAssertTableStatusOperator(BaseOperator):
+class DqopsAssertTableStatusOperator(BaseOperator):
     """
     Airflow assert table status operator for receiving DQOps table status.
 

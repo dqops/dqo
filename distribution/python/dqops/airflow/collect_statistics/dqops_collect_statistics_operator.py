@@ -30,7 +30,7 @@ from dqops.client.models.statistics_collector_target import StatisticsCollectorT
 from dqops.client.types import UNSET, Response, Unset
 
 
-class DqoCollectStatisticsOperator(BaseOperator):
+class DqopsCollectStatisticsOperator(BaseOperator):
     """
     Airflow collect statistics operator for receiving DQOps table status.
 

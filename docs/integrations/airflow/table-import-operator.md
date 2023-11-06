@@ -1,12 +1,12 @@
 # Table import operator
 
-Table import airflow operator **DqoTableImportOperator** is used to import table to connection existing in DQOps.
+Table import airflow operator **DqopsTableImportOperator** is used to import table to connection existing in DQOps.
 When the table schema changes you can also use this operator. 
 It will update the table in DQOps application for recently added columns or updates of types in the existing columns.
 
 ## Operator parameters
 
-Parameters points to the particular table that have to be imported.
+Parameters that indentify the table that should be imported to DQOps.
 
 | Name            | Description                                                                                                                                                                                                                                                                                                               | Type                                                          |
 |-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
@@ -37,15 +37,15 @@ The operator connects to the locally started DQOps server.
 import datetime
 import pendulum
 from airflow import DAG
-from dqops.airflow.table_import.dqo_table_import_operator import DqoTableImportOperator
+from dqops.airflow.table_import.dqops_table_import_operator import DqopsTableImportOperator
 
 with DAG(
     dag_id="example_connection_dqops_table_import",
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
-    import_table_task = DqoTableImportOperator(
-        task_id="dqo_connection_dqops_table_import_task",
+    import_table_task = DqopsTableImportOperator(
+        task_id="dqops_connection_dqops_table_import_task",
         base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_name="maven_restaurant_ratings",
@@ -57,7 +57,8 @@ with DAG(
 ## Execution results
 
 Airflow DAG provides logs to the executed tasks.
-The status details will appear in a one line as an info level log from the operator, which contains a JSON formatted response from DQOps presented below. 
+The status details will appear in a one line as an info level log from the operator,
+which contains a JSON formatted response from DQOps presented below. 
 
 ```json5
 {

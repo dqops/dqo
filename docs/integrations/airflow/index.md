@@ -4,10 +4,12 @@ DQOps integrates with Apache Airflow.
 
 Operators are available for actions such as:
 
-- run checks
-- collect statistics
-- import tables
-- table status verification
+- **[DqopsRunProfilingChecksOperator](./run-checks-operator.md)** runs data quality checks
+- **[DqopsCollectStatisticsOperator](./collect-statistics-operator.md)** collects basic statistics about tables
+- **[DqopsTableImportOperator](./table-import-operator.md)** imports the table schema to DQOps, 
+  setting up the default data quality checks
+- **[DqopsAssertTableStatusOperator](./table-status-operator.md)** verifies the most recent data quality status of a table,
+  the operator breaks DAG processing if any **fatal** severity issues are detected in the most recent data quality check run 
 
 
 ## DQOps python package for airflow

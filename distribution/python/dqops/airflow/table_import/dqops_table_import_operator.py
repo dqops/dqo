@@ -29,7 +29,7 @@ from dqops.client.models.import_tables_queue_job_result import (
 from dqops.client.types import UNSET, Response, Unset
 
 
-class DqoTableImportOperator(BaseOperator):
+class DqopsTableImportOperator(BaseOperator):
     """
     Airflow assert table status operator for receiving DQOps table status.
 
