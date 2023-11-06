@@ -144,21 +144,26 @@ spec:
       labels:
       - This is the column that is analyzed for data quality issues
 ```
+
 The `spec` section contains the details of the table, including the target schema and table name. 
 
-The `timestamp_columns` section specifies the column names for various timestamps in the data.
+The `timestamp_columns` section specifies the column names for various timestamps in the table. This section is
+used to identify the columns used for timeliness checks and to run [partitioned checks](./partition-checks/partition-checks.md).
 
 The `columns` section lists the columns in the table which has configured checks. In this example the column named 
 `target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
 
+The structure of the table configuration file is described in the [configuring checks](./configuring-checks.md) section.
+
+
 ## Data quality results
 
 In DQOps, data quality results (metrics captured by the [data quality sensor](../sensors/sensors.md)) are stored as Apache
-Parquet files following the Apache Hive compatible folder tree, partitioned by connection name, table name, and month. 
-For example, alerts for September 2022 for a single table would be stored in a file 
-`.data/rule_results/c=conn_bq_17/t=austin_311.311_service_requests/m=2022-09-01/rule_results.0.parquet`. 
+Parquet files following the Apache Hive compatible folder tree, partitioned by the connection name, table name, and month. 
+For example, data quality issues for September 2022 for a single table would be stored in a file 
+`.data/check_results/c=conn_bq_17/t=austin_311.311_service_requests/m=2022-09-01/check_results.0.parquet`. 
 
 The sensor data are stored locally, allowing true multi-cloud data collection without accessing any sensitive data 
 through an external cloud or SaaS solution.

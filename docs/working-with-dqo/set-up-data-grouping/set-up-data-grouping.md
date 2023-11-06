@@ -39,7 +39,7 @@ tables that will be **imported in the future**. Note that this configuration doe
 
 To set up data grouping configuration at the table level:
 
-1.  In DQOps graphical interface, go to the **Data Source** section, select the table of interest in the tree view on the left
+1.  In DQOps user interface, go to the **Data Source** section, select the table of interest in the tree view on the left
     side, and select **Data Grouping** tab.
 
     ![Adding table-level data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-table-level-data-stream.jpg)
@@ -62,20 +62,19 @@ To set up data grouping configuration at the table level:
     On this screen you can also edit or delete data grouping configurations. 
 
 ## Set up data grouping configuration using the DQOps Shell
+For the purpose of this section, we will show how to edit a *.dqotable.yaml* file directly from the DQOps command-line shell
+by opening Visual Studio Code as an editor.
 
-Data quality checks are stored in YAML configuration files. YAML configuration files are located in the `./sources` folder.
-The complete [DQOps YAML schema can be found here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
-
-The YAML files in DQOps support code completion in code editors such as Visual Studio Code. Remember to install the YAML
-extension by RedHat and Better Jinja by Samuel Colvin.
-
-![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
-
-![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png)
+In order to fully take advantage of code completion for DQOps YAML files, please follow
+the [Visual Studio Code configuration guide](../../integrations/visual-studio-code/index.md) to learn how to install
+required extensions.
 
 To set up a default data grouping configuration at the data source level, follow the steps below.
+This default setting is not used on tables on the data source. DQOps uses this configuration only once, when the
+table metadata is imported to [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md). The connection-level
+data grouping configuration is copied to the *.dqotable.yaml* file.
 
-1. Run the following command in DQOps Shell to edit YAML configuration file and define data stream.
+1. Run the following command in DQOps Shell to edit YAML configuration file and define the default data grouping.
 
     ```
     dqo> connection edit
@@ -97,7 +96,7 @@ To set up a default data grouping configuration at the data source level, follow
 
     Below are examples of the YAML files showing a sample configuration of a default data grouping configuration with a tag or column. 
 
-=== "Configuration of data grouping by a tag value"
+=== "Configuration of data grouping by a static tag value"
     ```yaml hl_lines="8-11"
     apiVersion: dqo/v1
     kind: source
@@ -117,7 +116,7 @@ To set up a default data grouping configuration at the data source level, follow
         mute_for_days: 60
     ```
 
-=== "Configuration of grouping by country"
+=== "Configuration of grouping by country column"
     ```yaml hl_lines="8-11"
     apiVersion: dqo/v1
     kind: source
@@ -165,7 +164,7 @@ To set up a data grouping configuration at the table level
     - "Column_data_stream" with data grouping set on category column
     - "Tag_data_stream" with data grouping by assigning a tag `landing_zone` to all data quality results.
 
-    ```yaml hl_lines="7-15"
+    ``` yaml hl_lines="7-15"
     apiVersion: dqo/v1
     kind: table
     spec:
@@ -191,3 +190,4 @@ To set up a data grouping configuration at the table level
             column_type: STRING
             nullable: true
     ```
+   

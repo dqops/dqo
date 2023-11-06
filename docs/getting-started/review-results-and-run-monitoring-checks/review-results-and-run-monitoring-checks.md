@@ -3,7 +3,8 @@
 After [adding your first connection, and initiated automatic monitoring](../add-data-source-connection/add-data-source-connection.md)
 we describe how to review the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks. 
 
-Once new tables are imported, DQO automatically enables the following profiling and monitoring checks. To learn more about each check, click on the links below. 
+Once new tables are imported, DQOps automatically enables the following profiling and monitoring checks.
+To learn more about each check, click on the links below. 
 
 **Table-level checks:**
 
@@ -31,7 +32,7 @@ Once new tables are imported, DQO automatically enables the following profiling 
 
 All checks are scheduled to run daily at 12:00 p.m.
 
-For more general information about checks, see [DQOps concepts section](../../dqo-concepts/checks/index.md). 
+For more general information about checks, see the [DQOps concepts](../../dqo-concepts/checks/index.md) section. 
 
 ## Review basic statistics results
 
@@ -70,7 +71,7 @@ In the previous step we have run profiling checks for imported tables and column
     Here you can view the list of all table profiling checks. Noticed the checks that have been enabled upon importing new tables have switched on the toggle button.
     The icons located before the name of each check allow you to: enable and disable it, configure settings, run a check, review results, and get more information about it.
  
-    For enabled checks, notice a square next to the name indicating the results of the run check initiated by the Advisor:
+    For enabled checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
 
     - green for a valid result
     - yellow for a warning
@@ -112,16 +113,17 @@ Now let's run monitoring checks.
 2. Click the **Run check** icon next to daily_row_count check. This check verifies that the number of rows in the table
     does not exceed the minimum accepted count set as the threshold level which is 1 in this case.
    
-    You can read more about threshold severity levels in [DQO concepts section](../../dqo-concepts/checks/#severity-levels).
+    You can read more about threshold severity levels in [DQOps concepts section](../../dqo-concepts/checks/#severity-levels).
 
     ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check.png)
     
     A green square should appear next to the name of the checks indicating that the result of the run check is valid.
     You can view the details by placing the mouse cursor on the green square or view more detail results by clicking the
-   **Results** icon
+    **Results** icon
 
     You can enable and run other monitoring checks and adjust their thresholds.
 
 ## Next step
 
-Now that you have reviewed the initial results from basic statistics and profiling checks and run monitoring checks, you can [review the results on the dashboards](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
+Now that you have reviewed the initial results from basic statistics and profiling checks and run monitoring checks, 
+you can [review the results on the dashboards](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).

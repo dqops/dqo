@@ -468,7 +468,7 @@ We can also run all checks in a category, skipping other categories.
     running unexpected data quality checks.
 
 The following example shows both checks defined in the *nulls* and in the *schema* category on a column.
-The highlighted section shows only the *schema* checks that we want to run.
+The highlighted section shows only the *schema* checks that we want to run on all columns.
 
 ``` { .yaml .annotate linenums="1" hl_lines="16-19 26-29" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -502,7 +502,7 @@ spec:
                 expected_value: 1
 ```
 
-We will use the `--category=schema` filter to run the *schema* checks. Additinally, following the note above,
+We will use the `--category=schema` filter to run the *schema* checks. Additionally, following the note above,
 only *daily monitoring* checks will be run.
 
 ``` { .asc .annotate }
