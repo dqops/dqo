@@ -22,6 +22,8 @@ import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -162,6 +164,15 @@ public class TableComparisonConfigurationModel {
             }
             TableComparisonGroupingColumnsPairSpec groupingColumnsPairSpec = groupingColumnPairModel.createColumnsPairSpec();
             groupingColumnsSpecList.add(groupingColumnsPairSpec);
+        }
+    }
+
+    public static class TableComparisonConfigurationModelSampleFactory implements SampleValueFactory<TableComparisonConfigurationModel> {
+        @Override
+        public TableComparisonConfigurationModel createSample() {
+            return fromTableComparisonSpec(
+                    new TableComparisonConfigurationSpec.TableComparisonConfigurationSpecSampleFactory().createSample(),
+                    true);
         }
     }
 }

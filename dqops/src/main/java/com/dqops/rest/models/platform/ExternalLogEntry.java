@@ -15,6 +15,7 @@
  */
 package com.dqops.rest.models.platform;
 
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -41,4 +42,15 @@ public class ExternalLogEntry {
      */
     @JsonPropertyDescription("Log message that should be logged.")
     private String message;
+
+    public static class ExternalLogEntrySampleFactory implements SampleValueFactory<ExternalLogEntry> {
+        @Override
+        public ExternalLogEntry createSample() {
+            ExternalLogEntry externalLogEntry = new ExternalLogEntry();
+            externalLogEntry.setWindowLocation("window.location");
+            externalLogEntry.setMessage("Sample log message.");
+
+            return externalLogEntry;
+        }
+    }
 }

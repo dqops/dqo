@@ -28237,7 +28237,8 @@ definitions:
           \ queries executed on this connection."
       provider_type:
         type: "string"
-        description: "Database provider type (required). Accepts: bigquery, snowflake."
+        description: "Database provider type (required). Accepts: bigquery, snowflake,\
+          \ etc."
         enum:
         - "bigquery"
         - "snowflake"

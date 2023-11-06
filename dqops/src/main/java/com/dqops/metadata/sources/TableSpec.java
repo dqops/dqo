@@ -18,13 +18,13 @@ package com.dqops.metadata.sources;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -39,6 +39,8 @@ import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -967,5 +969,18 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     @Override
     public TableSpec deepClone() {
         return (TableSpec)super.deepClone();
+    }
+
+    public static class TableSpecSampleFactory implements SampleValueFactory<TableSpec> {
+        @Override
+        public TableSpec createSample() {
+            String schemaTableName = SampleStringsRegistry.getSchemaTableName();
+            return new TableSpec() {{
+                setDisabled(false);
+                setTimestampColumns(new TimestampColumnsSpec.TimestampColumnsSpecSampleFactory().createSample());
+                setProfilingChecks(new TableProfilingCheckCategoriesSpec.TableProfilingCheckCategoriesSpecSampleFactory().createSample());
+                setPhysicalTableName(PhysicalTableName.fromSchemaTableFilter(schemaTableName));
+            }};
+        }
     }
 }

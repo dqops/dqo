@@ -24,3 +24,14 @@ http://localhost:8888/api/ishealthy
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/ishealthy^
+		-H "Accept: application/json"
+
+    ```
+
+

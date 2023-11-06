@@ -14,7 +14,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -31,6 +31,20 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
+    ```
+
+
 ___  
 ## delete_sensor  
 Deletes a custom sensor definition  
@@ -44,7 +58,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -52,6 +66,17 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -77,6 +102,17 @@ http://localhost:8888/api/sensors
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/sensors^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## get_sensor  
 Returns a sensor model  
@@ -97,7 +133,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -105,6 +141,17 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -130,6 +177,17 @@ http://localhost:8888/api/definitions/sensors
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/definitions/sensors^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## update_sensor  
 Updates an existing sensor, making a custom sensor definition if it is not present. 
@@ -144,7 +202,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -159,5 +217,19 @@ http://localhost:8888/api/sensors/{fullSensorName}
 |---------------------------------|-----------|-----------------|
 |Dictionary of sensor definitions|[SensorModel](\docs\client\models\sensors\#sensormodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
+
+    ```
 
 

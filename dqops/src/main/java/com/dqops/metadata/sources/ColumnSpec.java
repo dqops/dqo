@@ -18,13 +18,13 @@ package com.dqops.metadata.sources;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -34,6 +34,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -569,5 +570,16 @@ public class ColumnSpec extends AbstractSpec {
         }
 
         return false;
+    }
+
+    public static class ColumnSpecSampleFactory implements SampleValueFactory<ColumnSpec> {
+        @Override
+        public ColumnSpec createSample() {
+            return new ColumnSpec() {{
+                setDisabled(false);
+                setTypeSnapshot(new ColumnTypeSnapshotSpec.ColumnTypeSnapshotSpecSampleFactory().createSample());
+                setProfilingChecks(new ColumnProfilingCheckCategoriesSpec.ColumnProfilingCheckCategoriesSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

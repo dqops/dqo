@@ -24,6 +24,20 @@ http://localhost:8888/api/mypassword
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/mypassword^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"sample_string_value"
+
+    ```
+
+
 ___  
 ## change_user_password  
 Changes the password of a user identified by the email.  
@@ -37,7 +51,7 @@ http://localhost:8888/api/users/{email}/password
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -52,6 +66,20 @@ http://localhost:8888/api/users/{email}/password
 |---------------------------------|-----------|-----------------|
 |New Password|string|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"sample_string_value"
+
+    ```
 
 
 ___  
@@ -77,6 +105,20 @@ http://localhost:8888/api/users
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/users^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
+
+    ```
+
+
 ___  
 ## delete_user  
 Deletes a user from a multi-user account.  
@@ -90,7 +132,7 @@ http://localhost:8888/api/users/{email}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -98,6 +140,17 @@ http://localhost:8888/api/users/{email}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -123,6 +176,17 @@ http://localhost:8888/api/users
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/users^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## get_user  
 Returns the user model that describes the role of a user identified by an email  
@@ -143,7 +207,7 @@ http://localhost:8888/api/users/{email}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -151,6 +215,17 @@ http://localhost:8888/api/users/{email}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/users/sample_user@mail.com^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -166,7 +241,7 @@ http://localhost:8888/api/users/{email}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -181,5 +256,19 @@ http://localhost:8888/api/users/{email}
 |---------------------------------|-----------|-----------------|
 |User model|[DqoCloudUserModel](\docs\client\models\users\#dqocloudusermodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/users/sample_user@mail.com^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
+
+    ```
 
 

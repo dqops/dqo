@@ -22,6 +22,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -235,5 +236,16 @@ public class ConnectionIncidentGroupingSpec extends AbstractSpec implements Clon
             cloned.webhooks = cloned.webhooks.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         return cloned;
+    }
+
+    public static class ConnectionIncidentGroupingSpecSampleFactory implements SampleValueFactory<ConnectionIncidentGroupingSpec> {
+        @Override
+        public ConnectionIncidentGroupingSpec createSample() {
+            return new ConnectionIncidentGroupingSpec() {{
+                setGroupingLevel(IncidentGroupingLevel.table_dimension);
+                setDivideByDataGroups(true);
+                setWebhooks(new IncidentWebhookNotificationsSpec.IncidentWebhookNotificationsSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

@@ -14,7 +14,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -31,6 +31,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |---------------------------------|-----------|-----------------|
 |Table specification|[TableSpec](\docs\reference\yaml\tableyaml\#tablespec)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
+
+    ```
 
 
 ___  
@@ -53,7 +67,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -63,6 +77,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -85,7 +110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -95,6 +120,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -117,7 +153,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -127,6 +163,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/basic^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -149,7 +196,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -166,6 +213,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columnchecks/monitoring/"daily"/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -188,7 +246,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -205,6 +263,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columnchecks/partitioned/"daily"/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -227,7 +296,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -243,6 +312,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columnchecks/profiling/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -265,7 +345,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -275,6 +355,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/comments^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -297,7 +388,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -307,6 +398,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -329,7 +431,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -339,6 +441,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -361,7 +474,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -371,6 +484,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/defaultgroupingconfiguration^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -393,7 +517,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -403,6 +527,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/incidentgrouping^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -425,7 +560,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -435,6 +570,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/labels^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -457,7 +603,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -468,6 +614,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/model/basic^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -490,7 +647,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -501,6 +658,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -523,7 +691,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -536,6 +704,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/model/filter/sample_category/sample_check^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -558,7 +737,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -568,6 +747,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/monthly^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -590,7 +780,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -603,6 +793,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/bulkenable/monitoring/"daily"^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -625,7 +826,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -636,6 +837,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/model/basic^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -658,7 +870,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -669,6 +881,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -691,7 +914,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -704,6 +927,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/model/filter/sample_category/sample_check^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -726,7 +960,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -736,6 +970,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/monthly^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -758,7 +1003,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -771,6 +1016,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/bulkenable/partitioned/"daily"^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -793,7 +1049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -803,6 +1059,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioning^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -825,7 +1092,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -835,6 +1102,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -857,7 +1135,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -867,6 +1145,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model/basic^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -889,7 +1178,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -899,6 +1188,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -921,7 +1221,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -933,6 +1233,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model/filter/sample_category/sample_check^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -955,7 +1266,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -967,6 +1278,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/bulkenable/profiling^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -989,7 +1311,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1000,6 +1322,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/schedulesoverride/"partitioned_daily"^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -1022,7 +1355,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1032,6 +1365,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/statistics^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -1054,7 +1398,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1063,6 +1407,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -1078,7 +1433,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1097,6 +1452,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
+
+    ```
+
+
 ___  
 ## update_table_basic  
 Updates the basic field of an existing table, changing only the most important fields.  
@@ -1110,7 +1479,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1129,6 +1498,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/basic^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connection_name\":\"sample_connection\",\"table_hash\":2314522140819107818,\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"has_any_configured_checks\":true,\"has_any_configured_profiling_checks\":true,\"run_checks_job_template\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"partitioned\"},\"data_clean_job_template\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":true,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+
+    ```
+
+
 ___  
 ## update_table_comments  
 Updates the list of comments on an existing table.  
@@ -1142,7 +1525,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1161,6 +1544,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/comments^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"[]"
+
+    ```
+
+
 ___  
 ## update_table_daily_monitoring_checks  
 Updates the list of daily table level data quality monitoring on an existing table.  
@@ -1174,7 +1571,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1193,6 +1590,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"volume\":{\"daily_row_count\":{\"error\":{\"min_count\":1}}}}"
+
+    ```
+
+
 ___  
 ## update_table_default_grouping_configuration  
 Updates the default data grouping configuration at a table level.  
@@ -1206,7 +1617,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1225,6 +1636,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/defaultgroupingconfiguration^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"level_3\":{\"source\":\"column_value\",\"column\":\"sample_column\"}}"
+
+    ```
+
+
 ___  
 ## update_table_incident_grouping  
 Updates the configuration of incident grouping on a table.  
@@ -1238,7 +1663,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1257,6 +1682,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/incidentgrouping^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"grouping_level\":\"table_dimension\",\"minimum_severity\":\"warning\",\"divide_by_data_group\":true,\"disabled\":false}"
+
+    ```
+
+
 ___  
 ## update_table_labels  
 Updates the list of assigned labels of an existing table.  
@@ -1270,7 +1709,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1289,6 +1728,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/labels^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"[]"
+
+    ```
+
+
 ___  
 ## update_table_monitoring_checks_model  
 Updates the data quality monitoring from a model that contains a patch with changes.  
@@ -1302,7 +1755,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1322,6 +1775,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/model^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
+    ```
+
+
 ___  
 ## update_table_monitoring_checks_monthly  
 Updates the list of monthly table level data quality monitoring on an existing table.  
@@ -1335,7 +1802,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1354,6 +1821,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/monthly^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"volume\":{\"monthly_row_count\":{\"error\":{\"min_count\":1}}}}"
+
+    ```
+
+
 ___  
 ## update_table_partitioned_checks_daily  
 Updates the list of daily table level data quality partitioned checks on an existing table.  
@@ -1367,7 +1848,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1386,6 +1867,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"volume\":{\"daily_partition_row_count\":{\"error\":{\"min_count\":1}}}}"
+
+    ```
+
+
 ___  
 ## update_table_partitioned_checks_model  
 Updates the data quality partitioned checks from a model that contains a patch with changes.  
@@ -1399,7 +1894,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1419,6 +1914,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/model^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
+    ```
+
+
 ___  
 ## update_table_partitioned_checks_monthly  
 Updates the list of monthly table level data quality partitioned checks on an existing table.  
@@ -1432,7 +1941,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1451,6 +1960,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/monthly^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"volume\":{\"monthly_partition_row_count\":{\"error\":{\"min_count\":1}}}}"
+
+    ```
+
+
 ___  
 ## update_table_partitioning  
 Updates the table partitioning configuration of an existing table.  
@@ -1464,7 +1987,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1483,6 +2006,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioning^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"connection_name\":\"sample_connection\",\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"can_edit\":true}"
+
+    ```
+
+
 ___  
 ## update_table_profiling_checks  
 Updates the list of table level data quality profiling checks on an existing table.  
@@ -1496,7 +2033,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1515,6 +2052,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}}"
+
+    ```
+
+
 ___  
 ## update_table_profiling_checks_model  
 Updates the data quality profiling checks from a model that contains a patch with changes.  
@@ -1528,7 +2079,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1547,6 +2098,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
+
+    ```
+
+
 ___  
 ## update_table_scheduling_group_override  
 Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).  
@@ -1560,7 +2125,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -1578,5 +2143,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |---------------------------------|-----------|-----------------|
 |Table&#x27;s overridden schedule configuration to store or an empty object to clear the schedule configuration on a table|[MonitoringScheduleSpec](\docs\client\models\#monitoringschedulespec)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/schedulesoverride/"partitioned_daily"^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"cron_expression\":\"0 12 1 * *\"}"
+
+    ```
 
 

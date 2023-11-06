@@ -2,15 +2,15 @@ from enum import Enum
 
 
 class StatisticsResultDataType(str, Enum):
-    BOOLEAN = "BOOLEAN"
-    DATE = "DATE"
-    DATETIME = "DATETIME"
-    FLOAT = "FLOAT"
-    INSTANT = "INSTANT"
-    INTEGER = "INTEGER"
-    NULL = "NULL"
-    STRING = "STRING"
-    TIME = "TIME"
+    BOOLEAN = "boolean"
+    DATE = "date"
+    DATETIME = "datetime"
+    FLOAT = "float"
+    INSTANT = "instant"
+    INTEGER = "integer"
+    NULL = "null"
+    STRING = "string"
+    TIME = "time"
 
     def __str__(self) -> str:
         return str(self.value)

@@ -15,6 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -69,5 +71,18 @@ public class CheckDefinitionListModel {
     private String yamlParsingError;
 
     public CheckDefinitionListModel() {
+    }
+
+    public static class CheckDefinitionListModelSampleFactory implements SampleValueFactory<CheckDefinitionListModel> {
+        @Override
+        public CheckDefinitionListModel createSample() {
+            return new CheckDefinitionListModel() {{
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setFullCheckName(SampleStringsRegistry.getFullCheckName());
+                setCustom(false);
+                setBuiltIn(false);
+                setCanEdit(true);
+            }};
+        }
     }
 }

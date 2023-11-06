@@ -24,6 +24,17 @@ http://localhost:8888/api/dashboards
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/dashboards^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## get_dashboard_level1  
 Returns a single dashboard in the tree of folder with a temporary authenticated url  
@@ -44,7 +55,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -54,6 +65,17 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/dashboards/sample_folder_0/sample_dashboard^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -76,7 +98,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -87,6 +109,17 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_dashboard^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -109,7 +142,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -121,6 +154,17 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_dashboard^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -143,7 +187,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -156,6 +200,17 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_dashboard^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -178,7 +233,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -192,5 +247,16 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_folder_5/sample_dashboard^
+		-H "Accept: application/json"
+
+    ```
 
 

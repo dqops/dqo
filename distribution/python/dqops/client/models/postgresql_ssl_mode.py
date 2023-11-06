@@ -6,8 +6,8 @@ class PostgresqlSslMode(str, Enum):
     DISABLE = "disable"
     PREFER = "prefer"
     REQUIRE = "require"
-    VERIFY_CA = "verify_ca"
-    VERIFY_FULL = "verify_full"
+    VERIFY_CA = "verify-ca"
+    VERIFY_FULL = "verify-full"
 
     def __str__(self) -> str:
         return str(self.value)

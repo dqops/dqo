@@ -41,7 +41,7 @@ Implementation mode for a rule runner (rule implementation).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|python<br/>custom_class<br/>|
+|string|python<br/>java_class<br/>|
 
 ___  
 

@@ -35,7 +35,6 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvide
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.services.check.CheckService;
 import com.dqops.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

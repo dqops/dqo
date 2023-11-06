@@ -24,6 +24,20 @@ http://localhost:8888/api/logs/debug
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/logs/debug^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
+    ```
+
+
 ___  
 ## log_error  
 Logs an information message in the server&#x27;s logs as an error severity log entry.  
@@ -45,6 +59,20 @@ http://localhost:8888/api/logs/error
 |---------------------------------|-----------|-----------------|
 |Log entry|[ExternalLogEntry](\docs\client\models\log_shipping\#externallogentry)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/logs/error^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
+    ```
 
 
 ___  
@@ -70,6 +98,20 @@ http://localhost:8888/api/logs/info
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/logs/info^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
+    ```
+
+
 ___  
 ## log_warn  
 Logs an information message in the server&#x27;s logs as a warn severity log entry.  
@@ -91,5 +133,19 @@ http://localhost:8888/api/logs/warn
 |---------------------------------|-----------|-----------------|
 |Log entry|[ExternalLogEntry](\docs\client\models\log_shipping\#externallogentry)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/logs/warn^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
+
+    ```
 
 

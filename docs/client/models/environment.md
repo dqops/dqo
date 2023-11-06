@@ -35,7 +35,7 @@ DQOps user role within a data domain or a whole account level.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|EDITOR<br/>OPERATOR<br/>VIEWER<br/>ADMIN<br/>NONE<br/>|
+|string|editor<br/>viewer<br/>admin<br/>none<br/>operator<br/>|
 
 ___  
 

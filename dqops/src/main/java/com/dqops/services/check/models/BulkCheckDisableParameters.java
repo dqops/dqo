@@ -17,6 +17,7 @@
 package com.dqops.services.check.models;
 
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,7 +26,6 @@ import io.swagger.annotations.ApiModel;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,4 +41,13 @@ public class BulkCheckDisableParameters {
     @JsonPropertyDescription("List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     Map<String, List<String>> selectedTablesToColumns = null;
+
+    public static class BulkCheckDisableParametersSampleFactory implements SampleValueFactory<BulkCheckDisableParameters> {
+        @Override
+        public BulkCheckDisableParameters createSample() {
+            return new BulkCheckDisableParameters() {{
+                setCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample());
+            }};
+        }
+    }
 }

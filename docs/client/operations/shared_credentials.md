@@ -24,6 +24,20 @@ http://localhost:8888/api/credentials
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/credentials^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
+
+    ```
+
+
 ___  
 ## delete_shared_credential  
 Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.  
@@ -37,7 +51,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -45,6 +59,17 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X DELETE http://localhost:8888/api/credentials/sample_credential^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -60,7 +85,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -68,6 +93,17 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/credentials/sample_credential/download^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -93,6 +129,17 @@ http://localhost:8888/api/credentials
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/credentials^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## get_shared_credential  
 Returns a shared credential content  
@@ -113,7 +160,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -121,6 +168,17 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/credentials/sample_credential^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -136,7 +194,7 @@ http://localhost:8888/api/credential/{credentialName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -151,5 +209,19 @@ http://localhost:8888/api/credential/{credentialName}
 |---------------------------------|-----------|-----------------|
 |Shared credential model|[SharedCredentialModel](\docs\client\models\shared_credentials\#sharedcredentialmodel)|false|
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/credential/sample_credential^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
+
+    ```
 
 
