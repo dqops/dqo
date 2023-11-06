@@ -92,13 +92,16 @@ Confirm connection changes by clicking **Apply** on a pop-up window that will ap
 
 ## Configuring the data model
 
-After confirmation, a screen will open where you can see the filters and parameters for the dashboard. 
-The full list of data
-that can be used in dashboards is available in check results. For more information about the data structure,
-and how the data are stored in the dashboards
-see the [Parquet files references](../../reference/parquetfiles/check_results.md) for the *check_results* parquet table.
+After confirmation, a screen will open where you can see the data model and parameters in the dashboard. 
+The dashboard can use the [check_results](../../reference/parquetfiles/check_results.md) table as a source.
+Alternative, the [sensor_results](../../reference/parquetfiles/sensor_readouts.md) and other parquet tables
+replicated from the *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/.data* folder
+to the DQOps Cloud Data Lake are available for querying.
 
-![dimensions](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/dimensions.png)
+The list of columns in these tables is described in 
+the [Parquet files references](../../reference/parquetfiles/check_results.md) section for the *check_results* parquet table.
+
+![Looker studio data source columns for DQOps](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/dimensions.png)
 
 To return to the dashboard view, click **Done** in the top right corner.
 
@@ -113,7 +116,8 @@ and choose **Manage report URL parameters**.
  
 ![manage_report_URL_parameters](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/manage-report-url-parameters.png)
 
-All parameters must be marked as **Allow to be modified in report URL**, as they are used to create and maintain report view URLs. Afterward, select **Close** and return to the dashboard view.
+All parameters must be marked as **Allow to be modified in report URL**, as they are used to create and maintain report view URLs.
+Afterward, select **Close** and return to the dashboard view.
 
 ![allow_to_be_modified_in_report_URL](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/allow-to-be-modified-in-report-url.png)
 
@@ -130,43 +134,35 @@ is usable only when DQOps uses interface passes the access token to access the D
 
 Once you have completed the configuration steps, you can edit the dashboard and complete the dashboard according to your needs.
 
-## Adding the dashboard to the tree
+
+## Getting the embeddable dashboard url
+DQOps shows the Looker Studio dashboards embedded in an IFRAME HTML element.
+Looker Studio dashboards cannot be embedded inside an IFRAME if the default dashboard url is copied from the browser
+when editing the dashboard. When using a non-embeddable dashboard url, the dashboard will not open correctly in DQOps.
+
+Instead, you need to get the alternative, embeddable dashboard url. Go to the Looker Studio main menu and open
+the "File -> Embed report" screen shown below. 
+
+![Get embeddable url from Looker Studio](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/embed_URL.jpg)
+
+You will need this embeddable url in the next step to add the dashboard to the dashboards list file.
+
+
+## Adding the dashboard to DQOps
 
 Finally, to make the dashboard visible, you need to add it to the dashboard list YAML configuration file in DQOps. 
 It is the *settings/dashboardslist.dqodashboards.yaml* file in
 the [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md) folder.
 The file format of the dashboard list specification file
-is defined in the [YAML reference](../../reference/yaml/DashboardYaml.md) documentation.
+is defined in the [dasboards YAML reference](../../reference/yaml/DashboardYaml.md) documentation.
 When the dashboard's url is added to the dashboard list file, it will become visible in the user interface.
 
 Open the *settings/dashboardslist.dqodashboards.yaml* file in Visual Studio Code. An empty file should be present
-in the *$DQO_USER_HOME/settings* folder that is initialized when DQOps is started for the first time.
+in the *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/settings* folder
+that is initialized when DQOps is started for the first time.
 
 The example below shows the default configuration of all DQOps built-in dashboards.
 The file can be found in [GitHub](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml).
-
-The dashboards are organized into folders. The maximum folder nesting level supported by DQOps is 5 folders deep.
-Each dashboard in the tree has the following elements:
-
-- `dashboard_name` is the name that is shown in the **Dashboards** section in the user interface
-- `url` is the url to the Looker Studio dashboard, it must be a special url allowed for embedding
-   inside an IFRAME node. Urls to embeddable dashboards have an additional "embed/" section in the URL
-   just after the *https://lookerstudio.google.com/* base url.
-
-As you can see below,  
-the dashboard names, the url (the one generated in Looker Studio, with the name 'embed'),
-the dashboard size (the one that is set in Looker Studio in the Theme and Layout section)
-have also been added. You should also add parameters if you want to pass them in.
-You can copy the following section of the yaml file, edit it and create your own yaml with the dashboard list based on it.
-It is important to note all indentation in the text.
-Each folder should be indented at the same tab level as the previous one. Similarly, subfolders, 
-dashboard names and the rest of the yaml file. If you add incorrectly, 
-you may not see the dashboard on the dqops page.
-To do this, it is a good idea to go into the logs and see where ( in which line of the yaml file) the error is.
-
-
-The following example shows the default list of dashboards. 
-The file can be also reviewed in [GitHub](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml).
 
 ``` { .yaml .annotate linenums="1" hl_lines="6 8 10 11 12 14" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json
@@ -219,31 +215,118 @@ spec:
 1. Folder name: Main folder which may contain subfolders
 2. Folder name: The subfolder where we put the dashboards
 3. Dashboard name: The name of the dashboard that will be visible in the application
-4. URL: The URL of a given dashboard, substituting "embed" in the name
-5. Size: The size of the dashboard, which is set in Looker studio in the Theme and Layout section
-6. Parameters: List of parameters that we pass to the yaml file
+4. URL: The URL of a given dashboard, it must be the embeddable url identified by the "embed" element in the url
+5. Size: The size of the dashboard, which is set in Looker Studio in the Theme and Layout section
+6. Parameters: List of parameters that we pass to the dashboard. We must pass the *ds0.token* parameter to access the
+   private DQOps Cloud Data Quality Data Warehouse.
 
-**Brief description of the yaml file elements:**
+The dashboards are organized into folders. The maximum folder nesting level supported by DQOps is 5 folders deep.
+Each dashboard in the tree has the following elements:
 
-*folder_name: Profiling* - Main folder which may contain subfolders 
-
-*folder_name: Table profiling status* - The subfolder where we put the dashboards 
-
-*dashboard_name: Table profiling status per data quality dimension* - The name of the dashboard that will be visible in the application
-
-*url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C* - The URL of a given dashboard, substituting "embed" in the name
-
-*width: 1400 height: 1400* - The size of the dashboard, which is set in Looker studio in the Theme and Layout section
-
-*parameters:* List of parameters that we pass to the yaml file
+- `dashboard_name` is the name that is shown in the **Data Quality Dashboards** section in the user interface
+- `url` is the url to the Looker Studio dashboard, it must be a special url allowed for embedding
+  inside an IFRAME HTML element. Urls to embeddable dashboards have an additional "embed/" section in the URL
+  just after the *https://lookerstudio.google.com/* base url.
 
 
-We add a folder where the dashboard will be placed. Enter the name of the dashboard, the url generated in Looker(see below for a description of how to generate URL).
-When creating a dashboard in a yaml file, you should also specify its width and height. These parameters can be found in Looker studio in the edition of the dashboard by clicking on Layout.
+As you can see below, the `spec` node contains an array of folders.
+Each folder is identified by a `folder_name` field with the name of the folder in the tree.
+Just below the first folder named *Profiling*, you will see a `folders` node that is a container of nested subfolder.
 
-Here we can pass various parameters and provide a token. We specify, among other things, whether our dashboard will be in the profiling, monitoring or partitioned section.
-It is very important that the link to the dashboard in the yaml file contains the "embed" part in the name. The best way is to generate the link in Looker. Go into edit dashboard, then file, embed report and select embed url.
+A folder node has three types of child elements:
 
-![embed_URL](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/embed_URL.jpg)
+- `folder_name` stores the name of the folder
+- `folders` is a list (array) of nested subfolders, each nested folder has the same structure and must have a `folder_name` element
+- `dashboards` is a list of dashboards stored in the folder
 
-After completing the yaml file with the list of dashboards, commit the changes. Your dashboard will be visible in the app.
+When editing the dashboard list YAML file, please be very careful about maintaining correct indentations in the file.
+If the file is corrupted, the *Dashboards* screen will be empty in the DQOps user interface. Any errors will be reported
+to the local *[DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md)/.logs* logging folder.
+DQOps will report the exact file location (line and column) where the issue was found while reading the dashboard list file.
+
+A single dashboard has the following structure:
+
+``` { .yaml .annotate linenums="1" hl_lines="9-17" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json
+apiVersion: dqo/v1
+kind: dashboards
+spec:
+- folder_name: Profiling
+  folders:
+    - folder_name: Table profiling status
+      dashboards:
+        - dashboard_name: Table profiling status per data quality dimension # (1)!
+          url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C # (2)!
+          width: 1400 # (3)!
+          height: 1400 # (4)!
+          parameters: # (5)!
+            ds0.token: '%DQO_CLOUD_TOKEN%' # (6)!
+            ds0.p_check_type: profiling # (7)!
+            ds0.p_quality_dimension: all
+            ds0.p_check_category: all
+```
+
+1.  The dashboard's name.
+2.  The url to the embeddable version of the Looker Studio dashboard.
+3.  The width of the dashboard.
+4.  The height of the dashboard.
+5.  The container of parameters that are passed to the dashboard by encoding them in the dashboard's url.
+6.  The required DQOps Cloud access key used to access the data quality data warehouse. It must be a `'%DQO_CLOUD_TOKEN%'` token.
+7.  Additional, report specific parameters.
+
+The elements of a dashboard node are:
+
+- `dashboard_name` is the name of the dashboard that will be shown in the DQOps user interface, it does not need to be the same
+  as the dashboard name defined in Looker Studio
+
+- `url` stores the embeddable dashboard url that you should now copy from the *Embed report* screen shown
+  in the [Getting the embeddable dashboard url](#getting-the-embeddable-dashboard-url) section
+
+- `width` and `height` are the width and height of the dashboard  which is set in Looker Studio in the *Theme and Layout* section
+
+- `parameters` are the names of parameters passed in an encoded format as parameters appended to the dashboard. 
+  Please notice that all the parameters share the same `ds0.` prefix which is the prefix for the data source in Looker Studio.
+  Parameters in Looker Studio that can be passed in the url are defined at a data source level, that is why they use this prefix.
+  If your dashboard uses multiple connections to the DQOps Cloud Data Quality Data Warehouse to access or blend different tables,
+  you must pass the `ds0.token: '%DQO_CLOUD_TOKEN%'` parameter using the prefix of each data source.
+
+- `ds0.token` is a special parameter that is used by the DQOps Cloud Looker Studio Community Connector to pass a special
+  DQOps Cloud Looker Studio authentication token used by the connector to request a real authentication token for BigQuery.
+  Use the default `'%DQO_CLOUD_TOKEN%'` value which is replaced with the token when DQOps builds the final dashboard url.
+
+After completing the yaml file with the list of dashboards, save the changes.
+Your dashboard will be visible in the **Data Quality Dashboards** section in the DQOps user interface.
+
+
+## Changing built-in dashboards
+If any of the DQOps built-in dashboard does not serve your purpose and you need to change the layout, 
+reorder the filters or add new sections, simply make a copy of the dashboard following this manual up to the
+section of [Adding the dashboard to DQOps](#adding-the-dashboard-to-dqops). 
+
+Copy the whole folder tree where the dashboard is found from the 
+[default dashboard list file](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml)
+available on GitHub.
+Remove all folders and dashboards that will not be modified. Keep only the dashboard that will be replaced
+and a full folder path leading to this dashboard.
+
+Then, replace the dashboard's `url` with the new Looker Studio embeddable report url of your version of the dashboard
+and update the `width` and `height` parameters if they changed.
+In order to effectively override a built-in dashboard, all the folder names in the `folder_name` elements
+and the dashboard name specified in the `dashboard_name` element be the same as the overwritten built-in dashboard.
+When the file is saved and the DQOps **Data Quality Dashboards** screen is refreshed in the browser,
+your version of the dashboard will be shown instead.
+
+
+## Dashboard sample data
+While editing the dashboard in Looker Studio, you will see sample data that does not match the data in your
+DQOps Cloud Data Quality Data Warehouse. The connection names will be different. Only a few tables will be registered.
+
+The data that is provided to Looker Studio by the DQOps Looker Studio Community Connector uses a complimentary
+demo data quality data warehouse provided by DQOps for testing purposes.
+In order to use your real data quality results, you have to set the default value of the `ds0.token` parameter
+to the value of the *DQOps Cloud Looker Studio Community Connector API Key* shown on the
+[https://cloud.dqops.com/account](https://cloud.dqops.com/account) screen in the DQOps Cloud account management interface.
+The `ds0.token` parameter must be changed back to `0` before publishing the report. Otherwise, a report available 
+for any user who knows the report url will be accessible to anybody, allowing to see your private data.
+
+The *DQOps Cloud Looker Studio Community Connector API Key* is available only for paid customers of DQOps.
