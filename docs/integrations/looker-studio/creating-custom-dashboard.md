@@ -89,17 +89,27 @@ to modify the parameter values.
 Confirm connection changes by clicking **Apply** on a pop-up window that will appear.
  
 ![apply_connection_changes](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/apply-connection-changes.png)
- 
-After confirmation, a screen will open where you can see the filters and parameters for the dashboard. The full list of data
-that can be used in dashboards is available in check results. For more information about the data structure, and how the data are stored in the dashboards see the [Parquet files references](../../reference/parquetfiles/check_results.md).
+
+## Configuring the data model
+
+After confirmation, a screen will open where you can see the filters and parameters for the dashboard. 
+The full list of data
+that can be used in dashboards is available in check results. For more information about the data structure,
+and how the data are stored in the dashboards
+see the [Parquet files references](../../reference/parquetfiles/check_results.md) for the *check_results* parquet table.
 
 ![dimensions](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/dimensions.png)
 
 To return to the dashboard view, click **Done** in the top right corner.
 
+
 ## Setting up dashboards parameters
 
-To be able to modify the parameters on copied dashboard, select the **Resources** from the top menu and choose **Manage report URL parameters**.  
+DQOps user interface passes parameters to the dashboards. The most important parameter is `ds0.token`, 
+which receives an access token to the DQOps Cloud Data Quality Data Warehouse.
+
+To be able to modify the parameters on copied dashboard, select the **Resources** from the top menu
+and choose **Manage report URL parameters**.  
  
 ![manage_report_URL_parameters](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/manage-report-url-parameters.png)
 
@@ -111,25 +121,52 @@ It is also essential to specify who can edit the dashboard and who can only view
 To do this, click on Share, and a po-pup will appear in the top right-hand corner where you can add email addresses. 
 Alternatively, create an editing group and add the employees' email address in the popup.
 
+You have to ensure that the *Link settings* configuration allows *Anyone on the internet with the link can view*
+to have a **Viewer** permission. Otherwise, other users who were not directly granted access to the dashboards
+will not be able to use it. Despite that the access to the dashboard will be granted to everyone, the dashboard
+is usable only when DQOps uses interface passes the access token to access the DQOps Cloud Data Quality Data Warehouse.
+
 ![groups](https://dqops.com/docs/images/working-with-dqo/creating-custom-dashboard/groups.png)
 
 Once you have completed the configuration steps, you can edit the dashboard and complete the dashboard according to your needs.
 
-Finally, to make the dashboard visible, you need to add it to YAML configuration file in DQOps, which should be located in DQOps
-home catalog  for example: (home/settings/dashboardslist.dqodashboards.yaml). This will make the dashboard visible in the user interface.
+## Adding the dashboard to the tree
 
-Enter the DQOps repository. If you open the repository in IntelliJ IDEA, you will see folders and files on the left side.
-Ideally, in the Home folder, in the settings, create a yaml file where your dashboards will be located. To do this, right-click on settings and select 'New file'. You can name the file, for example: 'dashboardlists.yaml'. Your file will appear in the Settings tab.
-Enter the file. It is empty. Now you need to add content.
+Finally, to make the dashboard visible, you need to add it to the dashboard list YAML configuration file in DQOps. 
+It is the *settings/dashboardslist.dqodashboards.yaml* file in
+the [DQOps user home](../../dqo-concepts/home-folders/dqops-user-home.md) folder.
+The file format of the dashboard list specification file
+is defined in the [YAML reference](../../reference/yaml/DashboardYaml.md) documentation.
+When the dashboard's url is added to the dashboard list file, it will become visible in the user interface.
 
-The beginning of the yaml file has been added below.
-The dashboard file contains folders and subfolders. As you can see below, the dashboard names, the url (the one generated in Looker Studio, with the name 'embed'), the dashboard size (the one that is set in Looker Studio in the Theme and Layout section) have also been added. You should also add parameters if you want to pass them in.
+Open the *settings/dashboardslist.dqodashboards.yaml* file in Visual Studio Code. An empty file should be present
+in the *$DQO_USER_HOME/settings* folder that is initialized when DQOps is started for the first time.
+
+The example below shows the default configuration of all DQOps built-in dashboards.
+The file can be found in [GitHub](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml).
+
+The dashboards are organized into folders. The maximum folder nesting level supported by DQOps is 5 folders deep.
+Each dashboard in the tree has the following elements:
+
+- `dashboard_name` is the name that is shown in the **Dashboards** section in the user interface
+- `url` is the url to the Looker Studio dashboard, it must be a special url allowed for embedding
+   inside an IFRAME node. Urls to embeddable dashboards have an additional "embed/" section in the URL
+   just after the *https://lookerstudio.google.com/* base url.
+
+As you can see below,  
+the dashboard names, the url (the one generated in Looker Studio, with the name 'embed'),
+the dashboard size (the one that is set in Looker Studio in the Theme and Layout section)
+have also been added. You should also add parameters if you want to pass them in.
 You can copy the following section of the yaml file, edit it and create your own yaml with the dashboard list based on it.
 It is important to note all indentation in the text.
-Each folder should be indented at the same tab level as the previous one. Similarly, subfolders, dashboard names and the rest of the yaml file. If you add incorrectly, you may not see the dashboard on the dqops page. To do this, it is a good idea to go into the logs and see where ( in which line of the yaml file) the error is.
+Each folder should be indented at the same tab level as the previous one. Similarly, subfolders, 
+dashboard names and the rest of the yaml file. If you add incorrectly, 
+you may not see the dashboard on the dqops page.
+To do this, it is a good idea to go into the logs and see where ( in which line of the yaml file) the error is.
 
 
-The section of the yaml file that you complete looks like this:
+The following example shows the default list of dashboards. 
+The file can be also reviewed in [GitHub](https://github.com/dqops/dqo/blob/develop/home/settings/dashboardslist.dqodashboards.yaml).
 
 ``` { .yaml .annotate linenums="1" hl_lines="6 8 10 11 12 14" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json

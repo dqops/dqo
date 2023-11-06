@@ -13,6 +13,17 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     The [DQOps Python package](https://pypi.org/project/dqops/) is available on PyPI.
 
 
+- **[Looker Studio](./looker-studio/creating-custom-dashboard.md)**
+    
+    Data Quality Dashboards are a fundamental way to communicate the current state of data quality
+    to stakeholders. 
+   
+    DQOps developed a custom Looker Studio Community Connector that accesses the data quality results
+    in the user's private [Data Quality Data Warehouse](../dqo-concepts/architecture/dqops-architecture.md).
+    When using DQOps connector, it is possible to customize built-in data quality dashboards or
+    design custom dashboards that are better suited for the monitored data environment.
+
+
 - **[Slack](./slack/configuring-slack-notifications.md)**
 
     Notifications of new or updated [data quality incidents](../working-with-dqo/incidents-and-notifications/incidents.md)
