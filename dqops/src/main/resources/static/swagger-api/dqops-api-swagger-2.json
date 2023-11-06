@@ -15076,6 +15076,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Data quality check definition list model."
@@ -30449,6 +30453,9 @@
           "type" : "integer",
           "format" : "int64"
         },
+        "zero" : {
+          "type" : "boolean"
+        },
         "nano" : {
           "type" : "integer",
           "format" : "int32"
@@ -30456,7 +30463,7 @@
         "negative" : {
           "type" : "boolean"
         },
-        "zero" : {
+        "positive" : {
           "type" : "boolean"
         },
         "units" : {
@@ -31840,6 +31847,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Rule list model"
@@ -32253,6 +32264,10 @@
           "items" : {
             "$ref" : "#/definitions/ProviderSensorListModel"
           }
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Sensor list model"
@@ -35983,16 +35998,16 @@
     "TemporalUnit" : {
       "type" : "object",
       "properties" : {
-        "dateBased" : {
-          "type" : "boolean"
-        },
-        "timeBased" : {
+        "durationEstimated" : {
           "type" : "boolean"
         },
         "duration" : {
           "$ref" : "#/definitions/Duration"
         },
-        "durationEstimated" : {
+        "timeBased" : {
+          "type" : "boolean"
+        },
+        "dateBased" : {
           "type" : "boolean"
         }
       }

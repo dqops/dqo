@@ -1,12 +1,12 @@
 # Schedules overview
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 To set up schedule you can use the graphical interface as described below or manually modify the YAML configuration file as [described here.](./configuring-schedules-by-modifying-yaml-file.md)
 
 Different types of checks, such as Profiling, Monitoring, and Partitioned, have their own schedules. For more information
-on these different check types, please refer to the [DQO Concepts section](../../dqo-concepts/checks/index.md).  
+on these different check types, please refer to the [DQOps Concepts section](../../dqo-concepts/checks/index.md).  
 
 ## Configuring a schedule at connection and table level
 
@@ -56,7 +56,7 @@ connection or table.
 
 ## Starting a scheduler
 
-To initiate a scheduler in the DQO Shell, simply enter the command `scheduler start`. To stop the scheduler, use the 
+To initiate a scheduler in the DQOps Shell, simply enter the command `scheduler start`. To stop the scheduler, use the 
 command `scheduler stop`.
 
 You can also use the graphical interface to start the scheduler. Simply enable **Jobs scheduler** located in the Notifications
@@ -77,11 +77,11 @@ For more information on the `run` command, please refer to the [Command-line int
 ## Synchronizing data
 
 All the YAML configuration files with data source metadata and schedules configuration are stored in `/sources` folder. 
-You can read more about the [data storage in DQO here](../../dqo-concepts/data-storage/data-storage.md). 
+You can read more about the [data storage in DQOps here](../../dqo-concepts/data-storage/data-storage.md). 
 
-DQO allows you to modify the frequency of data synchronization when the scheduler is run in a server mode
+DQOps allows you to modify the frequency of data synchronization when the scheduler is run in a server mode
 
-In order to configure how often the scheduler will synchronize the local copy of the metadata with DQO Cloud and detect
+In order to configure how often the scheduler will synchronize the local copy of the metadata with DQOps Cloud and detect
 new schedules, start dqo with the following parameter:
 
 ```
@@ -93,7 +93,7 @@ You can also configure this parameter by setting `DQO_SCHEDULER_SCAN_METADATA_CR
 environment variable.
 
 
-To modify whether the job scheduler will sync configuration files and results with DQO Cloud, simply launch dqo 
+To modify whether the job scheduler will sync configuration files and results with DQOps Cloud, simply launch dqo 
 with the following parameter:
 
 ```

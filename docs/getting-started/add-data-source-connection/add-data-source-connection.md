@@ -1,14 +1,14 @@
 # Add data source connection
 
-After [installation and starting DQO](../installation/installation.md), we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
+After [installation and starting DQOps](../installation/installation.md), we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
 using the graphical interface.
 
-For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO section](../../working-with-dqo/adding-data-source-connection/index.md).
-You can find more information about [navigating the DQO graphical interface here](../../dqo-concepts/user-interface-overview/user-interface-overview.md). 
+For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQOps section](../../working-with-dqo/adding-data-source-connection/index.md).
+You can find more information about [navigating the DQOps graphical interface here](../../dqo-concepts/user-interface-overview/user-interface-overview.md). 
 
 ## Prerequisite credentials
 
-To add BigQuery data source connection to DQO you need the following:
+To add BigQuery data source connection to DQOps you need the following:
 
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
 - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
@@ -58,7 +58,7 @@ Now we can import schemas and tables.
 
 ## Initiate automatic monitoring and review scheduling
 
-Once new tables are imported, DQO automatically enables [profiling and monitoring checks](../../dqo-concepts/checks/index.md). These checks include row count,
+Once new tables are imported, DQOps automatically enables [profiling and monitoring checks](../../dqo-concepts/checks/index.md). These checks include row count,
 table availability and checks detecting schema changes. They are scheduled to run daily at 12:00 p.m.
 
 Upon import, you will receive information at the top of the page. If you click on the orange bar, you can open an Advisor.

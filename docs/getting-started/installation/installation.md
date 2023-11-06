@@ -1,14 +1,14 @@
 # Installation
 
-DQO is available on [PyPi repository](https://pypi.org/project/dqops/).
+DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 
-If you want to [install DQO directly from Git go to this section](../../working-with-dqo/installation/install-dqo-from-git.md).
+If you want to [install DQOps directly from Git go to this section](../../working-with-dqo/installation/install-dqo-from-git.md).
 
-You can also [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+You can also [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 
 ## Prerequisites
 
-To use DQO you need:
+To use DQOps you need:
 
   - Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 
@@ -43,10 +43,10 @@ To use DQO you need:
     echo %JAVA_HOME%
     ```
 
-## Install DQO with pip manager
+## Install DQOps with pip manager
 
-1. Create an empty catalogue where you want to install DQO.
-2. Open a terminal, navigate to the created directory, and install DQO via pip manager
+1. Create an empty catalogue where you want to install DQOps.
+2. Open a terminal, navigate to the created directory, and install DQOps via pip manager
 
     ```
     python -m pip install --user dqops
@@ -55,29 +55,29 @@ To use DQO you need:
 ## Start DQO application
 
 1. Run dqo app to finalize the installation. This process may take some time as the DQO distribution will be downloaded
-   and the Python environment will be initialized in the DQO home directory.
+   and the Python environment will be initialized in the DQOps home directory.
 
     ```
     python -m dqops
     ```
 
-2. Create DQO `userhome` folder.
+2. Create DQOps `userhome` folder.
 
     After installation, you will be asked whether to initialize the DQO `userhome` folder in the default location. Type Y to create the folder.  
     The `userhome` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md). 
 
-3. Login to DQO Cloud.
+3. Login to DQOps Cloud.
    
-    To use DQO features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
+    To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
     must create a DQO cloud account.
 
-    After creating a userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be 
+    After creating a userhome folder, you will be asked whether to log in to the DQOps cloud. After typing Y, you will be 
     redirected to [https://cloud.dqops.com/registration](https://cloud.dqps.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account. 
 
-    During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQO application.
+    During the first registration, a unique identification code (API Key) will be generated and automatically retrieved by DQOps application.
     The API Key is now stored in the configuration file. 
 
-4. Open the DQO User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
+4. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
     or by copying the link.
 
 ## Next step

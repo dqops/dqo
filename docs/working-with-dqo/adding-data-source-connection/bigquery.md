@@ -5,7 +5,7 @@ features like machine learning, geospatial analysis, and business intelligence.
 
 ## Prerequisite credentials
 
-To add BigQuery data source connection to DQO you need the following:
+To add BigQuery data source connection to DQOps you need the following:
 
   - A BiqQuery service account with **BigQuery > BigQuery Job User** permission
   - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete)
@@ -34,7 +34,7 @@ To add BigQuery data source connection to DQO you need the following:
     | Billing GCP project ID                                                                                     | The ID of the selected billing GCP project. In this project, the authenticated user must have bigquery.jobs.create permission. This field is active when you select the "Create jobs in selected billing project ID" option.                                                                                                                |
     | Quota GCP project ID                                                                                       | The Google Cloud Platform project ID which is used for invocation.                                                                                                                                                                                                                                                                          |
 
-    DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
+    DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
@@ -52,13 +52,13 @@ To add BigQuery data source connection to DQO you need the following:
 
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
 
-8. When new tables are imported, DQO automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+8. When new tables are imported, DQOps automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
 
     ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
-## Adding BigQuery connection using DQO Shell
+## Adding BigQuery connection using DQOps Shell
 
-To add a connection run the following command in DQO Shell.
+To add a connection run the following command in DQOps Shell.
 
 ```
 dqo> connection add
@@ -102,7 +102,7 @@ dqo> connection add --name=connection1
 
 After adding connection run `table import -c=connection1` to select schemas and import tables. 
 
-DQO will ask you to select the schema from which the tables will be imported.
+DQOps will ask you to select the schema from which the tables will be imported.
 
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
@@ -111,7 +111,7 @@ dqo> table import --connection={connection name}
 --schema={schema name}
 --table={table name}
 ```
-DQO supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
+DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The * 
 character can be used at the beginning, in the middle or at the end of the name.
 
@@ -141,9 +141,9 @@ spec:
 [Application Default Credentials](https://cloud.google.com/docs/authentication/provide-credentials-adc) is a strategy used by the Google authentication libraries to automatically find 
 credentials based on the application environment.
 
-DQO allows authentication using Google Application Credentials. 
+DQOps allows authentication using Google Application Credentials. 
 
-To provide your user credentials to DQO, use the Google Cloud CLI:
+To provide your user credentials to DQOps, use the Google Cloud CLI:
 
 1. [Install the gcloud CLI](https://cloud.google.com/sdk/docs/install), if you haven't already.
 2. Run `gcloud auth application-default login` command in shell or command line to create your credential file.

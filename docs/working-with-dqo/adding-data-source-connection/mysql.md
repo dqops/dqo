@@ -7,7 +7,7 @@ choice for applications that require high performance.
 ## Prerequisite credentials
 
 You need a MySQL account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol options
-for a specific IP address. In case of restrictions, you need to add the IP address used by DQO to [NDB Cluster TCP/IP Connections Using Direct Connections](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-tcp-definition-direct.html).
+for a specific IP address. In case of restrictions, you need to add the IP address used by DQOps to [NDB Cluster TCP/IP Connections Using Direct Connections](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-tcp-definition-direct.html).
 
 ## Adding MySQL connection using the graphical interface
 
@@ -33,9 +33,9 @@ for a specific IP address. In case of restrictions, you need to add the IP addre
     | Password                  | password                                 | MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                       |
     | Options                   | options                                  | MySQL connection 'options' initialization parameter. For example, setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable. |
     | sslmode                   | ssl_mode                                 | MySQL connection sslmode parameter. [See the MySQL documentation for more information about using sslMode parameter.](https://dev.mysql.com/doc/connector-j/8.1/en/connector-j-connp-props-security.html#cj-conn-prop_sslMode)                                          |
-    | JDBC connection property  |                                          | Optional setting. DQO supports using JDBC driver to access MySQL. [JDBC Concepts.](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-basic.html).                                                                                                     |
+    | JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access MySQL. [JDBC Concepts.](https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-usagenotes-basic.html).                                                                                                   |
     
-    DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
+    DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
@@ -62,13 +62,13 @@ for a specific IP address. In case of restrictions, you need to add the IP addre
 
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
 
-8. When new tables are imported, DQO automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+8. When new tables are imported, DQOps automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
 
     ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
-## Adding MySQL connection using DQO Shell
+## Adding MySQL connection using DQOps Shell
 
-To add a connection run the following command in DQO Shell.
+To add a connection run the following command in DQOps Shell.
 
 ```
 dqo> connection add
@@ -110,7 +110,7 @@ dqo> connection add --name=connection1
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
 
-DQO will ask you to select the schema from which the tables will be imported.
+DQOps will ask you to select the schema from which the tables will be imported.
 
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
@@ -119,7 +119,7 @@ dqo> table import --connection={connection name}
 --schema={schema name}
 --table={table name}
 ```
-DQO supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
+DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
 

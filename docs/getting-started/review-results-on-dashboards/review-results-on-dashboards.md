@@ -4,11 +4,11 @@ In the [previous step](../review-results-and-run-monitoring-checks/review-result
 the initial results from the basic statistics and profiling checks, as well as run one monitoring check. Now let's review
 the results on the data quality dashboards. 
 
-In DQO, you can choose from a variety of built-in dashboard groups. You can read more about the [data quality dashboards in the Concept section](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
+In DQOps, you can choose from a variety of built-in dashboard groups. You can read more about the [data quality dashboards in the Concept section](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
 
 ## Prerequisite
 
-To be able to display results on data quality dashboards you need to synchronize locally stored results with your DQO Cloud account.  
+To be able to display results on data quality dashboards you need to synchronize locally stored results with your DQOps Cloud account.  
 To synchronize all the data just click on the **Synchronize** button in the upper right corner of the navigation bar.
 
 ## Review the total number of issues raised by the profiling and monitoring checks
@@ -55,6 +55,6 @@ You have completed our quick tutorial, and now you know how to add connections, 
 
 ## Next steps
 
-- We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets) to help you in using DQO effectively. You can find the [full list of use cases here](../../examples/index.md). 
-- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../integrations/webhooks/index.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- We have provided a variety of use cases which use openly available datasets [Google Cloud](https://cloud.google.com/datasets) to help you in using DQOps effectively. You can find the [full list of use cases here](../../examples/index.md). 
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and Slack [notifications](../../integrations/slack/configuring-slack-notifications.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

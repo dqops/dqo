@@ -1,5 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { checkTypesToJobTemplateKey, useTree } from '../../../contexts/treeContext';
+import {
+  checkTypesToJobTemplateKey,
+  useTree
+} from '../../../contexts/treeContext';
 import { groupBy } from 'lodash';
 import { TREE_LEVEL } from '../../../shared/enums';
 import SvgIcon from '../../SvgIcon';
@@ -8,26 +11,37 @@ import clsx from 'clsx';
 import { Tooltip } from '@material-tailwind/react';
 import ContextMenu from '../../CustomTree/ContextMenu';
 import ConfirmDialog from '../../CustomTree/ConfirmDialog';
-import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { useSelector } from "react-redux";
-import { getFirstLevelActiveTab } from "../../../redux/selectors";
-import { useParams, useRouteMatch } from "react-router-dom";
-import { findTreeNode } from "../../../utils/tree";
-import { AxiosResponse } from "axios";
+import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { useSelector } from 'react-redux';
+import { getFirstLevelActiveTab } from '../../../redux/selectors';
+import { useParams, useRouteMatch } from 'react-router-dom';
+import { findTreeNode } from '../../../utils/tree';
+import { AxiosResponse } from 'axios';
 import {
   ConnectionModel,
   DqoJobHistoryEntryModel,
   DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
-} from "../../../api";
-import { ConnectionApiClient } from "../../../services/apiClient";
-import AddColumnDialog from "../../CustomTree/AddColumnDialog";
-import AddTableDialog from "../../CustomTree/AddTableDialog";
-import AddSchemaDialog from "../../CustomTree/AddSchemaDialog";
-import { IRootState } from "../../../redux/reducers";
+} from '../../../api';
+import { ConnectionApiClient } from '../../../services/apiClient';
+import AddColumnDialog from '../../CustomTree/AddColumnDialog';
+import AddTableDialog from '../../CustomTree/AddTableDialog';
+import AddSchemaDialog from '../../CustomTree/AddSchemaDialog';
+import { IRootState } from '../../../redux/reducers';
 
 const Tree = () => {
-  const { removeNode, loadingNodes, changeActiveTab, setActiveTab, treeData, toggleOpenNode, activeTab, switchTab, refreshNode, setTreeData } = useTree();
+  const {
+    removeNode,
+    loadingNodes,
+    changeActiveTab,
+    setActiveTab,
+    treeData,
+    toggleOpenNode,
+    activeTab,
+    switchTab,
+    refreshNode,
+    setTreeData
+  } = useTree();
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
@@ -37,23 +51,35 @@ const Tree = () => {
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
-  const { job_dictionary_state } = useSelector((state: IRootState) => state.job || {});
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
 
   useEffect(() => {
-    const jobs = Object.values(job_dictionary_state).filter(item => item.jobType === DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables);
+    const jobs = Object.values(job_dictionary_state).filter(
+      (item) =>
+        item.jobType ===
+        DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables
+    );
 
     jobs.forEach((job: DqoJobHistoryEntryModel) => {
       const key = (job?.jobId?.jobId || 0).toString();
       const str = localStorage.getItem(key);
-      if (str !== DqoJobHistoryEntryModelStatusEnum.succeeded && job.status == DqoJobHistoryEntryModelStatusEnum.succeeded) {
+      if (
+        str !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+        job.status == DqoJobHistoryEntryModelStatusEnum.succeeded
+      ) {
         localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.succeeded);
 
-        const id = [job.parameters?.importTableParameters?.connectionName, job.parameters?.importTableParameters?.schemaName].join('.');
+        const id = [
+          job.parameters?.importTableParameters?.connectionName,
+          job.parameters?.importTableParameters?.schemaName
+        ].join('.');
         const schemaNode = findTreeNode(treeData, id);
 
         refreshNode(schemaNode, true);
       }
-    })
+    });
   }, [job_dictionary_state]);
 
   const handleNodeClick = (node: CustomTreeNode) => {
@@ -61,7 +87,11 @@ const Tree = () => {
     changeActiveTab(node, true);
   };
 
-  const getNewTreeData = (newTreeData: CustomTreeNode[], items: CustomTreeNode[], node: CustomTreeNode) => {
+  const getNewTreeData = (
+    newTreeData: CustomTreeNode[],
+    items: CustomTreeNode[],
+    node: CustomTreeNode
+  ) => {
     newTreeData = newTreeData
       .filter(
         (item) =>
@@ -69,9 +99,7 @@ const Tree = () => {
           item.level === node.level ||
           item.parentId !== node.id
       )
-      .map((item) =>
-        item.id === node.id ? { ...item, open: true } : item
-      );
+      .map((item) => (item.id === node.id ? { ...item, open: true } : item));
     return [...newTreeData, ...items];
   };
 
@@ -91,7 +119,12 @@ const Tree = () => {
           items: [],
           level: TREE_LEVEL.DATABASE,
           tooltip: item.connection_name,
-          run_checks_job_template: item[checkTypesToJobTemplateKey[checkTypes as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionModel],
+          run_checks_job_template:
+            item[
+              checkTypesToJobTemplateKey[
+                checkTypes as keyof typeof checkTypesToJobTemplateKey
+              ] as keyof ConnectionModel
+            ],
           collect_statistics_job_template: item.collect_statistics_job_template,
           data_clean_job_template: item.data_clean_job_template,
           open: false
@@ -113,112 +146,136 @@ const Tree = () => {
       }
 
       const table = terms[7] || '';
-      const tableNode = findTreeNode(newTreeData, `${connection}.${schema}.${table}`);
+      const tableNode = findTreeNode(
+        newTreeData,
+        `${connection}.${schema}.${table}`
+      );
       if (tableNode && !tableNode.open) {
         const items = await refreshNode(tableNode, false);
         newTreeData = getNewTreeData(newTreeData, items, tableNode);
       }
 
       if (match.path === ROUTES.PATTERNS.CONNECTION) {
-        setActiveTab(connectionNode?.id || "");
+        setActiveTab(connectionNode?.id || '');
       }
 
       if (match.path === ROUTES.PATTERNS.SCHEMA) {
-        setActiveTab(schemaNode?.id || "");
+        setActiveTab(schemaNode?.id || '');
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE) {
-        setActiveTab(tableNode?.id || "");
+        setActiveTab(tableNode?.id || '');
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_PROFILING) {
-        setActiveTab(`${tableNode?.id || ""}.checks`);
+        setActiveTab(`${tableNode?.id || ''}.checks`);
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_COLUMNS) {
-        setActiveTab(`${tableNode?.id || ""}.columns`);
+        setActiveTab(`${tableNode?.id || ''}.columns`);
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_INCIDENTS_NOTIFICATION) {
-        setActiveTab(`${tableNode?.id || ""}.incidents`);
+        setActiveTab(`${tableNode?.id || ''}.incidents`);
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_DAILY) {
-        setActiveTab(`${tableNode?.id || ""}.dailyCheck`);
+        setActiveTab(`${tableNode?.id || ''}.dailyCheck`);
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_MONITORING_MONTHLY) {
-        setActiveTab(`${tableNode?.id || ""}.monthlyCheck`);
+        setActiveTab(`${tableNode?.id || ''}.monthlyCheck`);
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_DAILY) {
-        setActiveTab(`${tableNode?.id || ""}.dailyPartitionedChecks`);
+        setActiveTab(`${tableNode?.id || ''}.dailyPartitionedChecks`);
       }
 
       if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_MONTHLY) {
-        setActiveTab(`${tableNode?.id || ""}.monthlyPartitionedChecks`);
+        setActiveTab(`${tableNode?.id || ''}.monthlyPartitionedChecks`);
       }
 
       if (match.path === ROUTES.PATTERNS.COLUMN) {
-        const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnsNode);
         }
 
-        setActiveTab(`${columnsNode?.id || ""}.${terms[9] || ""}`);
+        setActiveTab(`${columnsNode?.id || ''}.${terms[9] || ''}`);
       }
       if (match.path === ROUTES.PATTERNS.COLUMN_PROFILING) {
-        const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnsNode);
         }
 
         const column = terms[9];
-        const columnNode = findTreeNode(newTreeData, `${columnsNode?.id || ""}.${column}`);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${column}`
+        );
         if (columnNode && !columnNode.open) {
           const items = await refreshNode(columnNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnNode);
         }
 
-        setActiveTab(`${columnNode?.id || ""}.checks`);
+        setActiveTab(`${columnNode?.id || ''}.checks`);
       }
       if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_DAILY) {
-        const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnsNode);
         }
 
         const column = terms[9];
-        const columnNode = findTreeNode(newTreeData, `${columnsNode?.id || ""}.${column}`);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${column}`
+        );
         if (columnNode && !columnNode.open) {
           const items = await refreshNode(columnNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnNode);
         }
 
-        setActiveTab(`${columnNode?.id || ""}.dailyCheck`);
+        setActiveTab(`${columnNode?.id || ''}.dailyCheck`);
       }
       if (match.path === ROUTES.PATTERNS.COLUMN_MONITORING_MONTHLY) {
-        const columnsNode = findTreeNode(newTreeData, `${tableNode?.id || ""}.columns`);
+        const columnsNode = findTreeNode(
+          newTreeData,
+          `${tableNode?.id || ''}.columns`
+        );
         if (columnsNode && !columnsNode.open) {
           const items = await refreshNode(columnsNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnsNode);
         }
 
         const column = terms[9];
-        const columnNode = findTreeNode(newTreeData, `${columnsNode?.id || ""}.${column}`);
+        const columnNode = findTreeNode(
+          newTreeData,
+          `${columnsNode?.id || ''}.${column}`
+        );
         if (columnNode && !columnNode.open) {
           const items = await refreshNode(columnNode, false);
           newTreeData = getNewTreeData(newTreeData, items, columnNode);
         }
 
-        setActiveTab(`${columnNode?.id || ""}.monthlyCheck`);
+        setActiveTab(`${columnNode?.id || ''}.monthlyCheck`);
       }
       setTreeData(newTreeData);
 
-      setFlag(prev => !prev);
+      setFlag((prev) => !prev);
     })();
   }, [firstLevelActiveTab]);
 
@@ -229,20 +286,23 @@ const Tree = () => {
     if (level === TREE_LEVEL.SCHEMA) return 'schema';
     if (level === TREE_LEVEL.TABLE) return 'table';
     if (level === TREE_LEVEL.CHECK) return 'search';
-    if (level === TREE_LEVEL.COLUMNS ||  level === TREE_LEVEL.COLUMN) return 'column';
-    if (level === TREE_LEVEL.COLUMN_CHECKS
-      || level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS
-      || level === TREE_LEVEL.COLUMN_DAILY_CHECKS
-      || level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS
-      || level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS
+    if (level === TREE_LEVEL.COLUMNS || level === TREE_LEVEL.COLUMN)
+      return 'column';
+    if (
+      level === TREE_LEVEL.COLUMN_CHECKS ||
+      level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS ||
+      level === TREE_LEVEL.COLUMN_DAILY_CHECKS ||
+      level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS ||
+      level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS
     ) {
       return 'column-check';
     }
-    if (level === TREE_LEVEL.TABLE_CHECKS
-      || level === TREE_LEVEL.TABLE_DAILY_CHECKS
-      || level === TREE_LEVEL.TABLE_MONTHLY_CHECKS
-      || level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS
-      || level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS
+    if (
+      level === TREE_LEVEL.TABLE_CHECKS ||
+      level === TREE_LEVEL.TABLE_DAILY_CHECKS ||
+      level === TREE_LEVEL.TABLE_MONTHLY_CHECKS ||
+      level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS ||
+      level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS
     ) {
       return 'table-check';
     }
@@ -286,7 +346,11 @@ const Tree = () => {
   };
 
   const renderIcon = (node: CustomTreeNode) => {
-    if (node.level === TREE_LEVEL.TABLE_INCIDENTS || node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)) {
+    if (
+      node.level === TREE_LEVEL.TABLE_INCIDENTS ||
+      node.level === TREE_LEVEL.CHECK ||
+      (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)
+    ) {
       return <div className="w-4 min-w-4 shrink-0" />;
     }
     if (loadingNodes[node.id]) {
@@ -295,14 +359,16 @@ const Tree = () => {
           className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
           name="spinner"
         />
-      )
+      );
     }
     return (
       <SvgIcon
         className="w-4 min-w-4 cursor-pointer shrink-0"
         name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
-          toggleOpenNode(node.id);
+          !(node.parsingYamlError && node.parsingYamlError.length > 0)
+            ? toggleOpenNode(node.id)
+            : undefined;
         }}
       />
     );
@@ -315,13 +381,22 @@ const Tree = () => {
           className={clsx(
             'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
-            (node.level === TREE_LEVEL.TABLE && checkTypes === CheckTypes.PARTITIONED) && node.configured ? 'text-red-900' : '',
+            node.level === TREE_LEVEL.TABLE &&
+              checkTypes === CheckTypes.PARTITIONED &&
+              node.configured
+              ? 'text-orange-500'
+              : '',
+            node?.parsingYamlError !== undefined ? 'text-red-900' : ''
           )}
         >
           {renderIcon(node)}
           <div
             className="flex space-x-2 py-1 flex-1 w-full text-[13px]"
-            onClick={() => handleNodeClick(node)}
+            onClick={() => {
+              !(node.parsingYamlError && node.parsingYamlError.length > 0)
+                ? handleNodeClick(node)
+                : undefined;
+            }}
           >
             <SvgIcon
               name={getIcon(node.level)}
@@ -329,25 +404,49 @@ const Tree = () => {
             />
             <Tooltip
               content={node.id}
-              className="max-w-120 py-4 px-4 bg-gray-800 delay-300"
+              className="max-w-120 py-4 px-4  delay-300 "
               placement="top-start"
             >
-              <div className="flex flex-1 justify-between items-center">
+              <div className="flex justify-between items-center  w-full">
                 <div
                   className={clsx(
-                    `flex-1 truncate mr-7`,
+                    `flex-1 truncate`,
                     node.hasCheck ? 'font-bold' : ''
                   )}
                 >
                   {node.label}
                 </div>
-                <ContextMenu
-                  node={node}
-                  openConfirm={openConfirm}
-                  openAddColumnDialog={openAddColumnDialog}
-                  openAddTableDialog={openAddTableDialog}
-                  openAddSchemaDialog={openAddSchemaDialog}
-                />
+                <div className="flex items-center justify-center relative">
+                  <div>
+                    {node.parsingYamlError &&
+                    node.parsingYamlError.length > 0 ? (
+                      <Tooltip
+                        content={node.parsingYamlError}
+                        className="max-w-120 z-50"
+                        placement="right-start"
+                      >
+                        <div
+                          style={{
+                            position: 'absolute',
+                            right: '30px',
+                            top: '-9px',
+                            borderRadius: '3px'
+                          }}
+                          className="bg-white"
+                        >
+                          <SvgIcon name="warning" className="w-5 h-5" />
+                        </div>
+                      </Tooltip>
+                    ) : null}
+                  </div>
+                  <ContextMenu
+                    node={node}
+                    openConfirm={openConfirm}
+                    openAddColumnDialog={openAddColumnDialog}
+                    openAddTableDialog={openAddTableDialog}
+                    openAddSchemaDialog={openAddSchemaDialog}
+                  />
+                </div>
               </div>
             </Tooltip>
           </div>
@@ -389,7 +488,7 @@ const Tree = () => {
   }, [selectedNode]);
 
   return (
-    <div className={clsx("pl-2", checkTypes === 'sources' ? 'mt-4' : 'mt-0')}>
+    <div className={clsx('pl-2', checkTypes === 'sources' ? 'mt-4' : 'mt-0')}>
       <div className="hidden">{flag}</div>
       <div>{renderTree('null', 0)}</div>
       <ConfirmDialog

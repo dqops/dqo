@@ -59,7 +59,7 @@ public class RuleFolderModel {
      * @param isBuiltIn The rule is provided (built-in) with DQOps.
      * @param canEdit The current user can edit the rule.
      */
-    public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {
+    public void addRule(String fullRuleName, boolean isCustom, boolean isBuiltIn, boolean canEdit, String yamlParsingError) {
         String[] ruleFolders = fullRuleName.split("/");
         String ruleName = ruleFolders[ruleFolders.length - 1];
         RuleFolderModel folderModel = this;
@@ -83,6 +83,7 @@ public class RuleFolderModel {
             ruleListModel.setCustom(isCustom);
             ruleListModel.setBuiltIn(isBuiltIn);
             ruleListModel.setCanEdit(canEdit);
+            ruleListModel.setYamlParsingError(yamlParsingError);
             folderModel.rules.add(ruleListModel);
         } else {
             if (isCustom){
