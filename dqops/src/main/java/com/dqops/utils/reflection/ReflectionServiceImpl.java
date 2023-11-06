@@ -308,6 +308,6 @@ public class ReflectionServiceImpl implements ReflectionService {
         Object[] enumConstants = targetEnum.getEnumConstants();
         return Arrays.stream(enumConstants)
                 .map(e -> createEnumValue((Enum<?>) e))
-                .collect(Collectors.toMap(EnumValueInfo::getJavaName, Function.identity()));
+                .collect(Collectors.toMap(EnumValueInfo::getYamlName, Function.identity()));
     }
 }
