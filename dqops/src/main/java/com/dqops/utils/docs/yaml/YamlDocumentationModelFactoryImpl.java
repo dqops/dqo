@@ -94,10 +94,18 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                                                                Class<?> targetClass,
                                                                Map<Class<?>, YamlObjectDocumentationModel> visitedObjects) {
         if (targetClass != null && !visitedObjects.containsKey(targetClass) && !linkageStore.containsKey(targetClass)) {
-            visitedObjects.put(targetClass, null);
-
             YamlObjectDocumentationModel yamlObjectDocumentationModel = new YamlObjectDocumentationModel();
+            visitedObjects.put(targetClass, yamlObjectDocumentationModel);
             List<YamlFieldsDocumentationModel> yamlFieldsDocumentationModels = new ArrayList<>();
+            ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
+            List<FieldInfo> infoFields = classInfo.getFields();
+
+            yamlObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
+            yamlObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
+            yamlObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
+            yamlObjectDocumentationModel.setObjectClassPath(
+                    Path.of("/").resolve(superiorObjectFileName).resolve("#" + classInfo.getReflectedClass().getSimpleName())
+            );
 
             ClassJavadoc classJavadoc = RuntimeJavadoc.getJavadoc(targetClass);
             if (classJavadoc != null) {
@@ -115,16 +123,6 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                 }
             }
 
-            ClassInfo classInfo = reflectionService.getClassInfoForClass(targetClass);
-            List<FieldInfo> infoFields = classInfo.getFields();
-
-            yamlObjectDocumentationModel.setClassFullName(classInfo.getReflectedClass().getName());
-            yamlObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
-            yamlObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
-            yamlObjectDocumentationModel.setObjectClassPath(
-                    Path.of("/").resolve(superiorObjectFileName).resolve("#" + classInfo.getReflectedClass().getSimpleName())
-            );
-
             for (FieldInfo info : infoFields) {
                 if (info.getDataType() == null) {
                     continue;
@@ -133,7 +131,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                 YamlFieldsDocumentationModel yamlFieldsDocumentationModel = new YamlFieldsDocumentationModel();
 
                 Type infoType = Objects.requireNonNullElse(info.getGenericDataType(), info.getClazz());
-                TypeModel infoTypeModel = getObjectsTypeModel(infoType);
+                TypeModel infoTypeModel = getObjectsTypeModel(infoType, visitedObjects);
                 yamlFieldsDocumentationModel.setTypeModel(infoTypeModel);
 
                 if (info.getDataType().equals(ParameterDataType.object_type)) {
@@ -182,15 +180,16 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
         }
     }
 
-    private TypeModel getObjectsTypeModel(Type type) {
+    private TypeModel getObjectsTypeModel(Type type, Map<Class<?>, YamlObjectDocumentationModel> visitedObjects) {
         Function<Class<?>, String> linkAccessor = (clazz) -> {
-            String simpleClassName = clazz.getSimpleName();
-
             if (linkageStore.containsKey(clazz)) {
                 Path infoClassPath = linkageStore.get(clazz);
                 return infoClassPath.toString();
+            } else if (visitedObjects.containsKey(clazz)) {
+                YamlObjectDocumentationModel visitedObject = visitedObjects.get(clazz);
+                return visitedObject.getObjectClassPath().toString();
             } else {
-                return "#" + simpleClassName;
+                return null;
             }
         };
 

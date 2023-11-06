@@ -144,9 +144,7 @@ public class DocumentationReflectionServiceImpl implements DocumentationReflecti
             clazz = (Class<?>) type;
             genericType = null;
 
-            String link = Objects.requireNonNullElseGet(
-                    objectLinkAccessor.apply(clazz),
-                    () -> "#" + clazz.getSimpleName());
+            String link = objectLinkAccessor.apply(clazz);
             typeModel.setClassUsedOnTheFieldPath(link);
         }
 

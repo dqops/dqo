@@ -86,7 +86,7 @@ public class HandlebarsDocumentationUtilities {
             if (displayText != null) {
                 // Only simple objects get complete linkage
                 String templateToReturn = null;
-                if (isSimpleObject(typeModel) || isLinkableEnum(typeModel)) {
+                if ((isSimpleObject(typeModel) || isLinkableEnum(typeModel)) && typeModel.getClassUsedOnTheFieldPath() != null) {
                     templateToReturn = "[%s](" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
                 } else {
                     templateToReturn = "%s";
@@ -108,8 +108,14 @@ public class HandlebarsDocumentationUtilities {
                     return String.format("Dict[%s, %s]", apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
                 case object_type:
                 default:
-                    return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
-                            "(" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
+                    if (typeModel.getClassUsedOnTheFieldPath() != null) {
+                        return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
+                                "(" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
+                    }
+                    else {
+                        return typeModel.getClassNameUsedOnTheField();
+                    }
+
             }
         }
 
