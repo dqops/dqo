@@ -879,12 +879,12 @@ function TreeProvider(props: any) {
   };
 
   const runPartitionedChecks = async (obj: RunChecksParameters) => {
-    await JobApiClient.runChecks(false, undefined, obj);
+    await JobApiClient.runChecks(undefined, false, undefined, obj);
   };
 
   const runChecks = async (node: CustomTreeNode) => {
     if (node.run_checks_job_template) {
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: node.run_checks_job_template
       });
       return;
@@ -927,7 +927,7 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -939,7 +939,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -951,7 +951,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -963,7 +963,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -975,7 +975,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -988,7 +988,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         columnNode?.label ?? ''
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1001,7 +1001,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1014,7 +1014,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1027,7 +1027,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1040,7 +1040,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1050,6 +1050,7 @@ function TreeProvider(props: any) {
   const collectStatisticsOnTable = async (node: CustomTreeNode) => {
     if (node.collect_statistics_job_template) {
       JobApiClient.collectStatisticsOnTable(
+        undefined,
         false,
         undefined,
         node.collect_statistics_job_template
@@ -1082,7 +1083,7 @@ function TreeProvider(props: any) {
       if (colArr && colArr.length > 0) {
         node.data_clean_job_template.columnNames = colArr;
       }
-      JobApiClient.deleteStoredData(false,
+      JobApiClient.deleteStoredData(undefined, false,
         undefined,
         {
         ...node.data_clean_job_template,
@@ -1108,6 +1109,7 @@ function TreeProvider(props: any) {
           break;
       }
       JobApiClient.deleteStoredData(
+        undefined,
         false,
         undefined,
         {

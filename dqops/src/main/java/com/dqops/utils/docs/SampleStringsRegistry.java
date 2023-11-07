@@ -34,6 +34,10 @@ public class SampleStringsRegistry {
         return "sample_table";
     }
 
+    public static String getFullTableName() {
+        return "sample_schema.sample_table";
+    }
+
     public static String getSchemaTableName() {
         return new PhysicalTableName(getSchemaName(), getTableName()).toTableSearchFilter();
     }
@@ -138,6 +142,8 @@ public class SampleStringsRegistry {
         return "window.location";
     }
 
+    public static String getJobId() { return "123123124324324"; }
+
     /**
      * Gets sample string fitting the parameter.
      * @param parameterName Parameter name.
@@ -190,6 +196,8 @@ public class SampleStringsRegistry {
             return getConnectionName();
         } else if (parameterNameLower.contains("schema")) {
             return getSchemaName();
+        } else if (parameterNameLower.contains("full_table_name")) {
+            return getFullTableName();
         } else if (parameterNameLower.contains("table")) {
             return getTableName();
         } else if (parameterNameLower.contains("column")) {
@@ -200,6 +208,8 @@ public class SampleStringsRegistry {
             return getMonthStart();
         } else if (parameterNameLower.contains("month_end")) {
             return getMonthEnd();
+        } else if (parameterNameLower.contains("job_id")) {
+            return getJobId();
         }
 
         throw new IllegalArgumentException("No value found fitting the parameter \"" + parameterName + "\".");

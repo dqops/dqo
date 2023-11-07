@@ -531,6 +531,7 @@ export const EditProfilingReferenceTable = ({
     try {
       setLoading(true);
       const res = await JobApiClient.runChecks(
+        undefined,
         false,
         undefined,
         { check_search_filters: categoryCheck ? categoryCheck?.run_checks_job_template : 

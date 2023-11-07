@@ -184,6 +184,7 @@ const TableColumns = ({
       statistics?.column_statistics.map(async (x, index) =>
         x.column_hash === hashValue
           ? await JobApiClient.collectStatisticsOnTable(
+              undefined,
               false,
               undefined,
               statistics?.column_statistics?.at(index)

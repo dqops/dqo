@@ -61,7 +61,7 @@ const CheckCategoriesView = ({
 
   const onRunChecks = async () => {
     await onUpdate();
-    const res = await JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
@@ -183,6 +183,7 @@ const CheckCategoriesView = ({
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
           JobApiClient.deleteStoredData(
+            undefined,
             false,
             undefined,
             {

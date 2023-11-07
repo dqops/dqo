@@ -562,6 +562,7 @@ Identifies a single job.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |job_id|Job id.|long|
+|job_business_key|Optional job business key that was assigned to the job. A business key is an alternative user assigned unique job identifier used to find the status of a job finding it by the business key.|string|
 |[parent_job_id](\docs\client\models\#dqoqueuejobid)|Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.|[DqoQueueJobId](\docs\client\models\#dqoqueuejobid)|
 
 

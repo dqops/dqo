@@ -79,6 +79,7 @@ const TableColumnsView = () => {
   const collectStatistics = async () => {
     try {
       await JobApiClient.collectStatisticsOnTable(
+        undefined,
         false,
         undefined,
         collectStiatisticsObject);

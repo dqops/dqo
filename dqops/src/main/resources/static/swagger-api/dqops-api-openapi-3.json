@@ -17526,6 +17526,17 @@
         "description" : "Starts a new background job that will run selected data statistics collectors on a whole table",
         "operationId" : "collectStatisticsOnTable",
         "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)",
@@ -17594,6 +17605,17 @@
         "description" : "Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping",
         "operationId" : "collectStatisticsOnDataGroups",
         "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the statistic collection job finishes to run, the default value is false (queue a background job and return the job id)",
@@ -17662,6 +17684,17 @@
         "description" : "Starts a new background job that will delete stored data about check results, sensor readouts etc.",
         "operationId" : "deleteStoredData",
         "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)",
@@ -17730,6 +17763,17 @@
         "description" : "Starts a new background job that will import selected tables.",
         "operationId" : "importTables",
         "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the import tables job finishes to run, the default value is false (queue a background job and return the job id)",
@@ -17873,11 +17917,10 @@
           "description" : "Job id",
           "required" : true,
           "schema" : {
-            "type" : "integer",
-            "format" : "int64",
+            "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "string" ]
           },
           "extensions" : { }
         } ],
@@ -17912,11 +17955,10 @@
           "description" : "Job id",
           "required" : true,
           "schema" : {
-            "type" : "integer",
-            "format" : "int64",
+            "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "string" ]
           },
           "extensions" : { }
         } ],
@@ -17954,11 +17996,10 @@
           "description" : "Job id",
           "required" : true,
           "schema" : {
-            "type" : "integer",
-            "format" : "int64",
+            "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "string" ]
           },
           "extensions" : { }
         }, {
@@ -18003,6 +18044,17 @@
         "description" : "Starts a new background job that will run selected data quality checks",
         "operationId" : "runChecks",
         "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the checks finish to run, the default value is false (queue a background job and return the job id)",
@@ -18073,14 +18125,13 @@
         "parameters" : [ {
           "name" : "jobId",
           "in" : "path",
-          "description" : "Job id",
+          "description" : "Job id, it can be a job business key assigned to the job or a job id generated by DQOps",
           "required" : true,
           "schema" : {
-            "type" : "integer",
-            "format" : "int64",
+            "type" : "string",
             "extensions" : { },
             "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "types" : [ "string" ]
           },
           "extensions" : { }
         }, {
@@ -18210,6 +18261,17 @@
         "description" : "Starts multiple file synchronization jobs that will synchronize files from selected DQOps User home folders to the DQOps Cloud. The default synchronization mode is a full synchronization (upload local files, download new files from the cloud).",
         "operationId" : "synchronizeFolders",
         "parameters" : [ {
+          "name" : "jobBusinessKey",
+          "in" : "query",
+          "description" : "Optional job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
           "name" : "wait",
           "in" : "query",
           "description" : "Wait until the synchronize multiple folders job finishes to run, the default value is false (queue a background job and return the job id)",
@@ -60705,6 +60767,13 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
+          "jobBusinessKey" : {
+            "type" : "string",
+            "description" : "Optional job business key that was assigned to the job. A business key is an alternative user assigned unique job identifier used to find the status of a job finding it by the business key.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
           "parentJobId" : {
             "$ref" : "#/components/schemas/DqoQueueJobId",
             "extensions" : { },
@@ -60729,6 +60798,10 @@
               "type" : "integer",
               "format" : "int64",
               "description" : "Job id."
+            },
+            "jobBusinessKey" : {
+              "type" : "string",
+              "description" : "Optional job business key that was assigned to the job. A business key is an alternative user assigned unique job identifier used to find the status of a job finding it by the business key."
             },
             "parentJobId" : {
               "description" : "Parent job id. Filled only for nested jobs, for example a sub-job that runs data quality checks on a single table.",

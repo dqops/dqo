@@ -10,7 +10,7 @@ from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
-    job_id: int,
+    job_id: str,
     *,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
@@ -55,7 +55,7 @@ def _build_response(
 
 
 def sync_detailed(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -66,7 +66,7 @@ def sync_detailed(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:
@@ -90,7 +90,7 @@ def sync_detailed(
 
 
 def sync(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -101,7 +101,7 @@ def sync(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:
@@ -120,7 +120,7 @@ def sync(
 
 
 async def asyncio_detailed(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -131,7 +131,7 @@ async def asyncio_detailed(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:
@@ -153,7 +153,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
     wait_timeout: Union[Unset, None, int] = UNSET,
@@ -164,7 +164,7 @@ async def asyncio(
     still running, but the wait timeout elapsed.
 
     Args:
-        job_id (int):
+        job_id (str):
         wait_timeout (Union[Unset, None, int]):
 
     Raises:

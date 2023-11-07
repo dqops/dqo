@@ -34,6 +34,7 @@ public abstract class DqoQueueJob<T> {
     private final JobCancellationToken cancellationToken;
     private final Object lock = new Object();
     private DqoQueueJobId jobId;
+    private String jobBusinessKey;
     private Throwable jobExecutionException;
     private DqoUserPrincipal principal;
 
@@ -173,6 +174,22 @@ public abstract class DqoQueueJob<T> {
      */
     public void setJobId(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    /**
+     * Returns a user assigned job business key that is a unique identifier of a job used to find the job.
+     * @return Job business key or null.
+     */
+    public String getJobBusinessKey() {
+        return jobBusinessKey;
+    }
+
+    /**
+     * Sets a job business key that is a user assigned job unique identifier.
+     * @param jobBusinessKey Job business key.
+     */
+    public void setJobBusinessKey(String jobBusinessKey) {
+        this.jobBusinessKey = jobBusinessKey;
     }
 
     /**

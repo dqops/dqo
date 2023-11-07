@@ -68,6 +68,7 @@ const SourceTablesView = ({
 
   const importSelectedTables = async () => {
     const res = await JobApiClient.importTables(
+      undefined,
       false, 
       undefined,
       {
@@ -90,6 +91,7 @@ const SourceTablesView = ({
 
   const importAllTables = async () => {
     const res = await JobApiClient.importTables(
+      undefined,
       false,
       undefined,
       {

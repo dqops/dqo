@@ -82,6 +82,7 @@ const TableActionGroup = ({
       try {
         setLoadingJob(true);
         await JobApiClient.collectStatisticsOnTable(
+          undefined,
           false,
           undefined,
           {
