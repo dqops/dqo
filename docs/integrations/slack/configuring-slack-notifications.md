@@ -72,14 +72,54 @@ To add a Webhook URL to DQOps:
 
 ## Notification example in Slack
 
-Each notification has a slightly different message.
+Each notification type has a slightly different message.
 
-#### **New incident message example**
+### **New incident message example**
+The notifications about a new data quality incident should be published to a dedicated Slack channel visible 
+to the support team that is monitoring and assessing new data quality incidents. It could be the data quality team
+or a 2nd level support team.
+
+This type of notification should be configured in the **A new incident was opened (detected)** field on
+the [webhook configuration](../webhooks/index.md) page. The Slack webhook url for this parameter should
+point to the Slack channel used by the 2nd level support team that is monitoring and reviewing new data quality incidents.
+
+A new incident preview in Slack is shown below.
 
 ![slack-message-open](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-open.png)
 
+### **Acknowledged incident message example**
+After the support team reviews a new data quality [incident](../../working-with-dqo/incidents-and-notifications/incidents.md) in DQOps,
+the support user will change the status of a valid incident to **Acknowledged**.
+Changing the incident status to **Acknowledged** is the next status in the incident management workflow, which means
+that the incident was acknowledged (confirmed), and is assigned to the engineering team (the 3rd level support) to be fixed. 
 
-#### **Acknowledged incident message example**
+This type of notification should be configured in the **An incident was acknowledged** field on
+the [webhook configuration](../webhooks/index.md) page. The Slack webhook url for this parameter should
+point to the Slack channel used by the 3nd level support team that is fixing data quality incidents.
+
+An acknowledged incident preview in Slack is shown below.
+
 ![slack-message-acknowledged](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/slack-message-acknowledged.png)
 
-**Acknowledged**, **Resolved** and **Muted** status messages only differ in the headers.
+The difference from the message published for a new incident is subtle.
+Only the **Acknowledged**, **Resolved** and **Muted** status messages differ in the title.
+
+
+## Setting incident base url
+
+The **View in DQOps** link will open an incident url in DQOps. If your DQOps instance is running in production mode
+and the DQOps web interface is assigned a host name, the base url must be configured. The default base url of DQOps
+is derived from the port number configured using the [--server.port](../../command-line-interface/dqo.md#--server.port) parameter.
+When no additional configuration is applied, the incident url will look like *http://localhost:8888/incidents/bigquery-public-data/2023/10/70cc4354-344f-bf9c-9bab-34ffae2f1179*.
+
+The *http://localhost:8888/* base url can be configured when starting DQOps using
+the [--dqo.instance.return-base-url](../../command-line-interface/dqo.md#--dqo.instance.return-base-url) startup parameter
+as shown in the following example.
+
+```
+dqo> dqo --dqo.instance.return-base-url=https://dqops.mycompany.com/ run
+```
+
+The base url for a DQOps Cloud SaaS instance is already configured, 
+and the base address is *https://&lt;customer&gt;.us.dqops.com* for instances hosted in the USA. 
+
