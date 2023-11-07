@@ -41,7 +41,7 @@ To delete data quality results using the DQOps Shell, use the [data delete comma
 To delete all the data for a connection run the following command
 
 ```
-date delete
+dqo> date delete
 ```
 
 Type the name of the connection you want to delete e.g. 
