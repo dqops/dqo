@@ -4,9 +4,10 @@ from airflow import DAG
 from dqops.airflow.table_import.dqops_table_import_operator import DqopsTableImportOperator
 
 with DAG(
-    dag_id="example_connection_dqops_table_import",
+    dag_id="dqops_table_import_on_example_connection",
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
+    tags=["dqops_example"]
 ) as dag:
     import_table_task = DqopsTableImportOperator(
         task_id="dqops_connection_dqops_table_import_task",

@@ -4,9 +4,10 @@ from airflow import DAG
 from dqops.airflow.collect_statistics.dqops_collect_statistics_operator import DqopsCollectStatisticsOperator
 
 with DAG(
-    dag_id="example_connection_dqops_collect_statistics",
+    dag_id="dqops_collect_statistics_on_example_connection",
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
+    tags=["dqops_example"]
 ) as dag:
     import_table_task = DqopsCollectStatisticsOperator(
         task_id="dqops_connection_dqops_collect_statistics_task",
