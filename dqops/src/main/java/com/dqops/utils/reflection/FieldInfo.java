@@ -348,7 +348,9 @@ public class FieldInfo {
             if (this.clazz.isEnum()) {
                 // convert to a java name
                 String javaEnumFieldName = ((Enum<?>) result).name();
-                return this.getEnumValuesByName().get(javaEnumFieldName).getYamlName();
+                EnumValueInfo enumFieldInfo = this.getEnumValuesByName().values().stream()
+                        .filter(enumValueInfo -> enumValueInfo.getJavaName().equals(javaEnumFieldName)).findAny().get();
+                return enumFieldInfo.getYamlName();
             }
 
             return result;
