@@ -1001,9 +1001,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         parameterDefinitionSpec.setDisplayHint(fieldInfo.getDisplayHint());
         parameterDefinitionSpec.setSampleValues(fieldInfo.getSampleValues() != null ? List.of(fieldInfo.getSampleValues()) : null);
         if (fieldInfo.getDataType() == ParameterDataType.enum_type) {
-            List<String> supportedEnumValues = fieldInfo.getEnumValuesByName().values()
-                    .stream().map(e -> e.getYamlName())
-                    .collect(Collectors.toList());
+            List<String> supportedEnumValues = new ArrayList<>(fieldInfo.getEnumValuesByName().keySet());
             parameterDefinitionSpec.setAllowedValues(supportedEnumValues);
         }
 
