@@ -42,7 +42,7 @@ The example below shows how to run data quality checks from the [DQOps command-l
 by running the [check run](../../command-line-interface/check.md#dqo-check-run) command.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh(1) --table=public.fact_sales(2)
+dqo> check run --connection=sales-dwh(1) --full-table-name=public.fact_sales(2)
 ```
 
 1. The target data source name. Supports patterns such as *name_prefix_\**.
@@ -52,10 +52,10 @@ dqo> check run --connection=sales-dwh(1) --table=public.fact_sales(2)
 
 The parameters passed to the [check run](../../command-line-interface/check.md#dqo-check-run) command are:
 
-| Parameter    | Description                                                                                                                                   | Example                   |
-|--------------|-----------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
-| --connection | Data source name, matches the folder name inside the *$DQO_USER_HOME/sources* folder.                                                         | --connection=sales-dwh    |
-| --table      | The target table name in the format: <schema_name>.<table_name>. This parameter supports patterns such as *target_schema.\** or *\*.fact_\**. | --table=public.fact_sales |
+| Parameter           | Description                                                                                                                                   | Example                             |
+|---------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------|
+| `--connection`      | Data source name, matches the folder name inside the *$DQO_USER_HOME/sources* folder.                                                         | --connection=sales-dwh              |
+| `--full-table-name` | The target table name in the format: <schema_name>.<table_name>. This parameter supports patterns such as *target_schema.\** or *\*.fact_\**. | --full-table-name=public.fact_sales |
 
 
 ## Targeting multiple tables
@@ -81,7 +81,7 @@ Running all data quality checks for all tables in the *public* schema that are d
 beginning with a *dim_* prefix) is shown below.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.dim_*(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.dim_*(1)
 ```
 
 1. The target table name as a pattern that matches only the *public* schema and all tables whose names
@@ -96,7 +96,7 @@ The [check run](../../command-line-interface/check.md#dqo-check-run) command for
 running only one check or all checks from one type is shown below. 
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check=<check>(1) --column=<column>(2)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check=<check>(1) --column=<column>(2)
                --check-type=monitoring(3) --time-scale=daily(4) --category=nulls(5)
 ```
 
@@ -162,7 +162,7 @@ The table-level check are ignored. The `--column=` filter will select column(s) 
 The filter supports also patterns such as `--column=*_id`, `--column=date_*`, or `--column=col_*_id`.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --column=cumulative_confirmed(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --column=cumulative_confirmed(1)
 ```
 
 1.  The column name, supports patterns.
@@ -194,7 +194,7 @@ without running the [monthly_row_count](../../checks/table/volume/row-count.md#m
 we can target it with a `--check=` parameter as shown in the following example.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check=daily_row_count(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check=daily_row_count(1)
 ```
 
 1. The name of the data quality check to run. Other check names are listed in the [Checks](../../checks/index.md) reference.
@@ -233,7 +233,7 @@ The type of checks is filtered using the `--check-type=` parameter. In order to 
 [profiling checks](../checks/profiling-checks/profiling-checks.md), we will use the following command.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check-type=profiling(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=profiling(1)
 ```
 
 1.  Selects the *profiling* checks to run.
@@ -271,7 +271,7 @@ spec:
 The following command line runs all *monitoring* checks.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check-type=monitoring(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=monitoring(1)
 ```
 
 1. Run the *monitoring* checks only.
@@ -309,7 +309,7 @@ spec:
 The `check run` command accepts a `--time-scale=daily` parameter that filters only by *daily* checks.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check-type=monitoring --time-scale=daily(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=monitoring --time-scale=daily(1)
 ```
 
 1.  Selects the *daily* checks. Another supported value is the *monthly* checks.
@@ -358,7 +358,7 @@ The daily partitioned checks are run with the following command.
 
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check-type=partitioned(1) --time-scale=daily
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=partitioned(1) --time-scale=daily
 ```
 
 1. Selects the *partitioned* checks.
@@ -406,7 +406,7 @@ spec:
 The `check run` command will use only the `--time-scale=daily` parameter to run the *daily* checks.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --time-scale=daily(1)
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --time-scale=daily(1)
 ```
 
 1.  All types of *daily* checks are run.
@@ -453,7 +453,7 @@ spec:
 The previous command that runs only *daily monitoring* checks will run both the table and column level checks.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check-type=monitoring --time-scale=daily
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=monitoring --time-scale=daily
 ```
 
 
@@ -506,7 +506,7 @@ We will use the `--category=schema` filter to run the *schema* checks. Additiona
 only *daily monitoring* checks will be run.
 
 ``` { .asc .annotate }
-dqo> check run --connection=sales-dwh --table=public.fact_sales --check-type=monitoring --time-scale=daily
+dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --check-type=monitoring --time-scale=daily
                --category=schema(1)
 ```
 

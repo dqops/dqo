@@ -354,9 +354,15 @@ public class FieldInfo {
             return result;
         }
         catch (InvocationTargetException e) {
-            throw new FieldAccessException("Invocation exception", e);
-        } catch (IllegalAccessException e) {
-            throw new FieldAccessException("Illegal access exception", e);
+            throw new FieldAccessException("Invocation exception when accessing a field " + this.classFieldName + " on class " + parentObject.getClass().getName(), e);
+        }
+        catch (IllegalAccessException e) {
+            throw new FieldAccessException("Illegal access exception when accessing a field " + this.classFieldName + " on class " + parentObject.getClass().getName(), e);
+        }
+        catch (Exception e) {
+            throw new FieldAccessException("Exception thrown when accessing a field " + this.classFieldName + " on class " +
+                    (parentObject != null ?
+                    parentObject.getClass().getName() : null), e);
         }
     }
 
