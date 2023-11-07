@@ -20,6 +20,8 @@ import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.commands.data.impl.DataCliService;
+import com.dqops.cli.completion.completedcommands.IConnectionNameCommand;
+import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.ColumnNameCompleter;
 import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.completion.completers.FullTableNameCompleter;
@@ -49,7 +51,7 @@ import java.util.List;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "delete", header = "Deletes stored data that matches the specified conditions", description = "Deletes stored data that matches specified conditions. Be careful when using this command, as it permanently deletes the selected data and cannot be undone.")
-public class DataDeleteCliCommand extends BaseCommand implements ICommand {
+public class DataDeleteCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
     private DataCliService dataCliService;
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
@@ -76,6 +78,14 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
         this.terminalTableWritter = terminalTableWritter;
     }
 
+    @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
+            completionCandidates = ConnectionNameCompleter.class)
+    private String connection;
+
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
+            completionCandidates = FullTableNameCompleter.class)
+    private String table;
+
     @CommandLine.Option(names = {"-er", "--errors"}, description = "Delete the execution errors")
     private boolean deleteErrors = false;
 
@@ -87,14 +97,6 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Delete the sensor readouts")
     private boolean deleteSensorReadouts = false;
-
-    @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
-            completionCandidates = ConnectionNameCompleter.class)
-    private String connection;
-
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
-            completionCandidates = FullTableNameCompleter.class)
-    private String table;
 
     @CommandLine.Option(names = {"-b", "--begin"}, description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
             converter = StringToLocalDateCliConverterMonthStart.class)
@@ -141,6 +143,38 @@ public class DataDeleteCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-qd", "--quality-dimension"}, description = "Data quality dimension")
     private String qualityDimension;
 
+
+    /**
+     * Returns the connection name.
+     * @return Connection name.
+     */
+    public String getConnection() {
+        return connection;
+    }
+
+    /**
+     * Sets the connection name.
+     * @param connectionName Connection name.
+     */
+    public void setConnection(String connectionName) {
+        this.connection = connectionName;
+    }
+
+    /**
+     * Returns the table name filter.
+     * @return Table name filter.
+     */
+    public String getTable() {
+        return table;
+    }
+
+    /**
+     * Sets the table name filter.
+     * @param tableName Table name filter.
+     */
+    public void setTable(String tableName) {
+        this.table = tableName;
+    }
 
     protected DeleteStoredDataQueueJobParameters createDeletionParameters() {
         DeleteStoredDataQueueJobParameters deleteStoredDataJobParameters = new DeleteStoredDataQueueJobParameters(

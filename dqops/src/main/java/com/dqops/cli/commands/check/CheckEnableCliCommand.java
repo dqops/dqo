@@ -79,7 +79,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports patterns like 'sch*.tab*'",
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name (schema.table), supports patterns like 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class)
     private String table;
 
