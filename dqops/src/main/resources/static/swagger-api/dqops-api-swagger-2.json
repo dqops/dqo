@@ -30242,7 +30242,7 @@
         },
         "jobType" : {
           "type" : "string",
-          "enum" : [ "run checks", "run checks on table", "collect statistics", "collect statistics on table", "queue thread shutdown", "synchronize folder", "synchronize multiple folders", "run scheduled checks by cron", "import schema", "import selected tables", "delete stored data", "repair stored data" ]
+          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
         },
         "parameters" : {
           "$ref" : "#/definitions/DqoJobEntryParametersModel"

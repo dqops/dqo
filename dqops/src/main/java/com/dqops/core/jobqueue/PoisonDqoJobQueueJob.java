@@ -47,7 +47,7 @@ public final class PoisonDqoJobQueueJob extends DqoQueueJob<Void> {
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.QUEUE_THREAD_SHUTDOWN;
+        return DqoJobType.queue_thread_shutdown;
     }
 
     /**

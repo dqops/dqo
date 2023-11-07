@@ -20753,6 +20753,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Data quality check definition list model.",
@@ -20780,6 +20787,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Data quality check definition list model."
@@ -60563,7 +60574,7 @@
             },
             "jobType" : {
               "type" : "string",
-              "enum" : [ "run checks", "run checks on table", "collect statistics", "collect statistics on table", "queue thread shutdown", "synchronize folder", "synchronize multiple folders", "run scheduled checks by cron", "import schema", "import selected tables", "delete stored data", "repair stored data" ]
+              "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
             },
             "parameters" : {
               "originalRef" : "#/components/schemas/DqoJobEntryParametersModel",
@@ -64740,6 +64751,13 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Rule list model",
@@ -64767,6 +64785,10 @@
             "can_edit" : {
               "type" : "boolean",
               "description" : "Boolean flag that decides if the current user can update or delete this object."
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Rule list model"
@@ -65804,6 +65826,13 @@
               "exampleSetFlag" : false
             },
             "types" : [ "array" ]
+          },
+          "yaml_parsing_error" : {
+            "type" : "string",
+            "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "Sensor list model",
@@ -65839,6 +65868,10 @@
                 "originalRef" : "#/components/schemas/ProviderSensorListModel",
                 "$ref" : "#/components/schemas/ProviderSensorListModel"
               }
+            },
+            "yaml_parsing_error" : {
+              "type" : "string",
+              "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
             }
           },
           "description" : "Sensor list model"
@@ -76121,7 +76154,7 @@
       "DqoJobType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "delete stored data", "synchronize folder", "synchronize multiple folders", "import selected tables", "repair stored data", "collect statistics", "run checks on table", "collect statistics on table", "run checks", "import schema", "queue thread shutdown", "run scheduled checks by cron" ]
+        "enum" : [ "delete_stored_data", "import_schema", "repair_stored_data", "run_scheduled_checks_cron", "synchronize_folder", "run_checks_on_table", "run_checks", "collect_statistics", "synchronize_multiple_folders", "queue_thread_shutdown", "collect_statistics_on_table", "import_tables" ]
       },
       "EffectiveScheduleLevelModel" : {
         "type" : "string",

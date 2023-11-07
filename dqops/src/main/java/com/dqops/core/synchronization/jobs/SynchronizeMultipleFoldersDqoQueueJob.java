@@ -205,7 +205,7 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS;
+        return DqoJobType.synchronize_multiple_folders;
     }
 
     /**

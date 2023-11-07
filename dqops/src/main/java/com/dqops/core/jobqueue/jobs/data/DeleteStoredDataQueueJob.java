@@ -195,7 +195,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.DELETE_STORED_DATA;
+        return DqoJobType.delete_stored_data;
     }
 
     /**

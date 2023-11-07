@@ -162,11 +162,11 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
     } else if (checkTypes === 'partitioned') {
       setTabs([
         {
-          label: 'Partitioned Daily',
+          label: 'Partition Daily',
           value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
-          label: 'Partitioned Monthly',
+          label: 'Partition Monthly',
           value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);
@@ -186,11 +186,11 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
           value: CheckRunMonitoringScheduleGroup.monitoring_monthly
         },
         {
-          label: 'Partitioned Daily',
+          label: 'Partition Daily',
           value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
-          label: 'Partitioned Monthly',
+          label: 'Partition Monthly',
           value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);

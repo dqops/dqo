@@ -111,7 +111,7 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.COLLECT_STATISTICS;
+        return DqoJobType.collect_statistics;
     }
 
     /**

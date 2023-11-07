@@ -30,11 +30,11 @@ const pageTabs = [
     value: CheckRunMonitoringScheduleGroup.monitoring_monthly
   },
   {
-    label: 'Partitioned Daily',
+    label: 'Partition Daily',
     value: CheckRunMonitoringScheduleGroup.partitioned_daily
   },
   {
-    label: 'Partitioned Monthly',
+    label: 'Partition Monthly',
     value: CheckRunMonitoringScheduleGroup.partitioned_monthly
   },
 ]
