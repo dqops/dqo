@@ -62,7 +62,7 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             Class<?> yamlClass = yamlDocumentationNode.getClazz();
             YamlSuperiorObjectDocumentationModel yamlSuperiorObjectDocumentationModel = new YamlSuperiorObjectDocumentationModel();
             yamlSuperiorObjectDocumentationModel.setSuperiorClassFullName(yamlClass.getName());
-            yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().toString());
+            yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().toString().replace('\\', '/'));
 
             Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
 
@@ -185,10 +185,10 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
         Function<Class<?>, String> linkAccessor = (clazz) -> {
             if (linkageStore.containsKey(clazz)) {
                 Path infoClassPath = linkageStore.get(clazz);
-                return infoClassPath.toString();
+                return infoClassPath.toString().replace('\\', '/');
             } else if (visitedObjects.containsKey(clazz)) {
                 YamlObjectDocumentationModel visitedObject = visitedObjects.get(clazz);
-                return visitedObject.getObjectClassPath().toString();
+                return visitedObject.getObjectClassPath().toString().replace('\\', '/');
             } else {
                 return null;
             }

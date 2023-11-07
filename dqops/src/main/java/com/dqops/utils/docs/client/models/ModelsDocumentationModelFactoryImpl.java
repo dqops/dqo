@@ -286,7 +286,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             String simpleClassName = clazz.getSimpleName();
             ComponentModel componentModel = componentModelMap.get(simpleClassName);
             if (componentModel != null && componentModel.getDocsLink() != null) {
-                return componentModel.getDocsLink().toString();
+                return componentModel.getDocsLink().toString().replace('\\', '/');
             } else {
                 return "#" + simpleClassName;
             }

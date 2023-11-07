@@ -27,7 +27,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Rule model|[RuleModel](\docs\client\models\rules\#rulemodel)| |
+|Rule model|[RuleModel](/docs/client/models/rules/#rulemodel)| |
 
 
 
@@ -94,7 +94,7 @@ http://localhost:8888/api/rules
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|rule_list_model||List[[RuleListModel](\docs\client\models\rules\#rulelistmodel)]|
+|rule_list_model||List[[RuleListModel](/docs/client/models/rules/#rulelistmodel)]|
 
 
 
@@ -128,7 +128,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_model](\docs\client\models\rules\#rulemodel)||[RuleModel](\docs\client\models\rules\#rulemodel)|
+|[rule_model](/docs/client/models/rules/#rulemodel)||[RuleModel](/docs/client/models/rules/#rulemodel)|
 
 
 
@@ -169,7 +169,7 @@ http://localhost:8888/api/definitions/rules
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_folder_model](\docs\client\models\rules\#rulefoldermodel)||[RuleFolderModel](\docs\client\models\rules\#rulefoldermodel)|
+|[rule_folder_model](/docs/client/models/rules/#rulefoldermodel)||[RuleFolderModel](/docs/client/models/rules/#rulefoldermodel)|
 
 
 
@@ -214,7 +214,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of rule definitions|[RuleModel](\docs\client\models\rules\#rulemodel)| |
+|List of rule definitions|[RuleModel](/docs/client/models/rules/#rulemodel)| |
 
 
 

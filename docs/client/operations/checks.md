@@ -27,7 +27,7 @@ http://localhost:8888/api/checks/{fullCheckName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check model|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)| |
+|Check model|[CheckDefinitionModel](/docs/client/models/checks/#checkdefinitionmodel)| |
 
 
 
@@ -94,7 +94,7 @@ http://localhost:8888/api/checks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_definition_list_model||List[[CheckDefinitionListModel](\docs\client\models\checks\#checkdefinitionlistmodel)]|
+|check_definition_list_model||List[[CheckDefinitionListModel](/docs/client/models/checks/#checkdefinitionlistmodel)]|
 
 
 
@@ -128,7 +128,7 @@ http://localhost:8888/api/checks/{fullCheckName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_model](\docs\client\models\checks\#checkdefinitionmodel)||[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)|
+|[check_definition_model](/docs/client/models/checks/#checkdefinitionmodel)||[CheckDefinitionModel](/docs/client/models/checks/#checkdefinitionmodel)|
 
 
 
@@ -169,7 +169,7 @@ http://localhost:8888/api/definitions/checks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_folder_model](\docs\client\models\checks\#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](\docs\client\models\checks\#checkdefinitionfoldermodel)|
+|[check_definition_folder_model](/docs/client/models/checks/#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](/docs/client/models/checks/#checkdefinitionfoldermodel)|
 
 
 
@@ -214,7 +214,7 @@ http://localhost:8888/api/checks/{fullCheckName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of check definitions|[CheckDefinitionModel](\docs\client\models\checks\#checkdefinitionmodel)| |
+|List of check definitions|[CheckDefinitionModel](/docs/client/models/checks/#checkdefinitionmodel)| |
 
 
 

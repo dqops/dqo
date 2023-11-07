@@ -212,7 +212,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             String simpleClassName = clazz.getSimpleName();
             ComponentModel linkageComponent = componentModelMap.get(simpleClassName);
             if (linkageComponent != null && linkageComponent.getDocsLink() != null) {
-                return linkageComponent.getDocsLink().toString();
+                return linkageComponent.getDocsLink().toString().replace('\\', '/');
             }
             return null;
         };

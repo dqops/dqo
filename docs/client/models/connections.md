@@ -8,8 +8,8 @@
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
-|[check_model_patch](\docs\client\models\#checkmodel)|Sample configured check model which will pasted onto selected checks.|[CheckModel](\docs\client\models\#checkmodel)|
+|[check_search_filters](/docs/client/models/#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](/docs/client/models/#checksearchfilters)|
+|[check_model_patch](/docs/client/models/#checkmodel)|Sample configured check model which will pasted onto selected checks.|[CheckModel](/docs/client/models/#checkmodel)|
 |selected_tables_to_columns|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|Dict[string, string_list]|
 |override_conflicts|Override existing configurations if they&#x27;re present. If false, apply updates only to the fields for which no configuration exists.|boolean|
 
@@ -25,7 +25,7 @@ ___
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_search_filters](\docs\client\models\#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](\docs\client\models\#checksearchfilters)|
+|[check_search_filters](/docs/client/models/#checksearchfilters)|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|[CheckSearchFilters](/docs/client/models/#checksearchfilters)|
 |selected_tables_to_columns|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|Dict[string, string_list]|
 
 
@@ -58,7 +58,7 @@ Connection model returned by the rest api.
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name.|string|
 |connection_hash|Connection hash that identifies the connection using a unique hash code.|long|
-|[spec](\docs\reference\yaml\connectionyaml\#connectionspec)|Full connection specification, including all nested objects (but not a list of tables).|[ConnectionSpec](\docs\reference\yaml\connectionyaml\#connectionspec)|
+|[spec](/docs/reference/yaml/connectionyaml/#connectionspec)|Full connection specification, including all nested objects (but not a list of tables).|[ConnectionSpec](/docs/reference/yaml/connectionyaml/#connectionspec)|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
 |yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 

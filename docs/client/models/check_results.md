@@ -15,7 +15,7 @@ Check detailed results. Returned in the context of a single data group, with a s
 |check_type|Check type.|string|
 |data_groups|Data groups list.|string_list|
 |data_group|Selected data group.|string|
-|check_result_entries|Single check results|List[[CheckResultEntryModel](\docs\client\models\incidents\#checkresultentrymodel)]|
+|check_result_entries|Single check results|List[[CheckResultEntryModel](/docs/client/models/incidents/#checkresultentrymodel)]|
 
 
 ___  
