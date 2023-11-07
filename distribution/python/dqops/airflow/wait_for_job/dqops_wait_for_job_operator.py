@@ -31,25 +31,25 @@ from dqops.client.types import UNSET, Response, Unset
 
 class DqopsWaitForJobOperator(BaseOperator):
     """
-    Airflow wait for job operator for ################################ todo.
+    Airflow wait for job operator used to wait until an another job has finished.
+    The operator should be used for long running jobs to track the status
 
     """
 
     def __init__(
         self,
-        job_id: int,
         *,
+        task_id_to_wait_for: Union[Unset, None, str] = UNSET,
         base_url: str = "http://localhost:8888/",
         wait_timeout: Union[Unset, None, int] = UNSET,
         fail_on_timeout: bool = True,
-        task_instance_name,
         **kwargs
     ) -> Union[Dict[str, Any], None]:
         """
         Parameters
         ----------
-        job_id : int
-            ####################################################################### todo
+        task_id_to_wait_for : int
+            The id of a task that the operator will wait for.
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
         wait_timeout : int
@@ -59,11 +59,10 @@ class DqopsWaitForJobOperator(BaseOperator):
         """
 
         super().__init__(**kwargs)
-        self.job_id: int = job_id
+        self.task_id_to_wait_for = task_id_to_wait_for
         self.base_url: str = extract_base_url(base_url)
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
-        self.task_instance_name = task_instance_name
 
     def execute(self, context):
         client: Client = create_client(
@@ -71,12 +70,17 @@ class DqopsWaitForJobOperator(BaseOperator):
         )
 
         try:
+            if self.task_id_to_wait_for != UNSET:
+                task_to_track: str = self.task_id_to_wait_for
+            else:
+                task_to_track = print(next(iter(context['task'].upstream_task_ids)))
+
             ti: TaskInstance = context.get("task_instance")
             xcom_job_result: ImportTablesQueueJobResult = ti.xcom_pull(
-                key="return_value", task_ids=self.task_instance_name
+                key="return_value", task_ids=task_to_track
             )
 
-            job_id = xcom_job_result["jobId"]["jobId"]
+            job_id: int = xcom_job_result["jobId"]["jobId"]
 
             response: Response[DqoJobHistoryEntryModel] = sync_detailed(
                 job_id=job_id,
@@ -95,13 +99,10 @@ class DqopsWaitForJobOperator(BaseOperator):
         )
         logging.info(job_result.to_dict())
 
-        if job_result.status == DqoJobStatus.FAILED:
-            raise DqopsJobFailedException()
-
-        if job_result.status == DqoJobStatus.RUNNING:
-            handle_dqo_timeout(self.fail_on_timeout)
-
-        if job_result.status != DqoJobStatus.SUCCEEDED:
+        if (job_result.status == DqoJobStatus.RUNNING or 
+            job_result.status == DqoJobStatus.WAITING or 
+            job_result.status == DqoJobStatus.QUEUED
+        ):
             raise DqopsUnfinishedJobException()
 
         return job_result.to_dict()
