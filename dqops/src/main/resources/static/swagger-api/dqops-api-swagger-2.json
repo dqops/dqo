@@ -30242,7 +30242,7 @@
         },
         "jobType" : {
           "type" : "string",
-          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_by_cron", "import_schema", "import_selected_tables", "delete_stored_data", "repair_stored_data" ]
+          "enum" : [ "run_checks", "run_checks_on_table", "collect_statistics", "collect_statistics_on_table", "queue_thread_shutdown", "synchronize_folder", "synchronize_multiple_folders", "run_scheduled_checks_cron", "import_schema", "import_tables", "delete_stored_data", "repair_stored_data" ]
         },
         "parameters" : {
           "$ref" : "#/definitions/DqoJobEntryParametersModel"

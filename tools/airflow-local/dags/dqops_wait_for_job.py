@@ -19,13 +19,22 @@ with DAG(
         schema_name="maven_restaurant_ratings",
         table_names=["ratings"]
     )
+
+    import_table_task_2 = DqopsTableImportOperator(
+        task_id="dqops_connection_dqops_table_import_task_2",
+        # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
+        base_url="http://host.docker.internal:8888",
+        connection_name="example_connection",
+        schema_name="maven_restaurant_ratings",
+        table_names=["consumers"]
+    )
     
     wait_for_job = DqopsWaitForJobOperator(
         task_id="dqops_wait_for_job",
         # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
         base_url="http://host.docker.internal:8888",
         # the total time in seconds for the operator to wait will be the product of retries number and the retry_delay
-        retries=5,
+        retries=2,
         retry_delay=10, # in seconds
         trigger_rule="all_done"
         # the below parameter is set automatically when the wait for job operator has the only one upstream task

@@ -117,7 +117,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_SCHEDULED_CHECKS_CRON;
+        return DqoJobType.run_scheduled_checks_cron;
     }
 
     /**

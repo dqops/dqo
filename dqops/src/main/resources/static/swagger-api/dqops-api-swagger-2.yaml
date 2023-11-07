@@ -28953,9 +28953,9 @@ definitions:
         - "queue_thread_shutdown"
         - "synchronize_folder"
         - "synchronize_multiple_folders"
-        - "run_scheduled_checks_by_cron"
+        - "run_scheduled_checks_cron"
         - "import_schema"
-        - "import_selected_tables"
+        - "import_tables"
         - "delete_stored_data"
         - "repair_stored_data"
       parameters:

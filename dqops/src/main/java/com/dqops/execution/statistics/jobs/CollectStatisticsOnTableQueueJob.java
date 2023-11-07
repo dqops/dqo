@@ -113,7 +113,7 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.COLLECT_STATISTICS_ON_TABLE;
+        return DqoJobType.collect_statistics_on_table;
     }
 
     /**

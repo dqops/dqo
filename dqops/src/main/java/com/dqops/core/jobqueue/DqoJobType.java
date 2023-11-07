@@ -21,39 +21,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Job type that identifies a job by type.
  */
 public enum DqoJobType {
-    @JsonProperty("run_checks")
-    RUN_CHECKS,
-
-    @JsonProperty("run_checks_on_table")
-    RUN_CHECKS_ON_TABLE,
-
-    @JsonProperty("collect_statistics")
-    COLLECT_STATISTICS,
-
-    @JsonProperty("collect_statistics_on_table")
-    COLLECT_STATISTICS_ON_TABLE,
-
-    @JsonProperty("queue_thread_shutdown")
-    QUEUE_THREAD_SHUTDOWN,
-
-    @JsonProperty("synchronize_folder")
-    SYNCHRONIZE_FOLDER,
-
-    @JsonProperty("synchronize_multiple_folders")
-    SYNCHRONIZE_MULTIPLE_FOLDERS,
-
-    @JsonProperty("run_scheduled_checks_by_cron")
-    RUN_SCHEDULED_CHECKS_CRON,
-
-    @JsonProperty("import_schema")
-    IMPORT_SCHEMA,
-
-    @JsonProperty("import_selected_tables")
-    IMPORT_TABLES,
-
-    @JsonProperty("delete_stored_data")
-    DELETE_STORED_DATA,
-
-    @JsonProperty("repair_stored_data")
-    REPAIR_STORED_DATA,
+    run_checks,
+    run_checks_on_table,
+    collect_statistics,
+    collect_statistics_on_table,
+    queue_thread_shutdown,
+    synchronize_folder,
+    synchronize_multiple_folders,
+    run_scheduled_checks_cron,
+    import_schema,
+    import_tables,
+    delete_stored_data,
+    repair_stored_data,
 }

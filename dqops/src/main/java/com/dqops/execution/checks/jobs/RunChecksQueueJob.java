@@ -101,7 +101,7 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_CHECKS;
+        return DqoJobType.run_checks;
     }
 
     /**

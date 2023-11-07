@@ -13,6 +13,7 @@ Check list model that is returned by the REST API.
 |custom|This check has is a custom check or was customized by the user.|boolean|
 |built_in|This check is provided with DQOps as a built-in check.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
+|yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
 ___  

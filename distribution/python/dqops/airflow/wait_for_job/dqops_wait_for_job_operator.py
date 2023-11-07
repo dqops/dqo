@@ -6,15 +6,13 @@ from airflow.models.baseoperator import BaseOperator
 from airflow.models.taskinstance import TaskInstance
 from httpx import ReadTimeout
 
-from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
-    DqopsJobFailedException,
+from dqops.airflow.common.exceptions.dqops_unfinished_job_exception import (
+    DqopsUnfinishedJobException,
 )
-from dqops.airflow.common.exceptions.dqops_unfinished_job_exception import DqopsUnfinishedJobException
 from dqops.airflow.common.tools.client_creator import create_client
 from dqops.airflow.common.tools.server_response_verifier import (
     verify_server_response_correctness,
 )
-from dqops.airflow.common.tools.timeout.dqo_timeout import handle_dqo_timeout
 from dqops.airflow.common.tools.timeout.python_client_timeout import (
     handle_python_timeout,
 )
@@ -73,7 +71,7 @@ class DqopsWaitForJobOperator(BaseOperator):
             if self.task_id_to_wait_for != UNSET:
                 task_to_track: str = self.task_id_to_wait_for
             else:
-                task_to_track = print(next(iter(context['task'].upstream_task_ids)))
+                task_to_track = print(next(iter(context["task"].upstream_task_ids)))
 
             ti: TaskInstance = context.get("task_instance")
             xcom_job_result: ImportTablesQueueJobResult = ti.xcom_pull(
@@ -99,9 +97,10 @@ class DqopsWaitForJobOperator(BaseOperator):
         )
         logging.info(job_result.to_dict())
 
-        if (job_result.status == DqoJobStatus.RUNNING or 
-            job_result.status == DqoJobStatus.WAITING or 
-            job_result.status == DqoJobStatus.QUEUED
+        if (
+            job_result.status == DqoJobStatus.RUNNING
+            or job_result.status == DqoJobStatus.WAITING
+            or job_result.status == DqoJobStatus.QUEUED
         ):
             raise DqopsUnfinishedJobException()
 

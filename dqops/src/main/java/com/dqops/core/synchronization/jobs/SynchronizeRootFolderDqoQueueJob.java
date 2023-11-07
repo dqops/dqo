@@ -87,7 +87,7 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.SYNCHRONIZE_FOLDER;
+        return DqoJobType.synchronize_folder;
     }
 
     /**

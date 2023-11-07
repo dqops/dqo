@@ -408,7 +408,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                             this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
                         }
 
-                        if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS) {
+                        if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.synchronize_multiple_folders) {
                             // we will keep only the last most recent successful synchronization job
                             removeOlderSynchronizeMultipleFoldersJobs(jobChange.getJobId());
                         }
@@ -444,10 +444,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void removeOlderSynchronizeMultipleFoldersJobs(final DqoQueueJobId jobIdToKeep) {
         Set<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
-                .filter(e -> e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS ||
-                        e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_FOLDER)
-                .filter(e -> (e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS  && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
-                        (e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_FOLDER && e.getKey().getParentJobId() != null &&
+                .filter(e -> e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders ||
+                        e.getValue().getJobType() == DqoJobType.synchronize_folder)
+                .filter(e -> (e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
+                        (e.getValue().getJobType() == DqoJobType.synchronize_folder && e.getKey().getParentJobId() != null &&
                                 e.getKey().getParentJobId().getJobId() != jobIdToKeep.getJobId()))
                 .map(e -> e.getKey())
                 .collect(Collectors.toSet());
