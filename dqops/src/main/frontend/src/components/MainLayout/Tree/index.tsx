@@ -59,7 +59,7 @@ const Tree = () => {
     const jobs = Object.values(job_dictionary_state).filter(
       (item) =>
         item.jobType ===
-        DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables
+        DqoJobHistoryEntryModelJobTypeEnum.import_tables
     );
 
     jobs.forEach((job: DqoJobHistoryEntryModel) => {

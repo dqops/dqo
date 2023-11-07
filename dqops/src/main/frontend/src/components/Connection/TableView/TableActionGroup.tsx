@@ -8,6 +8,7 @@ import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 
 import {
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
@@ -94,7 +95,7 @@ const TableActionGroup = ({
 
   const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
     (x) =>
-      x.jobType === 'collect statistics' &&
+      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
       x.parameters?.collectStatisticsParameters
         ?.statistics_collector_search_filters?.schemaTableName ===
         schema + '.' + table && 

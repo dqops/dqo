@@ -172,7 +172,7 @@ const Header = () => {
   useEffect(() => {
     if (
       Object.values(job_dictionary_state)
-        .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables)
+        .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables)
         .find(
           (y) =>
             y.status === DqoJobChangeModelStatusEnum.queued ||
@@ -187,7 +187,7 @@ const Header = () => {
               (key) =>
                 job_dictionary_state[key] ===
                 Object.values(job_dictionary_state)
-                  .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables)
+                  .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables)
                   ?.find(
                     (y) =>
                     y.status === DqoJobChangeModelStatusEnum.queued ||
@@ -201,7 +201,7 @@ const Header = () => {
       dispatch(
         setAdvisorObject(
           Object.values(job_dictionary_state).find(
-            (x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.importx20selectedx20tables
+            (x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables
           )?.parameters?.importTableParameters ?? {}
         )
       );

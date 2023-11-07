@@ -133,7 +133,7 @@ Job type that identifies a job by type.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|delete stored data<br/>synchronize folder<br/>synchronize multiple folders<br/>import selected tables<br/>repair stored data<br/>collect statistics<br/>run checks on table<br/>collect statistics on table<br/>run checks<br/>import schema<br/>queue thread shutdown<br/>run scheduled checks by cron<br/>|
+|string|delete_stored_data<br/>import_schema<br/>repair_stored_data<br/>run_scheduled_checks_cron<br/>synchronize_folder<br/>run_checks_on_table<br/>run_checks<br/>collect_statistics<br/>synchronize_multiple_folders<br/>queue_thread_shutdown<br/>collect_statistics_on_table<br/>import_tables<br/>|
 
 ___  
 

@@ -11,6 +11,7 @@ import {
 } from '../../services/apiClient';
 import {
   DataGroupingConfigurationSpec,
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   StatisticsCollectorSearchFilters,
   TableColumnsStatisticsModel
@@ -94,7 +95,7 @@ const TableColumnsView = () => {
   }
   const filteredJobs = Object.values(job_dictionary_state)?.filter(
     (x) =>
-      x.jobType === 'collect statistics' &&
+      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
       x.parameters?.collectStatisticsParameters
         ?.statistics_collector_search_filters?.schemaTableName ===
         schemaName + '.' + tableName &&

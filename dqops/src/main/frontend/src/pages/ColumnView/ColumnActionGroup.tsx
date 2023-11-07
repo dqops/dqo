@@ -9,7 +9,10 @@ import Loader from '../../components/Loader';
 import AddColumnDialog from '../../components/CustomTree/AddColumnDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { DqoJobHistoryEntryModelStatusEnum } from '../../api';
+import {
+    DqoJobHistoryEntryModelJobTypeEnum,
+    DqoJobHistoryEntryModelStatusEnum
+} from '../../api';
 import SvgIcon from '../../components/SvgIcon';
 
 interface IActionGroupProps {
@@ -50,7 +53,7 @@ const ColumnActionGroup = ({
 
   const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
     (x) =>
-      x.jobType === 'collect statistics' &&
+      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
       x.parameters?.collectStatisticsParameters
         ?.statistics_collector_search_filters?.schemaTableName ===
         schema + '.' + table && 

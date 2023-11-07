@@ -5,10 +5,11 @@ from dqops.airflow.table_status.dqops_assert_table_status_operator import DqopsA
 from dqops.client.models.check_type import CheckType
 
 with DAG(
-    dag_id="example_connection_dqops_assert_table_status",
+    dag_id="dqops_assert_table_status_on_example_connection",
     schedule=datetime.timedelta(hours=12),
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
+    tags=["dqops_example"]
 ) as dag:
     assert_status_task = DqopsAssertTableStatusOperator(
         task_id="dqops_assert_table_status_operator_task",

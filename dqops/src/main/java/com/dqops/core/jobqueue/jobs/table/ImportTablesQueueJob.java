@@ -157,7 +157,7 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.IMPORT_TABLES;
+        return DqoJobType.import_tables;
     }
 
     /**
