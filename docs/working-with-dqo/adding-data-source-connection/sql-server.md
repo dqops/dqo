@@ -8,7 +8,7 @@ transaction processing, business intelligence and analytics applications in corp
 You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol 
 options for a specific IP address. In case of restrictions, you need to add the IP address used by DQOps to [Allowed IP Addresses in SQL Server Network Policies](https://learn.microsoft.com/en-us/sql/tools/configuration-manager/tcp-ip-properties-ip-addresses-tab?view=sql-server-ver16).
 
-## Adding SQL Server connection using the graphical interface
+## Adding SQL Server connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 

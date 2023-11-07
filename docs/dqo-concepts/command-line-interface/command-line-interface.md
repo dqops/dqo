@@ -1,7 +1,7 @@
 # Working with Command-Line Interface
 
 The DQOps Command-Line Interface enables you to interact with DQOps using commands in Linux shells or Windows command prompt.
-DQOps CLI is an alternative to DQOps graphical user interface.
+DQOps CLI is an alternative to DQOps user interface.
 
 ## Command structure
 

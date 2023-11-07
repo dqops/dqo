@@ -9,7 +9,7 @@ You need a Redshift account. Amazon Redshift uses an elastic IP address for the 
 address is a static IP address. In case of restrictions, you need to add the IP address used by DQOps
 to [Allowed IP Addresses in Redshift Network Policies](https://docs.aws.amazon.com/redshift/latest/mgmt/managing-clusters-vpc.html).
 
-## Adding Redshift connection using the graphical interface
+## Adding Redshift connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 

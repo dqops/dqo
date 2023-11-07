@@ -261,9 +261,9 @@ spec:
 ```
 
 
-## Evaluating the schedule settings using the graphical interface
+## Evaluating the schedule settings using the user interface
 
-To evaluate schedule settings that have been configured in YAML files open the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
+To evaluate schedule settings that have been configured in YAML files open the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
 
 To view the connection-level schedule:
 
@@ -292,9 +292,9 @@ To view and modify individual check-level schedules:
     ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override.png)
 
 
-## Starting a scheduler using the graphical interface
+## Starting a scheduler using the user interface
 
-To start a scheduler using the graphical interface, simply select the **Notification** icon in the upper right corner and
+To start a scheduler using the user interface, simply select the **Notification** icon in the upper right corner and
 toggle the button next to the **Jobs scheduler**.
 
 ![Starting scheduler](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-starting-scheduler.png)

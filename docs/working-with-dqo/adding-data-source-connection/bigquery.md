@@ -11,7 +11,7 @@ To add BigQuery data source connection to DQOps you need the following:
   - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete)
   - A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials](./#using-google-application-credentials-authentication) authentication
 
-## Adding BigQuery connection using the graphical interface
+## Adding BigQuery connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 

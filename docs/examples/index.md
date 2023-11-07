@@ -51,10 +51,10 @@ To run the examples, follow the steps below.
         ./run_dqo
         ```
 
-2. Create DQOps `userhome` folder.
+2. Create DQOps `DQOps user home` folder.
 
-    After installation, you will be asked whether to initialize the DQOps userhome folder in the default location. Type Y to create the folder.  
-    The userhome folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
+    After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder.  
+    The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
 
 
 3. Login to DQOps Cloud.
@@ -62,15 +62,15 @@ To run the examples, follow the steps below.
     To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
     must create a DQOps cloud account.
  
-    After creating an userhome folder, you will be asked whether to log in to the DQOps cloud. After typing Y, you will be
+    After creating the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md), you will be asked whether to log in to the DQOps cloud. After typing Y, you will be
     redirected to https://cloud.dqops.com/registration, where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQOps application.
     The API Key is now stored in the configuration file.
 
-### **Executing the checks using the graphical interface**
+### **Executing the checks using the user interface**
 
-You can execute the checks using the [graphical interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
+You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
 Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
@@ -111,7 +111,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
     To see the results which you should expect, refer to the description of each example.
 
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 

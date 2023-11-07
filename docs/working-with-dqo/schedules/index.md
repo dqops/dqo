@@ -3,7 +3,7 @@
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-To set up schedule you can use the graphical interface as described below or manually modify the YAML configuration file as [described here.](./configuring-schedules-by-modifying-yaml-file.md)
+To set up schedule you can use the user interface as described below or manually modify the YAML configuration file as [described here.](./configuring-schedules-by-modifying-yaml-file.md)
 
 Different types of checks, such as Profiling, Monitoring, and Partitioned, have their own schedules. For more information
 on these different check types, please refer to the [DQOps Concepts section](../../dqo-concepts/checks/index.md).  
@@ -59,7 +59,7 @@ connection or table.
 To initiate a scheduler in the DQOps Shell, simply enter the command `scheduler start`. To stop the scheduler, use the 
 command `scheduler stop`.
 
-You can also use the graphical interface to start the scheduler. Simply enable **Jobs scheduler** located in the Notifications
+You can also use the user interface to start the scheduler. Simply enable **Jobs scheduler** located in the Notifications
 on the [right side of the navigation bar.](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
 
 For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md). 

@@ -57,7 +57,7 @@ To start DQOps in a Shell mode follow the steps below.
     docker run -v .:/dqo/userhome -it -p 8888:8888 dqops/dqo
     ```
 
-4. After a few seconds you can use the DQOps terminal or open the graphical interface by 
+4. After a few seconds you can use the DQOps terminal or open the user interface by 
    opening [http://localhost:8888](http://localhost:8888) in a web browser. 
 
 

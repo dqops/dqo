@@ -8,7 +8,7 @@ You need a Snowflake account. By default, Snowflake instances are open to any IP
 policies that restrict this communication. In case of restrictions you need to add the IP address used by DQOps to 
 [Allowed IP Addresses in Snowflake Network Policies](https://docs.snowflake.com/en/user-guide/network-policies#modifying-network-policies).
 
-## Adding Snowflake connection using the graphical interface
+## Adding Snowflake connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 

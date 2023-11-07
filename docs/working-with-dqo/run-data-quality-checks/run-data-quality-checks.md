@@ -2,16 +2,16 @@
 
 In DQOps there are two ways to enable and run data quality checks:
 
-- using the graphical interface 
+- using the user interface 
 - using DQOps Shell
 
 To enable checks, you need to add a connection. You can learn [how to add connection here](../adding-data-source-connection/index.md).
 
 For more information about different categories of checks, see [DQOps concepts section](../../dqo-concepts/checks/index.md).
 
-## Run data quality checks using the graphical interface
+## Run data quality checks using the user interface
 
-1. In DQOps graphical interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
+1. In DQOps user interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
 
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
    

@@ -2,7 +2,7 @@
 
 In DQOps, there are two ways to delete stored data quality results:
 
-- using the graphical interface 
+- using the user interface 
 - using DQOps Shell
 
 In DQOps, sensor readouts and check results are stored as Apache Parquet files following the Apache
@@ -13,13 +13,13 @@ For more information where and how the sensor readouts and check results are sto
 You can learn [how to run data quality checks here](../run-data-quality-checks/run-data-quality-checks.md).
 
 
-## Delete data quality results using the graphical interface
+## Delete data quality results using the user interface
 
-Using graphical interface you can delete data quality results at the connection, table, column, group of checks or individual check level.
+Using user interface you can delete data quality results at the connection, table, column, group of checks or individual check level.
 
 To delete the data quality results at the connection, table or column level follow the steps below
 
-1. In DQOps graphical interface, click on the three-dot icon next to the name of a connection, table or column in the tree view.
+1. In DQOps user interface, click on the three-dot icon next to the name of a connection, table or column in the tree view.
 
     ![Click three-dot icon](https://dqops.com/docs/images/working-with-dqo/delete-data-quality-results/click-three-dot-icon.jpg)
 
