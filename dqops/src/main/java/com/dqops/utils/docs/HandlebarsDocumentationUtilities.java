@@ -23,7 +23,6 @@ import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -43,6 +42,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelpers(StringHelpers.class);
         handlebars.registerHelpers(ConditionalHelpers.class);
         handlebars.registerHelper("render-type", renderTypeHelper);
+        handlebars.registerHelper("checkmark", checkmarkHelper);
     }
 
     /**
@@ -129,5 +129,13 @@ public class HandlebarsDocumentationUtilities {
         private boolean isSimpleObject(TypeModel typeModel) {
             return isObject(typeModel) && typeModel.getObjectDataType() == ObjectDataType.object_type;
         }
+    };
+
+    private static final Helper<Boolean> checkmarkHelper = (bool, _ignore) -> {
+        if (bool == null || !bool) {
+            return " ";
+        }
+
+        return ":material-check-bold:";
     };
 }
