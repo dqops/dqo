@@ -70,11 +70,11 @@ a list of all states and other related regions and with their unique codes (`sta
 | **12**          | FL                        | Florida              | 294478       |
 
 
-## Running the checks in the example and evaluating the results using the graphical interface
+## Running the checks in the example and evaluating the results using the user interface
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-foreign-key-match-percent-checks.png)
 
@@ -117,7 +117,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
     ![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results.png)
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 

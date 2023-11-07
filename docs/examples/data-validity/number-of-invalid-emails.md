@@ -41,11 +41,11 @@ The `email` column of interest contains both valid and invalid email values.
 | 15  | **user7@mail**              | 1        | Connecticu               | 1                           | missing          |
 
 
-## Running the checks in the example and evaluating the results using the graphical interface
+## Running the checks in the example and evaluating the results using the user interface
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-email-count-checks.png)
 
@@ -87,7 +87,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
     ![String-invalid-email-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-email-count-check-results.png)
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 

@@ -9,7 +9,7 @@ choice for applications that require high performance.
 You need a MySQL account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol options
 for a specific IP address. In case of restrictions, you need to add the IP address used by DQOps to [NDB Cluster TCP/IP Connections Using Direct Connections](https://dev.mysql.com/doc/refman/8.0/en/mysql-cluster-tcp-definition-direct.html).
 
-## Adding MySQL connection using the graphical interface
+## Adding MySQL connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 

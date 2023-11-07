@@ -1,7 +1,7 @@
 # Configuring schedule by modifying the YAML file
 
 In this section, we describe how you can customize when checks are run by setting schedules by modifying the YAML files.
-Instructions on how to configure the schedule using the graphical interface can be found [here.](./index.md)
+Instructions on how to configure the schedule using the user interface can be found [here.](./index.md)
 
 ## Configuring a schedule at the connection level
 

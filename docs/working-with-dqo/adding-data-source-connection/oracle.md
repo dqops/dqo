@@ -7,7 +7,7 @@ users such as delivering high performance, protecting users from unauthorized ac
 
 You need an Oracle account. 
 
-## Adding Oracle connection using the graphical interface
+## Adding Oracle connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 

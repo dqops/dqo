@@ -18,11 +18,11 @@ The data grouping should be configured individually for each table, which allows
 table that will be used in the **GROUP BY** clause to identify each group of data coming from a different data source.
 
 
-## Set up data grouping using the graphical interface
+## Set up data grouping using the user interface
 
 To set up the default data grouping configuration template at the data source level, follow the steps below.
 
-1. In DQOps graphical interface, go to the **Data Source** section, select the data source of interest in the tree view on the left
+1. In DQOps user interface, go to the **Data Source** section, select the data source of interest in the tree view on the left
     side, and select **Default Grouping Template** tab.
 
     ![Default data stream template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/default-data-stream-template.jpg)
