@@ -352,13 +352,13 @@ const ContextMenu = ({
                   deleteStoredData(
                     node,
                     params,
-                    node.run_checks_job_template?.columnName && [
-                      node.run_checks_job_template?.columnName
+                    node.run_checks_job_template?.column && [
+                      node.run_checks_job_template?.column
                     ]
                   );
                   setOpen(false);
                 }}
-                nameOfCol={node.run_checks_job_template?.columnName}
+                nameOfCol={node.run_checks_job_template?.column}
                 nodeId={String(node.id)}
               />
             </>

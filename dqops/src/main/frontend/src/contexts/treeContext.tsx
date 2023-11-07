@@ -1111,8 +1111,8 @@ function TreeProvider(props: any) {
         false,
         undefined,
         {
-        connectionName: node.collect_statistics_job_template?.connectionName,
-        schemaTableName: node.collect_statistics_job_template?.schemaTableName,
+        connection: node.collect_statistics_job_template?.connection,
+        fullTableName: node.collect_statistics_job_template?.fullTableName,
         checkType,
         ...params
       });

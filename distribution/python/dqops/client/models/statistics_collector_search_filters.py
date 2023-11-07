@@ -17,12 +17,12 @@ T = TypeVar("T", bound="StatisticsCollectorSearchFilters")
 class StatisticsCollectorSearchFilters:
     r"""
     Attributes:
-        connection_name (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
+        connection (Union[Unset, str]): The connection (data source) name. Supports search patterns in the format:
             'source\*', '\*_prod', 'prefix\*suffix'.
-        schema_table_name (Union[Unset, str]): The schema and table name. It is provided as
-            *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in
-            the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*',
-            'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.
+        full_table_name (Union[Unset, str]): The schema and table name. It is provided as *<schema_name>.<table_name>*,
+            for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table
+            name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer',
+            'schema_name.tab_\*_suffix'.
         enabled (Union[Unset, bool]): A boolean flag to target enabled tables, columns or checks. When the value of this
             field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are
             not implicitly disabled.
@@ -47,8 +47,8 @@ class StatisticsCollectorSearchFilters:
         collectors_hierarchy_ids_models (Union[Unset, List['HierarchyIdModel']]):
     """
 
-    connection_name: Union[Unset, str] = UNSET
-    schema_table_name: Union[Unset, str] = UNSET
+    connection: Union[Unset, str] = UNSET
+    full_table_name: Union[Unset, str] = UNSET
     enabled: Union[Unset, bool] = UNSET
     tags: Union[Unset, List[str]] = UNSET
     labels: Union[Unset, List[str]] = UNSET
@@ -61,8 +61,8 @@ class StatisticsCollectorSearchFilters:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        connection_name = self.connection_name
-        schema_table_name = self.schema_table_name
+        connection = self.connection
+        full_table_name = self.full_table_name
         enabled = self.enabled
         tags: Union[Unset, List[str]] = UNSET
         if not isinstance(self.tags, Unset):
@@ -100,10 +100,10 @@ class StatisticsCollectorSearchFilters:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if connection_name is not UNSET:
-            field_dict["connectionName"] = connection_name
-        if schema_table_name is not UNSET:
-            field_dict["schemaTableName"] = schema_table_name
+        if connection is not UNSET:
+            field_dict["connection"] = connection
+        if full_table_name is not UNSET:
+            field_dict["fullTableName"] = full_table_name
         if enabled is not UNSET:
             field_dict["enabled"] = enabled
         if tags is not UNSET:
@@ -130,9 +130,9 @@ class StatisticsCollectorSearchFilters:
         from ..models.hierarchy_id_model import HierarchyIdModel
 
         d = src_dict.copy()
-        connection_name = d.pop("connectionName", UNSET)
+        connection = d.pop("connection", UNSET)
 
-        schema_table_name = d.pop("schemaTableName", UNSET)
+        full_table_name = d.pop("fullTableName", UNSET)
 
         enabled = d.pop("enabled", UNSET)
 
@@ -167,8 +167,8 @@ class StatisticsCollectorSearchFilters:
             collectors_hierarchy_ids_models.append(collectors_hierarchy_ids_models_item)
 
         statistics_collector_search_filters = cls(
-            connection_name=connection_name,
-            schema_table_name=schema_table_name,
+            connection=connection,
+            full_table_name=full_table_name,
             enabled=enabled,
             tags=tags,
             labels=labels,

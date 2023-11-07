@@ -82,7 +82,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
 
     ```
 
@@ -134,7 +134,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
 
     ```
 
@@ -186,7 +186,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
 
     ```
 
@@ -433,7 +433,7 @@ http://localhost:8888/api/jobs/runchecks
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"check_search_filters\":{\"connectionName\":\"sample_connection\",\"schemaTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnName\":\"sample_column\",\"columnDataType\":\"string\"},\"dummy_execution\":false}"
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"dummy_execution\":false}"
 
     ```
 

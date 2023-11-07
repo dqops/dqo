@@ -244,9 +244,9 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
         }
 
         CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setConnectionName(this.connection);
-        filters.setSchemaTableName(this.table);
-        filters.setColumnName(this.column);
+        filters.setConnection(this.connection);
+        filters.setFullTableName(this.table);
+        filters.setColumn(this.column);
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
         filters.setCheckType(this.checkType);

@@ -109,8 +109,8 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                 if (columnModel == null) {
                     columnModel = new StatisticsResultsForColumnModel(connectionName, physicalTableName, columnName);
                     columnModel.setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters() {{
-                        setConnectionName(connectionName);
-                        setSchemaTableName(physicalTableName.toTableSearchFilter());
+                        setConnection(connectionName);
+                        setFullTableName(physicalTableName.toTableSearchFilter());
                         getColumnNames().add(columnName);
                         setEnabled(true);
                     }});
@@ -146,8 +146,8 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                                                                             String dataStreamName) {
         StatisticsResultsForColumnModel columnStatisticsResults = new StatisticsResultsForColumnModel(connectionName, physicalTableName, columName);
         columnStatisticsResults.setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters() {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
             getColumnNames().add(columName);
             setEnabled(true);
         }});

@@ -3222,7 +3222,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
 
 
 
@@ -4428,7 +4428,7 @@ Column level sensor that calculates the number of values that does not fit to a 
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
 
 
 

@@ -127,9 +127,9 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         }
 
         CheckSearchFilters exactCheckSearchFilters = new CheckSearchFilters();
-        exactCheckSearchFilters.setConnectionName(connection.getConnectionName());
-        exactCheckSearchFilters.setSchemaTableName(table.getPhysicalTableName().toTableSearchFilter());
-        exactCheckSearchFilters.setColumnName(column == null ? null : column.getColumnName());
+        exactCheckSearchFilters.setConnection(connection.getConnectionName());
+        exactCheckSearchFilters.setFullTableName(table.getPhysicalTableName().toTableSearchFilter());
+        exactCheckSearchFilters.setColumn(column == null ? null : column.getColumnName());
         exactCheckSearchFilters.setCheckCategory(check.getCategoryName());
         exactCheckSearchFilters.setCheckName(check.getCheckName());
         exactCheckSearchFilters.setSensorName(effectiveSensorRuleNames.getSensorName());

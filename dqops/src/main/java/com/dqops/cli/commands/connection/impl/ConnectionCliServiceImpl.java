@@ -219,8 +219,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 return cliOperationStatus;
             }
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
-            tableSearchFilters.setConnectionName(connectionName);
-            tableSearchFilters.setSchemaTableName(schemaName + ".*");
+            tableSearchFilters.setConnection(connectionName);
+            tableSearchFilters.setFullTableName(schemaName + ".*");
             tableSearchFilters.setTags(dimensions);
             tableSearchFilters.setLabels(labels);
 
@@ -305,7 +305,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             }
 
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
-            tableSearchFilters.setConnectionName(connectionName);
+            tableSearchFilters.setConnection(connectionName);
             tableSearchFilters.setTags(dimensions);
             tableSearchFilters.setLabels(labels);
 

@@ -199,7 +199,7 @@ public class CheckCliServiceImplTests extends BaseTest {
 
         AllChecksModelCliPatchParameters allChecksModelCliPatchParameters = new AllChecksModelCliPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
-            setConnectionName("conn");
+            setConnection("conn");
             setCheckName("profile_nulls_count");
         }};
         allChecksModelCliPatchParameters.setCheckSearchFilters(checkSearchFilters);

@@ -170,8 +170,8 @@ export const MultiChecks = () => {
       checkName ?? '',
       {
         check_search_filters: {
-          connectionName: connection,
-          schemaTableName: schema,
+          connection: connection,
+          fullTableName: schema,
           checkTarget,
           columnDataType,
           checkName,
@@ -201,8 +201,8 @@ export const MultiChecks = () => {
       checkName ?? '',
       {
         check_search_filters: {
-          connectionName: connection,
-          schemaTableName: schema,
+          connection: connection,
+          fullTableName: schema,
           checkTarget,
           columnDataType,
           checkName,

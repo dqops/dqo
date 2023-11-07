@@ -263,8 +263,8 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
 
     public static StatisticsCollectorSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
         return new StatisticsCollectorSearchFilters() {{
-            setConnectionName(tableSearchFilters.getConnectionName());
-            setSchemaTableName(tableSearchFilters.getSchemaTableName());
+            setConnection(tableSearchFilters.getConnection());
+            setFullTableName(tableSearchFilters.getFullTableName());
             setEnabled(tableSearchFilters.getEnabled());
             setTags(tableSearchFilters.getTags());
             setLabels(tableSearchFilters.getLabels());

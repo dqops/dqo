@@ -17,8 +17,8 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
         *,
         base_url: str = "http://localhost:8888/",
         api_key: str = UNSET,
-        connection_name: str = UNSET,
-        schema_table_name: str = UNSET,
+        connection: str = UNSET,
+        full_table_name: str = UNSET,
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
         fail_at_severity: RuleSeverityLevel = RuleSeverityLevel.FATAL,
@@ -31,9 +31,9 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
             The base url to DQOps application.
         api_key : str [optional, default=UNSET]
             Api key to DQOps application. Not set as default.
-        connection_name : str [optional, default=UNSET]
+        connection : str [optional, default=UNSET]
             The connection name to the data source in DQOps. When not set, all connection names will be used.
-        schema_table_name : str [optional, default=UNSET]
+        full_table_name : str [optional, default=UNSET]
             The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.
         wait_timeout : int [optional, default=UNSET]
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
@@ -46,8 +46,8 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
         super().__init__(
             base_url=base_url,
             api_key=api_key,
-            connection_name=connection_name,
-            schema_table_name=schema_table_name,
+            connection=connection,
+            full_table_name=full_table_name,
             check_type=CheckType.MONITORING,
             wait_timeout=wait_timeout,
             fail_on_timeout=fail_on_timeout,

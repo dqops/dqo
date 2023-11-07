@@ -534,7 +534,7 @@ export const EditProfilingReferenceTable = ({
         false,
         undefined,
         { check_search_filters: categoryCheck ? categoryCheck?.run_checks_job_template : 
-        { connectionName: connection, schemaTableName: schema + "." + table,
+        { connection: connection, fullTableName: schema + "." + table,
          tableComparisonName: reference?.table_comparison_configuration_name, enabled: true,
          checkCategory: 'comparisons', checkType: checkTypes as CheckSearchFiltersCheckTypeEnum }} 
       );

@@ -9,19 +9,19 @@ You can learn more about [the basic data statistics here](../../working-with-dqo
 
 Parameters allow selection of specific connections, tables and columns which statistics should be loaded.
 
-| Name                 | Description                                                                                                                                                                                                         | Type                                              |
-|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| connection_name      | The connection name to the data source in DQOps.                                                                                                                                                                    | Union[Unset, str]                                 |
-| schema_table_name    | The table name with it's schema name.                                                                                                                                                                               | Union[Unset, str]                                 |
-| table_name           | The table name.                                                                                                                                                                                                     | Union[Unset, str]                                 |
-| enabled              | If set to true only enabled connections and tables are filtered. Otherwise only disabled connection or table are used.                                                                                              | Union[Unset, bool]                                |
-| labels               | The label names of those edited by user on connections, tables and columns edited in DQOps platform.                                                                                                                | Union[Unset, List[str]]                      |
-| column_names         | The names of columns.                                                                                                                                                                                               | Union[Unset, List[str]]                      |
-| sensor_name          | The name of the sensor                                                                                                                                                                                              | Union[Unset, str]                            |
-| target               | The name of the target which value is column or table.                                                                                                                                                              | Union[Unset, StatisticsCollectorTarget]      |
-| base_url             | The base url to DQOps application. Default value is http://localhost:8888/                                                                                                                                          | str                                               |
-| wait_timeout         | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds. | int                                               |
-| fail_on_timeout      | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                 | bool [optional, default=True]                     |
+| Name            | Description                                                                                                                                                                                                         | Type                                              |
+|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
+| connection      | The connection name to the data source in DQOps.                                                                                                                                                                    | Union[Unset, str]                                 |
+| full_table_name | The table name with it's schema name.                                                                                                                                                                               | Union[Unset, str]                                 |
+| table_name      | The table name.                                                                                                                                                                                                     | Union[Unset, str]                                 |
+| enabled         | If set to true only enabled connections and tables are filtered. Otherwise only disabled connection or table are used.                                                                                              | Union[Unset, bool]                                |
+| labels          | The label names of those edited by user on connections, tables and columns edited in DQOps platform.                                                                                                                | Union[Unset, List[str]]                      |
+| column_names    | The names of columns.                                                                                                                                                                                               | Union[Unset, List[str]]                      |
+| sensor_name     | The name of the sensor                                                                                                                                                                                              | Union[Unset, str]                            |
+| target          | The name of the target which value is column or table.                                                                                                                                                              | Union[Unset, StatisticsCollectorTarget]      |
+| base_url        | The base url to DQOps application. Default value is http://localhost:8888/                                                                                                                                          | str                                               |
+| wait_timeout    | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds. | int                                               |
+| fail_on_timeout | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                 | bool [optional, default=True]                     |
 
 Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
 For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
@@ -52,8 +52,8 @@ with DAG(
     import_table_task = DqopsCollectStatisticsOperator(
         task_id="dqops_connection_dqops_collect_statistics_task",
         base_url="http://host.docker.internal:8888",
-        connection_name="example_connection",
-        schema_table_name="maven_restaurant_ratings.ratings"
+        connection_="example_connection",
+        full_table_name="maven_restaurant_ratings.ratings"
     )
 
 ```

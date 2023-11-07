@@ -237,35 +237,35 @@ public class TableListModel {
             setYamlParsingError(tableSpec.getYamlParsingError());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
         }};
@@ -308,35 +308,35 @@ public class TableListModel {
 
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
+                setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
 
                 setDateStart(null);
                 setDateEnd(null);

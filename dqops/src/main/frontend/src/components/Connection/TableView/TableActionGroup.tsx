@@ -97,9 +97,9 @@ const TableActionGroup = ({
     (x) =>
       x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
       x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.fullTableName ===
         schema + '.' + table && 
-         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connectionName === 
+         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connection === 
         connection &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||

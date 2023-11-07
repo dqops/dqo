@@ -44,8 +44,8 @@ public class TableSearchFiltersVisitorTests extends BaseTest {
     void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.tableSearchFilters = new TableSearchFilters();
-		tableSearchFilters.setConnectionName("test");
-		tableSearchFilters.setSchemaTableName("test.test");
+		tableSearchFilters.setConnection("test");
+		tableSearchFilters.setFullTableName("test.test");
 		this.sut = new TableSearchFiltersVisitor(tableSearchFilters);
 		this.connectionList = this.userHomeContext.getUserHome().getConnections();
 		this.connectionWrapper = connectionList.createAndAddNew("test");
@@ -57,7 +57,7 @@ public class TableSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptConnectionList_whenCalledForConnectionList_thenReturnsTraverseChildren() {
-		this.tableSearchFilters.setConnectionName("test2");
+		this.tableSearchFilters.setConnection("test2");
 		this.sut = new TableSearchFiltersVisitor(this.tableSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject(hierarchyNodeArrayList));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
@@ -71,7 +71,7 @@ public class TableSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptConnectionWrapper_whenCalledForConnectionWrapper_thenReturnsSkipChildren() {
-		this.tableSearchFilters.setConnectionName("test2");
+		this.tableSearchFilters.setConnection("test2");
 		this.sut = new TableSearchFiltersVisitor(this.tableSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject(hierarchyNodeArrayList));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
@@ -85,7 +85,7 @@ public class TableSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptTableList_whenCalledForTableList_thenReturnsTraverseChildren() {
-		this.tableSearchFilters.setSchemaTableName("test2.test2");
+		this.tableSearchFilters.setFullTableName("test2.test2");
 		this.sut = new TableSearchFiltersVisitor(this.tableSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, new SearchParameterObject(hierarchyNodeArrayList));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
@@ -99,7 +99,7 @@ public class TableSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptTableWrapper_whenCalledForTableWrapper_thenReturnsSkipChildren() {
-		this.tableSearchFilters.setSchemaTableName("test2.test2");
+		this.tableSearchFilters.setFullTableName("test2.test2");
 		this.sut = new TableSearchFiltersVisitor(this.tableSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, new SearchParameterObject(hierarchyNodeArrayList));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);

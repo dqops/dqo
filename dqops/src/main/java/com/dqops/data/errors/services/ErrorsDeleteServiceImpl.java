@@ -95,7 +95,7 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
                                         (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
                             })
                     .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
-                            filter.getTableSearchFilters().getConnectionName(),
+                            filter.getTableSearchFilters().getConnection(),
                             tableName
                     ))
                     .collect(Collectors.toList());

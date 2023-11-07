@@ -34,10 +34,10 @@ import java.util.List;
 public class DeleteStoredDataQueueJobParameters implements Cloneable {
     // @NotNull  // should be NotNull, but there are errors in TypeScript (CheckTableHeader.tsx)
     @JsonPropertyDescription("The connection name.")
-    private String connectionName;
+    private String connection;
 
     @JsonPropertyDescription("The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns.")
-    private String schemaTableName;
+    private String fullTableName;
 
     @JsonPropertyDescription("The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.")
     private LocalDate dateStart;
@@ -104,16 +104,16 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     /**
      * Creates parameters for a delete stored data job.
      * @param connectionName  Connection name.
-     * @param schemaTableName Schema.table name.
+     * @param fullTableName Schema.table name.
      * @param dateStart       Beginning of the period marked for deletion (only year and month considered by default).
      * @param dateEnd         End of the period marked for deletion (only year and month considered by default).
      */
     public DeleteStoredDataQueueJobParameters(String connectionName,
-                                              String schemaTableName,
+                                              String fullTableName,
                                               LocalDate dateStart,
                                               LocalDate dateEnd) {
-        this.connectionName = connectionName;
-        this.schemaTableName = schemaTableName;
+        this.connection = connectionName;
+        this.fullTableName = fullTableName;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
     }
@@ -129,9 +129,9 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
         }
 
         return new DeleteStoredDataQueueJobParameters() {{
-            setConnectionName(checkSearchFilters.getConnectionName());
-            setSchemaTableName(checkSearchFilters.getSchemaTableName());
-            setColumnNames(checkSearchFilters.getColumnName() != null ? List.of(checkSearchFilters.getColumnName()) : null);
+            setConnection(checkSearchFilters.getConnection());
+            setFullTableName(checkSearchFilters.getFullTableName());
+            setColumnNames(checkSearchFilters.getColumn() != null ? List.of(checkSearchFilters.getColumn()) : null);
             setCheckType(checkSearchFilters.getCheckType() != null ? checkSearchFilters.getCheckType().getDisplayName() : null);
             setTimeGradient(checkSearchFilters.getTimeScale() != null ? checkSearchFilters.getTimeScale().toTimeSeriesGradient().name() : null);
             setCheckName(checkSearchFilters.getCheckName());

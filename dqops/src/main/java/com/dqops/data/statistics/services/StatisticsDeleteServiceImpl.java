@@ -98,7 +98,7 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
                                         (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
                             })
                     .map(tableName -> this.statisticsSnapshotFactory.createSnapshot(
-                            filter.getTableSearchFilters().getConnectionName(),
+                            filter.getTableSearchFilters().getConnection(),
                             tableName
                     ))
                     .collect(Collectors.toList());

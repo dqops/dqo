@@ -15522,11 +15522,11 @@
     "CheckSearchFilters" : {
       "type" : "object",
       "properties" : {
-        "connectionName" : {
+        "connection" : {
           "type" : "string",
           "description" : "The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'."
         },
-        "schemaTableName" : {
+        "fullTableName" : {
           "type" : "string",
           "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'."
         },
@@ -15548,7 +15548,7 @@
             "type" : "string"
           }
         },
-        "columnName" : {
+        "column" : {
           "type" : "string",
           "description" : "The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'."
         },
@@ -30040,11 +30040,11 @@
     "DeleteStoredDataQueueJobParameters" : {
       "type" : "object",
       "properties" : {
-        "connectionName" : {
+        "connection" : {
           "type" : "string",
           "description" : "The connection name."
         },
-        "schemaTableName" : {
+        "fullTableName" : {
           "type" : "string",
           "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns."
         },
@@ -32608,11 +32608,11 @@
     "StatisticsCollectorSearchFilters" : {
       "type" : "object",
       "properties" : {
-        "connectionName" : {
+        "connection" : {
           "type" : "string",
           "description" : "The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'."
         },
-        "schemaTableName" : {
+        "fullTableName" : {
           "type" : "string",
           "description" : "The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'."
         },

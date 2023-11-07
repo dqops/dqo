@@ -226,8 +226,8 @@ public class TableComparisonModel {
         }
 
         tableComparisonModel.compareTableRunChecksJobTemplate = new CheckSearchFilters() {{
-           setConnectionName(comparedTableHierarchyId.getConnectionName());
-           setSchemaTableName(comparedTableSpec.getPhysicalTableName().toTableSearchFilter());
+           setConnection(comparedTableHierarchyId.getConnectionName());
+           setFullTableName(comparedTableSpec.getPhysicalTableName().toTableSearchFilter());
            setCheckType(checkType);
            setTimeScale(checkTimeScale);
            setCheckCategory(AbstractComparisonCheckCategorySpecMap.COMPARISONS_CATEGORY_NAME);

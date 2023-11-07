@@ -272,7 +272,7 @@ Target data quality checks filter, identifies which checks on which tables and c
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|column_name|The column name. This field accepts search patterns in the format: &#x27;fk_\*&#x27;, &#x27;\*_id&#x27;, &#x27;prefix\*suffix&#x27;.|string|
+|column|The column name. This field accepts search patterns in the format: &#x27;fk_\*&#x27;, &#x27;\*_id&#x27;, &#x27;prefix\*suffix&#x27;.|string|
 |column_data_type|The column data type that was imported from the data source and is stored in the [columns -&gt; column_name -&gt; type_snapshot -&gt; column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.|string|
 |column_nullable|Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -&gt; column_name -&gt; type_snapshot -&gt; nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.|boolean|
 |[check_target](\docs\client\models\#checktarget)|The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.|[CheckTarget](\docs\client\models\#checktarget)|
@@ -282,8 +282,8 @@ Target data quality checks filter, identifies which checks on which tables and c
 |table_comparison_name|The name of a configured table comparison. When the table comparison is provided, DQOps will only perform table comparison checks that compare data between tables.|string|
 |check_name|The target check name to run only this named check. Uses the short check name which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as: &#x27;profiling_\*&#x27;, &#x27;\*_count&#x27;, &#x27;profiling_\*_percent&#x27;.|string|
 |sensor_name|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: &#x27;table/volume/row_\*&#x27;, &#x27;\*_count&#x27;, &#x27;table/volume/prefix_\*_suffix&#x27;.|string|
-|connection_name|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
-|schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|string|
+|connection|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
+|full_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|string|
 |enabled|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|boolean|
 
 
@@ -298,8 +298,8 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name|The connection name.|string|
-|schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. This filter does not support patterns.|string|
+|connection|The connection name.|string|
+|full_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. This filter does not support patterns.|string|
 |date_start|The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|date|
 |date_end|The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|date|
 |delete_errors|Delete the data from the [errors](../../reference/parquetfiles/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.|boolean|
@@ -510,8 +510,8 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 |sensor_name|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: &#x27;table/volume/row_\*&#x27;, &#x27;\*_count&#x27;, &#x27;table/volume/prefix_\*_suffix&#x27;.|string|
 |collector_category|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|string|
 |[target](#statisticscollectortarget)|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|[StatisticsCollectorTarget](#statisticscollectortarget)|
-|connection_name|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
-|schema_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|string|
+|connection|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|string|
+|full_table_name|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|string|
 |enabled|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|boolean|
 
 

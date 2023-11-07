@@ -870,7 +870,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        updatePatchParameters.getCheckSearchFilters().setConnectionName(connectionName);
+        updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
         updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
         checkService.updateAllChecksPatch(updatePatchParameters, principal);
 
@@ -912,7 +912,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        bulkDisableParameters.getCheckSearchFilters().setConnectionName(connectionName);
+        bulkDisableParameters.getCheckSearchFilters().setConnection(connectionName);
         bulkDisableParameters.getCheckSearchFilters().setCheckName(checkName);
 
         checkService.disableChecks(bulkDisableParameters);

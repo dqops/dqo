@@ -11,7 +11,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |DD.MM.YYYY<br/>DD-MM-YYYY<br/>YYYY-MM-DD<br/>DD/MM/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>DD.MM.YYYY<br/>DD-MM-YYYY<br/>|
 
 
 
