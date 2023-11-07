@@ -474,7 +474,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
             return true;
         }
 
-        for(HierarchyNode child : this.children()) {
+        for (HierarchyNode child : this.children()) {
             if (child.isDirty()) {
                 return true;
             }
