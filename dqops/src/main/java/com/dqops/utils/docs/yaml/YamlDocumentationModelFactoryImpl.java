@@ -132,7 +132,6 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
 
                 Type infoType = Objects.requireNonNullElse(info.getGenericDataType(), info.getClazz());
                 TypeModel infoTypeModel = getObjectsTypeModel(infoType, visitedObjects);
-                yamlFieldsDocumentationModel.setTypeModel(infoTypeModel);
 
                 if (info.getDataType().equals(ParameterDataType.object_type)) {
                     if (info.getClazz().getName().contains("float")) {
@@ -164,6 +163,8 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
                     }
                 }
 
+                infoTypeModel = getObjectsTypeModel(infoType, visitedObjects);
+                yamlFieldsDocumentationModel.setTypeModel(infoTypeModel);
                 yamlFieldsDocumentationModel.setClassFieldName(info.getClassFieldName());
                 yamlFieldsDocumentationModel.setYamlFieldName(info.getYamlFieldName());
                 yamlFieldsDocumentationModel.setDisplayName(info.getDisplayName());
