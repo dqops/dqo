@@ -57,19 +57,19 @@ http://localhost:8888/api/incidents/{connectionName}
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|months|Number of recent months to load, the default is 3 months|long|false|
-|open|Returns open incidents, when the parameter is missing, the default value is true|boolean|false|
-|acknowledged|Returns acknowledged incidents, when the parameter is missing, the default value is true|boolean|false|
-|resolved|Returns resolved incidents, when the parameter is missing, the default value is false|boolean|false|
-|muted|Returns muted incidents, when the parameter is missing, the default value is false|boolean|false|
-|page|Page number, the first page is 1|long|false|
-|limit|Page size, the default is 50 rows|long|false|
-|filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string|false|
-|[order](\docs\client\models\incidents\#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](\docs\client\models\incidents\#incidentsortorder)|false|
-|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|months|Number of recent months to load, the default is 3 months|long| |
+|open|Returns open incidents, when the parameter is missing, the default value is true|boolean| |
+|acknowledged|Returns acknowledged incidents, when the parameter is missing, the default value is true|boolean| |
+|resolved|Returns resolved incidents, when the parameter is missing, the default value is false|boolean| |
+|muted|Returns muted incidents, when the parameter is missing, the default value is false|boolean| |
+|page|Page number, the first page is 1|long| |
+|limit|Page size, the default is 50 rows|long| |
+|filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string| |
+|[order](\docs\client\models\incidents\#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](\docs\client\models\incidents\#incidentsortorder)| |
+|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)| |
 
 
 
@@ -108,12 +108,12 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|year|Year when the incident was first seen|long|true|
-|month|Month when the incident was first seen|long|true|
-|incident_id|Incident id|string|true|
+|connection_name|Connection name|string|:material-check-bold:|
+|year|Year when the incident was first seen|long|:material-check-bold:|
+|month|Month when the incident was first seen|long|:material-check-bold:|
+|incident_id|Incident id|string|:material-check-bold:|
 
 
 
@@ -152,17 +152,17 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|year|Year when the incident was first seen|long|true|
-|month|Month when the incident was first seen|long|true|
-|incident_id|Incident id|string|true|
-|filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string|false|
-|days|Optional filter for a number of recent days to read the related issues|long|false|
-|date|Optional date filter|string|false|
-|column|Optional column name filter|string|false|
-|check|Optional check name filter|string|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|year|Year when the incident was first seen|long|:material-check-bold:|
+|month|Month when the incident was first seen|long|:material-check-bold:|
+|incident_id|Incident id|string|:material-check-bold:|
+|filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string| |
+|days|Optional filter for a number of recent days to read the related issues|long| |
+|date|Optional date filter|string| |
+|column|Optional column name filter|string| |
+|check|Optional check name filter|string| |
 
 
 
@@ -201,21 +201,21 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|year|Year when the incident was first seen|long|true|
-|month|Month when the incident was first seen|long|true|
-|incident_id|Incident id|string|true|
-|page|Page number, the first page is 1|long|false|
-|limit|Page size, the default is 50 rows|long|false|
-|filter|Optional filter|string|false|
-|days|Optional filter for a number of recent days to read the related issues|long|false|
-|date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string|false|
-|column|Optional column name filter|string|false|
-|check|Optional check name filter|string|false|
-|[order](\docs\client\models\incidents\#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](\docs\client\models\incidents\#checkresultsortorder)|false|
-|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|year|Year when the incident was first seen|long|:material-check-bold:|
+|month|Month when the incident was first seen|long|:material-check-bold:|
+|incident_id|Incident id|string|:material-check-bold:|
+|page|Page number, the first page is 1|long| |
+|limit|Page size, the default is 50 rows|long| |
+|filter|Optional filter|string| |
+|days|Optional filter for a number of recent days to read the related issues|long| |
+|date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string| |
+|column|Optional column name filter|string| |
+|check|Optional check name filter|string| |
+|[order](\docs\client\models\incidents\#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](\docs\client\models\incidents\#checkresultsortorder)| |
+|[direction](\docs\client\models\incidents\#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](\docs\client\models\incidents\#sortdirection)| |
 
 
 
@@ -247,13 +247,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|year|Year when the incident was first seen|long|true|
-|month|Month when the incident was first seen|long|true|
-|incident_id|Incident id|string|true|
-|issue_url|New incident&#x27;s issueUrl|string|true|
+|connection_name|Connection name|string|:material-check-bold:|
+|year|Year when the incident was first seen|long|:material-check-bold:|
+|month|Month when the incident was first seen|long|:material-check-bold:|
+|incident_id|Incident id|string|:material-check-bold:|
+|issue_url|New incident&#x27;s issueUrl|string|:material-check-bold:|
 
 
 
@@ -285,13 +285,13 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|year|Year when the incident was first seen|long|true|
-|month|Month when the incident was first seen|long|true|
-|incident_id|Incident id|string|true|
-|[status](\docs\client\models\incidents\#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|true|
+|connection_name|Connection name|string|:material-check-bold:|
+|year|Year when the incident was first seen|long|:material-check-bold:|
+|month|Month when the incident was first seen|long|:material-check-bold:|
+|incident_id|Incident id|string|:material-check-bold:|
+|[status](\docs\client\models\incidents\#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](\docs\client\models\incidents\#incidentstatus)|:material-check-bold:|
 
 
 

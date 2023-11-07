@@ -11,7 +11,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -155,7 +155,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -319,7 +319,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -483,7 +483,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
 |to|Maximal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -647,7 +647,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
@@ -786,7 +786,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
@@ -944,7 +944,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
@@ -1102,7 +1102,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
 |to_percent|Maximal accepted change relative to the previous readout (inclusive).|double| ||
@@ -1260,7 +1260,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to previous readout (inclusive).|double| ||
 
@@ -1391,7 +1391,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|double| ||
 |exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
@@ -1541,7 +1541,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|double| ||
 |exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
@@ -1691,7 +1691,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|double| ||
 |exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
@@ -1841,7 +1841,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to previous readout (inclusive).|double| ||
 
@@ -1973,7 +1973,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double| ||
 |exact_day|When the exact_day parameter is unchecked (exact_day: false), the rule search for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 1 day. If no results are found from that time, no results or errors will be generated.|boolean| ||
@@ -2123,7 +2123,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double| ||
 |exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 30 days. If no results are found from that time, no results or errors will be generated.|boolean| ||
@@ -2273,7 +2273,7 @@ Data quality rule that verifies if data quality sensor readout value changed by 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double| ||
 |exact_day|When the exact_day parameter is unchecked (exact_day: false), rule searches for the most recent sensor readouts from the past 60 days and compares them. If the parameter is selected (exact_day: true), the rule compares only with the results from the past 7 days. If no results are found from that time, no results or errors will be generated.|boolean| ||

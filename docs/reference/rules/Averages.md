@@ -11,7 +11,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
@@ -139,7 +139,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
@@ -267,7 +267,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
@@ -395,7 +395,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
 |max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
@@ -527,7 +527,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
 
@@ -645,7 +645,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double| ||
 
@@ -763,7 +763,7 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
 
