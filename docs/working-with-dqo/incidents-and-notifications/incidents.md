@@ -1,6 +1,6 @@
 # Incidents overview
 
-With the help of DQO, you can conveniently keep track of the issues that arise during data quality monitoring. The Incidents section aggregates
+With the help of DQOps, you can conveniently keep track of the issues that arise during data quality monitoring. The Incidents section aggregates
 these issues into incident and allows you to view and filter them, as well as manage their status.
 
 Issues can be grouped into incidents based on the following categories:
@@ -13,7 +13,7 @@ Issues can be grouped into incidents based on the following categories:
 
 ## Configure incidents
 
-Incidents are the default function of DQO and automatically groups issues.
+Incidents are the default function of DQOps and automatically groups issues.
 
 To modify the settings of the Incidents, follow these steps:
 
@@ -32,8 +32,8 @@ On the Incidents and Notifications tab, you can customize:
 - The level of grouping for data quality incidents.
 - The minimum severity level required for generating an incident.
 - Whether incidents should be created for the entire data source or for each data stream separately.
-- The maximum duration of an incident in days. After this time, DQO creates a new incident.
-- The time duration for muted incidents. If the incident is muted, DQO will not create a new one.
+- The maximum duration of an incident in days. After this time, DQOps creates a new incident.
+- The time duration for muted incidents. If the incident is muted, DQOps will not create a new one.
 
 ## View and manage Incidents
 
@@ -91,7 +91,7 @@ To help you manage the incidents, each of them can have the following resolution
 - **Acknowledged**: A state indicating that the incident was acknowledged.
 - **Resolved**: A state indicating that an incident is fixed.
 - **Muted**: A state for hiding the incident from your list. By default, any data quality issues associated with that
-  incident will be muted for 60 days. If an incident is muted, DQO will not create a new one. To change the time duration for muted incidents
+  incident will be muted for 60 days. If an incident is muted, DQOps will not create a new one. To change the time duration for muted incidents
   click the **Configure** button.
 
 ![Resolution status](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/resolution-status.png)
@@ -142,4 +142,4 @@ To sort the issue table, simply click on the sorting icon next to any column hea
 
 ## What's next
 
-- [Learn more about incident notifications](notifications.md)
+- [Learn more about incident notifications](../../integrations/webhooks/index.md)

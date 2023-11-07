@@ -55,7 +55,7 @@ To set a schedule, we will create a connection level schedule that will apply to
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
 The schedule for the daily_values_in_range_numeric_percent check will be temporarily disabled.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 You can read more about scheduling [here](../../working-with-dqo/schedules/index.md). 
 
 **VALUE**
@@ -88,7 +88,7 @@ The YAML connection configuration file stores data source configurations and all
 In the YAML data source configuration file below, the highlighted sections indicate the area where the cron expression 
 for the schedule is set to run every day at 8:00 AM (0 8 * * *).
 
-If you want to learn more about cron formatting, please refer to the [Working with DQO section](../../working-with-dqo/schedules/cron-formatting.md).
+If you want to learn more about cron formatting, please refer to the [Working with DQOps section](../../working-with-dqo/schedules/cron-formatting.md).
 
 ```yaml hl_lines="10-12"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
@@ -275,7 +275,7 @@ To view the connection-level schedule:
     ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule.png)
 
 In the example, we want to verify the availability of the `users` table every 30 minutes using the **daily_table_availability** check.
-DQO allows to set check-level schedules and override the connection level settings.
+DQOps allows to set check-level schedules and override the connection level settings.
 
 To view and modify individual check-level schedules:
 
@@ -302,9 +302,9 @@ toggle the button next to the **Jobs scheduler**.
 The scheduler has been initiated and will run checks based on the set schedules. Data synchronization will
 take place every 10 minutes.
 
-## Starting a scheduler using DQO Shell
+## Starting a scheduler using DQOps Shell
 
-To initiate a scheduler in the DQO Shell, simply enter the command `scheduler start`. To stop the scheduler, use the
+To initiate a scheduler in the DQOps Shell, simply enter the command `scheduler start`. To stop the scheduler, use the
 command `scheduler stop`.
 For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md).
 
@@ -324,7 +324,7 @@ For more information on the `run` command, please refer to the [Command-line int
 The detailed explanation of how to run the example is described [here](../#running-the-examples). 
 
 Even if we have started scheduler we can run all the checks to verify the results. 
-To execute the check prepared in the example, run the following command in DQO Shell:
+To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
@@ -353,6 +353,6 @@ check run --mode=debug
 ## Next step
 - Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 
   You can find instructions on how to do this [here](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md).
-- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
-- DQO allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQO](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

@@ -18,6 +18,8 @@ package com.dqops.rest.models.metadata;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -132,5 +134,16 @@ public class SensorModel {
                             .orElse(null);
                     return providerSensorModel != null && providerSensorModel.equalsProviderSensorDqo(sensor);
                 });
+    }
+
+    public static class SensorModelSampleFactory implements SampleValueFactory<SensorModel> {
+        @Override
+        public SensorModel createSample() {
+            return new SensorModel() {{
+                setFullSensorName(SampleStringsRegistry.getFullSensorName());
+                setSensorDefinitionSpec(new SensorDefinitionSpec.SensorDefinitionSpecSampleFactory().createSample());
+                setCanEdit(true);
+            }};
+        }
     }
 }

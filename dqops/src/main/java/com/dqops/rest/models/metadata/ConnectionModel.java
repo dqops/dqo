@@ -28,6 +28,8 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -62,9 +64,9 @@ public class ConnectionModel {
     private Integer parallelRunsLimit;
 
     /**
-     * Database provider type (required). Accepts: bigquery, snowflake.
+     * Database provider type (required). Accepts: bigquery, snowflake, etc.
      */
-    @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
+    @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake, etc.")
     private ProviderType providerType;
 
     /**
@@ -264,5 +266,16 @@ public class ConnectionModel {
         targetConnectionSpec.setSqlserver(this.getSqlserver());
         targetConnectionSpec.setMysql(this.getMysql());
         targetConnectionSpec.setOracle(this.getOracle());
+    }
+
+    public static class ConnectionModelSampleFactory implements SampleValueFactory<ConnectionModel> {
+        @Override
+        public ConnectionModel createSample() {
+            return fromConnectionSpecification(
+                    SampleStringsRegistry.getConnectionName(),
+                    new ConnectionSpec.ConnectionSpecSampleFactory().createSample(),
+                    false,
+                    true);
+        }
     }
 }

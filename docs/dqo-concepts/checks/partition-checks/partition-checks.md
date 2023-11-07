@@ -1,6 +1,6 @@
 # Partition checks
 
-In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
 Partition checks are designed to measure the data quality in partitioned data. In contrast to [monitoring checks](../monitoring-checks/monitoring-checks.md),
@@ -77,7 +77,7 @@ In order to enable time partition check, set a column that contains date, dateti
 4. Click the Save button in the upper right corner.
 
 ## Checks configuration in the YAML file
-Partition data quality checks, like other data quality checks in DQO, are defined as YAML files.
+Partition data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
 Below is an example of the YAML file showing sample configuration of a daily and monthly partition column data quality check
 nulls_percent.

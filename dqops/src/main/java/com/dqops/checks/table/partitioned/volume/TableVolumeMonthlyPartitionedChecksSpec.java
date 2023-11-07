@@ -23,6 +23,7 @@ import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -137,5 +138,14 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.monthly;
+    }
+
+    public static class TableVolumeMonthlyPartitionedChecksSpecSampleFactory implements SampleValueFactory<TableVolumeMonthlyPartitionedChecksSpec> {
+        @Override
+        public TableVolumeMonthlyPartitionedChecksSpec createSample() {
+            return new TableVolumeMonthlyPartitionedChecksSpec() {{
+                setMonthlyPartitionRowCount(new TableRowCountCheckSpec.TableRowCountCheckSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

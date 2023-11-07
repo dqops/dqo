@@ -82,7 +82,7 @@ The detailed schema of each type of data table that is stored in the `.data` fol
 
 The schema of the following tables are documented:
 
-| table name      | purpose                                                                                                         | table folder and schema                                                  |
+| Table name      | Purpose                                                                                                         | Table folder and schema                                                  |
 |-----------------|-----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------|
 | check results   | the results of data quality checks, evaluated by rules                                                          | [.data/check_results](../../reference/parquetfiles/check_results.md)     |
 | errors          | execution errors captured during the sensor rendering, rule evaluation or by running a query on the data source | [.data/errors](../../reference/parquetfiles/errors.md)                   |

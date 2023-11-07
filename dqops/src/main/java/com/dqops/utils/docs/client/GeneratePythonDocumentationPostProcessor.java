@@ -31,6 +31,7 @@ import com.dqops.utils.docs.client.models.ModelsDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGenerator;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactoryImpl;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
@@ -222,7 +223,9 @@ public class GeneratePythonDocumentationPostProcessor {
                 .resolve("operations")
                 .toAbsolutePath().normalize();
         DocumentationFolder currentOperationsDocFiles = DocumentationFolderFactory.loadCurrentFiles(operationsDocPath);
-        OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(new OperationsDocumentationModelFactoryImpl());
+        OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(
+                new OperationsDocumentationModelFactoryImpl(),
+                new UsageExampleModelFactoryImpl());
 
         DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel);
         renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);

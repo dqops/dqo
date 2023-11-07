@@ -21,7 +21,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -39,6 +39,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/"daily"/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -61,7 +72,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -74,6 +85,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/"daily"^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -96,7 +118,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -114,6 +136,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/"daily"/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -136,7 +169,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -149,6 +182,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/"daily"^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -171,7 +215,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -188,6 +232,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -210,7 +265,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -222,6 +277,17 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -244,7 +310,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -252,5 +318,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/connections/sample_connection/schemas^
+		-H "Accept: application/json"
+
+    ```
 
 

@@ -24,6 +24,17 @@ http://localhost:8888/api/incidentstat
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/incidentstat^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## find_recent_incidents_on_connection  
 Returns a list of recent data quality incidents.  
@@ -44,7 +55,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -62,6 +73,17 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -84,7 +106,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -95,6 +117,17 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -117,7 +150,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -133,6 +166,17 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -155,7 +199,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -177,6 +221,17 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## set_incident_issue_url  
 Changes the incident&#x27;s issueUrl to a new status.  
@@ -190,7 +245,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -202,6 +257,17 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
+		-H "Accept: application/json"
+
+    ```
 
 
 ___  
@@ -217,7 +283,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
-**The structure of this method is described below**  
+**Parameters of this method are described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
@@ -229,5 +295,16 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
+		-H "Accept: application/json"
+
+    ```
 
 

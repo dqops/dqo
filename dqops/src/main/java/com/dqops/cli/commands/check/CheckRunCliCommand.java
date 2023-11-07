@@ -35,7 +35,6 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListenerProvide
 import com.dqops.execution.checks.progress.CheckRunReportingMode;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.services.check.CheckService;
 import com.dqops.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -124,7 +123,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, info, debug)", defaultValue = "summary")
     private CheckRunReportingMode mode = CheckRunReportingMode.summary;
 
-    @CommandLine.Option(names = {"-tag", "--data-stream-level-tag"}, description = "Data stream hierarchy level filter (tag)",
+    @CommandLine.Option(names = {"-tag", "--data-grouping-level-tag"}, description = "Data grouping hierarchy level filter (tag)",
             required = false)
     private String[] tags;
 

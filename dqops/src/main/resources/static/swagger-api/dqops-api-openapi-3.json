@@ -58753,7 +58753,7 @@
             },
             "provider_type" : {
               "type" : "string",
-              "description" : "Database provider type (required). Accepts: bigquery, snowflake.",
+              "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
               "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle" ]
             },
             "bigquery" : {

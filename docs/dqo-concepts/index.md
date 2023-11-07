@@ -2,7 +2,7 @@
 
 These topics introduce the basic concepts of DQOps.
 
- - **[Checks](./checks/index.md)**
+ - **[Data quality checks](./checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
     of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
@@ -17,10 +17,16 @@ These topics introduce the basic concepts of DQOps.
 
  - **[Configuring checks](./checks/configuring-checks.md)**
 
-    The data quality checks are configured on tables and columns in DQOps YAML files.
+    Data quality checks are configured by setting the incident alerting thresholds
+    by setting the [data quality rule](./rules/rules.md) parameters.
 
-    The parameters for the check (sensor) and the data quality rule thresholds must be set.
-
+    DQOps uses YAML files to keep the configuration of data sources and the enabled data quality checks on monitored tables.
+    The DQOps YAML file format is fully documented and the YAML schema files are published.
+    
+    The DQOps YAML schema files allow unprecedented coding experience with Visual Studio Code when managing the
+    configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
+    are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
+    
 
  - **[DQOps user home](./home-folders/dqops-user-home.md)**
 
@@ -133,16 +139,6 @@ These topics introduce the basic concepts of DQOps.
 
     The data quality results are stored in a *$DQO_USER_HOME/.data* folder that is a Hive-compliant local data lake.
     Please read the [data storage](./data-storage/data-storage.md) concept guide to understand the data lake structure.
- 
-
-- **[YAML files overview](./yaml-files/yaml-files.md)**
-
-    DQOps uses YAML files to keep the configuration of data sources and the enabled data quality checks on monitored tables.
-    The DQOps YAML file format is fully documented and the YAML schema files are published.
-
-    The DQOps YAML schema files allow unprecedented coding experience with Visual Studio Code when managing the
-    configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
-    are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
 
 
 - **[User interface overview](./user-interface-overview/user-interface-overview.md)**

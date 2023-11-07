@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -218,5 +219,17 @@ public class SensorDefinitionSpec extends AbstractSpec implements InvalidYamlSta
         SensorDefinitionSpec cloned = (SensorDefinitionSpec)super.deepClone();
         cloned.fields = null;
         return cloned;
+    }
+
+    public static class SensorDefinitionSpecSampleFactory implements SampleValueFactory<SensorDefinitionSpec> {
+        @Override
+        public SensorDefinitionSpec createSample() {
+            return new SensorDefinitionSpec() {{
+                setFields(new ParameterDefinitionsListSpec.ParameterDefinitionsListSpecSampleFactory().createSample());
+                setRequiresEventTimestamp(false);
+                setRequiresIngestionTimestamp(false);
+                setDefaultValue(0d);
+            }};
+        }
     }
 }

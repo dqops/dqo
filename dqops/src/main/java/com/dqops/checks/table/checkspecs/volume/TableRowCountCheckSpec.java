@@ -19,11 +19,11 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleFatalParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -164,5 +164,15 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableVolumeRowCoun
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Completeness;
+    }
+
+    public static class TableRowCountCheckSpecSampleFactory implements SampleValueFactory<TableRowCountCheckSpec> {
+        @Override
+        public TableRowCountCheckSpec createSample() {
+            return new TableRowCountCheckSpec() {{
+                setParameters(new TableVolumeRowCountSensorParametersSpec.TableVolumeRowCountSensorParametersSpecSampleFactory().createSample());
+                setError(new MinCountRule1ParametersSpec.MinCountRule1ParametersSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

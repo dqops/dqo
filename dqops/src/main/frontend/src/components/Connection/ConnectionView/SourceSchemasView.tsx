@@ -21,18 +21,8 @@ interface SourceSchemasViewProps {
 const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
   const { connection }: { connection: string } = useParams();
   const [loading, setLoading] = useState(false);
-  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([
-    {
-      connectionName: 'bgTest',
-      schemaName: 'test',
-      alreadyImported: false,
-      importTableJobParameters: {
-        connectionName: 'bgTest',
-        schemaName: 'test',
-        tableNames: ['table 1', 'table 2', 'table 3']
-      }
-    }
-  ]);
+  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
+  const [error, setError] = useState<string>()
 
   const [selectedSchema, setSelectedSchema] = useState<string>();
   const { job_dictionary_state } = useSelector(
@@ -50,6 +40,9 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
     DataSourcesApi.getRemoteDataSourceSchemas(connection)
       .then((res) => {
         setSchemas(res.data);
+      })
+      .catch((err) => {
+        setError(err.message)
       })
       .finally(() => {
         setLoading(false);
@@ -129,6 +122,7 @@ const SourceSchemasView = ({ defaultSchema }: SourceSchemasViewProps) => {
                 </td>
               </tr>
             ))}
+            {error ? <div className='text-red-500'>{error}</div> : null}
           </tbody>
         </table>
       )}

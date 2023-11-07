@@ -21,6 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -155,5 +156,15 @@ public class MonitoringScheduleSpec extends AbstractSpec {
         MonitoringScheduleSpec cloned = this.deepClone();
         cloned.cronExpression = secretValueProvider.expandValue(cloned.cronExpression, lookupContext);
         return cloned;
+    }
+
+    public static class MonitoringScheduleSpecSampleFactory implements SampleValueFactory<MonitoringScheduleSpec> {
+        @Override
+        public MonitoringScheduleSpec createSample() {
+            return new MonitoringScheduleSpec() {{
+                setCronExpression("0 12 1 * *");
+                setDisabled(false);
+            }};
+        }
     }
 }

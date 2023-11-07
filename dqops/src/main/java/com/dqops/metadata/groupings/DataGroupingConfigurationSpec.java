@@ -22,6 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -516,5 +517,16 @@ public class DataGroupingConfigurationSpec extends AbstractSpec {
         }
 
         return hierarchyId.getLast().toString();
+    }
+
+    public static class DataGroupingConfigurationSpecSampleFactory implements SampleValueFactory<DataGroupingConfigurationSpec> {
+        @Override
+        public DataGroupingConfigurationSpec createSample() {
+            DataGroupingDimensionSpec.DataGroupingDimensionSpecSampleFactory dataGroupingDimensionSpecSampleFactory =
+                    new DataGroupingDimensionSpec.DataGroupingDimensionSpecSampleFactory();
+            return new DataGroupingConfigurationSpec() {{
+                setLevel3(dataGroupingDimensionSpecSampleFactory.createSample());
+            }};
+        }
     }
 }

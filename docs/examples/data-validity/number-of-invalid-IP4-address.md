@@ -27,7 +27,7 @@ If the number of IP4 address values exceed 0, a warning alert will be triggered.
 
 ## Data structure
 
-The following is a fragment of the `DQO` dataset. Some columns were omitted for clarity.  
+The following is a fragment of the `DQOps` dataset. Some columns were omitted for clarity.  
 The `ip4` column of interest contains both valid and invalid IP4 address values.
 
 | ip4                 | result | date      |
@@ -111,7 +111,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
@@ -255,4 +255,4 @@ Results returned by the sensor:
 - For details on the [string_invalid_ip4_address_count check used in this example, go to the check details section](../../checks/column/strings/string-invalid-ip4-address-count.md).
 - You might be interested in another validity check that [evaluates that the percentage of negative values in a column does not exceed the maximum accepted percentage](../data-validity/percentage-of-negative-values.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../integrations/webhooks/index.md).

@@ -17,6 +17,7 @@ package com.dqops.services.check.mapping.models;
 
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -72,5 +73,14 @@ public class CheckContainerModel {
     private boolean canDeleteData;
 
     public CheckContainerModel() {
+    }
+
+    public static class CheckContainerModelSampleFactory implements SampleValueFactory<CheckContainerModel> {
+        @Override
+        public CheckContainerModel createSample() {
+            return new CheckContainerModel() {{
+                setCategories(List.of(new QualityCategoryModel.QualityCategoryModelSampleFactory().createSample()));
+            }};
+        }
     }
 }

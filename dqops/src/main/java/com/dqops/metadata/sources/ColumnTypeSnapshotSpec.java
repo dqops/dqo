@@ -21,6 +21,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -30,8 +31,10 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Stores the column data type captured at the time of the table metadata import.
@@ -326,6 +329,13 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
             return clone;
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
+        }
+    }
+
+    public static class ColumnTypeSnapshotSpecSampleFactory implements SampleValueFactory<ColumnTypeSnapshotSpec> {
+        @Override
+        public ColumnTypeSnapshotSpec createSample() {
+            return new ColumnTypeSnapshotSpec("string", false, 256);
         }
     }
 }

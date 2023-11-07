@@ -17,9 +17,14 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.execution.rules.runners.python.PythonRuleRunner;
-import com.dqops.metadata.definitions.rules.*;
+import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
+import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
+import com.dqops.metadata.definitions.rules.RuleRunnerType;
+import com.dqops.metadata.definitions.rules.RuleTimeWindowMode;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -145,7 +150,7 @@ public class RuleModel {
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getParameters() == null, parameters)) {
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getParameters(), parameters)) {
             return false;
         }
 
@@ -183,5 +188,15 @@ public class RuleModel {
      */
     public FileContent makePythonModuleFileContent() {
         return new FileContent(rulePythonModuleContent);
+    }
+
+    public static class RuleModelSampleFactory implements SampleValueFactory<RuleModel> {
+        @Override
+        public RuleModel createSample() {
+            return new RuleModel() {{
+                setRuleName(SampleStringsRegistry.getRuleName());
+                setCanEdit(true);
+            }};
+        }
     }
 }

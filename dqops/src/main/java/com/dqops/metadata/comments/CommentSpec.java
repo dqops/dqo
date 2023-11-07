@@ -15,10 +15,15 @@
  */
 package com.dqops.metadata.comments;
 
+import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -27,9 +32,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import org.apache.parquet.Strings;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
 /**
@@ -150,5 +153,16 @@ public class CommentSpec extends AbstractSpec {
         }
 
         return true;
+    }
+
+    public static class CommentSpecSampleFactory implements SampleValueFactory<CommentSpec> {
+        @Override
+        public CommentSpec createSample() {
+            return new CommentSpec() {{
+                setDate(LocalDateTime.of(2007, 12, 3, 10, 15,30));
+                setCommentBy(SampleStringsRegistry.getUserName());
+                setComment(SampleStringsRegistry.getComment());
+            }};
+        }
     }
 }

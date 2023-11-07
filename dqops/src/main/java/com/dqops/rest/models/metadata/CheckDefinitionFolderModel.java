@@ -61,7 +61,7 @@ public class CheckDefinitionFolderModel {
      * @param isBuiltIn The check is provided (built-in) with DQOps.
      * @param canEdit The current user can edit the check.
      */
-    public void addCheck(String fullCheckName, boolean isCustom, boolean isBuiltIn, boolean canEdit) {
+    public void addCheck(String fullCheckName, boolean isCustom, boolean isBuiltIn, boolean canEdit, String yamlParsingError) {
 
         String[] checkFolders = fullCheckName.split("/");
         String checkName = checkFolders[checkFolders.length - 1];
@@ -89,6 +89,7 @@ public class CheckDefinitionFolderModel {
             checkDefinitionListModel.setCustom(isCustom);
             checkDefinitionListModel.setBuiltIn(isBuiltIn);
             checkDefinitionListModel.setCanEdit(canEdit);
+            checkDefinitionListModel.setYamlParsingError(yamlParsingError);
             if (folderModel.checks == null) {
                 folderModel.checks = new ArrayList<>();
             }

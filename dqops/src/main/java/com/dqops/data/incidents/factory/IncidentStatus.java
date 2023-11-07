@@ -16,6 +16,7 @@
 package com.dqops.data.incidents.factory;
 
 
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -45,5 +46,12 @@ public enum IncidentStatus {
      * The incident is muted and will not be reported.
      */
     @JsonProperty("muted")
-    muted,
+    muted;
+
+    public static class IncidentStatusSampleFactory implements SampleValueFactory<IncidentStatus> {
+        @Override
+        public IncidentStatus createSample() {
+            return open;
+        }
+    }
 }

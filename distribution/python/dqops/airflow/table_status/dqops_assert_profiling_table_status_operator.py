@@ -1,17 +1,16 @@
 from typing import Any, Dict, Union
 
-from dqops.airflow.table_status.dqo_assert_table_status_operator import (
-    DqoAssertTableStatusOperator,
+from dqops.airflow.table_status.dqops_assert_table_status_operator import (
+    DqopsAssertTableStatusOperator,
 )
-from dqops.client.models.check_time_scale import CheckTimeScale
 from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.types import UNSET, Unset
 
 
-class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
+class DqopsAssertProfilingTableStatusOperator(DqopsAssertTableStatusOperator):
     """
-    Airflow assert table status operator for receiving DQOps table status for monitoring type checks.
+    Airflow assert table status operator for receiving DQOps table status for profiling type checks.
 
     """
 
@@ -22,7 +21,6 @@ class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
         table_name: str,
         *,
         months: Union[Unset, None, int] = UNSET,
-        check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
         data_group: Union[Unset, None, str] = UNSET,
         check_name: Union[Unset, None, str] = UNSET,
         category: Union[Unset, None, str] = UNSET,
@@ -43,12 +41,10 @@ class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
             The schema name.
         table_name : str
             The table name.
-        months : Union[Unset, None, int] = UNSET,
+        months : Union[Unset, None, int] = UNSET
             Optional filter - the number of months to review the data quality check results.
             For partitioned checks, it is the number of months to analyze.
             The default value is 1 (which is the current month and 1 previous month).
-        check_time_scale : Union[Unset, None, CheckTimeScale] = UNSET
-            Time scale filter (values: daily or monthly).
         data_group: Union[Unset, None, str] = UNSET
             Data group.
         check_name: Union[Unset, None, str] = UNSET
@@ -68,14 +64,12 @@ class DqoAssertMonitoringTableStatusOperator(DqoAssertTableStatusOperator):
         fail_at_severity: RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]
             The threshold level of rule severity, causing that an airflow task finishes with failed status.
         """
-
         super().__init__(
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,
             months=months,
-            check_type=CheckType.MONITORING,
-            check_time_scale=check_time_scale,
+            check_type=CheckType.PROFILING,
             data_group=data_group,
             check_name=check_name,
             category=category,

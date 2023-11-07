@@ -32,13 +32,14 @@ import com.dqops.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSp
 import com.dqops.checks.column.partitioned.sql.ColumnSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -444,5 +445,14 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.partitioned_daily;
+    }
+
+    public static class ColumnDailyPartitionedCheckCategoriesSpecSampleFactory implements SampleValueFactory<ColumnDailyPartitionedCheckCategoriesSpec> {
+        @Override
+        public ColumnDailyPartitionedCheckCategoriesSpec createSample() {
+            return new ColumnDailyPartitionedCheckCategoriesSpec() {{
+                setNulls(new ColumnNullsDailyPartitionedChecksSpec.ColumnNullsDailyPartitionedChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

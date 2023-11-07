@@ -15,9 +15,12 @@
  */
 package com.dqops.utils.docs.client.operations;
 
+import com.dqops.utils.docs.client.apimodel.OperationModel;
+import com.dqops.utils.docs.client.operations.examples.OperationUsageExampleDocumentationModel;
 import io.swagger.v3.oas.models.PathItem.HttpMethod;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,6 +28,11 @@ import java.util.List;
  */
 @Data
 public class OperationsOperationDocumentationModel {
+    /**
+     * Operation model.
+     */
+    private OperationModel operationModel;
+
     /**
      * Object class full name.
      */
@@ -64,4 +72,9 @@ public class OperationsOperationDocumentationModel {
      * Body parameter field.
      */
     private OperationParameterDocumentationModel requestBodyField;
+
+    /**
+     * Usage examples list.
+     */
+    private List<OperationUsageExampleDocumentationModel> usageExamples = new ArrayList<>();
 }

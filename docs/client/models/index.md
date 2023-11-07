@@ -529,7 +529,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |connection_name|Connection name.|string|
 |connection_hash|Connection hash that identifies the connection using a unique hash code.|long|
 |parallel_runs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer|
-|[provider_type](#providertype)|Database provider type (required). Accepts: bigquery, snowflake.|[ProviderType](#providertype)|
+|[provider_type](#providertype)|Database provider type (required). Accepts: bigquery, snowflake, etc.|[ProviderType](#providertype)|
 |[bigquery](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](\docs\reference\yaml\connectionyaml\#bigqueryparametersspec)|
 |[snowflake](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)|Snowflake connection parameters.|[SnowflakeParametersSpec](\docs\reference\yaml\connectionyaml\#snowflakeparametersspec)|
 |[postgresql](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)|PostgreSQL connection parameters.|[PostgresqlParametersSpec](\docs\reference\yaml\connectionyaml\#postgresqlparametersspec)|

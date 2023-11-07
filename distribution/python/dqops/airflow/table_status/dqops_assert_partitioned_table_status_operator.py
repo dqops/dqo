@@ -1,7 +1,7 @@
 from typing import Any, Dict, Union
 
-from dqops.airflow.table_status.dqo_assert_table_status_operator import (
-    DqoAssertTableStatusOperator,
+from dqops.airflow.table_status.dqops_assert_table_status_operator import (
+    DqopsAssertTableStatusOperator,
 )
 from dqops.client.models.check_time_scale import CheckTimeScale
 from dqops.client.models.check_type import CheckType
@@ -9,7 +9,7 @@ from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.types import UNSET, Unset
 
 
-class DqoAssertPartitionedTableStatusOperator(DqoAssertTableStatusOperator):
+class DqopsAssertPartitionedTableStatusOperator(DqopsAssertTableStatusOperator):
     """
     Airflow assert table status operator for receiving DQOps table status for partitioned type checks.
 

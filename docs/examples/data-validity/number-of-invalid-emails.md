@@ -27,7 +27,7 @@ If the number of invalid email values exceed 0, a warning alert will be triggere
 
 ## Data structure
 
-The following is a fragment of the `DQO` dataset. Some columns were omitted for clarity.  
+The following is a fragment of the `DQOps` dataset. Some columns were omitted for clarity.  
 The `email` column of interest contains both valid and invalid email values.
 
 | id  | email                       | email_ok | surrounded_by_whitespace | surrounded_by_whitespace_ok | null_placeholder |
@@ -100,7 +100,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
@@ -245,5 +245,5 @@ Results returned by the sensor:
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [string_invalid_email_count check used in this example, go to the check details section](../../checks/column/strings/string-invalid-email-count.md).
 - You might be interested in another validity check that [evaluates that the number of invalid IP4 address in a column does not exceed the maximum accepted count](../data-validity/number-of-invalid-IP4-address.md).
-- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md). 
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

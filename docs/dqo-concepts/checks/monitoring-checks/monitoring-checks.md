@@ -1,6 +1,6 @@
 # Monitoring checks
 
-In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
 Monitoring checks are standard checks that monitor the data quality of a table or column. There are two categories of 
@@ -36,7 +36,7 @@ For monthly monitoring checks, the original time_period of the result e.g. 2023-
 This approach allows you to track the data quality over time and calculate daily and monthly data quality KPIs.
 
 ## Checks configuration in the YAML file
-Monitoring data quality checks, like other data quality checks in DQO, are defined as YAML files.
+Monitoring data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
 Below is an example of the YAML file showing sample configuration of a daily and monthly monitoring column data quality check
 nulls_percent.

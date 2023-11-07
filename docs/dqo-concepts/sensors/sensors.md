@@ -1,6 +1,6 @@
 # Sensors
 
-In DQO, the data quality sensor and [data quality rule](../rules/rules.md) form the [data quality check](../checks/index.md).
+In DQOps, the data quality sensor and [data quality rule](../rules/rules.md) form the [data quality check](../checks/index.md).
 
 Data quality sensor reads the value from the data source at a given point in time. Examples of these reads includes the
 number of rows, the percentage of null values in a column, or the current delay between the timestamp of the latest row
@@ -8,7 +8,7 @@ and the current system time.
 
 ## Sensor templating
 
-To implement sensors DQO uses the Jinja2 templating engine which is rendered into a SQL query.
+To implement sensors DQOps uses the Jinja2 templating engine which is rendered into a SQL query.
 
 The following examples show a data quality sensor template for various database types that calculates the number of rows
 in a table.
@@ -68,14 +68,15 @@ in a table.
     ```
 The file starts with an import of reusable dialects specific to the database.
 
-| Maro name                        | Description                                                                                                                                       |
-|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| render_target_table              | Adds target table name.                                                                                                                           |
-| render_data_stream_projections   | Optional data stream projection that allows tracking data quality results for different data streams aggregated in the same table.                |
-| render_time_dimension_projection | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately. |
-| render_where_clause              | WHERE clause is used to filter records.                                                                                                           |
-| render_group_by                  | GROUP BY statement group rows by dates, partitions or additional columns.                                                                         |
-| render_order_by                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                             |
+| Maro name                          | Description                                                                                                                                       |
+|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| `render_target_table`              | Adds target table name.                                                                                                                           |
+| `render_data_stream_projections`   | Optional data stream projection that allows tracking data quality results for different data streams aggregated in the same table.                |
+| `render_time_dimension_projection` | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately. |
+| `render_where_clause`              | WHERE clause is used to filter records.                                                                                                           |
+| `render_group_by`                  | GROUP BY statement group rows by dates, partitions or additional columns.                                                                         |
+| `render_order_by`                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                             |
+
 
 ## Sensor types and categories
 
@@ -109,7 +110,7 @@ A full list of sensors within each category is available at the link.
 
 ## Sensor data storage
 
-DQO stores a copy of the sensor data locally on the monitoring agent. The data files are stored as Apache Parquet files
+DQOps stores a copy of the sensor data locally on the monitoring agent. The data files are stored as Apache Parquet files
 in an Apache Hive compatible folder tree, partitioned by the data source, monitored table name, and the month. A local 
 copy of the sensor data enables a true multi-cloud data collection, without accessing any sensitive data by an external 
 cloud or SaaS solution.

@@ -16,6 +16,8 @@
 package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -52,5 +54,16 @@ public class DataGroupingConfigurationTrimmedModel {
     private String yamlParsingError;
 
     public DataGroupingConfigurationTrimmedModel() {
+    }
+
+    public static class DataGroupingConfigurationTrimmedModelSampleFactory implements SampleValueFactory<DataGroupingConfigurationTrimmedModel> {
+        @Override
+        public DataGroupingConfigurationTrimmedModel createSample() {
+            return new DataGroupingConfigurationTrimmedModel() {{
+                setDataGroupingConfigurationName(SampleStringsRegistry.getDataGrouping());
+                setSpec(new DataGroupingConfigurationSpec.DataGroupingConfigurationSpecSampleFactory().createSample());
+                setCanEdit(true);
+            }};
+        }
     }
 }

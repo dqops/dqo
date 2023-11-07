@@ -24,6 +24,17 @@ http://localhost:8888/api/environment/settings
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/environment/settings^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## get_user_profile  
 Returns the profile of the current user.  
@@ -47,6 +58,17 @@ http://localhost:8888/api/environment/profile
 
 
 
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/environment/profile^
+		-H "Accept: application/json"
+
+    ```
+
+
 ___  
 ## issue_api_key  
 Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.  
@@ -68,5 +90,16 @@ http://localhost:8888/api/environment/issueapikey
 
 
 
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl http://localhost:8888/api/environment/issueapikey^
+		-H "Accept: application/json"
+
+    ```
 
 

@@ -96,7 +96,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
 
         this.checkCategorySpecsClasses = TargetClassSearchUtility.findClasses(
                 "com.dqops.checks", projectDir, AbstractCheckCategorySpec.class
-        ).stream().collect(Collectors.toMap(
+        ).stream().filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
                 Class::getSimpleName,
                 Function.identity()
         ));
@@ -108,7 +108,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
                 TargetClassSearchUtility.findClasses(
                         "com.dqops.checks.table", projectDir, AbstractCheckSpec.class
                 ).stream()
-        ).collect(Collectors.toMap(
+        ).filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
                 Class::getSimpleName,
                 Function.identity()
         ));
@@ -128,7 +128,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         tableYaml.putAll(
                 TargetClassSearchUtility.findClasses(
                         "com.dqops.metadata.sources", projectDir, AbstractSpec.class
-                ).stream().collect(Collectors.toMap(
+                ).stream().filter(clazz -> !clazz.getName().contains("$")).collect(Collectors.toMap(
                         Class::getSimpleName,
                         Function.identity()
                 ))
@@ -192,6 +192,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
                 TargetClassSearchUtility.findClasses(
                         "com.dqops.metadata.incidents", projectDir, AbstractSpec.class
                 ).stream()
+                        .filter(clazz -> !clazz.getName().contains("$"))
                         .filter(c -> !c.getSimpleName().toLowerCase().contains("table"))
                         .collect(Collectors.toMap(
                                 Class::getSimpleName,
@@ -293,6 +294,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
             CheckTarget checkTarget = checkCategorySpec.getCheckTarget();
             pathFileNameWords.add(checkTarget.name());
             if (checkType == CheckType.monitoring || checkType == CheckType.partitioned) {
+
                 CheckTimeScale checkTimeScale = checkCategorySpec.getCheckTimeScale();
                 pathFileNameWords.add(checkTimeScale.name());
             }

@@ -7,13 +7,13 @@ This operator can be used to collect information about the data quality before o
 
 There are four operators available to check the status of the table.
 
-- **DqoAssertTableStatusOperator**: A generic Airflow assert table status operator that is used to receive the overall status of a table in DQOps.
+- **DqopsAssertTableStatusOperator**: A generic Airflow assert table status operator that is used to receive the overall status of a table in DQOps.
 
 And three operators with that verifies status from specific type of checks:
 
-- **DqoAssertProfilingTableStatusOperator**: Verifies the status of profiling checks.
-- **DqoAssertMonitoringTableStatusOperator**: Verifies the status of monitoring checks.
-- **DqoAssertPartitionedTableStatusOperator**: Verifies the status of partition checks.
+- **DqopsAssertProfilingTableStatusOperator**: Verifies the status of profiling checks.
+- **DqopsAssertMonitoringTableStatusOperator**: Verifies the status of monitoring checks.
+- **DqopsAssertPartitionedTableStatusOperator**: Verifies the status of partition checks.
 
 
 ## Operator parameters
@@ -58,7 +58,7 @@ The operator connects to the locally started DQOps server.
 import datetime
 import pendulum
 from airflow import DAG
-from dqops.airflow.table_status.dqo_assert_monitoring_table_status_operator import DqoAssertMonitoringTableStatusOperator
+from dqops.airflow.table_status.dqops_assert_monitoring_table_status_operator import DqopsAssertMonitoringTableStatusOperator
 
 with DAG(
     dag_id="example_connection_dqops_assert_table_status",
@@ -66,8 +66,8 @@ with DAG(
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
-    assert_status_task = DqoAssertMonitoringTableStatusOperator(
-        task_id="dqo_assert_table_status_operator_task",
+    assert_status_task = DqopsAssertMonitoringTableStatusOperator(
+        task_id="dqops_assert_table_status_operator_task",
         base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_name="maven_restaurant_ratings",
@@ -127,18 +127,18 @@ TableDataQualityStatusModel contains the following fields:
 - **schema_name**: The name of the schema.
 - **table_name**: The name of the table.
 - **highest_severity_issue**: The highest severity level of all identified data quality issues (1 for warning, 2 for error and 3 for fatal). 
-If no issues were identified, the value is 0. 
-If no data quality checks have been executed on the table, this field is null.
+  If no issues were identified, the value is 0. 
+  If no data quality checks have been executed on the table, this field is null.
 - **last_check_executed_at**: The UTC timestamp of the most recent data quality check executed on the table.
 - **executed_checks**: The total number of most recent checks executed on the table. 
-For table comparison checks that compare groups of data this field is the number of compared data groups.
+  For table comparison checks that compare groups of data this field is the number of compared data groups.
 - **valid_results**: The number of most recent valid data quality checks that passed without raising any issues.
 - **warnings**: The number of most recent data quality checks that failed by raising a warning severity data quality issue.
 - **errors**: The number of most recent data quality checks that failed by raising an error severity data quality issue.
 - **fatals**: The number of most recent data quality checks that failed by raising a fatal severity data quality issue.
 - **execution_errors**: The number of data quality check execution errors that were reported due to access issues to the data source, 
-invalid mapping in DQOps, invalid queries in data quality sensors, or invalid Python rules. 
-When an execution error is reported, the configuration of a data quality check on a table must be updated.
+  invalid mapping in DQOps, invalid queries in data quality sensors, or invalid Python rules. 
+  When an execution error is reported, the configuration of a data quality check on a table must be updated.
 - **failed_checks_statuses** (TableDataQualityStatusModelFailedChecksStatuses): The paths to all failed
-data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks
-are identified by the check name. Column-level checks are identified as a check_name[column_name].
+  data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks
+  are identified by the check name. Column-level checks are identified as a check_name[column_name].

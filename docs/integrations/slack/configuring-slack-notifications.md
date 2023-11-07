@@ -48,9 +48,9 @@ Slack integration allows you to receive notifications whenever an issue is detec
     You can divide connections or even different statuses of incidents and link them to a different Slack channel within a single Slack application.
 
 
-## Configuration steps in DQO
+## Configuration steps in DQOps
 
-To add a Webhook URL to DQO:
+To add a Webhook URL to DQOps:
 
 1. Open the DQOps application and go to the **Data Sources** section.
 

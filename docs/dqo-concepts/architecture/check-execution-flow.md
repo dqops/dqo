@@ -111,7 +111,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
 
      When new data quality incidents are detected and the notification channels are configured, DQOps will send a notification
      with a description of the new incident. DQOps supports calling webhooks, 
-     such as the [Slack](../../working-with-dqo/incidents-and-notifications/configuring-slack-notifications.md).
+     such as the [Slack](../../integrations/slack/configuring-slack-notifications.md).
 
      The webhooks URLs are defined on the *Default webhooks* screen in the *Configuration* section of the user interface.
      The webhook URLs can be also overwritten for each data source, allowing to forward the incidents to a different group
@@ -376,6 +376,6 @@ The following list describes the role of each internal component.
 13.  `Local data quality lake` is a local copy of the Parquet files that are managed by the Parquet in-memory cache.
      The list of tables and their partitioning formats is described in the [data storage](../data-storage/data-storage.md) article.
 
-14.  `Notification queue` is an internal component that calls [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md)
+14.  `Notification queue` is an internal component that calls [notifications](../../integrations/webhooks/index.md)
      webhooks, sending new data quality incidents and incident's status changes.
 

@@ -25,6 +25,7 @@ import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -175,5 +176,14 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.monthly;
+    }
+
+    public static class ColumnNullsMonthlyPartitionedChecksSpecSampleFactory implements SampleValueFactory<ColumnNullsMonthlyPartitionedChecksSpec> {
+        @Override
+        public ColumnNullsMonthlyPartitionedChecksSpec createSample() {
+            return new ColumnNullsMonthlyPartitionedChecksSpec() {{
+                setMonthlyPartitionNullsCount(new ColumnNullsCountCheckSpec.ColumnNullsCountCheckSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

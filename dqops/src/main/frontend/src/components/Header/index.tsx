@@ -15,10 +15,6 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { IRootState } from '../../redux/reducers';
 import {
-  DqoJobHistoryEntryModelJobTypeEnum
-} from '../../api';
-
-import {
   COLUMN_LEVEL_TABS,
   CONNECTION_LEVEL_TABS,
   PageTab,
@@ -33,6 +29,7 @@ import {
   setAdvisorJobId
 } from '../../redux/actions/job.actions';
 import { Tooltip } from '@material-tailwind/react';
+import { DqoJobChangeModelStatusEnum, DqoJobHistoryEntryModelJobTypeEnum } from '../../api';
 
 const Header = () => {
   const history = useHistory();
@@ -169,6 +166,7 @@ const Header = () => {
 
   const onCloseAdvisor = () => {
     dispatch(toggleAdvisor(false));
+    dispatch(setAdvisorJobId(0))
   };
 
   useEffect(() => {
@@ -177,9 +175,9 @@ const Header = () => {
         .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_selected_tables)
         .find(
           (y) =>
-            y.status === 'queued' ||
-            y.status === 'waiting' ||
-            y.status === 'running'
+            y.status === DqoJobChangeModelStatusEnum.queued ||
+            y.status === DqoJobChangeModelStatusEnum.waiting ||
+            y.status === DqoJobChangeModelStatusEnum.running
         )
     ) {
       dispatch(
@@ -192,9 +190,9 @@ const Header = () => {
                   .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_selected_tables)
                   ?.find(
                     (y) =>
-                      y.status === 'queued' ||
-                      y.status === 'waiting' ||
-                      y.status === 'running'
+                    y.status === DqoJobChangeModelStatusEnum.queued ||
+                    y.status === DqoJobChangeModelStatusEnum.waiting ||
+                    y.status === DqoJobChangeModelStatusEnum.running
                   )
             )
           )
@@ -213,9 +211,8 @@ const Header = () => {
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
-      job_dictionary_state[advisorJobId].status === 'succeeded'
+      job_dictionary_state[advisorJobId].status === DqoJobChangeModelStatusEnum.succeeded
     ) {
-      dispatch(setAdvisorJobId(0));
       dispatch(toggleAdvisor(true));
     }
   }, [advisorObject]);

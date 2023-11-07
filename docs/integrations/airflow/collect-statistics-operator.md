@@ -1,8 +1,9 @@
 # Collect statistics operator
 
-The collect statistics airflow operator **DqoCollectStatisticsOperator** is used to gather statistics for existing tables in DQOps platform.
+The collect statistics airflow operator **DqopsCollectStatisticsOperator** is used to gather statistics
+for existing tables in DQOps platform.
 
-You can learn more about [the basic data statistics here](../../basic-data-statistics/basic-data-statistics.md).
+You can learn more about [the basic data statistics here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
 
 ## Operator parameters
 
@@ -41,15 +42,15 @@ The operator connects to the locally started DQOps server.
 import datetime
 import pendulum
 from airflow import DAG
-from dqops.airflow.collect_statistics.dqo_collect_statistics_operator import DqoCollectStatisticsOperator
+from dqops.airflow.collect_statistics.dqops_collect_statistics_operator import DqopsCollectStatisticsOperator
 
 with DAG(
     dag_id="example_connection_dqops_collect_statistics",
     start_date=pendulum.datetime(2023, 1, 1, tz="UTC"),
     catchup=False,
 ) as dag:
-    import_table_task = DqoCollectStatisticsOperator(
-        task_id="dqo_connection_dqops_collect_statistics_task",
+    import_table_task = DqopsCollectStatisticsOperator(
+        task_id="dqops_connection_dqops_collect_statistics_task",
         base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_table_name="maven_restaurant_ratings.ratings"
@@ -82,7 +83,7 @@ The status details will appear in a one line as an info level log from the opera
 }
 ```
 
-Technically, the executed operator returns the [CollectStatisticsQueueJobResult](../../../client/models/jobs.md#CollectStatisticsQueueJobResult) object with status details.
+Technically, the executed operator returns the [CollectStatisticsQueueJobResult](../../client/models/jobs.md#CollectStatisticsQueueJobResult) object with status details.
 When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
 
 CollectStatisticsQueueJobResult includes:

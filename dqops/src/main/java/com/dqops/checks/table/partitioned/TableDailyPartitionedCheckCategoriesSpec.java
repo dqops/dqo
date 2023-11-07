@@ -21,15 +21,16 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.partitioned.comparison.TableComparisonDailyPartitionedChecksSpecMap;
 import com.dqops.checks.table.partitioned.sql.TableSqlDailyPartitionedChecksSpec;
-import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.partitioned.timeliness.TableTimelinessDailyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -221,5 +222,14 @@ public class TableDailyPartitionedCheckCategoriesSpec extends AbstractRootChecks
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.partitioned_daily;
+    }
+
+    public static class TableDailyPartitionedCheckCategoriesSpecSampleFactory implements SampleValueFactory<TableDailyPartitionedCheckCategoriesSpec> {
+        @Override
+        public TableDailyPartitionedCheckCategoriesSpec createSample() {
+            return new TableDailyPartitionedCheckCategoriesSpec() {{
+                setVolume(new TableVolumeDailyPartitionedChecksSpec.TableVolumeDailyPartitionedChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

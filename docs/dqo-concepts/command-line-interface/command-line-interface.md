@@ -1,18 +1,18 @@
 # Working with Command-Line Interface
 
-The DQO Command-Line Interface enables you to interact with DQO using commands in Linux shells or Windows command prompt.
-DQO CLI is an alternative to DQO graphical user interface.
+The DQOps Command-Line Interface enables you to interact with DQOps using commands in Linux shells or Windows command prompt.
+DQOps CLI is an alternative to DQOps graphical user interface.
 
 ## Command structure
 
-You can use DQO commands directly in your command-line shell, or in DQO Shell after you start the application. 
-In your command line use the base call to DQO program `dqo` with the optional [root_level_parameter](../../command-line-interface/dqo.md),
+You can use DQOps commands directly in your command-line shell, or in DQOps Shell after you start the application. 
+In your command line use the base call to DQOps program `dqo` with the optional [root_level_parameter](../../command-line-interface/dqo.md),
 command which you would like to use and command options and parameters. 
 
-While in DQO shell you just need to type the command and options or parameters. An example below show the differences in
+While in DQOps shell you just need to type the command and options or parameters. An example below show the differences in
 the two modes for the `check run` command that run all enabled checks. 
 
-**DQO command structure example**  
+**DQOps command structure example**  
 === "Command-line"
 
     ```
@@ -28,7 +28,7 @@ the two modes for the `check run` command that run all enabled checks.
 
 You can get help with any command by simply typing `--help` or `-h` at the end of a command name.
 
-For example, the following command in DQO Shell displays description and all parameters for `check run` command that run
+For example, the following command in DQOps Shell displays description and all parameters for `check run` command that run
 all enabled checks.
 
 ```

@@ -24,6 +24,8 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableOwnerSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -362,5 +364,17 @@ public class TableListModel {
             targetTableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
         }
         targetTableSpec.getProfilingChecks().setResultTruncation(this.profilingChecksResultTruncation);
+    }
+
+    public static class TableListModelSampleFactory implements SampleValueFactory<TableListModel> {
+        @Override
+        public TableListModel createSample() {
+            return fromTableSpecification(
+                    SampleStringsRegistry.getConnectionName(),
+                    new TableSpec.TableSpecSampleFactory().createSample(),
+                    true,
+                    true
+            );
+        }
     }
 }

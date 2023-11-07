@@ -15076,6 +15076,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Data quality check definition list model."
@@ -29513,7 +29517,7 @@
         },
         "provider_type" : {
           "type" : "string",
-          "description" : "Database provider type (required). Accepts: bigquery, snowflake.",
+          "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
           "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle" ]
         },
         "bigquery" : {
@@ -31840,6 +31844,10 @@
         "can_edit" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Rule list model"
@@ -32253,6 +32261,10 @@
           "items" : {
             "$ref" : "#/definitions/ProviderSensorListModel"
           }
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
         }
       },
       "description" : "Sensor list model"
