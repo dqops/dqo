@@ -149,7 +149,7 @@ const Dashboards = () => {
       onConfirm={() => new Promise(() => {closeTab(activeTab), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {closeTab(activeTab), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
+      message='The definition of this object was deleted in DQOps user home. The tab will be closed.'/>
     </DashboardLayout>
   );
 };
