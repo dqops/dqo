@@ -65,16 +65,17 @@ To run a partition check, you need to select a column that serves as the time pa
 ## Setting up date or datetime column name
 In order to enable time partition check, set a column that contains date, datetime or timestamp. 
 
-1. Go to the **Data Sources** section.
+1.  Go to the **Data Sources** section.
 
-2. Select the table of interest from the tree view.
+2.  Select the table of interest from the tree view.
 
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime
-   column name for partition checks" input field.
+3.  Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime
+    column name for partition checks" input field.
 
-   ![Checking results](https://dqops.com/docs/images/run-data-quality-checks/working-with-dqo/date-or-datetime-column-configuration-for-partion-checks.jpg)
+    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
 
-4. Click the Save button in the upper right corner.
+4.  Click the Save button in the upper right corner.
+
 
 ## Checks configuration in the YAML file
 Partition data quality checks, like other data quality checks in DQOps, are defined as YAML files.

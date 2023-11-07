@@ -59,5 +59,6 @@ data quality dimensions would look like the following table:
 | 2022-10 | JP          |     99.1% |        93.2% |    94.7% |
 
 ## What's next
+- Look at some built-in [data quality KPI dashboards](../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
 - Read about  [build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
 - Learn how to [review results of data quality monitoring results on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
