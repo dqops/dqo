@@ -16,10 +16,11 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
-  isDefault?: boolean
+  isDefault?: boolean;
+  activeTab: string
 }
 
-const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
@@ -97,7 +98,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
 
   useEffect(() => {
     const cron_expression = schedule?.cron_expression ?? '';
-    if (!cron_expression) {
+    if (cron_expression?.length === 0) {
       setMode('');
       return;
     }
@@ -146,15 +147,15 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
         setMinutes(Number(matches[1]));
       }
     }
-  }, [schedule?.cron_expression]);
+    else {
+      setMode("custom")
+    }
+  }, [activeTab]);
 
   const onChangeCronExpression = (e: ChangeEvent<HTMLInputElement>) => {
-    if (
-      /^\*\/\d\d? \* \* \* \*$/.test(e.target.value) ||
-      /^\d\d? \* \* \* \*$/.test(e.target.value) ||
-      /^\d\d? \d\d? \* \* \*$/.test(e.target.value)
-    ) {
-      handleChange({ cron_expression: e.target.value });
+    if (mode === 'custom' ) {
+      const cronExpression = e.target.value;
+      handleChange({ cron_expression: cronExpression });
     }
   };
 
@@ -185,7 +186,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       <table className="mb-6">
         <tbody>
           <tr>
-            <td className="pr-4 py-4 text-sm">
+            <td className={clsx("pr-4 py-4 text-sm", mode !== 'custom' && 'opacity-60')}>
               <div>Unix cron expression:</div>
             </td>
             <td className="px-4 py-4 text-sm">
@@ -193,8 +194,11 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
                 className="!text-sm"
                 value={schedule?.cron_expression}
                 onChange={onChangeCronExpression}
-                disabled={userProfile.can_manage_scheduler !== true}
+                disabled={userProfile.can_manage_scheduler !== true || mode !== 'custom'}
               />
+            </td>
+            <td className='text-xs underline text-teal-500'>
+              <a href='https://man.openbsd.org/crontab.5' target='_blank' rel="noreferrer">Unix cron expression documentation</a>
             </td>
           </tr>
           <tr>
@@ -277,7 +281,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
         </div>
         <div
           className={clsx(
-            'flex items-center text-sm',
+            'flex items-center text-sm mb-4',
             mode !== 'day' && 'opacity-60'
           )}
         >
@@ -305,6 +309,19 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_definitions !== true)}
             />
           </div>
+        </div>
+        <div
+          className={clsx(
+            'flex items-center text-sm',
+            mode !== 'custom' && 'opacity-60'
+          )}
+        >
+          <RadioButton
+            label="Use custom cron expression"
+            checked={mode === 'custom'}
+            onClick={() => onChangeMode('custom')}
+            className="mb-4"
+          />
         </div>
       </div>
     </div>
