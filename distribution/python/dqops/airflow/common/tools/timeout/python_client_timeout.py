@@ -20,4 +20,4 @@ def handle_python_timeout(exception: ReadTimeout, fail_on_timeout: bool):
         logging.error(timeout_message)
         raise exception
     else:
-        logging.info(timeout_message)
+        logging.warn(timeout_message)

@@ -19,4 +19,4 @@ def handle_dqo_timeout(fail_on_timeout: bool):
         logging.error(timeout_message)
         raise AirflowException(timeout_message)
     else:
-        logging.info(timeout_message)
+        logging.warn(timeout_message)
