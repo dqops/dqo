@@ -97,7 +97,13 @@ public class HandlebarsDocumentationUtilities {
             if (!isObject(typeModel) && !isLinkableEnum(typeModel)) {
                 // Simple types
                 String dataTypeString = typeModel.getDataType().toString();
-                return dataTypeString.substring(0, dataTypeString.length() - "_type".length());
+                switch (typeModel.getDataType()) {
+                    case string_list_type:
+                    case integer_list_type:
+                        return String.format("List[%s]", dataTypeString.substring(0, dataTypeString.length() - "_list_type".length()));
+                    default:
+                        return dataTypeString.substring(0, dataTypeString.length() - "_type".length());
+                }
             }
 
             ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
