@@ -181,7 +181,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
     }
     return 'Scheduled check execution not configured for all tables from this connection';
   };
-console.log(minutes)
+
   return (
     <div>
       {isCronScheduled === false ? (
