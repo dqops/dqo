@@ -30792,13 +30792,16 @@
       "type" : "object",
       "properties" : {
         "connectionName" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Connection name"
         },
         "schemaName" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Schema name"
         },
         "tableNames" : {
           "type" : "array",
+          "description" : "Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.",
           "items" : {
             "type" : "string"
           }
