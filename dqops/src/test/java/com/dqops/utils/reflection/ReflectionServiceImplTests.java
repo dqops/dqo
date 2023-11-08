@@ -335,7 +335,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Map<String, EnumValueInfo> enumValuesByYamlName = fieldInfo.getEnumValuesByName();
         Assertions.assertNotNull(enumValuesByYamlName);
         Assertions.assertEquals(12, enumValuesByYamlName.size());
-        Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string_type").getEnumInstance());
+        Assertions.assertSame(ParameterDataType.string_type, enumValuesByYamlName.get("string").getEnumInstance());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue());
         Assertions.assertEquals(null, fieldInfo.getConstructor());
     }
