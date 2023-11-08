@@ -22,8 +22,8 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.checkresults.services.models.CheckResultsListModel;
-import com.dqops.data.checkresults.services.models.TableDataQualityStatusFilterParameters;
-import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -82,25 +83,27 @@ public class CheckResultsController {
     @ApiOperation(value = "getTableDataQualityStatus", notes = "Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality " +
             "checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. " +
             "This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.",
-            response = TableDataQualityStatusModel.class,
+            response = TableCurrentDataQualityStatusModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The most recent data quality status of the requested table",
-                    response = TableDataQualityStatusModel.class),
+                    response = TableCurrentDataQualityStatusModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableDataQualityStatusModel>> getTableDataQualityStatus(
+    public ResponseEntity<Mono<TableCurrentDataQualityStatusModel>> getTableDataQualityStatus(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
             @RequestParam(required = false) Optional<Integer> months,
+            @ApiParam(name = "since", value = "Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.", required = false)
+            @RequestParam(required = false) Optional<Instant> since,
             @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
             @RequestParam(required = false) Optional<CheckType> checkType,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).", required = false)
@@ -137,7 +140,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDataQualityStatusFilterParameters tableDataQualityStatusFilterParameters = TableDataQualityStatusFilterParameters.builder()
+        TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters = TableCurrentDataQualityStatusFilterParameters.builder()
                 .connectionName(connectionName)
                 .physicalTableName(physicalTableName)
                 .lastMonths(months.orElse(1))
@@ -148,12 +151,13 @@ public class CheckResultsController {
                 .category(category.orElse(null))
                 .tableComparison(tableComparison.orElse(null))
                 .qualityDimension(qualityDimension.orElse(null))
+                .since(since.orElse(null))
                 .build();
 
-        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService
-                .analyzeTableMostRecentQualityStatus(tableDataQualityStatusFilterParameters);
+        TableCurrentDataQualityStatusModel tableCurrentDataQualityStatusModel = this.checkResultsDataService
+                .analyzeTableMostRecentQualityStatus(tableCurrentDataQualityStatusFilterParameters);
 
-        return new ResponseEntity<>(Mono.just(tableDataQualityStatusModel), HttpStatus.OK); // 200
+        return new ResponseEntity<>(Mono.just(tableCurrentDataQualityStatusModel), HttpStatus.OK); // 200
     }
 
     /**

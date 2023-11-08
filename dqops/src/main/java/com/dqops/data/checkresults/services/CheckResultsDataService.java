@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.models.*;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.time.Instant;
@@ -112,8 +114,8 @@ public interface CheckResultsDataService {
     /**
      * Analyzes the table to find the status of the most recent data quality check for each time series
      * and asses the most current status.
-     * @param tableDataQualityStatusFilterParameters Filter parameters container.
+     * @param tableCurrentDataQualityStatusFilterParameters Filter parameters container.
      * @return The table status.
      */
-    TableDataQualityStatusModel analyzeTableMostRecentQualityStatus(TableDataQualityStatusFilterParameters tableDataQualityStatusFilterParameters);
+    TableCurrentDataQualityStatusModel analyzeTableMostRecentQualityStatus(TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters);
 }
