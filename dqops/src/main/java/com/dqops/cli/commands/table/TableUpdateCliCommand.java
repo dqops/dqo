@@ -55,7 +55,7 @@ public class TableUpdateCliCommand extends BaseCommand implements ICommand, ICon
         this.tableImportService = tableImportService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Table", required = false,
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name in the form \"schema.table\".", required = false,
             completionCandidates = FullTableNameCompleter.class)
     private String fullTableName;
 

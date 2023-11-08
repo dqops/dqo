@@ -555,6 +555,7 @@ const EditReferenceTable = ({
     try {
       setDeletingData(!isDataDeleted);
       const res = await JobApiClient.deleteStoredData(
+        undefined,
         false, 
         undefined,
         {

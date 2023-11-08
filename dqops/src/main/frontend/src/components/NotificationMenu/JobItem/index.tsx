@@ -62,7 +62,7 @@ const JobItem = ({
   };
 
   const cancelJob = async (jobId: number) => {
-    await JobApiClient.cancelJob(jobId);
+    await JobApiClient.cancelJob(jobId.toString());
   };
 
   const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {

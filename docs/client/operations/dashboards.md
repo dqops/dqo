@@ -16,7 +16,7 @@ http://localhost:8888/api/dashboards
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dashboards_folder_spec||List[[DashboardsFolderSpec](\docs\client\models\dashboards\#dashboardsfolderspec)]|
+|dashboards_folder_spec||List[[DashboardsFolderSpec](/docs/client/models/dashboards/#dashboardsfolderspec)]|
 
 
 
@@ -50,18 +50,18 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](/docs/client/models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](/docs/client/models/dashboards/#authenticateddashboardmodel)|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder|Root folder name|string|true|
-|dashboard_name|Dashboard name|string|true|
-|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
+|folder|Root folder name|string|:material-check-bold:|
+|dashboard_name|Dashboard name|string|:material-check-bold:|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
 
 
@@ -93,19 +93,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](/docs/client/models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](/docs/client/models/dashboards/#authenticateddashboardmodel)|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|true|
-|folder2|Second level folder name|string|true|
-|dashboard_name|Dashboard name|string|true|
-|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
+|folder1|Root folder name|string|:material-check-bold:|
+|folder2|Second level folder name|string|:material-check-bold:|
+|dashboard_name|Dashboard name|string|:material-check-bold:|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
 
 
@@ -137,20 +137,20 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](/docs/client/models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](/docs/client/models/dashboards/#authenticateddashboardmodel)|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|true|
-|folder2|Second level folder name|string|true|
-|folder3|Third level folder name|string|true|
-|dashboard_name|Dashboard name|string|true|
-|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
+|folder1|Root folder name|string|:material-check-bold:|
+|folder2|Second level folder name|string|:material-check-bold:|
+|folder3|Third level folder name|string|:material-check-bold:|
+|dashboard_name|Dashboard name|string|:material-check-bold:|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
 
 
@@ -182,21 +182,21 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](/docs/client/models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](/docs/client/models/dashboards/#authenticateddashboardmodel)|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|true|
-|folder2|Second level folder name|string|true|
-|folder3|Third level folder name|string|true|
-|folder4|Fourth level folder name|string|true|
-|dashboard_name|Dashboard name|string|true|
-|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
+|folder1|Root folder name|string|:material-check-bold:|
+|folder2|Second level folder name|string|:material-check-bold:|
+|folder3|Third level folder name|string|:material-check-bold:|
+|folder4|Fourth level folder name|string|:material-check-bold:|
+|dashboard_name|Dashboard name|string|:material-check-bold:|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
 
 
@@ -228,22 +228,22 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](\docs\client\models\dashboards\#authenticateddashboardmodel)||[AuthenticatedDashboardModel](\docs\client\models\dashboards\#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](/docs/client/models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](/docs/client/models/dashboards/#authenticateddashboardmodel)|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|true|
-|folder2|Second level folder name|string|true|
-|folder3|Third level folder name|string|true|
-|folder4|Fourth level folder name|string|true|
-|folder5|Fifth level folder name|string|true|
-|dashboard_name|Dashboard name|string|true|
-|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string|false|
+|folder1|Root folder name|string|:material-check-bold:|
+|folder2|Second level folder name|string|:material-check-bold:|
+|folder3|Third level folder name|string|:material-check-bold:|
+|folder4|Fourth level folder name|string|:material-check-bold:|
+|folder5|Fifth level folder name|string|:material-check-bold:|
+|dashboard_name|Dashboard name|string|:material-check-bold:|
+|window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
 
 

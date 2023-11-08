@@ -5,7 +5,7 @@
 ## Table checks
 {{#each checks}}
 {{#if ( eq target "table")}}
-### {{categoryName}}{{#with "  "}}{{.}}{{/with}}
+### **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
 {{categoryHelp}}
 {{#each checkGroups}}
 | Check name | Check type | Description |
@@ -20,7 +20,7 @@
 ## Column checks
 {{#each checks}}
 {{#if ( eq target "column")}}
-### {{categoryName}}{{#with "  "}}{{.}}{{/with}}
+### **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
 {{categoryHelp}}
 {{#each checkGroups}}
 | Check name | Check type | Description |

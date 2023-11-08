@@ -23,18 +23,18 @@ ___{{#with "  "}}{{.}}{{/with}}
 {{#if parametersFields}}
 **Parameters of this method are described below**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-{{#each parametersFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{required}}|
+{{#each parametersFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
 {{/each}}
 {{/if}}
 
 {{#if requestBodyField}}
 **Request body**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-{{#with requestBodyField}}|{{helpText}}|{{render-type typeModel}}|{{required}}|
+{{#with requestBodyField}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
 {{/with}}
 {{/if}}
 

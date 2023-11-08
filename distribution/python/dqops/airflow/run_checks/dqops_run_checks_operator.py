@@ -43,8 +43,8 @@ class DqopsRunChecksOperator(BaseOperator):
         *,
         base_url: str = "http://localhost:8888/",
         api_key: str = UNSET,
-        connection_name: str = UNSET,
-        schema_table_name: str = UNSET,
+        connection: str = UNSET,
+        full_table_name: str = UNSET,
         check_type: Optional[CheckType] = UNSET,
         wait_timeout: int = UNSET,
         fail_on_timeout: bool = True,
@@ -58,9 +58,9 @@ class DqopsRunChecksOperator(BaseOperator):
             The base url to DQOps application.
         api_key : str [optional, default=UNSET]
             Api key to DQOps application. Not set as default.
-        connection_name : str [optional, default=UNSET]
+        connection : str [optional, default=UNSET]
             The connection name to the data source in DQOps. When not set, all connection names will be used.
-        schema_table_name : str [optional, default=UNSET]
+        full_table_name : str [optional, default=UNSET]
             The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.
         check_type : CheckType [optional, default=UNSET]
             Specifies type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.
@@ -75,8 +75,8 @@ class DqopsRunChecksOperator(BaseOperator):
         super().__init__(**kwargs)
         self.base_url: str = extract_base_url(base_url)
         self.api_key: str = api_key
-        self.connection_name: str = connection_name
-        self.schema_table_name: str = schema_table_name
+        self.connection: str = connection
+        self.full_table_name: str = full_table_name
         self.check_type: Optional[CheckType] = check_type
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
@@ -84,9 +84,9 @@ class DqopsRunChecksOperator(BaseOperator):
 
     def execute(self, context):
         filters: CheckSearchFilters = CheckSearchFilters(
-            connection_name=self.connection_name,
+            connection=self.connection,
             check_type=self.check_type,
-            schema_table_name=self.schema_table_name,
+            full_table_name=self.full_table_name,
         )
         params: RunChecksParameters = RunChecksParameters(check_search_filters=filters)
 

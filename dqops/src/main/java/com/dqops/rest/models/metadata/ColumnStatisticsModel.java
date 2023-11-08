@@ -106,8 +106,8 @@ public class ColumnStatisticsModel {
             setStatistics(statisticsResultsForColumn != null ? statisticsResultsForColumn.getMetrics() : null);
             setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
                 getColumnNames().add(columnName);
                 setEnabled(true);
             }});

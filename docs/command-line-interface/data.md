@@ -48,6 +48,7 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 |<p id="data delete-e">`-e`</p><br/><p id="data delete--end">`--end`</p><br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
 |<p id="data delete-er">`-er`</p><br/><p id="data delete--errors">`--errors`</p><br/>|Delete the execution errors| ||
 |<p id="data delete-fw">`-fw`</p><br/><p id="data delete--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="data delete-t">`-t`</p><br/><p id="data delete--table">`--table`</p><br/><p id="data delete--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 |<p id="data delete--headless">`--headless`</p><br/><p id="data delete-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="data delete-h">`-h`</p><br/><p id="data delete--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="data delete-of">`-of`</p><br/><p id="data delete--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
@@ -58,7 +59,6 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 |<p id="data delete-stc">`-stc`</p><br/><p id="data delete--statistics-category">`--statistics-category`</p><br/>|Statistics category name (volume, nulls, numeric, etc.)| ||
 |<p id="data delete-sc">`-sc`</p><br/><p id="data delete--statistics-collector">`--statistics-collector`</p><br/>|Data quality statistics collector name| ||
 |<p id="data delete-stt">`-stt`</p><br/><p id="data delete--statistics-target">`--statistics-target`</p><br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
-|<p id="data delete-t">`-t`</p><br/><p id="data delete--table">`--table`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 |<p id="data delete-tc">`-tc`</p><br/><p id="data delete--table-comparison">`--table-comparison`</p><br/>|Table comparison name.| ||
 |<p id="data delete-tg">`-tg`</p><br/><p id="data delete--time-gradient">`--time-gradient`</p><br/>|Time gradient of the sensor| ||
 
@@ -96,12 +96,12 @@ dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
 |<p id="data repair-c">`-c`</p><br/><p id="data repair--connection">`--connection`</p><br/>|Connection name|:material-check-bold:||
 |<p id="data repair-er">`-er`</p><br/><p id="data repair--errors">`--errors`</p><br/>|Repair the execution errors| ||
 |<p id="data repair-fw">`-fw`</p><br/><p id="data repair--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="data repair-t">`-t`</p><br/><p id="data repair--table">`--table`</p><br/><p id="data repair--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 |<p id="data repair--headless">`--headless`</p><br/><p id="data repair-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="data repair-h">`-h`</p><br/><p id="data repair--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="data repair-of">`-of`</p><br/><p id="data repair--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="data repair-sr">`-sr`</p><br/><p id="data repair--sensor-readouts">`--sensor-readouts`</p><br/>|Repair the sensor readouts| ||
 |<p id="data repair-st">`-st`</p><br/><p id="data repair--statistics">`--statistics`</p><br/>|Repair the statistics| ||
-|<p id="data repair-t">`-t`</p><br/><p id="data repair--table">`--table`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 
 
 

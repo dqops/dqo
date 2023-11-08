@@ -89,7 +89,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
             completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class)
     private String table;
 
@@ -369,9 +369,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @Override
     public Integer call() throws Exception {
         CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setConnectionName(this.connection);
-        filters.setSchemaTableName(this.table);
-        filters.setColumnName(this.column);
+        filters.setConnection(this.connection);
+        filters.setFullTableName(this.table);
+        filters.setColumn(this.column);
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
         filters.setCheckType(this.checkType);

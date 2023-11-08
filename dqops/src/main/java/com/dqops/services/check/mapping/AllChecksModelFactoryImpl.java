@@ -73,7 +73,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
-        connectionSearchFilters.setConnectionName(checkSearchFilters.getConnectionName());
+        connectionSearchFilters.setConnectionName(checkSearchFilters.getConnection());
 
         Collection<ConnectionSpec> connectionSpecs = this.hierarchyNodeTreeSearcher.findConnections(userHome, connectionSearchFilters);
         if (connectionSpecs.isEmpty()) {
@@ -252,7 +252,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<ColumnChecksModel> columnChecksModels = tableSpec.getColumns().entrySet().stream()
                 .filter(colToSpec ->
-                        (checkSearchFilters.getColumnName() == null || colToSpec.getKey().equals(checkSearchFilters.getColumnName()))
+                        (checkSearchFilters.getColumn() == null || colToSpec.getKey().equals(checkSearchFilters.getColumn()))
                                 && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
                                 && (checkSearchFilters.getColumnDataType() == null || colToSpec.getValue().getTypeSnapshot().getColumnType().equals(checkSearchFilters.getColumnDataType()))
                 ).map(columnNameToSpec -> getColumnChecksModelForColumn(

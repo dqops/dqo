@@ -69,7 +69,7 @@ const TableHeader = ({
 
   const onRunChecks = async () => {
     await onUpdate();
-    const res = await JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: checksUI?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
@@ -353,6 +353,7 @@ const TableHeader = ({
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
           JobApiClient.deleteStoredData(
+            undefined,
             false,
             undefined,
             {

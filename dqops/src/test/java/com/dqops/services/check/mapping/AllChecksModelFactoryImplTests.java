@@ -104,7 +104,7 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
     @Test
     void fromCheckSearchFilters_whenConnectionNameGiven_thenCreatesFullConnectionUiModel() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnectionName(this.connectionSpec.getConnectionName());
+        checkSearchFilters.setConnection(this.connectionSpec.getConnectionName());
 
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         List<AllChecksModel> allChecksModels = this.sut.fromCheckSearchFilters(checkSearchFilters, principal);

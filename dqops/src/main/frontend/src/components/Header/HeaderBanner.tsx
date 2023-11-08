@@ -35,15 +35,15 @@ export const HeaderBanner = ({ onClose }: HeaderBannerProps) => {
   const collectStatistics = () => {
     setIsCollected(true);
 
-    JobApiClient.collectStatisticsOnTable(false, undefined, {
-      connectionName: advisorObject.connectionName
+    JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+      connection: advisorObject.connectionName
     });
   };
 
   const runProfilingChecks = () => {
-    JobApiClient.runChecks(false, undefined, {
+    JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: {
-        connectionName: advisorObject.connectionName,
+        connection: advisorObject.connectionName,
         checkType: CheckTypes.PROFILING
       }
     });

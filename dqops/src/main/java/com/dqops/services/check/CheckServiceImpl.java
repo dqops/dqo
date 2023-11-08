@@ -171,7 +171,7 @@ public class CheckServiceImpl implements CheckService {
     public List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters, DqoUserPrincipal principal) {
         if (parameters == null
                 || parameters.getCheckSearchFilters() == null
-                || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnectionName())
+                || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnection())
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getCheckName())
         ) {
             // Successfully updated nothing.

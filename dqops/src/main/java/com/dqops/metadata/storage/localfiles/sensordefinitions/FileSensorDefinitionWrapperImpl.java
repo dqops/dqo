@@ -106,6 +106,8 @@ public class FileSensorDefinitionWrapperImpl extends SensorDefinitionWrapperImpl
     public void flush() {
         this.getProviderSensors().flush(); // the first call to flush, maybe all provider checks are deleted and the check is deleted right after
 
+        this.clearDirty(false);
+
         if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }

@@ -39,8 +39,8 @@ class DqopsCollectStatisticsOperator(BaseOperator):
     def __init__(
         self,
         *,
-        connection_name: (Union[Unset, str]) = UNSET,
-        schema_table_name: Union[Unset, str] = UNSET,
+        connection: (Union[Unset, str]) = UNSET,
+        full_table_name: Union[Unset, str] = UNSET,
         enabled: Union[Unset, bool] = UNSET,
         labels: Union[Unset, List[str]] = UNSET,
         column_names: Union[Unset, List[str]] = UNSET,
@@ -56,9 +56,9 @@ class DqopsCollectStatisticsOperator(BaseOperator):
 
         Parameters
         ----------
-        connection_name : Union[Unset, str]
+        connection : Union[Unset, str]
             The connection name to the data source in DQOps.
-        schema_table_name : Union[Unset, str]
+        full_table_name : Union[Unset, str]
             The schema name with the table name.
         enabled : Union[Unset, bool]
             If set to true only enabled connections and tables are filtered. Otherwise only disabled connection or table are used.
@@ -79,8 +79,8 @@ class DqopsCollectStatisticsOperator(BaseOperator):
         """
 
         super().__init__(**kwargs)
-        self.connection_name: Union[Unset, str] = connection_name
-        self.schema_table_name: Union[Unset, str] = schema_table_name
+        self.connection: Union[Unset, str] = connection
+        self.full_table_name: Union[Unset, str] = full_table_name
         self.enabled: Union[Unset, bool] = enabled
         self.labels: Union[Unset, List[str]] = labels
         self.column_names: Union[Unset, List[str]] = column_names
@@ -99,8 +99,8 @@ class DqopsCollectStatisticsOperator(BaseOperator):
         try:
             search_filters: StatisticsCollectorSearchFilters = (
                 StatisticsCollectorSearchFilters(
-                    connection_name=self.connection_name,
-                    schema_table_name=self.schema_table_name,
+                    connection=self.connection,
+                    full_table_name=self.full_table_name,
                     enabled=self.enabled,
                     labels=self.labels,
                     column_names=self.column_names,

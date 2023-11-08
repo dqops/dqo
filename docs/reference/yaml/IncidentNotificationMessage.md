@@ -28,7 +28,7 @@ Notification message payload that is posted (HTTP POST) to a notification endpoi
 |highest_severity|The highest failed check severity that was detected as part of this data quality incident. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer| | | |
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer| | | |
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string| | | |
-|[status](#incidentstatus)|Incident status.|[IncidentStatus](#incidentstatus)|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
+|status|Incident status.|enum|acknowledged<br/>muted<br/>open<br/>resolved<br/>| | |
 |text|Notification text in Markdown format that contains the most important fields from the class.|string| | | |
 
 

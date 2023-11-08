@@ -79,6 +79,7 @@ const TableColumnsView = () => {
   const collectStatistics = async () => {
     try {
       await JobApiClient.collectStatisticsOnTable(
+        undefined,
         false,
         undefined,
         collectStiatisticsObject);
@@ -88,8 +89,8 @@ const TableColumnsView = () => {
   };
 
   const collectStiatisticsObject : StatisticsCollectorSearchFilters = {
-    connectionName: connectionName,
-    schemaTableName: schemaName + "." + tableName,
+    connection: connectionName,
+    fullTableName: schemaName + "." + tableName,
     enabled: true,
      columnNames: selectedColumns?.[0]?.length!== 0 ? selectedColumns : [],
   }
@@ -97,7 +98,7 @@ const TableColumnsView = () => {
     (x) =>
       x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
       x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.fullTableName ===
         schemaName + '.' + tableName &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
@@ -191,7 +192,7 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statistics_collector_search_filters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.fullTableName ===
                   schemaName + '.' + tableName
                   && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
                   connectionName
@@ -206,7 +207,7 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statistics_collector_search_filters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.fullTableName ===
                   schemaName + '.' + tableName
                   && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
                   connectionName
@@ -218,7 +219,7 @@ const TableColumnsView = () => {
               filteredJobs?.find(
                 (x) =>
                   x.parameters?.collectStatisticsParameters
-                    ?.statistics_collector_search_filters?.schemaTableName ===
+                    ?.statistics_collector_search_filters?.fullTableName ===
                   schemaName + '.' + tableName
                   && x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.collectorName === 
                   connectionName

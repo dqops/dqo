@@ -456,7 +456,7 @@ dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 |<p id="connection table list-l">`-l`</p><br/><p id="connection table list--label">`--label`</p><br/>|Label filter| ||
 |<p id="connection table list-of">`-of`</p><br/><p id="connection table list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |<p id="connection table list-s">`-s`</p><br/><p id="connection table list--schema">`--schema`</p><br/>|Schema name| ||
-|<p id="connection table list-t">`-t`</p><br/><p id="connection table list--table">`--table`</p><br/>|Table name| ||
+|<p id="connection table list-t">`-t`</p><br/><p id="connection table list--table">`--table`</p><br/>|Table name, without the schema name.| ||
 
 
 
@@ -490,10 +490,10 @@ dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection table show-c">`-c`</p><br/><p id="connection table show--connection">`--connection`</p><br/>|Connection name| ||
 |<p id="connection table show-fw">`-fw`</p><br/><p id="connection table show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="connection table show-t">`-t`</p><br/><p id="connection table show--table">`--table`</p><br/><p id="connection table show--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 |<p id="connection table show--headless">`--headless`</p><br/><p id="connection table show-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="connection table show-h">`-h`</p><br/><p id="connection table show--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="connection table show-of">`-of`</p><br/><p id="connection table show--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="connection table show-t">`-t`</p><br/><p id="connection table show--table">`--table`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 
 
 

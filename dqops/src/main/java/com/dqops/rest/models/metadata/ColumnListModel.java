@@ -156,46 +156,46 @@ public class ColumnListModel {
 
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
                 getColumnNames().add(columnName);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setFullTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
 
                 setDateStart(null);

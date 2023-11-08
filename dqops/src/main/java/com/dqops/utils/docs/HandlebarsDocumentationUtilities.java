@@ -23,7 +23,6 @@ import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -43,6 +42,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelpers(StringHelpers.class);
         handlebars.registerHelpers(ConditionalHelpers.class);
         handlebars.registerHelper("render-type", renderTypeHelper);
+        handlebars.registerHelper("checkmark", checkmarkHelper);
     }
 
     /**
@@ -86,7 +86,7 @@ public class HandlebarsDocumentationUtilities {
             if (displayText != null) {
                 // Only simple objects get complete linkage
                 String templateToReturn = null;
-                if (isSimpleObject(typeModel) || isLinkableEnum(typeModel)) {
+                if ((isSimpleObject(typeModel) || isLinkableEnum(typeModel)) && typeModel.getClassUsedOnTheFieldPath() != null) {
                     templateToReturn = "[%s](" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
                 } else {
                     templateToReturn = "%s";
@@ -108,8 +108,14 @@ public class HandlebarsDocumentationUtilities {
                     return String.format("Dict[%s, %s]", apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
                 case object_type:
                 default:
-                    return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
-                            "(" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
+                    if (typeModel.getClassUsedOnTheFieldPath() != null) {
+                        return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
+                                "(" + typeModel.getClassUsedOnTheFieldPath().toLowerCase() + ")";
+                    }
+                    else {
+                        return typeModel.getClassNameUsedOnTheField();
+                    }
+
             }
         }
 
@@ -123,5 +129,13 @@ public class HandlebarsDocumentationUtilities {
         private boolean isSimpleObject(TypeModel typeModel) {
             return isObject(typeModel) && typeModel.getObjectDataType() == ObjectDataType.object_type;
         }
+    };
+
+    private static final Helper<Boolean> checkmarkHelper = (bool, _ignore) -> {
+        if (bool == null || !bool) {
+            return " ";
+        }
+
+        return ":material-check-bold:";
     };
 }

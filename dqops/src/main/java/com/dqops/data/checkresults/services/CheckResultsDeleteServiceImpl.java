@@ -95,7 +95,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
                                        (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
                             })
                     .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
-                            filter.getTableSearchFilters().getConnectionName(),
+                            filter.getTableSearchFilters().getConnection(),
                             tableName
                     ))
                     .collect(Collectors.toList());

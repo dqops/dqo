@@ -9,7 +9,7 @@
 {{#if definition.spec.fields}}
 **Parameters**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 {{#each definition.spec.fields}}|{{displayName}}|{{helpText}}|{{replace dataType "_type" ""}}|{{#if required}}Yes{{else}} {{/if}}|{{#each allowedValues}}{{this}}<br/>{{/each}}|
 {{/each}}

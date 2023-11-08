@@ -63,13 +63,14 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 		this.fileWritter = fileWritter;
 	}
 
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name filter", required = false,
-			completionCandidates = FullTableNameCompleter.class)
-	private String fullTableName = "*";
-
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name filter", required = false,
 			completionCandidates = ConnectionNameCompleter.class)
 	private String connectionName = "*";
+
+	@CommandLine.Option(names = {"-t", "--table", "--full-table-name"},
+			description = "Full table name filter in the form \"schema.table\", but also supporting patterns: public.*, *.customers, landing*.customer*.", required = false,
+			completionCandidates = FullTableNameCompleter.class)
+	private String fullTableName = "*.*";
 
 	@CommandLine.Option(names = {"-C", "--column"}, description = "Connection name filter", required = false,
 			completionCandidates = ColumnNameCompleter.class)

@@ -54,12 +54,12 @@ public class TableAddCliCommand extends BaseCommand implements ICommand, IConnec
         this.tableImportService = tableImportService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false)
-    private String fullTableName;
-
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name", required = false,
             completionCandidates = ConnectionNameCompleter.class)
     private String connectionName;
+
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false)
+    private String fullTableName;
 
     /**
      * Returns the table name.

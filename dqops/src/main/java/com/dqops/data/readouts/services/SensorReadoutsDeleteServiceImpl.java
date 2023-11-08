@@ -95,7 +95,7 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
                                 (tableNameSearchPattern == null || tableNameSearchPattern.match(schemaTableName.getTableName()));
                     })
                     .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
-                            filter.getTableSearchFilters().getConnectionName(),
+                            filter.getTableSearchFilters().getConnection(),
                             tableName
                     ))
                     .collect(Collectors.toList());

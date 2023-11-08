@@ -14,9 +14,9 @@ T = TypeVar("T", bound="DeleteStoredDataQueueJobParameters")
 class DeleteStoredDataQueueJobParameters:
     """
     Attributes:
-        connection_name (Union[Unset, str]): The connection name.
-        schema_table_name (Union[Unset, str]): The schema and table name. It is provided as
-            *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns.
+        connection (Union[Unset, str]): The connection name.
+        full_table_name (Union[Unset, str]): The schema and table name. It is provided as *<schema_name>.<table_name>*,
+            for example *public.fact_sales*. This filter does not support patterns.
         date_start (Union[Unset, datetime.date]): The start date (inclusive) to delete the data, based on the
             *time_period* column in Parquet files.
         date_end (Union[Unset, datetime.date]): The end date (inclusive) to delete the data, based on the *time_period*
@@ -58,8 +58,8 @@ class DeleteStoredDataQueueJobParameters:
             Supported values are *table* and *column*.
     """
 
-    connection_name: Union[Unset, str] = UNSET
-    schema_table_name: Union[Unset, str] = UNSET
+    connection: Union[Unset, str] = UNSET
+    full_table_name: Union[Unset, str] = UNSET
     date_start: Union[Unset, datetime.date] = UNSET
     date_end: Union[Unset, datetime.date] = UNSET
     delete_errors: Union[Unset, bool] = UNSET
@@ -81,8 +81,8 @@ class DeleteStoredDataQueueJobParameters:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        connection_name = self.connection_name
-        schema_table_name = self.schema_table_name
+        connection = self.connection
+        full_table_name = self.full_table_name
         date_start: Union[Unset, str] = UNSET
         if not isinstance(self.date_start, Unset):
             date_start = self.date_start.isoformat()
@@ -114,10 +114,10 @@ class DeleteStoredDataQueueJobParameters:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if connection_name is not UNSET:
-            field_dict["connectionName"] = connection_name
-        if schema_table_name is not UNSET:
-            field_dict["schemaTableName"] = schema_table_name
+        if connection is not UNSET:
+            field_dict["connection"] = connection
+        if full_table_name is not UNSET:
+            field_dict["fullTableName"] = full_table_name
         if date_start is not UNSET:
             field_dict["dateStart"] = date_start
         if date_end is not UNSET:
@@ -160,9 +160,9 @@ class DeleteStoredDataQueueJobParameters:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        connection_name = d.pop("connectionName", UNSET)
+        connection = d.pop("connection", UNSET)
 
-        schema_table_name = d.pop("schemaTableName", UNSET)
+        full_table_name = d.pop("fullTableName", UNSET)
 
         _date_start = d.pop("dateStart", UNSET)
         date_start: Union[Unset, datetime.date]
@@ -211,8 +211,8 @@ class DeleteStoredDataQueueJobParameters:
         collector_target = d.pop("collectorTarget", UNSET)
 
         delete_stored_data_queue_job_parameters = cls(
-            connection_name=connection_name,
-            schema_table_name=schema_table_name,
+            connection=connection,
+            full_table_name=full_table_name,
             date_start=date_start,
             date_end=date_end,
             delete_errors=delete_errors,

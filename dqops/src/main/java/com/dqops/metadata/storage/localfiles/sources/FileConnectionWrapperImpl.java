@@ -109,6 +109,8 @@ public class FileConnectionWrapperImpl extends ConnectionWrapperImpl {
     public void flush() {
         this.getTables().flush(); // the first call to flush, maybe all tables are deleted and the connection is deleted right after
 
+        this.clearDirty(false);
+
         if (this.getStatus() == InstanceStatus.DELETED || this.getStatus() == InstanceStatus.NOT_TOUCHED) {
             return; // do nothing
         }

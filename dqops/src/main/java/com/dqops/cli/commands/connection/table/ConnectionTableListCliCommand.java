@@ -20,6 +20,7 @@ import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.commands.TabularOutputFormat;
 import com.dqops.cli.commands.connection.impl.ConnectionCliService;
+import com.dqops.cli.completion.completers.ConnectionNameCompleter;
 import com.dqops.cli.terminal.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,13 +60,13 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 		this.fileWritter = fileWritter;
 	}
 
-	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false)
+	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false, completionCandidates = ConnectionNameCompleter.class)
 	private String connection;
 
 	@CommandLine.Option(names = {"-s", "--schema"}, description = "Schema name", required = false)
 	private String schema;
 
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false)
+	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name, without the schema name.", required = false)
 	private String table;
 
 	@CommandLine.Option(names = {"-d", "--dimension"}, description = "Dimension filter", required = false)

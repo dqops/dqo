@@ -10,8 +10,8 @@ Parameters allow selection of specific connections, tables and columns which sta
 
 | Name              | Description                                                                                                                                                                                                          | Type                                    |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
-| connection_name   | The connection name to the data source in DQOps.                                                                                                                                                                     | Union[Unset, str]                       |
-| schema_table_name | The name of the table with it's schema name.                                                                                                                                                                         | Union[Unset, str]                       |
+| connection   | The connection name to the data source in DQOps.                                                                                                                                                                     | Union[Unset, str]                       |
+| full_table_name | The name of the table with it's schema name.                                                                                                                                                                         | Union[Unset, str]                       |
 | enabled           | If set to true only enabled connections and tables are filtered. Otherwise only disabled connection or table are used.                                                                                               | Union[Unset, bool]                      |
 | labels            | The label names of those edited by user on connections, tables and columns edited in DQOps platform.                                                                                                                 | Union[Unset, List[str]]                 |
 | column_names      | The names of columns.                                                                                                                                                                                                | Union[Unset, List[str]]                 |
@@ -50,8 +50,8 @@ with DAG(
     import_table_task = DqopsCollectStatisticsOperator(
         task_id="dqops_connection_dqops_collect_statistics_task",
         base_url="http://host.docker.internal:8888",
-        connection_name="example_connection",
-        schema_table_name="maven_restaurant_ratings.ratings"
+        connection="example_connection",
+        full_table_name="maven_restaurant_ratings.ratings"
     )
 
 ```
@@ -82,7 +82,7 @@ The status details will appear in a one line as an info level log from the opera
 ```
 
 Technically, the executed operator returns the [CollectStatisticsQueueJobResult](../../client/models/jobs.md#CollectStatisticsQueueJobResult) object with status details.
-When the task execution succeeds or not, the task instance in Airflow will be marked as Success or Failed accordingly.
+When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
 
 CollectStatisticsQueueJobResult includes:
 

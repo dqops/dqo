@@ -55,7 +55,7 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
             completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports patterns like 'sch*.tab*'",
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name (schema.table), supports patterns like 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class)
     private String table;
 
@@ -244,9 +244,9 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
         }
 
         CheckSearchFilters filters = new CheckSearchFilters();
-        filters.setConnectionName(this.connection);
-        filters.setSchemaTableName(this.table);
-        filters.setColumnName(this.column);
+        filters.setConnection(this.connection);
+        filters.setFullTableName(this.table);
+        filters.setColumn(this.column);
         filters.setCheckName(this.check);
         filters.setSensorName(this.sensor);
         filters.setCheckType(this.checkType);

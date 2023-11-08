@@ -30,6 +30,7 @@ nav:
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
+      - Incident management: "dqo-concepts/data-quality-incidents/incidents.md"
       - User interface overview: "dqo-concepts/user-interface-overview/user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
   - Use cases:

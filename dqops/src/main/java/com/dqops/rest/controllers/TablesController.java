@@ -854,8 +854,8 @@ public class TablesController {
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -921,8 +921,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -988,8 +988,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -1227,8 +1227,8 @@ public class TablesController {
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1302,8 +1302,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1377,8 +1377,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1451,16 +1451,16 @@ public class TablesController {
 
         resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
             setTarget(StatisticsCollectorTarget.table);
             setEnabled(true);
         }});
 
         resultModel.setCollectTableAndColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
             setEnabled(true);
         }});
 

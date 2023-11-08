@@ -16,7 +16,7 @@ http://localhost:8888/api/environment/settings
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_settings_model](\docs\client\models\environment\#dqosettingsmodel)||[DqoSettingsModel](\docs\client\models\environment\#dqosettingsmodel)|
+|[dqo_settings_model](/docs/client/models/environment/#dqosettingsmodel)||[DqoSettingsModel](/docs/client/models/environment/#dqosettingsmodel)|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/environment/profile
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_user_profile_model](\docs\client\models\environment\#dqouserprofilemodel)||[DqoUserProfileModel](\docs\client\models\environment\#dqouserprofilemodel)|
+|[dqo_user_profile_model](/docs/client/models/environment/#dqouserprofilemodel)||[DqoUserProfileModel](/docs/client/models/environment/#dqouserprofilemodel)|
 
 
 

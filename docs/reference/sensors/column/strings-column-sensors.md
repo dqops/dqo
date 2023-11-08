@@ -14,7 +14,7 @@ Column level sensor that counts how many expected string values are among the TO
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|string_list| ||
 |top|The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.|long| ||
@@ -613,7 +613,7 @@ Column level sensor that counts how many expected string values are used in a te
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|List of expected string values that should be found in the tested column.|string_list| ||
 
@@ -2145,7 +2145,7 @@ Column level sensor that calculates the count of values that are longer than a g
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
@@ -2349,7 +2349,7 @@ Column level sensor that calculates the percentage of values that are longer tha
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
@@ -2574,7 +2574,7 @@ Column level sensor that calculates the count of values that are shorter than a 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
@@ -2778,7 +2778,7 @@ Column level sensor that calculates the percentage of values that are shorter th
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
@@ -3003,7 +3003,7 @@ Column level sensor that calculates the percentage of strings with a length belo
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_length|Sets a minimal string length|integer| ||
 |max_length|Sets a maximal string length.|integer| ||
@@ -3220,9 +3220,9 @@ Column level sensor that calculates the percentage of values that does fit a giv
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
 
 
 
@@ -3677,7 +3677,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
 
@@ -4426,9 +4426,9 @@ Column level sensor that calculates the number of values that does not fit to a 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
+|date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
 
 
 
@@ -4708,7 +4708,7 @@ Column level sensor that calculates the number of values that does not fit to a 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
 
@@ -6906,7 +6906,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|string_list| ||
 

@@ -211,30 +211,30 @@ public class ConnectionModel {
             setYamlParsingError(connectionSpec.getYamlParsingError());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()

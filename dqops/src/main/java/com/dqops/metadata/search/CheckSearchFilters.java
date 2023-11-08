@@ -46,7 +46,7 @@ import java.util.stream.Collectors;
 @ApiModel(value = "CheckSearchFilters", description = "Target data quality checks filter, identifies which checks on which tables and columns should be executed.")
 public class CheckSearchFilters extends TableSearchFilters implements Cloneable {
     @JsonPropertyDescription("The column name. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.")
-    private String columnName;
+    private String column;
 
     @JsonPropertyDescription("The column data type that was imported from the data source and is stored in the " +
             "[columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
@@ -108,16 +108,16 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      * Gets a column name search pattern.
      * @return Column name search pattern.
      */
-    public String getColumnName() {
-        return columnName;
+    public String getColumn() {
+        return column;
     }
 
     /**
      * Sets a column name search pattern.
-     * @param columnName Column name search pattern.
+     * @param column Column name search pattern.
      */
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
+    public void setColumn(String column) {
+        this.column = column;
     }
 
     /**
@@ -333,8 +333,8 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     @JsonIgnore
     public SearchPattern getColumnNameSearchPattern() {
-        if (columnNameSearchPattern == null && columnName != null) {
-            columnNameSearchPattern = SearchPattern.create(false, columnName);
+        if (columnNameSearchPattern == null && column != null) {
+            columnNameSearchPattern = SearchPattern.create(false, column);
         }
         
         return columnNameSearchPattern;
@@ -388,8 +388,8 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
 
     public static CheckSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
         return new CheckSearchFilters() {{
-            setConnectionName(tableSearchFilters.getConnectionName());
-            setSchemaTableName(tableSearchFilters.getSchemaTableName());
+            setConnection(tableSearchFilters.getConnection());
+            setFullTableName(tableSearchFilters.getFullTableName());
             setEnabled(tableSearchFilters.getEnabled());
             setTags(tableSearchFilters.getTags());
             setLabels(tableSearchFilters.getLabels());
@@ -400,7 +400,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
         @Override
         public CheckSearchFilters createSample() {
             CheckSearchFilters checkSearchFilters = fromTableSearchFilters(new TableSearchFilters.TableSearchFiltersSampleFactory().createSample());
-            checkSearchFilters.setColumnName(SampleStringsRegistry.getColumnName());
+            checkSearchFilters.setColumn(SampleStringsRegistry.getColumnName());
 
             ColumnTypeSnapshotSpec columnTypeSnapshotSpec = new ColumnTypeSnapshotSpec.ColumnTypeSnapshotSpecSampleFactory().createSample();
             checkSearchFilters.setColumnDataType(columnTypeSnapshotSpec.getColumnType());

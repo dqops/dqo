@@ -56,13 +56,13 @@ public class ColumnRenameCliCommand extends BaseCommand implements ICommand, ICo
 		this.columnCliService = columnCliService;
 	}
 
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
-			completionCandidates = FullTableNameCompleter.class)
-	private String fullTableName;
-
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false,
 			completionCandidates = ConnectionNameCompleter.class)
 	private String connectionName;
+
+	@CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name in the form \"schema.table\".", required = false,
+			completionCandidates = FullTableNameCompleter.class)
+	private String fullTableName;
 
 	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name", required = false,
 			completionCandidates = ColumnNameCompleter.class)

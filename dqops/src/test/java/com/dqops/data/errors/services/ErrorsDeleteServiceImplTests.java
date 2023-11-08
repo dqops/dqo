@@ -155,8 +155,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName1.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName1.toTableSearchFilter());
             }});
             setDateStart(startDate.plusDays(1).toLocalDate());
             setDateEnd(startDate.plusDays(1).toLocalDate());
@@ -197,8 +197,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName1.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName1.toTableSearchFilter());
             }});
             setDateStart(startDate.withDayOfMonth(1).toLocalDate());
             setDateEnd(startDate.withDayOfMonth(1).toLocalDate().plusMonths(1).minusDays(1));
@@ -251,8 +251,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(startDate1.withDayOfMonth(1).toLocalDate());
             setDateEnd(startDate1.withDayOfMonth(1).toLocalDate().plusMonths(1).minusDays(1));
@@ -312,8 +312,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(startDate1.toLocalDate());
             setDateEnd(startDate2.toLocalDate());
@@ -373,8 +373,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName("sch.nonexistent_table");
+                setConnection(connectionName);
+                setFullTableName("sch.nonexistent_table");
             }});
         }};
 
@@ -436,8 +436,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName("*ch.*tab1");
+                setConnection(connectionName);
+                setFullTableName("*ch.*tab1");
             }});
         }};
 
@@ -538,8 +538,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
@@ -581,8 +581,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
@@ -625,8 +625,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
@@ -669,8 +669,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
@@ -713,8 +713,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setDateStart(month);
             setDateEnd(month.plusDays(3));
@@ -756,8 +756,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
 
         ErrorsFragmentFilter filter = new ErrorsFragmentFilter(){{
             setTableSearchFilters(new TableSearchFilters(){{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
             }});
             setSensorName("s1");
         }};

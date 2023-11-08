@@ -60,15 +60,16 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 		this.principalProvider = principalProvider;
 	}
 
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
-			completionCandidates = FullTableNameCompleter.class)
-	private String fullTableName;
-
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false,
 			completionCandidates = ConnectionNameCompleter.class)
 	private String connectionName;
 
-	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name", required = false,
+	@CommandLine.Option(names = {"-t", "--table", "--full-table-name"},
+			description = "Full table name filter in the form \"schema.table\", but also supporting patterns: public.*, *.customers, landing*.customer*.", required = false,
+			completionCandidates = FullTableNameCompleter.class)
+	private String fullTableName;
+
+	@CommandLine.Option(names = {"-C", "--column"}, description = "Column name, supports patterns: c_*, *_id, prefix*suffix.", required = false,
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName;
 

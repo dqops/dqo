@@ -16,27 +16,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)]|
+|check_results_list_model||List[[CheckResultsListModel](/docs/client/models/check_results/#checkresultslistmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|column_name|Column name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|data_group|Data group|string|false|
-|month_start|Month start boundary|string|false|
-|month_end|Month end boundary|string|false|
-|check_name|Check name|string|false|
-|category|Check category name|string|false|
-|table_comparison|Table comparison name|string|false|
-|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|column_name|Column name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|data_group|Data group|string| |
+|month_start|Month start boundary|string| |
+|month_end|Month end boundary|string| |
+|check_name|Check name|string| |
+|category|Check category name|string| |
+|table_comparison|Table comparison name|string| |
+|max_results_per_check|Maximum number of results per check, the default is 100|long| |
 
 
 
@@ -68,27 +68,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)]|
+|check_results_list_model||List[[CheckResultsListModel](/docs/client/models/check_results/#checkresultslistmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|column_name|Column name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|data_group|Data group|string|false|
-|month_start|Month start boundary|string|false|
-|month_end|Month end boundary|string|false|
-|check_name|Check name|string|false|
-|category|Check category name|string|false|
-|table_comparison|Table comparison name|string|false|
-|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|column_name|Column name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|data_group|Data group|string| |
+|month_start|Month start boundary|string| |
+|month_end|Month end boundary|string| |
+|check_name|Check name|string| |
+|category|Check category name|string| |
+|table_comparison|Table comparison name|string| |
+|max_results_per_check|Maximum number of results per check, the default is 100|long| |
 
 
 
@@ -120,26 +120,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)]|
+|check_results_list_model||List[[CheckResultsListModel](/docs/client/models/check_results/#checkresultslistmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|column_name|Column name|string|true|
-|data_group|Data group|string|false|
-|month_start|Month start boundary|string|false|
-|month_end|Month end boundary|string|false|
-|check_name|Check name|string|false|
-|category|Check category name|string|false|
-|table_comparison|Table comparison name|string|false|
-|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|column_name|Column name|string|:material-check-bold:|
+|data_group|Data group|string| |
+|month_start|Month start boundary|string| |
+|month_end|Month end boundary|string| |
+|check_name|Check name|string| |
+|category|Check category name|string| |
+|table_comparison|Table comparison name|string| |
+|max_results_per_check|Maximum number of results per check, the default is 100|long| |
 
 
 
@@ -171,26 +171,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_data_quality_status_model](\docs\client\models\check_results\#tabledataqualitystatusmodel)||[TableDataQualityStatusModel](\docs\client\models\check_results\#tabledataqualitystatusmodel)|
+|[table_data_quality_status_model](/docs/client/models/check_results/#tabledataqualitystatusmodel)||[TableDataQualityStatusModel](/docs/client/models/check_results/#tabledataqualitystatusmodel)|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long|false|
-|[check_type](\docs\client\models\#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](\docs\client\models\#checktype)|false|
-|[check_time_scale](\docs\client\models\#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](\docs\client\models\#checktimescale)|false|
-|data_group|Optional data group|string|false|
-|check_name|Optional check name|string|false|
-|category|Optional check category name|string|false|
-|table_comparison|Optional table comparison name|string|false|
-|quality_dimension|Optional data quality dimension|string|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long| |
+|[check_type](/docs/client/models/#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](/docs/client/models/#checktype)| |
+|[check_time_scale](/docs/client/models/#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](/docs/client/models/#checktimescale)| |
+|data_group|Optional data group|string| |
+|check_name|Optional check name|string| |
+|category|Optional check category name|string| |
+|table_comparison|Optional table comparison name|string| |
+|quality_dimension|Optional data quality dimension|string| |
 
 
 
@@ -222,26 +222,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)]|
+|check_results_list_model||List[[CheckResultsListModel](/docs/client/models/check_results/#checkresultslistmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|data_group|Data group|string|false|
-|month_start|Month start boundary|string|false|
-|month_end|Month end boundary|string|false|
-|check_name|Check name|string|false|
-|category|Check category name|string|false|
-|table_comparison|Table comparison name|string|false|
-|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|data_group|Data group|string| |
+|month_start|Month start boundary|string| |
+|month_end|Month end boundary|string| |
+|check_name|Check name|string| |
+|category|Check category name|string| |
+|table_comparison|Table comparison name|string| |
+|max_results_per_check|Maximum number of results per check, the default is 100|long| |
 
 
 
@@ -273,26 +273,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)]|
+|check_results_list_model||List[[CheckResultsListModel](/docs/client/models/check_results/#checkresultslistmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|data_group|Data group|string|false|
-|month_start|Month start boundary|string|false|
-|month_end|Month end boundary|string|false|
-|check_name|Check name|string|false|
-|category|Check category name|string|false|
-|table_comparison|Table comparison name|string|false|
-|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|data_group|Data group|string| |
+|month_start|Month start boundary|string| |
+|month_end|Month end boundary|string| |
+|check_name|Check name|string| |
+|category|Check category name|string| |
+|table_comparison|Table comparison name|string| |
+|max_results_per_check|Maximum number of results per check, the default is 100|long| |
 
 
 
@@ -324,25 +324,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](\docs\client\models\check_results\#checkresultslistmodel)]|
+|check_results_list_model||List[[CheckResultsListModel](/docs/client/models/check_results/#checkresultslistmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name|Table name|string|true|
-|data_group|Data group|string|false|
-|month_start|Month start boundary|string|false|
-|month_end|Month end boundary|string|false|
-|check_name|Check name|string|false|
-|category|Check category name|string|false|
-|table_comparison|Table comparison name|string|false|
-|max_results_per_check|Maximum number of results per check, the default is 100|long|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name|Table name|string|:material-check-bold:|
+|data_group|Data group|string| |
+|month_start|Month start boundary|string| |
+|month_end|Month end boundary|string| |
+|check_name|Check name|string| |
+|category|Check category name|string| |
+|table_comparison|Table comparison name|string| |
+|max_results_per_check|Maximum number of results per check, the default is 100|long| |
 
 
 

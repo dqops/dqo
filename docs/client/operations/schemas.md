@@ -16,26 +16,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](/docs/client/models/#checkconfigurationmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Check time-scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|table_name_pattern|Table name pattern|string|false|
-|column_name_pattern|Column name pattern|string|false|
-|column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
-|check_category|Check category|string|false|
-|check_name|Check name|string|false|
-|check_enabled|Check enabled|boolean|false|
-|check_configured|Check configured|boolean|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Check time-scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|table_name_pattern|Table name pattern|string| |
+|column_name_pattern|Column name pattern|string| |
+|column_data_type|Column data-type|string| |
+|[check_target](/docs/client/models/#checktarget)|Check target|[CheckTarget](/docs/client/models/#checktarget)| |
+|check_category|Check category|string| |
+|check_name|Check name|string| |
+|check_enabled|Check enabled|boolean| |
+|check_configured|Check configured|boolean| |
 
 
 
@@ -67,21 +67,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](\docs\client\models\#checktemplate)]|
+|check_template||List[[CheckTemplate](/docs/client/models/#checktemplate)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
-|check_category|Check category|string|false|
-|check_name|Check name|string|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|[check_target](/docs/client/models/#checktarget)|Check target|[CheckTarget](/docs/client/models/#checktarget)| |
+|check_category|Check category|string| |
+|check_name|Check name|string| |
 
 
 
@@ -113,26 +113,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](/docs/client/models/#checkconfigurationmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Check time-scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|table_name_pattern|Table name pattern|string|false|
-|column_name_pattern|Column name pattern|string|false|
-|column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
-|check_category|Check category|string|false|
-|check_name|Check name|string|false|
-|check_enabled|Check enabled|boolean|false|
-|check_configured|Check configured|boolean|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Check time-scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|table_name_pattern|Table name pattern|string| |
+|column_name_pattern|Column name pattern|string| |
+|column_data_type|Column data-type|string| |
+|[check_target](/docs/client/models/#checktarget)|Check target|[CheckTarget](/docs/client/models/#checktarget)| |
+|check_category|Check category|string| |
+|check_name|Check name|string| |
+|check_enabled|Check enabled|boolean| |
+|check_configured|Check configured|boolean| |
 
 
 
@@ -164,21 +164,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](\docs\client\models\#checktemplate)]|
+|check_template||List[[CheckTemplate](/docs/client/models/#checktemplate)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|[time_scale](\docs\client\models\#checktimescale)|Time scale|[CheckTimeScale](\docs\client\models\#checktimescale)|true|
-|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
-|check_category|Check category|string|false|
-|check_name|Check name|string|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|[check_target](/docs/client/models/#checktarget)|Check target|[CheckTarget](/docs/client/models/#checktarget)| |
+|check_category|Check category|string| |
+|check_name|Check name|string| |
 
 
 
@@ -210,25 +210,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_configuration_model||List[[CheckConfigurationModel](\docs\client\models\#checkconfigurationmodel)]|
+|check_configuration_model||List[[CheckConfigurationModel](/docs/client/models/#checkconfigurationmodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|table_name_pattern|Table name pattern|string|false|
-|column_name_pattern|Column name pattern|string|false|
-|column_data_type|Column data-type|string|false|
-|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
-|check_category|Check category|string|false|
-|check_name|Check name|string|false|
-|check_enabled|Check enabled|boolean|false|
-|check_configured|Check configured|boolean|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|table_name_pattern|Table name pattern|string| |
+|column_name_pattern|Column name pattern|string| |
+|column_data_type|Column data-type|string| |
+|[check_target](/docs/client/models/#checktarget)|Check target|[CheckTarget](/docs/client/models/#checktarget)| |
+|check_category|Check category|string| |
+|check_name|Check name|string| |
+|check_enabled|Check enabled|boolean| |
+|check_configured|Check configured|boolean| |
 
 
 
@@ -260,20 +260,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_template||List[[CheckTemplate](\docs\client\models\#checktemplate)]|
+|check_template||List[[CheckTemplate](/docs/client/models/#checktemplate)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
-|schema_name|Schema name|string|true|
-|[check_target](\docs\client\models\#checktarget)|Check target|[CheckTarget](\docs\client\models\#checktarget)|false|
-|check_category|Check category|string|false|
-|check_name|Check name|string|false|
+|connection_name|Connection name|string|:material-check-bold:|
+|schema_name|Schema name|string|:material-check-bold:|
+|[check_target](/docs/client/models/#checktarget)|Check target|[CheckTarget](/docs/client/models/#checktarget)| |
+|check_category|Check category|string| |
+|check_name|Check name|string| |
 
 
 
@@ -305,16 +305,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|schema_model||List[[SchemaModel](\docs\client\models\schemas\#schemamodel)]|
+|schema_model||List[[SchemaModel](/docs/client/models/schemas/#schemamodel)]|
 
 
 
 
 **Parameters of this method are described below**  
   
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Is&nbsp;it required?&nbsp;|
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|true|
+|connection_name|Connection name|string|:material-check-bold:|
 
 
 

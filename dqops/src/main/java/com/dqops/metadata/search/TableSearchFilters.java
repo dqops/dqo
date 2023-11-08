@@ -34,12 +34,12 @@ import lombok.EqualsAndHashCode;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class TableSearchFilters {
     @JsonPropertyDescription("The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
-    private String connectionName;
+    private String connection;
 
     @JsonPropertyDescription("The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. " +
             "The schema and table name accept patterns both in the schema name and table name parts. " +
             "Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.")
-    private String schemaTableName;
+    private String fullTableName;
 
     @JsonPropertyDescription("A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, " +
             "the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.")
@@ -76,32 +76,32 @@ public class TableSearchFilters {
      * Returns the connection name search pattern.
      * @return Connection name search pattern.
      */
-    public String getConnectionName() {
-        return connectionName;
+    public String getConnection() {
+        return connection;
     }
 
     /**
      * Sets the connection name search pattern.
-     * @param connectionName Connection name search pattern.
+     * @param connection Connection name search pattern.
      */
-    public void setConnectionName(String connectionName) {
-        this.connectionName = connectionName;
+    public void setConnection(String connection) {
+        this.connection = connection;
     }
 
     /**
      * Returns a "schema.table" search pattern. The pattern may also contain a wildcard '*', for example: "schema.fact*"
      * @return Schema / table search pattern.
      */
-    public String getSchemaTableName() {
-        return schemaTableName;
+    public String getFullTableName() {
+        return fullTableName;
     }
 
     /**
      * Sets a schema name and table name search pattern.
-     * @param schemaTableName Schema and table search pattern.
+     * @param fullTableName Schema and table search pattern.
      */
-    public void setSchemaTableName(String schemaTableName) {
-        this.schemaTableName = schemaTableName;
+    public void setFullTableName(String fullTableName) {
+        this.fullTableName = fullTableName;
     }
 
     /**
@@ -161,15 +161,15 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
-            connectionNameSearchPattern = SearchPattern.create(false, connectionName);
+        if (connectionNameSearchPattern == null && connection != null) {
+            connectionNameSearchPattern = SearchPattern.create(false, connection);
         }
 
         return connectionNameSearchPattern;
     }
     
     protected void recreateSchemaTableNameSearchPatterns() {
-        PhysicalTableName parsedSchemaTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
+        PhysicalTableName parsedSchemaTableName = PhysicalTableName.fromSchemaTableFilter(fullTableName);
         schemaNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getSchemaName());
         tableNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getTableName());
     }
@@ -181,7 +181,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getSchemaNameSearchPattern() {
-        if (schemaNameSearchPattern == null && schemaTableName != null) {
+        if (schemaNameSearchPattern == null && fullTableName != null) {
             recreateSchemaTableNameSearchPatterns();
         }
 
@@ -195,7 +195,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getTableNameSearchPattern() {
-        if (tableNameSearchPattern == null && schemaTableName != null) {
+        if (tableNameSearchPattern == null && fullTableName != null) {
             recreateSchemaTableNameSearchPatterns();
         }
 
@@ -240,8 +240,8 @@ public class TableSearchFilters {
         @Override
         public TableSearchFilters createSample() {
             return new TableSearchFilters() {{
-                setConnectionName(SampleStringsRegistry.getConnectionName());
-                setSchemaTableName(SampleStringsRegistry.getSchemaTableName());
+                setConnection(SampleStringsRegistry.getConnectionName());
+                setFullTableName(SampleStringsRegistry.getSchemaTableName());
             }};
         }
     }
