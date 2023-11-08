@@ -83,6 +83,7 @@ from .check_configuration_model import CheckConfigurationModel
 from .check_container_list_model import CheckContainerListModel
 from .check_container_model import CheckContainerModel
 from .check_container_type_model import CheckContainerTypeModel
+from .check_current_data_quality_status_model import CheckCurrentDataQualityStatusModel
 from .check_definition_folder_model import CheckDefinitionFolderModel
 from .check_definition_folder_model_folders import CheckDefinitionFolderModelFolders
 from .check_definition_list_model import CheckDefinitionListModel
@@ -385,6 +386,12 @@ from .column_comparison_profiling_checks_spec_custom_checks import (
     ColumnComparisonProfilingChecksSpecCustomChecks,
 )
 from .column_comparison_sum_match_check_spec import ColumnComparisonSumMatchCheckSpec
+from .column_current_data_quality_status_model import (
+    ColumnCurrentDataQualityStatusModel,
+)
+from .column_current_data_quality_status_model_checks import (
+    ColumnCurrentDataQualityStatusModelChecks,
+)
 from .column_daily_monitoring_check_categories_spec import (
     ColumnDailyMonitoringCheckCategoriesSpec,
 )
@@ -1584,6 +1591,13 @@ from .table_comparison_results_model_table_comparison_results import (
 from .table_comparison_row_count_match_check_spec import (
     TableComparisonRowCountMatchCheckSpec,
 )
+from .table_current_data_quality_status_model import TableCurrentDataQualityStatusModel
+from .table_current_data_quality_status_model_checks import (
+    TableCurrentDataQualityStatusModelChecks,
+)
+from .table_current_data_quality_status_model_columns import (
+    TableCurrentDataQualityStatusModelColumns,
+)
 from .table_daily_monitoring_check_categories_spec import (
     TableDailyMonitoringCheckCategoriesSpec,
 )
@@ -1604,10 +1618,6 @@ from .table_daily_partitioned_check_categories_spec_custom import (
 )
 from .table_data_freshness_check_spec import TableDataFreshnessCheckSpec
 from .table_data_ingestion_delay_check_spec import TableDataIngestionDelayCheckSpec
-from .table_data_quality_status_model import TableDataQualityStatusModel
-from .table_data_quality_status_model_failed_checks_statuses import (
-    TableDataQualityStatusModelFailedChecksStatuses,
-)
 from .table_data_staleness_check_spec import TableDataStalenessCheckSpec
 from .table_incident_grouping_spec import TableIncidentGroupingSpec
 from .table_list_model import TableListModel
@@ -1842,6 +1852,7 @@ __all__ = (
     "CheckContainerListModel",
     "CheckContainerModel",
     "CheckContainerTypeModel",
+    "CheckCurrentDataQualityStatusModel",
     "CheckDefinitionFolderModel",
     "CheckDefinitionFolderModelFolders",
     "CheckDefinitionListModel",
@@ -1966,6 +1977,8 @@ __all__ = (
     "ColumnComparisonProfilingChecksSpec",
     "ColumnComparisonProfilingChecksSpecCustomChecks",
     "ColumnComparisonSumMatchCheckSpec",
+    "ColumnCurrentDataQualityStatusModel",
+    "ColumnCurrentDataQualityStatusModelChecks",
     "ColumnDailyMonitoringCheckCategoriesSpec",
     "ColumnDailyMonitoringCheckCategoriesSpecComparisons",
     "ColumnDailyMonitoringCheckCategoriesSpecCustom",
@@ -2529,6 +2542,9 @@ __all__ = (
     "TableComparisonResultsModelColumnComparisonResults",
     "TableComparisonResultsModelTableComparisonResults",
     "TableComparisonRowCountMatchCheckSpec",
+    "TableCurrentDataQualityStatusModel",
+    "TableCurrentDataQualityStatusModelChecks",
+    "TableCurrentDataQualityStatusModelColumns",
     "TableDailyMonitoringCheckCategoriesSpec",
     "TableDailyMonitoringCheckCategoriesSpecComparisons",
     "TableDailyMonitoringCheckCategoriesSpecCustom",
@@ -2537,8 +2553,6 @@ __all__ = (
     "TableDailyPartitionedCheckCategoriesSpecCustom",
     "TableDataFreshnessCheckSpec",
     "TableDataIngestionDelayCheckSpec",
-    "TableDataQualityStatusModel",
-    "TableDataQualityStatusModelFailedChecksStatuses",
     "TableDataStalenessCheckSpec",
     "TableIncidentGroupingSpec",
     "TableListModel",

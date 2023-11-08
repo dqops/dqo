@@ -17,7 +17,7 @@ The default configuration of notifications. Notifications are published by calli
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](/docs/reference/yaml/connectionyaml/#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](/docs/reference/yaml/connectionyaml/#incidentwebhooknotificationsspec)| | | |
+|[spec](../connectionyaml/#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../connectionyaml/#incidentwebhooknotificationsspec)| | | |
 
 
 

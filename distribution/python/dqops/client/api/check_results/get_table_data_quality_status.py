@@ -7,7 +7,9 @@ from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_time_scale import CheckTimeScale
 from ...models.check_type import CheckType
-from ...models.table_data_quality_status_model import TableDataQualityStatusModel
+from ...models.table_current_data_quality_status_model import (
+    TableCurrentDataQualityStatusModel,
+)
 from ...types import UNSET, Response, Unset
 
 
@@ -17,6 +19,7 @@ def _get_kwargs(
     table_name: str,
     *,
     months: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
@@ -29,6 +32,8 @@ def _get_kwargs(
 
     params: Dict[str, Any] = {}
     params["months"] = months
+
+    params["since"] = since
 
     json_check_type: Union[Unset, None, str] = UNSET
     if not isinstance(check_type, Unset):
@@ -67,9 +72,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[TableDataQualityStatusModel]:
+) -> Optional[TableCurrentDataQualityStatusModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = TableDataQualityStatusModel.from_dict(response.json())
+        response_200 = TableCurrentDataQualityStatusModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -80,7 +85,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[TableDataQualityStatusModel]:
+) -> Response[TableCurrentDataQualityStatusModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -96,6 +101,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
@@ -103,7 +109,7 @@ def sync_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     quality_dimension: Union[Unset, None, str] = UNSET,
-) -> Response[TableDataQualityStatusModel]:
+) -> Response[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -117,6 +123,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
+        since (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
@@ -130,7 +137,7 @@ def sync_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TableDataQualityStatusModel]
+        Response[TableCurrentDataQualityStatusModel]
     """
 
     kwargs = _get_kwargs(
@@ -138,6 +145,7 @@ def sync_detailed(
         schema_name=schema_name,
         table_name=table_name,
         months=months,
+        since=since,
         check_type=check_type,
         check_time_scale=check_time_scale,
         data_group=data_group,
@@ -161,6 +169,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
@@ -168,7 +177,7 @@ def sync(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     quality_dimension: Union[Unset, None, str] = UNSET,
-) -> Optional[TableDataQualityStatusModel]:
+) -> Optional[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -182,6 +191,7 @@ def sync(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
+        since (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
@@ -195,7 +205,7 @@ def sync(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TableDataQualityStatusModel
+        TableCurrentDataQualityStatusModel
     """
 
     return sync_detailed(
@@ -204,6 +214,7 @@ def sync(
         table_name=table_name,
         client=client,
         months=months,
+        since=since,
         check_type=check_type,
         check_time_scale=check_time_scale,
         data_group=data_group,
@@ -221,6 +232,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
@@ -228,7 +240,7 @@ async def asyncio_detailed(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     quality_dimension: Union[Unset, None, str] = UNSET,
-) -> Response[TableDataQualityStatusModel]:
+) -> Response[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -242,6 +254,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
+        since (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
@@ -255,7 +268,7 @@ async def asyncio_detailed(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TableDataQualityStatusModel]
+        Response[TableCurrentDataQualityStatusModel]
     """
 
     kwargs = _get_kwargs(
@@ -263,6 +276,7 @@ async def asyncio_detailed(
         schema_name=schema_name,
         table_name=table_name,
         months=months,
+        since=since,
         check_type=check_type,
         check_time_scale=check_time_scale,
         data_group=data_group,
@@ -284,6 +298,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
     check_type: Union[Unset, None, CheckType] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
@@ -291,7 +306,7 @@ async def asyncio(
     category: Union[Unset, None, str] = UNSET,
     table_comparison: Union[Unset, None, str] = UNSET,
     quality_dimension: Union[Unset, None, str] = UNSET,
-) -> Optional[TableDataQualityStatusModel]:
+) -> Optional[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -305,6 +320,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
+        since (Union[Unset, None, int]):
         check_type (Union[Unset, None, CheckType]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
@@ -318,7 +334,7 @@ async def asyncio(
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TableDataQualityStatusModel
+        TableCurrentDataQualityStatusModel
     """
 
     return (
@@ -328,6 +344,7 @@ async def asyncio(
             table_name=table_name,
             client=client,
             months=months,
+            since=since,
             check_type=check_type,
             check_time_scale=check_time_scale,
             data_group=data_group,

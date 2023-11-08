@@ -6,25 +6,29 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_data_quality_status_model_failed_checks_statuses import (
-        TableDataQualityStatusModelFailedChecksStatuses,
+    from ..models.table_current_data_quality_status_model_checks import (
+        TableCurrentDataQualityStatusModelChecks,
+    )
+    from ..models.table_current_data_quality_status_model_columns import (
+        TableCurrentDataQualityStatusModelColumns,
     )
 
 
-T = TypeVar("T", bound="TableDataQualityStatusModel")
+T = TypeVar("T", bound="TableCurrentDataQualityStatusModel")
 
 
 @_attrs_define
-class TableDataQualityStatusModel:
+class TableCurrentDataQualityStatusModel:
     """The table's most recent data quality status. It is a summary of the results of the most recently executed data
-    quality checks on the table. Verify the value of the highest_severity_issue (0 - all data quality checks passed, 1 -
-    a warning was detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.
+    quality checks on the table. Verify the value of the highest_severity_level to see if there are any data quality
+    issues on the table. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was
+    detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.
 
         Attributes:
             connection_name (Union[Unset, str]): The connection name in DQOps.
             schema_name (Union[Unset, str]): The schema name.
             table_name (Union[Unset, str]): The table name.
-            highest_severity_issue (Union[Unset, int]): The severity of the highest identified data quality issue (1 =
+            highest_severity_level (Union[Unset, int]): The severity of the highest identified data quality issue (1 =
                 warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no
                 data quality checks were executed on the table.
             last_check_executed_at (Union[Unset, int]): The UTC timestamp when the most recent data quality check was
@@ -43,15 +47,17 @@ class TableDataQualityStatusModel:
                 to access issues to the data source, invalid mapping in DQOps, invalid queries in data quality sensors or
                 invalid python rules. When an execution error is reported, the configuration of a data quality check on a table
                 must be updated.
-            failed_checks_statuses (Union[Unset, TableDataQualityStatusModelFailedChecksStatuses]): The paths to all failed
-                data quality checks (keys) and severity of the highest data quality issue that was detected. Table-level checks
-                are identified by the check name. Column-level checks are identified as a check_name[column_name].
+            checks (Union[Unset, TableCurrentDataQualityStatusModelChecks]): The dictionary of statuses for data quality
+                checks. The keys are data quality check names, the values are the current data quality check statuses that
+                describe the most current status.
+            columns (Union[Unset, TableCurrentDataQualityStatusModelColumns]): Dictionary of data statues for all columns
+                that have any known data quality results. The keys in the dictionary are the column names.
     """
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
-    highest_severity_issue: Union[Unset, int] = UNSET
+    highest_severity_level: Union[Unset, int] = UNSET
     last_check_executed_at: Union[Unset, int] = UNSET
     executed_checks: Union[Unset, int] = UNSET
     valid_results: Union[Unset, int] = UNSET
@@ -59,16 +65,15 @@ class TableDataQualityStatusModel:
     errors: Union[Unset, int] = UNSET
     fatals: Union[Unset, int] = UNSET
     execution_errors: Union[Unset, int] = UNSET
-    failed_checks_statuses: Union[
-        Unset, "TableDataQualityStatusModelFailedChecksStatuses"
-    ] = UNSET
+    checks: Union[Unset, "TableCurrentDataQualityStatusModelChecks"] = UNSET
+    columns: Union[Unset, "TableCurrentDataQualityStatusModelColumns"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
-        highest_severity_issue = self.highest_severity_issue
+        highest_severity_level = self.highest_severity_level
         last_check_executed_at = self.last_check_executed_at
         executed_checks = self.executed_checks
         valid_results = self.valid_results
@@ -76,9 +81,13 @@ class TableDataQualityStatusModel:
         errors = self.errors
         fatals = self.fatals
         execution_errors = self.execution_errors
-        failed_checks_statuses: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.failed_checks_statuses, Unset):
-            failed_checks_statuses = self.failed_checks_statuses.to_dict()
+        checks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.checks, Unset):
+            checks = self.checks.to_dict()
+
+        columns: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.columns, Unset):
+            columns = self.columns.to_dict()
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -89,8 +98,8 @@ class TableDataQualityStatusModel:
             field_dict["schema_name"] = schema_name
         if table_name is not UNSET:
             field_dict["table_name"] = table_name
-        if highest_severity_issue is not UNSET:
-            field_dict["highest_severity_issue"] = highest_severity_issue
+        if highest_severity_level is not UNSET:
+            field_dict["highest_severity_level"] = highest_severity_level
         if last_check_executed_at is not UNSET:
             field_dict["last_check_executed_at"] = last_check_executed_at
         if executed_checks is not UNSET:
@@ -105,15 +114,20 @@ class TableDataQualityStatusModel:
             field_dict["fatals"] = fatals
         if execution_errors is not UNSET:
             field_dict["execution_errors"] = execution_errors
-        if failed_checks_statuses is not UNSET:
-            field_dict["failed_checks_statuses"] = failed_checks_statuses
+        if checks is not UNSET:
+            field_dict["checks"] = checks
+        if columns is not UNSET:
+            field_dict["columns"] = columns
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_data_quality_status_model_failed_checks_statuses import (
-            TableDataQualityStatusModelFailedChecksStatuses,
+        from ..models.table_current_data_quality_status_model_checks import (
+            TableCurrentDataQualityStatusModelChecks,
+        )
+        from ..models.table_current_data_quality_status_model_columns import (
+            TableCurrentDataQualityStatusModelColumns,
         )
 
         d = src_dict.copy()
@@ -123,7 +137,7 @@ class TableDataQualityStatusModel:
 
         table_name = d.pop("table_name", UNSET)
 
-        highest_severity_issue = d.pop("highest_severity_issue", UNSET)
+        highest_severity_level = d.pop("highest_severity_level", UNSET)
 
         last_check_executed_at = d.pop("last_check_executed_at", UNSET)
 
@@ -139,24 +153,25 @@ class TableDataQualityStatusModel:
 
         execution_errors = d.pop("execution_errors", UNSET)
 
-        _failed_checks_statuses = d.pop("failed_checks_statuses", UNSET)
-        failed_checks_statuses: Union[
-            Unset, TableDataQualityStatusModelFailedChecksStatuses
-        ]
-        if isinstance(_failed_checks_statuses, Unset):
-            failed_checks_statuses = UNSET
+        _checks = d.pop("checks", UNSET)
+        checks: Union[Unset, TableCurrentDataQualityStatusModelChecks]
+        if isinstance(_checks, Unset):
+            checks = UNSET
         else:
-            failed_checks_statuses = (
-                TableDataQualityStatusModelFailedChecksStatuses.from_dict(
-                    _failed_checks_statuses
-                )
-            )
+            checks = TableCurrentDataQualityStatusModelChecks.from_dict(_checks)
 
-        table_data_quality_status_model = cls(
+        _columns = d.pop("columns", UNSET)
+        columns: Union[Unset, TableCurrentDataQualityStatusModelColumns]
+        if isinstance(_columns, Unset):
+            columns = UNSET
+        else:
+            columns = TableCurrentDataQualityStatusModelColumns.from_dict(_columns)
+
+        table_current_data_quality_status_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
             table_name=table_name,
-            highest_severity_issue=highest_severity_issue,
+            highest_severity_level=highest_severity_level,
             last_check_executed_at=last_check_executed_at,
             executed_checks=executed_checks,
             valid_results=valid_results,
@@ -164,11 +179,12 @@ class TableDataQualityStatusModel:
             errors=errors,
             fatals=fatals,
             execution_errors=execution_errors,
-            failed_checks_statuses=failed_checks_statuses,
+            checks=checks,
+            columns=columns,
         )
 
-        table_data_quality_status_model.additional_properties = d
-        return table_data_quality_status_model
+        table_current_data_quality_status_model.additional_properties = d
+        return table_current_data_quality_status_model
 
     @property
     def additional_keys(self) -> List[str]:

@@ -58,6 +58,8 @@ import com.dqops.utils.docs.cli.CliCommandDocumentationGeneratorImpl;
 import com.dqops.utils.docs.cli.CliCommandDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
+import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
+import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
 import com.dqops.utils.docs.parquetfiles.ParquetFilesDocumentationGenerator;
 import com.dqops.utils.docs.parquetfiles.ParquetFilesDocumentationGeneratorImpl;
 import com.dqops.utils.docs.parquetfiles.ParquetFilesDocumentationModelFactoryImpl;
@@ -121,6 +123,7 @@ public class GenerateDocumentationPostProcessor {
             generateDocumentationForYaml(projectDir, linkageStore, dqoHomeContext);
             generateDocumentationForParquetFiles(projectDir, linkageStore);
 
+            executePostCorrections(projectDir);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -437,5 +440,15 @@ public class GenerateDocumentationPostProcessor {
                 renderedIndexParquets,
                 "########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY",
                 "########## END INCLUDE PARQUET FILES REFERENCE");
+    }
+
+    private static void executePostCorrections(Path projectRoot) {
+        Path docPath = projectRoot.resolve("../docs").toAbsolutePath().normalize();
+        DocumentationFolder docsRootFolder = DocumentationFolderFactory.loadCurrentFiles(docPath);
+        DocumentationFolder docsRootFolderCorrected = DocumentationFolderFactory.loadCurrentFiles(docPath);
+
+        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService = new DocumentationFolderPostCorrectorServiceImpl();
+        documentationFolderPostCorrectorService.postProcessCorrect(projectRoot.toAbsolutePath(), docsRootFolderCorrected);
+        docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
     }
 }
