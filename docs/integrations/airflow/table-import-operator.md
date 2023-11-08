@@ -1,6 +1,6 @@
 # Table import operator
 
-Table import airflow operator **DqopsTableImportOperator** is used to import table to connection existing in DQOps.
+The Airflow table import operator **DqopsTableImportOperator** is used to import table to connection existing in DQOps.
 When the table schema changes you can also use this operator. 
 It will update the table in DQOps application for recently added columns or updates of types in the existing columns.
 
@@ -8,22 +8,22 @@ It will update the table in DQOps application for recently added columns or upda
 
 Parameters that indentify the table that should be imported to DQOps.
 
-| Name            | Description                                                                                                                                                                                                                                                                                                               | Type                                                          |
-|-----------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
-| connection_name | (Required) The connection name to the data source in DQOps.                                                                                                                                                                                                                                                               | str                                                           |
-| schema_name     | (Required) The schema name.                                                                                                                                                                                                                                                                                               | str                                                           |
-| table_name      | (Required) The table name.                                                                                                                                                                                                                                                                                                | str                                                           |
-| base_url        | The base url to DQOps application. Default value is http://localhost:8888/                                                                                                                                                                                                                                                | str                                                           |
-| wait_timeout    | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.                                                                                                       | int                                                           |
-| fail_on_timeout | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                       | bool [optional, default=True]                                 |
+| Name            | Description                                                                                                                                                                                                          | Type                                                          |
+|-----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| connection_name | (Required) The name of the connection in DQOps.                                                                                                                                                                      | str                                                           |
+| schema_name     | (Required) The name of the schema.                                                                                                                                                                                   | str                                                           |
+| table_name      | (Required) The name of the table.                                                                                                                                                                                    | str                                                           |
+| base_url        | The base url to DQOps application. Default value is http://localhost:8888/, which is the instance of DQOps started locally                                                                                           | str                                                           |
+| wait_timeout    | The number of seconds the client will wait for activity before terminating the idle task. If not set, the timeout is read from the client’s default value, which is set to 120 seconds.                              | int                                                           |
+| fail_on_timeout | By default, exceeding the timeout limit causes the status of the task to end with the Failed status. By setting the flag of this parameter to True, the status of the failed task will result in the Success status. | bool [optional, default=True]                                 |
 
 Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
-For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
+For the complete list of parameters that are supported by BaseOperator, visit the official Airflow webpage https://airflow.apache.org/
 
 
 ## Set up the operator
 
-Entry requirements includes:
+Entry requirements include:
 
 - Installation of python package from PyPi called dqops
 - Configuration of data source including setting the connection in DQOps application
@@ -114,12 +114,12 @@ which contains a JSON formatted response from DQOps presented below.
 }
 ```
 
-When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
+When the task execution succeeds or not, the task instance in Airflow will be marked as Success or Failed accordingly.
 
 In this example the table has been imported with success, as present in the value of the status.
 The returned object in the response has a type of ImportTablesQueueJobResult.
 
-ImportTablesQueueJobResult includes:
+ImportTablesQueueJobResult include:
 
 - **job_id (DqoQueueJobId)**: Identifies a single job that was pushed to the job queue.
 - **result (ImportTablesResult)**: Result object returned from the "import tables" job. 

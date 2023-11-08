@@ -1,6 +1,6 @@
 # Run checks operator
 
-Run checks airflow operators are used to execute sensors configured in the DQOps application. 
+The Airflow run checks operators are used to execute checks configured in the DQOps application. 
 
 The operator provides parameters which allow setting it specifically:
 
@@ -9,7 +9,7 @@ The operator provides parameters which allow setting it specifically:
 - check types 
 - or a combination of them.
 
-Run checks operators are working synchronously, so airflow will wait for the end of execution. 
+Run checks operators are working synchronously, so Airflow will wait for the end of execution. 
 To prevent endless execution, the operator supports a timeout parameter.
 
 There are 4 operators for running checks.
@@ -20,9 +20,9 @@ Generic operators:
 
 Typed operators:
 
-- **DqopsRunProfilingChecksOperator**: Run checks operator for running profiling type of checks.
-- **DqopsRunMonitoringChecksOperator**: Run checks operator for running monitoring type of checks.
-- **DqopsRunPartitionedChecksOperator**: Run checks operator for running partitioned type of checks.
+- **DqopsRunProfilingChecksOperator**: Run checks operator for running [profiling type of checks](../../dqo-concepts/checks/profiling-checks/profiling-checks.md).
+- **DqopsRunMonitoringChecksOperator**: Run checks operator for running [monitoring type of checks](../../dqo-concepts/checks/monitoring-checks/monitoring-checks.md).
+- **DqopsRunPartitionedChecksOperator**: Run checks operator for running [partition type of checks](../../dqo-concepts/checks/partition-checks/partition-checks.md).
 
 
 ## Operator parameters
@@ -30,30 +30,30 @@ Typed operators:
 Operator parameters can be treated as filters that limit the scope of checks that will be run.
 When none of the available operator parameters are set, possibly all sensors will be run.  
 
-| Name               | Description                                                                                                                                                                                                                                                                                                                                                         | Type                                                           |
-|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
-| base_url           | The base url to DQOps application. Default value is http://localhost:8888.                                                                                                                                                                                                                                                                                          | str                                                            |
-| api_key            | Api key to DQOps application. Not set as default.                                                                                                                                                                                                                                                                                                                   | str                                                            |
-| connection_name    | The connection name to the data source in DQOps. When not set, all connection names will be used.                                                                                                                                                                                                                                                                   | str                                                            |
-| schema_table_name  | The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.                                                                                                                                                                                                                                            | str                                                            |
-| check_type         | Only available for DqopsRunChecksOperator. Specifies type of checks to be executed. When set, the operator will work as other run checks operators. The other operators have set this field to a constant value from CheckType enum. <br/> When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module. | CheckType                                                      |
-| wait_timeout       | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.                                                                                                                                                 | int                                                            |
-| fail_on_timeout    | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                                                                                                                                                                 | bool                                                           |
-| fail_at_severity   | The threshold level of rule severity, causing that an airflow task finishes with failed status.                                                                                                                                                                                                                                                                     | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]  |
+| Name              | Description                                                                                                                                                                                                                                                                                                                                                          | Type                                                           |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------|
+| base_url          | The base url to DQOps application. Default value is http://localhost:8888/, which is the instance of DQOps started locally                                                                                                                                                                                                                                           | str                                                           |
+| api_key           | The api key to DQOps application. Not set as default.                                                                                                                                                                                                                                                                                                                | str                                                            |
+| connection_name   | The name of the connection to the data source in DQOps. When not set, all connection names will be used.                                                                                                                                                                                                                                                             | str                                                            |
+| schema_table_name | The name of the table with the schema. When not set, checks from all tables will be run within the specified connection.                                                                                                                                                                                                                                             | str                                                            |
+| check_type        | (Only available for DqopsRunChecksOperator) Specifies type of checks to be executed. When set, the operator will work as other run checks operators. The other operators have set this field to a constant value from CheckType enum. <br/> When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module. | CheckType                                                      |
+| wait_timeout      | The number of seconds the client will wait for activity before terminating the idle task. If not set, the timeout is read from the client’s default value, which is set to 120 seconds.                                                                                                                                                                              | int                                                            |
+| fail_on_timeout   | By default, exceeding the timeout limit causes the status of the task to end with the Failed status. By setting the flag of this parameter to True, the status of the failed task will result in the Success status.                                                                                                                                                 | bool                                                           |
+| fail_at_severity  | The threshold level of rule severity, causing that an Airflow task finishes with failed status.                                                                                                                                                                                                                                                                      | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]  |
 
 Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
 For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
 
 ## Set up the run check operator
 
-Entry requirements includes:
+Entry requirements include:
 
 - Installation of python package from PyPi called dqops
-- Configuration of data source and sensors in DQOps.
+- Configuration of data source and checks in DQOps.
 
 **DAG example**
 
-The example sets a task to execute all profiling sensors on "example_connection" connection every 12 hours. 
+The example sets a task to execute all profiling checks on "example_connection" connection every 12 hours. 
 The operator connects to the locally started DQOps server.
 
 ```python
@@ -101,9 +101,9 @@ The status details will appear in a one line as an info level log from the opera
 }
 ```
 
-Executed job adds information to an airflow task log. 
+Executed job adds information to an Airflow task log. 
 The executed run checks operator returns the RunChecksQueueJobResult object with execution details.
-When the task execution succeeded or not, the task instance in airflow is marked as Success or Failed accordingly.
+When the task execution succeeded or not, the task instance in Airflow is marked as Success or Failed accordingly.
 
 RunChecksQueueJobResult includes:
 

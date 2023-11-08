@@ -1,7 +1,6 @@
 # Collect statistics operator
 
-The collect statistics airflow operator **DqopsCollectStatisticsOperator** is used to gather statistics
-for existing tables in DQOps platform.
+The Airflow collect statistics operator **DqopsCollectStatisticsOperator** is used to gather statistics for existing tables in DQOps platform.
 
 You can learn more about [the basic data statistics here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
 
@@ -9,22 +8,21 @@ You can learn more about [the basic data statistics here](../../working-with-dqo
 
 Parameters allow selection of specific connections, tables and columns which statistics should be loaded.
 
-| Name                 | Description                                                                                                                                                                                                         | Type                                              |
-|----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| connection_name      | The connection name to the data source in DQOps.                                                                                                                                                                    | Union[Unset, str]                                 |
-| schema_table_name    | The table name with it's schema name.                                                                                                                                                                               | Union[Unset, str]                                 |
-| table_name           | The table name.                                                                                                                                                                                                     | Union[Unset, str]                                 |
-| enabled              | If set to true only enabled connections and tables are filtered. Otherwise only disabled connection or table are used.                                                                                              | Union[Unset, bool]                                |
-| labels               | The label names of those edited by user on connections, tables and columns edited in DQOps platform.                                                                                                                | Union[Unset, List[str]]                      |
-| column_names         | The names of columns.                                                                                                                                                                                               | Union[Unset, List[str]]                      |
-| sensor_name          | The name of the sensor                                                                                                                                                                                              | Union[Unset, str]                            |
-| target               | The name of the target which value is column or table.                                                                                                                                                              | Union[Unset, StatisticsCollectorTarget]      |
-| base_url             | The base url to DQOps application. Default value is http://localhost:8888/                                                                                                                                          | str                                               |
-| wait_timeout         | Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds. | int                                               |
-| fail_on_timeout      | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                 | bool [optional, default=True]                     |
+| Name              | Description                                                                                                                                                                                                          | Type                                    |
+|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
+| connection_name   | The connection name to the data source in DQOps.                                                                                                                                                                     | Union[Unset, str]                       |
+| schema_table_name | The name of the table with it's schema name.                                                                                                                                                                         | Union[Unset, str]                       |
+| enabled           | If set to true only enabled connections and tables are filtered. Otherwise only disabled connection or table are used.                                                                                               | Union[Unset, bool]                      |
+| labels            | The label names of those edited by user on connections, tables and columns edited in DQOps platform.                                                                                                                 | Union[Unset, List[str]]                 |
+| column_names      | The names of columns.                                                                                                                                                                                                | Union[Unset, List[str]]                 |
+| sensor_name       | The name of the sensor.                                                                                                                                                                                              | Union[Unset, str]                       |
+| target            | The name of the target which value is column or table.                                                                                                                                                               | Union[Unset, StatisticsCollectorTarget] |
+| base_url          | The base url to DQOps application. Default value is http://localhost:8888/, which is the instance of DQOps started locally                                                                                           | str                                     |
+| wait_timeout      | The number of seconds the client will wait for activity before terminating the idle task. If not set, the timeout is read from the client’s default value, which is set to 120 seconds.                              | int                                     |
+| fail_on_timeout   | By default, exceeding the timeout limit causes the status of the task to end with the Failed status. By setting the flag of this parameter to True, the status of the failed task will result in the Success status. | bool [optional, default=True]           |
 
 Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
-For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
+For the complete list of parameters that are supported by BaseOperator, visit the official Airflow webpage https://airflow.apache.org/
 
 ## Set up the operator
 
@@ -35,7 +33,7 @@ Entry requirements includes:
 
 **DAG example**
 
-The example sets a task to receive status from the monitoring sensors set on the "maven_restaurant_ratings.consumers" table from "example_connection". 
+The example sets a task to receive status from the monitoring checks set on the "maven_restaurant_ratings.consumers" table from "example_connection". 
 The operator connects to the locally started DQOps server.
 
 ```python
@@ -84,7 +82,7 @@ The status details will appear in a one line as an info level log from the opera
 ```
 
 Technically, the executed operator returns the [CollectStatisticsQueueJobResult](../../client/models/jobs.md#CollectStatisticsQueueJobResult) object with status details.
-When the task execution succeeds or not, the task instance in airflow will be marked as Success or Failed accordingly.
+When the task execution succeeds or not, the task instance in Airflow will be marked as Success or Failed accordingly.
 
 CollectStatisticsQueueJobResult includes:
 
