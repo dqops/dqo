@@ -43,7 +43,7 @@ Error detailed statuses. Returned in the context of a single data group, with a 
 |check_category|Check category name.|string|
 |data_groups_names|Data groups list.|string_list|
 |data_group|Selected data group.|string|
-|error_entries|Error entries|List[[ErrorEntryModel](#errorentrymodel)]|
+|error_entries|Error entries|List[[ErrorEntryModel](#ErrorEntryModel)]|
 
 
 ___  

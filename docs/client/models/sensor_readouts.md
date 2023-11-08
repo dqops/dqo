@@ -43,7 +43,7 @@ Sensor readout detailed results. Returned in the context of a single data group,
 |sensor_name|Sensor name.|string|
 |data_group_names|Data groups list.|string_list|
 |data_group|Selected data group.|string|
-|sensor_readout_entries|Sensor readout entries|List[[SensorReadoutEntryModel](#sensorreadoutentrymodel)]|
+|sensor_readout_entries|Sensor readout entries|List[[SensorReadoutEntryModel](#SensorReadoutEntryModel)]|
 
 
 ___  

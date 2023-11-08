@@ -86,20 +86,7 @@ public class GeneratePythonDocumentationPostProcessor {
             linkageStore = new LinkageStore<>();
             LinkageStore<String> targetLinkage = getPopulatedLinkageStore(openAPI);
 
-            SpecToModelCheckMappingService specToModelCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
-                    new ReflectionServiceImpl(),
-                    new SensorDefinitionFindServiceImpl(),
-                    new RuleDefinitionFindServiceImpl()
-            );
-            SimilarCheckMatchingService similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(
-                    specToModelCheckMappingService,
-                    () -> dqoHomeContext
-            );
-            DocsModelLinkageService docsModelLinkageService = new DocsModelLinkageServiceImpl(
-                    projectDir,
-                    similarCheckMatchingService
-            );
-
+            DocsModelLinkageService docsModelLinkageService = new DocsModelLinkageServiceImpl(projectDir);
             ComponentReflectionService componentReflectionService = new ComponentReflectionServiceImpl(projectDir);
 
             OpenAPIModel openAPIModel = OpenAPIModel.fromOpenAPI(openAPI, targetLinkage, linkageStore, docsModelLinkageService, componentReflectionService);
