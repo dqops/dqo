@@ -40,6 +40,28 @@ The right side of the navigation bar provides access to the main settings and so
 - **Notifications** - You can view DQO notifications and enable or disable the scheduler. A NEW tag will appear when there is a new notification.
 - **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
 
+### **Notifications**
+
+Notifications allows you to view executed jobs, such as running checks, collecting statistics, importing metadata, etc. 
+
+![Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+
+The notifications grant you access to a comprehensive log of all executed actions, allowing you to check the status of each action. These statuses can include "succeeded," "failed," "running," "waiting," "queued," or "cancelled." Furthermore, you can expand individual job entries to view sub-jobs and access additional details about specific tasks.
+
+Main functions of notifications:
+
+- In the top of notifications you can manage your job scheduler, which is responsible for executing scheduled jobs.
+
+![Job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
+
+- If the job is queued or running you can cancel or stop it by clicking the X button.
+
+![Canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
+
+- In notifications you can also view the result of executed checks by simply hovering on run checks job. Color of the square shows the highest severity status of the results.
+
+![Job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
+
 ## Tree view
 
 ![Tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view.png)
@@ -94,24 +116,4 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 ![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png)
 
-## Notification panel 
 
-Notification panel is feature where you can look up executed jobs, such as running checks, collecting statistics, importing metadata, ect. 
-
-![Notification Panel](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
-
-The notification panel grants you access to a comprehensive log of all executed actions, allowing you to check the status of each action. These statuses can include "succeeded," "failed," "running," "waiting," "queued," or "cancelled." Furthermore, you can expand individual job entries to view sub-jobs and access additional details about specific tasks.
-
-### **Main functions of notification panel:**
-
-- In the top of notification panel you can menage your job scheduler, which are responsible for executing scheduled jobs.
-
-![Job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
-
-- If job is running, queued or waiting you can always cancell this job by clicking on x button, then it wont be executed.
-
-![Canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
-
-- In notification panel you can also look up the result of executed checks by simply hovering on specific job. 
-
-![Job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
