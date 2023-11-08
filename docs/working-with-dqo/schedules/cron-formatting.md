@@ -10,6 +10,7 @@ Each value may be any of the allowed values below, along with various combinatio
 
 
 **Supported special characters:**
+
 - asterisks (*) Selects all values within a field. For example, * in the minute field means "every minute".
 - comma (,) This is used to specify additional values. For example, "MON,WED,FRI" in the day-of-week field means "the days Monday, Wednesday, and Friday".
 - slash (/) This is used to specify increments. For example, "0/15" in the seconds field means "the seconds 0, 15, 30, and 45". And "5/15" in the seconds field means "the seconds 5, 20, 35, and 50".
