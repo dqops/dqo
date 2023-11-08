@@ -47,6 +47,7 @@ class DqopsCollectStatisticsOperator(BaseOperator):
         sensor_name: Union[Unset, str] = UNSET,
         target: Union[Unset, StatisticsCollectorTarget] = UNSET,
         base_url: str = "http://localhost:8888/",
+        job_business_key: Union[Unset, None, str] = UNSET,
         wait_timeout: Union[Unset, None, int] = UNSET,
         fail_on_timeout: bool = True,
         **kwargs
@@ -72,6 +73,8 @@ class DqopsCollectStatisticsOperator(BaseOperator):
             The name of the target which value is column or table.
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
+        job_business_key : Union[Unset, None, str] = UNSET
+            Job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.
         wait_timeout : int
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
@@ -88,6 +91,7 @@ class DqopsCollectStatisticsOperator(BaseOperator):
         self.target: Union[Unset, StatisticsCollectorTarget] = target
 
         self.base_url: str = extract_base_url(base_url)
+        self.job_business_key: Union[Unset, None, str] = job_business_key
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
 
@@ -112,6 +116,7 @@ class DqopsCollectStatisticsOperator(BaseOperator):
             response: Response[CollectStatisticsQueueJobResult] = sync_detailed(
                 client=client,
                 json_body=search_filters,
+                job_business_key=self.job_business_key,
                 wait=True,
                 wait_timeout=self.wait_timeout,
             )

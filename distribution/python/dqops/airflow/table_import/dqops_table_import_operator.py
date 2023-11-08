@@ -42,6 +42,7 @@ class DqopsTableImportOperator(BaseOperator):
         table_names: List[str],
         *,
         base_url: str = "http://localhost:8888/",
+        job_business_key: Union[Unset, None, str] = UNSET,
         wait_timeout: Union[Unset, None, int] = UNSET,
         fail_on_timeout: bool = True,
         **kwargs
@@ -57,7 +58,9 @@ class DqopsTableImportOperator(BaseOperator):
             The table names to be imported.
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
-        wait_timeout : int
+        job_business_key : Union[Unset, None, str] = UNSET
+            Job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.
+        wait_timeout : Union[Unset, None, int]
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
             Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.
@@ -69,7 +72,8 @@ class DqopsTableImportOperator(BaseOperator):
         self.table_names: List[str] = table_names
 
         self.base_url: str = extract_base_url(base_url)
-        self.wait_timeout: int = wait_timeout
+        self.job_business_key: Union[Unset, None, str] = job_business_key
+        self.wait_timeout: Union[Unset, None, int] = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
 
     def execute(self, context):
@@ -89,6 +93,7 @@ class DqopsTableImportOperator(BaseOperator):
             response: Response[ImportTablesQueueJobResult] = sync_detailed(
                 client=client,
                 json_body=table_import_parameters,
+                job_business_key=self.job_business_key,
                 wait=True,
                 wait_timeout=self.wait_timeout,
             )

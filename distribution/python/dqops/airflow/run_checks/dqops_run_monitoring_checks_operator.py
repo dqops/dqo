@@ -3,7 +3,7 @@ from typing import Any, Dict, Union
 from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
-from dqops.client.types import UNSET
+from dqops.client.types import UNSET, Unset
 
 
 class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
@@ -16,6 +16,7 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
         self,
         *,
         base_url: str = "http://localhost:8888/",
+        job_business_key: Union[Unset, None, str] = UNSET,
         api_key: str = UNSET,
         connection: str = UNSET,
         full_table_name: str = UNSET,
@@ -29,6 +30,8 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
         ----------
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
+        job_business_key : Union[Unset, None, str] = UNSET
+            Job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.
         api_key : str [optional, default=UNSET]
             Api key to DQOps application. Not set as default.
         connection : str [optional, default=UNSET]
@@ -45,6 +48,7 @@ class DqopsRunMonitoringChecksOperator(DqopsRunChecksOperator):
 
         super().__init__(
             base_url=base_url,
+            job_business_key=job_business_key,
             api_key=api_key,
             connection=connection,
             full_table_name=full_table_name,

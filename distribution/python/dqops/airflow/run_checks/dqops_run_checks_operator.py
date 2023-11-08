@@ -29,7 +29,7 @@ from dqops.client.models.dqo_job_status import DqoJobStatus
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.models.run_checks_parameters import RunChecksParameters
 from dqops.client.models.run_checks_queue_job_result import RunChecksQueueJobResult
-from dqops.client.types import UNSET, Response
+from dqops.client.types import UNSET, Response, Unset
 
 
 class DqopsRunChecksOperator(BaseOperator):
@@ -42,6 +42,7 @@ class DqopsRunChecksOperator(BaseOperator):
         self,
         *,
         base_url: str = "http://localhost:8888/",
+        job_business_key: Union[Unset, None, str] = UNSET,
         api_key: str = UNSET,
         connection: str = UNSET,
         full_table_name: str = UNSET,
@@ -56,6 +57,8 @@ class DqopsRunChecksOperator(BaseOperator):
         ----------
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
+        job_business_key : Union[Unset, None, str] = UNSET
+            Job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.
         api_key : str [optional, default=UNSET]
             Api key to DQOps application. Not set as default.
         connection : str [optional, default=UNSET]
@@ -74,6 +77,7 @@ class DqopsRunChecksOperator(BaseOperator):
 
         super().__init__(**kwargs)
         self.base_url: str = extract_base_url(base_url)
+        self.job_business_key: Union[Unset, None, str] = job_business_key
         self.api_key: str = api_key
         self.connection: str = connection
         self.full_table_name: str = full_table_name
@@ -98,6 +102,7 @@ class DqopsRunChecksOperator(BaseOperator):
             response: Response[RunChecksQueueJobResult] = sync_detailed(
                 client=client,
                 json_body=params,
+                job_business_key=self.job_business_key,
                 wait=True,
                 wait_timeout=self.wait_timeout,
             )
