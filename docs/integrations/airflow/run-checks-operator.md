@@ -42,7 +42,7 @@ When none of the available operator parameters are set, possibly all sensors wil
 | fail_at_severity  | The threshold level of rule severity, causing that an Airflow task finishes with failed status.                                                                                                                                                                                                                                                                      | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]  |
 
 Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
-For the complete list of parameters that are supported by BaseOperator, visit the official airflow webpage https://airflow.apache.org/
+For the complete list of parameters that are supported by BaseOperator, visit the official Airflow webpage https://airflow.apache.org/
 
 ## Set up the run check operator
 
@@ -149,3 +149,11 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **running**: The job is now running.
 - **succeeded**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
+
+## Long-running run check task
+
+An approach is different in case of long-running Airflow tasks that take several minutes up to hours to be completed.
+
+Instead of using a single operator, usage of WaitForJobOperator as an addition to the long-running task is necessary.
+
+Check the [wait for job operator](wait-for-job-operator.md) page for more details.
