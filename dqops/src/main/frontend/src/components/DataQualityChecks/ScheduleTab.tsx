@@ -18,7 +18,7 @@ const ScheduleTab = ({ schedule, onChange }: IScheduleTabProps) => {
 
   return (
     <div className={isDisabled ? 'text-gray-700' : ''}>
-      <ScheduleView handleChange={handleChange} schedule={schedule} activeTab=''/>
+      <ScheduleView handleChange={handleChange} schedule={schedule}/>
     </div>
   );
 };

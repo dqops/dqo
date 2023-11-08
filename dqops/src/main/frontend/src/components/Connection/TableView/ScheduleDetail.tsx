@@ -100,7 +100,7 @@ const ScheduleDetail = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} activeTab={activeTab}/>
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
     </div>
   );
 };

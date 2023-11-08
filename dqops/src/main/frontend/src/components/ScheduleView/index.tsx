@@ -17,10 +17,9 @@ interface IScheduleViewProps {
   schedule?: MonitoringScheduleSpec;
   handleChange: (obj: any) => void;
   isDefault?: boolean;
-  activeTab: string
 }
 
-const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: IScheduleViewProps) => {
+const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
@@ -102,17 +101,19 @@ const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: ISchedul
       setMode('');
       return;
     }
-    if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
-      setMode('minutes');
-      const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
-      if (!matches) return;
-      if (Number(matches[1]) < 0) {
-        onChangeMinutes(0);
+    if (mode !== 'custom'){
+      if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
+        setMode('minutes');
+        const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+        if (!matches) return;
+        if (Number(matches[1]) < 0) {
+          onChangeMinutes(0);
       } else if (Number(matches[1]) > 59) {
         onChangeMinutes(59);
       } else {
         setMinutes(Number(matches[1]));
       }
+      return;
     }
     if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
       setMode('hour');
@@ -125,13 +126,13 @@ const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: ISchedul
       } else {
         setMinutes(Number(matches[1]));
       }
+      return;
     }
-
     if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
       setMode('day');
       const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
       if (!matches) return;
-
+      
       if (Number(matches[2]) < 0) {
         onChangeHour(0);
       } else if (Number(matches[2]) > 23) {
@@ -146,11 +147,14 @@ const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: ISchedul
       } else {
         setMinutes(Number(matches[1]));
       }
+      return;
     }
-    else {
+  }
+    if(cron_expression?.length > 0) {
       setMode("custom")
+      return;
     }
-  }, [activeTab]);
+  }, [schedule]);
 
   const onChangeCronExpression = (e: ChangeEvent<HTMLInputElement>) => {
     if (mode === 'custom' ) {
@@ -158,7 +162,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault, activeTab }: ISchedul
       handleChange({ cron_expression: cronExpression });
     }
   };
-
+  
   const getLabel = () => {
     if (table && !column) {
       return 'Use scheduling configuration from the connection levels';

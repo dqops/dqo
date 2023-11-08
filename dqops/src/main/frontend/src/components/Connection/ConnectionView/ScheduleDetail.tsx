@@ -204,7 +204,7 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} isDefault={isDefault} activeTab={activeTab}/>
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} isDefault={isDefault}/>
     </div>
   );
 };
