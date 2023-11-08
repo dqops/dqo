@@ -43,7 +43,7 @@ List of dashboards.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[DashboardSpec](/docs/client/models/dashboards/#dashboardspec)]|
+|self||List[[DashboardSpec](../dashboards/#dashboardspec)]|
 
 
 ___  
@@ -57,7 +57,7 @@ List of dashboard folders.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[DashboardsFolderSpec](/docs/client/models/dashboards/#dashboardsfolderspec)]|
+|self||List[[DashboardsFolderSpec](../dashboards/#dashboardsfolderspec)]|
 
 
 ___  
