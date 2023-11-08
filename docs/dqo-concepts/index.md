@@ -128,8 +128,8 @@ These topics introduce the basic concepts of DQOps.
     For example, a table *fact_global_sales* that aggregates sales fact rows from multiple countries can be tested for each country.
     A column that identifies a country must be present in the table and data grouping must be configured.
 
-    Data grouping allows detecting data quality issues for groups of rows loaded by different data streams or received
-    from different sources.
+    Data grouping allows detecting data quality issues for groups of rows loaded by different data streams,
+    different data pipelines, or received from different vendors or departments.
 
 
 - **[Data storage](./data-storage/data-storage.md)**

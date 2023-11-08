@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class StatisticsDataScope(str, Enum):
-    DATA_GROUPINGS = "data_groupings"
+    DATA_GROUP = "data_group"
     TABLE = "table"
 
     def __str__(self) -> str:

@@ -59,10 +59,8 @@ Container of table level daily partitioned checks. Contains categories of daily 
 
 ___  
 
-## TableComparisonDailyPartitionedChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the daily partitioned comparison checks for each configured reference table.  
+## TableTimelinessDailyPartitionedChecksSpec  
+Container of table level date partitioned timeliness data quality checks.  
   
 
 
@@ -76,7 +74,11 @@ Container of comparison checks for each defined data comparison. The name of the
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-daily-partitioned-checks/#tablecomparisondailypartitionedchecksspec)]| | | |
+|[daily_partition_data_freshness](/docs/checks/table/timeliness/data-freshness)|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](/docs/checks/table/timeliness/data-freshness)| | | |
+|[daily_partition_data_staleness](/docs/checks/table/timeliness/data-staleness)|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](/docs/checks/table/timeliness/data-staleness)| | | |
+|[daily_partition_data_ingestion_delay](/docs/checks/table/timeliness/data-ingestion-delay)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](/docs/checks/table/timeliness/data-ingestion-delay)| | | |
+|[daily_partition_reload_lag](/docs/checks/table/timeliness/reload-lag)|Daily partitioned check calculating the longest time a row waited to be load|[TablePartitionReloadLagCheckSpec](/docs/checks/table/timeliness/reload-lag)| | | |
+|[custom_checks](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)| | | |
 
 
 
@@ -152,8 +154,10 @@ Container of table level date partitioned volume data quality checks.
 
 ___  
 
-## TableTimelinessDailyPartitionedChecksSpec  
-Container of table level date partitioned timeliness data quality checks.  
+## TableComparisonDailyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the daily partitioned comparison checks for each configured reference table.  
   
 
 
@@ -167,11 +171,7 @@ Container of table level date partitioned timeliness data quality checks.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_data_freshness](/docs/checks/table/timeliness/data-freshness)|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](/docs/checks/table/timeliness/data-freshness)| | | |
-|[daily_partition_data_staleness](/docs/checks/table/timeliness/data-staleness)|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](/docs/checks/table/timeliness/data-staleness)| | | |
-|[daily_partition_data_ingestion_delay](/docs/checks/table/timeliness/data-ingestion-delay)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](/docs/checks/table/timeliness/data-ingestion-delay)| | | |
-|[daily_partition_reload_lag](/docs/checks/table/timeliness/reload-lag)|Daily partitioned check calculating the longest time a row waited to be load|[TablePartitionReloadLagCheckSpec](/docs/checks/table/timeliness/reload-lag)| | | |
-|[custom_checks](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)| | | |
+|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-daily-partitioned-checks/#tablecomparisondailypartitionedchecksspec)]| | | |
 
 
 

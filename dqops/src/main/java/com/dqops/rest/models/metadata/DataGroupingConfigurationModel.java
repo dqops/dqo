@@ -43,7 +43,7 @@ public class DataGroupingConfigurationModel {
     @JsonPropertyDescription("Data grouping configuration name.")
     private String dataGroupingConfigurationName;
 
-    @JsonPropertyDescription("Data stream specification.")
+    @JsonPropertyDescription("Data grouping specification with the definition of the list of data grouping dimensions, the column names to use in a **GROUP BY** clause or a value of a static tag to assign to every check result captured from the table.")
     private DataGroupingConfigurationSpec spec;
 
     /**

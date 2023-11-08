@@ -15760,7 +15760,7 @@
         "data_scope" : {
           "type" : "string",
           "description" : "The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.",
-          "enum" : [ "table", "data_groupings" ]
+          "enum" : [ "table", "data_group" ]
         },
         "dummy_sensor_execution" : {
           "type" : "boolean",
@@ -15782,7 +15782,7 @@
         "data_scope" : {
           "type" : "string",
           "description" : "The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.",
-          "enum" : [ "table", "data_groupings" ]
+          "enum" : [ "table", "data_group" ]
         },
         "dummy_sensor_execution" : {
           "type" : "boolean",
@@ -29935,7 +29935,7 @@
           "description" : "Data grouping configuration name."
         },
         "spec" : {
-          "description" : "Data stream specification.",
+          "description" : "Data grouping specification with the definition of the list of data grouping dimensions, the column names to use in a **GROUP BY** clause or a value of a static tag to assign to every check result captured from the table.",
           "$ref" : "#/definitions/DataGroupingConfigurationSpec"
         },
         "can_edit" : {

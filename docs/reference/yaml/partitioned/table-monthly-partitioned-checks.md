@@ -1,4 +1,35 @@
 
+## TableMonthlyPartitionedCheckCategoriesSpec  
+Container of table level monthly partitioned checks. Contains categories of monthly partitioned checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[volume](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablevolumemonthlypartitionedchecksspec)|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|[TableVolumeMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablevolumemonthlypartitionedchecksspec)| | | |
+|[timeliness](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|[TableTimelinessMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tabletimelinessmonthlypartitionedchecksspec)| | | |
+|[sql](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablesqlmonthlypartitionedchecksspec)|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|[TableSqlMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablesqlmonthlypartitionedchecksspec)| | | |
+|[comparisons](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablecomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyPartitionedChecksSpecMap](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablecomparisonmonthlypartitionedchecksspecmap)| | | |
+|[custom](/docs/reference/yaml/profiling/table-profiling-checks/#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcheckspecmap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## TableSqlMonthlyPartitionedChecksSpec  
 Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).  
   
@@ -29,6 +60,35 @@ Container of built-in preconfigured data quality checks on a table level that ar
 
 ___  
 
+## TableComparisonMonthlyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the monthly partitioned comparison checks for each configured reference table.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|self||Dict[string, [TableComparisonMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablecomparisonmonthlypartitionedchecksspec)]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## TableVolumeMonthlyPartitionedChecksSpec  
 Container of table level monthly partitioned volume data quality checks.  
   
@@ -46,37 +106,6 @@ Container of table level monthly partitioned volume data quality checks.
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[monthly_partition_row_count](/docs/checks/table/volume/row-count)|Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|[TableRowCountCheckSpec](/docs/checks/table/volume/row-count)| | | |
 |[monthly_partition_row_count_change](/docs/checks/table/volume/row-count-change)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableChangeRowCountCheckSpec](/docs/checks/table/volume/row-count-change)| | | |
-|[custom_checks](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableTimelinessMonthlyPartitionedChecksSpec  
-Container of table level monthly partitioned timeliness data quality checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_partition_data_freshness](/docs/checks/table/timeliness/data-freshness)|Monthly partitioned check calculating the number of days since the most recent event (freshness)|[TableDataFreshnessCheckSpec](/docs/checks/table/timeliness/data-freshness)| | | |
-|[monthly_partition_data_staleness](/docs/checks/table/timeliness/data-staleness)|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](/docs/checks/table/timeliness/data-staleness)| | | |
-|[monthly_partition_data_ingestion_delay](/docs/checks/table/timeliness/data-ingestion-delay)|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](/docs/checks/table/timeliness/data-ingestion-delay)| | | |
-|[monthly_partition_reload_lag](/docs/checks/table/timeliness/reload-lag)|Monthly partitioned check calculating the longest time a row waited to be load|[TablePartitionReloadLagCheckSpec](/docs/checks/table/timeliness/reload-lag)| | | |
 |[custom_checks](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)| | | |
 
 
@@ -118,8 +147,8 @@ Container of built-in comparison (accuracy) checks on a table level that are usi
 
 ___  
 
-## TableMonthlyPartitionedCheckCategoriesSpec  
-Container of table level monthly partitioned checks. Contains categories of monthly partitioned checks.  
+## TableTimelinessMonthlyPartitionedChecksSpec  
+Container of table level monthly partitioned timeliness data quality checks.  
   
 
 
@@ -133,40 +162,11 @@ Container of table level monthly partitioned checks. Contains categories of mont
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablevolumemonthlypartitionedchecksspec)|Volume monthly partitioned data quality checks that verify the quality of every month of data separately|[TableVolumeMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablevolumemonthlypartitionedchecksspec)| | | |
-|[timeliness](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|[TableTimelinessMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tabletimelinessmonthlypartitionedchecksspec)| | | |
-|[sql](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablesqlmonthlypartitionedchecksspec)|Custom SQL monthly partitioned data quality checks that verify the quality of every month of data separately|[TableSqlMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablesqlmonthlypartitionedchecksspec)| | | |
-|[comparisons](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablecomparisonmonthlypartitionedchecksspecmap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonMonthlyPartitionedChecksSpecMap](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablecomparisonmonthlypartitionedchecksspecmap)| | | |
-|[custom](/docs/reference/yaml/profiling/table-profiling-checks/#customcheckspecmap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcheckspecmap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableComparisonMonthlyPartitionedChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the monthly partitioned comparison checks for each configured reference table.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [TableComparisonMonthlyPartitionedChecksSpec](/docs/reference/yaml/partitioned/table-monthly-partitioned-checks/#tablecomparisonmonthlypartitionedchecksspec)]| | | |
+|[monthly_partition_data_freshness](/docs/checks/table/timeliness/data-freshness)|Monthly partitioned check calculating the number of days since the most recent event (freshness)|[TableDataFreshnessCheckSpec](/docs/checks/table/timeliness/data-freshness)| | | |
+|[monthly_partition_data_staleness](/docs/checks/table/timeliness/data-staleness)|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](/docs/checks/table/timeliness/data-staleness)| | | |
+|[monthly_partition_data_ingestion_delay](/docs/checks/table/timeliness/data-ingestion-delay)|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](/docs/checks/table/timeliness/data-ingestion-delay)| | | |
+|[monthly_partition_reload_lag](/docs/checks/table/timeliness/reload-lag)|Monthly partitioned check calculating the longest time a row waited to be load|[TablePartitionReloadLagCheckSpec](/docs/checks/table/timeliness/reload-lag)| | | |
+|[custom_checks](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](/docs/reference/yaml/profiling/table-profiling-checks/#customcategorycheckspecmap)| | | |
 
 
 

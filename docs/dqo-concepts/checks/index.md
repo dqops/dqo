@@ -234,18 +234,30 @@ below the average daily change in the metric value.
 An important aspect of data monitoring is the ability to calculate data quality metrics for different groups of rows
 stored in the same table. Data in the fact table can be loaded from different sources such as countries, states, or
 received from different external sources. Each stream of data would be loaded by a different pipeline. Data pipelines
-for different data streams may fail independently of each other.
+for different data group may fail independently of each other.
 
 Data groups can be identified by a discriminator column, such as country or state. DQOps can analyze data within separate
-segments with a GROUP BY <data_stream_discriminator_column> clause to the data quality queries. DQOps support setting of up
+segments with a GROUP BY <data_grouping_discriminator_column> clause to the data quality queries. DQOps support setting of up
 to 9 different data grouping hierarchy levels. Below is an example of a query with grouping by country.
 
-``` sql hl_lines="4 5"
-SELECT CURRENT_DATETIME() as time_window,
-100.0 * SUM(CASE WHEN tested_column >= 0 THEN 1 ELSE 0 END) /
-COUNT(*) as percentage_valid,
-country as stream_level_1 FROM schema.table
-GROUP BY stream_level_1
+``` sql hl_lines="12 16"
+SELECT
+    CASE
+        WHEN COUNT(*) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN analyzed_table."target_column"
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*)
+    END AS actual_value,
+    analyzed_table."country" AS grouping_level_1,
+    DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+    CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+GROUP BY grouping_level_1, time_period, time_period_utc
+ORDER BY grouping_level_1, time_period, time_period_utc
 ```
 
 The results pivoted for readability might look as follows:
@@ -260,17 +272,29 @@ a separate data pipeline that has loaded invalid data.
 
 ## Integration of data partitions with data grouping
 
-Data partitions can be integrated with data segmentation by data streams. 
+Data partitions can be integrated with data segmentation by applying also data grouping. 
 
-For example, the GROUP BY clause can list columns that divide the data set by a day and a data stream discriminator column
+For example, the GROUP BY clause can list columns that divide the data set by a day and a data group discriminator column
 (country in this example). A complete SQL query that the DQOps tool would execute on the data source look like this:
 
-``` sql hl_lines="1 4 5"
-SELECT DATETIME_TRUNC(transaction_timestamp_column, DAY) as time_window,
-100.0 * SUM(CASE WHEN tested_column >= 0 THEN 1 ELSE 0 END) /
-COUNT(*) as percentage_valid,
-country as stream_level_1 FROM schema.table
-GROUP BY time_window, stream_level_1
+``` sql hl_lines="12-14 16"
+SELECT
+    CASE
+        WHEN COUNT(*) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN analyzed_table."target_column"
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*)
+    END AS actual_value,
+    analyzed_table."country" AS grouping_level_1,
+    CAST(analyzed_table."date_column" AS date) AS time_period,
+    CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+GROUP BY grouping_level_1, time_period, time_period_utc
+ORDER BY grouping_level_1, time_period, time_period_utc
 ```
 
 The results of this query collect data quality scores for each day and country separately, and allows accurate 

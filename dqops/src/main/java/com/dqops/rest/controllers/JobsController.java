@@ -374,7 +374,7 @@ public class JobsController {
         CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
                 statisticsCollectorSearchFilters,
                 progressListener,
-                StatisticsDataScope.data_groupings,
+                StatisticsDataScope.data_group,
                 false);
         runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
         runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));

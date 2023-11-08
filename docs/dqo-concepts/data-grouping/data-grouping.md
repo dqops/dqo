@@ -55,13 +55,13 @@ the value of the _country_ column value. The user enabled a **daily_row_count** 
 DQOps will track the row count time series for both countries, allowing to detect anomalies or missing data
 for only one country. Detecting data quality issues that are related to a single data source is crucial for the root
 cause analysis and allows to contact the right person, 
-responsible for providing the data from that data stream (the country in this example).
+responsible for providing the data from that data grouping (the country in this example).
 
 When a data quality issue is identified (a data quality check's rule raised an alert), DQOps could be configured
 to create either one data quality incident for the whole table (without identification of the data group) or for each
 group of data (the country in this example) as a separate data quality incident.
 
-The data quality dashboards in DQOps have a configuration parameter to select the data stream for which we want to
+The data quality dashboards in DQOps have a configuration parameter to select the data grouping for which we want to
 find the most recent data quality issues or calculate the data quality KPI.
 The [data quality KPI](../data-quality-kpis/data-quality-kpis.md) scores that is calculated for each data source (data grouping)
 simplify the root cause analysis by linking the data quality incident to a data source, a data group,
@@ -75,7 +75,7 @@ There are two ways to identify the data source in DQOps:
 of the data source. A [data quality KPI](../data-quality-kpis/data-quality-kpis.md) can be calculated from multiple 
 tables at once.
 
-Here is an example of data stream configuration in the YAML file using a tag named 'UK':
+Here is an example of data grouping configuration in the YAML file using a tag named 'UK':
 
 ``` yaml hl_lines="7-11"
 apiVersion: dqo/v1

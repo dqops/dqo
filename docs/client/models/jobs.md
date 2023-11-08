@@ -308,7 +308,7 @@ Enumeration of possible statistics scopes. &quot;table&quot; - a whole table was
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|table<br/>data_groupings<br/>|
+|string|data_group<br/>table<br/>|
 
 ___  
 

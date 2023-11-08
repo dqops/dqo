@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
-        AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
-    )
     from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
         AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
+    )
+    from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
+        AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
     )
     from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
         AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
@@ -143,11 +143,11 @@ class ColumnAnomalyStationaryPartitionSumCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
-            AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
-        )
         from ..models.anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
             AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
+        )
+        from ..models.anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
+            AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
         )
         from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
             AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,

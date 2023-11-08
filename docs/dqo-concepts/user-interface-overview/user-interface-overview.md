@@ -15,7 +15,7 @@ The navigation bar allows you to select the specific sections that you want to f
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar1.png)
 
 - The **Data Sources** section allows you to [add new connections](../../working-with-dqo/adding-data-source-connection/index.md), import schemas and 
-    tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data streams](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
+    tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../run-data-quality-checks/run-data-quality-checks.md/#configure-date-or-datetime-column-for-partition-checks), 
     and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md),

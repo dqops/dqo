@@ -24,12 +24,10 @@ public enum StatisticsDataScope {
     /**
      * The statistics (profile) is analyzed for the whole table.
      */
-    @JsonProperty("table")
     table,
 
     /**
      * The statistics (profile) is analyzed for each group of data.
      */
-    @JsonProperty("data_groupings")
-    data_groupings
+    data_group
 }
