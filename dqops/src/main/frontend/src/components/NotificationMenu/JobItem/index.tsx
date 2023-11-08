@@ -3,6 +3,7 @@ import {
   DqoJobChangeModelStatusEnum,
   DqoJobEntryParametersModel,
   DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum
 } from '../../../api';
 import React, { useState } from 'react';
@@ -113,7 +114,7 @@ const JobItem = ({
       <AccordionHeader className="!outline-none" onClick={() => setOpen(!open)}>
         <div className="group flex justify-between items-center text-sm w-full text-gray-700 ">
           <div className="flex space-x-1 items-center">
-            <div>{(job.jobType !== undefined && String(job.jobType).length !== 0) ? job.jobType : "Error"}</div>
+            <div>{(job.jobType !== undefined && String(job.jobType).length !== 0) ? job.jobType.replace(/_/g, " ") : "Error"}</div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
@@ -129,7 +130,7 @@ const JobItem = ({
             )}
             <div className=" relative">
               <div className="flex items-center gap-x-3">
-                {job.jobType === 'run checks' &&
+                {job.jobType === DqoJobHistoryEntryModelJobTypeEnum.run_checks &&
                   job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
                     <div
                       className="w-3 h-3"
@@ -149,7 +150,7 @@ const JobItem = ({
                   {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
                 </div>
               </div>
-              {job.jobType === 'run checks' &&
+              {job.jobType === DqoJobHistoryEntryModelJobTypeEnum.run_checks &&
                 job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
                   <div
                     className="hidden group-hover:block absolute px-5 gap-y-1 w-80 h-29 rounded-md border border-gray-400 z-50 bg-white"
