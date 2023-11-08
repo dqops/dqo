@@ -13338,12 +13338,36 @@
           },
           "extensions" : { }
         }, {
-          "name" : "checkType",
+          "name" : "profiling",
           "in" : "query",
-          "description" : "Optional check type filter (profiling, monitoring, partitioned).",
+          "description" : "Optional check type filter to detect the current status of the profiling checks results. The default value is false, excluding profiling checks from the current table status detection. If enabled, only the status of the most recent check result is retrieved.",
           "schema" : {
-            "$ref" : "#/components/schemas/CheckType",
-            "exampleSetFlag" : false
+            "type" : "boolean",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "monitoring",
+          "in" : "query",
+          "description" : "Optional check type filter to detect the current status of the monitoring checks results. The default value is true, including monitoring checks in the current table status detection. If enabled, only the status of the most recent check result is retrieved.",
+          "schema" : {
+            "type" : "boolean",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "partitioned",
+          "in" : "query",
+          "description" : "Optional check type filter to detect the current status of the partitioned checks results. The default value is true, including partitioned checks in the current table status detection. Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.",
+          "schema" : {
+            "type" : "boolean",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
           },
           "extensions" : { }
         }, {
@@ -20746,6 +20770,20 @@
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
+          },
+          "category" : {
+            "type" : "string",
+            "description" : "Check category name, such as nulls, schema, strings, volume.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "quality_dimension" : {
+            "type" : "string",
+            "description" : "Data quality dimension, such as Completeness, Uniqueness, Validity.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
           }
         },
         "description" : "The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.",
@@ -20763,6 +20801,14 @@
               "type" : "integer",
               "format" : "int64",
               "description" : "The UTC timestamp when the check was recently executed."
+            },
+            "category" : {
+              "type" : "string",
+              "description" : "Check category name, such as nulls, schema, strings, volume."
+            },
+            "quality_dimension" : {
+              "type" : "string",
+              "description" : "Data quality dimension, such as Completeness, Uniqueness, Validity."
             }
           },
           "description" : "The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups."
@@ -32665,12 +32711,8 @@
         "type" : "object",
         "properties" : {
           "highest_severity_level" : {
-            "type" : "integer",
-            "description" : "The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the column.",
-            "format" : "int32",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "$ref" : "#/components/schemas/CheckResultStatus",
+            "exampleSetFlag" : false
           },
           "last_check_executed_at" : {
             "type" : "integer",
@@ -32752,9 +32794,9 @@
           "type" : "object",
           "properties" : {
             "highest_severity_level" : {
-              "type" : "integer",
-              "format" : "int32",
-              "description" : "The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the column."
+              "type" : "string",
+              "description" : "The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.",
+              "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
             },
             "last_check_executed_at" : {
               "type" : "integer",
@@ -70749,12 +70791,8 @@
             "types" : [ "string" ]
           },
           "highest_severity_level" : {
-            "type" : "integer",
-            "description" : "The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.",
-            "format" : "int32",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+            "$ref" : "#/components/schemas/CheckResultStatus",
+            "exampleSetFlag" : false
           },
           "last_check_executed_at" : {
             "type" : "integer",
@@ -70864,9 +70902,9 @@
               "description" : "The table name."
             },
             "highest_severity_level" : {
-              "type" : "integer",
-              "format" : "int32",
-              "description" : "The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table."
+              "type" : "string",
+              "description" : "The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.",
+              "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
             },
             "last_check_executed_at" : {
               "type" : "integer",

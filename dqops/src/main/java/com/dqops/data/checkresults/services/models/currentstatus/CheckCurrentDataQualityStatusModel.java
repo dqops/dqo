@@ -48,4 +48,16 @@ public class CheckCurrentDataQualityStatusModel {
      */
     @JsonPropertyDescription("The UTC timestamp when the check was recently executed.")
     private Instant executedAt;
+
+    /**
+     * Check category name.
+     */
+    @JsonPropertyDescription("Check category name, such as nulls, schema, strings, volume.")
+    private String category;
+
+    /**
+     * Data quality dimension, such as Completeness, Uniqueness, Validity.
+     */
+    @JsonPropertyDescription("Data quality dimension, such as Completeness, Uniqueness, Validity.")
+    private String qualityDimension;
 }

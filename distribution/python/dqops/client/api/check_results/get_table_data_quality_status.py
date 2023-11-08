@@ -6,7 +6,6 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_time_scale import CheckTimeScale
-from ...models.check_type import CheckType
 from ...models.table_current_data_quality_status_model import (
     TableCurrentDataQualityStatusModel,
 )
@@ -20,7 +19,9 @@ def _get_kwargs(
     *,
     months: Union[Unset, None, int] = UNSET,
     since: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
@@ -35,11 +36,11 @@ def _get_kwargs(
 
     params["since"] = since
 
-    json_check_type: Union[Unset, None, str] = UNSET
-    if not isinstance(check_type, Unset):
-        json_check_type = check_type.value if check_type else None
+    params["profiling"] = profiling
 
-    params["checkType"] = json_check_type
+    params["monitoring"] = monitoring
+
+    params["partitioned"] = partitioned
 
     json_check_time_scale: Union[Unset, None, str] = UNSET
     if not isinstance(check_time_scale, Unset):
@@ -102,7 +103,9 @@ def sync_detailed(
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     since: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
@@ -124,7 +127,9 @@ def sync_detailed(
         table_name (str):
         months (Union[Unset, None, int]):
         since (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
@@ -146,7 +151,9 @@ def sync_detailed(
         table_name=table_name,
         months=months,
         since=since,
-        check_type=check_type,
+        profiling=profiling,
+        monitoring=monitoring,
+        partitioned=partitioned,
         check_time_scale=check_time_scale,
         data_group=data_group,
         check_name=check_name,
@@ -170,7 +177,9 @@ def sync(
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     since: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
@@ -192,7 +201,9 @@ def sync(
         table_name (str):
         months (Union[Unset, None, int]):
         since (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
@@ -215,7 +226,9 @@ def sync(
         client=client,
         months=months,
         since=since,
-        check_type=check_type,
+        profiling=profiling,
+        monitoring=monitoring,
+        partitioned=partitioned,
         check_time_scale=check_time_scale,
         data_group=data_group,
         check_name=check_name,
@@ -233,7 +246,9 @@ async def asyncio_detailed(
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     since: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
@@ -255,7 +270,9 @@ async def asyncio_detailed(
         table_name (str):
         months (Union[Unset, None, int]):
         since (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
@@ -277,7 +294,9 @@ async def asyncio_detailed(
         table_name=table_name,
         months=months,
         since=since,
-        check_type=check_type,
+        profiling=profiling,
+        monitoring=monitoring,
+        partitioned=partitioned,
         check_time_scale=check_time_scale,
         data_group=data_group,
         check_name=check_name,
@@ -299,7 +318,9 @@ async def asyncio(
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
     since: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
     data_group: Union[Unset, None, str] = UNSET,
     check_name: Union[Unset, None, str] = UNSET,
@@ -321,7 +342,9 @@ async def asyncio(
         table_name (str):
         months (Union[Unset, None, int]):
         since (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
         data_group (Union[Unset, None, str]):
         check_name (Union[Unset, None, str]):
@@ -345,7 +368,9 @@ async def asyncio(
             client=client,
             months=months,
             since=since,
-            check_type=check_type,
+            profiling=profiling,
+            monitoring=monitoring,
+            partitioned=partitioned,
             check_time_scale=check_time_scale,
             data_group=data_group,
             check_name=check_name,

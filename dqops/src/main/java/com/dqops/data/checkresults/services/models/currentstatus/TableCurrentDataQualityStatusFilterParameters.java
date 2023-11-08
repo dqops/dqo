@@ -19,6 +19,7 @@ package com.dqops.data.checkresults.services.models.currentstatus;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.Builder;
 import lombok.Data;
@@ -41,7 +42,7 @@ public class TableCurrentDataQualityStatusFilterParameters {
     /**
      * The physicalTableName composed with a schema and a table name.
      */
-    @JsonPropertyDescription("The physicalTableName composed with a schema and a table name.")
+    @JsonPropertyDescription("The physical table name object composed with a schema and a table name.")
     private PhysicalTableName physicalTableName;
 
     /**
@@ -57,10 +58,25 @@ public class TableCurrentDataQualityStatusFilterParameters {
     private Instant since;
 
     /**
-     * Data quality check type (profiling, monitoring, partitioned)
+     * Boolean flag to enable detecting the current status of profiling checks. The default value is false, so the current status does not include profiling checks.
      */
-    @JsonPropertyDescription("Data quality check type (profiling, monitoring, partitioned).")
-    private CheckType checkType;
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonPropertyDescription("Boolean flag to enable detecting the current status of profiling checks. The default value is false, so the current status does not include profiling checks.")
+    private boolean profiling = false;
+
+    /**
+     * Boolean flag to enable detecting the current status of monitoring checks. The default value is true, so the current status depends on the statu of monitoring checks
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonPropertyDescription("Boolean flag to enable detecting the current status of monitoring checks. The default value is true, so the current status depends on the status of monitoring checks.")
+    private boolean monitoring = true;
+
+    /**
+     * Boolean flag to enable detecting the current status of partitioned checks. The default value is true, so the current status depends on the statu of partitioned checks.
+     */
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    @JsonPropertyDescription("Boolean flag to enable detecting the current status of partitioned checks. The default value is true, so the current status depends on the statu of partitioned checks.")
+    private boolean partitioned = true;
 
     /**
      * Time scale filter for monitoring and partitioned checks (values: daily or monthly).
@@ -93,9 +109,8 @@ public class TableCurrentDataQualityStatusFilterParameters {
     private String tableComparison;
 
     /**
-     * Check quality dimension.
+     * Check data quality dimension.
      */
-    @JsonPropertyDescription("Check quality dimension.")
+    @JsonPropertyDescription("Check data quality dimension.")
     private String qualityDimension;
-
 }

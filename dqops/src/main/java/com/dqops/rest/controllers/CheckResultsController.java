@@ -75,7 +75,9 @@ public class CheckResultsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param months         The number of months to load.
-     * @param checkType      Optional check type filter.
+     * @param profiling      Optional check type filter to return profiling checks.
+     * @param monitoring     Optional check type filter to return monitoring checks.
+     * @param partitioned    Optional check type filter to return partitioned checks.
      * @param checkTimeScale Optional check time scale filter.
      * @return The most recent table's data quality status.
      */
@@ -104,8 +106,18 @@ public class CheckResultsController {
             @RequestParam(required = false) Optional<Integer> months,
             @ApiParam(name = "since", value = "Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.", required = false)
             @RequestParam(required = false) Optional<Instant> since,
-            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
-            @RequestParam(required = false) Optional<CheckType> checkType,
+            @ApiParam(name = "profiling", value = "Optional check type filter to detect the current status of the profiling checks results. " +
+                    "The default value is false, excluding profiling checks from the current table status detection. " +
+                    "If enabled, only the status of the most recent check result is retrieved.", required = false)
+            @RequestParam(required = false) Optional<Boolean> profiling,
+            @ApiParam(name = "monitoring", value = "Optional check type filter to detect the current status of the monitoring checks results. " +
+                    "The default value is true, including monitoring checks in the current table status detection. " +
+                    "If enabled, only the status of the most recent check result is retrieved.", required = false)
+            @RequestParam(required = false) Optional<Boolean> monitoring,
+            @ApiParam(name = "partitioned", value = "Optional check type filter to detect the current status of the partitioned checks results. " +
+                    "The default value is true, including partitioned checks in the current table status detection. " +
+                    "Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.", required = false)
+            @RequestParam(required = false) Optional<Boolean> partitioned,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale,
             @ApiParam(name = "dataGroup", value = "Optional data group", required = false)
@@ -144,7 +156,9 @@ public class CheckResultsController {
                 .connectionName(connectionName)
                 .physicalTableName(physicalTableName)
                 .lastMonths(months.orElse(1))
-                .checkType(checkType.orElse(null))
+                .profiling(profiling.orElse(false))
+                .monitoring(monitoring.orElse(true))
+                .partitioned(partitioned.orElse(true))
                 .checkTimeScale(checkTimeScale.orElse(null))
                 .dataGroup(dataGroup.orElse(null))
                 .checkName(checkName.orElse(null))

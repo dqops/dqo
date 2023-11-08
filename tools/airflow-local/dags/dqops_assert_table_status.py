@@ -2,7 +2,6 @@ import datetime
 import pendulum
 from airflow import DAG
 from dqops.airflow.table_status.dqops_assert_table_status_operator import DqopsAssertTableStatusOperator
-from dqops.client.models.check_type import CheckType
 
 with DAG(
     dag_id="dqops_assert_table_status_on_example_connection",
@@ -17,6 +16,5 @@ with DAG(
         base_url="http://host.docker.internal:8888",
         connection_name="example_connection",
         schema_name="maven_restaurant_ratings",
-        table_name="consumers",
-        check_type=CheckType.MONITORING
+        table_name="consumers"
     )

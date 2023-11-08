@@ -641,62 +641,82 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         CheckResultsOverviewParameters checkResultsLoadParameters = CheckResultsOverviewParameters
                 .createForRecentMonths(lastMonths, lastMonths + 1);
 
-        Table ruleResultsTable = loadRuleResults(checkResultsLoadParameters, connectionName, physicalTableName);
-        Table errorsTable = loadErrorsNormalizedToResults(checkResultsLoadParameters, connectionName, physicalTableName);
-        Table combinedTable = errorsTable != null ?
-                (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
-                ruleResultsTable;
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, CheckResultsColumnNames.COLUMN_NAMES_FOR_RESULTS_OVERVIEW);
+        checkResultsSnapshot.ensureMonthsAreLoaded(checkResultsLoadParameters.getStartMonth(), checkResultsLoadParameters.getEndMonth());
 
-        if (combinedTable == null) {
-            return statusModel;
+        if (checkResultsSnapshot.getLoadedMonthlyPartitions() != null && !checkResultsSnapshot.getLoadedMonthlyPartitions().isEmpty()) {
+            List<LoadedMonthlyPartition> partitionsFromNewest = checkResultsSnapshot.getLoadedMonthlyPartitions()
+                    .values()
+                    .stream()
+                    .sorted(Comparator.comparing((LoadedMonthlyPartition partition) -> partition.getPartitionId()).reversed())
+                    .collect(Collectors.toList());
+
+            for (LoadedMonthlyPartition loadedMonthlyPartition : partitionsFromNewest) {
+                if (loadedMonthlyPartition.getData() == null || loadedMonthlyPartition.getData().rowCount() == 0) {
+                    continue;
+                }
+
+                Table filteredTable = filterTableOnFilterParameters(loadedMonthlyPartition.getData(), tableCurrentDataQualityStatusFilterParameters);
+                Table filteredTableByDataGroup = filteredTable;
+                if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
+                    TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                    filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+                }
+
+                calculateStatus(filteredTableByDataGroup, statusModel);
+            }
         }
 
-        Table filteredTable = filterTableOnFilterParameters(combinedTable, tableCurrentDataQualityStatusFilterParameters);
+        ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_OVERVIEW);
+        errorsSnapshot.ensureMonthsAreLoaded(checkResultsLoadParameters.getStartMonth(), checkResultsLoadParameters.getEndMonth());
 
-        Table filteredTableByDataGroup = filteredTable;
-        if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
-            TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
-            filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+        if (errorsSnapshot.getLoadedMonthlyPartitions() != null && !errorsSnapshot.getLoadedMonthlyPartitions().isEmpty()) {
+            List<LoadedMonthlyPartition> partitionsFromNewest = errorsSnapshot.getLoadedMonthlyPartitions()
+                    .values()
+                    .stream()
+                    .sorted(Comparator.comparing((LoadedMonthlyPartition partition) -> partition.getPartitionId()).reversed())
+                    .collect(Collectors.toList());
+
+            for (LoadedMonthlyPartition loadedMonthlyPartition : partitionsFromNewest) {
+                if (loadedMonthlyPartition.getData() == null || loadedMonthlyPartition.getData().rowCount() == 0) {
+                    continue;
+                }
+
+                Table filteredTable = filterTableOnFilterParameters(loadedMonthlyPartition.getData(), tableCurrentDataQualityStatusFilterParameters);
+                Table filteredTableByDataGroup = filteredTable;
+                if (!Strings.isNullOrEmpty(tableCurrentDataQualityStatusFilterParameters.getDataGroup())) {
+                    TextColumn dataGroupNameFilteredColumn = filteredTable.textColumn(CheckResultsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+                    filteredTableByDataGroup = filteredTable.where(dataGroupNameFilteredColumn.isEqualTo(tableCurrentDataQualityStatusFilterParameters.getDataGroup()));
+                }
+
+                calculateStatus(filteredTableByDataGroup, statusModel);
+            }
         }
 
-        Table sortedTable = filteredTableByDataGroup.sortDescendingOn(
-                CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME,
-                CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME,
-                CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
-
-        TableCurrentDataQualityStatusModel statusModelWithStatistics = calculateStatus(sortedTable, statusModel);
-
-        return statusModelWithStatistics;
+        return statusModel;
     }
 
     /**
      * Calculates status for the table. Completes the TableDataQualityStatusModel with total severity data.
      * @param sourceTable Source table to be filtered.
-     * @param tableStatusModel Object with connection, schema and table name.
+     * @param tableStatusModel Target current table status model to update and fill with the status.
      * @return Complete TableDataQualityStatusModel
      */
     protected TableCurrentDataQualityStatusModel calculateStatus(Table sourceTable, TableCurrentDataQualityStatusModel tableStatusModel){
-
-        LongColumn checkHashColumn = sourceTable.longColumn(CheckResultsColumnNames.CHECK_HASH_COLUMN_NAME);
-        TextColumn timeSeriesIdColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_SERIES_ID_COLUMN_NAME);
         InstantColumn executedAtColumn = sourceTable.instantColumn(CheckResultsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        IntColumn severityColumn = sourceTable.intColumn(CheckResultsColumnNames.SEVERITY_COLUMN_NAME);
+        IntColumn severityColumn = (IntColumn)TableColumnUtility.findColumn(sourceTable, CheckResultsColumnNames.SEVERITY_COLUMN_NAME); // when there is no severity column, it is the "errors" table and the severity is 4 as an execution error
         TextColumn checkNameColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+        TextColumn checkCategoryColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+        TextColumn qualityDimensionColumn = sourceTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
         TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        TextColumn checkTypeColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
-        long lastCheckHash = Long.MIN_VALUE;
-        String lastTimeSeriesId = "";
         int rowCount = sourceTable.rowCount();
 
         for (int i = 0; i < rowCount; i++) {
-            long currentCheckHash = checkHashColumn.getLong(i);
-            String currentTimeSeriesId = timeSeriesIdColumn.getString(i);
-
-            if (lastCheckHash == currentCheckHash && Objects.equals(lastTimeSeriesId, currentTimeSeriesId)) {
-                continue;
-            }
-
-            Integer severity = severityColumn.get(i);
+            Integer severity = severityColumn == null ? 4 : severityColumn.get(i);
             if (severity == null) {
                 continue;
             }
@@ -715,13 +735,14 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             String checkName = checkNameColumn.get(i);
             String columnName = columnNameColumn.get(i);
             CurrentDataQualityStatusHolder currentStatusHolder;
+            ColumnCurrentDataQualityStatusModel columnCurrentDataQualityStatusModel = null;
 
             if (Strings.isNullOrEmpty(columnName)) {
                 // table level check
                 currentStatusHolder = tableStatusModel;
             } else {
                 // column level check
-                ColumnCurrentDataQualityStatusModel columnCurrentDataQualityStatusModel = tableStatusModel.getColumns().get(columnName);
+                columnCurrentDataQualityStatusModel = tableStatusModel.getColumns().get(columnName);
                 if (columnCurrentDataQualityStatusModel == null) {
                     columnCurrentDataQualityStatusModel = new ColumnCurrentDataQualityStatusModel();
                     tableStatusModel.getColumns().put(columnName, columnCurrentDataQualityStatusModel);
@@ -741,17 +762,40 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
             CheckCurrentDataQualityStatusModel checkCurrentStatusModel = currentStatusHolder.getChecks().get(checkName);
             if (checkCurrentStatusModel == null) {
+                String checkCategory = checkCategoryColumn.get(i);
+                String qualityDimension = qualityDimensionColumn.get(i);
                 checkCurrentStatusModel = new CheckCurrentDataQualityStatusModel();
+                checkCurrentStatusModel.setCategory(checkCategory);
+                checkCurrentStatusModel.setQualityDimension(qualityDimension);
                 currentStatusHolder.getChecks().put(checkName, checkCurrentStatusModel);
-            } else if (checkCurrentStatusModel.getExecutedAt().isAfter(executedAt)) {
-                continue;  // we have the current status, we are skipping...  TODO: but for partitioned checks, we should not....
+            } else {
+                String checkTypeString = checkTypeColumn.get(i);
+                boolean isPartitionedCheck = Objects.equals(checkTypeString, CheckType.partitioned.getDisplayName());
+                if (!isPartitionedCheck && checkCurrentStatusModel.getExecutedAt().isAfter(executedAt)) {
+                    continue;  // we have the current status, we are skipping... but we are including the status of all partitions, also if their results were collected earlier
+                }
             }
 
-            if (severity > tableStatusModel.getHighestSeverityLevel() && severity != 4) {
-                tableStatusModel.setHighestSeverityLevel(severity);
+            if (checkCurrentStatusModel.getExecutedAt() != null) {
+                if (executedAt != null && executedAt.isAfter(checkCurrentStatusModel.getExecutedAt())) {
+                    checkCurrentStatusModel.setExecutedAt(executedAt);
+                }
+            } else {
+                checkCurrentStatusModel.setExecutedAt(executedAt);
             }
 
-            if ((checkCurrentStatusModel.getSeverity() == null || severity > checkCurrentStatusModel.getSeverity().getSeverity()) && severity != 4) {
+            if (tableStatusModel.getHighestSeverityLevel() == null || (severity > tableStatusModel.getHighestSeverityLevel().getSeverity() && severity != 4)) {
+                tableStatusModel.setHighestSeverityLevel(CheckResultStatus.fromSeverity(severity));
+            }
+
+            if (columnCurrentDataQualityStatusModel != null) {
+                if (columnCurrentDataQualityStatusModel.getHighestSeverityLevel() == null ||
+                        (severity > columnCurrentDataQualityStatusModel.getHighestSeverityLevel().getSeverity() && severity != 4)) {
+                    columnCurrentDataQualityStatusModel.setHighestSeverityLevel(CheckResultStatus.fromSeverity(severity));
+                }
+            }
+
+            if (checkCurrentStatusModel.getSeverity() == null || severity > checkCurrentStatusModel.getSeverity().getSeverity()) {
                 checkCurrentStatusModel.setSeverity(CheckResultStatus.fromSeverity(severity));
             }
         }
@@ -761,7 +805,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
     /**
      * Increments the count of issues with the given severity level in a current DQ status holder, status holders are table and column levels.
-     * @param dataQualityStatusHolder Target aata quality status holder to increment.
+     * @param dataQualityStatusHolder Target data quality status holder to increment.
      * @param severity The severity level.
      */
     protected void incrementTotalIssueCount(CurrentDataQualityStatusHolder dataQualityStatusHolder, int severity) {
@@ -822,9 +866,19 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         Selection rowSelection = Selection.withRange(0, sourceTable.rowCount());
 
-        CheckType checkType = filterParameters.getCheckType();
-        if (checkType != null) {
-            rowSelection = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME).isEqualTo(checkType.toString());
+        if (!filterParameters.isPartitioned()) {
+            rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                    .isNotEqualTo(CheckType.profiling.getDisplayName()));
+        }
+
+        if (!filterParameters.isMonitoring()) {
+            rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                    .isNotEqualTo(CheckType.monitoring.getDisplayName()));
+        }
+
+        if (!filterParameters.isPartitioned()) {
+            rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
+                    .isNotEqualTo(CheckType.partitioned.getDisplayName()));
         }
 
         Instant since = filterParameters.getSince();

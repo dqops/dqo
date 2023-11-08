@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.check_result_status import CheckResultStatus
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -28,9 +29,7 @@ class TableCurrentDataQualityStatusModel:
             connection_name (Union[Unset, str]): The connection name in DQOps.
             schema_name (Union[Unset, str]): The schema name.
             table_name (Union[Unset, str]): The table name.
-            highest_severity_level (Union[Unset, int]): The severity of the highest identified data quality issue (1 =
-                warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no
-                data quality checks were executed on the table.
+            highest_severity_level (Union[Unset, CheckResultStatus]):
             last_check_executed_at (Union[Unset, int]): The UTC timestamp when the most recent data quality check was
                 executed on the table.
             executed_checks (Union[Unset, int]): The total number of most recent checks that were executed on the table.
@@ -57,7 +56,7 @@ class TableCurrentDataQualityStatusModel:
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
     table_name: Union[Unset, str] = UNSET
-    highest_severity_level: Union[Unset, int] = UNSET
+    highest_severity_level: Union[Unset, CheckResultStatus] = UNSET
     last_check_executed_at: Union[Unset, int] = UNSET
     executed_checks: Union[Unset, int] = UNSET
     valid_results: Union[Unset, int] = UNSET
@@ -73,7 +72,10 @@ class TableCurrentDataQualityStatusModel:
         connection_name = self.connection_name
         schema_name = self.schema_name
         table_name = self.table_name
-        highest_severity_level = self.highest_severity_level
+        highest_severity_level: Union[Unset, str] = UNSET
+        if not isinstance(self.highest_severity_level, Unset):
+            highest_severity_level = self.highest_severity_level.value
+
         last_check_executed_at = self.last_check_executed_at
         executed_checks = self.executed_checks
         valid_results = self.valid_results
@@ -137,7 +139,12 @@ class TableCurrentDataQualityStatusModel:
 
         table_name = d.pop("table_name", UNSET)
 
-        highest_severity_level = d.pop("highest_severity_level", UNSET)
+        _highest_severity_level = d.pop("highest_severity_level", UNSET)
+        highest_severity_level: Union[Unset, CheckResultStatus]
+        if isinstance(_highest_severity_level, Unset):
+            highest_severity_level = UNSET
+        else:
+            highest_severity_level = CheckResultStatus(_highest_severity_level)
 
         last_check_executed_at = d.pop("last_check_executed_at", UNSET)
 

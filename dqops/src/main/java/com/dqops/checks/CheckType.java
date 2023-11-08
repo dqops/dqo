@@ -48,7 +48,7 @@ public enum CheckType {
     public static class CheckTypeSampleFactory implements SampleValueFactory<CheckType> {
         @Override
         public CheckType createSample() {
-            return partitioned;
+            return monitoring;
         }
     }
 }

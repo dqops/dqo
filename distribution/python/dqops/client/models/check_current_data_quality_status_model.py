@@ -17,10 +17,14 @@ class CheckCurrentDataQualityStatusModel:
         Attributes:
             severity (Union[Unset, CheckResultStatus]):
             executed_at (Union[Unset, int]): The UTC timestamp when the check was recently executed.
+            category (Union[Unset, str]): Check category name, such as nulls, schema, strings, volume.
+            quality_dimension (Union[Unset, str]): Data quality dimension, such as Completeness, Uniqueness, Validity.
     """
 
     severity: Union[Unset, CheckResultStatus] = UNSET
     executed_at: Union[Unset, int] = UNSET
+    category: Union[Unset, str] = UNSET
+    quality_dimension: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -29,6 +33,8 @@ class CheckCurrentDataQualityStatusModel:
             severity = self.severity.value
 
         executed_at = self.executed_at
+        category = self.category
+        quality_dimension = self.quality_dimension
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -37,6 +43,10 @@ class CheckCurrentDataQualityStatusModel:
             field_dict["severity"] = severity
         if executed_at is not UNSET:
             field_dict["executed_at"] = executed_at
+        if category is not UNSET:
+            field_dict["category"] = category
+        if quality_dimension is not UNSET:
+            field_dict["quality_dimension"] = quality_dimension
 
         return field_dict
 
@@ -52,9 +62,15 @@ class CheckCurrentDataQualityStatusModel:
 
         executed_at = d.pop("executed_at", UNSET)
 
+        category = d.pop("category", UNSET)
+
+        quality_dimension = d.pop("quality_dimension", UNSET)
+
         check_current_data_quality_status_model = cls(
             severity=severity,
             executed_at=executed_at,
+            category=category,
+            quality_dimension=quality_dimension,
         )
 
         check_current_data_quality_status_model.additional_properties = d

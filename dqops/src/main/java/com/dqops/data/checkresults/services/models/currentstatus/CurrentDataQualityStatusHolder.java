@@ -16,6 +16,8 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
+import com.dqops.data.checkresults.services.models.CheckResultStatus;
+
 import java.time.Instant;
 import java.util.Map;
 
@@ -24,8 +26,8 @@ import java.util.Map;
  * to the service getter of the dictionary that returns data quality check statuses keyed by the check name, but on a table or column levels.
  */
 public interface CurrentDataQualityStatusHolder {
-    Integer getHighestSeverityLevel();
-    void setHighestSeverityLevel(Integer highestSeverityLevel);
+    CheckResultStatus getHighestSeverityLevel();
+    void setHighestSeverityLevel(CheckResultStatus highestSeverityLevel);
     Instant getLastCheckExecutedAt();
     void setLastCheckExecutedAt(Instant lastCheckExecutedAt);
     int getExecutedChecks();

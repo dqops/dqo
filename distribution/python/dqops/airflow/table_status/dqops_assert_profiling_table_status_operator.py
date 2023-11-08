@@ -3,7 +3,6 @@ from typing import Any, Dict, Union
 from dqops.airflow.table_status.dqops_assert_table_status_operator import (
     DqopsAssertTableStatusOperator,
 )
-from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.types import UNSET, Unset
 
@@ -69,7 +68,9 @@ class DqopsAssertProfilingTableStatusOperator(DqopsAssertTableStatusOperator):
             schema_name=schema_name,
             table_name=table_name,
             months=months,
-            check_type=CheckType.PROFILING,
+            profiling=True,
+            monitoring=False,
+            partitioned=False,
             data_group=data_group,
             check_name=check_name,
             category=category,

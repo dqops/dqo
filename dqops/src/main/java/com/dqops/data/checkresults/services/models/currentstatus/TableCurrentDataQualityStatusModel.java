@@ -16,6 +16,7 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
+import com.dqops.data.checkresults.services.models.CheckResultStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -58,10 +59,10 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private String tableName;
 
     /**
-     * The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.
+     * The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.
      */
-    @JsonPropertyDescription("The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.")
-    private Integer highestSeverityLevel;
+    @JsonPropertyDescription("The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.")
+    private CheckResultStatus highestSeverityLevel;
 
     /**
      * The UTC timestamp when the most recent data quality check was executed on the table.
