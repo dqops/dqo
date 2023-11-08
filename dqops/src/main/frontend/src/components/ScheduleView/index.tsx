@@ -18,10 +18,10 @@ interface IScheduleViewProps {
   handleChange: (obj: any) => void;
   isDefault?: boolean;
 }
-
+type TMinutes = {'minutes' : number, 'day' : number, 'hour' : number }
 const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
-  const [minutes, setMinutes] = useState(15);
+  const [minutes, setMinutes] = useState<TMinutes>({'minutes' : 15, 'day' : 15, 'hour' : 15 });
   const [hour, setHour] = useState(15);
   const { table, column }: { table: string; column: string } = useParams();
 
@@ -52,15 +52,15 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
     setMode(value);
 
     if (value === 'minutes') {
-      handleChange({ cron_expression: `*/${minutes} * * * *` });
+      handleChange({ cron_expression: `*/${minutes.minutes} * * * *` });
       return;
     }
     if (value === 'hour') {
-      handleChange({ cron_expression: `${minutes} * * * *` });
+      handleChange({ cron_expression: `${minutes.minutes} * * * *` });
       return;
     }
     if (value === 'day') {
-      handleChange({ cron_expression: `${minutes} ${hour} * * *` });
+      handleChange({ cron_expression: `${minutes.day} ${hour} * * *` });
       return;
     }
     if (!value) {
@@ -80,13 +80,13 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
     if (mode === 'day') {
       handleChange({ cron_expression: `${val} ${hour} * * *` });
     }
-    setMinutes(val);
+    setMinutes((prevState) =>  ({...prevState, [mode as keyof TMinutes] : val}));
   };
 
   const onChangeHour = (val: number) => {
     if (Number(val) < 0 || Number(val) > 23) return;
     if (mode === 'day') {
-      handleChange({ cron_expression: `${minutes} ${val} * * *` });
+      handleChange({ cron_expression: `${minutes.day} ${val} * * *` });
     }
     setHour(val);
   };
@@ -111,7 +111,10 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       } else if (Number(matches[1]) > 59) {
         onChangeMinutes(59);
       } else {
-        setMinutes(Number(matches[1]));
+        setMinutes((prevState) => ({
+          ...prevState,
+          [mode as keyof TMinutes]: Number(matches[1]),
+        }));
       }
       return;
     }
@@ -124,7 +127,10 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       } else if (Number(matches[1]) > 59) {
         onChangeMinutes(59);
       } else {
-        setMinutes(Number(matches[1]));
+        setMinutes((prevState) => ({
+          ...prevState,
+          [mode as keyof TMinutes]: Number(matches[1]),
+        }));
       }
       return;
     }
@@ -145,7 +151,10 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       } else if (Number(matches[1]) > 59) {
         onChangeMinutes(59);
       } else {
-        setMinutes(Number(matches[1]));
+        setMinutes((prevState) => ({
+          ...prevState,
+          [mode as keyof TMinutes]: Number(matches[1]),
+        }));
       }
       return;
     }
@@ -253,7 +262,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               className="!text-sm"
               min={0}
               max={60}
-              value={minutes}
+              value={minutes.minutes}
               onChange={onChangeMinutes}
               disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
             />
@@ -276,7 +285,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               className="!text-sm"
               min={0}
               max={60}
-              value={minutes}
+              value={minutes.hour}
               onChange={onChangeMinutes}
               disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
             />
@@ -308,7 +317,7 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
               className="!text-sm"
               min={0}
               max={60}
-              value={minutes}
+              value={minutes.day}
               onChange={onChangeMinutes}
               disabled={userProfile.can_manage_scheduler !== true || (isDefault === true && userProfile.can_manage_data_sources !== true)}
             />
