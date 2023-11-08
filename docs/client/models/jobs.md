@@ -374,9 +374,9 @@ Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that im
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_name||string|
-|schema_name||string|
-|table_names||string_list|
+|connection_name|Connection name|string|
+|schema_name|Schema name|string|
+|table_names|Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.|string_list|
 
 
 ___  

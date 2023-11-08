@@ -46,8 +46,8 @@ Custom data quality rule specification. Provides the custom rule configuration. 
 |type|Rule runner type|enum|python<br/>java_class<br/>| | |
 |java_class_name|Java class name for a rule runner that will execute the sensor. The &quot;type&quot; must be &quot;java_class&quot;.|string| | | |
 |mode|Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.|enum|previous_readouts<br/>current_value<br/>| | |
-|[time_window](/docs/reference/yaml/ruledefinitionyaml/#ruletimewindowsettingsspec)|Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.|[RuleTimeWindowSettingsSpec](/docs/reference/yaml/ruledefinitionyaml/#ruletimewindowsettingsspec)| | | |
-|[fields](/docs/reference/yaml/sensordefinitionyaml/#parameterdefinitionslistspec)|List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.|[ParameterDefinitionsListSpec](/docs/reference/yaml/sensordefinitionyaml/#parameterdefinitionslistspec)| | | |
+|[time_window](../ruledefinitionyaml/#ruletimewindowsettingsspec)|Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.|[RuleTimeWindowSettingsSpec](../ruledefinitionyaml/#ruletimewindowsettingsspec)| | | |
+|[fields](../sensordefinitionyaml/#parameterdefinitionslistspec)|List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.|[ParameterDefinitionsListSpec](../sensordefinitionyaml/#parameterdefinitionslistspec)| | | |
 |parameters|Additional rule parameters|Dict[string, string]| | | |
 
 
@@ -77,7 +77,7 @@ Custom rule specification that describes the configuration of a python module wi
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](/docs/reference/yaml/ruledefinitionyaml/#ruledefinitionspec)||[RuleDefinitionSpec](/docs/reference/yaml/ruledefinitionyaml/#ruledefinitionspec)| | | |
+|[spec](../ruledefinitionyaml/#ruledefinitionspec)||[RuleDefinitionSpec](../ruledefinitionyaml/#ruledefinitionspec)| | | |
 
 
 

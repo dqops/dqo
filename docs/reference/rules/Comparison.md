@@ -107,7 +107,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = None
     lower_bound = getattr(rule_parameters.parameters,"from")
@@ -226,7 +226,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = None
     lower_bound = getattr(rule_parameters.parameters, "from")
@@ -333,7 +333,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.expected_datatype
     lower_bound = expected_value
@@ -438,7 +438,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     has_expected_value = hasattr(rule_parameters, 'expected_value')
     has_actual_value = hasattr(rule_parameters, 'actual_value')
     if not has_expected_value and not has_actual_value:
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     if not has_expected_value:
         return RuleExecutionResult(False, None, None, None)
@@ -556,7 +556,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.expected_value
     lower_bound = expected_value - rule_parameters.parameters.error_margin
@@ -660,7 +660,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.expected_value
     lower_bound = expected_value
@@ -764,7 +764,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_value
     lower_bound = None
@@ -867,7 +867,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_count
     lower_bound = None
@@ -970,7 +970,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_days
     lower_bound = None
@@ -1311,7 +1311,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_percent
     lower_bound = None
@@ -1416,7 +1416,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_value
     lower_bound = None
@@ -1521,7 +1521,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value
@@ -1626,7 +1626,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_count
     lower_bound = rule_parameters.parameters.min_count
@@ -1729,7 +1729,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_percent
     lower_bound = rule_parameters.parameters.min_percent
@@ -1834,7 +1834,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value

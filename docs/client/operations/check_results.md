@@ -171,7 +171,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_data_quality_status_model](../../models/check_results/#tabledataqualitystatusmodel)||[TableDataQualityStatusModel](../../models/check_results/#tabledataqualitystatusmodel)|
+|[table_current_data_quality_status_model](../../models/check_results/#tablecurrentdataqualitystatusmodel)||[TableCurrentDataQualityStatusModel](../../models/check_results/#tablecurrentdataqualitystatusmodel)|
 
 
 
@@ -184,6 +184,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long| |
+|since|Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.|long| |
 |[check_type](../../models/#checktype)|Optional check type filter (profiling, monitoring, partitioned).|[CheckType](../../models/#checktype)| |
 |[check_time_scale](../../models/#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../../models/#checktimescale)| |
 |data_group|Optional data group|string| |

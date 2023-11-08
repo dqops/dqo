@@ -12,9 +12,10 @@ T = TypeVar("T", bound="ImportTablesQueueJobParameters")
 class ImportTablesQueueJobParameters:
     """
     Attributes:
-        connection_name (Union[Unset, str]):
-        schema_name (Union[Unset, str]):
-        table_names (Union[Unset, List[str]]):
+        connection_name (Union[Unset, str]): Connection name
+        schema_name (Union[Unset, str]): Schema name
+        table_names (Union[Unset, List[str]]): Optional list of table names inside the schema. When the list of tables
+            is empty, all tables are imported.
     """
 
     connection_name: Union[Unset, str] = UNSET
