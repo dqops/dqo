@@ -156,7 +156,7 @@ const JobItem = ({
                     style={{
                       transform: 'translate(50%, -50%)',
                       top: '550%',
-                      right: '165%'
+                      right: '145%'
                     }}
                   >
                     <div className="flex gap-x-2">
