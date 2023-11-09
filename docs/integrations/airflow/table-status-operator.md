@@ -25,7 +25,7 @@ The required parameters set clearly indicate the specific table in a connection.
 | table_name        | (Required) The name of the table.                                                                                                                                                                                                                                                                                                                                                                       | str                                                           |
 | months            | The number of months for reviewing the data quality check results. The default value is 1, which includes the current month and 1 previous month. For partitioned checks, it is the number of months to analyze.                                                                                                                                                                                        | Union[Unset, None, int]                                       |
 | profiling         | (Only available in DqopsAssertTableStatusOperator operator) Boolean flag to enable reading also the most recent status of *profiling* data quality checks. By default, DQOps does not read the check results of profiling checks.                                                                                                                                                                       | Union[Unset, None, bool]                                      |
-| monitoring        | (Only available in DqopsAssertTableStatusOperator operator) Boolean flag to configure reading the most recent status of *monitoring* data quality checks. By default, DQOps finds the most recent check result for each data quality check and returns its severity status. The default value is True.                                                                                                  | Union[Unset, None, bool]                                      
+| monitoring        | (Only available in DqopsAssertTableStatusOperator operator) Boolean flag to configure reading the most recent status of *monitoring* data quality checks. By default, DQOps finds the most recent check result for each data quality check and returns its severity status. The default value is True.                                                                                                  | Union[Unset, None, bool]                                      |
 | partitioned       | (Only available in DqopsAssertTableStatusOperator operator) Boolean flag to configure reading the most recent status of *partitioned* data quality checks. By default, DQOps reads the check execution statuses of ALL partitioned checks in the filtered time range, for all partitions (time periods), because data quality issues could be present in earlier partitions. The default value is True. | Union[Unset, None, bool]                                      |
 | check_time_scale  | Time scale filter for monitoring and partition checks (values: daily or monthly).                                                                                                                                                                                                                                                                                                                       | Union[Unset, None, CheckTimeScale]                            |
 | data_group        | The name of the data group.                                                                                                                                                                                                                                                                                                                                                                             | Union[Unset, None, str]                                       |
@@ -146,12 +146,10 @@ The failed checks name was daily_row_count, as shown in the failed_checks_status
 Here we used the default number of months which is from the beginning of the previous month to the present.
 
 
-```text
-Tip
+!!! tip "Tip"
+    It is easy to verify the issue with row count, which exceeds the expected limit set by the check's rules. 
+    In such a case, we need to check if data was loaded or adjust the rule thresholds if the number of rows is as expected.
 
-It is easy to verify the issue with row count, which exceeds the expected limit set by the check's rules. 
-In such a case, we need to check if data was loaded or adjust the rule thresholds if the number of rows is as expected.
-```
 
 Furthermore, the task will finish with Failed Airflow status as we did not set the **maximum_severity_threshold** parameter.
 
