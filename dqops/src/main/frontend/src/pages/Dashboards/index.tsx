@@ -62,7 +62,6 @@ const Dashboards = () => {
       }
     }
     setImageWidth(1);
-
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
