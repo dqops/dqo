@@ -562,6 +562,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
             TextColumn columnNameColumn = partitionData.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
             TextColumn checkNameColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_NAME_COLUMN_NAME);
+            TextColumn checkTypeColumn = partitionData.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
             for (Integer rowIndex : selectionOfMatchingIssues) {
                 Row row = partitionData.row(rowIndex);
@@ -578,6 +579,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 LocalDate executedAtDate = executedAt.atZone(defaultTimeZoneId).toLocalDate();
                 String columnName = columnNameColumn.get(rowIndex);
                 String checkName = checkNameColumn.get(rowIndex);
+                String checkTypeString = checkTypeColumn.get(rowIndex);
+                CheckType checkType = Strings.isNullOrEmpty(checkTypeString) ? null : Enum.valueOf(CheckType.class, checkTypeString);
                 if (columnName == null) {
                     columnName = CheckResultsDataService.COLUMN_NAME_TABLE_CHECKS_PLACEHOLDER;
                 }
@@ -597,6 +600,8 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 if (dateMatch && columnMatch) {
                     histogramModel.incrementCountForCheck(checkName);
                 }
+
+                histogramModel.markCheckType(checkType);
             }
         }
 
