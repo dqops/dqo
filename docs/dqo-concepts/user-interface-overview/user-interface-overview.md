@@ -37,30 +37,34 @@ The right side of the navigation bar provides access to the main settings and so
 - **Help** - Links to the support page, documentation, DQOps account manager and configuration parameters settings set at 
     the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
 - **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
-- **Notifications** - You can view DQO notifications and enable or disable the scheduler. A NEW tag will appear when there is a new notification.
+- **Notifications** - View DQOps notifications and enable/disable the scheduler. The Notifications icon displays **NEW** tag, when there is a new notification.
 - **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
 
 ### **Notifications**
 
-Notifications allows you to view executed jobs, such as running checks, collecting statistics, importing metadata, etc. 
+Notifications provide a log of all completed tasks, such as running checks, gathering statistics, importing metadata, 
+synchronizing folders, etc. 
 
 ![Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
 
-The notifications grant you access to a comprehensive log of all executed actions, allowing you to check the status of each action. These statuses can include "succeeded," "failed," "running," "waiting," "queued," or "cancelled." Furthermore, you can expand individual job entries to view sub-jobs and access additional details about specific tasks.
+You can use the notifications to access a complete log of all jobs that have been executed. This log allows you to check
+the status of each action, which can be "succeeded," "failed," "running," "waiting," "queued," or "canceled." 
+Additionally, you can expand each job entry to view sub-jobs and access more detailed information about specific tasks.
 
-Main functions of notifications:
+**Main functions of notifications:**
 
-- In the top of notifications you can manage your job scheduler, which is responsible for executing scheduled jobs.
+- In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/schedules/index.md). 
 
-![Job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
+    ![Job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
 
 - If the job is queued or running you can cancel or stop it by clicking the X button.
 
-![Canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
+    ![Canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
 
-- In notifications you can also view the result of executed checks by simply hovering on run checks job. Color of the square shows the highest severity status of the results.
+- You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
+    severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
 
-![Job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
+    ![Job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 
 ## Tree view
 

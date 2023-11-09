@@ -59,7 +59,7 @@ To create a new table comparison follow these steps:
 
     ![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/list-of-checks.png)
 
-8. Click the **Save** button after making all the adjustments to save the changes.  
+8. After making all the adjustments, click the **Save** button to save the changes.  
 
 ## Run table comparison
 
