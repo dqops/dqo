@@ -400,7 +400,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                         this.jobChanges.put(changeSequence, dqoUpdatedJobChangeModel);
                         if (jobChange.getUpdatedModel() != null) {
                             assert Objects.equals(jobChange.getJobId(), jobChange.getUpdatedModel().getJobId());
-                            this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel()); // replaces the current model
+                            DqoQueueJobId jobId = jobChange.getJobId();
+                            this.allJobs.put(jobId, jobChange.getUpdatedModel()); // replaces the current model
+                            if (jobId.getJobBusinessKey() != null) {
+                                this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                            }
                         } else {
                             // update in the job
                             DqoJobHistoryEntryModel currentJobEntryModel = this.allJobs.get(jobChange.getJobId());
@@ -411,7 +415,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                                 clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
                                 dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
                             }
-                            this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
+                            DqoQueueJobId jobId = jobChange.getJobId();
+                            this.allJobs.put(jobId, clonedJobEntryModel);
+                            if (jobId.getJobBusinessKey() != null) {
+                                this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                            }
                         }
 
                         if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.synchronize_multiple_folders) {
