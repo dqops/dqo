@@ -443,6 +443,8 @@ theme:
     - navigation.indexes
     - navigation.footer
     - navigation.instant
+    - navigation.tracking
+    - navigation.prune
     - content.tabs.link
     - content.code.copy
     - content.code.annotate

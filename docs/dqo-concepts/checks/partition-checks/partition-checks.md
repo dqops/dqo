@@ -92,13 +92,13 @@ nulls_percent.
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
-        partitioned_checks_timestamp_source: event_timestamp
+        partition_by_column: event_timestamp
       columns:
         target_column:
-          partition_checks:
+          partitioned_checks:
             daily:
               nulls:
-                daily_partition_checks_nulls_percent:
+                daily_partition_nulls_percent:
                   warning:
                     max_percent: 1.0
                   error:
@@ -117,13 +117,13 @@ nulls_percent.
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
-        partitioned_checks_timestamp_source: event_timestamp
+        partition_by_column: event_timestamp
       columns:
         target_column:
-          partotion_checks:
+          partotioned_checks:
             monthly:
               nulls:
-                monthly_partition_checks_nulls_percent:
+                monthly_partition_nulls_percent:
                   warning:
                     max_percent: 1.0
                   error:
