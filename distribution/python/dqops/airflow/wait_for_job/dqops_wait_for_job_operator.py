@@ -124,4 +124,4 @@ class DqopsWaitForJobOperator(BaseOperator):
 
         job_id: int = xcom_job_result["jobId"]["jobId"]
 
-        return job_id
+        return str(job_id)
