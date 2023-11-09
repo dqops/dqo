@@ -27,8 +27,8 @@ Rule folder model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|folders|A dictionary of nested folders with rules, the keys are the folder names.|Dict[string, [RuleFolderModel](../rules/#rulefoldermodel)]|
-|rules|List of rules defined in this folder.|List[[RuleListModel](../rules/#rulelistmodel)]|
+|folders|A dictionary of nested folders with rules, the keys are the folder names.|Dict[string, [RuleFolderModel](../rules/#RuleFolderModel)]|
+|rules|List of rules defined in this folder.|List[[RuleListModel](../rules/#RuleListModel)]|
 
 
 ___  
@@ -68,7 +68,7 @@ List of parameter definitions - the parameters for custom sensors or custom rule
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[ParameterDefinitionSpec](../../../reference/yaml/ruledefinitionyaml/#parameterdefinitionspec)]|
+|self||List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)]|
 
 
 ___  
@@ -84,11 +84,11 @@ Rule model that is returned by the REST API. Describes a single unique rule name
 |---------------|---------------------------------|-----------|
 |rule_name|Rule name|string|
 |rule_python_module_content|Rule Python module content|string|
-|[type](#rulerunnertype)|Rule runner type|[RuleRunnerType](#rulerunnertype)|
+|[type](#RuleRunnerType)|Rule runner type|[RuleRunnerType](#RuleRunnerType)|
 |java_class_name|Java class name for a rule runner that will execute the sensor. The &quot;type&quot; must be &quot;java_class&quot;.|string|
-|[mode](#ruletimewindowmode)|Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.|[RuleTimeWindowMode](#ruletimewindowmode)|
-|[time_window](../../../reference/yaml/ruledefinitionyaml/#ruletimewindowsettingsspec)|Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.|[RuleTimeWindowSettingsSpec](../../../reference/yaml/ruledefinitionyaml/#ruletimewindowsettingsspec)|
-|[fields](#parameterdefinitionslistspec)|List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.|[ParameterDefinitionsListSpec](#parameterdefinitionslistspec)|
+|[mode](#RuleTimeWindowMode)|Rule historic (past) values mode. A rule may require just the current sensor readout or use sensor readouts from past periods to perform prediction. The number of time windows is configured in the time_window setting.|[RuleTimeWindowMode](#RuleTimeWindowMode)|
+|[time_window](../../../reference/yaml/RuleDefinitionYaml/#ruletimewindowsettingsspec)|Rule time window configuration when the mode is previous_readouts. Configures the number of past time windows (sensor readouts) that are passes as a parameter to the rule. For example, to calculate the average or perform prediction on historic data.|[RuleTimeWindowSettingsSpec](../../../reference/yaml/RuleDefinitionYaml/#ruletimewindowsettingsspec)|
+|[fields](#ParameterDefinitionsListSpec)|List of fields that are parameters of a custom rule. Those fields are used by the DQOps UI to display the data quality check editing screens with proper UI controls for all required fields.|[ParameterDefinitionsListSpec](#ParameterDefinitionsListSpec)|
 |parameters|Additional rule parameters|Dict[string, string]|
 |custom|This rule has a custom (user level) definition.|boolean|
 |built_in|This rule has is a built-in rule.|boolean|

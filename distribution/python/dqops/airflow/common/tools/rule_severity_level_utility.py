@@ -1,5 +1,5 @@
-from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.models.check_result_status import CheckResultStatus
+from dqops.client.models.rule_severity_level import RuleSeverityLevel
 
 
 def get_severity_value_from_rule_severity(rule_severity: RuleSeverityLevel) -> int:
@@ -46,4 +46,3 @@ def get_severity_value_from_check_result(check_result_status: CheckResultStatus)
     if check_result_status == CheckResultStatus.EXECUTION_ERROR:
         return 4
     raise Exception("Unrecognized check result status : " + str(check_result_status))
-

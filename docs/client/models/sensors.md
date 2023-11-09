@@ -8,7 +8,7 @@ Provider sensor list model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[provider_type](../#providertype)|Provider type.|[ProviderType](../#providertype)|
+|[provider_type](../#ProviderType)|Provider type.|[ProviderType](../#ProviderType)|
 |custom|This connection specific template is a custom sensor template or was customized by the user.|boolean|
 |built_in|This connection specific template is provided with DQOps as a built-in sensor.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
@@ -30,7 +30,7 @@ Sensor list model that is returned by the REST API.
 |custom|This sensor has is a custom sensor or was customized by the user. This is a read-only flag.|boolean|
 |built_in|This sensor is provided with DQOps as a built-in sensor. This is a read-only flag.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
-|provider_sensors|List of provider (database) specific models.|List[[ProviderSensorListModel](#providersensorlistmodel)]|
+|provider_sensors|List of provider (database) specific models.|List[[ProviderSensorListModel](#ProviderSensorListModel)]|
 |yaml_parsing_error|Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.|string|
 
 
@@ -45,8 +45,8 @@ Sensor folder model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|folders|A dictionary of nested folders with sensors, the keys are the folder names.|Dict[string, [SensorFolderModel](../sensors/#sensorfoldermodel)]|
-|sensors|List of sensors defined in this folder.|List[[SensorListModel](../sensors/#sensorlistmodel)]|
+|folders|A dictionary of nested folders with sensors, the keys are the folder names.|Dict[string, [SensorFolderModel](../sensors/#SensorFolderModel)]|
+|sensors|List of sensors defined in this folder.|List[[SensorListModel](../sensors/#SensorListModel)]|
 
 
 ___  
@@ -60,8 +60,8 @@ Provider sensor model returned from REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[provider_type](../#providertype)|Provider type.|[ProviderType](../#providertype)|
-|[provider_sensor_definition_spec](../../../reference/yaml/providersensoryaml/#providersensordefinitionspec)|Provider specific sensor definition specification|[ProviderSensorDefinitionSpec](../../../reference/yaml/providersensoryaml/#providersensordefinitionspec)|
+|[provider_type](../#ProviderType)|Provider type.|[ProviderType](../#ProviderType)|
+|[provider_sensor_definition_spec](../../../reference/yaml/ProviderSensorYaml/#providersensordefinitionspec)|Provider specific sensor definition specification|[ProviderSensorDefinitionSpec](../../../reference/yaml/ProviderSensorYaml/#providersensordefinitionspec)|
 |sql_template|Provider specific Jinja2 SQL template|string|
 |custom|Whether the provider sensor is a User Home provider sensor|boolean|
 |built_in|This is a DQOps built-in provider sensor, whose parameters cannot be changed.|boolean|
@@ -81,8 +81,8 @@ Sensor model returned from REST API.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |full_sensor_name|Full sensor name.|string|
-|[sensor_definition_spec](../../../reference/yaml/sensordefinitionyaml/#sensordefinitionspec)|Sensor definition specification.|[SensorDefinitionSpec](../../../reference/yaml/sensordefinitionyaml/#sensordefinitionspec)|
-|provider_sensor_list|Provider sensors list with provider specific sensor definitions.|List[[ProviderSensorModel](#providersensormodel)]|
+|[sensor_definition_spec](../../../reference/yaml/SensorDefinitionYaml/#sensordefinitionspec)|Sensor definition specification.|[SensorDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#sensordefinitionspec)|
+|provider_sensor_list|Provider sensors list with provider specific sensor definitions.|List[[ProviderSensorModel](#ProviderSensorModel)]|
 |custom|Whether the sensor is a User Home sensor|boolean|
 |built_in|This is a DQOps built-in sensor, whose parameters cannot be changed.|boolean|
 |can_edit|Boolean flag that decides if the current user can update or delete this object.|boolean|
