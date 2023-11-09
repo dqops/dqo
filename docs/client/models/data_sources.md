@@ -22,7 +22,7 @@ Connection test status result model returned from REST API. Describes the status
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_result](#connectionteststatus)|Connection test result|[ConnectionTestStatus](#connectionteststatus)|
+|[connection_test_result](#ConnectionTestStatus)|Connection test result|[ConnectionTestStatus](#ConnectionTestStatus)|
 |error_message|Optional error message when the status is not &quot;SUCCESS&quot;|string|
 
 
@@ -57,7 +57,7 @@ Schema model returned from REST API. Describes a schema on the source database w
 |connection_name|Connection name.|string|
 |schema_name|Schema name.|string|
 |already_imported|Has the schema been imported.|boolean|
-|[import_table_job_parameters](../jobs/#importtablesqueuejobparameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](../jobs/#importtablesqueuejobparameters)|
+|[import_table_job_parameters](../jobs/#ImportTablesQueueJobParameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](../jobs/#ImportTablesQueueJobParameters)|
 
 
 ___  

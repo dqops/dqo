@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.timeseries;
 
+import com.dqops.checks.CheckTimeScale;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -79,5 +80,21 @@ public enum TimePeriodGradient {
      */
     public int getRank() {
         return rank;
+    }
+
+    /**
+     * Converts the time gradient to a time scale for matching gradients. Returns null when there is no match.
+     * @return Time scale or null.
+     */
+    public CheckTimeScale toTimeScale() {
+        if (this == day) {
+            return CheckTimeScale.daily;
+        }
+
+        if (this == month) {
+            return CheckTimeScale.monthly;
+        }
+
+        return null;
     }
 }

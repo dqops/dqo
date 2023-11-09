@@ -28,7 +28,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdi
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check search filters and table/column selectors.|[BulkCheckDisableParameters](../../models/connections/#bulkcheckdisableparameters)| |
+|Check search filters and table/column selectors.|[BulkCheckDisableParameters](../../models/connections/#BulkCheckDisableParameters)| |
 
 
 
@@ -73,7 +73,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulken
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check search filters and rules configuration|[AllChecksPatchParameters](../../models/connections/#allcheckspatchparameters)| |
+|Check search filters and rules configuration|[AllChecksPatchParameters](../../models/connections/#AllChecksPatchParameters)| |
 
 
 
@@ -117,7 +117,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection specification|[ConnectionSpec](../../../reference/yaml/connectionyaml/#connectionspec)| |
+|Connection specification|[ConnectionSpec](../../../reference/yaml/ConnectionYaml/#connectionspec)| |
 
 
 
@@ -161,7 +161,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../../models/#connectionmodel)| |
+|Basic connection model|[ConnectionModel](../../models/#ConnectionModel)| |
 
 
 
@@ -194,7 +194,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../../models/#dqoqueuejobid)||[DqoQueueJobId](../../models/#dqoqueuejobid)|
+|[dqo_queue_job_id](../../models/#DqoQueueJobId)||[DqoQueueJobId](../../models/#DqoQueueJobId)|
 
 
 
@@ -235,7 +235,7 @@ http://localhost:8888/api/connections
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_model||List[[ConnectionModel](../../models/#connectionmodel)]|
+|connection_model||List[[ConnectionModel](../../models/#ConnectionModel)]|
 
 
 
@@ -269,7 +269,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_specification_model](../../models/connections/#connectionspecificationmodel)||[ConnectionSpecificationModel](../../models/connections/#connectionspecificationmodel)|
+|[connection_specification_model](../../models/connections/#ConnectionSpecificationModel)||[ConnectionSpecificationModel](../../models/connections/#ConnectionSpecificationModel)|
 
 
 
@@ -310,7 +310,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_model](../../models/#connectionmodel)||[ConnectionModel](../../models/#connectionmodel)|
+|[connection_model](../../models/#ConnectionModel)||[ConnectionModel](../../models/#ConnectionModel)|
 
 
 
@@ -351,7 +351,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../../models/#commentspec)]|
+|comment_spec||List[[CommentSpec](../../models/#CommentSpec)]|
 
 
 
@@ -392,7 +392,7 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|common_column_model||List[[CommonColumnModel](../../models/connections/#commoncolumnmodel)]|
+|common_column_model||List[[CommonColumnModel](../../models/connections/#CommonColumnModel)]|
 
 
 
@@ -433,7 +433,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[data_grouping_configuration_spec](../../../reference/yaml/connectionyaml/#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](../../../reference/yaml/connectionyaml/#datagroupingconfigurationspec)|
+|[data_grouping_configuration_spec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)||[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)|
 
 
 
@@ -474,7 +474,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_incident_grouping_spec](../../../reference/yaml/connectionyaml/#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](../../../reference/yaml/connectionyaml/#connectionincidentgroupingspec)|
+|[connection_incident_grouping_spec](../../../reference/yaml/ConnectionYaml/#connectionincidentgroupingspec)||[ConnectionIncidentGroupingSpec](../../../reference/yaml/ConnectionYaml/#connectionincidentgroupingspec)|
 
 
 
@@ -515,7 +515,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|string||string_list|
+|string||List[string]|
 
 
 
@@ -556,7 +556,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/#monitoringschedulespec)|
+|[monitoring_schedule_spec](../../models/#MonitoringScheduleSpec)||[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)|
 
 
 
@@ -566,7 +566,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../../models/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
 
 
 
@@ -609,7 +609,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection specification|[ConnectionSpec](../../../reference/yaml/connectionyaml/#connectionspec)| |
+|Connection specification|[ConnectionSpec](../../../reference/yaml/ConnectionYaml/#connectionspec)| |
 
 
 
@@ -653,7 +653,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection basic details|[ConnectionModel](../../models/#connectionmodel)| |
+|Connection basic details|[ConnectionModel](../../models/#ConnectionModel)| |
 
 
 
@@ -697,7 +697,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments|List[[CommentSpec](../../models/#commentspec)]| |
+|List of comments|List[[CommentSpec](../../models/#CommentSpec)]| |
 
 
 
@@ -741,7 +741,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](../../../reference/yaml/connectionyaml/#datagroupingconfigurationspec)| |
+|Default data grouping configuration to be assigned to a connection|[DataGroupingConfigurationSpec](../../../reference/yaml/ConnectionYaml/#datagroupingconfigurationspec)| |
 
 
 
@@ -785,7 +785,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](../../../reference/yaml/connectionyaml/#connectionincidentgroupingspec)| |
+|Incident grouping and notification configuration|[ConnectionIncidentGroupingSpec](../../../reference/yaml/ConnectionYaml/#connectionincidentgroupingspec)| |
 
 
 
@@ -829,7 +829,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of labels|string_list| |
+|List of labels|List[string]| |
 
 
 
@@ -865,7 +865,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../../models/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
 
 
 
@@ -874,7 +874,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Monitoring schedule definition to store|[MonitoringScheduleSpec](../../models/#monitoringschedulespec)| |
+|Monitoring schedule definition to store|[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)| |
 
 
 

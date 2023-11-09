@@ -101,7 +101,7 @@ http://localhost:8888/api/users
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|[DqoCloudUserModel](../../models/users/#dqocloudusermodel)| |
+|User model|[DqoCloudUserModel](../../models/users/#DqoCloudUserModel)| |
 
 
 
@@ -168,7 +168,7 @@ http://localhost:8888/api/users
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dqo_cloud_user_model||List[[DqoCloudUserModel](../../models/users/#dqocloudusermodel)]|
+|dqo_cloud_user_model||List[[DqoCloudUserModel](../../models/users/#DqoCloudUserModel)]|
 
 
 
@@ -202,7 +202,7 @@ http://localhost:8888/api/users/{email}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](../../models/users/#dqocloudusermodel)||[DqoCloudUserModel](../../models/users/#dqocloudusermodel)|
+|[dqo_cloud_user_model](../../models/users/#DqoCloudUserModel)||[DqoCloudUserModel](../../models/users/#DqoCloudUserModel)|
 
 
 
@@ -254,7 +254,7 @@ http://localhost:8888/api/users/{email}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|[DqoCloudUserModel](../../models/users/#dqocloudusermodel)| |
+|User model|[DqoCloudUserModel](../../models/users/#DqoCloudUserModel)| |
 
 
 

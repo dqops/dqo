@@ -17,7 +17,7 @@ The configuration of default schedules for running data quality checks.
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../connectionyaml/#defaultschedulesspec)||[DefaultSchedulesSpec](../connectionyaml/#defaultschedulesspec)| | | |
+|[spec](../ConnectionYaml/#DefaultSchedulesSpec)||[DefaultSchedulesSpec](../ConnectionYaml/#DefaultSchedulesSpec)| | | |
 
 
 

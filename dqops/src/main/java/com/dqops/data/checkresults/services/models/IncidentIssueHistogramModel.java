@@ -16,6 +16,7 @@
 
 package com.dqops.data.checkresults.services.models;
 
+import com.dqops.checks.CheckType;
 import com.dqops.data.incidents.services.models.IncidentDailyIssuesCount;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -41,6 +42,24 @@ import java.util.stream.Collectors;
 @Data
 public class IncidentIssueHistogramModel {
     /**
+     * True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.")
+    private boolean hasProfilingIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.")
+    private boolean hasMonitoringIssues;
+
+    /**
+     * True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.
+     */
+    @JsonPropertyDescription("True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.")
+    private boolean hasPartitionedIssues;
+
+    /**
      * A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.
      */
     @JsonPropertyDescription("A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.")
@@ -57,6 +76,30 @@ public class IncidentIssueHistogramModel {
      */
     @JsonPropertyDescription("A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.")
     private Map<String, Integer> checks = new LinkedHashMap<>();
+
+    /**
+     * Turns on a flag for profiling, monitoring or partitioned checks when an issue in that type was detected.
+     * @param checkType Check type.
+     */
+    public void markCheckType(CheckType checkType) {
+        if (checkType == null) {
+            return;
+        }
+
+        switch (checkType) {
+            case profiling:
+                this.hasProfilingIssues = true;
+                break;
+
+            case monitoring:
+                this.hasMonitoringIssues = true;
+                break;
+
+            case partitioned:
+                this.hasPartitionedIssues = true;
+                break;
+        }
+    }
 
     /**
      * Increments a count of data quality issues for a date.

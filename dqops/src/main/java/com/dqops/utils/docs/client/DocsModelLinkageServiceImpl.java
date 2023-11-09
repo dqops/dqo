@@ -35,7 +35,6 @@ import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
-import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarChecksContainer;
 import com.dqops.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorCategorySpec;
@@ -52,8 +51,6 @@ import java.util.stream.Stream;
 
 public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     public final TreeSet<String> notMapped = new TreeSet<>();
-
-    private final SimilarCheckMatchingService similarCheckMatchingService;
     private SimilarChecksContainer tableSimilarChecks = null;
     private SimilarChecksContainer columnSimilarChecks = null;
 
@@ -69,9 +66,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
 
     private final Map<String, Path> extraLinkageMappings;
 
-    public DocsModelLinkageServiceImpl(Path projectDir,
-                                       SimilarCheckMatchingService similarCheckMatchingService) {
-        this.similarCheckMatchingService = similarCheckMatchingService;
+    public DocsModelLinkageServiceImpl(Path projectDir) {
 
         this.sensorParametersSpecsClasses = TargetClassSearchUtility.findClasses(
                 "com.dqops.sensors", projectDir, AbstractSensorParametersSpec.class
@@ -221,28 +216,14 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
 
         extraLinkage.put(ProviderSensorDefinitionSpec.class.getSimpleName(),
                 Path.of("/docs/reference/yaml/ProviderSensorYaml/#providersensordefinitionspec"));
-        extraLinkage.put(ParameterDefinitionSpec.class.getSimpleName(),
-                Path.of("/docs/reference/yaml/RuleDefinitionYaml/#parameterdefinitionspec"));
         extraLinkage.put(RuleTimeWindowSettingsSpec.class.getSimpleName(),
                 Path.of("/docs/reference/yaml/RuleDefinitionYaml/#ruletimewindowsettingsspec"));
+        extraLinkage.put(ParameterDefinitionSpec.class.getSimpleName(),
+                Path.of("/docs/reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec"));
         extraLinkage.put(SensorDefinitionSpec.class.getSimpleName(),
                 Path.of("/docs/reference/yaml/SensorDefinitionYaml/#sensordefinitionspec"));
 
         return extraLinkage;
-    }
-
-    protected SimilarChecksContainer getTableSimilarChecks() {
-        if (tableSimilarChecks == null) {
-            tableSimilarChecks = similarCheckMatchingService.findSimilarTableChecks();
-        }
-        return tableSimilarChecks;
-    }
-
-    protected SimilarChecksContainer getColumnSimilarChecks() {
-        if (columnSimilarChecks == null) {
-            columnSimilarChecks = similarCheckMatchingService.findSimilarColumnChecks();
-        }
-        return columnSimilarChecks;
     }
 
     /**
@@ -254,7 +235,10 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
     public Path findDocsLinkage(String modelClassName) {
         Path docsPath = Path.of("/docs");
 
-        if (sensorParametersSpecsClasses.containsKey(modelClassName)) {
+        if (extraLinkageMappings.containsKey(modelClassName)) {
+            return extraLinkageMappings.get(modelClassName);
+        }
+        else if (sensorParametersSpecsClasses.containsKey(modelClassName)) {
             docsPath = docsPath.resolve(Path.of("reference", "sensors"));
             Class<? extends AbstractSensorParametersSpec> clazz = sensorParametersSpecsClasses.get(modelClassName);
             if (CustomSensorParametersSpec.class.isAssignableFrom(clazz)) {
@@ -308,20 +292,7 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
             docsPath = docsPath.resolve(Path.of("checks"));
             Class<? extends AbstractCheckSpec> clazz = checkSpecsClasses.get(modelClassName);
             AbstractCheckSpec checkSpec = getClassDefaultInstance(clazz);
-
-//            CheckTarget checkTarget = getCheckTarget(clazz);
-//            docsPath = docsPath.resolve(checkTarget.name());
-//
-//            String checkCategory = getCheckCategory(clazz);
-//            docsPath = docsPath.resolve(checkCategory);
-
             String checkNameFromSpec = getCheckNameFromSpec(checkSpec);
-
-//            SimilarChecksContainer similarChecks = checkTarget == CheckTarget.column ? getColumnSimilarChecks() : getTableSimilarChecks();
-//            Collection<SimilarChecksGroup> similarChecksInCategory = similarChecks.getChecksPerGroup().get(checkCategory);
-//            String name = similarChecksInCategory.stream().findFirst().get().getSimilarChecks().get(0).getCheckName();
-
-            //table/accuracy/total-row-count-match-percent/#daily-total-row-count-match-percent
 
             return docsPath.resolve(checkNameFromSpec);
         }
@@ -333,9 +304,6 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         }
         else if (connectionYamlClasses.containsKey(modelClassName)) {
             return docsPath.resolve("reference/yaml/ConnectionYaml").resolve("#" + modelClassName.toLowerCase());
-        }
-        else if (extraLinkageMappings.containsKey(modelClassName)) {
-            return extraLinkageMappings.get(modelClassName);
         }
 
         notMapped.add(modelClassName);
@@ -376,26 +344,5 @@ public class DocsModelLinkageServiceImpl implements DocsModelLinkageService {
         String fileName = splitName[splitName.length - 1];
         splitName[splitName.length - 1] = "#" + fileName.replace("_", "-");
         return Path.of(String.join("/", splitName));
-    }
-
-    private CheckTarget getCheckTarget(Class<? extends AbstractCheckSpec> checkClass) {
-        String packageName = getIndexedPackageModuleName(checkClass, 3);
-        if (packageName.equals("column")) {
-            return CheckTarget.column;
-        } else if (packageName.equals("table")) {
-            return CheckTarget.table;
-        } else {
-            throw new RuntimeException("Invalid check target for class: " + checkClass.getName());
-        }
-    }
-
-    private String getCheckCategory(Class<? extends AbstractCheckSpec> checkClass) {
-        return getIndexedPackageModuleName(checkClass, 5);
-    }
-
-    private String getIndexedPackageModuleName(Class<?> clazz, int i) {
-        String packageName = clazz.getPackageName();
-        String[] packageNameSplit = packageName.split("\\.");
-        return packageNameSplit[i];
     }
 }
