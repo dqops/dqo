@@ -17,10 +17,10 @@ type TStatistics = {
 }   
 
 const initColumnStatisticsObject : Record<string, TStatistics[]> = {
-  "Nulls" : [{type: "Not nulls count"}, {type: "Not nulls percent"}, {type: "Nulls percent"}, {type: "Not nulls Percent"}],
-  "Uniqueness" : [{type: "Duplicate count"}, {type: "Duplicate percent"}, {type: "Distinct count"}, {type: "Distinct percent"}],
-  "Range" : [{type: "Max value"}, {type: "Min value"}, {type: "Sum value"}, {type: "Median value"}],
-  "String length" : [{type: "String max length"}, {type: "String min length"}, {type: "String mean length"}],
+  "Nulls" : [{type: "Nulls count"}, {type: "Nulls percent"}, {type: "Not nulls count"}, {type: "Not nulls percent"}],
+  "Uniqueness" : [{type: "Distinct count"}, {type: "Distinct percent"}, {type: "Duplicate count"}, {type: "Duplicate percent"}],
+  "Range" : [{type: "Min value"}, {type: "Max value"}, {type: "Median value"}, {type: "Sum value"}],
+  "strings" : [{type: "String min length"}, {type: "String max length"}, {type: "String mean length"}],
   "Top most common values" : [],
 }
 
@@ -50,6 +50,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
           table,
           column
         );
+        console.log(res.data)
       getColumnStatisticsModel(res.data);
     } catch (err) {
       console.error(err);
@@ -114,16 +115,24 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   }
 
   const getColumnStatisticsModel = (fetchedColumnsStatistics: ColumnStatisticsModel) => {
-    const column_statistics_dictionary: Record<string, TStatistics[]> = {}
+    const column_statistics_dictionary: Record<string, TStatistics[]> = initColumnStatisticsObject
     const table_statistics_array : TStatistics[] = []
     if(fetchedColumnsStatistics.statistics && fetchedColumnsStatistics?.statistics.length > 0) {
       fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
         if (item.collector !== "string_datatype_detect") {
-          if (Object.keys(column_statistics_dictionary).find((x) => x === String(item.category))) {
-            column_statistics_dictionary[String(item.category)].push({type: item.collector, result: String(item.result), sampleCount: item.sampleCount})
-          } else {
-            column_statistics_dictionary[String(item.category)] = [{type: item.collector, result: String(item.result), sampleCount: item.sampleCount}]
-          }
+          const key = Object.keys(column_statistics_dictionary).find((x) => x.toLowerCase() === String(item.category))
+          if (key) {
+              if(column_statistics_dictionary[key].find((y) => y.type?.toLowerCase().replace(/\s/g, "_") === item.collector)){
+                const foundObject = column_statistics_dictionary[key].find((y) => y.type?.toLowerCase().replace(/\s/g, "_") === item.collector);
+                if (foundObject) {
+                  foundObject.result = String(item.result);
+                  foundObject.sampleCount = item.sampleCount;
+                }
+              } 
+          }   
+          if(item.category === 'sampling'){
+            column_statistics_dictionary["Top most common values"].push({type: item.collector, result: String(item.result), sampleCount: item.sampleCount})
+          }     
         } else {
           table_statistics_array.push({type: "Detected Datatype:", result: getDetectedDatatype(item.result)})
         }
@@ -145,7 +154,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   }
  
   const renderSampleIndicator = (value: number) : React.JSX.Element => {
-    const nullCount = columnStatistics["nulls"].find((x) => x.type === 'not_nulls_count')?.result
+    const nullCount = columnStatistics["Nulls"].find((x) => x.type === 'Not nulls count')?.result
     return (
       <div className=" h-3 border border-gray-100 flex ml-5 w-[100px]">
           <div
