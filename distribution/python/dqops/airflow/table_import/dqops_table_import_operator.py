@@ -109,7 +109,7 @@ class DqopsTableImportOperator(BaseOperator):
         logging.info(job_result.to_dict())
 
         if job_result.status == DqoJobStatus.FAILED:
-            raise DqopsJobFailedException()
+            raise DqopsJobFailedException(context["ti"], job_result.to_dict())
 
         if job_result.status == DqoJobStatus.RUNNING:
             handle_dqo_timeout(self.fail_on_timeout)

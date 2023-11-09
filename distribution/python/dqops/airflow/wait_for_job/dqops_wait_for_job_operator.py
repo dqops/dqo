@@ -5,6 +5,7 @@ from typing import Any, Dict, Union
 from airflow.models.baseoperator import BaseOperator
 from airflow.models.taskinstance import TaskInstance
 from httpx import ReadTimeout
+from dqops.airflow.common.exceptions.dqops_job_failed_exception import DqopsJobFailedException
 
 from dqops.airflow.common.exceptions.dqops_unfinished_job_exception import (
     DqopsUnfinishedJobException,
@@ -72,11 +73,7 @@ class DqopsWaitForJobOperator(BaseOperator):
         )
 
         try:
-            job_id: str = (
-                self.job_business_key
-                if self.job_business_key is not UNSET
-                else self._gather_job_id(context)
-            )
+            job_id: str = self._gather_job_id(context)
 
             logging.info("the job id is : " + job_id)
 
@@ -107,10 +104,14 @@ class DqopsWaitForJobOperator(BaseOperator):
         return job_result.to_dict()
 
     def _gather_job_id(self, context) -> str:
+
+        if self.job_business_key is not UNSET:
+            return self.job_business_key
+
         if self.task_id_to_wait_for != UNSET:
             task_to_track: str = self.task_id_to_wait_for
         else:
-            task_to_track = print(next(iter(context["task"].upstream_task_ids)))
+            task_to_track = next(iter(context["task"].upstream_task_ids))
 
         ti: TaskInstance = context.get("task_instance")
         xcom_job_result: ImportTablesQueueJobResult = ti.xcom_pull(

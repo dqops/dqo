@@ -120,7 +120,7 @@ class DqopsRunChecksOperator(BaseOperator):
         logging.info(job_result.to_dict())
 
         if job_result.status == DqoJobStatus.FAILED:
-            raise DqopsJobFailedException()
+            raise DqopsJobFailedException(context["ti"], job_result.to_dict())
 
         # dqo times out with RunChecksQueueJobResult object details
         if job_result.status == DqoJobStatus.RUNNING:
@@ -134,6 +134,6 @@ class DqopsRunChecksOperator(BaseOperator):
             >= get_severity_value_from_rule_severity(self.fail_at_severity)
             and job_result.status != DqoJobStatus.CANCELLED
         ):
-            raise DqopsDataQualityIssueDetectedException()
+            raise DqopsDataQualityIssueDetectedException(context["ti"], job_result.to_dict())
 
         return job_result.to_dict()
