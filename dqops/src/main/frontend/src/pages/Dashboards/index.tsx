@@ -126,9 +126,7 @@ const Dashboards = () => {
             );
           })}
         </div>
-        {dashboardTooltipState.height &&
-        isTooltipVisible &&
-        imageWidth < 400 ? (
+        {dashboardTooltipState.height && isTooltipVisible ? (
           <div
             className={clsx(
               'py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal'
@@ -139,16 +137,18 @@ const Dashboards = () => {
             }}
           >
             {dashboardTooltipState.label}
-            <img
-              alt=""
-              src={`${dashboardTooltipState.url}/thumbnail`}
-              style={{ display: 'block' }}
-              className="pt-2 max-h-100 max-w-100"
-              loading="eager"
-              onLoad={(e) =>
-                setImageWidth((e.target as HTMLImageElement).width)
-              }
-            />
+            {imageWidth < 400 && (
+              <img
+                alt=""
+                src={`${dashboardTooltipState.url}/thumbnail`}
+                style={{ display: 'block' }}
+                className="pt-2 max-h-100 max-w-100"
+                loading="eager"
+                onLoad={(e) =>
+                  setImageWidth((e.target as HTMLImageElement).width)
+                }
+              />
+            )}
           </div>
         ) : null}
         {isLicenseFree && (
