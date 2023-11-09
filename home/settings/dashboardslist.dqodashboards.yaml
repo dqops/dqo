@@ -812,7 +812,7 @@ spec:
 
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Count per table
+        - dashboard_name: Data quality issues per table
           url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
           width: 1400
           height: 2500
