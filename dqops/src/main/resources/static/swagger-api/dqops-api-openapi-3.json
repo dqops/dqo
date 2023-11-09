@@ -62442,6 +62442,27 @@
       "IncidentIssueHistogramModel" : {
         "type" : "object",
         "properties" : {
+          "hasProfilingIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hasMonitoringIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "hasPartitionedIssues" : {
+            "type" : "boolean",
+            "description" : "True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
           "days" : {
             "type" : "object",
             "additionalProperties" : {
@@ -62500,6 +62521,18 @@
         "jsonSchema" : {
           "type" : "object",
           "properties" : {
+            "hasProfilingIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues."
+            },
+            "hasMonitoringIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues."
+            },
+            "hasPartitionedIssues" : {
+              "type" : "boolean",
+              "description" : "True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues."
+            },
             "days" : {
               "type" : "object",
               "description" : "A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.",

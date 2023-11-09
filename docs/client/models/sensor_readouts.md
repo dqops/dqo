@@ -41,7 +41,7 @@ Sensor readout detailed results. Returned in the context of a single data group,
 |check_hash|Check hash.|long|
 |check_category|Check category name.|string|
 |sensor_name|Sensor name.|string|
-|data_group_names|Data groups list.|string_list|
+|data_group_names|Data groups list.|List[string]|
 |data_group|Selected data group.|string|
 |sensor_readout_entries|Sensor readout entries|List[[SensorReadoutEntryModel](#SensorReadoutEntryModel)]|
 
