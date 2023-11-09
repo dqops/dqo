@@ -269,7 +269,7 @@ const JobItem = ({
                 job?.parameters?.runChecksParameters?.check_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
-                  <td>{key}</td>
+                  <td>{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase())}</td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
@@ -324,7 +324,7 @@ const JobItem = ({
                   ?.statistics_collector_search_filters
               ).map(([key, value], index) => (
                 <tr key={index} className="flex justify-between w-108">
-                  <td>{key}</td>
+                  <td>{key.replace(/([a-z])([A-Z])/g, '$1 $2').replace(/^\w/, (c) => c.toUpperCase())}</td>
                   <td>{renderValue(value)}</td>
                 </tr>
               ))}
