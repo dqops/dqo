@@ -1,12 +1,15 @@
-# Install DQOps using PIP
+# Download DQOps using PIP
 
 DQOps is available as a Python package [dqops](https://pypi.org/project/dqops/). This package contains a bootstrapper that
 will download a full DQOps distribution from [DQO GitHub](https://github.com/dqops/dqo) and install a Java JRE 17 in a version
 specific to the current platform. DQOps runs on Windows, Linux and MacOS. Both x64 and arm8 platforms are supported.
 
-> DQOps python package is a quick option to run a local, non-production instance.
-> Please choose a [Docker distribution](run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
-> that can monitor the data quality at all times.
+!!! note "Running DQOps as a server"
+
+    DQOps python package is a quick option to run a local, non-production instance.
+    Please choose a [Docker distribution](run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
+    that can monitor the data quality at all times.
+
 
 ## Prerequisites
 

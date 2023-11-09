@@ -2,40 +2,52 @@
 
 ## Prerequisites
 
-To use DQOps you need:
+To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from Git and compile it locally, you need:
 
-- Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+ -  Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 
-  To confirm that you have Python installed run the following command
-  ```
-  python --version
-  ```
-  To view the Python 3 version, run `python3 --version` instead.
+    To confirm that you have Python installed run the following command
 
-
-
-- Ability to install Python packages with pip.
-
-  To confirm that you have pip installed run the following command
-  ```
-  pip --version
-  ```
-  Current version of pip should be displayed.
+    ```
+    python --version
+    ```
+   
+    To view the Python 3 version, run `python3 --version` instead.
 
 
-- Installed JDK software (version 17) and set the JAVA_HOME environment variable.
+ -  Ability to install Python packages with pip.
 
-  To confirm that Java is installed on your system, please run this command:
-  ```
-  java --version
-  ```
-  A Java version should be displayed. If the above command shows 'java' is not recognized, it means Java is not
-  installed or the path is not properly set.
+    To confirm that you have pip installed run the following command
 
-  To ensure that the JAVA_HOME environmental variables are properly set, please run the following command:
-  ```
-  echo %JAVA_HOME%
-  ```
+    ```
+    pip --version
+    ```
+   
+    Current version of pip should be displayed.
+
+
+ -  Installed JDK software (version 17) and set the JAVA_HOME environment variable.
+
+    To confirm that Java is installed on your system, please run this command:
+
+    ```
+    java --version
+    ```
+   
+    A Java version should be displayed. If the above command shows 'java' is not recognized, it means Java is not
+    installed or the path is not properly set.
+
+    To ensure that the JAVA_HOME environmental variables are properly set, please run the following command:
+
+    === "Windows"
+        ```
+        echo %JAVA_HOME%
+        ```
+
+    === "MacOS/Linux"
+        ```
+        echo $JAVA_HOME
+        ```
 
 ## Installation
 

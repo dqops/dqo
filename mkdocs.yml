@@ -33,6 +33,11 @@ nav:
       - Incident management: "dqo-concepts/data-quality-incidents/incidents.md"
       - User interface overview: "dqo-concepts/user-interface-overview/user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
+  - Installing DQOps:
+      - Download DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
+      - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
+      - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
+      - Install DQOps from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
@@ -63,11 +68,6 @@ nav:
       - Data quality monitoring:
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
-      - Installation:
-          - Install DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
-          - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
-          - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
-          - Install DQOps from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
       - Adding connections:
           - "working-with-dqo/adding-data-source-connection/index.md"
           - BigQuery: "working-with-dqo/adding-data-source-connection/bigquery.md"

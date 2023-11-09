@@ -23,55 +23,56 @@ To run DQOps as a Docker container you need
 
 To start DQOps in a Shell mode follow the steps below.
 
-1. Download the DQOps image from DockerHub by running the following command in a terminal:
+1.  Download the DQOps image from DockerHub by running the following command in a terminal:
 
     ```
     docker pull dqops/dqo
     ```
 
-2. Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
-   DQOps will store the metadata of imported data sources, the configuration of enabled data quality checks, and the
-   data quality results.
+2.  Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
+    DQOps will store the metadata of imported data sources, the configuration of enabled data quality checks, and the
+    data quality results.
 
-3. Run DQOps Docker image
+3.  Run DQOps Docker image
 
     ```
     docker run -v [enter the path to your local DQOps user home folder]:/dqo/userhome -it -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-our-DQOps-Cloud-API-key]
     ```
 
-   - The `-v` flag mounts your locally created `DQOps User Home` folder into the container. 
-     You need to provide the path to your local `DQOps User Home` folder
-   - The `-i` flag keeps STDIN open even if not attached.
-   - The `-t` flag allocates a pseudo-TTY.
-   - The `-p` flag creates a mapping between the host’s port 8888 to the container’s port 8888. Without the port mapping, you would not be able to access the application.
-   - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQOps Cloud registration](https://cloud.dqops.com/registration).
-     When the DQOps Cloud API Key is not specified and you are starting DQOps using an empty `DQOps User Home` folder,
-     DQOps will not be able to open the browser. Please copy the url to the [DQO Cloud Login](https://cloud.dqops.com/) that is shown
-     to a browser and create or login to your DQOps Cloud account.
+    - The `-v` flag mounts your locally created `DQOps User Home` folder into the container. 
+      You need to provide the path to your local `DQOps User Home` folder
+    - The `-i` flag keeps STDIN open even if not attached.
+    - The `-t` flag allocates a pseudo-TTY.
+    - The `-p` flag creates a mapping between the host’s port 8888 to the container’s port 8888. Without the port mapping, you would not be able to access the application.
+    - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQOps Cloud registration](https://cloud.dqops.com/registration).
+      When the DQOps Cloud API Key is not specified and you are starting DQOps using an empty `DQOps User Home` folder,
+      DQOps will not be able to open the browser. Please copy the url to the [DQOps Cloud Login](https://cloud.dqops.com/) that is shown
+      to a browser and create or login to your DQOps Cloud account.
 
-   If you want to use the current folder as your `DQOps User Home`, you can bind this folder to the `/dqo/userhome` mount point in
-   the DQOps docker image. Please keep in mind that the `DQOps User Home` folder should be empty (to initialize it on startup)
-   or it should be already a valid `DQOps User Home` folder.
+    If you want to use the current folder as your `DQOps User Home`, you can bind this folder to the `/dqo/userhome` mount point in
+    the DQOps docker image. Please keep in mind that the `DQOps User Home` folder should be empty (to initialize it on startup)
+    or it should be already a valid `DQOps User Home` folder.
 
     ```
     docker run -v .:/dqo/userhome -it -p 8888:8888 dqops/dqo
     ```
 
-4. After a few seconds you can use the DQOps terminal or open the user interface by 
-   opening [http://localhost:8888](http://localhost:8888) in a web browser. 
+4.  After a few seconds you can use the DQOps terminal or open the user interface by 
+    opening [http://localhost:8888](http://localhost:8888) in a web browser. 
 
 
 ## Start DQOps in server mode
 
-To start DQO in server mode follow the steps below.
+To start DQOps in a server mode follow the steps below.
 
-1. Download the DQO image from DockerHub by running the following command in a terminal:
+1. Download the `dqops/dqo` image from DockerHub by running the following command in a terminal:
 
     ```
     docker pull dqops/dqo
     ```
 
 2. Run the DQOps Docker image
+
     ```
     docker run -v [enter the path to your local userhome folder]:/dqo/userhome -d -m=4g -p 8888:8888 dqops/dqo [--dqo.cloud.api-key=here-our-DQOps-Cloud-API-key] run
     ```
@@ -89,7 +90,7 @@ To start DQO in server mode follow the steps below.
    - The `run` command at the end will run the [run CLI command](../../command-line-interface/run.md) command and activate a server mode
      without the DQOps Shell.
 
-3. After a few seconds open your web browser to **http://localhost:8888**. You should see the DQOps user interface.
+3. After a few seconds open your web browser to **http://localhost:8888/**. You should see the DQOps user interface.
 
 
 
