@@ -16,7 +16,7 @@ type TStatistics = {
     sampleCount?: number
 }   
 
-const initColumnStatisticsObject : Record<string, TStatistics[]> = {
+const initColumnStatisticsObject : Record<string,  TStatistics[]> = {
   "Nulls" : [{type: "Nulls count"}, {type: "Nulls percent"}, {type: "Not nulls count"}, {type: "Not nulls percent"}],
   "Uniqueness" : [{type: "Distinct count"}, {type: "Distinct percent"}, {type: "Duplicate count"}, {type: "Duplicate percent"}],
   "Range" : [{type: "Min value"}, {type: "Max value"}, {type: "Median value"}, {type: "Sum value"}],
@@ -41,36 +41,45 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   const [tableStatistics, setTableStatistics] = useState<TStatistics[]>([]);
   const [rowCount, setRowCount] = useState<number>()
 
-  const fetchColumnsStatistics = async () => {
-    try {
-      const res: AxiosResponse<ColumnStatisticsModel> =
-        await ColumnApiClient.getColumnStatistics(
+  useEffect(() => {
+    const fetchStatistics = async () => {
+      try {
+        const res: AxiosResponse<ColumnStatisticsModel> = await ColumnApiClient.getColumnStatistics(
           connection,
           schema,
           table,
           column
         );
-        console.log(res.data)
-      getColumnStatisticsModel(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+        if (res.data.statistics && res.data.statistics?.length > 0) {
+          getColumnStatisticsModel(res.data);
+        } else { 
+          setColumnStatistics({
+            "Nulls" : [{type: "Nulls count"}, {type: "Nulls percent"}, {type: "Not nulls count"}, {type: "Not nulls percent"}],
+            "Uniqueness" : [{type: "Distinct count"}, {type: "Distinct percent"}, {type: "Duplicate count"}, {type: "Duplicate percent"}],
+            "Range" : [{type: "Min value"}, {type: "Max value"}, {type: "Median value"}, {type: "Sum value"}],
+            "strings" : [{type: "String min length"}, {type: "String max length"}, {type: "String mean length"}],
+            "Top most common values" : [],
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-  const fetchRowStatistics = async () => {
-    try {
-      const res: AxiosResponse<TableStatisticsModel> =
-        await TableApiClient.getTableStatistics(connection, schema, table);
-      getTableStatisticsModel(res.data)
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    const fetchRowStatistics = async () => {
+      try {
+        const res: AxiosResponse<TableStatisticsModel> =
+          await TableApiClient.getTableStatistics(connection, schema, table);
+        getTableStatisticsModel(res.data)
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
-  useEffect(() => {
-    fetchColumnsStatistics();
+    fetchStatistics();
     fetchRowStatistics();
-  }, [connection, schema, table, column, statisticsCollectedIndicator]);
+  }, [connection, schema, table, column, statisticsCollectedIndicator, columnStatistics]);
+
 
   const renderCategory = (value: string) => {
     if (value.toLowerCase() === 'sampling') {
