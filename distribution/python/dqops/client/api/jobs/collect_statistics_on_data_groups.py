@@ -17,12 +17,15 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     json_body: StatisticsCollectorSearchFilters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
     params: Dict[str, Any] = {}
+    params["jobBusinessKey"] = job_business_key
+
     params["wait"] = wait
 
     params["waitTimeout"] = wait_timeout
@@ -67,6 +70,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     json_body: StatisticsCollectorSearchFilters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[CollectStatisticsQueueJobResult]:
@@ -76,6 +80,7 @@ def sync_detailed(
     separate metric for each data grouping
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (StatisticsCollectorSearchFilters):
@@ -90,6 +95,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     )
@@ -105,6 +111,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     json_body: StatisticsCollectorSearchFilters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[CollectStatisticsQueueJobResult]:
@@ -114,6 +121,7 @@ def sync(
     separate metric for each data grouping
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (StatisticsCollectorSearchFilters):
@@ -129,6 +137,7 @@ def sync(
     return sync_detailed(
         client=client,
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     ).parsed
@@ -138,6 +147,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     json_body: StatisticsCollectorSearchFilters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[CollectStatisticsQueueJobResult]:
@@ -147,6 +157,7 @@ async def asyncio_detailed(
     separate metric for each data grouping
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (StatisticsCollectorSearchFilters):
@@ -161,6 +172,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     )
@@ -174,6 +186,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     json_body: StatisticsCollectorSearchFilters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[CollectStatisticsQueueJobResult]:
@@ -183,6 +196,7 @@ async def asyncio(
     separate metric for each data grouping
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (StatisticsCollectorSearchFilters):
@@ -199,6 +213,7 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             json_body=json_body,
+            job_business_key=job_business_key,
             wait=wait,
             wait_timeout=wait_timeout,
         )

@@ -30,7 +30,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -54,11 +54,11 @@ The `invalidOcr` column of interest contains both TRUE and FALSE values.
 | 4925540251205632 | Alaskans For Don Young         | 1500800    | MANUAL     | **FALSE**  |
 | 5155591651590144 | POL/ Ted Cruz/R/US SEN / TX    | 1610000    | MANUAL     | **FALSE**  |
 
-## Running the checks in the example and evaluating the results using the graphical interface
+## Running the checks in the example and evaluating the results using the user interface
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks.png)
 
@@ -102,9 +102,9 @@ To execute the check prepared in the example using the [graphical interface](../
    ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results.png)
 
 
-7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-   Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+   Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
@@ -115,7 +115,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
@@ -157,7 +157,7 @@ In this example, we have set three minimum percentage thresholds levels for the 
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_false_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="16-29"
 apiVersion: dqo/v1
@@ -191,11 +191,11 @@ spec:
                 min_percent: 95.0
 ```
 
-## Running the checks in the example and evaluating the results using DQO Shell
+## Running the checks in the example and evaluating the results using DQOps Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples). 
 
-To execute the check prepared in the example, run the following command in DQO Shell:
+To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
@@ -262,8 +262,8 @@ Results returned by the sensor:
 ```
 ## Next steps
 
-- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [profile_false_percent check used in this example, go to the check details section](../../checks/column/bool/false-percent.md).
 - You might be interested in another reasonability check that [evaluates that percentage of integer values from a range in a column does not exceed the minimum accepted percentage](../data-reasonability/percentage-of-integer-values-in-range.md).
-- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
-- DQO provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).

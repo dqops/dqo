@@ -68,17 +68,26 @@ public class SensorListModel {
     @JsonPropertyDescription("List of provider (database) specific models.")
     private List<ProviderSensorListModel> providerSensors;
 
+    /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
     public SensorListModel() {
     }
 
     public SensorListModel(String sensorName, String fullSensorName, boolean custom, boolean builtIn, boolean canEdit,
-                           List<ProviderSensorListModel> providerSensors) {
+                           List<ProviderSensorListModel> providerSensors,String yamlParsingError) {
         this.sensorName = sensorName;
         this.fullSensorName = fullSensorName;
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
         this.providerSensors = providerSensors;
+        this.yamlParsingError = yamlParsingError;
     }
 
     /**

@@ -49,6 +49,9 @@ public class CheckResultsOverviewDataModel {
     @JsonPropertyDescription("Check name.")
     private String checkName;
 
+    @JsonPropertyDescription("Optional table comparison name for table comparison checks only.")
+    private String comparisonName;
+
     @JsonPropertyDescription("List of time periods for the results, returned as a local time, sorted from the newest to the oldest.")
     private List<LocalDateTime> timePeriods = new ArrayList<>();
 

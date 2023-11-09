@@ -32,13 +32,14 @@ import com.dqops.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecks
 import com.dqops.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
-import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.timeseries.TimeSeriesMode;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -444,5 +445,14 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonIgnore
     public CheckRunScheduleGroup getSchedulingGroup() {
         return CheckRunScheduleGroup.partitioned_monthly;
+    }
+
+    public static class ColumnMonthlyPartitionedCheckCategoriesSpecSampleFactory implements SampleValueFactory<ColumnMonthlyPartitionedCheckCategoriesSpec> {
+        @Override
+        public ColumnMonthlyPartitionedCheckCategoriesSpec createSample() {
+            return new ColumnMonthlyPartitionedCheckCategoriesSpec() {{
+                setNulls(new ColumnNullsMonthlyPartitionedChecksSpec.ColumnNullsMonthlyPartitionedChecksSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

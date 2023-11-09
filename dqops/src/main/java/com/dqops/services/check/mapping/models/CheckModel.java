@@ -24,6 +24,8 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.services.check.matching.SimilarCheckSensorRuleKey;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -86,6 +88,7 @@ public class CheckModel implements Cloneable {
      */
     @JsonIgnore
     private AbstractCheckSpec<?, ?, ?, ?> checkSpec;
+
 
     /**
      * Threshold (alerting) rules defined for a check.
@@ -219,6 +222,15 @@ public class CheckModel implements Cloneable {
     @JsonPropertyDescription("Boolean flag that decides if the current user can delete data (results).")
     private boolean canDeleteData;
 
+    /**
+     * Returns the check hash code that identifies the check instance.
+     * @return Check hash or null.
+     */
+    @JsonPropertyDescription("The check hash code that identifies the check instance.")
+    public Long getCheckHash() {
+        return this.checkSpec != null && this.checkSpec.getHierarchyId() != null ? this.checkSpec.getHierarchyId().hashCode64() : null;
+    }
+
     public CheckModel() {
     }
 
@@ -305,5 +317,19 @@ public class CheckModel implements Cloneable {
             this.configurationRequirementsErrors = new ArrayList<>();
         }
         this.configurationRequirementsErrors.add(configurationRequirementsError);
+    }
+
+    public static class CheckModelSampleFactory implements SampleValueFactory<CheckModel> {
+        @Override
+        public CheckModel createSample() {
+            CheckModel checkModel = new CheckModel() {{
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setHelpText(SampleStringsRegistry.getHelpText());
+                setSensorName(SampleStringsRegistry.getFullSensorName());
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+            }};
+            checkModel.applySampleValues();
+            return checkModel;
+        }
     }
 }

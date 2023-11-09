@@ -3,15 +3,20 @@ package com.dqops.metadata.storage.localfiles.defaultobservabilitychecks;
 import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.core.filesystem.ApiVersion;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * The configuration of default data quality checks that are activated for all imported tables and columns.
- * The default observability checks are stored in the settings/defaultchecks.dqochecks.yaml file in the DQOps user's home folder.
+ * The default observability checks are stored in the *$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml* file in the DQOps user's home folder.
  */
-public class DefaultObservabilityChecksYaml {
+public class DefaultObservabilityChecksYaml implements InvalidYamlStatusHolder {
     private String apiVersion = ApiVersion.CURRENT_API_VERSION;
     private SpecificationKind kind = SpecificationKind.DEFAULT_CHECKS;
     private DefaultObservabilityChecksSpec spec = new DefaultObservabilityChecksSpec();
+
+    @JsonIgnore
+    private String yamlParsingError;
 
     public DefaultObservabilityChecksYaml() {
     }
@@ -68,4 +73,26 @@ public class DefaultObservabilityChecksYaml {
         this.spec = spec;
     }
 
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        if (this.spec != null) {
+            this.spec.setYamlParsingError(yamlParsingError);
+        }
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 }

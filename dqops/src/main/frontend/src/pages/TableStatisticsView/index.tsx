@@ -112,7 +112,7 @@ export default function TableStatisticsView({
         </div>
         <div className="flex justify-between gap-x-10">
           <div className="flex gap-x-6 ml-3">
-            <div>Total Rows</div>
+            <div>Total rows</div>
             <div>
               {rowCount &&
                 rowCount.statistics?.map((x, index) => (
@@ -125,7 +125,7 @@ export default function TableStatisticsView({
             </div>
           </div>
           <div className="flex gap-x-6 ml-3">
-            <div>Total Columns</div>
+            <div>Column count</div>
             <div>
               {rowCount &&
                 rowCount.statistics?.map((x, index) => (

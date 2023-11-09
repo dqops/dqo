@@ -4,15 +4,20 @@ DQOps is an DataOps friendly data quality monitoring tool with customizable data
 DQOps comes with more than 140 predefined data quality checks which helps you monitor the quality of your data.
 
 ## DQOps features
-- Intuitive graphical interface and access via CLI
+- Intuitive [user interface](./dqo-concepts/user-interface-overview/user-interface-overview.md) that uses tabs
+  to work on multiple tables at the same time
+- [Command-line](./dqo-concepts/command-line-interface/command-line-interface.md) interface
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, and MySQL
 - More than 140 built-in table and column checks with easy customization
-- Table and column-level checks which allows writing your own SQL queries
-- Daily and monthly date partition testing
-- Data segmentation by up to 9 different data streams
-- Built-in scheduling
-- Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
-- Incident analysis
+- Table and column-level [data quality checks](./dqo-concepts/checks/index.md) which allows writing your own SQL queries
+- Daily and monthly date [partition testing](./dqo-concepts/checks/partition-checks/partition-checks.md)
+- [Data grouping](./dqo-concepts/data-grouping/data-grouping.md) by up to 9 different columns
+- Built-in [scheduling](./working-with-dqo/schedules/index.md)
+- Calculation of [data quality KPIs](./dqo-concepts/data-quality-kpis/data-quality-kpis.md)
+- Built-in [data quality dashboards](./dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+- Cloud hosted Data Quality Data Warehouse
+- [Incident](./working-with-dqo/incidents-and-notifications/incidents.md) management
+- Sending incident notifications using [webhooks](./integrations/webhooks/index.md) and [Slack](./integrations/slack/configuring-slack-notifications.md)
 
 ## Getting started
 
@@ -46,7 +51,7 @@ Visual Studio Code for data quality.
 Want to learn more about data quality? 
 
 Check out eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
-created by the DQOps Team based on their experience in data cleansing and data quality monitoring.
+created by the DQOps team based on their experience in data cleansing and data quality monitoring.
 
 ![A step-by-step guide to improve data quality](./images/ebook.png "A step-by-step guide to improve data quality")
 

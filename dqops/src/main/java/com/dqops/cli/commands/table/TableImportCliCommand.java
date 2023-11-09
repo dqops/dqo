@@ -64,21 +64,21 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
     /**
      * Connection name parameter.
      */
-    @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name",
+    @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name",
             required = false, completionCandidates = ConnectionNameCompleter.class)
     private String connection;
 
     /**
      * Schema name parameter.
      */
-    @CommandLine.Option(names = {"-s", "--schema"}, description = "Schema Name",
+    @CommandLine.Option(names = {"-s", "--schema"}, description = "Schema name",
             required = false, completionCandidates = SchemaNameCompleter.class)
     private String schema;
 
     /**
      * Table name parameter.
      */
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Table Name",
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Table name, without the schema name.",
             required = false)
     private String table;
 

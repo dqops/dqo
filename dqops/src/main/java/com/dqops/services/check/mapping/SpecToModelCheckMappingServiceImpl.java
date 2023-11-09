@@ -43,7 +43,7 @@ import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -1001,9 +1001,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         parameterDefinitionSpec.setDisplayHint(fieldInfo.getDisplayHint());
         parameterDefinitionSpec.setSampleValues(fieldInfo.getSampleValues() != null ? List.of(fieldInfo.getSampleValues()) : null);
         if (fieldInfo.getDataType() == ParameterDataType.enum_type) {
-            List<String> supportedEnumValues = fieldInfo.getEnumValuesByName().values()
-                    .stream().map(e -> e.getYamlName())
-                    .collect(Collectors.toList());
+            List<String> supportedEnumValues = new ArrayList<>(fieldInfo.getEnumValuesByName().keySet());
             parameterDefinitionSpec.setAllowedValues(supportedEnumValues);
         }
 
@@ -1121,7 +1119,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param scheduleLevel Schedule level.
      * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
      */
-    protected EffectiveScheduleModel getEffectiveScheduleModel(MonitoringSchedulesSpec schedulesSpec,
+    protected EffectiveScheduleModel getEffectiveScheduleModel(DefaultSchedulesSpec schedulesSpec,
                                                                CheckRunScheduleGroup scheduleGroup,
                                                                EffectiveScheduleLevelModel scheduleLevel) {
         MonitoringScheduleSpec scheduleSpec = schedulesSpec != null

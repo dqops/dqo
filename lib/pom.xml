@@ -11,7 +11,7 @@
 
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-lib</artifactId>
-    <version>0.3.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>0.4.0</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<name>lib</name>
 	<description>POM for a list of dependencies to libraries that should be distributed in the "lib" folder, especially all JDBC drivers.</description>
 	<packaging>jar</packaging>

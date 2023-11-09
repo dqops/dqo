@@ -6,9 +6,9 @@ transaction processing, business intelligence and analytics applications in corp
 ## Prerequisite credentials
 
 You need a SQL Server account. Use the TCP/IP Properties (IP Addresses Tab) dialog box to configure the TCP/IP protocol 
-options for a specific IP address. In case of restrictions, you need to add the IP address used by DQO to [Allowed IP Addresses in SQL Server Network Policies](https://learn.microsoft.com/en-us/sql/tools/configuration-manager/tcp-ip-properties-ip-addresses-tab?view=sql-server-ver16).
+options for a specific IP address. In case of restrictions, you need to add the IP address used by DQOps to [Allowed IP Addresses in SQL Server Network Policies](https://learn.microsoft.com/en-us/sql/tools/configuration-manager/tcp-ip-properties-ip-addresses-tab?view=sql-server-ver16).
 
-## Adding SQL Server connection using the graphical interface
+## Adding SQL Server connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
@@ -23,8 +23,8 @@ options for a specific IP address. In case of restrictions, you need to add the 
     ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-sql-server.png)
 
     | SQL Server connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                                                      |
-    |--------------------------------|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | Connection name                |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                          |
+    |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.                                        |
     | Host                           | host                                     | SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.                                                                                                                                                                        |
     | Port                           | port                                     | SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.                                                                                                                                              |
     | Database                       | database                                 | SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                               |
@@ -32,9 +32,9 @@ options for a specific IP address. In case of restrictions, you need to add the 
     | Password                       | password                                 | SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                                           |
     | Options                        | options                                  | SQL Server connection 'options' initialization parameter. For example, setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable. |
     | Disable SSL encryption         | disable_encryption                       | Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.                                                                                                                                           |
-    | JDBC connection property       |                                          | Optional setting. DQO supports using JDBC driver to access SQL Server. [See the SQL Server documentation for JDBC connection parameter references.](https://learn.microsoft.com/en-us/sql/connect/jdbc/overview-of-the-jdbc-driver?view=sql-server-ver16).                       |
+    | JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access SQL Server. [See the SQL Server documentation for JDBC connection parameter references.](https://learn.microsoft.com/en-us/sql/connect/jdbc/overview-of-the-jdbc-driver?view=sql-server-ver16).                     |
    
-    DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
+    DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
@@ -61,13 +61,13 @@ options for a specific IP address. In case of restrictions, you need to add the 
 
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
 
-8. When new tables are imported, DQO automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+8. When new tables are imported, DQOps automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
 
     ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
-## Adding SQL Server connection using DQO Shell
+## Adding SQL Server connection using DQOps Shell
 
-To add a connection run the following command in DQO Shell.
+To add a connection run the following command in DQOps Shell.
 
 ```
 dqo> connection add
@@ -109,7 +109,7 @@ dqo> connection add --name=connection1
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
 
-DQO will ask you to select the schema from which the tables will be imported.
+DQOps will ask you to select the schema from which the tables will be imported.
 
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
@@ -118,7 +118,7 @@ dqo> table import --connection={connection name}
 --schema={schema name}
 --table={table name}
 ```
-DQO supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
+DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
 

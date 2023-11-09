@@ -27,8 +27,8 @@ import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.userhome.UserHome;
@@ -338,17 +338,17 @@ public class DefaultsController {
     public ResponseEntity<Mono<Void>> updateDefaultProfilingTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
 
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -359,8 +359,8 @@ public class DefaultsController {
             checkContainerSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setProfiling(checkContainerSpec);
         }
 
@@ -391,16 +391,16 @@ public class DefaultsController {
     public ResponseEntity<Mono<Void>> updateDefaultProfilingColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -411,8 +411,8 @@ public class DefaultsController {
             checkContainerSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setProfiling(checkContainerSpec);
         }
 
@@ -443,16 +443,16 @@ public class DefaultsController {
     public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityDailyMonitoringTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -463,8 +463,8 @@ public class DefaultsController {
             checkContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setMonitoringDaily(checkContainerSpec);
         }
 
@@ -495,16 +495,16 @@ public class DefaultsController {
     public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityDailyMonitoringColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -515,8 +515,8 @@ public class DefaultsController {
             checkContainerSpec = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setMonitoringDaily(checkContainerSpec);
         }
 
@@ -547,16 +547,16 @@ public class DefaultsController {
     public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityMonthlyMonitoringTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -567,8 +567,8 @@ public class DefaultsController {
             checkContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getTable(), null);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checkContainerSpec.getTable(), null);
             defaultDataObservabilityChecks.setMonitoringMonthly(checkContainerSpec);
         }
 
@@ -599,16 +599,16 @@ public class DefaultsController {
     public ResponseEntity<Mono<Void>> updateDefaultDataObservabilityMonthlyMonitoringColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         ExecutionContext executionContext = this.executionContextFactory.create();
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         SettingsWrapper settingsWrapper = userHome.getSettings();
 
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
-            settingsSpec = new SettingsSpec();
-            settingsWrapper.setSpec(settingsSpec);
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
+            localSettingsSpec = new LocalSettingsSpec();
+            settingsWrapper.setSpec(localSettingsSpec);
         }
 
         DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome
@@ -619,8 +619,8 @@ public class DefaultsController {
             checkContainerSpec = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checkContainerSpec.getColumn(), null);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checkContainerSpec.getColumn(), null);
             defaultDataObservabilityChecks.setMonitoringMonthly(checkContainerSpec);
         }
 
@@ -696,19 +696,19 @@ public class DefaultsController {
 
         UserHome userHome = userHomeContext.getUserHome();
 
-        MonitoringSchedulesSpec monitoringSchedulesSpec = null;
+        DefaultSchedulesSpec defaultSchedulesSpec = null;
 
         if (userHome == null
                 || userHome.getDefaultSchedules() == null
                 || userHome.getDefaultSchedules().getSpec() == null
         ) {
-            monitoringSchedulesSpec = new MonitoringSchedulesSpec();
+            defaultSchedulesSpec = new DefaultSchedulesSpec();
         } else {
-            monitoringSchedulesSpec = userHome.getDefaultSchedules().getSpec();
+            defaultSchedulesSpec = userHome.getDefaultSchedules().getSpec();
         }
 
         if (newMonitoringScheduleSpec.isPresent()) {
-            monitoringSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
+            defaultSchedulesSpec.setScheduleForCheckSchedulingGroup(newMonitoringScheduleSpec.get(), schedulingGroup);
         }
 
         userHomeContext.flush();

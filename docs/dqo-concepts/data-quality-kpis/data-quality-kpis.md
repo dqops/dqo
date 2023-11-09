@@ -1,6 +1,6 @@
 # Data quality KPIs
 
-The results of data quality measurements are defined as data quality key performance indicators (KPIs). DQO calculates 
+The results of data quality measurements are defined as data quality key performance indicators (KPIs). DQOps calculates 
 data quality KPIs as a percentage of passed [data quality checks](../checks/index.md) for each table, database, or connection.
 
 We can divide the data quality KPIs into business-focused and data engineering-focused. 
@@ -8,7 +8,7 @@ We can divide the data quality KPIs into business-focused and data engineering-f
 - The data quality KPIs for business help monitor data quality to create insights, optimize processes, and improve decision-making.
 - The data quality KPIs for data engineering monitor the problems with the data pipelines, file skipping, pipeline failure, etc.
 
-The data model used in DQO tool for storing data quality test results supports reporting various data quality KPIs. DQO 
+The data model used in DQOps tool for storing data quality test results supports reporting various data quality KPIs. DQOps 
 stores the result for both passed (no alert raised or only a warning raised) and failed (errors or fatal alerts raised)
 [data quality checks](../checks/index.md) evaluations. 
 
@@ -18,7 +18,7 @@ The final alert raised by the data quality check evaluation reflects the most se
 
 ## Aggregation of data quality KPIs
 Data quality KPIs can be aggregated at multiple levels, providing ways to measure the data quality for time periods 
-(days, weeks, months, etc.), data quality dimensions, data streams (such as by country), or any combination of these 
+(days, weeks, months, etc.), data quality dimensions, data groupings (such as by country), or any combination of these 
 grouping levels.
 
 The expected result of calculating the data quality KPI at different grouping levels may look like the tables below.
@@ -41,11 +41,11 @@ Data quality KPIs at a day and data quality dimension level.
 | 2022-10-03 | 94.6%     | 97.0%        | 94.3%    |
 | 2022-10-04 | 99.1%     | 93.2%        | 94.7%    |
 
-Additionally, data quality KPIs can be calculated for different [data streams](../data-grouping/data-grouping.md)
+Additionally, data quality KPIs can be calculated for different [data groupings](../data-grouping/data-grouping.md)
 separately. Data aggregated in a single database (or a data lake) can be loaded from different data sources. 
 To calculate a separate data quality KPI for each data source, it must be possible to identify that source at the data level.
 
-[Read more about data stream segmentation](../data-grouping/data-grouping.md)
+[Read more about data segmentation with data groupings](../data-grouping/data-grouping.md)
 
 Data quality KPIs can also be calculated for combinations of data sources (data streams), time periods and data quality
 dimensions. An example output of a data quality KPI calculation at a month, country-level data sources, and separate 
@@ -58,6 +58,8 @@ data quality dimensions would look like the following table:
 | 2022-10 | FR          |     94.6% |        97.0% |    94.3% |
 | 2022-10 | JP          |     99.1% |        93.2% |    94.7% |
 
+
 ## What's next
-- [Read about build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
-- [Learn how to review results of data quality monitoring on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+- Look at some built-in [data quality KPI dashboards](../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
+- Read about  [build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
+- Learn how to [review results of data quality monitoring results on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)

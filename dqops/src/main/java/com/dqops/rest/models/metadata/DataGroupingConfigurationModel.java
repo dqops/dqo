@@ -43,7 +43,7 @@ public class DataGroupingConfigurationModel {
     @JsonPropertyDescription("Data grouping configuration name.")
     private String dataGroupingConfigurationName;
 
-    @JsonPropertyDescription("Data stream specification.")
+    @JsonPropertyDescription("Data grouping specification with the definition of the list of data grouping dimensions, the column names to use in a **GROUP BY** clause or a value of a static tag to assign to every check result captured from the table.")
     private DataGroupingConfigurationSpec spec;
 
     /**
@@ -51,6 +51,14 @@ public class DataGroupingConfigurationModel {
      */
     @JsonPropertyDescription("Boolean flag that decides if the current user can update or delete this object.")
     private boolean canEdit;
+
+    /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
 
     public DataGroupingConfigurationModel() {
     }

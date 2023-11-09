@@ -18,6 +18,7 @@ package com.dqops.metadata.dashboards;
 import com.dqops.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.Instant;
@@ -29,9 +30,33 @@ import java.util.Objects;
 /**
  * List of dashboard folders.
  */
-public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<DashboardsFolderSpec> implements Cloneable {
+public class DashboardsFolderListSpec extends AbstractDirtyTrackingSpecList<DashboardsFolderSpec> implements Cloneable, InvalidYamlStatusHolder {
     @JsonIgnore
     private Instant fileLastModified;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
+
 
     /**
      * Returns the last modification date of the dashboard list file.

@@ -11,7 +11,7 @@ Column level sensor that counts how many expected numeric values are used in a t
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|List of expected numeric values that should be found in the tested column.|integer_list| ||
 
@@ -1295,7 +1295,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|A list of expected values that must be present in a numeric column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|integer_list| ||
 
@@ -1568,7 +1568,7 @@ Column level sensor that finds the median in a given column.
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_value|Median (50th percentile), must equal 0.5|double| ||
 
@@ -2594,7 +2594,7 @@ Column level sensor that calculates the count of values that are above than a gi
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
@@ -2748,7 +2748,7 @@ Column level sensor that calculates the percentage of values that are above than
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
@@ -2907,7 +2907,7 @@ Column level sensor that calculates the count of values that are below than a gi
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
@@ -3061,7 +3061,7 @@ Column level sensor that calculates the percentage of values that are below than
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
@@ -3216,7 +3216,7 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Minimal value range variable.|long| ||
 |max_value|Maximal value range variable.|long| ||
@@ -3375,7 +3375,7 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Minimal value range variable.|double| ||
 |max_value|Maximal value range variable.|double| ||

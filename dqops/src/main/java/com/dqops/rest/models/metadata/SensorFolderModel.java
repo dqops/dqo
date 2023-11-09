@@ -64,7 +64,8 @@ public class SensorFolderModel {
     public void addSensor(String fullSensorName,
                           List<ProviderSensorListModel> providerSensorListModelList,
                           SensorDefinitionSource sensorDefinitionSource,
-                          boolean canEdit) {
+                          boolean canEdit,
+                          String yamlParsingError) {
 
         String[] sensorFolders = fullSensorName.split("/");
         String sensorName = sensorFolders[sensorFolders.length - 1];
@@ -102,6 +103,7 @@ public class SensorFolderModel {
             sensorListModel.setSensorSource(sensorDefinitionSource);
             sensorListModel.setProviderSensors(providerSensorListModelList);
             sensorListModel.setCanEdit(canEdit);
+            sensorListModel.setYamlParsingError(yamlParsingError);
             folderModel.sensors.add(sensorListModel);
         }
     }

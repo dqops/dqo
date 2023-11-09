@@ -48,9 +48,9 @@ import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
-import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -65,7 +65,7 @@ import com.dqops.services.check.matching.SimilarCheckMatchingService;
 import com.dqops.services.check.matching.SimilarCheckModel;
 import com.dqops.services.check.matching.SimilarChecksContainer;
 import com.dqops.services.check.matching.SimilarChecksGroup;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.ProviderTypeModel;
 import com.dqops.utils.docs.rules.RuleDocumentationModelFactory;
 import com.dqops.utils.docs.sensors.SensorDocumentationModel;
@@ -76,8 +76,6 @@ import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -120,7 +118,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private YamlSerializer yamlSerializer;
     private JinjaTemplateRenderService jinjaTemplateRenderService;
-    private final HandledClassesLinkageStore linkageStore;
+    private final LinkageStore<Class<?>> linkageStore;
 
     /**
      * Creates a check documentation service.
@@ -139,7 +137,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService,
-                                              HandledClassesLinkageStore linkageStore) {
+                                              LinkageStore<Class<?>> linkageStore) {
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
@@ -318,6 +316,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         checkDocumentationModel.setCheckType(similarCheckModel.getCheckType().getDisplayName());
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
+        checkDocumentationModel.setQualityDimension(similarCheckModel.getCheckModel().getQualityDimension());
         checkDocumentationModel.setCheckHelp(checkModel.getHelpText());
         checkDocumentationModel.setCheckModel(checkModel);
         String checkCategoryName = similarCheckModel.getCategory();

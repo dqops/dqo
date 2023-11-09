@@ -72,11 +72,7 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
     }
   }
   useEffect(() => {
-    if (isDefault === true) {
       fetchDefaultSchedule()
-    } else {
-      setUpdatedSchedule(scheduleGroups?.[activeTab]?.updatedSchedule);
-    }
   } , [activeTab])
 
   const onChangeTab = (tab: CheckRunMonitoringScheduleGroup) => {
@@ -90,14 +86,14 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   }
 
   const handleChange = (obj: MonitoringScheduleSpec) => {
-    if (isDefault === true) {
+
       setUpdatedSchedule((prevState) => ({
         ...prevState,
         cron_expression: obj.cron_expression,
         disabled: obj.disabled
       }));
       setIsDefaultUpdated(true)
-    }
+    
     dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, true));
     dispatch(
       setUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, {
@@ -117,9 +113,9 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
     }
-    if (isDefault === true) {
+
       updateDefaultSchedules(updatedSchedule)
-    }
+
     await dispatch(updateConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab, updatedSchedule));
     await dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
     dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, false));
@@ -162,11 +158,11 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
     } else if (checkTypes === 'partitioned') {
       setTabs([
         {
-          label: 'Partitioned Daily',
+          label: 'Partition Daily',
           value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
-          label: 'Partitioned Monthly',
+          label: 'Partition Monthly',
           value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);
@@ -186,11 +182,11 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
           value: CheckRunMonitoringScheduleGroup.monitoring_monthly
         },
         {
-          label: 'Partitioned Daily',
+          label: 'Partition Daily',
           value: CheckRunMonitoringScheduleGroup.partitioned_daily
         },
         {
-          label: 'Partitioned Monthly',
+          label: 'Partition Monthly',
           value: CheckRunMonitoringScheduleGroup.partitioned_monthly
         },
       ]);

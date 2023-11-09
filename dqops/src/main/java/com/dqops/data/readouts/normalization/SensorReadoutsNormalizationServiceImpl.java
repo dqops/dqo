@@ -28,7 +28,6 @@ import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import com.google.common.primitives.Doubles;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -38,8 +37,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.*;
 import java.time.format.DateTimeParseException;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Service that parses datasets with results returned by a sensor query.

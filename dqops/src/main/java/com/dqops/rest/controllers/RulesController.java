@@ -338,12 +338,12 @@ public class RulesController {
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperUserHome : ruleDefinitionWrapperListUserHome) {
             String ruleNameUserHome = ruleDefinitionWrapperUserHome.getRuleName();
-            ruleFolderModel.addRule(ruleNameUserHome, true, builtInRuleNames.contains(ruleNameUserHome), canEditRule);
+            ruleFolderModel.addRule(ruleNameUserHome, true, builtInRuleNames.contains(ruleNameUserHome), canEditRule, ruleDefinitionWrapperUserHome.getSpec().getYamlParsingError());
         }
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
             String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
-            ruleFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true, canEditRule);
+            ruleFolderModel.addRule(ruleNameDqoHome, customRuleNames.contains(ruleNameDqoHome), true, canEditRule, ruleDefinitionWrapperDqoHome.getSpec().getYamlParsingError());
         }
         return ruleFolderModel;
     }

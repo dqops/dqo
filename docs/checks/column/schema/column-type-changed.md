@@ -12,9 +12,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_type_changed|profiling| |[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_type_changed|profiling| |Consistency|[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -32,13 +32,13 @@ dqo> check run -c=connection_name -ch=profile_column_type_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=profile_column_type_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_type_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_type_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_type_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
       profiling_checks:
         schema:
@@ -47,7 +47,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
             error: {}
             fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="13-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -78,6 +80,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -91,9 +98,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_type_changed|monitoring|daily|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_type_changed|monitoring|daily|Consistency|[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -111,13 +118,13 @@ dqo> check run -c=connection_name -ch=daily_column_type_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_column_type_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_type_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_column_type_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_type_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
       monitoring_checks:
         daily:
@@ -127,7 +134,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
               error: {}
               fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -159,6 +168,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -172,9 +186,9 @@ ___
 **Check description**  
 Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_type_changed|monitoring|monthly|[column_type_hash](../../../../reference/sensors/Column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_type_changed|monitoring|monthly|Consistency|[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -192,13 +206,13 @@ dqo> check run -c=connection_name -ch=monthly_column_type_changed
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_column_type_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_type_changed
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_column_type_changed
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_type_changed
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
       monitoring_checks:
         monthly:
@@ -208,7 +222,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
               error: {}
               fatal: {}
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -239,6 +255,11 @@ spec:
       - optional column that stores the timestamp when row was ingested
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_type_hash](../../../../reference/sensors/column/schema-column-sensors/#column-type-hash)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 

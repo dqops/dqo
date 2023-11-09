@@ -201,7 +201,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.IMPORT_SCHEMA;
+        return DqoJobType.import_schema;
     }
 
     /**

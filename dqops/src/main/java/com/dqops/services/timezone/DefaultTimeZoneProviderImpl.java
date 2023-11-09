@@ -18,7 +18,7 @@ package com.dqops.services.timezone;
 import com.dqops.core.configuration.DqoConfigurationProperties;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -117,13 +117,13 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
         }
 
         SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-        SettingsSpec settingsSpec = settingsWrapper.getSpec();
-        if (settingsSpec == null) {
+        LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+        if (localSettingsSpec == null) {
             return null;
         }
 
         SecretValueLookupContext lookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
-        return this.secretValueProvider.expandValue(settingsSpec.getTimeZone(), lookupContext);
+        return this.secretValueProvider.expandValue(localSettingsSpec.getTimeZone(), lookupContext);
     }
 
     /**

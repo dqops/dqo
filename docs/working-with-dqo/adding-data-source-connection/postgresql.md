@@ -6,10 +6,10 @@ with many features that safely store and scale the most complicated data workloa
 ## Prerequisite credentials
 
 You need a PostgreSQL account. By default, PostgreSQL restricts connections to hosts and networks included in the 
-pg_hba.conf file. In case of restrictions you need to add the IP address used by DQO to
+pg_hba.conf file. In case of restrictions you need to add the IP address used by DQOps to
 [Allowed IP Addresses in PostgreSQL Network Policies](https://www.postgresql.org/docs/9.1/auth-pg-hba-conf.html).
 
-## Adding PostgreSQL connection using the graphical interface
+## Adding PostgreSQL connection using the user interface
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
@@ -23,16 +23,16 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
 
     ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-postgresql.png)
 
-    | PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                             |
-    |--------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | Connection name                |                                          | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-    | Host                           | host                                     | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                              |
-    | Port                           | port                                     | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                    |
-    | Password                       | password                                 | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                  |
-    | sslmode                        | sslmode                                  | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                   |  
-    | JDBC connection property       |                                          | Optional setting. DQO supports using JDBC driver to access PostgreSQL. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
+    | PostgreSQL connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               |
+    |--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Connection name                |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
+    | Host                           | host                                     | PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.                                                                                                                                |
+    | Port                           | port                                     | PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.                                                                                                      |
+    | Password                       | password                                 | PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                    |
+    | sslmode                        | sslmode                                  | PostgreSQL sslmode parameter. The default value is disabled. [See the PostgreSQL documentation for more information about using SSL.](https://jdbc.postgresql.org/documentation/ssl/)                                                     |  
+    | JDBC connection property       |                                          | Optional setting. DQOps supports using JDBC driver to access PostgreSQL. [See the PostgreSQL documentation for JDBC connection parameter references.](https://jdbc.postgresql.org/documentation/use/)                                     |
     
-    DQO allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
+    DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
     
     For example:
@@ -59,13 +59,13 @@ pg_hba.conf file. In case of restrictions you need to add the IP address used by
 
     ![AImporting tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
 
-8. When new tables are imported, DQO automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+8. When new tables are imported, DQOps automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
 
     ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
-## Adding PostgreSQL connection using DQO Shell
+## Adding PostgreSQL connection using DQOps Shell
 
-To add a connection run the following command in DQO Shell.
+To add a connection run the following command in DQOps Shell.
 
 ```
 dqo> connection add
@@ -105,7 +105,7 @@ dqo> connection add --name=connection1
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
 
-DQO will ask you to select the schema from which the tables will be imported.
+DQOps will ask you to select the schema from which the tables will be imported.
 
 You can also add the schema and table name as a parameter to import tables in just a single step.
 
@@ -114,7 +114,7 @@ dqo> table import --connection={connection name}
 --schema={schema name}
 --table={table name}
 ```
-DQO supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
+DQOps supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
 

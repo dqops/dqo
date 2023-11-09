@@ -15,6 +15,7 @@
  */
 package com.dqops.checks;
 
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -42,5 +43,12 @@ public enum CheckType {
      */
     public String getDisplayName() {
         return displayName;
+    }
+
+    public static class CheckTypeSampleFactory implements SampleValueFactory<CheckType> {
+        @Override
+        public CheckType createSample() {
+            return monitoring;
+        }
     }
 }

@@ -9,7 +9,7 @@ Column level sensor that retrieves a column value samples. Column value sampling
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |limit|The limit of results that are returned. The default value is 10 sample values with the highest count (the most popular).|integer| ||
 

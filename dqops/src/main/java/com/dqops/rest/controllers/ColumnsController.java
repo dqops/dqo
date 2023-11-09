@@ -18,18 +18,18 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -44,11 +44,13 @@ import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.*;
+import com.dqops.rest.models.metadata.ColumnListModel;
+import com.dqops.rest.models.metadata.ColumnModel;
+import com.dqops.rest.models.metadata.ColumnStatisticsModel;
+import com.dqops.rest.models.metadata.TableColumnsStatisticsModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
+import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.metadata.ColumnService;
@@ -66,7 +68,6 @@ import reactor.core.publisher.Mono;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -220,8 +221,8 @@ public class ColumnsController {
 
         resultModel.setCollectColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
 //            setTarget(StatisticsCollectorTarget.column);
             setEnabled(true);
         }});
@@ -275,6 +276,7 @@ public class ColumnsController {
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             setSpec(columnSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
@@ -712,9 +714,9 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -784,9 +786,9 @@ public class ColumnsController {
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -857,9 +859,9 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -1111,9 +1113,9 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1189,9 +1191,9 @@ public class ColumnsController {
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1267,9 +1269,9 @@ public class ColumnsController {
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
-            setColumnName(columnName);
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setColumn(columnName);
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1494,7 +1496,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of labels to stored (replaced) on the column or an empty object to clear the list of assigned labels on the column")
-            @RequestBody Optional<LabelSetSpec> labelSetSpec) {
+            @RequestBody LabelSetSpec labelSetSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1508,12 +1510,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        // TODO: validate the columnSpec
-        if (labelSetSpec.isPresent()) {
-            columnSpec.setLabels(labelSetSpec.get());
-        } else {
-            columnSpec.setLabels(null);
-        }
+        columnSpec.setLabels(labelSetSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -1549,7 +1546,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column")
-            @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @RequestBody CommentsListSpec commentsListSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1563,12 +1560,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
         }
 
-        // TODO: validate the columnSpec
-        if (commentsListSpec.isPresent()) {
-            columnSpec.setComments(commentsListSpec.get());
-        } else {
-            columnSpec.setComments(null);
-        }
+        columnSpec.setComments(commentsListSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -1604,7 +1596,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column")
-            @RequestBody Optional<ColumnProfilingCheckCategoriesSpec> columnCheckCategoriesSpec) {
+            @RequestBody ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1618,11 +1610,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        if (columnCheckCategoriesSpec.isPresent()) {
-            columnSpec.setProfilingChecks(columnCheckCategoriesSpec.get());
-        } else {
-            columnSpec.setProfilingChecks(null);
-        }
+        columnSpec.setProfilingChecks(columnCheckCategoriesSpec);
 
         userHomeContext.flush();
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -1658,7 +1646,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column")
-            @RequestBody Optional<ColumnDailyMonitoringCheckCategoriesSpec> columnDailyMonitoringSpec) {
+            @RequestBody ColumnDailyMonitoringCheckCategoriesSpec columnDailyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)  ||
@@ -1677,8 +1665,8 @@ public class ColumnsController {
             monitoringChecksSpec = new ColumnMonitoringChecksRootSpec();
         }
         
-        if (columnDailyMonitoringSpec.isPresent()) {
-            monitoringChecksSpec.setDaily(columnDailyMonitoringSpec.get());
+        if (columnDailyMonitoringSpec != null) {
+            monitoringChecksSpec.setDaily(columnDailyMonitoringSpec);
             columnSpec.setMonitoringChecks(monitoringChecksSpec);
         } else if (monitoringChecksSpec.getMonthly() == null) {
             // If there is no monthly monitoring checks, and it's been requested to delete daily monitoring checks, then delete all.
@@ -1721,7 +1709,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column")
-            @RequestBody Optional<ColumnMonthlyMonitoringCheckCategoriesSpec> columnMonthlyMonitoringSpec) {
+            @RequestBody ColumnMonthlyMonitoringCheckCategoriesSpec columnMonthlyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1740,8 +1728,8 @@ public class ColumnsController {
             monitoringChecksSpec = new ColumnMonitoringChecksRootSpec();
         }
 
-        if (columnMonthlyMonitoringSpec.isPresent()) {
-            monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec.get());
+        if (columnMonthlyMonitoringSpec != null) {
+            monitoringChecksSpec.setMonthly(columnMonthlyMonitoringSpec);
             columnSpec.setMonitoringChecks(monitoringChecksSpec);
         } else if (monitoringChecksSpec.getDaily() == null) {
             // If there is no daily monitoring checks, and it's been requested to delete monthly monitoring checks, then delete all.
@@ -1784,7 +1772,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
-            @RequestBody Optional<ColumnDailyPartitionedCheckCategoriesSpec> columnDailyPartitionedSpec) {
+            @RequestBody ColumnDailyPartitionedCheckCategoriesSpec columnDailyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1803,8 +1791,8 @@ public class ColumnsController {
             partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
         }
 
-        if (columnDailyPartitionedSpec.isPresent()) {
-            partitionedChecksSpec.setDaily(columnDailyPartitionedSpec.get());
+        if (columnDailyPartitionedSpec != null) {
+            partitionedChecksSpec.setDaily(columnDailyPartitionedSpec);
             columnSpec.setPartitionedChecks(partitionedChecksSpec);
         } else if (partitionedChecksSpec.getMonthly() == null) {
             // If there is no monthly partitioned checks, and it's been requested to delete daily partitioned checks, then delete all.
@@ -1847,7 +1835,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column")
-            @RequestBody Optional<ColumnMonthlyPartitionedCheckCategoriesSpec> columnMonthlyPartitionedSpec) {
+            @RequestBody ColumnMonthlyPartitionedCheckCategoriesSpec columnMonthlyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1866,8 +1854,8 @@ public class ColumnsController {
             partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
         }
 
-        if (columnMonthlyPartitionedSpec.isPresent()) {
-            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec.get());
+        if (columnMonthlyPartitionedSpec != null) {
+            partitionedChecksSpec.setMonthly(columnMonthlyPartitionedSpec);
             columnSpec.setPartitionedChecks(partitionedChecksSpec);
         } else if (partitionedChecksSpec.getMonthly() == null) {
             // If there is no daily partitioned checks, and it's been requested to delete monthly partitioned checks, then delete all.
@@ -1911,7 +1899,7 @@ public class ColumnsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -1933,8 +1921,8 @@ public class ColumnsController {
 
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -1978,7 +1966,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality monitoring configuration")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -2000,8 +1988,8 @@ public class ColumnsController {
 
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, true);
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -2046,7 +2034,7 @@ public class ColumnsController {
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality partitioned checks configuration")
-            @RequestBody Optional<CheckContainerModel> allChecksModel) {
+            @RequestBody CheckContainerModel allChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName) ||
@@ -2068,8 +2056,8 @@ public class ColumnsController {
 
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, true);
 
-        if (allChecksModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel.get(), checksToUpdate, tableSpec);
+        if (allChecksModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checksToUpdate, tableSpec);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }

@@ -16,6 +16,9 @@
 
 package com.dqops.rest.models.credentials;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -54,4 +57,15 @@ public class SharedCredentialModel {
      */
     @JsonPropertyDescription("Credential's value for a binary credential that is stored as a base64 value. Only one value (the text_value or binary_value) should be not empty.")
     private String binaryValue;
+
+    public static class SharedCredentialModelSampleFactory implements SampleValueFactory<SharedCredentialModel> {
+        @Override
+        public SharedCredentialModel createSample() {
+            return new SharedCredentialModel() {{
+                setCredentialName(SampleStringsRegistry.getCredential());
+                setType(CredentialType.text);
+                setTextValue(getCredentialName() + "_text_value");
+            }};
+        }
+    }
 }

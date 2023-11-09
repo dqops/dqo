@@ -1,6 +1,6 @@
 # Profiling
 
-In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
 Profiling checks are useful for exploring and experimenting with various types of checks and determining the most suitable
@@ -23,7 +23,7 @@ If there was a change in the data, and we run the check again in May, the result
 
 
 ## Checks configuration in the YAML file
-Profiling data quality checks, like other data quality checks in DQO are defined as YAML files.
+Profiling data quality checks, like other data quality checks in DQOps are defined as YAML files.
 
 Below is an example of the YAML file showing sample configuration of a profiling column data quality check nulls_percent.
 

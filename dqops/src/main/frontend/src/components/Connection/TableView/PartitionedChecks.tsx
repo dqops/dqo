@@ -271,6 +271,7 @@ const TablePartitionedChecksView = () => {
           checkTypes={checkTypes}
           timePartitioned="daily"
           checksUI={dailyPartitionedChecks}
+           onUpdateChecks = {onUpdate}
         />
       )}
       {tab === 'monthly_comparisons' && (
@@ -278,6 +279,7 @@ const TablePartitionedChecksView = () => {
           checkTypes={checkTypes}
           timePartitioned="monthly"
           checksUI={monthlyPartitionedChecks}
+          onUpdateChecks = {onUpdate}
         />
       )}
     </div>

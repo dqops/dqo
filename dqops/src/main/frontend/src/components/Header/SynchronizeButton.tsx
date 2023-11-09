@@ -18,7 +18,7 @@ export const SynchronizeButton = () => {
   const syncAllFolders = async () => {
     try {
       setLoading(true);
-      const res = await JobApiClient.synchronizeFolders(false, undefined, {
+      const res = await JobApiClient.synchronizeFolders(undefined, false, undefined, {
         sources: true,
         sensors: true,
         rules: true,

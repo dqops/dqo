@@ -1,64 +1,57 @@
 # Review the results of data quality monitoring on dashboards
 
-DQO has multiple built-in data quality dashboards for displaying [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
+DQOps has multiple built-in data quality dashboards for displaying [data quality KPI](../../dqo-concepts/data-quality-kpis/data-quality-kpis.md).
 Our dashboards use [Looker Studio](https://lookerstudio.google.com/overview) (formerly Google Data Studio) business
 intelligence environment.
 
-In DQO, you can choose from a variety of built-in dashboard groups.
-
-- **Governance dashboards** allows to review summarized key data metrics per [check category](../../checks/#categories-of-checks),
-[data quality dimensions](../../dqo-concepts/data-quality-dimensions/data-quality-dimensions.md) or [data streams](../../dqo-concepts/data-grouping/data-grouping.md).
-Government dashboards are useful for senior management to review aggregated key data metrics.
-
-- **Operational dashboards** helps data engineers and data owners to identify areas (tables or data pipelines) in a data 
-warehouse or data lake with the highest number of data quality issues that should be addressed.
-
-- **Data Quality Issue Details** dashboards show detailed information about the issues at the table level. The detailed dashboards are useful for data engineers and data owners
-  to better understand data dynamics during the investigation phase when the data quality issue is being diagnosed and
-  later to confirm whether it has been resolved.
-
-Learn more about [different groups of dashboards here](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
+You can [learn more about different types of dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+in the Concept section.
 
 ## Prerequisite
 
-To be able to display results on data quality dashboards, you need to have a DQO account and synchronize locally stored results with it.  
-To synchronize the data just click on the **Synchronize** button in the upper right corner of the navigation tab or run `cloud sync all` command in DQO Shell.
+To be able to display results on data quality dashboards, you need to have a DQOps account and synchronize locally stored results with it.  
+To synchronize the data just click on the **Synchronize** button in the upper right corner of the navigation tab or run `cloud sync all` command in DQOps Shell.
 
 You can read more about `cloud` command in [Command-line specification section](../../command-line-interface/cloud.md).
 
-## Total data quality KPIs dashboard
+## View results on dashboards
 
-To review the summary KPIs of all run checks you can use the **KPIs** dashboard.
-You can find it in the Governance (KPIs) group.
+To view dashboards, simply go to the **Data Quality Dashboard** section, and select the dashboard of interest from the tree
+view on the left. There are several groups and subgroups of data quality dashboards dedicated to analyzing results from
+data quality checks. You can [learn more about different types of dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
+in the Concept section.
 
-1. Go to the **Data Quality Dashboards** section using the navigation bar at the top of the screen
+For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
+You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
-    ![Navigating to Data Quality Dashboards section](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/data-quality-dashboards-section.png)
-    
-2. From the tree view on the left, select the **KPIs** dashboard folder in the **Government (KPIs)** group, and then the **KPIs** dashboard. 
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
 
-    ![Total DQO KPIs dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-dashboards.png)
+When you hover over the name of the dashboard in the tree view, thumbnails are displayed to help you identify the
+type of dashboard.
 
+### **Filtering**
 
-## Affected tables dashboard
+On each dashboard, data can be filtered. You can filter data by clicking on the dropdown buttons located on the dark grey top part
+of the dashboard, or clicking on the elements in the tables such as the Connection, Schema, Dimension, Data group, etc.
+Some dashboards have additional filtering options such as checks boxes or input fields.
 
-To review which tables were affected by data quality issues you can use **Affected Tables** dashboard.
-You can find it in the **Operational** group.
+![Dashboards filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-filtering.png)
 
-1. From the tree view on the left of the **Data Quality Dashboard** section, select the **Affected Tables** dashboard in the **Operational** group.
+The following example shows the filtering of data by a connection named **bigquery-public-data** after clicking on it.
 
-    ![Addected Tables dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/affected-tables-dashboard.png)
+![Dashboards - connection filtering example](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-connection-filtering-example.png)
 
-    The **Affected Table** dashboard displays issues categorized by connection, schema, data quality dimension, and check 
-    category. You can filter results in other tables by clicking on any element in these tables, which can help you locate the issue.
+Data on dashboards is displayed for a specific time range, most often for the current month.
+Depending on the type of dashboard, you can change the specific time range using **Time window** dropdown button located
+on the top part of the dashboard.
 
-## Issues details dashboard
+![Time window filtering](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboard-time-window-filtering.png)
 
-To review the details which tables were affected by the issues you can use the **Issue** dashboard. 
-You can find it in the **Data Quality Issue Details** group.
+Other dashboards have buttons to change the view between the current and previous month.
 
-1. From the tree view on the left of the **Data Quality Dashboard** section, select the **Issue** dashboard in the **Data Quality Issue Details** group. 
+![Current/previous month switch](https://dqops.com/docs/images/concepts/data-quality-dashboards/dashboards-current-previous-month-switch.png)
 
-    ![Total issue details dashboard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/issues-dashboard.png)
+## What's next
 
-    The **Issue** dashboard displays the results categorized by checks and also lists the tables affected by the issues.
+- [Learn how to run data quality checks](../run-data-quality-checks/run-data-quality-checks.md).
+- [Learn about setting schedules](../schedules/index.md) to easily customize when checks are run.

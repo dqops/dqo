@@ -21,6 +21,7 @@ import com.dqops.metadata.fields.ParameterDataType;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +36,8 @@ public class FieldInfo {
     private String helpText;
     private Class<?> clazz;
     private ParameterDataType dataType;
+    private ObjectDataType objectDataType;
+    private ParameterizedType genericDataType;
     private DisplayHint displayHint;
     private Map<String, EnumValueInfo> enumValuesByName;
     private Method getterMethod;
@@ -138,6 +141,38 @@ public class FieldInfo {
      */
     public void setDataType(ParameterDataType dataType) {
         this.dataType = dataType;
+    }
+
+    /**
+     * Returns the specific data type of the object field used when rendering it for display.
+     * @return Field type (object type). Null if not of object type.
+     */
+    public ObjectDataType getObjectDataType() {
+        return objectDataType;
+    }
+
+    /**
+     * Sets the data type of the object field to be used when rendering it for display.
+     * @param objectDataType Field type (object type). Null if not of object type.
+     */
+    public void setObjectDataType(ObjectDataType objectDataType) {
+        this.objectDataType = objectDataType;
+    }
+
+    /**
+     * Returns the data type that is wrapped by the generic class.
+     * @return Data type wrapped by the generic class.
+     */
+    public ParameterizedType getGenericDataType() {
+        return genericDataType;
+    }
+
+    /**
+     * Sets the data type that is wrapped by the generic class that this field represents.
+     * @param genericDataType Data type wrapped by the generic class.
+     */
+    public void setGenericDataType(ParameterizedType genericDataType) {
+        this.genericDataType = genericDataType;
     }
 
     /**
@@ -313,15 +348,23 @@ public class FieldInfo {
             if (this.clazz.isEnum()) {
                 // convert to a java name
                 String javaEnumFieldName = ((Enum<?>) result).name();
-                return this.getEnumValuesByName().get(javaEnumFieldName).getYamlName();
+                EnumValueInfo enumFieldInfo = this.getEnumValuesByName().values().stream()
+                        .filter(enumValueInfo -> enumValueInfo.getJavaName().equals(javaEnumFieldName)).findAny().get();
+                return enumFieldInfo.getYamlName();
             }
 
             return result;
         }
         catch (InvocationTargetException e) {
-            throw new FieldAccessException("Invocation exception", e);
-        } catch (IllegalAccessException e) {
-            throw new FieldAccessException("Illegal access exception", e);
+            throw new FieldAccessException("Invocation exception when accessing a field " + this.classFieldName + " on class " + parentObject.getClass().getName(), e);
+        }
+        catch (IllegalAccessException e) {
+            throw new FieldAccessException("Illegal access exception when accessing a field " + this.classFieldName + " on class " + parentObject.getClass().getName(), e);
+        }
+        catch (Exception e) {
+            throw new FieldAccessException("Exception thrown when accessing a field " + this.classFieldName + " on class " +
+                    (parentObject != null ?
+                    parentObject.getClass().getName() : null), e);
         }
     }
 

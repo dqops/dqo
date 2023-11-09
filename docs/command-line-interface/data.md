@@ -37,30 +37,30 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-b`<br/>`--begin`<br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
-|`-cat`<br/>`--category`<br/>|Check category name (volume, nulls, numeric, etc.)| ||
-|`-ch`<br/>`--check`<br/>|Data quality check name| ||
-|`-cr`<br/>`--check-results`<br/>|Delete the check results| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
-|`-col`<br/>`--column`<br/>|Column name| ||
-|`-c`<br/>`--connection`<br/>|Connection name| ||
-|`-ds`<br/>`--data-group-tag`<br/>|Data group dimension level filter, that filters by tags.| ||
-|`-e`<br/>`--end`<br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
-|`-er`<br/>`--errors`<br/>|Delete the execution errors| ||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-qd`<br/>`--quality-dimension`<br/>|Data quality dimension| ||
-|`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name)| ||
-|`-sr`<br/>`--sensor-readouts`<br/>|Delete the sensor readouts| ||
-|`-st`<br/>`--statistics`<br/>|Delete the statistics| ||
-|`-stc`<br/>`--statistics-category`<br/>|Statistics category name (volume, nulls, numeric, etc.)| ||
-|`-sc`<br/>`--statistics-collector`<br/>|Data quality statistics collector name| ||
-|`-stt`<br/>`--statistics-target`<br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
-|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
-|`-tc`<br/>`--table-comparison`<br/>|Table comparison name.| ||
-|`-tg`<br/>`--time-gradient`<br/>|Time gradient of the sensor| ||
+|<p id="data delete-b">`-b`</p><br/><p id="data delete--begin">`--begin`</p><br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
+|<p id="data delete-cat">`-cat`</p><br/><p id="data delete--category">`--category`</p><br/>|Check category name (volume, nulls, numeric, etc.)| ||
+|<p id="data delete-ch">`-ch`</p><br/><p id="data delete--check">`--check`</p><br/>|Data quality check name| ||
+|<p id="data delete-cr">`-cr`</p><br/><p id="data delete--check-results">`--check-results`</p><br/>|Delete the check results| ||
+|<p id="data delete-ct">`-ct`</p><br/><p id="data delete--check-type">`--check-type`</p><br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
+|<p id="data delete-col">`-col`</p><br/><p id="data delete--column">`--column`</p><br/>|Column name| ||
+|<p id="data delete-c">`-c`</p><br/><p id="data delete--connection">`--connection`</p><br/>|Connection name| ||
+|<p id="data delete-ds">`-ds`</p><br/><p id="data delete--data-group-tag">`--data-group-tag`</p><br/>|Data group dimension level filter, that filters by tags.| ||
+|<p id="data delete-e">`-e`</p><br/><p id="data delete--end">`--end`</p><br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
+|<p id="data delete-er">`-er`</p><br/><p id="data delete--errors">`--errors`</p><br/>|Delete the execution errors| ||
+|<p id="data delete-fw">`-fw`</p><br/><p id="data delete--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="data delete-t">`-t`</p><br/><p id="data delete--table">`--table`</p><br/><p id="data delete--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<p id="data delete--headless">`--headless`</p><br/><p id="data delete-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="data delete-h">`-h`</p><br/><p id="data delete--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="data delete-of">`-of`</p><br/><p id="data delete--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="data delete-qd">`-qd`</p><br/><p id="data delete--quality-dimension">`--quality-dimension`</p><br/>|Data quality dimension| ||
+|<p id="data delete-s">`-s`</p><br/><p id="data delete--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name)| ||
+|<p id="data delete-sr">`-sr`</p><br/><p id="data delete--sensor-readouts">`--sensor-readouts`</p><br/>|Delete the sensor readouts| ||
+|<p id="data delete-st">`-st`</p><br/><p id="data delete--statistics">`--statistics`</p><br/>|Delete the statistics| ||
+|<p id="data delete-stc">`-stc`</p><br/><p id="data delete--statistics-category">`--statistics-category`</p><br/>|Statistics category name (volume, nulls, numeric, etc.)| ||
+|<p id="data delete-sc">`-sc`</p><br/><p id="data delete--statistics-collector">`--statistics-collector`</p><br/>|Data quality statistics collector name| ||
+|<p id="data delete-stt">`-stt`</p><br/><p id="data delete--statistics-target">`--statistics-target`</p><br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
+|<p id="data delete-tc">`-tc`</p><br/><p id="data delete--table-comparison">`--table-comparison`</p><br/>|Table comparison name.| ||
+|<p id="data delete-tg">`-tg`</p><br/><p id="data delete--time-gradient">`--time-gradient`</p><br/>|Time gradient of the sensor| ||
 
 
 
@@ -92,16 +92,16 @@ dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-cr`<br/>`--check-results`<br/>|Repair the check results| ||
-|`-c`<br/>`--connection`<br/>|Connection name|:material-check-bold:||
-|`-er`<br/>`--errors`<br/>|Repair the execution errors| ||
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-sr`<br/>`--sensor-readouts`<br/>|Repair the sensor readouts| ||
-|`-st`<br/>`--statistics`<br/>|Repair the statistics| ||
-|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<p id="data repair-cr">`-cr`</p><br/><p id="data repair--check-results">`--check-results`</p><br/>|Repair the check results| ||
+|<p id="data repair-c">`-c`</p><br/><p id="data repair--connection">`--connection`</p><br/>|Connection name|:material-check-bold:||
+|<p id="data repair-er">`-er`</p><br/><p id="data repair--errors">`--errors`</p><br/>|Repair the execution errors| ||
+|<p id="data repair-fw">`-fw`</p><br/><p id="data repair--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="data repair-t">`-t`</p><br/><p id="data repair--table">`--table`</p><br/><p id="data repair--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
+|<p id="data repair--headless">`--headless`</p><br/><p id="data repair-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="data repair-h">`-h`</p><br/><p id="data repair--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="data repair-of">`-of`</p><br/><p id="data repair--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="data repair-sr">`-sr`</p><br/><p id="data repair--sensor-readouts">`--sensor-readouts`</p><br/>|Repair the sensor readouts| ||
+|<p id="data repair-st">`-st`</p><br/><p id="data repair--statistics">`--statistics`</p><br/>|Repair the statistics| ||
 
 
 

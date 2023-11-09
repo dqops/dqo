@@ -13,13 +13,16 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_differencing_percentile_moving_average.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -51,6 +54,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_differencing_percentile_moving_average.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -167,13 +173,16 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 30 periods (days, etc.), but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_differencing_percentile_moving_average_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -204,6 +213,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_differencing_percentile_moving_average_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -319,13 +331,16 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist to run the calculation. You can change the default value by modifying prediction_time_window parameterin Definitions section.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_average.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -357,6 +372,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_stationary_percentile_moving_average.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -468,13 +486,16 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |anomaly_percent|Probability that the current sensor readout will achieve values within the mean according to the distribution of the previous values gathered within the time window. In other words, the inter-quantile range around the mean of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/anomaly_stationary_percentile_moving_average_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -505,6 +526,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/anomaly_stationary_percentile_moving_average_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -617,14 +641,17 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_above|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 |percentile_below|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/change_percentile_moving_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -667,6 +694,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/change_percentile_moving_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -791,14 +821,17 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_above|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 |percentile_below|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/change_percentile_moving_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -841,6 +874,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/change_percentile_moving_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -965,14 +1001,17 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_above|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 |percentile_below|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/change_percentile_moving_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1015,6 +1054,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/change_percentile_moving_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1138,14 +1180,17 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_above|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 |percentile_below|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/percentile_moving_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1188,6 +1233,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/percentile_moving_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1308,14 +1356,17 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_above|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 |percentile_below|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/percentile_moving_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1358,6 +1409,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/percentile_moving_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1478,14 +1532,17 @@ Data quality rule that verifies if a data quality sensor readout value is probab
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |percentile_above|Probability that the current sensor readout will achieve values greater than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the upper quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 |percentile_below|Probability that the current sensor readout will achieve values lesser than it would be expected from the estimated distribution based on the previous values gathered within the time window. In other words, the lower quantile of the estimated normal distribution. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *percentile/percentile_moving_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1528,6 +1585,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *percentile/percentile_moving_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)

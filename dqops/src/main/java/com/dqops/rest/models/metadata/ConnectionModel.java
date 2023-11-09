@@ -28,6 +28,8 @@ import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -62,9 +64,9 @@ public class ConnectionModel {
     private Integer parallelRunsLimit;
 
     /**
-     * Database provider type (required). Accepts: bigquery, snowflake.
+     * Database provider type (required). Accepts: bigquery, snowflake, etc.
      */
-    @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake.")
+    @JsonPropertyDescription("Database provider type (required). Accepts: bigquery, snowflake, etc.")
     private ProviderType providerType;
 
     /**
@@ -170,6 +172,14 @@ public class ConnectionModel {
     private boolean canDeleteData;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
      * @param connectionSpec Source connection specification.
@@ -184,7 +194,7 @@ public class ConnectionModel {
             boolean isOperator) {
         return new ConnectionModel() {{
             setConnectionName(connectionName);
-            setParallelRunsLimit(connectionSpec.getParallelRunsLimit());
+            setParallelRunsLimit(connectionSpec.getParallelJobsLimit());
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
             setBigquery(connectionSpec.getBigquery());
@@ -198,32 +208,33 @@ public class ConnectionModel {
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
             setCanDeleteData(isOperator);
+            setYamlParsingError(connectionSpec.getYamlParsingError());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
@@ -247,7 +258,7 @@ public class ConnectionModel {
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setParallelRunsLimit(this.parallelRunsLimit);
+        targetConnectionSpec.setParallelJobsLimit(this.parallelRunsLimit);
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
@@ -255,5 +266,16 @@ public class ConnectionModel {
         targetConnectionSpec.setSqlserver(this.getSqlserver());
         targetConnectionSpec.setMysql(this.getMysql());
         targetConnectionSpec.setOracle(this.getOracle());
+    }
+
+    public static class ConnectionModelSampleFactory implements SampleValueFactory<ConnectionModel> {
+        @Override
+        public ConnectionModel createSample() {
+            return fromConnectionSpecification(
+                    SampleStringsRegistry.getConnectionName(),
+                    new ConnectionSpec.ConnectionSpecSampleFactory().createSample(),
+                    false,
+                    true);
+        }
     }
 }

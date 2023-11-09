@@ -21,7 +21,7 @@ package com.dqops.data.normalization;
  */
 public final class CommonColumnNames {
     /**
-     * The row's primary key, it is a uuid of the check hash, time period and the data stream id. This value identifies a single row.
+     * The row's primary key, it is a uuid of the connection_name, table_name, column_name, check_hash, time_period, and the data_group_hash. This value identifies a single row.
      */
     public static final String ID_COLUMN_NAME = "id";
 

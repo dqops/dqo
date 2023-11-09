@@ -2,10 +2,9 @@ from enum import Enum
 
 
 class DatetimeBuiltInDateFormats(str, Enum):
-    DAYDASHMONTHDASHYEAR = "DayDashMonthDashYear"
-    DAYDOTMONTHDOTYEAR = "DayDotMonthDotYear"
-    DAYSLASHMONTHSLASHYEAR = "DaySlashMonthSlashYear"
-    ISO8601 = "ISO8601"
+    DDMMYYYY = "DD/MM/YYYY"
+    DD_MM_YYYY = "DD-MM-YYYY"
+    YYYY_MM_DD = "YYYY-MM-DD"
 
     def __str__(self) -> str:
         return str(self.value)

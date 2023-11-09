@@ -20,7 +20,7 @@ Notification message payload that is posted (HTTP POST) to a notification endpoi
 |table|Table name affected by a data quality incident.|string| | | |
 |table_priority|Table priority of the table that was affected by a data quality incident.|integer| | | |
 |incident_hash|Data quality incident hash that identifies similar incidents on the same incident grouping level.|long| | | |
-|data_stream_name|The data stream name that was affected by a data quality incident.|string| | | |
+|data_group_name|The data group name that was affected by a data quality incident. The data group names are created from the values of columns and tags configured in the data grouping configuration. An example data group when grouping a static tag &quot;customers&quot;  as the first level grouping and a *country* column value for the second grouping level is *customers / UK*.|string| | | |
 |quality_dimension|The data quality dimension that was affected by a data quality incident.|string| | | |
 |check_category|The data quality check category that was affected by a data quality incident.|string| | | |
 |check_type|The data quality check type that was affected by a data quality incident.|string| | | |

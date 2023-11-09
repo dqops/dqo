@@ -16,6 +16,7 @@
 package com.dqops.rest.server.authentication;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
+import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
@@ -23,7 +24,6 @@ import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpHeaders;
@@ -51,24 +51,37 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     /**
      * Special url that receives a post with the authentication token received from DQOps Cloud.
      */
-    public static final String ISSUE_TOKEN_URL = "/tokenissuer";
+    public static final String ISSUE_TOKEN_REQUEST_PATH = "/tokenissuer";
 
     /**
      * Health check url.
      */
-    public static final String HEALTHCHECK_URL = "/api/ishealthy";
+    public static final String HEALTHCHECK_REQUEST_PATH = "/api/ishealthy";
+
+    /**
+     * /manifest.json path
+     */
+    public static final String MANIFEST_JSON_REQUEST_PATH = "/manifest.json";
+
+    /**
+     * Cookie name used to send the authentication token.
+     */
+    public static final String AUTHENTICATION_TOKEN_COOKIE = "DQOAccessToken";
 
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
+    private final DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory;
     private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
+                                             DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                              InstanceCloudLoginService instanceCloudLoginService,
                                              DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
                                              DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
+        this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dqoAuthenticationTokenFactory = dqoAuthenticationTokenFactory;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
@@ -176,7 +189,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                     .then();
         }
 
-        if (Objects.equals(requestPath, ISSUE_TOKEN_URL)) {
+        if (Objects.equals(requestPath, ISSUE_TOKEN_REQUEST_PATH)) {
             exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(303));
             String returnUrl = exchange.getRequest().getQueryParams().getFirst("returnUrl");
             String refreshToken = exchange.getRequest().getQueryParams().getFirst("refreshToken");
@@ -203,11 +216,11 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                         signedAuthenticationToken.getTarget().getTenantId() + ", the cookie is valid for " + hostHeader + " host");
             }
 
-            ResponseCookie dqoAccessTokenCookie = ResponseCookie.from("DQOAccessToken", signedAuthenticationToken.getSignedHex())
-                    .maxAge(Duration.ofHours(24))
+            ResponseCookie dqoAccessTokenCookie = ResponseCookie.from(AUTHENTICATION_TOKEN_COOKIE, signedAuthenticationToken.getSignedHex())
+                    .maxAge(Duration.ofMinutes(this.dqoInstanceConfigurationProperties.getAuthenticationTokenExpirationMinutes()))
                     .domain(hostHeader)
                     .build();
-            exchange.getResponse().getCookies().add("DQOAccessToken", dqoAccessTokenCookie);
+            exchange.getResponse().getCookies().add(AUTHENTICATION_TOKEN_COOKIE, dqoAccessTokenCookie);
             exchange.getResponse().getHeaders().add("Location", returnUrl);
 
             if (log.isDebugEnabled()) {
@@ -215,7 +228,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             }
 
             return exchange.getResponse().writeAndFlushWith(Mono.empty());
-        } else if (Objects.equals(requestPath, HEALTHCHECK_URL) || Objects.equals(requestPath, "/manifest.json")) {
+        } else if (Objects.equals(requestPath, HEALTHCHECK_REQUEST_PATH) || Objects.equals(requestPath, MANIFEST_JSON_REQUEST_PATH)) {
             Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAnonymousToken();
 
             ServerWebExchange mutatedExchange = exchange.mutate()
@@ -226,7 +239,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                     .filter(mutatedExchange)
                     .then();
         } else {
-            HttpCookie dqoAccessTokenCookie = exchange.getRequest().getCookies().getFirst("DQOAccessToken");
+            HttpCookie dqoAccessTokenCookie = exchange.getRequest().getCookies().getFirst(AUTHENTICATION_TOKEN_COOKIE);
             if (dqoAccessTokenCookie == null) {
                 if (requestPath.startsWith("/api")) {
                     exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(401));

@@ -61,7 +61,7 @@ const CheckCategoriesView = ({
 
   const onRunChecks = async () => {
     await onUpdate();
-    const res = await JobApiClient.runChecks(false, undefined, {
+    const res = await JobApiClient.runChecks(undefined, false, undefined, {
       check_search_filters: category?.run_checks_job_template,
       ...(checkTypes === CheckTypes.PARTITIONED && timeWindowFilter !== null
         ? { timeWindowFilter }
@@ -153,8 +153,7 @@ const CheckCategoriesView = ({
             }
             checkResult={checkResultsOverview.find(
               (item) =>
-                item.checkName === check.check_name &&
-                category.category === item.checkCategory
+                item.checkHash == check.check_hash
             )}
             getCheckOverview={getCheckOverview}
             onUpdate={onUpdate}
@@ -184,6 +183,7 @@ const CheckCategoriesView = ({
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
           JobApiClient.deleteStoredData(
+            undefined,
             false,
             undefined,
             {

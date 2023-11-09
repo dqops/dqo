@@ -135,6 +135,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
                 sensorReadoutDetailedDataModel.setCheckDisplayName(checkDisplayName);
                 sensorReadoutDetailedDataModel.setDataGroup(dataGroupNameForCheck);
 
+
                 Selection resultsForCheckHash = checkHashColumnUnsorted.isEqualTo(checkHash);
                 List<String> dataGroupsForCheck = allDataGroupColumnUnsorted.where(resultsForCheckHash).asList().stream().distinct().sorted().collect(Collectors.toList());
 
@@ -186,6 +187,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
 
         String provider = row.getString(SensorReadoutsColumnNames.PROVIDER_COLUMN_NAME);
         String qualityDimension = row.getString(SensorReadoutsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
+        String tableComparison = row.getString(SensorReadoutsColumnNames.TABLE_COMPARISON_NAME_COLUMN_NAME);
+
 
         SensorReadoutEntryModel singleModel = new SensorReadoutEntryModel() {{
             setId(id);
@@ -206,6 +209,8 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             setCheckName(checkName);
             setCheckType(checkType);
             setCheckDisplayName(checkDisplayName);
+            setTableComparison(tableComparison);
+
         }};
         return singleModel;
     }

@@ -1,7 +1,7 @@
 **column count match** checks  
 
 **Description**  
-Table level comparison check compares the row count of the current (parent) table to the column count in the reference table.
+Table level comparison check compares the column count of the current (parent) table to the column count in the reference table.
 
 ___
 
@@ -10,9 +10,9 @@ ___
 **Check description**  
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|profile_column_count_match|profiling| |[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|profile_column_count_match|profiling| |Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -30,13 +30,13 @@ dqo> check run -c=connection_name -ch=profile_column_count_match
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=profile_column_count_match
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_count_match
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_column_count_match
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_count_match
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   profiling_checks:
     comparisons:
@@ -49,7 +49,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=profile_col
           fatal:
             max_diff_percent: 5.0
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="22-31"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -100,6 +102,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -113,9 +120,9 @@ ___
 **Check description**  
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|daily_column_count_match|monitoring|daily|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|daily_column_count_match|monitoring|daily|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -133,13 +140,13 @@ dqo> check run -c=connection_name -ch=daily_column_count_match
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=daily_column_count_match
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_count_match
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_column_count_match
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_count_match
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     daily:
@@ -153,7 +160,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=daily_colum
             fatal:
               max_diff_percent: 5.0
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -205,6 +214,11 @@ spec:
 
 ```
 
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
+
 
 
 
@@ -218,9 +232,9 @@ ___
 **Check description**  
 Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.  
   
-|Check name|Check type|Time scale|Sensor definition|Quality rule|
-|----------|----------|----------|-----------|-------------|
-|monthly_column_count_match|monitoring|monthly|[column_count](../../../../reference/sensors/Table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
+|Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
+|----------|----------|----------|-----------------|-----------------|------------|
+|monthly_column_count_match|monitoring|monthly|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -238,13 +252,13 @@ dqo> check run -c=connection_name -ch=monthly_column_count_match
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -ch=monthly_column_count_match
+dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_count_match
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_column_count_match
+dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_count_match
 ```
-**Check structure (Yaml)**
+**Check structure (YAML)**
 ```yaml
   monitoring_checks:
     monthly:
@@ -258,7 +272,9 @@ dqo> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_col
             fatal:
               max_diff_percent: 5.0
 ```
-**Sample configuration (Yaml)**  
+**Sample configuration (YAML)**  
+The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
+  
 ```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -309,6 +325,11 @@ spec:
         for the table comparison
 
 ```
+
+Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
+[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[sensor](../../../dqo-concepts/sensors/sensors.md).
+
 
 
 

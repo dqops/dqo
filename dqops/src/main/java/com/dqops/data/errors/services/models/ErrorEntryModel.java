@@ -66,4 +66,7 @@ public class ErrorEntryModel {
     String errorSource;
     @JsonPropertyDescription("Error timestamp.")
     LocalDateTime errorTimestamp;
+
+    @JsonPropertyDescription("Table comparison name")
+    String tableComparison;
 }

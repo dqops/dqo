@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
 import { useHistory, useLocation, useParams, useRouteMatch } from "react-router-dom";
@@ -8,10 +8,11 @@ import { IRootState } from "../../redux/reducers";
 import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 import { TabOption } from "../PageTabs/tab";
 import qs from "query-string";
-import axios from 'axios';
+
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
 import { checkIfTabCouldExist } from '../../utils';
+import { useTree } from '../../contexts/treeContext';
 
 interface ConnectionLayoutProps {
   children: any;
@@ -19,7 +20,7 @@ interface ConnectionLayoutProps {
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-
+  const { objectNotFound, setObjectNotFound } = useTree()
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
 
   const dispatch= useDispatch();
@@ -27,10 +28,8 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const location = useLocation();
   const match = useRouteMatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [objectNotFound, setObjectNotFound] = useState(false)
 
   const handleChange = (tab: TabOption) => {
-    console.log("here")
     dispatch(setActiveFirstLevelTab(checkTypes, tab.value));
     if (tab.url && tab.url !== location.pathname) {
       history.push(tab.url);
@@ -61,15 +60,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
     }
   }, [activeTab]);
 
-axios.interceptors.response.use(undefined, function (error) {
-  const statusCode = error.response ? error.response.status : null;
-  if (statusCode === 404 ) {
-    console.log(error)
-    setObjectNotFound(true)
-  }
-  return Promise.reject(error);
-});
-
   return (
     <MainLayout>
       <div className="h-full flex flex-col">
@@ -95,7 +85,7 @@ axios.interceptors.response.use(undefined, function (error) {
       onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
+      message='The definition of this object was deleted in DQOps user home. The tab will be closed.'/>
     </MainLayout>
     
   );

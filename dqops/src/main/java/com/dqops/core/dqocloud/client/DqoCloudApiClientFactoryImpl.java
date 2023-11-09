@@ -21,6 +21,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * DQOps Cloud API client factory.
@@ -29,17 +30,21 @@ import org.springframework.stereotype.Component;
 public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private RestTemplate restTemplate;
 
     /**
      * Default injection constructor.
      * @param dqoCloudConfigurationProperties DQOps Cloud configuration properties.
-     * @param dqoCloudApiKeyProvider DQOps CLoud api key provider.
+     * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
+     * @param restTemplate Rest template instance.
      */
     @Autowired
     public DqoCloudApiClientFactoryImpl(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
-                                        DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+                                        DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                        RestTemplate restTemplate) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.restTemplate = restTemplate;
     }
 
     /**
@@ -47,7 +52,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
      * @return Unauthenticated client.
      */
     public ApiClient createUnauthenticatedClient() {
-        ApiClient apiClient = new ApiClient();
+        ApiClient apiClient = new ApiClient(this.restTemplate);
         apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
         return apiClient;
     }
@@ -57,7 +62,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
      * @return Authenticated client.
      */
     public ApiClient createAuthenticatedClient() {
-        ApiClient apiClient = new ApiClient();
+        ApiClient apiClient = new ApiClient(this.restTemplate);
         apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         apiClient.setApiKey(apiKey.getApiKeyToken());

@@ -30,11 +30,11 @@ const pageTabs = [
     value: CheckRunMonitoringScheduleGroup.monitoring_monthly
   },
   {
-    label: 'Partitioned Daily',
+    label: 'Partition Daily',
     value: CheckRunMonitoringScheduleGroup.partitioned_daily
   },
   {
-    label: 'Partitioned Monthly',
+    label: 'Partition Monthly',
     value: CheckRunMonitoringScheduleGroup.partitioned_monthly
   },
 ]
@@ -90,7 +90,6 @@ const ScheduleDetail = () => {
     setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
     dispatch(resetTableSchedulingGroup(checkTypes, firstLevelActiveTab));
   }, [checkTypes, firstLevelActiveTab])
-
   return (
     <div className="py-4 px-8">
       <ActionGroup
@@ -101,7 +100,7 @@ const ScheduleDetail = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
       </div>
-      <ScheduleView handleChange={handleChange} schedule={updatedSchedule}/>
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
     </div>
   );
 };

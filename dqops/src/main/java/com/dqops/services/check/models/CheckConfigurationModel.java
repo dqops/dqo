@@ -81,7 +81,7 @@ public class CheckConfigurationModel {
     /**
      * Check timescale (for monitoring and partitioned checks).
      */
-    @JsonPropertyDescription("Category to which this check belongs.")
+    @JsonPropertyDescription("Check timescale (for monitoring and partitioned checks).")
     private CheckTimeScale checkTimeScale;
 
     /**

@@ -17,9 +17,14 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.execution.rules.runners.python.PythonRuleRunner;
-import com.dqops.metadata.definitions.rules.*;
+import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
+import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
+import com.dqops.metadata.definitions.rules.RuleRunnerType;
+import com.dqops.metadata.definitions.rules.RuleTimeWindowMode;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -81,6 +86,14 @@ public class RuleModel {
     private boolean canEdit;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Default constructor for RuleModel.
      */
     public RuleModel() {
@@ -97,15 +110,17 @@ public class RuleModel {
     public RuleModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn, boolean canEdit) {
         this.ruleName = ruleDefinitionWrapper.getRuleName();
         this.rulePythonModuleContent = ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent();
-        this.type = ruleDefinitionWrapper.getSpec().getType();
-        this.javaClassName = ruleDefinitionWrapper.getSpec().getJavaClassName();
-        this.mode = ruleDefinitionWrapper.getSpec().getMode();
-        this.timeWindow = ruleDefinitionWrapper.getSpec().getTimeWindow();
-        this.fields = ruleDefinitionWrapper.getSpec().getFields();
-        this.parameters = ruleDefinitionWrapper.getSpec().getParameters();
+        RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionWrapper.getSpec();
+        this.type = ruleDefinitionSpec.getType();
+        this.javaClassName = ruleDefinitionSpec.getJavaClassName();
+        this.mode = ruleDefinitionSpec.getMode();
+        this.timeWindow = ruleDefinitionSpec.getTimeWindow();
+        this.fields = ruleDefinitionSpec.getFields();
+        this.parameters = ruleDefinitionSpec.getParameters();
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
+        this.yamlParsingError = ruleDefinitionSpec.getYamlParsingError();
     }
 
     /**
@@ -135,7 +150,7 @@ public class RuleModel {
             return false;
         }
 
-        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getParameters() == null, parameters)) {
+        if (!Objects.equals(ruleDefinitionWrapper.getSpec().getParameters(), parameters)) {
             return false;
         }
 
@@ -173,5 +188,15 @@ public class RuleModel {
      */
     public FileContent makePythonModuleFileContent() {
         return new FileContent(rulePythonModuleContent);
+    }
+
+    public static class RuleModelSampleFactory implements SampleValueFactory<RuleModel> {
+        @Override
+        public RuleModel createSample() {
+            return new RuleModel() {{
+                setRuleName(SampleStringsRegistry.getRuleName());
+                setCanEdit(true);
+            }};
+        }
     }
 }

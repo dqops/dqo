@@ -63,6 +63,9 @@ class TableListModel:
             statistics.
         can_run_checks (Union[Unset, bool]): Boolean flag that decides if the current user can run checks.
         can_delete_data (Union[Unset, bool]): Boolean flag that decides if the current user can delete data (results).
+        yaml_parsing_error (Union[Unset, str]): Optional parsing error that was captured when parsing the YAML file.
+            This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing
+            error message and the file location.
     """
 
     connection_name: Union[Unset, str] = UNSET
@@ -91,6 +94,7 @@ class TableListModel:
     can_collect_statistics: Union[Unset, bool] = UNSET
     can_run_checks: Union[Unset, bool] = UNSET
     can_delete_data: Union[Unset, bool] = UNSET
+    yaml_parsing_error: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -155,6 +159,7 @@ class TableListModel:
         can_collect_statistics = self.can_collect_statistics
         can_run_checks = self.can_run_checks
         can_delete_data = self.can_delete_data
+        yaml_parsing_error = self.yaml_parsing_error
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -225,6 +230,8 @@ class TableListModel:
             field_dict["can_run_checks"] = can_run_checks
         if can_delete_data is not UNSET:
             field_dict["can_delete_data"] = can_delete_data
+        if yaml_parsing_error is not UNSET:
+            field_dict["yaml_parsing_error"] = yaml_parsing_error
 
         return field_dict
 
@@ -368,6 +375,8 @@ class TableListModel:
 
         can_delete_data = d.pop("can_delete_data", UNSET)
 
+        yaml_parsing_error = d.pop("yaml_parsing_error", UNSET)
+
         table_list_model = cls(
             connection_name=connection_name,
             table_hash=table_hash,
@@ -393,6 +402,7 @@ class TableListModel:
             can_collect_statistics=can_collect_statistics,
             can_run_checks=can_run_checks,
             can_delete_data=can_delete_data,
+            yaml_parsing_error=yaml_parsing_error,
         )
 
         table_list_model.additional_properties = d

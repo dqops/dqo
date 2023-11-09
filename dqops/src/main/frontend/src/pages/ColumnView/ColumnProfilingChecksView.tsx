@@ -27,6 +27,7 @@ import { useParams } from 'react-router-dom';
 import Tabs from '../../components/Tabs';
 import ColumnStatisticsView from './ColumnStatisticsView';
 import { useHistory } from 'react-router-dom';
+import { IRootState } from '../../redux/reducers';
 
 const tabs = [
   {
@@ -56,6 +57,9 @@ const ColumnProfilingChecksView = ({
   const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
     getFirstLevelState(checkTypes)
   );
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
@@ -64,6 +68,10 @@ const ColumnProfilingChecksView = ({
   const [activeTab, setActiveTab] = useState('statistics');
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
+  const [jobId, setJobId] = useState<number>();
+  const job = jobId ? job_dictionary_state[jobId] : undefined;
+  const [collectedStatisticsIndicator, setCollectedSatisticsIndicator] = useState(false)
+
   const history = useHistory();
 
   const getCheckOverview = () => {
@@ -154,15 +162,23 @@ const ColumnProfilingChecksView = ({
   const onCollectStatistics = async () => {
     try {
       setLoadingJob(true);
-      await JobApiClient.collectStatisticsOnTable(
+      const res = await JobApiClient.collectStatisticsOnTable(
+        undefined,
         false,
         undefined,
         statistics?.collect_column_statistics_job_template
       );
+      setJobId(res.data.jobId?.jobId)
     } finally {
       setLoadingJob(false);
     }
   };
+
+  useEffect(() => {
+    if(job && job.status === "succeeded") {
+      setCollectedSatisticsIndicator((prevState) => !prevState)
+    }
+  },[job_dictionary_state])
 
   const onChangeTab = (tab: string) => {
     history.push(
@@ -177,7 +193,7 @@ const ColumnProfilingChecksView = ({
     );
     setActiveTab(tab);
   };
-    console.log(tabs)
+
   return (
     <div className="flex flex-col overflow-x-auto overflow-y-hidden"
     >
@@ -191,7 +207,7 @@ const ColumnProfilingChecksView = ({
         runningStatistics={loadingJob}
       />
       <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
-      {activeTab === 'statistics' && <ColumnStatisticsView />}
+      {activeTab === 'statistics' && <ColumnStatisticsView statisticsCollectedIndicator={collectedStatisticsIndicator}/>}
       {activeTab === 'advanced' && (
         <DataQualityChecks
           onUpdate={onUpdate}

@@ -23,7 +23,6 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -122,8 +121,8 @@ public class TableServiceImpl implements TableService {
         }
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnectionName(connectionName);
-        checkSearchFilters.setSchemaTableName(tableName.toTableSearchFilter());
+        checkSearchFilters.setConnection(connectionName);
+        checkSearchFilters.setFullTableName(tableName.toTableSearchFilter());
         checkSearchFilters.setCheckType(checkType);
         checkSearchFilters.setTimeScale(checkTimeScale);
         // Filtering by checkTarget has to be done apart from these filters.
@@ -174,9 +173,9 @@ public class TableServiceImpl implements TableService {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
         filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(physicalTableName.toTableSearchFilter());
-        filters.setColumnName(columnNamePattern);
+        filters.setConnection(connectionName);
+        filters.setFullTableName(physicalTableName.toTableSearchFilter());
+        filters.setColumn(columnNamePattern);
         filters.setColumnDataType(columnDataType);
         filters.setCheckTarget(checkTarget);
         filters.setCheckCategory(checkCategory);
@@ -234,8 +233,8 @@ public class TableServiceImpl implements TableService {
                 tableWrapper.markForDeletion();
 
                 DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                    setConnectionName(connectionName);
-                    setSchemaTableName(tableName.toTableSearchFilter());
+                    setConnection(connectionName);
+                    setFullTableName(tableName.toTableSearchFilter());
                     setDeleteStatistics(true);
                     setDeleteCheckResults(true);
                     setDeleteSensorReadouts(true);

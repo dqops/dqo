@@ -62,8 +62,8 @@ import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -362,11 +362,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
     /**
      * Accepts a settings specific specification.
      *
-     * @param settingsSpec Settings specific configuration.
+     * @param localSettingsSpec Settings specific configuration.
      * @param parameter    Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(SettingsSpec settingsSpec, P parameter);
+    R accept(LocalSettingsSpec localSettingsSpec, P parameter);
 
     /**
      * Accepts a file index list.
@@ -574,11 +574,11 @@ public interface HierarchyNodeResultVisitor<P, R> {
 
     /**
      * Accepts a container of schedules, divided by the time range.
-     * @param monitoringSchedulesSpec Container of schedule categories.
+     * @param defaultSchedulesSpec Container of schedule categories.
      * @param parameter              Additional visitor's parameter.
      * @return Accept's result.
      */
-    R accept(MonitoringSchedulesSpec monitoringSchedulesSpec, P parameter);
+    R accept(DefaultSchedulesSpec defaultSchedulesSpec, P parameter);
 
     /**
      * Accepts a configuration of incremental partition checks.

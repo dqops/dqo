@@ -83,8 +83,8 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
 
         CheckResultsFragmentFilter deleteFilter = new CheckResultsFragmentFilter();
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setConnectionName("perftestdelete");
-        tableSearchFilters.setSchemaTableName("perfschema.perftest");
+        tableSearchFilters.setConnection("perftestdelete");
+        tableSearchFilters.setFullTableName("perfschema.perftest");
         deleteFilter.setTableSearchFilters(tableSearchFilters);
         deleteFilter.setDateStart(monthDate);
         deleteFilter.setDateEnd(monthDate.plusMonths(1));

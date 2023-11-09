@@ -205,7 +205,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
 
         TextColumn scopeColumn = TextColumn.create(StatisticsColumnNames.SCOPE_COLUMN_NAME, resultRowCount);
         if (sensorRunParameters.getColumn() != null) {
-            scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? StatisticsDataScope.data_groupings.name() : StatisticsDataScope.table.name());
+            scopeColumn.setMissingTo(sensorRunParameters.getDataGroupings() != null ? StatisticsDataScope.data_group.name() : StatisticsDataScope.table.name());
         }
         normalizedResults.addColumns(scopeColumn);
 

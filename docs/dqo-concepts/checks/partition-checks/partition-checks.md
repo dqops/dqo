@@ -1,6 +1,6 @@
 # Partition checks
 
-In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
+In DQOps, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
 Partition checks are designed to measure the data quality in partitioned data. In contrast to [monitoring checks](../monitoring-checks/monitoring-checks.md),
@@ -65,19 +65,20 @@ To run a partition check, you need to select a column that serves as the time pa
 ## Setting up date or datetime column name
 In order to enable time partition check, set a column that contains date, datetime or timestamp. 
 
-1. Go to the **Data Sources** section.
+1.  Go to the **Data Sources** section.
 
-2. Select the table of interest from the tree view.
+2.  Select the table of interest from the tree view.
 
-3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime
-   column name for partition checks" input field.
+3.  Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime
+    column name for partition checks" input field.
 
-   ![Checking results](https://dqops.com/docs/images/run-data-quality-checks/working-with-dqo/date-or-datetime-column-configuration-for-partion-checks.jpg)
+    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
 
-4. Click the Save button in the upper right corner.
+4.  Click the Save button in the upper right corner.
+
 
 ## Checks configuration in the YAML file
-Partition data quality checks, like other data quality checks in DQO, are defined as YAML files.
+Partition data quality checks, like other data quality checks in DQOps, are defined as YAML files.
 
 Below is an example of the YAML file showing sample configuration of a daily and monthly partition column data quality check
 nulls_percent.
@@ -91,13 +92,13 @@ nulls_percent.
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
-        partitioned_checks_timestamp_source: event_timestamp
+        partition_by_column: event_timestamp
       columns:
         target_column:
-          partition_checks:
+          partitioned_checks:
             daily:
               nulls:
-                daily_partition_checks_nulls_percent:
+                daily_partition_nulls_percent:
                   warning:
                     max_percent: 1.0
                   error:
@@ -116,13 +117,13 @@ nulls_percent.
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
-        partitioned_checks_timestamp_source: event_timestamp
+        partition_by_column: event_timestamp
       columns:
         target_column:
-          partotion_checks:
+          partotioned_checks:
             monthly:
               nulls:
-                monthly_partition_checks_nulls_percent:
+                monthly_partition_nulls_percent:
                   warning:
                     max_percent: 1.0
                   error:

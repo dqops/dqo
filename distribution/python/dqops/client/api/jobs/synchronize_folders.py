@@ -17,12 +17,15 @@ from ...types import UNSET, Response, Unset
 def _get_kwargs(
     *,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
     params: Dict[str, Any] = {}
+    params["jobBusinessKey"] = job_business_key
+
     params["wait"] = wait
 
     params["waitTimeout"] = wait_timeout
@@ -69,6 +72,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[SynchronizeMultipleFoldersQueueJobResult]:
@@ -79,6 +83,7 @@ def sync_detailed(
     files, download new files from the cloud).
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (SynchronizeMultipleFoldersDqoQueueJobParameters):
@@ -93,6 +98,7 @@ def sync_detailed(
 
     kwargs = _get_kwargs(
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     )
@@ -108,6 +114,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[SynchronizeMultipleFoldersQueueJobResult]:
@@ -118,6 +125,7 @@ def sync(
     files, download new files from the cloud).
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (SynchronizeMultipleFoldersDqoQueueJobParameters):
@@ -133,6 +141,7 @@ def sync(
     return sync_detailed(
         client=client,
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     ).parsed
@@ -142,6 +151,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Response[SynchronizeMultipleFoldersQueueJobResult]:
@@ -152,6 +162,7 @@ async def asyncio_detailed(
     files, download new files from the cloud).
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (SynchronizeMultipleFoldersDqoQueueJobParameters):
@@ -166,6 +177,7 @@ async def asyncio_detailed(
 
     kwargs = _get_kwargs(
         json_body=json_body,
+        job_business_key=job_business_key,
         wait=wait,
         wait_timeout=wait_timeout,
     )
@@ -179,6 +191,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     json_body: SynchronizeMultipleFoldersDqoQueueJobParameters,
+    job_business_key: Union[Unset, None, str] = UNSET,
     wait: Union[Unset, None, bool] = UNSET,
     wait_timeout: Union[Unset, None, int] = UNSET,
 ) -> Optional[SynchronizeMultipleFoldersQueueJobResult]:
@@ -189,6 +202,7 @@ async def asyncio(
     files, download new files from the cloud).
 
     Args:
+        job_business_key (Union[Unset, None, str]):
         wait (Union[Unset, None, bool]):
         wait_timeout (Union[Unset, None, int]):
         json_body (SynchronizeMultipleFoldersDqoQueueJobParameters):
@@ -205,6 +219,7 @@ async def asyncio(
         await asyncio_detailed(
             client=client,
             json_body=json_body,
+            job_business_key=job_business_key,
             wait=wait,
             wait_timeout=wait_timeout,
         )

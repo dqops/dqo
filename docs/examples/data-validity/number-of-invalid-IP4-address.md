@@ -27,7 +27,7 @@ If the number of IP4 address values exceed 0, a warning alert will be triggered.
 
 ## Data structure
 
-The following is a fragment of the `DQO` dataset. Some columns were omitted for clarity.  
+The following is a fragment of the `DQOps` dataset. Some columns were omitted for clarity.  
 The `ip4` column of interest contains both valid and invalid IP4 address values.
 
 | ip4                 | result | date      |
@@ -51,11 +51,11 @@ The `ip4` column of interest contains both valid and invalid IP4 address values.
 | 150.238.182.105     | 1      | 1/11/2023 |
 | 233.227.62.33       | 1      | 1/11/2023 |
 
-## Running the checks in the example and evaluating the results using the graphical interface
+## Running the checks in the example and evaluating the results using the user interface
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-ip4-address-count-checks.png)
 
@@ -98,7 +98,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
     ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results.png)
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
@@ -111,7 +111,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
@@ -255,4 +255,4 @@ Results returned by the sensor:
 - For details on the [string_invalid_ip4_address_count check used in this example, go to the check details section](../../checks/column/strings/string-invalid-ip4-address-count.md).
 - You might be interested in another validity check that [evaluates that the percentage of negative values in a column does not exceed the maximum accepted percentage](../data-validity/percentage-of-negative-values.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../working-with-dqo/incidents-and-notifications/notifications.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../integrations/webhooks/index.md).

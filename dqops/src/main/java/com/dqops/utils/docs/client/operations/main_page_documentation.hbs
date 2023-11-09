@@ -1,0 +1,13 @@
+# operations
+
+**This is a list of the operations in DQOps REST API Python client broken down by individual controllers.**
+
+{{#each controllerOperations}}
+## {{superiorClassSimpleName}}{{#with "  "}}{{.}}{{/with}}
+{{superiorDescription}}{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+|&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|----------------|------|---------------------------------|
+{{#each operationObjects}}|[{{operationPythonName}}](./{{superiorClassSimpleName}}/#{{operationPythonName}})|{{apiCallMethod}}|{{operationDescription}}|
+{{/each}}
+{{/each}}

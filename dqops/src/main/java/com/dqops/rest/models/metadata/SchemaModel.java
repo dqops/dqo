@@ -109,35 +109,35 @@ public class SchemaModel {
             setCanDeleteData(isOperator);
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setConnection(connectionName);
+                setFullTableName(schemaName + ".*");
                 setEnabled(true);
             }});
             setImportTableJobParameters(new ImportTablesQueueJobParameters()
@@ -148,7 +148,7 @@ public class SchemaModel {
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(schemaName + ".*");
+                setFullTableName(schemaName + ".*");
 
                 setDateStart(null);
                 setDateEnd(null);

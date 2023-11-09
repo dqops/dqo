@@ -163,7 +163,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.REPAIR_STORED_DATA;
+        return DqoJobType.repair_stored_data;
     }
 
     /**

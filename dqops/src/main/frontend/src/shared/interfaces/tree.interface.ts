@@ -31,4 +31,5 @@ export interface CustomTreeNode extends TreeNode {
   category?: string;
 
   configured?: boolean;
+  parsingYamlError?: string; 
 }

@@ -13,12 +13,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from '../../shared/routes';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
-import {
-  TimeWindowFilterParameters,
-  RunChecksParameters
-} from '../../api';
+import { TimeWindowFilterParameters, RunChecksParameters } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
+import {
+  addFirstLevelTab,
+  setActiveFirstLevelTab
+} from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 
@@ -76,10 +76,11 @@ const ContextMenu = ({
 
   const importMetaData = () => {
     dispatch(
-      setActiveFirstLevelTab(
-        checkTypes,
-        ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label)
-      )
+      addFirstLevelTab(checkTypes, {
+        url: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
+        value: ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, node.label),
+        label: `${node.label}`
+      })
     );
     history.push(
       `${ROUTES.CONNECTION_DETAIL(
@@ -132,7 +133,11 @@ const ContextMenu = ({
             checkTypes !== 'partitioned' && (
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={userProfile.can_run_checks=== true ? handleRunChecks : undefined}
+                onClick={
+                  userProfile.can_run_checks === true
+                    ? handleRunChecks
+                    : undefined
+                }
               >
                 Run checks
               </div>
@@ -176,7 +181,11 @@ const ContextMenu = ({
           ].includes(node.level) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={userProfile.can_collect_statistics=== true ? handleCollectStatisticsOnTable : undefined}
+              onClick={
+                userProfile.can_collect_statistics === true
+                  ? handleCollectStatisticsOnTable
+                  : undefined
+              }
             >
               Collect statistics
             </div>
@@ -184,7 +193,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={ userProfile.can_manage_data_sources === true ? importMetaData : undefined}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? importMetaData()
+                  : undefined;
+              }}
             >
               Import metadata
             </div>
@@ -192,7 +205,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources=== true ? openAddSchemaDialog(node) : undefined}}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? openAddSchemaDialog(node)
+                  : undefined;
+              }}
             >
               Add schema
             </div>
@@ -200,7 +217,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.SCHEMA && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={ userProfile.can_manage_data_sources=== true ? importTables : undefined}
+              onClick={
+                userProfile.can_manage_data_sources === true
+                  ? importTables
+                  : undefined
+              }
             >
               Import tables
             </div>
@@ -213,7 +234,7 @@ const ContextMenu = ({
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={copyToClipboard}
             >
-              Copy full name
+              Copy name
             </div>
           )}
           <div
@@ -225,7 +246,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources=== true ? openConfirm(node) : undefined}}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? openConfirm(node)
+                  : undefined;
+              }}
             >
               Delete connection
             </div>
@@ -233,7 +258,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.TABLE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources=== true ? openConfirm(node): undefined}}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? openConfirm(node)
+                  : undefined;
+              }}
             >
               Delete table
             </div>
@@ -241,7 +270,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.COLUMN && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources=== true ? openConfirm(node): undefined}}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? openConfirm(node)
+                  : undefined;
+              }}
             >
               Delete column
             </div>
@@ -249,7 +282,11 @@ const ContextMenu = ({
           {node.level === TREE_LEVEL.SCHEMA && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources=== true ? openAddTableDialog(node): undefined}}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? openAddTableDialog(node)
+                  : undefined;
+              }}
             >
               Add table
             </div>
@@ -258,7 +295,11 @@ const ContextMenu = ({
             node.level === TREE_LEVEL.COLUMN) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={() =>{userProfile.can_manage_data_sources=== true ?openAddColumnDialog(node): undefined}}
+              onClick={() => {
+                userProfile.can_manage_data_sources === true
+                  ? openAddColumnDialog(node)
+                  : undefined;
+              }}
             >
               Add column
             </div>
@@ -269,7 +310,11 @@ const ContextMenu = ({
             <>
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() =>{userProfile.can_delete_data ? setDeleteDataDialogOpened(true): undefined}}
+                onClick={() => {
+                  userProfile.can_delete_data
+                    ? setDeleteDataDialogOpened(true)
+                    : undefined;
+                }}
               >
                 Delete data
               </div>
@@ -282,7 +327,6 @@ const ContextMenu = ({
                   setOpen(false);
                 }}
                 nodeId={String(node.id)}
-
               />
             </>
           )}
@@ -291,7 +335,11 @@ const ContextMenu = ({
             <>
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={() => {userProfile.can_delete_data ? setDeleteDataDialogOpened(true): undefined}}
+                onClick={() => {
+                  userProfile.can_delete_data
+                    ? setDeleteDataDialogOpened(true)
+                    : undefined;
+                }}
               >
                 Delete data
               </div>
@@ -304,13 +352,13 @@ const ContextMenu = ({
                   deleteStoredData(
                     node,
                     params,
-                    node.run_checks_job_template?.columnName && [
-                      node.run_checks_job_template?.columnName
+                    node.run_checks_job_template?.column && [
+                      node.run_checks_job_template?.column
                     ]
                   );
                   setOpen(false);
                 }}
-                nameOfCol={node.run_checks_job_template?.columnName}
+                nameOfCol={node.run_checks_job_template?.column}
                 nodeId={String(node.id)}
               />
             </>

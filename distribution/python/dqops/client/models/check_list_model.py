@@ -10,7 +10,7 @@ T = TypeVar("T", bound="CheckListModel")
 
 @_attrs_define
 class CheckListModel:
-    """Simplistic model that returns a single data quality check, it's name and "configured" flag
+    """Simplistic model that returns a single data quality check, its name and "configured" flag
 
     Attributes:
         check_category (Union[Unset, str]): Check category.

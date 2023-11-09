@@ -105,7 +105,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             connectionWrapper.markForDeletion();
 
             DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setDeleteStatistics(true);
                 setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);

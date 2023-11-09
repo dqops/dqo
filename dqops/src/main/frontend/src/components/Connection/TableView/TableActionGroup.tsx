@@ -8,6 +8,7 @@ import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 
 import {
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
@@ -81,6 +82,7 @@ const TableActionGroup = ({
       try {
         setLoadingJob(true);
         await JobApiClient.collectStatisticsOnTable(
+          undefined,
           false,
           undefined,
           {
@@ -94,11 +96,11 @@ const TableActionGroup = ({
 
   const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
     (x) =>
-      x.jobType === 'collect statistics' &&
+      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
       x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.schemaTableName ===
+        ?.statistics_collector_search_filters?.fullTableName ===
         schema + '.' + table && 
-         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connectionName === 
+         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connection === 
         connection &&
       (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
         x.status === DqoJobHistoryEntryModelStatusEnum.queued ||

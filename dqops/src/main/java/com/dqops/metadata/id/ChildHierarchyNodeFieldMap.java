@@ -51,6 +51,15 @@ public interface ChildHierarchyNodeFieldMap {
     void propagateHierarchyIdToChildren(HierarchyNode node, HierarchyId newHierarchyId);
 
     /**
+     * Assigns a parent hierarchy ID on all child nodes, skipping the <code>ignoredChild</code> node.
+     *
+     * @param node Hierarchy node whose Hierarchy ID was recently changed and should be propagated to all children.
+     * @param newHierarchyId New hierarchy ID on the node.
+     * @param ignoredChild The child node name to ignore.
+     */
+    void propagateHierarchyIdToChildrenExcept(HierarchyNode node, HierarchyId newHierarchyId, String ignoredChild);
+
+    /**
      * Returns an interator over entries in teh field map.
      * @return Iteratable of entries.
      */

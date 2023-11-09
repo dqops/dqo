@@ -29,6 +29,7 @@ import {
   setAdvisorJobId
 } from '../../redux/actions/job.actions';
 import { Tooltip } from '@material-tailwind/react';
+import { DqoJobChangeModelStatusEnum, DqoJobHistoryEntryModelJobTypeEnum } from '../../api';
 
 const Header = () => {
   const history = useHistory();
@@ -165,17 +166,18 @@ const Header = () => {
 
   const onCloseAdvisor = () => {
     dispatch(toggleAdvisor(false));
+    dispatch(setAdvisorJobId(0))
   };
 
   useEffect(() => {
     if (
       Object.values(job_dictionary_state)
-        .filter((x) => x.jobType === 'import selected tables')
+        .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables)
         .find(
           (y) =>
-            y.status === 'queued' ||
-            y.status === 'waiting' ||
-            y.status === 'running'
+            y.status === DqoJobChangeModelStatusEnum.queued ||
+            y.status === DqoJobChangeModelStatusEnum.waiting ||
+            y.status === DqoJobChangeModelStatusEnum.running
         )
     ) {
       dispatch(
@@ -185,12 +187,12 @@ const Header = () => {
               (key) =>
                 job_dictionary_state[key] ===
                 Object.values(job_dictionary_state)
-                  .filter((x) => x.jobType === 'import selected tables')
+                  .filter((x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables)
                   ?.find(
                     (y) =>
-                      y.status === 'queued' ||
-                      y.status === 'waiting' ||
-                      y.status === 'running'
+                    y.status === DqoJobChangeModelStatusEnum.queued ||
+                    y.status === DqoJobChangeModelStatusEnum.waiting ||
+                    y.status === DqoJobChangeModelStatusEnum.running
                   )
             )
           )
@@ -199,7 +201,7 @@ const Header = () => {
       dispatch(
         setAdvisorObject(
           Object.values(job_dictionary_state).find(
-            (x) => x.jobType === 'import selected tables'
+            (x) => x.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables
           )?.parameters?.importTableParameters ?? {}
         )
       );
@@ -209,9 +211,8 @@ const Header = () => {
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
-      job_dictionary_state[advisorJobId].status === 'succeeded'
+      job_dictionary_state[advisorJobId].status === DqoJobChangeModelStatusEnum.succeeded
     ) {
-      dispatch(setAdvisorJobId(0));
       dispatch(toggleAdvisor(true));
     }
   }, [advisorObject]);

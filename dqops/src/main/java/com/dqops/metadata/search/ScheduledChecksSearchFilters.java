@@ -17,14 +17,19 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 /**
  * Hierarchy node search filters used to find all check nodes that match exactly a schedule (by a cron expression)
  * or have no schedule at all, so they are just collected.
  */
 public class ScheduledChecksSearchFilters {
+    @JsonPropertyDescription("Boolean flag to search only for enabled rules or only disabled checks. The default value is *true*.")
     private Boolean enabled = true;
+
     private MonitoringScheduleSpec schedule;
+
     private CheckRunScheduleGroup scheduleGroup;
 
     /**

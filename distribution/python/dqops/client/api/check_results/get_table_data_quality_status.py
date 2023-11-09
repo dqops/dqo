@@ -6,8 +6,9 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_time_scale import CheckTimeScale
-from ...models.check_type import CheckType
-from ...models.table_data_quality_status_model import TableDataQualityStatusModel
+from ...models.table_current_data_quality_status_model import (
+    TableCurrentDataQualityStatusModel,
+)
 from ...types import UNSET, Response, Unset
 
 
@@ -17,25 +18,45 @@ def _get_kwargs(
     table_name: str,
     *,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
     params: Dict[str, Any] = {}
     params["months"] = months
 
-    json_check_type: Union[Unset, None, str] = UNSET
-    if not isinstance(check_type, Unset):
-        json_check_type = check_type.value if check_type else None
+    params["since"] = since
 
-    params["checkType"] = json_check_type
+    params["profiling"] = profiling
+
+    params["monitoring"] = monitoring
+
+    params["partitioned"] = partitioned
 
     json_check_time_scale: Union[Unset, None, str] = UNSET
     if not isinstance(check_time_scale, Unset):
         json_check_time_scale = check_time_scale.value if check_time_scale else None
 
     params["checkTimeScale"] = json_check_time_scale
+
+    params["dataGroup"] = data_group
+
+    params["checkName"] = check_name
+
+    params["category"] = category
+
+    params["tableComparison"] = table_comparison
+
+    params["qualityDimension"] = quality_dimension
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -52,9 +73,9 @@ def _get_kwargs(
 
 def _parse_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Optional[TableDataQualityStatusModel]:
+) -> Optional[TableCurrentDataQualityStatusModel]:
     if response.status_code == HTTPStatus.OK:
-        response_200 = TableDataQualityStatusModel.from_dict(response.json())
+        response_200 = TableCurrentDataQualityStatusModel.from_dict(response.json())
 
         return response_200
     if client.raise_on_unexpected_status:
@@ -65,7 +86,7 @@ def _parse_response(
 
 def _build_response(
     *, client: Union[AuthenticatedClient, Client], response: httpx.Response
-) -> Response[TableDataQualityStatusModel]:
+) -> Response[TableCurrentDataQualityStatusModel]:
     return Response(
         status_code=HTTPStatus(response.status_code),
         content=response.content,
@@ -81,9 +102,17 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
-) -> Response[TableDataQualityStatusModel]:
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
+) -> Response[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -97,15 +126,23 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        since (Union[Unset, None, int]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TableDataQualityStatusModel]
+        Response[TableCurrentDataQualityStatusModel]
     """
 
     kwargs = _get_kwargs(
@@ -113,8 +150,16 @@ def sync_detailed(
         schema_name=schema_name,
         table_name=table_name,
         months=months,
-        check_type=check_type,
+        since=since,
+        profiling=profiling,
+        monitoring=monitoring,
+        partitioned=partitioned,
         check_time_scale=check_time_scale,
+        data_group=data_group,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        quality_dimension=quality_dimension,
     )
 
     response = client.get_httpx_client().request(
@@ -131,9 +176,17 @@ def sync(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
-) -> Optional[TableDataQualityStatusModel]:
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
+) -> Optional[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -147,15 +200,23 @@ def sync(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        since (Union[Unset, None, int]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TableDataQualityStatusModel
+        TableCurrentDataQualityStatusModel
     """
 
     return sync_detailed(
@@ -164,8 +225,16 @@ def sync(
         table_name=table_name,
         client=client,
         months=months,
-        check_type=check_type,
+        since=since,
+        profiling=profiling,
+        monitoring=monitoring,
+        partitioned=partitioned,
         check_time_scale=check_time_scale,
+        data_group=data_group,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        quality_dimension=quality_dimension,
     ).parsed
 
 
@@ -176,9 +245,17 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
-) -> Response[TableDataQualityStatusModel]:
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
+) -> Response[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -192,15 +269,23 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        since (Union[Unset, None, int]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        Response[TableDataQualityStatusModel]
+        Response[TableCurrentDataQualityStatusModel]
     """
 
     kwargs = _get_kwargs(
@@ -208,8 +293,16 @@ async def asyncio_detailed(
         schema_name=schema_name,
         table_name=table_name,
         months=months,
-        check_type=check_type,
+        since=since,
+        profiling=profiling,
+        monitoring=monitoring,
+        partitioned=partitioned,
         check_time_scale=check_time_scale,
+        data_group=data_group,
+        check_name=check_name,
+        category=category,
+        table_comparison=table_comparison,
+        quality_dimension=quality_dimension,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -224,9 +317,17 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    check_type: Union[Unset, None, CheckType] = UNSET,
+    since: Union[Unset, None, int] = UNSET,
+    profiling: Union[Unset, None, bool] = UNSET,
+    monitoring: Union[Unset, None, bool] = UNSET,
+    partitioned: Union[Unset, None, bool] = UNSET,
     check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
-) -> Optional[TableDataQualityStatusModel]:
+    data_group: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
+    category: Union[Unset, None, str] = UNSET,
+    table_comparison: Union[Unset, None, str] = UNSET,
+    quality_dimension: Union[Unset, None, str] = UNSET,
+) -> Optional[TableCurrentDataQualityStatusModel]:
     """getTableDataQualityStatus
 
      Read the most recent results of executed data quality checks on the table and return the current
@@ -240,15 +341,23 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        check_type (Union[Unset, None, CheckType]):
+        since (Union[Unset, None, int]):
+        profiling (Union[Unset, None, bool]):
+        monitoring (Union[Unset, None, bool]):
+        partitioned (Union[Unset, None, bool]):
         check_time_scale (Union[Unset, None, CheckTimeScale]):
+        data_group (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
+        category (Union[Unset, None, str]):
+        table_comparison (Union[Unset, None, str]):
+        quality_dimension (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
         httpx.TimeoutException: If the request takes longer than Client.timeout.
 
     Returns:
-        TableDataQualityStatusModel
+        TableCurrentDataQualityStatusModel
     """
 
     return (
@@ -258,7 +367,15 @@ async def asyncio(
             table_name=table_name,
             client=client,
             months=months,
-            check_type=check_type,
+            since=since,
+            profiling=profiling,
+            monitoring=monitoring,
+            partitioned=partitioned,
             check_time_scale=check_time_scale,
+            data_group=data_group,
+            check_name=check_name,
+            category=category,
+            table_comparison=table_comparison,
+            quality_dimension=quality_dimension,
         )
     ).parsed

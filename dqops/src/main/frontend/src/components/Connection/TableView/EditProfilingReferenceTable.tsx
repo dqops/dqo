@@ -16,7 +16,9 @@ import {
   TableComparisonResultsModel,
   DqoJobHistoryEntryModelStatusEnum,
   QualityCategoryModel,
-  ComparisonCheckResultModel
+  ComparisonCheckResultModel,
+  CheckSearchFiltersCheckTypeEnum,
+  CheckContainerModel
 } from '../../../api';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
 import Checkbox from '../../Checkbox';
@@ -28,7 +30,6 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
 } from '../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -36,6 +37,8 @@ import clsx from 'clsx';
 import ResultPanel from './ResultPanel';
 import EditReferenceTable from './EditReferenceTable';
 import useConnectionSchemaTableExists from '../../../hooks/useConnectionSchemaTableExists';
+import { setUpdatedChecksModel } from '../../../redux/actions/table.actions';
+import { Tooltip } from '@material-tailwind/react';
 
 type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -48,9 +51,13 @@ type EditProfilingReferenceTableProps = {
   onChangeSelectedReference: (arg: string) => void;
   listOfExistingReferences: Array<string | undefined>;
   canUserCompareTables?: boolean;
+  checksUI: any;
+  onUpdateChecks: () => void;
 };
 
-type TParameters = {refConnection?: string, refSchema?: string, refTable?: string}
+type TParameters = {name?: string, refConnection?: string, refSchema?: string, refTable?: string}
+
+type TSeverityValues = Partial<{warning: number, error: number, fatal: number}>
 
 const itemsToRender = [
   {
@@ -89,7 +96,9 @@ export const EditProfilingReferenceTable = ({
   getNewTableComparison,
   onChangeSelectedReference,
   listOfExistingReferences,
-  canUserCompareTables
+  canUserCompareTables,
+  checksUI,
+  onUpdateChecks
 }: EditProfilingReferenceTableProps) => {
   const [isUpdated, setIsUpdated] = useState(false);
   const {
@@ -105,13 +114,7 @@ export const EditProfilingReferenceTable = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const {
-    checksUI,
-    dailyMonitoring,
-    monthlyMonitoring,
-    dailyPartitionedChecks,
-    monthlyPartitionedChecks
-  } = useSelector(getFirstLevelState(checkTypes));
+  const { tabs: pageTabs } = useSelector((state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]);
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [showColumnCount, setShowColumnCount] = useState(false)
@@ -129,6 +132,7 @@ export const EditProfilingReferenceTable = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [parameters, setParameters] = useState<TParameters>({})
+  const [tableChecksToUpdate, setTableChecksToUpdate] = useState<any>(checksUI)
 
   const onChangeParameters = (obj:  Partial<TParameters>) => {
     setParameters((prevState) => ({
@@ -136,7 +140,6 @@ export const EditProfilingReferenceTable = ({
       ...obj
     }))
   }
-
 
   const { tableExist, schemaExist, connectionExist } =
     useConnectionSchemaTableExists(
@@ -154,21 +157,10 @@ export const EditProfilingReferenceTable = ({
   };
   const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
-    if (checkTypes === CheckTypes.PROFILING) {
-      values = Object.values(checksUI);
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
-      if (timePartitioned === 'daily') {
-        values = Object.values(dailyPartitionedChecks ?? {});
-      } else {
-        values = Object.values(monthlyPartitionedChecks ?? {});
-      }
-    } else if (checkTypes === CheckTypes.MONITORING) {
-      if (timePartitioned === 'daily') {
-        values = Object.values(dailyMonitoring ?? {});
-      } else {
-        values = Object.values(monthlyMonitoring ?? {});
-      }
+       if (!checksUI) {
+      return;
     }
+      values = Object.values(checksUI);
 
     if (values.length === 0 || !Array.isArray(values[0])) {
       return;
@@ -179,7 +171,7 @@ export const EditProfilingReferenceTable = ({
     if (!comparisonCategory || !comparisonCategory.checks) {
       return;
     }
-
+    
     const rowCountElem = comparisonCategory.checks.find(
       (c: any) =>
         c.check_name === 'profile_row_count_match' ||
@@ -201,6 +193,57 @@ export const EditProfilingReferenceTable = ({
       setShowColumnCount(!!columnCountElem.configured)
     }
   };
+
+  const handleChange = async (value: CheckContainerModel) => {
+    return new Promise<void>((resolve) => {
+      dispatch(setUpdatedChecksModel(checkTypes, firstLevelActiveTab, value));
+      resolve();
+    }).then(() => {
+      onUpdateChecks();
+    });
+  };
+ 
+  const onUpdateChecksUI = (type : 'row' | 'column', disabled?: boolean, severity?: TSeverityValues) => {
+    const copiedChecks = {...tableChecksToUpdate}
+    let checks;
+    if (copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? ''))) {
+       checks = copiedChecks.categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+    } else {
+      checks = (pageTabs.find((item) => item.value === firstLevelActiveTab)?.state.checksUI as any)
+      .categories.find((item : any) => String(item.category).includes((selectedReference ? selectedReference : parameters.name) ?? '')).checks
+    }
+      let selectedCheck;
+      if (type === 'row') {
+        selectedCheck = checks.find((item : any) => String(item.check_name).includes("row"))
+      } else {
+        selectedCheck = checks.find((item : any) => String(item.check_name).includes("column"))
+    }
+    if (disabled !== undefined) {
+      selectedCheck.configured = disabled;
+      if (type === 'row') {
+        setShowRowCount(disabled)
+      } else {
+        setShowColumnCount(disabled)
+      }
+    }
+    if (severity) {
+      if (severity.warning) {
+        selectedCheck.rule.warning.rule_parameters[0].double_value = severity.warning;
+        selectedCheck.rule.warning.configured = true;
+      } 
+      if (severity.error) {
+        selectedCheck.rule.error.rule_parameters[0].double_value = severity.error;
+        selectedCheck.rule.error.configured = true;
+      } 
+      if (severity.fatal) {
+        selectedCheck.rule.fatal.rule_parameters[0].double_value = severity.fatal;
+        selectedCheck.rule.fatal.configured = true;
+      } 
+    }
+    
+    setTableChecksToUpdate(copiedChecks as CheckContainerModel)
+  }
+  
 
   useEffect(() => {
     if (selectedReference) {
@@ -390,6 +433,7 @@ export const EditProfilingReferenceTable = ({
         }
       }
     }
+    handleChange(tableChecksToUpdate as CheckContainerModel)
   };
 
   const onChange = (obj: Partial<TableComparisonModel>): void => {
@@ -487,13 +531,13 @@ export const EditProfilingReferenceTable = ({
     try {
       setLoading(true);
       const res = await JobApiClient.runChecks(
+        undefined,
         false,
         undefined,
-        categoryCheck?.run_checks_job_template
-          ? {
-              check_search_filters: categoryCheck?.run_checks_job_template
-            }
-          : undefined
+        { check_search_filters: categoryCheck ? categoryCheck?.run_checks_job_template : 
+        { connection: connection, fullTableName: schema + "." + table,
+         tableComparisonName: reference?.table_comparison_configuration_name, enabled: true,
+         checkCategory: 'comparisons', checkType: checkTypes as CheckSearchFiltersCheckTypeEnum }} 
       );
       dispatch(
         setCurrentJobId(
@@ -529,7 +573,7 @@ export const EditProfilingReferenceTable = ({
       tableComparisonResults?.column_comparison_results ?? {};
 
     if (Object.keys(columnComparisonResults).find((x) => x === nameOfColumn)) {
-      return columnComparisonResults[nameOfColumn] ?? [];
+      return columnComparisonResults[nameOfColumn].column_comparison_results as {[key: string]: ComparisonCheckResultModel} ?? {};
     } else {
       return {};
     }
@@ -538,7 +582,7 @@ export const EditProfilingReferenceTable = ({
   const calculateColor = (
     nameOfCol: string,
     nameOfCheck: string,
-    bool?: boolean
+    type?: 'row_count' | 'column_count' 
   ): string => {
     let newNameOfCheck = '';
     if (checkTypes === CheckTypes.PROFILING) {
@@ -552,34 +596,22 @@ export const EditProfilingReferenceTable = ({
     }
 
     let colorVar = getComparisonResults(nameOfCol)[newNameOfCheck];
-    if (
-      bool &&
-      tableComparisonResults?.table_comparison_results &&
-      tableComparisonResults
-    ) {
-      const comparisonResult = Object.values(
-        tableComparisonResults.table_comparison_results
-      )?.at(0);
-      if (comparisonResult) {
-        colorVar = comparisonResult;
-      }
+    if (type && tableComparisonResults && tableComparisonResults.table_comparison_results) {
+      if (type === 'row_count') {
+        colorVar = Object.values(tableComparisonResults.table_comparison_results)?.at(0) ?? {}
+      } 
+      else if (type === 'column_count') {
+        colorVar = Object.values(tableComparisonResults.table_comparison_results)?.at(1) ?? {}
+      } 
     }
 
-    if (colorVar && colorVar.fatals && Number(colorVar.fatals) !== 0) {
+    if (colorVar?.fatals && Number(colorVar.fatals) !== 0) {
       return 'bg-red-200';
-    } else if (colorVar && colorVar.errors && Number(colorVar.errors) !== 0) {
+    } else if (colorVar?.errors && Number(colorVar.errors) !== 0) {
       return 'bg-orange-200';
-    } else if (
-      colorVar &&
-      colorVar.warnings &&
-      Number(colorVar.warnings) !== 0
-    ) {
+    } else if (colorVar?.warnings && Number(colorVar.warnings) !== 0) {
       return 'bg-yellow-200';
-    } else if (
-      colorVar &&
-      colorVar.valid_results &&
-      Number(colorVar.valid_results) !== 0
-    ) {
+    } else if (colorVar?.valid_results && Number(colorVar.valid_results) !== 0) {
       return 'bg-green-200';
     } else {
       return '';
@@ -640,6 +672,7 @@ export const EditProfilingReferenceTable = ({
           canUserCompareTables={canUserCompareTables}
           columnOptions = {{comparedColumnsOptions: comparedColumnOptions ?? [], referencedColumnsOptions: columnOptions }}
           onChangeParameters = { onChangeParameters }
+          onUpdateChecks={onUpdateChecks}
         />
       </div>
       {reference &&
@@ -669,7 +702,7 @@ export const EditProfilingReferenceTable = ({
                     <tr>
                       <th
                         className="text-left pr-4 py-1.5 flex items-center gap-x-2 font-normal"
-                        onClick={() => settableLevelComparisonExtended(!tableLevelComparisonExtended)}
+                        onClick={() => settableLevelComparisonExtended((prevState) => !prevState)}
                       >
                         {tableLevelComparisonExtended ? (
                           <SvgIcon name="chevron-down" className="w-5 h-5" />
@@ -681,30 +714,46 @@ export const EditProfilingReferenceTable = ({
                       <th className="text-left px-4 py-1.5"></th>
                       <th
                         className={clsx(
-                          'text-center px-0 py-4 pr-2 w-1/12 ',
-                          showRowCount ? calculateColor('', '', true) : ''
+                          'text-center px-0 py-4 pr-2 w-1/12 relative',
+                         calculateColor('', '', 'row_count')
                         )}
                       >
                         <Checkbox
                           checked={showRowCount}
                           onChange={(checked) => {
-                            setShowRowCount(checked);
+                            onUpdateChecksUI('row', checked);
                           }}
                         />{' '}
+                        {calculateColor('', '', 'row_count').length !== 0 && !showRowCount
+                               &&  <Tooltip
+                              content="Previous comparison results are present, delete the results before comparing the tables again"
+                              className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
+                              <div>
+                                <SvgIcon name='warning' className='w-5 h-5 absolute bottom-[10px] left-[6px]'/>
+                              </div>
+                        </Tooltip>}
                       </th>
                       <th
                         className={clsx(
-                          'text-center px-0 py-4 pr-2 w-1/12 ',
-                          showColumnCount && reference.supports_compare_column_count=== true ? calculateColor('', '', true) : ''
+                          'text-center px-0 py-4 pr-2 w-1/12 relative',
+                           reference.supports_compare_column_count=== true ? calculateColor('', '', 'column_count') : ''
                         )}
                       >
                         {reference.supports_compare_column_count===true ? 
                         <Checkbox
                           checked={showColumnCount}
                           onChange={(checked) => {
-                            setShowColumnCount(checked);
+                            onUpdateChecksUI('column', checked);
                           }}
                         /> : null }
+                        {calculateColor('', '', 'column_count').length !== 0 && !showColumnCount
+                               &&  <Tooltip
+                              content="Previous comparison results are present, delete the results before comparing the tables again"
+                              className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
+                              <div>
+                                <SvgIcon name='warning' className='w-5 h-5 absolute bottom-[10px] left-[6px]'/>
+                              </div>
+                        </Tooltip>}
                       </th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
                       <th className="text-center px-4 py-1.5 pr-1 w-1/12"></th>
@@ -719,39 +768,6 @@ export const EditProfilingReferenceTable = ({
                       <th>
                         {tableLevelComparisonExtended && (
                           <div className="flex flex-col w-full font-normal">
-                            {rowKey ? (
-                              <div className="gap-y-3">
-                                Results:
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Valid:</th>
-                                  {                               
-                                  tableComparisonResults?.table_comparison_results?.[rowKey ?? '']?.valid_results
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Errors:
-                                  </th>
-                                  {
-                                   tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.errors
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Fatal:</th>
-                                  {
-                                   tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.fatals
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Warning:
-                                  </th>
-                                  {
-                                    tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.warnings
-                                  }
-                                </td>
-                              </div>
-                            ) : null}
                             {showRowCount && (
                               <div className="flex flex-col pt-0 mt-0 w-full">
                                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
@@ -762,13 +778,14 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_row_count
                                         ?.warning_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareRowCount({
                                         warning_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
-                                    }
+                                      onUpdateChecksUI("row", undefined, {warning: Number(e.target.value)})
+                                    }}
                                   />
                                   %
                                 </div>
@@ -780,13 +797,14 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_row_count
                                         ?.error_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareRowCount({
                                         error_difference_percent: Number(
                                           e.target.value
-                                        )
+                                          )
                                       })
-                                    }
+                                      onUpdateChecksUI("row", undefined, {error: Number(e.target.value)})
+                                      }}
                                   />
                                   %
                                 </div>
@@ -798,58 +816,58 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_row_count
                                         ?.fatal_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareRowCount({
                                         fatal_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
+                                      onUpdateChecksUI("row", undefined, {fatal: Number(e.target.value)})}
                                     }
-                                  />
+                                    />
                                   %
                                 </div>
                               </div>
                             )}
+                        {rowKey ? (
+                          <div className="gap-y-3">
+                            Results:
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Valid:</th>
+                              {                               
+                              tableComparisonResults?.table_comparison_results?.[rowKey ?? '']?.valid_results
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Errors:
+                              </th>
+                              {
+                               tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.errors
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Fatal:</th>
+                              {
+                               tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.fatals
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Warning:
+                              </th>
+                              {
+                                tableComparisonResults?.table_comparison_results?.[rowKey ?? ""]?.warnings
+                              }
+                            </td>
+                          </div>
+                        ) : null}
                           </div>
                         )}
                       </th>
                       <th>
                         {(tableLevelComparisonExtended  && reference?.supports_compare_column_count===true) ? (
                           <div className="flex flex-col w-full font-normal">
-                            {columnKey ? 
-                              <div className="gap-y-3">
-                                Results:
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Valid:</th>
-                                  {
-                                   tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.valid_results
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Errors:
-                                  </th>
-                                  {
-                                    tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.errors
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">Fatal:</th>
-                                  {
-                                 tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.fatals
-                                  }
-                                </td>
-                                <td className="flex justify-between w-2/3 ">
-                                  <th className="text-xs font-light">
-                                    Warning:
-                                  </th>
-                                  {
-                                 tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.warnings
-                                  }
-                                </td>
-                              </div>
-                              : null
-                              }           
                             {showColumnCount && (
                               <div className="flex flex-col pt-0 mt-0 w-full">
                                 <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
@@ -860,12 +878,13 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_column_count
                                         ?.warning_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) =>{
                                       onChangeCompareColumnCount({
                                         warning_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
+                                      onUpdateChecksUI("column", undefined, {warning: Number(e.target.value)})}
                                     }
                                   />
                                   %
@@ -878,13 +897,13 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_column_count
                                         ?.error_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       onChangeCompareColumnCount({
                                         error_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
-                                    }
+                                    onUpdateChecksUI("column", undefined, {error: Number(e.target.value)})}}
                                   />
                                   %
                                 </div>
@@ -896,18 +915,53 @@ export const EditProfilingReferenceTable = ({
                                       reference?.compare_column_count
                                         ?.fatal_difference_percent
                                     }
-                                    onChange={(e) =>
+                                    onChange={(e) =>{
                                       onChangeCompareColumnCount({
                                         fatal_difference_percent: Number(
                                           e.target.value
                                         )
                                       })
+                                      onUpdateChecksUI("column", undefined, {fatal: Number(e.target.value)})}
                                     }
-                                  />
+                                    />
                                   %
                                 </div>
                               </div>
                             )}
+                        {columnKey ? 
+                          <div className="gap-y-3">
+                            Results:
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Valid:</th>
+                              {
+                               tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.valid_results
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Errors:
+                              </th>
+                              {
+                                tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.errors
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">Fatal:</th>
+                              {
+                             tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.fatals
+                              }
+                            </td>
+                            <td className="flex justify-between w-2/3 ">
+                              <th className="text-xs font-light">
+                                Warning:
+                              </th>
+                              {
+                             tableComparisonResults?.table_comparison_results?.[columnKey ?? ""]?.warnings
+                              }
+                            </td>
+                          </div>
+                          : null
+                          }           
                           </div>
                         ) : null}
                       </th>
@@ -976,7 +1030,7 @@ export const EditProfilingReferenceTable = ({
                           <td
                             key={jIndex}
                             className={clsx(
-                              'text-center px-4 py-1.5',
+                              'text-center px-4 py-1.5 relative',
                               calculateColor(
                                 item.compared_column_name ?? '',
                                 itemData.key
@@ -1023,6 +1077,26 @@ export const EditProfilingReferenceTable = ({
                                 )
                               }
                             />
+                            { calculateColor(
+                                item.compared_column_name ?? '',
+                                itemData.key
+                              ).length !== 0 && !(!!item[
+                                itemData.prop as keyof ColumnComparisonModel
+                              ] &&
+                              !(
+                                item.reference_column_name === undefined ||
+                                item.reference_column_name.length === 0 ||
+                                !columnOptions.find(
+                                  (x) =>
+                                    x.label === item.reference_column_name
+                                )
+                              )) &&  <Tooltip
+                              content="Previous comparison results are present, delete the results before comparing the tables again"
+                              className='pr-6 max-w-80 py-4 px-4 bg-gray-800'>
+                              <div>
+                                <SvgIcon name='warning' className='w-5 h-5 absolute bottom-[10px] left-[6px]'/>
+                              </div>
+                        </Tooltip>}
                           </td>
                         ))}
                       </tr>

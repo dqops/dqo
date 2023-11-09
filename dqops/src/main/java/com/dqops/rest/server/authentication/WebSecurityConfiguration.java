@@ -66,8 +66,9 @@ public class WebSecurityConfiguration {
         http.securityContextRepository(this.dqoServerSecurityContextRepository);
 
         http.authorizeExchange(customizer -> {
-            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.ISSUE_TOKEN_URL).permitAll();
-            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_URL).permitAll();
+            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.ISSUE_TOKEN_REQUEST_PATH).permitAll();
+            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.HEALTHCHECK_REQUEST_PATH).permitAll();
+            customizer.pathMatchers(AuthenticateWithDqoCloudWebFilter.MANIFEST_JSON_REQUEST_PATH).permitAll();
             customizer.pathMatchers("/**").hasAuthority(DqoPermissionNames.VIEW);
         });
 

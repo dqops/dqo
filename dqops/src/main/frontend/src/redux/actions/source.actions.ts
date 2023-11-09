@@ -68,6 +68,7 @@ export const setCheckResults = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
+  comparisonName: string,
   checkResults: CheckResultsListModel[]
 ) => ({
   type: SOURCE_ACTION.SET_CHECK_RESULTS,
@@ -75,7 +76,8 @@ export const setCheckResults = (
   activeTab,
   data: {
     checkName,
-    checkResults
+    checkResults,
+    comparisonName
   }
 });
 
@@ -83,6 +85,7 @@ export const setSensorReadouts = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
+  comparisonName: string,
   sensorReadouts: SensorReadoutsListModel[]
 ) => ({
   type: SOURCE_ACTION.SET_SENSOR_READOUTS,
@@ -90,7 +93,8 @@ export const setSensorReadouts = (
   activeTab,
   data: {
     checkName,
-    sensorReadouts
+    sensorReadouts,
+    comparisonName
   }
 });
 
@@ -98,6 +102,7 @@ export const setSensorErrors = (
   checkType: CheckTypes,
   activeTab: string,
   checkName: string,
+  comparisonName: string,
   errors: ErrorsListModel[]
 ) => {
   return {
@@ -106,7 +111,8 @@ export const setSensorErrors = (
     activeTab,
     data: {
       checkName,
-      sensorErrors: errors
+      sensorErrors: errors,
+      comparisonName
     }
   };
 };
@@ -308,21 +314,30 @@ export const getCheckResults =
     const successCallback = (
       res: AxiosResponse<CheckResultsListModel[]>
     ) => {
+      const checks = [...res.data]
+
+    if (checks && checks[0] && checks[0].checkResultEntries && comparisonName && comparisonName.length > 0) {
+      checks[0].checkResultEntries = checks[0].checkResultEntries.filter(entry => entry.tableComparison === comparisonName);
+    }
+    
+    const filteredChecks = checks.filter((item) => item.checkName === checkName)
+
       dispatch(
         getCheckResultsSuccess(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
-        )
-      );
-
+          filteredChecks ?? []
+          )
+          );
+          
       dispatch(
         setCheckResults(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
+          comparisonName ?? "",
+          filteredChecks ?? []
         )
       );
     };
@@ -505,16 +520,21 @@ export const getCheckReadouts =
     const successCallback = (
       res: AxiosResponse<SensorReadoutsListModel[]>
     ) => {
+      const sensors = [...res.data]
+
+      if (sensors && sensors[0] && sensors[0].sensorReadoutEntries && comparisonName && comparisonName.length > 0) {
+        sensors[0].sensorReadoutEntries = sensors[0].sensorReadoutEntries.filter(entry => entry.tableComparison === comparisonName);
+      }
+      
+      const filteredSensors = sensors.filter((item) => item.checkName === checkName)
+
       dispatch(
         setSensorReadouts(
           checkType,
           activeTab,
           checkName,
-          res.data.filter(
-            (item) =>
-              item.sensorReadoutEntries &&
-              item.sensorReadoutEntries[0]?.checkName === checkName
-          )
+          comparisonName ?? '',
+          filteredSensors ?? []
         )
       );
     };
@@ -689,12 +709,21 @@ export const getCheckErrors =
     dispatch(getCheckErrorsRequest(checkType, activeTab));
 
     const successCallback = (res: AxiosResponse<ErrorsListModel[]>) => {
+      const errors = [...res.data]
+
+      if (errors && errors[0] && errors[0].errorEntries && comparisonName && comparisonName.length > 0) {
+        errors[0].errorEntries = errors[0].errorEntries.filter((item) => item.tableComparison === comparisonName)
+      }
+
+      const filteredErrors = errors.filter((item) => item.checkName === checkName)
+
       dispatch(
         setSensorErrors(
           checkType,
           activeTab,
           checkName,
-          res.data.filter((item) => item.checkName === checkName)
+          comparisonName ?? '',
+          filteredErrors ?? []
         )
       );
     };

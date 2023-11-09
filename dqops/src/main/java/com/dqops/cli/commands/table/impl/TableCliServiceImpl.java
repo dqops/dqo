@@ -26,7 +26,6 @@ import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
@@ -225,8 +224,8 @@ public class TableCliServiceImpl implements TableCliService {
         UserHome userHome = userHomeContext.getUserHome();
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setConnectionName(connectionName);
-        tableSearchFilters.setSchemaTableName(tableName);
+        tableSearchFilters.setConnection(connectionName);
+        tableSearchFilters.setFullTableName(tableName);
         tableSearchFilters.setTags(dimensions);
         tableSearchFilters.setLabels(labels);
 
@@ -304,8 +303,8 @@ public class TableCliServiceImpl implements TableCliService {
         UserHome userHome = userHomeContext.getUserHome();
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setConnectionName(connectionName);
-        tableSearchFilters.setSchemaTableName(fullTableName);
+        tableSearchFilters.setConnection(connectionName);
+        tableSearchFilters.setFullTableName(fullTableName);
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
         HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);

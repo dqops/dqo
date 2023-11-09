@@ -19,7 +19,7 @@ import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.sensors.CustomSensorParametersSpec;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.dqops.utils.reflection.TargetClassSearchUtility;
@@ -48,17 +48,28 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderSensorDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome) {
+    public DocumentationFolder renderSensorDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder sensorsFolder = new DocumentationFolder();
         sensorsFolder.setFolderName("reference/sensors");
         sensorsFolder.setLinkName("Sensors");
         Path sensorsPath = Path.of("docs", "reference", "sensors");
         sensorsFolder.setDirectPath(projectRootPath.resolve("..").resolve(sensorsPath).toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
-
         List<SensorDocumentationModel> sensorDocumentationModels = createSensorDocumentationModels(projectRootPath);
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
+
+        MainPageSensorDocumentationModel mainPageSensorDocumentationModel = new MainPageSensorDocumentationModel();
+        mainPageSensorDocumentationModel.setSensors(sensorGroupedDocumentationModels);
+
+        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("sensors/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = sensorsFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageSensorDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageSensorDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
+
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
 
         for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
             Path sensorFilePath = Path.of(sensorGroupedDocumentation.getTarget(),

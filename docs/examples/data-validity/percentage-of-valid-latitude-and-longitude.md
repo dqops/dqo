@@ -27,7 +27,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -52,11 +52,11 @@ The `latitude` and `longitude` columns of interest contains valid values.
 | 14-00001652 | ARR Missed Yard Trimmings /Organics | PROVENCIAL                          | **30.28755755** | **-97.66188875** |
 | 14-00001654 | Parking Ticket Complaint            | 9TH                                 | **30.27091532** | **-97.7417791**  |
 
-## Running the checks in the example and evaluating the results using the graphical interface
+## Running the checks in the example and evaluating the results using the user interface
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks.png)
 
@@ -99,9 +99,9 @@ To execute the check prepared in the example using the [graphical interface](../
 
     ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results.png)
 
-7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
@@ -112,7 +112,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
@@ -155,7 +155,7 @@ In this example, we have set three maximum percentage thresholds levels for the 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_valid_latitude_percent` and
 `daily_valid_longitude_percent`checks are configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="12-39"
 apiVersion: dqo/v1
@@ -199,11 +199,11 @@ spec:
                 min_percent: 95.0
 ```
 
-## Running the checks in the example and evaluating the results using DQO Shell
+## Running the checks in the example and evaluating the results using DQOps Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example, run the following command in DQO Shell:
+To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
@@ -297,7 +297,7 @@ Results returned by the sensor:
 ```
 ## Next steps
 
-- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [valid_latitude_percent check used in this example, go to the check details section](../../checks/column/numeric/valid-latitude-percent.md).
 - For details on the [valid_longitude_percent check used in this example, go to the check details section](../../checks/column/numeric/valid-longitude-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage](../data-validity/percentage-of-valid-uuid.md).

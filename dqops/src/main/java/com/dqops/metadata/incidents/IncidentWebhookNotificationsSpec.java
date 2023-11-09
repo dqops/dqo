@@ -23,6 +23,10 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.InvalidYamlStatusHolder;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -41,7 +45,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = false)
-public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cloneable {
+public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cloneable, InvalidYamlStatusHolder {
     private static final ChildHierarchyNodeFieldMapImpl<IncidentWebhookNotificationsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
@@ -58,6 +62,29 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
 
     @JsonPropertyDescription("Webhook URL where the notification messages describing muted messages are pushed using a HTTP POST request. The format of the JSON message is documented in the IncidentNotificationMessage object.")
     private String incidentMutedWebhookUrl;
+
+    @JsonIgnore
+    private String yamlParsingError;
+
+    /**
+     * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
+     *
+     * @param yamlParsingError YAML parsing error.
+     */
+    @Override
+    public void setYamlParsingError(String yamlParsingError) {
+        this.yamlParsingError = yamlParsingError;
+    }
+
+    /**
+     * Returns the YAML parsing error that was captured.
+     *
+     * @return YAML parsing error.
+     */
+    @Override
+    public String getYamlParsingError() {
+        return this.yamlParsingError;
+    }
 
     /**
      * Returns the URL where notifications of new incidents are pushed using a HTTP POST request.
@@ -223,4 +250,15 @@ public class IncidentWebhookNotificationsSpec extends AbstractSpec implements Cl
         return clonedWebhooks;
     }
 
+    public static class IncidentWebhookNotificationsSpecSampleFactory implements SampleValueFactory<IncidentWebhookNotificationsSpec> {
+        @Override
+        public IncidentWebhookNotificationsSpec createSample() {
+            return new IncidentWebhookNotificationsSpec() {{
+                setIncidentOpenedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/opened");
+                setIncidentAcknowledgedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/acknowledged");
+                setIncidentResolvedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/resolved");
+                setIncidentMutedWebhookUrl(SampleStringsRegistry.getSampleUrl() + "/muted");
+            }};
+        }
+    }
 }

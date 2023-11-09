@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import {
   CheckSearchFilters,
   ColumnListModel,
@@ -99,6 +99,7 @@ function TreeProvider(props: any) {
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
+  const [objectNotFound, setObjectNotFound] = useState(false)
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
@@ -120,7 +121,8 @@ function TreeProvider(props: any) {
           ],
         collect_statistics_job_template: item.collect_statistics_job_template,
         data_clean_job_template: item.data_clean_job_template,
-        open: false
+        open: false,
+        parsingYamlError: item.yaml_parsing_error
       }));
       const treeDataMaps = [
         CheckTypes.MONITORING,
@@ -299,7 +301,8 @@ function TreeProvider(props: any) {
       collect_statistics_job_template: table.collect_statistics_job_template,
       data_clean_job_template: table.data_clean_job_template,
       open: false,
-      configured: table.partitioning_configuration_missing
+      configured: table.partitioning_configuration_missing,
+      parsingYamlError: table.yaml_parsing_error
     }));
     if (reset) {
       resetTreeData(node, items);
@@ -876,12 +879,12 @@ function TreeProvider(props: any) {
   };
 
   const runPartitionedChecks = async (obj: RunChecksParameters) => {
-    await JobApiClient.runChecks(false, undefined, obj);
+    await JobApiClient.runChecks(undefined, false, undefined, obj);
   };
 
   const runChecks = async (node: CustomTreeNode) => {
     if (node.run_checks_job_template) {
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: node.run_checks_job_template
       });
       return;
@@ -924,7 +927,7 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -936,7 +939,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -948,7 +951,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -960,7 +963,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -972,7 +975,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -985,7 +988,7 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         columnNode?.label ?? ''
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -998,7 +1001,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1011,7 +1014,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1024,7 +1027,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1037,7 +1040,7 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(false, undefined, {
+      JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: res.data.run_checks_job_template
       });
       return;
@@ -1047,6 +1050,7 @@ function TreeProvider(props: any) {
   const collectStatisticsOnTable = async (node: CustomTreeNode) => {
     if (node.collect_statistics_job_template) {
       JobApiClient.collectStatisticsOnTable(
+        undefined,
         false,
         undefined,
         node.collect_statistics_job_template
@@ -1079,7 +1083,7 @@ function TreeProvider(props: any) {
       if (colArr && colArr.length > 0) {
         node.data_clean_job_template.columnNames = colArr;
       }
-      JobApiClient.deleteStoredData(false,
+      JobApiClient.deleteStoredData(undefined, false,
         undefined,
         {
         ...node.data_clean_job_template,
@@ -1105,11 +1109,12 @@ function TreeProvider(props: any) {
           break;
       }
       JobApiClient.deleteStoredData(
+        undefined,
         false,
         undefined,
         {
-        connectionName: node.collect_statistics_job_template?.connectionName,
-        schemaTableName: node.collect_statistics_job_template?.schemaTableName,
+        connection: node.collect_statistics_job_template?.connection,
+        fullTableName: node.collect_statistics_job_template?.fullTableName,
         checkType,
         ...params
       });
@@ -1793,6 +1798,19 @@ function TreeProvider(props: any) {
 
     setTabMaps(newTabMaps);
   };
+  
+  axios.interceptors.response.use(undefined, function (error) {
+    const statusCode = error.response ? error.response.status : null;
+    if (statusCode === 401 || statusCode === 403) {
+      return; // handled elsewhere
+    }
+
+    if (statusCode === 404 ) {
+      console.log(error)
+      setObjectNotFound(true)
+    }
+    return Promise.reject(error);
+  });
 
   return (
     <TreeContext.Provider
@@ -1830,7 +1848,9 @@ function TreeProvider(props: any) {
         loadingNodes,
         addSchema,
         refreshDatabaseNode,
-        runPartitionedChecks
+        runPartitionedChecks,
+        objectNotFound,
+        setObjectNotFound
       }}
       {...props}
     />

@@ -21,6 +21,7 @@ import Tabs from '../../Tabs';
 import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
+  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
@@ -165,6 +166,7 @@ const ProfilingView = () => {
       )
     );
   };
+  
   const updateData2 = (nameOfDS: string): void => {
     setNameOfDataStream(nameOfDS);
   };
@@ -243,9 +245,9 @@ const ProfilingView = () => {
   useEffect(() => {
     setFilteredJob(Object.values(job_dictionary_state)?.find(
       (x) =>
-        x.jobType === 'collect statistics' &&
+        x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
         x.parameters?.collectStatisticsParameters
-          ?.statistics_collector_search_filters?.schemaTableName ===
+          ?.statistics_collector_search_filters?.fullTableName ===
           schemaName + '.' + tableName &&
         (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
           x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
@@ -304,6 +306,7 @@ const ProfilingView = () => {
         <TableReferenceComparisons
           checkTypes={checkTypes}
           checksUI={checksUI}
+          onUpdateChecks = {onUpdate}
         />
       )}
     </div>

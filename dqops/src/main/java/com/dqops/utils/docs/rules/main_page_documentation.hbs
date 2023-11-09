@@ -1,0 +1,12 @@
+# Rules
+
+**This is a list of the rules in DQOps broken down by category and a brief description of what they do.**
+
+{{#each rules}}
+### **{{category}}**{{#with "  "}}{{.}}{{/with}}
+
+| Rule name | Description |
+|-----------|-------------|
+{{#each ruleDocumentationModels}}|[{{ruleName}}](./{{capitalizeFirst category}}/#{{replace ruleName "_" "-"}})|{{single-line ruleParametersJavaDoc}}|
+{{/each}}
+{{/each}}

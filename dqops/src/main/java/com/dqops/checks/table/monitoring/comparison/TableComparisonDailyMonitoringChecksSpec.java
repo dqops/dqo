@@ -15,6 +15,8 @@
  */
 package com.dqops.checks.table.monitoring.comparison;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractTableComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.ComparisonCheckRules;
 import com.dqops.checks.comparison.TableCompareCheckType;
@@ -22,6 +24,7 @@ import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMa
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -160,5 +163,27 @@ public class TableComparisonDailyMonitoringChecksSpec extends AbstractTableCompa
     @Override
     public boolean supportsColumnComparisonCheck() {
         return true;
+    }
+
+    /**
+     * Gets the check type appropriate for all checks in this category.
+     *
+     * @return Corresponding check type.
+     */
+    @Override
+    @JsonIgnore
+    public CheckType getCheckType() {
+        return CheckType.monitoring;
+    }
+
+    /**
+     * Gets the check timescale appropriate for all checks in this category.
+     *
+     * @return Corresponding check timescale.
+     */
+    @Override
+    @JsonIgnore
+    public CheckTimeScale getCheckTimeScale() {
+        return CheckTimeScale.daily;
     }
 }

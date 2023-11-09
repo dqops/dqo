@@ -166,6 +166,7 @@ public class SensorsController {
             sensorModel.setFullSensorName(sensorDefinitionWrapper.getName());
             sensorModel.setSensorDefinitionSpec(sensorDefinitionWrapper.getSpec());
             sensorModel.setCustom(true);
+            sensorModel.setYamlParsingError(sensorDefinitionWrapper.getSpec().getYamlParsingError());
             List<ProviderSensorModel> providerSensorBasicModelList = sensorDefinitionWrapper.getProviderSensors()
                     .toList().stream()
                     .map(providerSensorWrapper -> new ProviderSensorModel(
@@ -439,9 +440,10 @@ public class SensorsController {
                     providerSensorListModel.setSensorSource(SensorDefinitionSource.BUILT_IN);
                     providerSensorListModel.setCanEdit(canEditDefinitions);
                     providerSensorListModelList.add(providerSensorListModel);
+
                 }
             }
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorListModelList, SensorDefinitionSource.BUILT_IN, canEditDefinitions);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorListModelList, SensorDefinitionSource.BUILT_IN, canEditDefinitions, sensorDefinitionWrapper.getSpec().getYamlParsingError());
         });
 
         userHome.getSensors().forEach(sensorDefinitionWrapper -> {
@@ -455,8 +457,7 @@ public class SensorsController {
                 }
                 providerSensorListModelList.add(providerSensorListModel);
             });
-
-            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorListModelList, SensorDefinitionSource.CUSTOM, canEditDefinitions);
+            sensorFolderModel.addSensor(sensorDefinitionWrapper.getName(), providerSensorListModelList, SensorDefinitionSource.CUSTOM, canEditDefinitions, sensorDefinitionWrapper.getSpec().getYamlParsingError());
         });
 
         return sensorFolderModel;
