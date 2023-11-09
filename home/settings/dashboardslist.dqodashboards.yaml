@@ -967,20 +967,21 @@ spec:
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: partitioned
-      - folder_name: Partition volume statistics
-        dashboards:
-          - dashboard_name: Daily partitions row count
-            url: https://lookerstudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
-            width: 1400
-            height: 2000
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-          - dashboard_name: Too small partitions
-            url: https://lookerstudio.google.com/embed/reporting/44394e69-6f83-4e16-a903-404418b2eddb/page/c5B8C
-            width: 1400
-            height: 2850
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
+
+    - folder_name: Partition volume statistics
+      dashboards:
+        - dashboard_name: Daily partitions row count
+          url: https://lookerstudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
+          width: 1400
+          height: 2000
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: Too small partitions
+          url: https://lookerstudio.google.com/embed/reporting/44394e69-6f83-4e16-a903-404418b2eddb/page/c5B8C
+          width: 1400
+          height: 2850
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
 
 - folder_name: DQOps usage
   folders:
