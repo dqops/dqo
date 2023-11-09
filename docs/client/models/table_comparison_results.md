@@ -29,7 +29,7 @@ The table comparison column results model with the information about the most re
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |column_name|Column name|string|
-|column_comparison_results|The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are check names. The values are summaries of the most recent comparison on this column.|Dict[string, [ComparisonCheckResultModel](../table_comparison_results/#comparisoncheckresultmodel)]|
+|column_comparison_results|The dictionary of comparison results between the tables for the specific column. The keys for the dictionary are check names. The values are summaries of the most recent comparison on this column.|Dict[string, [ComparisonCheckResultModel](../table_comparison_results/#ComparisonCheckResultModel)]|
 
 
 ___  
@@ -43,8 +43,8 @@ The table comparison results model with the summary information about the most r
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|table_comparison_results|The dictionary of comparison results between the tables for table level comparisons (e.g. row count). The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.|Dict[string, [ComparisonCheckResultModel](#comparisoncheckresultmodel)]|
-|column_comparison_results|The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.|Dict[string, [TableComparisonColumnResultsModel](#tablecomparisoncolumnresultsmodel)]|
+|table_comparison_results|The dictionary of comparison results between the tables for table level comparisons (e.g. row count). The keys for the dictionary are the check names. The value in the dictionary is a summary information about the most recent comparison.|Dict[string, [ComparisonCheckResultModel](#ComparisonCheckResultModel)]|
+|column_comparison_results|The dictionary of comparison results between the tables for each compared column. The keys for the dictionary are the column names. The values are dictionaries of the data quality check names and their results.|Dict[string, [TableComparisonColumnResultsModel](#TableComparisonColumnResultsModel)]|
 
 
 ___  

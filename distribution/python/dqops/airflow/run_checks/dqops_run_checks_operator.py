@@ -12,7 +12,9 @@ from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
     DqopsJobFailedException,
 )
 from dqops.airflow.common.tools.client_creator import create_client
-from dqops.airflow.common.tools.rule_severity_level_utility import get_severity_value_from_rule_severity
+from dqops.airflow.common.tools.rule_severity_level_utility import (
+    get_severity_value_from_rule_severity,
+)
 from dqops.airflow.common.tools.server_response_verifier import (
     verify_server_response_correctness,
 )
@@ -121,7 +123,9 @@ class DqopsRunChecksOperator(BaseOperator):
 
         if (
             job_result.result.highest_severity is not None
-            and get_severity_value_from_rule_severity(job_result.result.highest_severity)
+            and get_severity_value_from_rule_severity(
+                job_result.result.highest_severity
+            )
             >= get_severity_value_from_rule_severity(self.fail_at_severity)
             and job_result.status != DqoJobStatus.CANCELLED
         ):

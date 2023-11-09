@@ -20,7 +20,7 @@ http://localhost:8888/api/logs/debug
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping/#ExternalLogEntry)| |
 
 
 
@@ -57,7 +57,7 @@ http://localhost:8888/api/logs/error
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping/#ExternalLogEntry)| |
 
 
 
@@ -94,7 +94,7 @@ http://localhost:8888/api/logs/info
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping/#ExternalLogEntry)| |
 
 
 
@@ -131,7 +131,7 @@ http://localhost:8888/api/logs/warn
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping/#ExternalLogEntry)| |
 
 
 

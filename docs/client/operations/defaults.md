@@ -16,7 +16,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#checkcontainermodel)||[CheckContainerModel](../../models/#checkcontainermodel)|
+|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#checkcontainermodel)||[CheckContainerModel](../../models/#checkcontainermodel)|
+|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
 
 
 
@@ -84,7 +84,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#checkcontainermodel)||[CheckContainerModel](../../models/#checkcontainermodel)|
+|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
 
 
 
@@ -118,7 +118,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#checkcontainermodel)||[CheckContainerModel](../../models/#checkcontainermodel)|
+|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
 
 
 
@@ -152,7 +152,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#checkcontainermodel)||[CheckContainerModel](../../models/#checkcontainermodel)|
+|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
 
 
 
@@ -186,7 +186,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#checkcontainermodel)||[CheckContainerModel](../../models/#checkcontainermodel)|
+|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
 
 
 
@@ -220,7 +220,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/#monitoringschedulespec)|
+|[monitoring_schedule_spec](../../models/#MonitoringScheduleSpec)||[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)|
 
 
 
@@ -229,7 +229,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
 
 
 
@@ -261,7 +261,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_webhook_notifications_spec](../../../reference/yaml/connectionyaml/#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../../../reference/yaml/connectionyaml/#incidentwebhooknotificationsspec)|
+|[incident_webhook_notifications_spec](../../../reference/yaml/ConnectionYaml/#incidentwebhooknotificationsspec)||[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml/#incidentwebhooknotificationsspec)|
 
 
 
@@ -299,7 +299,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
 
 
 
@@ -336,7 +336,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
 
 
 
@@ -373,7 +373,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
 
 
 
@@ -410,7 +410,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/#checkcontainermodel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
 
 
 
@@ -447,7 +447,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
 
 
 
@@ -484,7 +484,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#checkcontainermodel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
 
 
 
@@ -519,7 +519,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#checkrunschedulegroup)|:material-check-bold:|
+|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
 
 
 
@@ -528,7 +528,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/#monitoringschedulespec)| |
+|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)| |
 
 
 
@@ -565,7 +565,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](../../../reference/yaml/connectionyaml/#incidentwebhooknotificationsspec)| |
+|Spec with default notification webhooks changes to be applied to the default configuration|[IncidentWebhookNotificationsSpec](../../../reference/yaml/ConnectionYaml/#incidentwebhooknotificationsspec)| |
 
 
 

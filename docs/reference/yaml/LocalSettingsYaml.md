@@ -18,7 +18,7 @@ DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqose
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../localsettingsyaml/#localsettingsspec)||[LocalSettingsSpec](../localsettingsyaml/#localsettingsspec)| | | |
+|[spec](../LocalSettingsYaml/#LocalSettingsSpec)||[LocalSettingsSpec](../LocalSettingsYaml/#LocalSettingsSpec)| | | |
 
 
 

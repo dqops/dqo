@@ -10,7 +10,8 @@ from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception
 )
 from dqops.airflow.common.tools.client_creator import create_client
 from dqops.airflow.common.tools.rule_severity_level_utility import (
-    get_severity_value_from_rule_severity, get_severity_value_from_check_result,
+    get_severity_value_from_check_result,
+    get_severity_value_from_rule_severity,
 )
 from dqops.airflow.common.tools.server_response_verifier import (
     verify_server_response_correctness,
@@ -152,8 +153,9 @@ class DqopsAssertTableStatusOperator(BaseOperator):
         )
         logging.info(table_dq_status.to_dict())
 
-        if get_severity_value_from_check_result(table_dq_status.highest_severity_level) >= \
-                get_severity_value_from_rule_severity(self.fail_at_severity):
+        if get_severity_value_from_check_result(
+            table_dq_status.highest_severity_level
+        ) >= get_severity_value_from_rule_severity(self.fail_at_severity):
             raise DqopsDataQualityIssueDetectedException()
 
         return table_dq_status.to_dict()
