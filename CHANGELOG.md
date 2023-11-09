@@ -1,8 +1,9 @@
-# 0.4.0 (under development)
+# 0.4.0
 * Data quality dashboards reorganized, layout unified
 * Python client and REST API documentation
 * Additional Airflow operators
 * Small bug fixes in the UI
+* DQOps concepts documentation
 
 # 0.3.0
 * Improvements for running DQOps as a cloud hosted SaaS platform
