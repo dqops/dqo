@@ -16,7 +16,10 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
+import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.models.CheckResultStatus;
+import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,20 +37,47 @@ import java.time.Instant;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "CheckCurrentDataQualityStatusModel", description = "The most recent data quality status for a single data quality check. " +
-          "If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.")
+          "If data grouping is enabled, the *current_severity* will be the highest data quality issue status from all data quality results for all data groups. " +
+          "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
 @Data
 public class CheckCurrentDataQualityStatusModel {
     /**
-     * The data quality issue severity for this data quality check.
+     * The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check,
+     * sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor's template or a Python rule.
+     * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */
-    @JsonPropertyDescription("The data quality issue severity for this data quality check.")
-    private CheckResultStatus severity;
+    @JsonPropertyDescription("The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check, " +
+            "sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor's template or a Python rule. " +
+            "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
+    private CheckResultStatus currentSeverity;
+
+    /**
+     * The highest severity of previous executions of this data quality issue in the analyzed time range.
+     * It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore.
+     * For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.
+     */
+    @JsonPropertyDescription("The highest severity of previous executions of this data quality issue in the analyzed time range. " +
+                             "It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. " +
+                             "For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.")
+    private RuleSeverityLevel highestHistoricalSeverity;
 
     /**
      * The UTC timestamp when the check was recently executed.
      */
     @JsonPropertyDescription("The UTC timestamp when the check was recently executed.")
     private Instant executedAt;
+
+    /**
+     * The check type: profiling, monitoring, partitioned.
+     */
+    @JsonPropertyDescription("The check type: profiling, monitoring, partitioned.")
+    private CheckType checkType;
+
+    /**
+     * The check time scale for *monitoring* and *partitioned* check types. The time scales are *daily* and *monthly*. The profiling checks do not have a time scale.
+     */
+    @JsonPropertyDescription("The check time scale for *monitoring* and *partitioned* check types. The time scales are *daily* and *monthly*. The profiling checks do not have a time scale.")
+    private CheckTimeScale timeScale;
 
     /**
      * Check category name.

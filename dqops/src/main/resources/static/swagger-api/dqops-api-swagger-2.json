@@ -15087,15 +15087,30 @@
     "CheckCurrentDataQualityStatusModel" : {
       "type" : "object",
       "properties" : {
-        "severity" : {
+        "current_severity" : {
           "type" : "string",
-          "description" : "The data quality issue severity for this data quality check.",
+          "description" : "The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor's template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
           "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+        },
+        "highest_historical_severity" : {
+          "type" : "string",
+          "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
+          "enum" : [ "valid", "warning", "error", "fatal" ]
         },
         "executed_at" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The UTC timestamp when the check was recently executed."
+        },
+        "check_type" : {
+          "type" : "string",
+          "description" : "The check type: profiling, monitoring, partitioned.",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
+        },
+        "time_scale" : {
+          "type" : "string",
+          "description" : "The check time scale for *monitoring* and *partitioned* check types. The time scales are *daily* and *monthly*. The profiling checks do not have a time scale.",
+          "enum" : [ "daily", "monthly" ]
         },
         "category" : {
           "type" : "string",
@@ -15106,7 +15121,7 @@
           "description" : "Data quality dimension, such as Completeness, Uniqueness, Validity."
         }
       },
-      "description" : "The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups."
+      "description" : "The most recent data quality status for a single data quality check. If data grouping is enabled, the *current_severity* will be the highest data quality issue status from all data quality results for all data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range."
     },
     "CheckDefinitionFolderModel" : {
       "type" : "object",

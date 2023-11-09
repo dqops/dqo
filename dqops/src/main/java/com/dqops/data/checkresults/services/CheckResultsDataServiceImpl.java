@@ -38,6 +38,7 @@ import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.rest.models.common.SortDirection;
+import com.dqops.rules.RuleSeverityLevel;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.datetime.LocalDateTimePeriodUtility;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
@@ -712,6 +713,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
         TextColumn qualityDimensionColumn = sourceTable.textColumn(CheckResultsColumnNames.QUALITY_DIMENSION_COLUMN_NAME);
         TextColumn columnNameColumn = sourceTable.textColumn(CheckResultsColumnNames.COLUMN_NAME_COLUMN_NAME);
         TextColumn checkTypeColumn = sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME);
+        TextColumn timeGradientColumn = sourceTable.textColumn(CheckResultsColumnNames.TIME_GRADIENT_COLUMN_NAME);
 
         int rowCount = sourceTable.rowCount();
 
@@ -764,14 +766,28 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
             if (checkCurrentStatusModel == null) {
                 String checkCategory = checkCategoryColumn.get(i);
                 String qualityDimension = qualityDimensionColumn.get(i);
+                String checkTypeString = checkTypeColumn.get(i);
+                String checkTimeGradientString = timeGradientColumn.get(i);
+
+                TimePeriodGradient timePeriodGradient = Strings.isNullOrEmpty(checkTimeGradientString) ? null :
+                        Enum.valueOf(TimePeriodGradient.class, checkTimeGradientString);
+                CheckTimeScale checkTimeScale = timePeriodGradient != null ? timePeriodGradient.toTimeScale() : null;
+
                 checkCurrentStatusModel = new CheckCurrentDataQualityStatusModel();
-                checkCurrentStatusModel.setCategory(checkCategory);
-                checkCurrentStatusModel.setQualityDimension(qualityDimension);
+                checkCurrentStatusModel.setCategory(Strings.isNullOrEmpty(checkCategory) ? null :checkCategory);
+                checkCurrentStatusModel.setQualityDimension(Strings.isNullOrEmpty(qualityDimension) ? null : qualityDimension);
+                checkCurrentStatusModel.setCheckType(Strings.isNullOrEmpty(checkTypeString) ? null : Enum.valueOf(CheckType.class, checkTypeString));
+                checkCurrentStatusModel.setTimeScale(checkTimeScale);
                 currentStatusHolder.getChecks().put(checkName, checkCurrentStatusModel);
             } else {
                 String checkTypeString = checkTypeColumn.get(i);
                 boolean isPartitionedCheck = Objects.equals(checkTypeString, CheckType.partitioned.getDisplayName());
                 if (!isPartitionedCheck && checkCurrentStatusModel.getExecutedAt().isAfter(executedAt)) {
+                    if (severity != 4 && (checkCurrentStatusModel.getHighestHistoricalSeverity() == null ||
+                            severity > checkCurrentStatusModel.getHighestHistoricalSeverity().getSeverity())) {
+                        checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
+                    }
+
                     continue;  // we have the current status, we are skipping... but we are including the status of all partitions, also if their results were collected earlier
                 }
             }
@@ -795,8 +811,13 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 }
             }
 
-            if (checkCurrentStatusModel.getSeverity() == null || severity > checkCurrentStatusModel.getSeverity().getSeverity()) {
-                checkCurrentStatusModel.setSeverity(CheckResultStatus.fromSeverity(severity));
+            if (checkCurrentStatusModel.getCurrentSeverity() == null || severity > checkCurrentStatusModel.getCurrentSeverity().getSeverity()) {
+                checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
+            }
+
+            if (severity != 4 && (checkCurrentStatusModel.getHighestHistoricalSeverity() == null ||
+                    severity > checkCurrentStatusModel.getHighestHistoricalSeverity().getSeverity())) {
+                checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
             }
         }
 
