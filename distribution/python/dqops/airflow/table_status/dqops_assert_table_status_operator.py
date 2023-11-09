@@ -156,6 +156,6 @@ class DqopsAssertTableStatusOperator(BaseOperator):
         if get_severity_value_from_check_result(
             table_dq_status.highest_severity_level
         ) >= get_severity_value_from_rule_severity(self.fail_at_severity):
-            raise DqopsDataQualityIssueDetectedException()
+            raise DqopsDataQualityIssueDetectedException(context["ti"], table_dq_status.to_dict())
 
         return table_dq_status.to_dict()
