@@ -31,9 +31,48 @@ Description of a single dashboard that is available in the platform.
 
 ___  
 
-## DashboardsFolderListSpec  
-List of dashboard folders.  
+## DashboardYaml  
+Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
   
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](../DashboardYaml/#DashboardsFolderListSpec)||[DashboardsFolderListSpec](../DashboardYaml/#DashboardsFolderListSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## DashboardListSpec  
+List of dashboards.  
+  
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -71,48 +110,9 @@ Description of a folder with multiple dashboards or other folders.
 
 ___  
 
-## DashboardListSpec  
-List of dashboards.  
+## DashboardsFolderListSpec  
+List of dashboard folders.  
   
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-___  
-
-## DashboardYaml  
-Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../DashboardYaml/#DashboardsFolderListSpec)||[DashboardsFolderListSpec](../DashboardYaml/#DashboardsFolderListSpec)| | | |
-
-
-
 
 
 
