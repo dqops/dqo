@@ -977,7 +977,7 @@ spec:
           - dashboard_name: Too small partitions
             url: https://lookerstudio.google.com/embed/reporting/44394e69-6f83-4e16-a903-404418b2eddb/page/c5B8C
             width: 1400
-            height: 2500
+            height: 2850
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
 
