@@ -386,9 +386,11 @@ nav:
         - sql column sensors: 'reference/sensors/column/sql-column-sensors.md'
         - strings column sensors: 'reference/sensors/column/strings-column-sensors.md'
         - uniqueness column sensors: 'reference/sensors/column/uniqueness-column-sensors.md'
+      - index: 'reference/sensors/index.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
     - Rules:
+      - index: 'reference/rules/index.md'
       - Averages: 'reference/rules/Averages.md'
       - Change: 'reference/rules/Change.md'
       - Comparison: 'reference/rules/Comparison.md'

@@ -23,6 +23,7 @@ import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -43,6 +44,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelpers(ConditionalHelpers.class);
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
+        handlebars.registerHelper("single-line", singleLineHelper);
     }
 
     /**
@@ -143,5 +145,13 @@ public class HandlebarsDocumentationUtilities {
         }
 
         return ":material-check-bold:";
+    };
+
+    private static final Helper<String> singleLineHelper = (s, _ignore) -> {
+        if (s == null) {
+            return null;
+        }
+
+        return s.replaceAll("\\s+", " ");
     };
 }

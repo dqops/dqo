@@ -1,44 +1,4 @@
 
-## DashboardsFolderSpec  
-Description of a folder with multiple dashboards or other folders.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|folder_name|Folder name|string| | | |
-|[dashboards](../DashboardYaml/#DashboardListSpec)|List of data quality dashboard at this level.|[DashboardListSpec](../DashboardYaml/#DashboardListSpec)| | | |
-|[folders](../DashboardYaml/#DashboardsFolderListSpec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](../DashboardYaml/#DashboardsFolderListSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DashboardsFolderListSpec  
-List of dashboard folders.  
-  
-
-
-
-
-
-
-___  
-
 ## DashboardSpec  
 Description of a single dashboard that is available in the platform.  
   
@@ -71,8 +31,19 @@ Description of a single dashboard that is available in the platform.
 
 ___  
 
-## DashboardYaml  
-Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
+## DashboardsFolderListSpec  
+List of dashboard folders.  
+  
+
+
+
+
+
+
+___  
+
+## DashboardsFolderSpec  
+Description of a folder with multiple dashboards or other folders.  
   
 
 
@@ -86,9 +57,9 @@ Data quality dashboard definition YAML schema for a data quality dashboards list
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../DashboardYaml/#DashboardsFolderListSpec)||[DashboardsFolderListSpec](../DashboardYaml/#DashboardsFolderListSpec)| | | |
+|folder_name|Folder name|string| | | |
+|[dashboards](../DashboardYaml/#DashboardListSpec)|List of data quality dashboard at this level.|[DashboardListSpec](../DashboardYaml/#DashboardListSpec)| | | |
+|[folders](../DashboardYaml/#DashboardsFolderListSpec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](../DashboardYaml/#DashboardsFolderListSpec)| | | |
 
 
 
@@ -110,6 +81,35 @@ List of dashboards.
 
 
 
+
+
+
+
+
+
+
+
+
+___  
+
+## DashboardYaml  
+Data quality dashboard definition YAML schema for a data quality dashboards list specification.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](../DashboardYaml/#DashboardsFolderListSpec)||[DashboardsFolderListSpec](../DashboardYaml/#DashboardsFolderListSpec)| | | |
 
 
 

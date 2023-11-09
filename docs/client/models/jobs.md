@@ -363,7 +363,7 @@ Parameters for the {@link ImportTablesQueueJob ImportTablesQueueJob} job that im
 |---------------|---------------------------------|-----------|
 |connection_name|Connection name|string|
 |schema_name|Schema name|string|
-|table_names|Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.|string_list|
+|table_names|Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.|List[string]|
 
 
 ___  
