@@ -9,7 +9,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{categoryName}}/#{{replace sensorName "_" "-"}})|{{sensorParametersJavaDoc}}|
+{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{category}}-table-sensors/#{{replace sensorName "_" "-"}})|{{single-line sensorParametersJavaDoc}}|
 {{/each}}
 {{else}}
 {{/if}}
@@ -22,7 +22,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{categoryName}}/#{{replace sensorName "_" "-"}})|{{sensorParametersJavaDoc}}|
+{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{category}}-column-sensors/#{{replace sensorName "_" "-"}})|{{single-line sensorParametersJavaDoc}}|
 {{/each}}
 {{else}}
 {{/if}}

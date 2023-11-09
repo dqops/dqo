@@ -7,6 +7,6 @@
 
 | Rule name | Description |
 |-----------|-------------|
-{{#each ruleDocumentationModels}}|[{{ruleName}}](./{{category}}/#{{replace ruleName "_" "-"}})|{{ruleParametersJavaDoc}}|
+{{#each ruleDocumentationModels}}|[{{ruleName}}](./{{capitalizeFirst category}}/#{{replace ruleName "_" "-"}})|{{single-line ruleParametersJavaDoc}}|
 {{/each}}
 {{/each}}
