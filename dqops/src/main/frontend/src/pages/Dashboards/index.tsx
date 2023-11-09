@@ -19,31 +19,39 @@ const Dashboards = () => {
     (state: IRootState) => state.dashboard
   );
 
-  const { objectNotFound, setObjectNotFound } = useTree()
+  const { objectNotFound, setObjectNotFound } = useTree();
 
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
-  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error, sidebarWidth } =
-    useDashboard();
+  const {
+    tabs,
+    activeTab,
+    setActiveTab,
+    closeTab,
+    openedDashboards,
+    error,
+    sidebarWidth
+  } = useDashboard();
 
   useEffect(() => {
     dispatch(getAllDashboards());
   }, []);
 
   const [isTooltipVisible, setIsTooltipVisible] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null); 
-  
+  const [imageWidth, setImageWidth] = useState(1);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
   const showTooltip = () => {
     setIsTooltipVisible(true);
 
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-  
+
     timerRef.current = setTimeout(() => {
       setIsTooltipVisible(false);
     }, 3000);
   };
-  
+
   useEffect(() => {
     if (dashboardTooltipState.label) {
       showTooltip();
@@ -53,7 +61,8 @@ const Dashboards = () => {
         timerRef.current = null;
       }
     }
-    
+    setImageWidth(1);
+
     return () => {
       if (timerRef.current) {
         clearTimeout(timerRef.current);
@@ -118,20 +127,31 @@ const Dashboards = () => {
             );
           })}
         </div>
-        {(dashboardTooltipState.height && isTooltipVisible) ? 
-        <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}
-          style={{left: `${sidebarWidth}px`, top: `${dashboardTooltipState.height}px`}}>
-              {dashboardTooltipState.label}
-                <img
-                alt=""
-                src={`${dashboardTooltipState.url}/thumbnail`}
-                style={{ display: "block"}}
-                className='pt-2 max-h-100 max-w-100'
-                loading='eager'
-                />
-              </div> 
-        : null 
-        }
+        {dashboardTooltipState.height &&
+        isTooltipVisible &&
+        imageWidth < 400 ? (
+          <div
+            className={clsx(
+              'py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal'
+            )}
+            style={{
+              left: `${sidebarWidth}px`,
+              top: `${dashboardTooltipState.height}px`
+            }}
+          >
+            {dashboardTooltipState.label}
+            <img
+              alt=""
+              src={`${dashboardTooltipState.url}/thumbnail`}
+              style={{ display: 'block' }}
+              className="pt-2 max-h-100 max-w-100"
+              loading="eager"
+              onLoad={(e) =>
+                setImageWidth((e.target as HTMLImageElement).width)
+              }
+            />
+          </div>
+        ) : null}
         {isLicenseFree && (
           <div
             className="z-40 text-red-500 bg-white bg-opacity-50"
@@ -145,11 +165,18 @@ const Dashboards = () => {
         )}
       </div>
       <ConfirmDialog
-      open={objectNotFound}
-      onConfirm={() => new Promise(() => {closeTab(activeTab), setObjectNotFound(false)})}
-      isCancelExcluded={true} 
-      onClose={() => {closeTab(activeTab), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQOps user home. The tab will be closed.'/>
+        open={objectNotFound}
+        onConfirm={() =>
+          new Promise(() => {
+            closeTab(activeTab), setObjectNotFound(false);
+          })
+        }
+        isCancelExcluded={true}
+        onClose={() => {
+          closeTab(activeTab), setObjectNotFound(false);
+        }}
+        message="The definition of this object was deleted in DQOps user home. The tab will be closed."
+      />
     </DashboardLayout>
   );
 };
