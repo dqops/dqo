@@ -36,6 +36,7 @@ import { TableReferenceComparisons } from './TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
 import { checkIfTabCouldExist } from '../../../utils';
 import TablePreview from './TablePreview';
+import TableQualityStatus from './TableQualityStatus';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -50,6 +51,10 @@ const tabs = [
   {
     label: 'Table Preview',
     value: 'preview'
+  },
+  {
+    label: 'Table quality status',
+    value: 'table-quality-status'
   },
   {
     label: 'Profiling Checks',
@@ -301,6 +306,7 @@ const ProfilingView = () => {
         />
       )}
       {activeTab === 'preview' && <TablePreview statistics={statistics ?? {}}/>}
+      {activeTab === 'table-quality-status' && <TableQualityStatus/>}
       {activeTab === 'advanced' && <TableProfilingChecks />}
       {activeTab === 'reference-comparisons' && (
         <TableReferenceComparisons

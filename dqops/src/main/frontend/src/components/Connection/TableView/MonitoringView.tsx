@@ -24,6 +24,7 @@ import {
   getFirstLevelState
 } from '../../../redux/selectors';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
+import TableQualityStatus from './TableQualityStatus';
 
 const initTabs = [
   {
@@ -33,6 +34,10 @@ const initTabs = [
   {
     label: 'Monthly',
     value: 'monthly'
+  },
+  {
+    label: 'Table quality status',
+    value: 'table-quality-status'
   },
   {
     label: 'Daily Comparisons',
@@ -245,6 +250,7 @@ const MonitoringView = () => {
           loading={loading}
         />
       )}
+      {tab === 'table-quality-status' && <TableQualityStatus/>}
       {tab === 'daily_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
