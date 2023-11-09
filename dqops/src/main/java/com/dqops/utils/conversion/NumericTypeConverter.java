@@ -15,6 +15,8 @@
  */
 package com.dqops.utils.conversion;
 
+import org.apache.parquet.Strings;
+
 /**
  * Static class to cast or convert objects to a desired numeric type.
  */
@@ -143,5 +145,25 @@ public class NumericTypeConverter {
 
         String asString = obj.toString();
         return Double.valueOf(asString);
+    }
+
+    /**
+     * Tries to parse a string value to a long (int 64 bit) value.
+     * Captures exceptions and returns null when the value is not parsable to a long integer.
+     * @param value String value to parse.
+     * @return Parsed long value when it is parsable or null when the value is not a valid long value.
+     */
+    public static Long tryParseLong(String value) {
+        if (Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+
+        try {
+            long parsedLong = Long.parseLong(value);
+            return parsedLong;
+        }
+        catch (NumberFormatException ex) {
+            return null;
+        }
     }
 }

@@ -23,6 +23,7 @@ import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -54,6 +55,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     private boolean started;
     private final TreeMap<DqoQueueJobId, DqoJobHistoryEntryModel> allJobs = new TreeMap<>();
     private final TreeMap<Long, DqoJobChangeModel> jobChanges = new TreeMap<>();
+    private final Map<String, DqoQueueJobId> businessKeyToJobIdMap = new LinkedHashMap<>();
     private final DqoJobIdGenerator dqoJobIdGenerator;
     private DqoQueueConfigurationProperties queueConfigurationProperties;
     private Sinks.Many<DqoChangeNotificationEntry> jobUpdateSink;
@@ -385,7 +387,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 if (jobChange != null) { // the job change is null when we are just publishing a change to the file synchronization status
                     if (jobChange.getStatus() == DqoJobStatus.queued) {
                         // new job
-                        this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel());
+                        DqoQueueJobId jobId = jobChange.getJobId();
+                        this.allJobs.put(jobId, jobChange.getUpdatedModel());
+                        if (jobId.getJobBusinessKey() != null) {
+                            this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                        }
                         DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
                         this.jobChanges.put(changeSequence, dqoNewJobChangeModel);
                     } else {
@@ -394,7 +400,11 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                         this.jobChanges.put(changeSequence, dqoUpdatedJobChangeModel);
                         if (jobChange.getUpdatedModel() != null) {
                             assert Objects.equals(jobChange.getJobId(), jobChange.getUpdatedModel().getJobId());
-                            this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel()); // replaces the current model
+                            DqoQueueJobId jobId = jobChange.getJobId();
+                            this.allJobs.put(jobId, jobChange.getUpdatedModel()); // replaces the current model
+                            if (jobId.getJobBusinessKey() != null) {
+                                this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                            }
                         } else {
                             // update in the job
                             DqoJobHistoryEntryModel currentJobEntryModel = this.allJobs.get(jobChange.getJobId());
@@ -405,10 +415,14 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                                 clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
                                 dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
                             }
-                            this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
+                            DqoQueueJobId jobId = jobChange.getJobId();
+                            this.allJobs.put(jobId, clonedJobEntryModel);
+                            if (jobId.getJobBusinessKey() != null) {
+                                this.businessKeyToJobIdMap.put(jobId.getJobBusinessKey(), jobId);
+                            }
                         }
 
-                        if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS) {
+                        if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.synchronize_multiple_folders) {
                             // we will keep only the last most recent successful synchronization job
                             removeOlderSynchronizeMultipleFoldersJobs(jobChange.getJobId());
                         }
@@ -444,10 +458,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     public void removeOlderSynchronizeMultipleFoldersJobs(final DqoQueueJobId jobIdToKeep) {
         Set<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
-                .filter(e -> e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS ||
-                        e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_FOLDER)
-                .filter(e -> (e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_MULTIPLE_FOLDERS  && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
-                        (e.getValue().getJobType() == DqoJobType.SYNCHRONIZE_FOLDER && e.getKey().getParentJobId() != null &&
+                .filter(e -> e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders ||
+                        e.getValue().getJobType() == DqoJobType.synchronize_folder)
+                .filter(e -> (e.getValue().getJobType() == DqoJobType.synchronize_multiple_folders && e.getKey().getJobId() != jobIdToKeep.getJobId()) ||
+                        (e.getValue().getJobType() == DqoJobType.synchronize_folder && e.getKey().getParentJobId() != null &&
                                 e.getKey().getParentJobId().getJobId() != jobIdToKeep.getJobId()))
                 .map(e -> e.getKey())
                 .collect(Collectors.toSet());
@@ -455,6 +469,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         if (oldJobIdsToDelete.size() > 0) {
             for (DqoQueueJobId jobId : oldJobIdsToDelete) {
                 this.allJobs.remove(jobId);
+                if (jobId.getJobBusinessKey() != null) {
+                    this.businessKeyToJobIdMap.remove(jobId.getJobBusinessKey());
+                }
             }
 
             List<Long> oldChangeIdsToDelete = this.jobChanges.entrySet()
@@ -491,6 +508,9 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         if (oldJobIdsToDelete.size() > 0) {
             for (DqoQueueJobId jobId : oldJobIdsToDelete) {
                 this.allJobs.remove(jobId);
+                if (jobId.getJobBusinessKey() != null) {
+                    this.businessKeyToJobIdMap.remove(jobId.getJobBusinessKey());
+                }
             }
         }
     }
@@ -526,6 +546,24 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         synchronized (this.lock) {
             DqoJobHistoryEntryModel dqoJobHistoryEntryModel = this.allJobs.get(jobId);
             return dqoJobHistoryEntryModel;
+        }
+    }
+
+    /**
+     * Tries to find a job id of a job that was assigned also a business key (a user assigned job id).
+     * If there is a known (tracked) job with that business key, this method will return the job id. Otherwise, when not found, returns null.
+     *
+     * @param jobBusinessKey Job business key to look up.
+     * @return Job id or null when not found.
+     */
+    @Override
+    public DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey) {
+        if (Strings.isNullOrEmpty(jobBusinessKey)) {
+            return null;
+        }
+
+        synchronized (this.lock) {
+            return this.businessKeyToJobIdMap.get(jobBusinessKey);
         }
     }
 }

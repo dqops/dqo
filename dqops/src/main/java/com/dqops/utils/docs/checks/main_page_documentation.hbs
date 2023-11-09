@@ -2,10 +2,10 @@
 
 **This is a list of the checks in DQOps broken down by category and a brief description of what they do.**
 
-## **Table checks**
+## Table checks
 {{#each checks}}
 {{#if ( eq target "table")}}
-###{{categoryName}}{{#with "  "}}{{.}}{{/with}}
+### **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
 {{categoryHelp}}
 {{#each checkGroups}}
 | Check name | Check type | Description |
@@ -17,10 +17,10 @@
 {{/if}}
 {{/each}}
 
-## **Column checks**
+## Column checks
 {{#each checks}}
 {{#if ( eq target "column")}}
-###{{categoryName}}{{#with "  "}}{{.}}{{/with}}
+### **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
 {{categoryHelp}}
 {{#each checkGroups}}
 | Check name | Check type | Description |

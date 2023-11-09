@@ -174,7 +174,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
     @Test
     void executeChecks_whenRequestedExecutionByType_thenResultsAddUpToAllRun() {
         CheckSearchFilters allFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
+            setConnection(connectionWrapper.getName());
         }};
 
         CheckSearchFilters profilingFilters = allFilters.clone();

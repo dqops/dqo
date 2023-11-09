@@ -118,8 +118,8 @@ public class SchemaServiceImpl implements SchemaService {
         }
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
-        checkSearchFilters.setConnectionName(connectionName);
-        checkSearchFilters.setSchemaTableName(schemaName + ".*");
+        checkSearchFilters.setConnection(connectionName);
+        checkSearchFilters.setFullTableName(schemaName + ".*");
         checkSearchFilters.setCheckType(checkType);
         checkSearchFilters.setTimeScale(checkTimeScale);
         // Filtering by checkTarget has to be done apart from these filters.
@@ -199,9 +199,9 @@ public class SchemaServiceImpl implements SchemaService {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
         filters.setTimeScale(checkContainerTypeModel.getCheckTimeScale());
-        filters.setConnectionName(connectionName);
-        filters.setSchemaTableName(tableSearchPattern);
-        filters.setColumnName(columnNamePattern);
+        filters.setConnection(connectionName);
+        filters.setFullTableName(tableSearchPattern);
+        filters.setColumn(columnNamePattern);
         filters.setColumnDataType(columnDataType);
         filters.setCheckTarget(checkTarget);
         filters.setCheckCategory(checkCategory);

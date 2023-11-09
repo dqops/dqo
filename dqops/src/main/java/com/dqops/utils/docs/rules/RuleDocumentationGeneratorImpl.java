@@ -19,10 +19,9 @@ import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.CustomRuleParametersSpec;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.HandledClassesLinkageStore;
+import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
-import com.dqops.utils.docs.sensors.SensorDocumentationModel;
 import com.dqops.utils.reflection.TargetClassSearchUtility;
 import com.github.jknack.handlebars.Template;
 
@@ -49,18 +48,29 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
      * @return Folder structure with rendered markdown files.
      */
     @Override
-    public DocumentationFolder renderRuleDocumentation(Path projectRootPath, HandledClassesLinkageStore linkageStore, DqoHome dqoHome) {
+    public DocumentationFolder renderRuleDocumentation(Path projectRootPath, LinkageStore<Class<?>> linkageStore, DqoHome dqoHome) {
         DocumentationFolder rulesFolder = new DocumentationFolder();
         rulesFolder.setFolderName("reference/rules");
         rulesFolder.setLinkName("Rules");
         Path rulesPath = Path.of("docs", "reference", "rules");
         rulesFolder.setDirectPath(projectRootPath.resolve("..").resolve(rulesPath).toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("rules/rule_documentation");
-
         List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>(createRuleDocumentationModels(projectRootPath));
         ruleDocumentationModels.sort(Comparator.comparing(RuleDocumentationModel::getFullRuleName));
         List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = groupRulesByCategory(ruleDocumentationModels);
+
+        MainPageRuleDocumentationModel mainPageRuleDocumentationModel = new MainPageRuleDocumentationModel();
+        mainPageRuleDocumentationModel.setRules(ruleGroupedDocumentationModels);
+
+        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("rules/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = rulesFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageRuleDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageRuleDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+        
+        
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("rules/rule_documentation");
 
         for (RuleGroupedDocumentationModel ruleGroupedDocumentationModel : ruleGroupedDocumentationModels) {
             Path rulesFilePath = Path.of(

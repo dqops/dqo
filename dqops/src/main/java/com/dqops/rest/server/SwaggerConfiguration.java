@@ -35,7 +35,7 @@ public class SwaggerConfiguration implements WebFluxConfigurer {
         String baseUrl = "";
         registry.
                 addResourceHandler(baseUrl + swaggerUiPath + "/**")
-                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui-dist/4.18.2/")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui-dist/5.9.2/")
                 .resourceChain(true);
 
         registry.

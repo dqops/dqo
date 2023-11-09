@@ -53,7 +53,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionList connectionList, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnectionName();
+        String connectionNameFilter = this.filters.getConnection();
         if (Strings.isNullOrEmpty(connectionNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -80,7 +80,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(ConnectionWrapper connectionWrapper, SearchParameterObject parameter) {
-        String connectionNameFilter = this.filters.getConnectionName();
+        String connectionNameFilter = this.filters.getConnection();
 
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setConnectionLabels(connectionWrapper.getSpec().getLabels());
@@ -105,7 +105,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableList tableList, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getSchemaTableName();
+        String schemaTableName = this.filters.getFullTableName();
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -132,7 +132,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      */
     @Override
     public TreeNodeTraversalResult accept(TableWrapper tableWrapper, SearchParameterObject parameter) {
-        String schemaTableName = this.filters.getSchemaTableName();
+        String schemaTableName = this.filters.getFullTableName();
 
         if (Strings.isNullOrEmpty(schemaTableName)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -190,7 +190,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN; // column checks don't concern us
         }
 
-        String columnNameFilter = this.filters.getColumnName();
+        String columnNameFilter = this.filters.getColumn();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -241,7 +241,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        String columnNameFilter = this.filters.getColumnName();
+        String columnNameFilter = this.filters.getColumn();
         if (Strings.isNullOrEmpty(columnNameFilter)) {
             return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
@@ -364,7 +364,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
-        CheckTarget checkTarget = this.filters.getColumnName() == null ? null : CheckTarget.column;
+        CheckTarget checkTarget = this.filters.getColumn() == null ? null : CheckTarget.column;
         if (checkTarget != null && checkTarget != checksContainerSpec.getCheckTarget()) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }

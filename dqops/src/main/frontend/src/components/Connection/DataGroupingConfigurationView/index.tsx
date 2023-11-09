@@ -7,13 +7,14 @@ import DataGroupingDimensionItem from '../../DataQualityChecks/DataGroupingDimen
 import { Errors } from '../TableView/DataGroupingConfigurationEditView';
 import { useParams } from 'react-router-dom';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../redux/reducers';
 
 interface IDataGroupingConfigurationViewProps {
   dataGroupingConfiguration?: DataGroupingConfigurationSpec;
   onChange: (value: DataGroupingConfigurationSpec) => void;
   errors?: Errors;
   onClearError?: (idx: number) => void;
-  canUserEdit?: boolean;
 }
 
 const DataGroupingConfigurationView = ({
@@ -21,10 +22,11 @@ const DataGroupingConfigurationView = ({
   onChange,
   errors,
   onClearError,
-  canUserEdit
 }: IDataGroupingConfigurationViewProps) => {
   const { table }: { table: string } = useParams();
-
+  const {  userProfile } = useSelector(
+    (state: IRootState) => state.job || {}
+  );
   const getDataGroupingDimensionLevel = (index: number) => {
     if (index === 0) return dataGroupingConfiguration?.level_1;
     if (index === 1) return dataGroupingConfiguration?.level_2;
@@ -48,7 +50,7 @@ const DataGroupingConfigurationView = ({
   };
 
   return (
-    <div className={clsx("py-4 px-4 text-sm", canUserEdit === true ? "" : "pointer-events-none cursor-not-allowed"  )}>
+    <div className={clsx("py-4 px-4 text-sm", userProfile.can_manage_data_sources === true ? "" : "pointer-events-none cursor-not-allowed"  )}>
       {Array(9)
         .fill(0)
         .map((item, index) => (

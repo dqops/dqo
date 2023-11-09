@@ -25,10 +25,10 @@ dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud login-fw">`-fw`</p><br/><p id="cloud login--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud login--headless">`--headless`</p><br/><p id="cloud login-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud login-h">`-h`</p><br/><p id="cloud login--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud login-of">`-of`</p><br/><p id="cloud login--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -58,10 +58,10 @@ dqo> cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud password-fw">`-fw`</p><br/><p id="cloud password--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud password--headless">`--headless`</p><br/><p id="cloud password-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud password-h">`-h`</p><br/><p id="cloud password--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud password-of">`-of`</p><br/><p id="cloud password--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -93,13 +93,13 @@ dqo> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-r`<br/>`--refresh-data-warehouse`<br/>|Force refresh a whole table in the data quality data warehouse| ||
+|<p id="cloud sync data-d">`-d`</p><br/><p id="cloud sync data--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync data-fw">`-fw`</p><br/><p id="cloud sync data--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync data--headless">`--headless`</p><br/><p id="cloud sync data-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync data-h">`-h`</p><br/><p id="cloud sync data--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync data-m">`-m`</p><br/><p id="cloud sync data--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync data-of">`-of`</p><br/><p id="cloud sync data--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync data-r">`-r`</p><br/><p id="cloud sync data--refresh-data-warehouse">`--refresh-data-warehouse`</p><br/>|Force refresh a whole table in the data quality data warehouse| ||
 
 
 
@@ -131,12 +131,12 @@ dqo> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync sources-d">`-d`</p><br/><p id="cloud sync sources--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync sources-fw">`-fw`</p><br/><p id="cloud sync sources--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync sources--headless">`--headless`</p><br/><p id="cloud sync sources-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync sources-h">`-h`</p><br/><p id="cloud sync sources--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync sources-m">`-m`</p><br/><p id="cloud sync sources--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync sources-of">`-of`</p><br/><p id="cloud sync sources--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -168,12 +168,12 @@ dqo> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync sensors-d">`-d`</p><br/><p id="cloud sync sensors--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync sensors-fw">`-fw`</p><br/><p id="cloud sync sensors--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync sensors--headless">`--headless`</p><br/><p id="cloud sync sensors-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync sensors-h">`-h`</p><br/><p id="cloud sync sensors--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync sensors-m">`-m`</p><br/><p id="cloud sync sensors--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync sensors-of">`-of`</p><br/><p id="cloud sync sensors--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -205,12 +205,12 @@ dqo> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync rules-d">`-d`</p><br/><p id="cloud sync rules--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync rules-fw">`-fw`</p><br/><p id="cloud sync rules--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync rules--headless">`--headless`</p><br/><p id="cloud sync rules-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync rules-h">`-h`</p><br/><p id="cloud sync rules--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync rules-m">`-m`</p><br/><p id="cloud sync rules--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync rules-of">`-of`</p><br/><p id="cloud sync rules--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -242,12 +242,12 @@ dqo> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync checks-d">`-d`</p><br/><p id="cloud sync checks--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync checks-fw">`-fw`</p><br/><p id="cloud sync checks--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync checks--headless">`--headless`</p><br/><p id="cloud sync checks-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync checks-h">`-h`</p><br/><p id="cloud sync checks--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync checks-m">`-m`</p><br/><p id="cloud sync checks--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync checks-of">`-of`</p><br/><p id="cloud sync checks--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -279,12 +279,12 @@ dqo> cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync settings-d">`-d`</p><br/><p id="cloud sync settings--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync settings-fw">`-fw`</p><br/><p id="cloud sync settings--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync settings--headless">`--headless`</p><br/><p id="cloud sync settings-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync settings-h">`-h`</p><br/><p id="cloud sync settings--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync settings-m">`-m`</p><br/><p id="cloud sync settings--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync settings-of">`-of`</p><br/><p id="cloud sync settings--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -316,12 +316,12 @@ dqo> cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync credentials-d">`-d`</p><br/><p id="cloud sync credentials--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync credentials-fw">`-fw`</p><br/><p id="cloud sync credentials--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync credentials--headless">`--headless`</p><br/><p id="cloud sync credentials-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync credentials-h">`-h`</p><br/><p id="cloud sync credentials--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync credentials-m">`-m`</p><br/><p id="cloud sync credentials--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync credentials-of">`-of`</p><br/><p id="cloud sync credentials--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
 
@@ -353,13 +353,13 @@ dqo> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
-|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
-|`--headless`<br/>`-hl`<br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
-|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
-|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-r`<br/>`--refresh-data-warehouse`<br/>|Force refresh a whole table in the data quality data warehouse| ||
+|<p id="cloud sync all-d">`-d`</p><br/><p id="cloud sync all--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|<p id="cloud sync all-fw">`-fw`</p><br/><p id="cloud sync all--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="cloud sync all--headless">`--headless`</p><br/><p id="cloud sync all-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="cloud sync all-h">`-h`</p><br/><p id="cloud sync all--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="cloud sync all-m">`-m`</p><br/><p id="cloud sync all--mode">`--mode`</p><br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|<p id="cloud sync all-of">`-of`</p><br/><p id="cloud sync all--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="cloud sync all-r">`-r`</p><br/><p id="cloud sync all--refresh-data-warehouse">`--refresh-data-warehouse`</p><br/>|Force refresh a whole table in the data quality data warehouse| ||
 
 
 

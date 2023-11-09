@@ -15,10 +15,13 @@
  */
 package com.dqops.metadata.search;
 
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 /**
  * Search filters used to search for the monitoring schedule specifications.
  */
 public class MonitoringScheduleSearchFilters {
+    @JsonPropertyDescription("Boolean flag to search only for enabled schedules or only disabled schedules. The default value is *true*, which prevents searching for all schedules despite their enabled status.")
     private Boolean scheduleEnabled = true;
 
     /**

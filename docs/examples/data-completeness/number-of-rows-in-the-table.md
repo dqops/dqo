@@ -25,7 +25,7 @@ We aim to verify if the table meets size requirements and is not too small:
 - error: 381
 - fatal: 150
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -47,7 +47,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 | 2021    | 2021 Health Disparities | Able-Bodied  | California    | Female        | 87    |
 | 2021    | 2021 Health Disparities | Able-Bodied  | Colorado      | Female        | 87    |
 
-## Running the checks in the example and evaluating the results using the graphical interface
+## Running the checks in the example and evaluating the results using the user interface
 
 ### **Validation if the table is not empty**
 
@@ -69,8 +69,8 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
     ![Row-count check result](https://dqops.com/docs/images/examples/daily-row-count-check-result.png)
 
-4. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
-    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+4. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 5. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
@@ -115,7 +115,7 @@ To do that, you can set the higher threshold to verify that the table has an exp
 - error: 381
 - fatal: 150
 
-To execute the check prepared in the example using the [graphical interface](../../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md):
+To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-row-count-checks.png)
 
@@ -140,9 +140,9 @@ To execute the check prepared in the example using the [graphical interface](../
 
     ![Run check](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
 
-5. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+5. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 6. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
@@ -153,7 +153,7 @@ To execute the check prepared in the example using the [graphical interface](../
 
 ## Configuring a schedule at connection level
 
-With DQO, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
+With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
 After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
@@ -195,7 +195,7 @@ In this example, we have set three minimum count thresholds levels for the check
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="7-16"
 apiVersion: dqo/v1
@@ -225,11 +225,11 @@ spec:
         nullable: true
 ```
 
-## Running the checks in the example and evaluating the results using DQO Shell
+## Running the checks in the example and evaluating the results using DQOps Shell
 
 The detailed explanation of how to run the example is described [here](../#running-the-examples).
 
-To execute the check prepared in the example, run the following command in DQO Shell:
+To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
@@ -282,8 +282,8 @@ Results returned by the sensor:
 ```
 ## Next steps
 
-- You haven't installed DQO yet? Check the detailed guide on how to [install DQO using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [row_count check used in this example, go to the check details section](../../checks/table/volume/row-count.md).
 - You might be interested in another completeness check that [evaluates that the number of nulls in a column does not exceed the maximum accepted count](../data-completeness/number-of-null-values.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
-- With DQO, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).
+- With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).

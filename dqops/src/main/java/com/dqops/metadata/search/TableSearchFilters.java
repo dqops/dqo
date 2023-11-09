@@ -17,23 +17,40 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Hierarchy node search filters.
+ * Target table search filters used to find tables in the DQOps metadata.
  */
 @EqualsAndHashCode(callSuper = false)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class TableSearchFilters {
-    private String connectionName;
-    private String schemaTableName;
+    @JsonPropertyDescription("The connection (data source) name. Supports search patterns in the format: 'source\\*', '\\*_prod', 'prefix\\*suffix'.")
+    private String connection;
+
+    @JsonPropertyDescription("The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. " +
+            "The schema and table name accept patterns both in the schema name and table name parts. " +
+            "Sample patterns are: 'schema_name.tab_prefix_\\*', 'schema_name.*', '*.*', 'schema_name.\\*_customer', 'schema_name.tab_\\*_suffix'.")
+    private String fullTableName;
+
+    @JsonPropertyDescription("A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, " +
+            "the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.")
     private Boolean enabled = true;
+
+    @JsonPropertyDescription("An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The tags are assigned to the table on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a tag.")
     private String[] tags;
+
+    @JsonPropertyDescription("An array of labels assigned to the table. All labels must be present on a table to match. The labels can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +
+            "The labels are assigned on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.")
     private String[] labels;
 
     @JsonIgnore
@@ -59,32 +76,32 @@ public class TableSearchFilters {
      * Returns the connection name search pattern.
      * @return Connection name search pattern.
      */
-    public String getConnectionName() {
-        return connectionName;
+    public String getConnection() {
+        return connection;
     }
 
     /**
      * Sets the connection name search pattern.
-     * @param connectionName Connection name search pattern.
+     * @param connection Connection name search pattern.
      */
-    public void setConnectionName(String connectionName) {
-        this.connectionName = connectionName;
+    public void setConnection(String connection) {
+        this.connection = connection;
     }
 
     /**
      * Returns a "schema.table" search pattern. The pattern may also contain a wildcard '*', for example: "schema.fact*"
      * @return Schema / table search pattern.
      */
-    public String getSchemaTableName() {
-        return schemaTableName;
+    public String getFullTableName() {
+        return fullTableName;
     }
 
     /**
      * Sets a schema name and table name search pattern.
-     * @param schemaTableName Schema and table search pattern.
+     * @param fullTableName Schema and table search pattern.
      */
-    public void setSchemaTableName(String schemaTableName) {
-        this.schemaTableName = schemaTableName;
+    public void setFullTableName(String fullTableName) {
+        this.fullTableName = fullTableName;
     }
 
     /**
@@ -144,15 +161,15 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getConnectionNameSearchPattern() {
-        if (connectionNameSearchPattern == null && connectionName != null) {
-            connectionNameSearchPattern = SearchPattern.create(false, connectionName);
+        if (connectionNameSearchPattern == null && connection != null) {
+            connectionNameSearchPattern = SearchPattern.create(false, connection);
         }
 
         return connectionNameSearchPattern;
     }
     
     protected void recreateSchemaTableNameSearchPatterns() {
-        PhysicalTableName parsedSchemaTableName = PhysicalTableName.fromSchemaTableFilter(schemaTableName);
+        PhysicalTableName parsedSchemaTableName = PhysicalTableName.fromSchemaTableFilter(fullTableName);
         schemaNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getSchemaName());
         tableNameSearchPattern = SearchPattern.create(false, parsedSchemaTableName.getTableName());
     }
@@ -164,7 +181,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getSchemaNameSearchPattern() {
-        if (schemaNameSearchPattern == null && schemaTableName != null) {
+        if (schemaNameSearchPattern == null && fullTableName != null) {
             recreateSchemaTableNameSearchPatterns();
         }
 
@@ -178,7 +195,7 @@ public class TableSearchFilters {
      */
     @JsonIgnore
     public SearchPattern getTableNameSearchPattern() {
-        if (tableNameSearchPattern == null && schemaTableName != null) {
+        if (tableNameSearchPattern == null && fullTableName != null) {
             recreateSchemaTableNameSearchPatterns();
         }
 
@@ -217,5 +234,15 @@ public class TableSearchFilters {
         }
 
         return labelsSearchPatterns[i];
+    }
+
+    public static class TableSearchFiltersSampleFactory implements SampleValueFactory<TableSearchFilters> {
+        @Override
+        public TableSearchFilters createSample() {
+            return new TableSearchFilters() {{
+                setConnection(SampleStringsRegistry.getConnectionName());
+                setFullTableName(SampleStringsRegistry.getSchemaTableName());
+            }};
+        }
     }
 }

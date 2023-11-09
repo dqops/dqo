@@ -19,8 +19,11 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyIdModel;
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.statistics.StatisticsCollectorTarget;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
@@ -35,10 +38,22 @@ import java.util.stream.Collectors;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class StatisticsCollectorSearchFilters extends TableSearchFilters implements Cloneable {
+    @JsonPropertyDescription("The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.")
     private Collection<String> columnNames = new LinkedHashSet<>();
+
+    @JsonPropertyDescription("The target statistics collector name to capture only selected statistics. Uses the short collector name" +
+            "This field supports search patterns such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. " +
+            "In order to collect only top 10 most common column samples, use 'column_samples'.")
     private String collectorName;
+
+    @JsonPropertyDescription("The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. " +
+            "This field supports search patterns such as: 'table/volume/row_\\*', '\\*_count', 'table/volume/prefix_\\*_suffix'.")
     private String sensorName;
+
+    @JsonPropertyDescription("The target statistics collector category, for example: *nulls*, *volume*, *sampling*.")
     private String collectorCategory;
+
+    @JsonPropertyDescription("The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.")
     private StatisticsCollectorTarget target;
 
     @JsonIgnore // we can't serialize it because it is a mix of types, will not support deserialization correctly
@@ -243,6 +258,27 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
         }
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Cannot clone the object", ex);
+        }
+    }
+
+    public static StatisticsCollectorSearchFilters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
+        return new StatisticsCollectorSearchFilters() {{
+            setConnection(tableSearchFilters.getConnection());
+            setFullTableName(tableSearchFilters.getFullTableName());
+            setEnabled(tableSearchFilters.getEnabled());
+            setTags(tableSearchFilters.getTags());
+            setLabels(tableSearchFilters.getLabels());
+        }};
+    }
+
+    public static class StatisticsCollectorSearchFiltersSampleFactory implements SampleValueFactory<StatisticsCollectorSearchFilters> {
+        @Override
+        public StatisticsCollectorSearchFilters createSample() {
+            StatisticsCollectorSearchFilters statisticsCollectorSearchFilters = fromTableSearchFilters(new TableSearchFilters.TableSearchFiltersSampleFactory().createSample());
+            statisticsCollectorSearchFilters.setColumnNames(List.of(SampleStringsRegistry.getColumnName()));
+            statisticsCollectorSearchFilters.setCollectorCategory(SampleStringsRegistry.getCategoryName());
+
+            return statisticsCollectorSearchFilters;
         }
     }
 }

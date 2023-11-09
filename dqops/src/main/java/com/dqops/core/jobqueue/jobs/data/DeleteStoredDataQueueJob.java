@@ -79,8 +79,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     protected ErrorsFragmentFilter getErrorsFragmentFilter() {
         return new ErrorsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
-                setConnectionName(deletionParameters.getConnectionName());
-                setSchemaTableName(deletionParameters.getSchemaTableName());
+                setConnection(deletionParameters.getConnection());
+                setFullTableName(deletionParameters.getFullTableName());
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
@@ -98,8 +98,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     protected StatisticsResultsFragmentFilter getStatisticsResultsFragmentFilter() {
         return new StatisticsResultsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
-                setConnectionName(deletionParameters.getConnectionName());
-                setSchemaTableName(deletionParameters.getSchemaTableName());
+                setConnection(deletionParameters.getConnection());
+                setFullTableName(deletionParameters.getFullTableName());
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
@@ -115,8 +115,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     protected CheckResultsFragmentFilter getRuleResultsFragmentFilter() {
         return new CheckResultsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
-                setConnectionName(deletionParameters.getConnectionName());
-                setSchemaTableName(deletionParameters.getSchemaTableName());
+                setConnection(deletionParameters.getConnection());
+                setFullTableName(deletionParameters.getFullTableName());
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
@@ -135,8 +135,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     protected SensorReadoutsFragmentFilter getSensorReadoutsFragmentFilter() {
         return new SensorReadoutsFragmentFilter() {{
             setTableSearchFilters(new TableSearchFilters() {{
-                setConnectionName(deletionParameters.getConnectionName());
-                setSchemaTableName(deletionParameters.getSchemaTableName());
+                setConnection(deletionParameters.getConnection());
+                setFullTableName(deletionParameters.getFullTableName());
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
@@ -162,7 +162,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     public DeleteStoredDataResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        if (this.deletionParameters.getConnectionName() == null) {
+        if (this.deletionParameters.getConnection() == null) {
             throw new IllegalArgumentException("Connection not specified for data delete job.");
         }
 
@@ -195,7 +195,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.DELETE_STORED_DATA;
+        return DqoJobType.delete_stored_data;
     }
 
     /**
@@ -221,7 +221,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
     @Override
     public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         DeleteStoredDataQueueJobConcurrencyTarget target = new DeleteStoredDataQueueJobConcurrencyTarget(
-                this.deletionParameters.getConnectionName());
+                this.deletionParameters.getConnection());
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.DELETE_STORED_DATA, target);
         JobConcurrencyConstraint deleteLimit = new JobConcurrencyConstraint(concurrencyTarget, 1);
         return new JobConcurrencyConstraint[] { deleteLimit };

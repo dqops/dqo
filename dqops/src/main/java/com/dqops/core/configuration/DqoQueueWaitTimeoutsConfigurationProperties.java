@@ -81,20 +81,20 @@ public class DqoQueueWaitTimeoutsConfigurationProperties implements Cloneable {
      */
     public long getWaitTimeForJobType(DqoJobType jobType) {
         switch (jobType) {
-            case RUN_CHECKS:
-            case RUN_CHECKS_ON_TABLE:
-            case RUN_SCHEDULED_CHECKS_CRON:
+            case run_checks:
+            case run_checks_on_table:
+            case run_scheduled_checks_cron:
                 return this.runChecks;
 
-            case COLLECT_STATISTICS:
-            case COLLECT_STATISTICS_ON_TABLE:
+            case collect_statistics:
+            case collect_statistics_on_table:
                 return this.collectStatistics;
 
-            case DELETE_STORED_DATA:
+            case delete_stored_data:
                 return this.deleteStoredData;
 
-            case IMPORT_SCHEMA:
-            case IMPORT_TABLES:
+            case import_schema:
+            case import_tables:
                 return this.importTables;
 
             default:

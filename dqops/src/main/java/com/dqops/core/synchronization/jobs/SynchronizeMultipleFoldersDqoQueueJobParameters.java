@@ -18,6 +18,7 @@ package com.dqops.core.synchronization.jobs;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -204,6 +205,15 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
+
+    public static class SynchronizeMultipleFoldersDqoQueueJobParametersSampleFactory implements SampleValueFactory<SynchronizeMultipleFoldersDqoQueueJobParameters> {
+        @Override
+        public SynchronizeMultipleFoldersDqoQueueJobParameters createSample() {
+            SynchronizeMultipleFoldersDqoQueueJobParameters synchronizeMultipleFoldersDqoQueueJobParameters = new SynchronizeMultipleFoldersDqoQueueJobParameters();
+            synchronizeMultipleFoldersDqoQueueJobParameters.synchronizeAllFolders();
+            return synchronizeMultipleFoldersDqoQueueJobParameters;
         }
     }
 }

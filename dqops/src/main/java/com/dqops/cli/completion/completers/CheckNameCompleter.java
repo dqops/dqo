@@ -19,8 +19,6 @@ package com.dqops.cli.completion.completers;
 import com.dqops.cli.completion.completers.cache.CliCompleterCacheKey;
 import com.dqops.cli.completion.completers.cache.CliCompletionCache;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextCache;
 import com.dqops.metadata.userhome.UserHome;
@@ -30,7 +28,10 @@ import com.dqops.utils.StaticBeanFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.BeanFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Check name completer. Returns a list of all known checks.

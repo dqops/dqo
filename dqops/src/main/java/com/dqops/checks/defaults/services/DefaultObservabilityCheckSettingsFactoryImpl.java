@@ -162,12 +162,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
      */
     protected DefaultProfilingObservabilityCheckSettingsSpec createDefaultProfilingChecks() {
         DefaultProfilingObservabilityCheckSettingsSpec defaultSettings = new DefaultProfilingObservabilityCheckSettingsSpec();
-        TableAvailabilityProfilingChecksSpec tableAvailability = new TableAvailabilityProfilingChecksSpec();
-        tableAvailability.setProfileTableAvailability(new TableAvailabilityCheckSpec() {{
-            setWarning(new MaxFailuresRule0ParametersSpec());
-        }});
-        defaultSettings.getTable().setAvailability(tableAvailability);
-
         TableVolumeProfilingChecksSpec tableVolume = new TableVolumeProfilingChecksSpec();
         tableVolume.setProfileRowCount(new TableRowCountCheckSpec() {{
             setWarning(new MinCountRuleWarningParametersSpec());
@@ -177,15 +171,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
         tableSchema.setProfileColumnCount(new TableSchemaColumnCountCheckSpec());
         defaultSettings.getTable().setSchema(tableSchema);
-
-        ColumnSchemaProfilingChecksSpec columnSchema = new ColumnSchemaProfilingChecksSpec();
-        columnSchema.setProfileColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
-            setWarning(new EqualsInteger1RuleParametersSpec());
-        }});
-        columnSchema.setProfileColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
-        }});
-        defaultSettings.getColumn().setSchema(columnSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
         columnNulls.setProfileNullsCount(new ColumnNullsCountCheckSpec());
@@ -201,48 +186,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
      */
     protected DefaultMonthlyMonitoringObservabilityCheckSettingsSpec createDefaultMonthlyMonitoringChecks() {
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultSettings = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
-        TableAvailabilityMonthlyMonitoringChecksSpec availability = new TableAvailabilityMonthlyMonitoringChecksSpec();
-        availability.setMonthlyTableAvailability(new TableAvailabilityCheckSpec() {{
-            setWarning(new MaxFailuresRule0ParametersSpec());
-        }});
-        defaultSettings.getTable().setAvailability(availability);
-
-        TableVolumeMonthlyMonitoringChecksSpec volume = new TableVolumeMonthlyMonitoringChecksSpec();
-        volume.setMonthlyRowCount(new TableRowCountCheckSpec() {{
-            setWarning(new MinCountRuleWarningParametersSpec());
-        }});
-        defaultSettings.getTable().setVolume(volume);
-
-        TableSchemaMonthlyMonitoringChecksSpec tableSchema = new TableSchemaMonthlyMonitoringChecksSpec();
-        tableSchema.setMonthlyColumnCount(new TableSchemaColumnCountCheckSpec()); // just snapshotting
-        tableSchema.setMonthlyColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
-        }});
-        tableSchema.setMonthlyColumnListChanged(new TableSchemaColumnListChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
-        }});
-        tableSchema.setMonthlyColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
-        }});
-        tableSchema.setMonthlyColumnListOrOrderChanged(new TableSchemaColumnListOrOrderChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
-        }});
-        defaultSettings.getTable().setSchema(tableSchema);
-
-        ColumnSchemaMonthlyMonitoringChecksSpec columnSchema = new ColumnSchemaMonthlyMonitoringChecksSpec();
-        columnSchema.setMonthlyColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
-            setWarning(new EqualsInteger1RuleParametersSpec());
-        }});
-        columnSchema.setMonthlyColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
-        }});
-        defaultSettings.getColumn().setSchema(columnSchema);
-
-        ColumnNullsMonthlyMonitoringChecksSpec columnNulls = new ColumnNullsMonthlyMonitoringChecksSpec();
-        columnNulls.setMonthlyNullsCount(new ColumnNullsCountCheckSpec());
-        columnNulls.setMonthlyNullsPercent(new ColumnNullsPercentCheckSpec());
-        defaultSettings.getColumn().setNulls(columnNulls);
-
         return defaultSettings;
     }
 }

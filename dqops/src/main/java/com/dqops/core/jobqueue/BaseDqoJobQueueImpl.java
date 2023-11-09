@@ -52,6 +52,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
     private final AtomicInteger runningJobsCount = new AtomicInteger();
     private LinkedBlockingQueue<DqoJobQueueEntry> jobsBlockingQueue;
     private ConcurrentHashMap<DqoQueueJobId, DqoJobQueueEntry> jobEntriesByJobId;
+    private ConcurrentHashMap<String, DqoQueueJobId> jobBusinessKeyToJobIdMap;
     private Set<DqoJobQueueEntry> runningJobs;
     private List<DqoJobQueueEntry> jobsQueuedBeforeStart = new ArrayList<>();
     private volatile boolean started;
@@ -103,6 +104,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
         this.runnerThreadsFutures = new ArrayList<>();
         this.runningJobs = ConcurrentHashMap.newKeySet();
         this.jobEntriesByJobId = new ConcurrentHashMap<DqoQueueJobId, DqoJobQueueEntry>();
+        this.jobBusinessKeyToJobIdMap = new ConcurrentHashMap<>();
 
         for (int i = 0; i < this.parallelJobLimitProvider.getMaxDegreeOfParallelism(); i++) {
             this.startedThreadsCount.incrementAndGet();
@@ -210,7 +212,12 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                         this.queueMonitoringService.publishJobFailedEvent(dqoJobQueueEntry, ex.getMessage());
                     }
                     finally {
-                        this.jobEntriesByJobId.remove(dqoJobQueueEntry.getJobId());
+                        DqoQueueJobId jobId = dqoJobQueueEntry.getJobId();
+                        this.jobEntriesByJobId.remove(jobId);
+                        if (jobId.getJobBusinessKey() != null) {
+                            this.jobBusinessKeyToJobIdMap.remove(jobId.getJobBusinessKey());
+                        }
+
                         this.runningJobs.remove(dqoJobQueueEntry);
                         this.runningJobsCount.decrementAndGet();
                         if (dqoJobQueueEntry.getJobConcurrencyConstraints() != null) {
@@ -286,6 +293,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             this.jobsBlockingQueue = null;
             this.runningJobs = null;
             this.jobEntriesByJobId = null;
+            this.jobBusinessKeyToJobIdMap = null;
             this.started = false;
             this.stopInProgress = false;
             this.stopped = true;
@@ -326,7 +334,9 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
      * @param principal Principal that will be used to run the job.
      * @return Started job summary and a future to await for finish.
      */
-    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job, DqoQueueJobId parentJobId, DqoUserPrincipal principal) {
+    protected <T> PushJobResult<T> pushJobCore(DqoQueueJob<T> job,
+                                               DqoQueueJobId parentJobId,
+                                               DqoUserPrincipal principal) {
         if (this.stopped || this.stopInProgress) {
             job.getCancellationToken().cancel();
             return new PushJobResult<>(job.getFinishedFuture(), job.getJobId());
@@ -336,6 +346,7 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             if (job.getJobId() == null) {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
                 newJobId.setParentJobId(parentJobId);
+                newJobId.setJobBusinessKey(job.getJobBusinessKey());
                 job.setJobId(newJobId);
             }
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
@@ -355,11 +366,15 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
             if (job.getJobId() == null) {
                 DqoQueueJobId newJobId = this.dqoJobIdGenerator.createNewJobId();
                 newJobId.setParentJobId(parentJobId);
+                newJobId.setJobBusinessKey(job.getJobBusinessKey());
                 job.setJobId(newJobId);
             }
             DqoJobQueueEntry jobQueueEntry = new DqoJobQueueEntry(job, job.getJobId());
             job.setPrincipal(principal);
             this.jobEntriesByJobId.put(job.getJobId(), jobQueueEntry);
+            if (job.getJobBusinessKey() != null) {
+                this.jobBusinessKeyToJobIdMap.put(job.getJobBusinessKey(), job.getJobId());
+            }
 
             this.queueMonitoringService.publishJobAddedEvent(jobQueueEntry);
             this.jobsBlockingQueue.put(jobQueueEntry);
@@ -398,11 +413,24 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                 synchronized (this) {
                     Optional<DqoJobQueueEntry> preStartQueuedJob = this.jobsQueuedBeforeStart.stream().filter(je -> je.getJobId().equals(jobId)).findFirst();
                     if (preStartQueuedJob.isPresent()) {
-                        this.jobsQueuedBeforeStart.remove(preStartQueuedJob.get());
+                        DqoJobQueueEntry preStartJob = preStartQueuedJob.get();
+                        this.jobsQueuedBeforeStart.remove(preStartJob);
+                        if (preStartJob.getJob() != null && preStartJob.getJob().getJobBusinessKey() != null) {
+                            this.jobBusinessKeyToJobIdMap.remove(preStartJob.getJob().getJobBusinessKey());
+                        }
                     }
                 }
             }
         }
+    }
+
+    /**
+     * Finds the job id of a job given a job business key, a unique user assigned job id.
+     * @param jobBusinessKey Job business key.
+     * @return Job id object when the job was found or null.
+     */
+    public DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey) {
+        return this.jobBusinessKeyToJobIdMap.get(jobBusinessKey);
     }
 
     /**

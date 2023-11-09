@@ -20,7 +20,6 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.metadata.sources.*;
@@ -142,8 +141,8 @@ public class ColumnServiceImpl implements ColumnService {
                 }
 
                 DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
-                    setConnectionName(connectionName);
-                    setSchemaTableName(tableName.toTableSearchFilter());
+                    setConnection(connectionName);
+                    setFullTableName(tableName.toTableSearchFilter());
                     setColumnNames(columnNamesRemoved);
                     setDeleteStatistics(true);
                     setDeleteCheckResults(true);

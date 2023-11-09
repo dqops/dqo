@@ -1,6 +1,6 @@
 # Use cases
 
-We have provided a variety of examples to help you in using DQO effectively. These examples use openly available 
+We have provided a variety of examples to help you in using DQOps effectively. These examples use openly available 
 datasets from [Google Cloud](https://cloud.google.com/datasets).
 
 You can find the full list of examples at the bottom of this article. 
@@ -9,7 +9,7 @@ You can find the full list of examples at the bottom of this article.
 
 To use the examples you need:
 
-- [Installed DQO](../getting-started/installation/installation.md).
+- [Installed DQOps](../getting-started/installation/installation.md).
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
 - A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).).
 
@@ -21,7 +21,7 @@ gcloud auth application-default login
 
 ## Running the use cases
 
-[Standard DQO installation](../getting-started/installation/installation.md) comes with a set of examples, which can 
+[Standard DQOps installation](../getting-started/installation/installation.md) comes with a set of examples, which can 
 be found in the `example/` directory. You can view a complete list of the examples with links to detailed explanation by
 scrolling to the bottom of the page.
 
@@ -29,16 +29,16 @@ The example directory contains two configuration files: `connection.dqoconnectio
 configuration, and `*.dqotable.yaml` file, which stores the columns and tables metadata and checks configuration.
 
 While it is not necessary to manually add the connection in our examples, you can find information on how to do it in the
-[Working with DQO section](../working-with-dqo/adding-data-source-connection/index.md).
+[Working with DQOps section](../working-with-dqo/adding-data-source-connection/index.md).
 
 ## Running the use cases
 
 To run the examples, follow the steps below. 
 
-1. Go to the directory where you installed DQO and navigate, for example, to 
+1. Go to the directory where you installed DQOps and navigate, for example, to 
     `examples/data-completeness/number-of-rows-in-the-table-bigquery`.  
     
-    Run the command provided below in the terminal. This will install DQO on your computer. 
+    Run the command provided below in the terminal. This will install DQOps on your computer. 
 
     === "Windows"
 
@@ -51,27 +51,27 @@ To run the examples, follow the steps below.
         ./run_dqo
         ```
 
-2. Create DQO `userhome` folder.
+2. Create DQOps `DQOps user home` folder.
 
-    After installation, you will be asked whether to initialize the DQO userhome folder in the default location. Type Y to create the folder.  
-    The userhome folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
+    After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder.  
+    The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
 
 
-3. Login to DQO Cloud.
+3. Login to DQOps Cloud.
 
-    To use DQO features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
-    must create a DQO cloud account.
+    To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
+    must create a DQOps cloud account.
  
-    After creating an userhome folder, you will be asked whether to log in to the DQO cloud. After typing Y, you will be
+    After creating the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md), you will be asked whether to log in to the DQOps cloud. After typing Y, you will be
     redirected to https://cloud.dqops.com/registration, where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
-    During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQO application.
+    During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQOps application.
     The API Key is now stored in the configuration file.
 
-### **Executing the checks using the graphical interface**
+### **Executing the checks using the user interface**
 
-You can execute the checks using the [graphical interface](../working-with-dqo/navigating-the-graphical-interface/navigating-the-graphical-interface.md).
-Simply, open the DQO User Interface Console (http://localhost:8888).
+You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
+Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
 
@@ -111,18 +111,18 @@ Simply, open the DQO User Interface Console (http://localhost:8888).
     To see the results which you should expect, refer to the description of each example.
 
 
-7. Synchronize the results with your DQO cloud account using the **Synchronize** button located in the upper right corner of the graphical interface.
+7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-    Synchronization ensures that the locally stored results are synced with your DQO Cloud account, allowing you to view them on the dashboards.
+    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
+3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
 
 
-### **Executing the checks using the DQO Shell**
+### **Executing the checks using the DQOps Shell**
 
-You can also execute the checks that were prepared in the example, using the DQO Shell. 
+You can also execute the checks that were prepared in the example, using the DQOps Shell. 
 
-1. Just run the following command in DQO Shell:
+1. Just run the following command in DQOps Shell:
 
     ```
     check run
@@ -131,13 +131,13 @@ You can also execute the checks that were prepared in the example, using the DQO
     A summary table with the results will be displayed. To see the results which you should expect, refer to the description of each example.
 
 
-2. After executing the checks, synchronize the results with your DQO cloud account by running the following command.
+2. After executing the checks, synchronize the results with your DQOps cloud account by running the following command.
 
     ```
     cloud sync all
     ``` 
 
-3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQO section.
+3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
 
 
 ## List of the use cases

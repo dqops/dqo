@@ -53,7 +53,7 @@ public class TableRemoveCliCommand extends BaseCommand implements ICommand, ICon
         this.tableImportService = tableImportService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Table", required = false,
+    @CommandLine.Option(names = {"-t", "--table", "--full-table-name"}, description = "Full table name filter in the form \"schema.table\", but also supporting patterns: public.*, *.customers, landing*.customer*.", required = false,
             completionCandidates = FullTableNameCompleter.class)
     private String fullTableName;
 

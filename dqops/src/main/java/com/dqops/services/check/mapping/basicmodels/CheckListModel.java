@@ -24,12 +24,12 @@ import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Simplistic model that returns a single data quality check, it's name and "configured" flag.
+ * Simplistic model that returns a single data quality check, its name and "configured" flag.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "CheckListModel", description = "Simplistic model that returns a single data quality check, it's name and \"configured\" flag")
+@ApiModel(value = "CheckListModel", description = "Simplistic model that returns a single data quality check, its name and \"configured\" flag")
 public class CheckListModel implements Comparable<CheckListModel> {
     @JsonPropertyDescription("Check category.")
     private String checkCategory;

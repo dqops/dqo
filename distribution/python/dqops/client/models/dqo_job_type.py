@@ -2,18 +2,18 @@ from enum import Enum
 
 
 class DqoJobType(str, Enum):
-    COLLECT_STATISTICS = "COLLECT_STATISTICS"
-    COLLECT_STATISTICS_ON_TABLE = "COLLECT_STATISTICS_ON_TABLE"
-    DELETE_STORED_DATA = "DELETE_STORED_DATA"
-    IMPORT_SCHEMA = "IMPORT_SCHEMA"
-    IMPORT_TABLES = "IMPORT_TABLES"
-    QUEUE_THREAD_SHUTDOWN = "QUEUE_THREAD_SHUTDOWN"
-    REPAIR_STORED_DATA = "REPAIR_STORED_DATA"
-    RUN_CHECKS = "RUN_CHECKS"
-    RUN_CHECKS_ON_TABLE = "RUN_CHECKS_ON_TABLE"
-    RUN_SCHEDULED_CHECKS_CRON = "RUN_SCHEDULED_CHECKS_CRON"
-    SYNCHRONIZE_FOLDER = "SYNCHRONIZE_FOLDER"
-    SYNCHRONIZE_MULTIPLE_FOLDERS = "SYNCHRONIZE_MULTIPLE_FOLDERS"
+    COLLECT_STATISTICS = "collect_statistics"
+    COLLECT_STATISTICS_ON_TABLE = "collect_statistics_on_table"
+    DELETE_STORED_DATA = "delete_stored_data"
+    IMPORT_SCHEMA = "import_schema"
+    IMPORT_TABLES = "import_tables"
+    QUEUE_THREAD_SHUTDOWN = "queue_thread_shutdown"
+    REPAIR_STORED_DATA = "repair_stored_data"
+    RUN_CHECKS = "run_checks"
+    RUN_CHECKS_ON_TABLE = "run_checks_on_table"
+    RUN_SCHEDULED_CHECKS_CRON = "run_scheduled_checks_cron"
+    SYNCHRONIZE_FOLDER = "synchronize_folder"
+    SYNCHRONIZE_MULTIPLE_FOLDERS = "synchronize_multiple_folders"
 
     def __str__(self) -> str:
         return str(self.value)

@@ -1,17 +1,17 @@
 # Run data quality check
 
-In DQO there are two ways to enable and run data quality checks:
+In DQOps there are two ways to enable and run data quality checks:
 
-- using the graphical interface 
-- using DQO Shell
+- using the user interface 
+- using DQOps Shell
 
 To enable checks, you need to add a connection. You can learn [how to add connection here](../adding-data-source-connection/index.md).
 
-For more information about different categories of checks, see [DQO concepts section](../../dqo-concepts/checks/index.md).
+For more information about different categories of checks, see [DQOps concepts section](../../dqo-concepts/checks/index.md).
 
-## Run data quality checks using the graphical interface
+## Run data quality checks using the user interface
 
-1. In DQO graphical interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
+1. In DQOps user interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
 
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
    
@@ -24,7 +24,7 @@ For more information about different categories of checks, see [DQO concepts sec
     ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check.jpg)
 
 4. Set the threshold levels or leave default values. Set parameters if the check has any. Click the Save button in the upper right corner.
-    You can read more about threshold severity levels in [DQO concepts section](../../dqo-concepts/checks/#severity-levels).
+    You can read more about threshold severity levels in [DQOps concepts section](../../dqo-concepts/checks/#severity-levels).
 
     ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels.jpg)
 
@@ -46,7 +46,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
     A table will appear with more details about the run check.
 
-7. Synchronize locally stored results with your DQO Cloud account to be able to view the results on the dashboards.
+7. Synchronize locally stored results with your DQOps Cloud account to be able to view the results on the dashboards.
 
     To synchronize all the data click on Synchronize button in the upper right corner of the navigation menu.
 
@@ -54,7 +54,7 @@ For more information about different categories of checks, see [DQO concepts sec
 
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score.
 
-To learn more about partition checks, go to [DQO concepts section](../../dqo-concepts/checks/partition-checks/partition-checks.md)
+To learn more about partition checks, go to [DQOps concepts section](../../dqo-concepts/checks/partition-checks/partition-checks.md)
 
 To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
 
@@ -90,22 +90,14 @@ To configure the event and/or ingestion timestamp columns:
 4. Click the Save button in the upper right corner.
 
 
-## Run data quality checks using the DQO Shell
+## Run data quality checks using the DQOps Shell
 
 Data quality checks are stored in YAML configuration files. YAMl configuration files are located in the `./sources` folder.
-The complete DQO YAML schema can be found [here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
+The complete DQOps YAML schema can be found [here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
 
-The YAML files in DQO support code completion in code editors such as Visual Studio Code. Remember to install the YAML
-extension by RedHat and Better Jinja by Samuel Colvin.
+To add and run data quality checks using the DQOps Shell, follow the steps below. 
 
-![YAML extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/yaml-extension.png)
-
-![Better Jinja extension](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/better-jinja-extension.png)
-
-
-To add and run data quality checks using the DQO Shell, follow the steps below. 
-
-1. Run the following command in DQO Shell to edit YAMl configuration file and define data quality checks.
+1. Run the following command in DQOps Shell to edit YAMl configuration file and define data quality checks.
     ```
     dqo> table edit
     ```
@@ -156,7 +148,7 @@ To add and run data quality checks using the DQO Shell, follow the steps below.
                 nullable: true
     ```
    
-4. To execute the check, run the following command in DQO Shell:
+4. To execute the check, run the following command in DQOps Shell:
 
     ```
     dqo> check run

@@ -19,6 +19,7 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.SilentCheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -180,6 +181,16 @@ public class RunChecksParameters implements Cloneable {
         }
         catch (CloneNotSupportedException ex) {
             throw new DqoRuntimeException("Clone not supported", ex);
+        }
+    }
+
+    public static class RunChecksParametersSampleFactory implements SampleValueFactory<RunChecksParameters> {
+        @Override
+        public RunChecksParameters createSample() {
+            RunChecksParameters runChecksParameters = new RunChecksParameters();
+            runChecksParameters.setCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample());
+
+            return runChecksParameters;
         }
     }
 }

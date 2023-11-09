@@ -1,0 +1,51 @@
+{{superiorDescription}}{{#with "  "}}{{.}}{{/with}}
+
+{{#each operationObjects}}
+___{{#with "  "}}{{.}}{{/with}}
+## {{operationPythonName}}{{#with "  "}}{{.}}{{/with}}
+{{operationDescription}}{{#with "  "}}{{.}}{{/with}}
+[Source code]({{clientSourceUrl}})
+{{#with "  "}}{{.}}{{/with}}
+
+**{{apiCallMethod}}**
+```
+{{apiCallUrl}}{{#with "  "}}{{.}}{{/with}}
+```
+{{#if returnValueField}}
+**Return value**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
+|---------------|---------------------------------|-----------|
+{{#with returnValueField}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|
+{{/with}}
+{{/if}}
+
+{{#if parametersFields}}
+**Parameters of this method are described below**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+{{#each parametersFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
+{{/each}}
+{{/if}}
+
+{{#if requestBodyField}}
+**Request body**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|-----------------|
+{{#with requestBodyField}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
+{{/with}}
+{{/if}}
+
+{{#if usageExamples}}
+**Usage examples**{{#with "  "}}{{.}}{{/with}}
+{{#each usageExamples~}}
+=== "{{{executionMethod}}}"
+    {{#with "  "}}{{.}}{{/with}}
+    ```{{{executionCodeFormatting}}}
+    {{{renderedExample}}}
+    ```
+{{/each~}}
+{{/if}}
+{{/each}}

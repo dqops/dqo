@@ -52,6 +52,7 @@ public class CheckResultsOverviewParameters {
     /**
      * Returns the check overview parameters for a given number of months.
      * @param months Number of months. 0 for the current month only. 1 for current and previous month (to capture one full month).
+     * @param resultsCount The maximum number of months to load, because loading starts at the most recent month and goes back. If there are no data for the current month and we requested 1 month, DQOps will load earlier months.
      * @return Check result overview parameters.
      */
     public static CheckResultsOverviewParameters createForRecentMonths(long months, int resultsCount) {

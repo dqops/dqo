@@ -21,12 +21,16 @@ class TableModel:
         table_hash (Union[Unset, int]): Table hash that identifies the table using a unique hash code.
         spec (Union[Unset, TableSpec]):
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can update or delete this object.
+        yaml_parsing_error (Union[Unset, str]): Optional parsing error that was captured when parsing the YAML file.
+            This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing
+            error message and the file location.
     """
 
     connection_name: Union[Unset, str] = UNSET
     table_hash: Union[Unset, int] = UNSET
     spec: Union[Unset, "TableSpec"] = UNSET
     can_edit: Union[Unset, bool] = UNSET
+    yaml_parsing_error: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -37,6 +41,7 @@ class TableModel:
             spec = self.spec.to_dict()
 
         can_edit = self.can_edit
+        yaml_parsing_error = self.yaml_parsing_error
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -49,6 +54,8 @@ class TableModel:
             field_dict["spec"] = spec
         if can_edit is not UNSET:
             field_dict["can_edit"] = can_edit
+        if yaml_parsing_error is not UNSET:
+            field_dict["yaml_parsing_error"] = yaml_parsing_error
 
         return field_dict
 
@@ -70,11 +77,14 @@ class TableModel:
 
         can_edit = d.pop("can_edit", UNSET)
 
+        yaml_parsing_error = d.pop("yaml_parsing_error", UNSET)
+
         table_model = cls(
             connection_name=connection_name,
             table_hash=table_hash,
             spec=spec,
             can_edit=can_edit,
+            yaml_parsing_error=yaml_parsing_error,
         )
 
         table_model.additional_properties = d

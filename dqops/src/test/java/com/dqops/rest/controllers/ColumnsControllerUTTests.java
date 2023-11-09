@@ -308,7 +308,7 @@ public class ColumnsControllerUTTests extends BaseTest {
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleProfilingCheck));
+                sampleProfilingCheck);
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
@@ -345,7 +345,7 @@ public class ColumnsControllerUTTests extends BaseTest {
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleMonitoring.getDaily()));
+                sampleMonitoring.getDaily());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
@@ -383,7 +383,7 @@ public class ColumnsControllerUTTests extends BaseTest {
                 this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
                 this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(samplePartitionedCheck.getMonthly()));
+                samplePartitionedCheck.getMonthly());
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);

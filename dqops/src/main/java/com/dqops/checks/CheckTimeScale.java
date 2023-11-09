@@ -16,6 +16,7 @@
 package com.dqops.checks;
 
 import com.dqops.metadata.timeseries.TimePeriodGradient;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -41,6 +42,13 @@ public enum CheckTimeScale {
         }
         else {
             throw new UnsupportedOperationException("Time scale " + this + " mapping missing, add it here.");
+        }
+    }
+
+    public static class CheckTimeScaleSampleFactory implements SampleValueFactory<CheckTimeScale> {
+        @Override
+        public CheckTimeScale createSample() {
+            return daily;
         }
     }
 }

@@ -1,6 +1,6 @@
 # Checks overview
 
-In DQO, the check is a data quality test that can be run on both table or column levels. The check consists of a 
+In DQOps, the check is a data quality test that can be run on both table or column levels. The check consists of a 
 [data quality sensor](../sensors/sensors.md) and a [data quality rule](../rules/rules.md).
 
 The data quality sensor reads the value from the data source at a given point in time. The data quality rule includes 
@@ -9,7 +9,7 @@ an issue with your data, and it creates an [incident that can be viewed, filtere
 
 ## Types of checks
 
-In DQO, checks are divided into 3 types:
+In DQOps, checks are divided into 3 types:
 
 - [**Profiling checks**](profiling-checks/profiling-checks.md) enable you to run more advanced data analyses than 
 [**Basic data statistics**](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). Profiling checks are also useful for 
@@ -29,14 +29,15 @@ To run a partition check, you need to select a column that serves as the time pa
 Partition checks are also divided into two categories: daily checks and monthly checks.
 
 The data in the table often comes from different data sources, different vendors, or is loaded by different data pipelines.
-That is why DQO supports the setting of up to 9 different data grouping dimensions (levels). 
+That is why DQOps supports the setting of up to 9 different data grouping dimensions (levels). 
 [Read more about the data grouping here](../data-grouping/data-grouping.md)
+
 
 ## Categories of checks
 
 Each type of checks is divided into two main categories: table and column. Table-level data quality checks are used to 
 evaluate the table at a high-level without reference to individual columns, while column-level checks are run on 
-specific column. Built-in checks available in DQO are divided into the following subcategories. 
+specific column. Built-in checks available in DQOps are divided into the following subcategories. 
 
 You can access the full lists of available checks with detailed descriptions by clicking on a link. 
 
@@ -50,6 +51,7 @@ You can access the full lists of available checks with detailed descriptions by 
 | [SQL](../../checks/#sql)                   | Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
 | [Availability](../../checks/#availability) | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
 | [Schema](../../checks/#schema)             | Detects changes in the schema.                                                                                                                                                                                                              |                                                                                                                                                                                                                                            |
+
 
 ### **Column checks**
 
@@ -69,9 +71,10 @@ You can access the full lists of available checks with detailed descriptions by 
 | [Anomaly](../../checks/#anomaly)       | Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.                                                                                                            |
 | [Schema](../../checks/#schema)         | Detects changes in the schema.                                                                                                                                                                                                             |
 
+
 ## Severity levels
 
-Checks evaluate the results using rules. There are 3 severity levels in DQO: warning, error and fatal
+Checks evaluate the results using rules. There are 3 severity levels in DQOps: warning, error and fatal
 
 - **Warning**. A warning level alerting threshold raises warnings for less important data quality issues. Warnings are
   not treated as data quality issues. Data quality checks that did not pass the warning alerting rule, but did pass the
@@ -141,21 +144,26 @@ spec:
       labels:
       - This is the column that is analyzed for data quality issues
 ```
+
 The `spec` section contains the details of the table, including the target schema and table name. 
 
-The `timestamp_columns` section specifies the column names for various timestamps in the data.
+The `timestamp_columns` section specifies the column names for various timestamps in the table. This section is
+used to identify the columns used for timeliness checks and to run [partitioned checks](./partition-checks/partition-checks.md).
 
 The `columns` section lists the columns in the table which has configured checks. In this example the column named 
 `target_column` has a configured check `profile_nulls_percent`. This means that the sensor reads the percentage of null
 values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
 be raised.
 
+The structure of the table configuration file is described in the [configuring checks](./configuring-checks.md) section.
+
+
 ## Data quality results
 
-In DQO, data quality results (metrics captured by the [data quality sensor](../sensors/sensors.md)) are stored as Apache
-Parquet files following the Apache Hive compatible folder tree, partitioned by connection name, table name, and month. 
-For example, alerts for September 2022 for a single table would be stored in a file 
-`.data/rule_results/c=conn_bq_17/t=austin_311.311_service_requests/m=2022-09-01/rule_results.0.parquet`. 
+In DQOps, data quality results (metrics captured by the [data quality sensor](../sensors/sensors.md)) are stored as Apache
+Parquet files following the Apache Hive compatible folder tree, partitioned by the connection name, table name, and month. 
+For example, data quality issues for September 2022 for a single table would be stored in a file 
+`.data/check_results/c=conn_bq_17/t=austin_311.311_service_requests/m=2022-09-01/check_results.0.parquet`. 
 
 The sensor data are stored locally, allowing true multi-cloud data collection without accessing any sensitive data 
 through an external cloud or SaaS solution.
@@ -164,14 +172,14 @@ The result data can simply be replicated to a data lake or cloud bucket. Later, 
 Hive-compatible data can query the output files of the data quality tool. Data can be queried using Apache Hive,
 Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server PolyBase, AWS Athena, and AWS Redshift Spectrum.
 
-Data cleaning is as simple as deleting a file from a folder, which can be done using the DQO user interface or CLI. 
+Data cleaning is as simple as deleting a file from a folder, which can be done using the DQOps user interface or CLI. 
 
 ## Testing date partitions
 
 The majority of data quality solutions are limited to capturing data quality metrics for the whole table, without taking
 into consideration that the old data is measured together with the most recent data. This limitation has serious 
-implications, making many data quality results incorrect. DQO solves this challenge by allowing testing daily and 
-monthly date partitions. DQO can capture metrics using a **GROUP BY** clause and supports daily and monthly slicing. 
+implications, making many data quality results incorrect. DQOps solves this challenge by allowing testing daily and 
+monthly date partitions. DQOps can capture metrics using a **GROUP BY** clause and supports daily and monthly slicing. 
 
 Consider a simple data quality check that counts the percentage of rows with a non-negative value. A data quality
 sensor that analyzes the whole table without time slicing, detecting a percentage of valid rows where the value of a 
@@ -195,7 +203,7 @@ yesterday's data may not be visible, as they are responsible for lowering the da
 one year’s data. Furthermore, daily or monthly partitioned data that is reloaded should be analyzed separately, for 
 each daily partition.
 
-DQO allows capturing metrics using a **GROUP BY** clause with daily or monthly time slicing. 
+DQOps allows capturing metrics using a **GROUP BY** clause with daily or monthly time slicing. 
 The following Google BigQuery query example captures time-sliced data to calculate metrics for each day separately.
 
 ``` sql hl_lines="1 4"
@@ -221,23 +229,35 @@ not group the data by day and calculated an aggregate score for the table only d
 too far from the average score. The examples above only show 5 days of data, but in a real database, this drop will be 
 below the average daily change in the metric value.
 
-## Data stream segmentation
+## Data grouping
 
 An important aspect of data monitoring is the ability to calculate data quality metrics for different groups of rows
 stored in the same table. Data in the fact table can be loaded from different sources such as countries, states, or
 received from different external sources. Each stream of data would be loaded by a different pipeline. Data pipelines
-for different data streams may fail independently of each other.
+for different data group may fail independently of each other.
 
-Data streams can be identified by a discriminator column, such as country or state. DQO can analyze data within separate
-segments with a GROUP BY <data_stream_discriminator_column> clause to the data quality queries. DQO support setting of up
-to 9 different data streams. Below is an example of a query with grouping by country.
+Data groups can be identified by a discriminator column, such as country or state. DQOps can analyze data within separate
+segments with a GROUP BY <data_grouping_discriminator_column> clause to the data quality queries. DQOps support setting of up
+to 9 different data grouping hierarchy levels. Below is an example of a query with grouping by country.
 
-``` sql hl_lines="4 5"
-SELECT CURRENT_DATETIME() as time_window,
-100.0 * SUM(CASE WHEN tested_column >= 0 THEN 1 ELSE 0 END) /
-COUNT(*) as percentage_valid,
-country as stream_level_1 FROM schema.table
-GROUP BY stream_level_1
+``` sql hl_lines="12 16"
+SELECT
+    CASE
+        WHEN COUNT(*) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN analyzed_table."target_column"
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*)
+    END AS actual_value,
+    analyzed_table."country" AS grouping_level_1,
+    DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+    CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+GROUP BY grouping_level_1, time_period, time_period_utc
+ORDER BY grouping_level_1, time_period, time_period_utc
 ```
 
 The results pivoted for readability might look as follows:
@@ -250,19 +270,31 @@ Data quality scores, which are calculated for each data source or vendor separat
 analysis by linking the data quality incident to a data source, a data stream, an external data supplier or simply
 a separate data pipeline that has loaded invalid data.
 
-## Integration of data partitions with data segmentation by data streams
+## Integration of data partitions with data grouping
 
-Data partitions can be integrated with data segmentation by data streams. 
+Data partitions can be integrated with data segmentation by applying also data grouping. 
 
-For example, the GROUP BY clause can list columns that divide the data set by a day and a data stream discriminator column
-(country in this example). A complete SQL query that the DQO tool would execute on the data source look like this:
+For example, the GROUP BY clause can list columns that divide the data set by a day and a data group discriminator column
+(country in this example). A complete SQL query that the DQOps tool would execute on the data source look like this:
 
-``` sql hl_lines="1 4 5"
-SELECT DATETIME_TRUNC(transaction_timestamp_column, DAY) as time_window,
-100.0 * SUM(CASE WHEN tested_column >= 0 THEN 1 ELSE 0 END) /
-COUNT(*) as percentage_valid,
-country as stream_level_1 FROM schema.table
-GROUP BY time_window, stream_level_1
+``` sql hl_lines="12-14 16"
+SELECT
+    CASE
+        WHEN COUNT(*) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN analyzed_table."target_column"
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*)
+    END AS actual_value,
+    analyzed_table."country" AS grouping_level_1,
+    CAST(analyzed_table."date_column" AS date) AS time_period,
+    CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+GROUP BY grouping_level_1, time_period, time_period_utc
+ORDER BY grouping_level_1, time_period, time_period_utc
 ```
 
 The results of this query collect data quality scores for each day and country separately, and allows accurate 

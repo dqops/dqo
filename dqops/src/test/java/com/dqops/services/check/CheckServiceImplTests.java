@@ -277,7 +277,7 @@ public class CheckServiceImplTests extends BaseTest {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
-            setConnectionName("conn");
+            setConnection("conn");
             setCheckName("profile_row_count");
         }};
 
@@ -330,7 +330,7 @@ public class CheckServiceImplTests extends BaseTest {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
-            setConnectionName("conn");
+            setConnection("conn");
             setCheckName("profile_row_count");
         }};
 
@@ -386,7 +386,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
-            setConnectionName("conn");
+            setConnection("conn");
             setCheckName("profile_nulls_count");
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
@@ -431,7 +431,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         AllChecksPatchParameters allChecksPatchParameters = new AllChecksPatchParameters();
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
-            setConnectionName("conn");
+            setConnection("conn");
             setCheckName("profile_nulls_count");
         }};
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
@@ -481,8 +481,8 @@ public class CheckServiceImplTests extends BaseTest {
 
         // The column that was left out isn't configured
         CheckSearchFilters remainingColumnChecksSearch = checkSearchFilters.clone();
-        remainingColumnChecksSearch.setSchemaTableName("sch.tab2");
-        remainingColumnChecksSearch.setColumnName("col2");
+        remainingColumnChecksSearch.setFullTableName("sch.tab2");
+        remainingColumnChecksSearch.setColumn("col2");
 
         Collection<AbstractCheckSpec<?, ?, ?, ?>> remainingCheck = hierarchyNodeTreeSearcher.findChecks(userHome, remainingColumnChecksSearch);
         Assertions.assertNotNull(remainingCheck);

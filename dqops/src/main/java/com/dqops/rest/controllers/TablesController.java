@@ -19,18 +19,16 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
-import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.normalization.CommonTableNormalizationService;
 import com.dqops.data.statistics.services.StatisticsDataService;
@@ -41,8 +39,8 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
+import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
-import com.dqops.metadata.scheduling.MonitoringSchedulesSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.*;
@@ -56,7 +54,6 @@ import com.dqops.rest.models.metadata.TableModel;
 import com.dqops.rest.models.metadata.TablePartitioningModel;
 import com.dqops.rest.models.metadata.TableStatisticsModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
@@ -219,6 +216,7 @@ public class TablesController {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setSpec(tableSpec);
             setCanEdit(principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT));
+            setYamlParsingError(tableSpec.getYamlParsingError());
         }};
 
         return new ResponseEntity<>(Mono.just(tableModel), HttpStatus.OK); // 200
@@ -407,7 +405,7 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -856,8 +854,8 @@ public class TablesController {
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -923,8 +921,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -990,8 +988,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setEnabled(true);
@@ -1229,8 +1227,8 @@ public class TablesController {
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1304,8 +1302,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1379,8 +1377,8 @@ public class TablesController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
-            setConnectionName(connectionWrapper.getName());
-            setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
+            setConnection(connectionWrapper.getName());
+            setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
             setCheckType(checks.getCheckType());
             setTimeScale(checks.getCheckTimeScale());
             setCheckCategory(checkCategory);
@@ -1453,16 +1451,16 @@ public class TablesController {
 
         resultModel.setCollectTableStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
             setTarget(StatisticsCollectorTarget.table);
             setEnabled(true);
         }});
 
         resultModel.setCollectTableAndColumnStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
         {{
-            setConnectionName(connectionName);
-            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setConnection(connectionName);
+            setFullTableName(physicalTableName.toTableSearchFilter());
             setEnabled(true);
         }});
 
@@ -2042,7 +2040,6 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        // TODO: validate the tableSpec
         TableSpec tableSpec = tableWrapper.getSpec();
         tablePartitioningModel.copyToTableSpecification(tableSpec);
         userHomeContext.flush();
@@ -2078,7 +2075,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Default data grouping configuration to store or an empty object to clear the data grouping configuration on a table level")
-            @RequestBody Optional<DataGroupingConfigurationSpec> dataGroupingConfigurationSpec) {
+            @RequestBody DataGroupingConfigurationSpec dataGroupingConfigurationSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2101,12 +2098,12 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        if (dataGroupingConfigurationSpec.isPresent()) {
+        if (dataGroupingConfigurationSpec != null) {
             if (!Strings.isNullOrEmpty(tableSpec.getDefaultGroupingName())) {
                 tableSpec.getGroupings().remove(tableSpec.getDefaultGroupingName());
-                tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec.get());
+                tableSpec.getGroupings().put(tableSpec.getDefaultGroupingName(), dataGroupingConfigurationSpec);
             } else {
-                tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec.get());
+                tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
                 tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
             }
         } else {
@@ -2150,7 +2147,7 @@ public class TablesController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup,
             @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
-                @RequestBody Optional<MonitoringScheduleSpec> monitoringScheduleSpec) {
+                @RequestBody MonitoringScheduleSpec monitoringScheduleSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2173,14 +2170,12 @@ public class TablesController {
         }
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        MonitoringSchedulesSpec schedules = tableSpec.getSchedulesOverride();
+        DefaultSchedulesSpec schedules = tableSpec.getSchedulesOverride();
         if (schedules == null) {
-            schedules = new MonitoringSchedulesSpec();
+            schedules = new DefaultSchedulesSpec();
             tableSpec.setSchedulesOverride(schedules);
         }
-
-        MonitoringScheduleSpec newScheduleSpec = monitoringScheduleSpec.orElse(null);
-        schedules.setScheduleForCheckSchedulingGroup(newScheduleSpec, schedulingGroup);
+        schedules.setScheduleForCheckSchedulingGroup(monitoringScheduleSpec, schedulingGroup);
 
         userHomeContext.flush();
 
@@ -2216,7 +2211,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("New configuration of the table's incident grouping")
-            @RequestBody Optional<TableIncidentGroupingSpec> incidentGrouping) {
+            @RequestBody TableIncidentGroupingSpec incidentGrouping) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2238,12 +2233,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (incidentGrouping.isPresent()) {
-            tableSpec.setIncidentGrouping(incidentGrouping.get());
-        } else {
-            tableSpec.setIncidentGrouping(null);
-        }
+        tableWrapper.getSpec().setIncidentGrouping(null);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -2277,7 +2267,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("List of labels to attach (replace) on a table or an empty object to clear the list of labels on a table")
-            @RequestBody Optional<LabelSetSpec> labelSetSpec) {
+            @RequestBody LabelSetSpec labelSetSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2300,12 +2290,7 @@ public class TablesController {
         }
 
         // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (labelSetSpec.isPresent()) {
-            tableSpec.setLabels(labelSetSpec.get());
-        } else {
-            tableSpec.setLabels(null);
-        }
+        tableWrapper.getSpec().setLabels(labelSetSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -2339,7 +2324,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("List of comments to attach (replace) on a table or an empty object to clear the list of comments on a table")
-            @RequestBody Optional<CommentsListSpec> commentsListSpec) {
+            @RequestBody CommentsListSpec commentsListSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2362,12 +2347,7 @@ public class TablesController {
         }
 
         // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (commentsListSpec.isPresent()) {
-            tableSpec.setComments(commentsListSpec.get());
-        } else {
-            tableSpec.setComments(null);
-        }
+        tableWrapper.getSpec().setComments(commentsListSpec);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
@@ -2430,7 +2410,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).")
-            @RequestBody Optional<TableProfilingCheckCategoriesSpec> tableProfilingCheckCategoriesSpec) {
+            @RequestBody TableProfilingCheckCategoriesSpec tableProfilingCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2440,8 +2420,8 @@ public class TablesController {
         boolean success = this.updateTableGenericChecks(
                 principal,
                 spec -> {
-                    if (tableProfilingCheckCategoriesSpec.isPresent()) {
-                        spec.setTableCheckRootContainer(tableProfilingCheckCategoriesSpec.get());
+                    if (tableProfilingCheckCategoriesSpec != null) {
+                        spec.setTableCheckRootContainer(tableProfilingCheckCategoriesSpec);
                     } else {
                         spec.setProfilingChecks(new TableProfilingCheckCategoriesSpec()); // it is never empty...
                     }
@@ -2486,7 +2466,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of daily table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
-            @RequestBody Optional<TableDailyMonitoringCheckCategoriesSpec> tableDailyMonitoringSpec) {
+            @RequestBody TableDailyMonitoringCheckCategoriesSpec tableDailyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2495,15 +2475,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 principal,
-                spec -> {
-                    TableMonitoringChecksSpec monitoringSpec = spec.getMonitoringChecks();
-
-                    if (tableDailyMonitoringSpec.isPresent()) {
-                        monitoringSpec.setDaily(tableDailyMonitoringSpec.get());
-                    } else {
-                        monitoringSpec.setDaily(null);
-                    }
-                },
+                spec -> spec.getMonitoringChecks().setDaily(tableDailyMonitoringSpec),
                 connectionName,
                 schemaName,
                 tableName
@@ -2544,7 +2516,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of monthly table level data quality monitoring to store or an empty object to remove all data quality monitoring on the table level (column level monitoring are preserved).")
-            @RequestBody Optional<TableMonthlyMonitoringCheckCategoriesSpec> tableMonthlyMonitoringSpec) {
+            @RequestBody TableMonthlyMonitoringCheckCategoriesSpec tableMonthlyMonitoringSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2553,15 +2525,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 principal,
-                spec -> {
-                    TableMonitoringChecksSpec monitoringSpec = spec.getMonitoringChecks();
-
-                    if (tableMonthlyMonitoringSpec.isPresent()) {
-                        monitoringSpec.setMonthly(tableMonthlyMonitoringSpec.get());
-                    } else {
-                        monitoringSpec.setMonthly(null);
-                    }
-                },
+                spec -> spec.getMonitoringChecks().setMonthly(tableMonthlyMonitoringSpec),
                 connectionName,
                 schemaName,
                 tableName
@@ -2602,7 +2566,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of daily table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
-            @RequestBody Optional<TableDailyPartitionedCheckCategoriesSpec> tableDailyPartitionedSpec) {
+            @RequestBody TableDailyPartitionedCheckCategoriesSpec tableDailyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2611,15 +2575,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 principal,
-                spec -> {
-                    TablePartitionedChecksRootSpec PartitionedSpec = spec.getPartitionedChecks();
-                    
-                    if (tableDailyPartitionedSpec.isPresent()) {
-                        PartitionedSpec.setDaily(tableDailyPartitionedSpec.get());
-                    } else {
-                        PartitionedSpec.setDaily(null);
-                    }
-                },
+                spec -> spec.getPartitionedChecks().setDaily(tableDailyPartitionedSpec),
                 connectionName,
                 schemaName,
                 tableName
@@ -2660,7 +2616,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Configuration of monthly table level data quality partitioned checks to store or an empty object to remove all data quality partitioned checks on the table level (column level partitioned checks are preserved).")
-            @RequestBody Optional<TableMonthlyPartitionedCheckCategoriesSpec> tableMonthlyPartitionedSpec) {
+            @RequestBody TableMonthlyPartitionedCheckCategoriesSpec tableMonthlyPartitionedSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2669,15 +2625,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 principal,
-                spec -> {
-                    TablePartitionedChecksRootSpec PartitionedSpec = spec.getPartitionedChecks();
-
-                    if (tableMonthlyPartitionedSpec.isPresent()) {
-                        PartitionedSpec.setMonthly(tableMonthlyPartitionedSpec.get());
-                    } else {
-                        PartitionedSpec.setMonthly(null);
-                    }
-                },
+                spec -> spec.getPartitionedChecks().setMonthly(tableMonthlyPartitionedSpec),
                 connectionName,
                 schemaName,
                 tableName
@@ -2696,7 +2644,7 @@ public class TablesController {
             String connectionName,
             String schemaName,
             String tableName,
-            Optional<CheckContainerModel> checkContainerModel) {
+            CheckContainerModel checkContainerModel) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -2718,8 +2666,8 @@ public class TablesController {
             return false;
         }
 
-        if (checkContainerModel.isPresent()) {
-            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel.get(), checksToUpdate, tableSpec);
+        if (checkContainerModel != null) {
+            this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, checksToUpdate, tableSpec);
             tableSpec.setTableCheckRootContainer(checksToUpdate);
         } else {
             // we cannot just remove all checks because the model is a patch, no changes in the patch means no changes to the object
@@ -2757,7 +2705,7 @@ public class TablesController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration.")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2811,7 +2759,7 @@ public class TablesController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality monitoring configuration.")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -2865,7 +2813,7 @@ public class TablesController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Model with the changes to be applied to the data quality partitioned checks configuration.")
-            @RequestBody Optional<CheckContainerModel> checkContainerModel) {
+            @RequestBody CheckContainerModel checkContainerModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {

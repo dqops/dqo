@@ -112,7 +112,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     @Test
     void findTables_whenCalledForAll_thenReturnsCollection() {
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setSchemaTableName("*");
+        tableSearchFilters.setFullTableName("*");
         ArrayList<TableWrapper> expectedList = new ArrayList<>();
         expectedList.add(table);
         TableWrapper tableWrapper2 = connection.getTables().createAndAddNew(new PhysicalTableName("test2", "test2"));
@@ -135,7 +135,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     @Test
     void findTables_whenCalledForExistedOne_thenReturnsSingleCollection() {
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setSchemaTableName("test.test");
+        tableSearchFilters.setFullTableName("test.test");
         ArrayList<TableWrapper> expectedList = new ArrayList<>();
         expectedList.add(table);
         Collection<TableWrapper> tableSpecCollection = this.sut.findTables(userHomeContext.getUserHome(), tableSearchFilters);
@@ -145,7 +145,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     @Test
     void findTables_whenCalledForNotExisted_thenReturnsEmptyCollection() {
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
-        tableSearchFilters.setSchemaTableName("testNotExisted.testNotExisted");
+        tableSearchFilters.setFullTableName("testNotExisted.testNotExisted");
         ArrayList<TableWrapper> expectedList = new ArrayList<>();
         Collection<TableWrapper> tableSpecCollection = this.sut.findTables(userHomeContext.getUserHome(), tableSearchFilters);
         Assertions.assertEquals(tableSpecCollection, expectedList);

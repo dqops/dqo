@@ -22,7 +22,8 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.CheckResultsDetailedFilterParameters;
 import com.dqops.data.checkresults.services.models.CheckResultsListModel;
-import com.dqops.data.checkresults.services.models.TableDataQualityStatusModel;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusFilterParameters;
+import com.dqops.data.checkresults.services.models.currentstatus.TableCurrentDataQualityStatusModel;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -39,6 +40,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -73,7 +75,9 @@ public class CheckResultsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param months         The number of months to load.
-     * @param checkType      Optional check type filter.
+     * @param profiling      Optional check type filter to return profiling checks.
+     * @param monitoring     Optional check type filter to return monitoring checks.
+     * @param partitioned    Optional check type filter to return partitioned checks.
      * @param checkTimeScale Optional check time scale filter.
      * @return The most recent table's data quality status.
      */
@@ -81,29 +85,52 @@ public class CheckResultsController {
     @ApiOperation(value = "getTableDataQualityStatus", notes = "Read the most recent results of executed data quality checks on the table and return the current table's data quality status - the number of failed data quality " +
             "checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. " +
             "This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.",
-            response = TableDataQualityStatusModel.class,
+            response = TableCurrentDataQualityStatusModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "The most recent data quality status of the requested table",
-                    response = TableDataQualityStatusModel.class),
+                    response = TableCurrentDataQualityStatusModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<TableDataQualityStatusModel>> getTableDataQualityStatus(
+    public ResponseEntity<Mono<TableCurrentDataQualityStatusModel>> getTableDataQualityStatus(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
             @RequestParam(required = false) Optional<Integer> months,
-            @ApiParam(name = "checkType", value = "Optional check type filter (profiling, monitoring, partitioned).", required = false)
-            @RequestParam(required = false) Optional<CheckType> checkType,
+            @ApiParam(name = "since", value = "Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.", required = false)
+            @RequestParam(required = false) Optional<Instant> since,
+            @ApiParam(name = "profiling", value = "Optional check type filter to detect the current status of the profiling checks results. " +
+                    "The default value is false, excluding profiling checks from the current table status detection. " +
+                    "If enabled, only the status of the most recent check result is retrieved.", required = false)
+            @RequestParam(required = false) Optional<Boolean> profiling,
+            @ApiParam(name = "monitoring", value = "Optional check type filter to detect the current status of the monitoring checks results. " +
+                    "The default value is true, including monitoring checks in the current table status detection. " +
+                    "If enabled, only the status of the most recent check result is retrieved.", required = false)
+            @RequestParam(required = false) Optional<Boolean> monitoring,
+            @ApiParam(name = "partitioned", value = "Optional check type filter to detect the current status of the partitioned checks results. " +
+                    "The default value is true, including partitioned checks in the current table status detection. " +
+                    "Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.", required = false)
+            @RequestParam(required = false) Optional<Boolean> partitioned,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).", required = false)
-            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
+            @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale,
+            @ApiParam(name = "dataGroup", value = "Optional data group", required = false)
+            @RequestParam(required = false) Optional<String> dataGroup,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName,
+            @ApiParam(name = "category", value = "Optional check category name", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "tableComparison", value = "Optional table comparison name", required = false)
+            @RequestParam(required = false) Optional<String> tableComparison,
+            @ApiParam(name = "qualityDimension", value = "Optional data quality dimension", required = false)
+            @RequestParam(required = false) Optional<String> qualityDimension) {
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -125,11 +152,26 @@ public class CheckResultsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDataQualityStatusModel tableDataQualityStatusModel = this.checkResultsDataService.analyzeTableMostRecentQualityStatus(
-                connectionName, physicalTableName,
-                months.orElse(1), checkType.orElse(null), checkTimeScale.orElse(null));
+        TableCurrentDataQualityStatusFilterParameters tableCurrentDataQualityStatusFilterParameters = TableCurrentDataQualityStatusFilterParameters.builder()
+                .connectionName(connectionName)
+                .physicalTableName(physicalTableName)
+                .lastMonths(months.orElse(1))
+                .profiling(profiling.orElse(false))
+                .monitoring(monitoring.orElse(true))
+                .partitioned(partitioned.orElse(true))
+                .checkTimeScale(checkTimeScale.orElse(null))
+                .dataGroup(dataGroup.orElse(null))
+                .checkName(checkName.orElse(null))
+                .category(category.orElse(null))
+                .tableComparison(tableComparison.orElse(null))
+                .qualityDimension(qualityDimension.orElse(null))
+                .since(since.orElse(null))
+                .build();
 
-        return new ResponseEntity<>(Mono.just(tableDataQualityStatusModel), HttpStatus.OK); // 200
+        TableCurrentDataQualityStatusModel tableCurrentDataQualityStatusModel = this.checkResultsDataService
+                .analyzeTableMostRecentQualityStatus(tableCurrentDataQualityStatusFilterParameters);
+
+        return new ResponseEntity<>(Mono.just(tableCurrentDataQualityStatusModel), HttpStatus.OK); // 200
     }
 
     /**

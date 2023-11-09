@@ -24,7 +24,6 @@ import com.dqops.cli.output.OutputFormatService;
 import com.dqops.cli.terminal.*;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
@@ -220,8 +219,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 return cliOperationStatus;
             }
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
-            tableSearchFilters.setConnectionName(connectionName);
-            tableSearchFilters.setSchemaTableName(schemaName + ".*");
+            tableSearchFilters.setConnection(connectionName);
+            tableSearchFilters.setFullTableName(schemaName + ".*");
             tableSearchFilters.setTags(dimensions);
             tableSearchFilters.setLabels(labels);
 
@@ -306,7 +305,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
             }
 
             TableSearchFilters tableSearchFilters = new TableSearchFilters();
-            tableSearchFilters.setConnectionName(connectionName);
+            tableSearchFilters.setConnection(connectionName);
             tableSearchFilters.setTags(dimensions);
             tableSearchFilters.setLabels(labels);
 
@@ -362,7 +361,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
 
         ConnectionSearchFilters connectionSearchFilters = new ConnectionSearchFilters();
         connectionSearchFilters.setConnectionName(connectionNameFilter);
-        connectionSearchFilters.setDimensions(dimensions);
+        connectionSearchFilters.setTags(dimensions);
         connectionSearchFilters.setLabels(labels);
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();

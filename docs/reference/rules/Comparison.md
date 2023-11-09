@@ -11,14 +11,17 @@ Data quality rule that verifies if a data quality check readout is between from 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 |to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/between_floats.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -47,6 +50,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/between_floats.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -101,7 +107,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = None
     lower_bound = getattr(rule_parameters.parameters,"from")
@@ -123,14 +129,17 @@ Data quality rule that verifies if a data quality check readout is between begin
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 |to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/between_ints.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -159,6 +168,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/between_ints.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -214,7 +226,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = None
     lower_bound = getattr(rule_parameters.parameters, "from")
@@ -237,13 +249,16 @@ Data quality rule that verifies that a data quality check readout of a string_da
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_datatype|Expected data type code, the data type codes are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|integer| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/datatype_equals.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -266,6 +281,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/datatype_equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -315,7 +333,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.expected_datatype
     lower_bound = expected_value
@@ -336,13 +354,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_diff_percent|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/diff_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -362,6 +383,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/diff_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -414,7 +438,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     has_expected_value = hasattr(rule_parameters, 'expected_value')
     has_actual_value = hasattr(rule_parameters, 'actual_value')
     if not has_expected_value and not has_actual_value:
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     if not has_expected_value:
         return RuleExecutionResult(False, None, None, None)
@@ -441,14 +465,17 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
 |error_margin|Error margin for comparison.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/equals.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -476,6 +503,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -526,7 +556,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.expected_value
     lower_bound = expected_value - rule_parameters.parameters.error_margin
@@ -547,13 +577,16 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_value|Expected value for the actual_value returned by the sensor. It must be an integer value.|long| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/equals_integer.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -575,6 +608,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/equals_integer.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -624,7 +660,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.expected_value
     lower_bound = expected_value
@@ -645,13 +681,16 @@ Data quality rule that verifies if a data quality check readsout is less or equa
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -673,6 +712,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -722,7 +764,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_value
     lower_bound = None
@@ -744,13 +786,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_count.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -770,6 +815,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -819,7 +867,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_count
     lower_bound = None
@@ -841,13 +889,16 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -867,6 +918,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -916,7 +970,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_days
     lower_bound = None
@@ -938,13 +992,16 @@ Data quality rule that verifies if the number of executive failures (the sensor 
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_failures|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|long| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_failures.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -969,6 +1026,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_failures.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1061,13 +1121,16 @@ Data quality rule that verifies the results of the data quality checks that coun
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_missing|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_missing.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1089,6 +1152,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_missing.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1164,13 +1230,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1190,6 +1259,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1239,7 +1311,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_percent
     lower_bound = None
@@ -1261,13 +1333,16 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/max_value.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1289,6 +1364,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/max_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1338,7 +1416,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.max_value
     lower_bound = None
@@ -1360,13 +1438,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1388,6 +1469,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1437,7 +1521,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value
@@ -1459,13 +1543,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_count.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1487,6 +1574,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1536,7 +1626,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_count
     lower_bound = rule_parameters.parameters.min_count
@@ -1558,13 +1648,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1584,6 +1677,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1633,7 +1729,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_percent
     lower_bound = rule_parameters.parameters.min_percent
@@ -1655,13 +1751,16 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/min_value.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1683,6 +1782,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/min_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence
@@ -1732,7 +1834,7 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     expected_value = rule_parameters.parameters.min_value
     lower_bound = rule_parameters.parameters.min_value
@@ -1754,7 +1856,10 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/value_changed.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 apiVersion: dqo/v1
 kind: rule
@@ -1770,6 +1875,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *comparison/value_changed.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 from datetime import datetime
 from typing import Sequence

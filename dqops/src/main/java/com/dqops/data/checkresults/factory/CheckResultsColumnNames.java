@@ -21,14 +21,14 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 /**
- * The data quality check results table that stores check results - a copy of sensor readouts (copied from the sensor_readouts table) and evaluated by the data quality rules.
- * This table differs from the sensor_readouts by adding also the result of the rule evaluation. The additional columns are the 'severity' which says if the check passed (the severity is 0)
+ * The data quality check results table that stores the data quality check results - a copy of sensor readouts (copied from the sensor_readouts table) and evaluated by the data quality rules.
+ * This table differs from the *sensor_readouts* by adding also the result of the rule evaluation. The additional columns are the 'severity' which says if the check passed (the severity is 0)
  * or the data quality check raised a data quality issue with a severity warning - 1, error - 2 or fatal - 3.
- * The check results are stored in the check_results table is located in the $DQO_USER_HOME/.data/check_results folder that contains uncompressed parquet files.
- * The table is partitioned using a Hive compatible partitioning folder structure. When the $DQO_USER_HOME is not configured, it is the folder where DQOps was started (the DQOps user's home folder).
+ * The check results are stored in the check_results table is located in the *$DQO_USER_HOME/.data/check_results* folder that contains uncompressed parquet files.
+ * The table is partitioned using a Hive compatible partitioning folder structure. When the *$DQO_USER_HOME* is not configured, it is the folder where DQOps was started (the DQOps user's home folder).
  *
  * The folder partitioning structure for this table is:
- * c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/, for example: c=myconnection/t=public.testedtable/m=2023-01-01/.
+ * *c=[connection_name]/t=[schema_name.table_name]/m=[first_day_of_month]/*, for example: *c=myconnection/t=public.testedtable/m=2023-01-01/*.
  */
 public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     /**
@@ -118,7 +118,8 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
             TIME_PERIOD_UTC_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME,
             TABLE_COMPARISON_NAME_COLUMN_NAME,
-            TIME_SERIES_ID_COLUMN_NAME
+            TIME_SERIES_ID_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME
     };
 
     /**

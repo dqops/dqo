@@ -10,7 +10,7 @@ from ...types import Response
 
 
 def _get_kwargs(
-    job_id: int,
+    job_id: str,
 ) -> Dict[str, Any]:
     pass
 
@@ -47,7 +47,7 @@ def _build_response(
 
 
 def sync_detailed(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
 ) -> Response[MonoVoid]:
@@ -56,7 +56,7 @@ def sync_detailed(
      Cancels a running job
 
     Args:
-        job_id (int):
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -78,7 +78,7 @@ def sync_detailed(
 
 
 def sync(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
 ) -> Optional[MonoVoid]:
@@ -87,7 +87,7 @@ def sync(
      Cancels a running job
 
     Args:
-        job_id (int):
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,7 +104,7 @@ def sync(
 
 
 async def asyncio_detailed(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
 ) -> Response[MonoVoid]:
@@ -113,7 +113,7 @@ async def asyncio_detailed(
      Cancels a running job
 
     Args:
-        job_id (int):
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,7 +133,7 @@ async def asyncio_detailed(
 
 
 async def asyncio(
-    job_id: int,
+    job_id: str,
     *,
     client: AuthenticatedClient,
 ) -> Optional[MonoVoid]:
@@ -142,7 +142,7 @@ async def asyncio(
      Cancels a running job
 
     Args:
-        job_id (int):
+        job_id (str):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

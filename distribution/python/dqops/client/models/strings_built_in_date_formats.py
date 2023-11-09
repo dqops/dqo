@@ -2,11 +2,11 @@ from enum import Enum
 
 
 class StringsBuiltInDateFormats(str, Enum):
-    DAYMONTHYEAR = "DayMonthYear"
-    ISO8601 = "ISO8601"
-    MONTHDAYYEAR = "MonthDayYear"
-    MONTHNAMEDAYYEAR = "MonthNameDayYear"
-    YEARMONTHDAY = "YearMonthDay"
+    DDMMYYYY = "DD/MM/YYYY"
+    MMDDYYYY = "MM/DD/YYYY"
+    MONTH_D_YYYY = "Month D, YYYY"
+    YYYYMMDD = "YYYY/MM/DD"
+    YYYY_MM_DD = "YYYY-MM-DD"
 
     def __str__(self) -> str:
         return str(self.value)

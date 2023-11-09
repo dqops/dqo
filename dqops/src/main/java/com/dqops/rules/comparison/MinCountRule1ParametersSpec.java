@@ -19,6 +19,7 @@ import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -100,5 +101,12 @@ public class MinCountRule1ParametersSpec extends AbstractRuleParametersSpec {
     @Override
     public String getRuleDefinitionName() {
         return "comparison/min_count";
+    }
+
+    public static class MinCountRule1ParametersSpecSampleFactory implements SampleValueFactory<MinCountRule1ParametersSpec> {
+        @Override
+        public MinCountRule1ParametersSpec createSample() {
+            return new MinCountRule1ParametersSpec();
+        }
     }
 }

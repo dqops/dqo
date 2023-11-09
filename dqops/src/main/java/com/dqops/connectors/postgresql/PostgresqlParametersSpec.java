@@ -21,6 +21,8 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -71,7 +73,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--postgresql-sslmode"}, description = "Connect to PostgreSQL using sslmode connection parameter")
     @JsonPropertyDescription("Sslmode PostgreSQL connection parameter. The default value is disabled.")
-    private PostgreqlSslmode sslmode = PostgreqlSslmode.disable;
+    private PostgresqlSslMode sslmode = PostgresqlSslMode.disable;
 
     @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -183,7 +185,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
      * Returns the flag to require SSL connection.
      * @return True - require an SSL connection.
      */
-    public PostgreqlSslmode getSslmode() {
+    public PostgresqlSslMode getSslmode() {
         return sslmode;
     }
 
@@ -191,7 +193,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
      * Sets a flag to require an SSL connection.
      * @param ssl True - ssl connection is required.
      */
-    public void setSslmode(PostgreqlSslmode sslmode) {
+    public void setSslmode(PostgresqlSslMode sslmode) {
         setDirtyIf(!Objects.equals(this.sslmode, sslmode));
         this.sslmode = sslmode;
     }
@@ -249,5 +251,18 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
+    }
+
+    public static class PostgresqlParametersSpecSampleFactory implements SampleValueFactory<PostgresqlParametersSpec> {
+        @Override
+        public PostgresqlParametersSpec createSample() {
+            return new PostgresqlParametersSpec() {{
+                setHost("localhost");
+                setPort("5432");
+                setDatabase("db");
+                setUser(SampleStringsRegistry.getUserName());
+                setUser("PASSWD");
+            }};
+        }
     }
 }

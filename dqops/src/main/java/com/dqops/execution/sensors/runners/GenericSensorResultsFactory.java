@@ -57,7 +57,9 @@ public class GenericSensorResultsFactory {
                 DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
                 InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
-        row.setInt(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        if (actualValue != null) {
+            row.setInt(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        }
         LocalDateTime nowAtDefaultTimeZone = getNowAtDefaultTimeZone(defaultTimeZoneId, timePeriodGradient);
         row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, nowAtDefaultTimeZone);
         row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, nowAtDefaultTimeZone.toInstant(ZoneOffset.UTC));
@@ -78,7 +80,9 @@ public class GenericSensorResultsFactory {
                 DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
                 InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
-        row.setLong(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        if (actualValue != null) {
+            row.setLong(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        }
         LocalDateTime nowAtDefaultTimeZone = getNowAtDefaultTimeZone(defaultTimeZoneId, timePeriodGradient);
         row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, nowAtDefaultTimeZone);
         row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, nowAtDefaultTimeZone.toInstant(ZoneOffset.UTC));
@@ -99,7 +103,9 @@ public class GenericSensorResultsFactory {
                 DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
                 InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
-        row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        if (actualValue != null) {
+            row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, actualValue);
+        }
         LocalDateTime nowAtDefaultTimeZone = getNowAtDefaultTimeZone(defaultTimeZoneId, timePeriodGradient);
         row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, nowAtDefaultTimeZone);
         row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, nowAtDefaultTimeZone.toInstant(ZoneOffset.UTC));

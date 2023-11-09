@@ -12,20 +12,22 @@ import {
 } from '../../redux/actions/incidents.actions';
 import { TabOption } from '../PageTabs/tab';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
-import axios from 'axios';
+import { useTree } from '../../contexts/treeContext';
 
 interface LayoutProps {
   children?: any;
 }
 
 const IncidentsLayout = ({ children }: LayoutProps) => {
+  const { objectNotFound, setObjectNotFound } = useTree()
+  
   const { tabs: pageTabs, activeTab } = useSelector(
     (state: IRootState) => state.incidents
   );
   
   const dispatch = useDispatch();
   const history = useHistory();
-  const [objectNotFound, setObjectNotFound] = React.useState(false)
+
 
   const handleChange = (tab: TabOption) => {
     dispatch(setActiveFirstLevelTab(tab.value));
@@ -52,13 +54,6 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
     }
   }, [activeTab]);
 
-  axios.interceptors.response.use(undefined, function (error) {
-    const statusCode = error.response ? error.response.status : null;
-    if (statusCode === 404 ) {
-      setObjectNotFound(true)
-    }
-    return Promise.reject(error);
-  });
   return (
     <div
       className="flex min-h-screen overflow-hidden"
@@ -96,7 +91,7 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
       onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {dispatch(closeFirstLevelTab(activeTab)), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
+      message='The definition of this object was deleted in DQOps user home. The tab will be closed.'/>
     </div>
   );
 };

@@ -107,7 +107,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
      */
     @Override
     public DqoJobType getJobType() {
-        return DqoJobType.RUN_CHECKS_ON_TABLE;
+        return DqoJobType.run_checks_on_table;
     }
 
     /**

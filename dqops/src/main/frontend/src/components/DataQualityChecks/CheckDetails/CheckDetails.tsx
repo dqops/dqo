@@ -3,7 +3,8 @@ import Tabs from '../../Tabs';
 import {
   DqoJobHistoryEntryModelStatusEnum,
   CheckModel,
-  DeleteStoredDataQueueJobParameters
+  DeleteStoredDataQueueJobParameters,
+  CheckResultEntryModel
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
@@ -94,18 +95,23 @@ const CheckDetails = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
+
   const currentJob = currentJobId
     ? job_dictionary_state[currentJobId]
     : undefined;
+  
+  const checkNameWithComparisonName = comparisonName 
+   ? (checkName + "/" + comparisonName)
+   : checkName   
 
-  const checkResults = resultsData ? resultsData[checkName ?? ''] || [] : [];
+  const checkResults = resultsData ? resultsData[checkNameWithComparisonName ?? ''] || [] : [];
   const sensorReadouts = readoutsData
-    ? readoutsData[checkName ?? ''] || []
+    ? readoutsData[checkNameWithComparisonName ?? ''] || []
     : [];
-  const sensorErrors = errorsData ? errorsData[checkName ?? ''] || [] : [];
+  const sensorErrors = errorsData ? errorsData[checkNameWithComparisonName ?? ''] || [] : [];
   const filters =
-    filtersData && filtersData[checkName ?? '']
-      ? filtersData[checkName ?? '']
+    filtersData && filtersData[checkNameWithComparisonName ?? '']
+      ? filtersData[checkNameWithComparisonName ?? '']
       : defaultFilters || {
           month: "Last 3 months"
         };
@@ -237,7 +243,7 @@ const CheckDetails = ({
 
   const onChangeDataGroup = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkNameWithComparisonName ?? '', {
         ...filters,
         onChangeDataGroup: value
       })
@@ -247,7 +253,7 @@ const CheckDetails = ({
 
   const onChangeMonth = (value: string) => {
     dispatch(
-      setCheckFilters(checkTypes, firstLevelActiveTab, checkName ?? '', {
+      setCheckFilters(checkTypes, firstLevelActiveTab, checkNameWithComparisonName ?? '', {
         ...filters,
         month: value
       })
@@ -344,6 +350,7 @@ const CheckDetails = ({
           onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData(
+              undefined,
               false,
               undefined,
               {

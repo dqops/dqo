@@ -22,6 +22,8 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -154,46 +156,46 @@ public class ColumnListModel {
 
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setCheckType(CheckType.profiling);
                 setEnabled(true);
             }});
             setRunMonitoringChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setCheckType(CheckType.monitoring);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
+                setColumn(columnName);
                 setCheckType(CheckType.partitioned);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
-                setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setConnection(connectionName);
+                setFullTableName(physicalTableName.toTableSearchFilter());
                 getColumnNames().add(columnName);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setFullTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
 
                 setDateStart(null);
@@ -250,5 +252,18 @@ public class ColumnListModel {
         targetColumnSpec.setSqlExpression(this.getSqlExpression());
         targetColumnSpec.setDisabled(this.isDisabled());
         targetColumnSpec.setTypeSnapshot(this.getTypeSnapshot());
+    }
+
+    public static class ColumnListModelSampleFactory implements SampleValueFactory<ColumnListModel> {
+        @Override
+        public ColumnListModel createSample() {
+            ColumnSpec columnSpec = new ColumnSpec.ColumnSpecSampleFactory().createSample();
+            return fromColumnSpecification(SampleStringsRegistry.getConnectionName(),
+                    new PhysicalTableName(SampleStringsRegistry.getSchemaName(), SampleStringsRegistry.getTableName()),
+                    SampleStringsRegistry.getColumnName(),
+                    columnSpec,
+                    false,
+                    true);
+        }
     }
 }

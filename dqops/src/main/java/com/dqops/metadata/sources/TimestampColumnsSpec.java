@@ -23,6 +23,7 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -189,5 +190,16 @@ public class TimestampColumnsSpec extends AbstractSpec {
         }
 
         throw new IllegalArgumentException("Effective column used for time window grouping for date/time partitioned data quality checks is not correctly configured.");
+    }
+
+    public static class TimestampColumnsSpecSampleFactory implements SampleValueFactory<TimestampColumnsSpec> {
+        @Override
+        public TimestampColumnsSpec createSample() {
+            return new TimestampColumnsSpec() {{
+                setEventTimestampColumn("col1");
+                setIngestionTimestampColumn("col2");
+                setPartitionByColumn("col3");
+            }};
+        }
     }
 }

@@ -74,4 +74,11 @@ public interface DqoJobQueue {
      * @param jobId Job id.
      */
     void cancelJob(DqoQueueJobId jobId);
+
+    /**
+     * Finds the job id of a job given a job business key, a unique user assigned job id.
+     * @param jobBusinessKey Job business key.
+     * @return Job id object when the job was found or null.
+     */
+    DqoQueueJobId lookupJobIdByBusinessKey(String jobBusinessKey);
 }

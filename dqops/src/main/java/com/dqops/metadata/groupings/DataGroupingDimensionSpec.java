@@ -23,6 +23,8 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -205,5 +207,12 @@ public class DataGroupingDimensionSpec extends AbstractSpec {
         }
 
         return this.deepClone();
+    }
+
+    public static class DataGroupingDimensionSpecSampleFactory implements SampleValueFactory<DataGroupingDimensionSpec> {
+        @Override
+        public DataGroupingDimensionSpec createSample() {
+            return createForColumn(SampleStringsRegistry.getColumnName());
+        }
     }
 }

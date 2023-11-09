@@ -3,4 +3,4 @@
  | |) | | (_) | | (_) | | '_ \ (_-<
  |___/   \__\_\  \___/  | .__/ /__/
                         |_|
- :: DQOps Data Quality Operations Center ::    (v0.3.0)
+ :: DQOps Data Quality Operations Center ::    (v0.4.0)

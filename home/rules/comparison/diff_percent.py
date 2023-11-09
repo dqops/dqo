@@ -65,7 +65,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     has_expected_value = hasattr(rule_parameters, 'expected_value')
     has_actual_value = hasattr(rule_parameters, 'actual_value')
     if not has_expected_value and not has_actual_value:
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
     if not has_expected_value:
         return RuleExecutionResult(False, None, None, None)

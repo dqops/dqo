@@ -20,6 +20,11 @@ function ErrorProvider({ children }: any) {
     axios.interceptors.response.use(undefined, async (error) => {
       const { response } = error;
 
+      const statusCode = error.response ? error.response.status : null;
+      if (statusCode === 401 || statusCode === 403) {
+        return; // handled elsewhere
+      }
+
       const newError = {
         name: response?.data?.error,
         message: response?.data?.trace,
@@ -30,11 +35,11 @@ function ErrorProvider({ children }: any) {
         setErrors([...errors, newError]);
       }
 
-      if (response.status > 500) {
+      if (response.status >= 500) {
         setIsOpen(true);
       }
       if (response.status < 500) {
-        if (response.request.responseURL.indexOf("api/logs/error") < 0) {
+        if (response.request?.responseURL?.indexOf("api/logs/error") < 0) {
           LogErrorsApi.logError({
             window_location: window.location.href,
             message: response?.data?.trace

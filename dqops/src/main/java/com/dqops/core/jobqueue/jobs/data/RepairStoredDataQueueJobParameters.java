@@ -57,8 +57,8 @@ public class RepairStoredDataQueueJobParameters implements Cloneable {
      */
     public static RepairStoredDataQueueJobParameters fromTableSearchFilters(TableSearchFilters tableSearchFilters) {
         return new RepairStoredDataQueueJobParameters() {{
-            setConnectionName(tableSearchFilters.getConnectionName());
-            setSchemaTableName(tableSearchFilters.getSchemaTableName());
+            setConnectionName(tableSearchFilters.getConnection());
+            setSchemaTableName(tableSearchFilters.getFullTableName());
 
             setRepairCheckResults(true);
             setRepairErrors(true);

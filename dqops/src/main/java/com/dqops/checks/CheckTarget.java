@@ -15,6 +15,7 @@
  */
 package com.dqops.checks;
 
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
@@ -25,5 +26,12 @@ public enum CheckTarget {
     table,  // lowercase name to make swagger work
 
     @JsonProperty("column")
-    column // lowercase name to make swagger work
+    column; // lowercase name to make swagger work
+
+    public static class CheckTargetSampleFactory implements SampleValueFactory<CheckTarget> {
+        @Override
+        public CheckTarget createSample() {
+            return column;
+        }
+    }
 }

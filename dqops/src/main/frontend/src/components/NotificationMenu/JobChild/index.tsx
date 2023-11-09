@@ -42,7 +42,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
     }
   };
   const cancelJob = async (jobId: number) => {
-    await JobApiClient.cancelJob(jobId);
+    await JobApiClient.cancelJob(jobId.toString());
   };
 
   return (

@@ -33,7 +33,6 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.traversal.TreeNodeTraversalResult;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
-import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -61,9 +60,9 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     void setUp() {
 		this.userHomeContext = UserHomeContextObjectMother.createTemporaryFileHomeContext(true);
 		this.checkSearchFilters = new CheckSearchFilters();
-		checkSearchFilters.setConnectionName("test");
-		checkSearchFilters.setSchemaTableName("test.test");
-		checkSearchFilters.setColumnName("test");
+		checkSearchFilters.setConnection("test");
+		checkSearchFilters.setFullTableName("test.test");
+		checkSearchFilters.setColumn("test");
 		this.sut = new CheckSearchFiltersVisitor(checkSearchFilters);
 
 		this.connectionList = this.userHomeContext.getUserHome().getConnections();
@@ -79,7 +78,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptConnectionList_whenCalledForConnectionList_thenReturnsTraverseChildren() {
-		this.checkSearchFilters.setConnectionName("test2");
+		this.checkSearchFilters.setConnection("test2");
 		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionList, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
@@ -93,7 +92,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptConnectionWrapper_whenCalledForConnectionWrapper_thenReturnsSkipChildren() {
-		this.checkSearchFilters.setConnectionName("test2");
+		this.checkSearchFilters.setConnection("test2");
 		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.connectionWrapper, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
@@ -107,7 +106,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptTableList_whenCalledForTableList_thenReturnsTraverseChildren() {
-		this.checkSearchFilters.setSchemaTableName("test2.test2");
+		this.checkSearchFilters.setFullTableName("test2.test2");
 		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableList, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);
@@ -121,7 +120,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptTableWrapper_whenCalledForTableWrapper_thenReturnsSkipChildren() {
-		this.checkSearchFilters.setSchemaTableName("test2.test2");
+		this.checkSearchFilters.setFullTableName("test2.test2");
 		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableWrapper, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
@@ -158,7 +157,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     @Test
     void acceptColumnSpecMap_whenCalledForColumnSpecMap_thenReturnsTraverseChildren() {
-		this.checkSearchFilters.setColumnName("test2");
+		this.checkSearchFilters.setColumn("test2");
 		this.sut = new CheckSearchFiltersVisitor(this.checkSearchFilters);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpecMap, new SearchParameterObject());
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.TRAVERSE_CHILDREN);

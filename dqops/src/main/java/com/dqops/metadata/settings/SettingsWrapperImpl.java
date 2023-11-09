@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 /**
  * Settings spec wrapper.
  */
-public class SettingsWrapperImpl extends AbstractElementWrapper<String, SettingsSpec> implements SettingsWrapper {
+public class SettingsWrapperImpl extends AbstractElementWrapper<String, LocalSettingsSpec> implements SettingsWrapper {
 	@JsonIgnore
 	private final static String NAME = "settings";
 

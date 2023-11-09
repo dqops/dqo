@@ -12,14 +12,17 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 |multiply_stdev_below|How many multiples of the estimated standard deviation the current sensor readout could be below the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -58,6 +61,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -175,14 +181,17 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 |multiply_stdev_below|How many multiples of the estimated standard deviation the current sensor readout could be below the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -221,6 +230,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -338,14 +350,17 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 |multiply_stdev_below|How many multiples of the estimated standard deviation the current sensor readout could be below the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -384,6 +399,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -501,13 +519,16 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_within_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -536,6 +557,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_within_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -644,13 +668,16 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_within_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -679,6 +706,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_within_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -787,13 +817,16 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/change_multiply_moving_stdev_within_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -822,6 +855,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/change_multiply_moving_stdev_within_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -930,14 +966,17 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 |multiply_stdev_below|How many multiples of the estimated standard deviation the current sensor readout could be below the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -976,6 +1015,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1089,14 +1131,17 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 |multiply_stdev_below|How many multiples of the estimated standard deviation the current sensor readout could be below the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1135,6 +1180,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1248,14 +1296,17 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 |multiply_stdev_below|How many multiples of the estimated standard deviation the current sensor readout could be below the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1294,6 +1345,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1407,13 +1461,16 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_within_30_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1442,6 +1499,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_within_30_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1546,13 +1606,16 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_within_60_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1581,6 +1644,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_within_60_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)
@@ -1685,13 +1751,16 @@ Data quality rule that verifies if a data quality sensor readout value
 
 **Parameters**  
   
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
+| Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
 
 
 
-**Example**
+**Rule definition YAML**
+
+The rule definition YAML file *stdev/multiply_moving_stdev_within_7_days.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
 ```yaml
 # yaml-language-server: $schema&#x3D;https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
@@ -1720,6 +1789,9 @@ spec:
 
 
 **Rule implementation (Python)**
+
+The code sample below shows the content of the  *stdev/multiply_moving_stdev_within_7_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
+
 ```python
 #
 # Copyright © 2023 DQOps (support@dqops.com)

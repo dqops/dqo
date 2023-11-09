@@ -17,6 +17,8 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
+import com.dqops.utils.docs.SampleStringsRegistry;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -77,6 +79,14 @@ public class CheckDefinitionModel {
     private boolean canEdit;
 
     /**
+     * Optional parsing error that was captured when parsing the YAML file.
+     * This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.
+     */
+    @JsonPropertyDescription("Optional parsing error that was captured when parsing the YAML file. " +
+            "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
+    private String yamlParsingError;
+
+    /**
      * Default constructor for CheckModel.
      */
     public CheckDefinitionModel() {
@@ -92,9 +102,11 @@ public class CheckDefinitionModel {
      */
     public CheckDefinitionModel(CheckDefinitionWrapper checkDefinitionWrapper, boolean custom, boolean builtIn, boolean canEdit) {
         this.checkName = checkDefinitionWrapper.getCheckName();
-        this.sensorName = checkDefinitionWrapper.getSpec().getSensorName();
-        this.ruleName = checkDefinitionWrapper.getSpec().getRuleName();
-        this.helpText = checkDefinitionWrapper.getSpec().getHelpText();
+        CheckDefinitionSpec checkDefinitionSpec = checkDefinitionWrapper.getSpec();
+        this.sensorName = checkDefinitionSpec.getSensorName();
+        this.ruleName = checkDefinitionSpec.getRuleName();
+        this.helpText = checkDefinitionSpec.getHelpText();
+        this.yamlParsingError = checkDefinitionSpec.getYamlParsingError();
         this.custom = custom;
         this.builtIn = builtIn;
         this.canEdit = canEdit;
@@ -136,5 +148,20 @@ public class CheckDefinitionModel {
         checkDefinitionSpec.setHelpText(this.helpText);
 
         return checkDefinitionSpec;
+    }
+
+    public static class CheckDefinitionModelSampleFactory implements SampleValueFactory<CheckDefinitionModel> {
+        @Override
+        public CheckDefinitionModel createSample() {
+            return new CheckDefinitionModel() {{
+                setCheckName(SampleStringsRegistry.getCheckName());
+                setSensorName(SampleStringsRegistry.getFullSensorName());
+                setRuleName(SampleStringsRegistry.getFullRuleName());
+                setHelpText(SampleStringsRegistry.getHelpText());
+                setCustom(false);
+                setBuiltIn(false);
+                setCanEdit(true);
+            }};
+        }
     }
 }

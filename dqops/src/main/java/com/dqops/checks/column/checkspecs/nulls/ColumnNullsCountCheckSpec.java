@@ -23,6 +23,7 @@ import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
+import com.dqops.utils.docs.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -163,5 +164,15 @@ public class ColumnNullsCountCheckSpec
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Completeness;
+    }
+
+    public static class ColumnNullsCountCheckSpecSampleFactory implements SampleValueFactory<ColumnNullsCountCheckSpec> {
+        @Override
+        public ColumnNullsCountCheckSpec createSample() {
+            return new ColumnNullsCountCheckSpec() {{
+                setParameters(new ColumnNullsNullsCountSensorParametersSpec.ColumnNullsNullsCountSensorParametersSpecSampleFactory().createSample());
+                setError(new MaxCountRule10ParametersSpec.MaxCountRule10ParametersSpecSampleFactory().createSample());
+            }};
+        }
     }
 }

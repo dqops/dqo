@@ -100,7 +100,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
 
                 CollectStatisticsOnTableQueueJobParameters runChecksOnTableQueueJobParameters = new CollectStatisticsOnTableQueueJobParameters() {{
                     setConnection(connectionWrapper.getName());
-                    setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelRunsLimit());
+                    setMaxJobsPerConnection(connectionWrapper.getSpec().getParallelJobsLimit());
                     setTable(targetTable.getPhysicalTableName());
                     setStatisticsCollectorSearchFilters(statisticsCollectorSearchFilters);
                     setDataScope(statisticsDataScope);

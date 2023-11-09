@@ -20,7 +20,7 @@ import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.metadata.basespecs.InstanceStatus;
-import com.dqops.metadata.settings.SettingsSpec;
+import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapperImpl;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
 import com.dqops.metadata.storage.localfiles.SpecificationKind;
@@ -51,17 +51,17 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 	 * @return Loaded settings specification.
 	 */
 	@Override
-	public SettingsSpec getSpec() {
-		SettingsSpec spec = super.getSpec();
+	public LocalSettingsSpec getSpec() {
+		LocalSettingsSpec spec = super.getSpec();
 		if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
 			FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML);
 			if (fileNode != null) {
 				FileContent fileContent = fileNode.getContent();
 				String textContent = fileContent.getTextContent();
-				SettingsSpec deserializedSpec = (SettingsSpec) fileContent.getCachedObjectInstance();
+				LocalSettingsSpec deserializedSpec = (LocalSettingsSpec) fileContent.getCachedObjectInstance();
 
 				if (deserializedSpec == null) {
-					SettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, SettingsYaml.class, fileNode.getPhysicalAbsolutePath());
+					LocalSettingsYaml deserialized = this.yamlSerializer.deserialize(textContent, LocalSettingsYaml.class, fileNode.getPhysicalAbsolutePath());
 					deserializedSpec = deserialized.getSpec();
 					if (deserialized.getKind() != SpecificationKind.SETTINGS) {
 						throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
@@ -102,8 +102,8 @@ public class FileSettingsWrapperImpl extends SettingsWrapperImpl {
 			this.setStatus(InstanceStatus.MODIFIED);
 		}
 
-		SettingsYaml settingsYaml = new SettingsYaml(this.getSpec());
-		String specAsYaml = this.yamlSerializer.serialize(settingsYaml);
+		LocalSettingsYaml localSettingsYaml = new LocalSettingsYaml(this.getSpec());
+		String specAsYaml = this.yamlSerializer.serialize(localSettingsYaml);
 		FileContent newFileContent = new FileContent(specAsYaml);
 		String fileNameWithExt = SpecFileNames.LOCAL_SETTINGS_SPEC_FILE_NAME_YAML;
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { getAllDashboards } from '../../redux/actions/dashboard.actions';
 import DashboardLayout from '../../components/DashboardLayout';
@@ -10,8 +10,8 @@ import { AuthenticatedDashboardModel } from '../../api';
 import { TabOption } from '../../components/PageTabs/tab';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import axios from 'axios';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { useTree } from '../../contexts/treeContext';
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
@@ -19,23 +19,56 @@ const Dashboards = () => {
     (state: IRootState) => state.dashboard
   );
 
-  const [objectNotFound, setObjectNotFound] = React.useState(false)
- 
+  const { objectNotFound, setObjectNotFound } = useTree();
 
-  axios.interceptors.response.use(undefined, function (error) {
-    const statusCode = error.response ? error.response.status : null;
-    if (statusCode === 404 ) {
-      setObjectNotFound(true)
-    }
-    return Promise.reject(error);
-  });
   const { isLicenseFree } = useSelector((state: IRootState) => state.job || {});
-  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards, error, sidebarWidth } =
-    useDashboard();
+  const {
+    tabs,
+    activeTab,
+    setActiveTab,
+    closeTab,
+    openedDashboards,
+    error,
+    sidebarWidth
+  } = useDashboard();
 
   useEffect(() => {
     dispatch(getAllDashboards());
   }, []);
+
+  const [isTooltipVisible, setIsTooltipVisible] = useState(false);
+  const [imageWidth, setImageWidth] = useState(1);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showTooltip = () => {
+    setIsTooltipVisible(true);
+
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+    }
+
+    timerRef.current = setTimeout(() => {
+      setIsTooltipVisible(false);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (dashboardTooltipState.label) {
+      showTooltip();
+    } else {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+    setImageWidth(1);
+    return () => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+        timerRef.current = null;
+      }
+    };
+  }, [dashboardTooltipState.label]);
 
   return (
     <DashboardLayout>
@@ -93,20 +126,31 @@ const Dashboards = () => {
             );
           })}
         </div>
-        {dashboardTooltipState.height ? 
-        <div className={clsx("py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal")}
-          style={{left: `${sidebarWidth}px`, top: `${dashboardTooltipState.height}px`}}>
-              {dashboardTooltipState.label}
-                <img
+        {dashboardTooltipState.height && isTooltipVisible ? (
+          <div
+            className={clsx(
+              'py-2 px-2 bg-gray-800 text-white absolute z-1000 text-xs text-left rounded-1 whitespace-normal'
+            )}
+            style={{
+              left: `${sidebarWidth}px`,
+              top: `${dashboardTooltipState.height}px`
+            }}
+          >
+            {dashboardTooltipState.label}
+            {imageWidth < 400 && (
+              <img
                 alt=""
                 src={`${dashboardTooltipState.url}/thumbnail`}
-                style={{ display: "block"}}
-                className='pt-2 max-h-100 max-w-100'
-                loading='eager'
-                />
-              </div> 
-        : null 
-        }
+                style={{ display: 'block' }}
+                className="pt-2 max-h-100 max-w-100"
+                loading="eager"
+                onLoad={(e) =>
+                  setImageWidth((e.target as HTMLImageElement).width)
+                }
+              />
+            )}
+          </div>
+        ) : null}
         {isLicenseFree && (
           <div
             className="z-40 text-red-500 bg-white bg-opacity-50"
@@ -120,11 +164,18 @@ const Dashboards = () => {
         )}
       </div>
       <ConfirmDialog
-      open={objectNotFound}
-      onConfirm={() => new Promise(() => {closeTab(activeTab), setObjectNotFound(false)})}
-      isCancelExcluded={true} 
-      onClose={() => {closeTab(activeTab), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQOps user home, closing the tab'/>
+        open={objectNotFound}
+        onConfirm={() =>
+          new Promise(() => {
+            closeTab(activeTab), setObjectNotFound(false);
+          })
+        }
+        isCancelExcluded={true}
+        onClose={() => {
+          closeTab(activeTab), setObjectNotFound(false);
+        }}
+        message="The definition of this object was deleted in DQOps user home. The tab will be closed."
+      />
     </DashboardLayout>
   );
 };

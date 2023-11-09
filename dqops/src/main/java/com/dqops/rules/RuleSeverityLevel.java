@@ -34,6 +34,14 @@ public enum RuleSeverityLevel {
     }
 
     /**
+     * Returns the severity level as a number.
+     * @return Severity level as a number.
+     */
+    public int getSeverity() {
+        return level;
+    }
+
+    /**
      * Creates a rule severity level from a numeric severity level.
      * @param severity Rule severity level.
      * @return Severity level enum instance.
