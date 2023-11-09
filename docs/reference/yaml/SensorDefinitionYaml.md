@@ -28,6 +28,19 @@ Data quality sensor definition YAML schema for a data quality sensor specificati
 
 ___  
 
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
+
+
+
+
+
+
+
+
+___  
+
 ## ParameterDefinitionSpec  
 Defines a single field that is a sensor parameter or a rule parameter.  
   
@@ -49,8 +62,8 @@ Defines a single field that is a sensor parameter or a rule parameter.
 |data_type|Parameter data type.|enum|date<br/>datetime<br/>boolean<br/>integer_list<br/>string<br/>double<br/>column_name<br/>string_list<br/>integer<br/>long<br/>enum<br/>object<br/>| | |
 |display_hint|UI control display hint.|enum|textarea<br/>| | |
 |required|True when the value for the parameter must be provided.|boolean| | | |
-|allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
-|sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
+|allowed_values|List of allowed values for a field that is of an enum type.|List[string]| | | |
+|sample_values|List of sample values. The sample values are used in the documentation or help messages.|List[string]| | | |
 
 
 
@@ -83,19 +96,6 @@ Data Quality sensor definition specification. Provides the configuration for a d
 |default_value|Default value that is used when the sensor returns no rows. A row count sensor may return no rows when a GROUP BY condition is added to capture the database server&#x27;s local time zone. In order to always return a value, a sensor may have a default value configured.|double| | | |
 |parameters|Additional sensor definition parameters|Dict[string, string]| | | |
 
-
-
-
-
-
-
-
-
-___  
-
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
-  
 
 
 

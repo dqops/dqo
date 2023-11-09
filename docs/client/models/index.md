@@ -58,8 +58,8 @@ Model of a single field that is used to edit a parameter value for a sensor or a
 |datetime_value|Field value for a date time field.|datetime|
 |column_name_value|Field value for a column name field.|string|
 |enum_value|Field value for an enum (choice) field.|string|
-|string_list_value|Field value for an array (list) of strings.|string_list|
-|integer_list_value|Field value for an array (list) of integers, using 64 bit integers.|integer_list|
+|string_list_value|Field value for an array (list) of strings.|List[string]|
+|integer_list_value|Field value for an array (list) of integers, using 64 bit integers.|List[integer]|
 |date_value|Field value for an date.|date|
 
 
@@ -306,7 +306,7 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |delete_statistics|Delete the data from the [statistics](../../reference/parquetfiles/statistics.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the statistics.|boolean|
 |delete_check_results|Delete the data from the [check_results](../../reference/parquetfiles/check_results.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the check results.|boolean|
 |delete_sensor_readouts|Delete the data from the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the sensor readouts.|boolean|
-|column_names|The list of column names to delete the data for column level results or errors only for selected columns.|string_list|
+|column_names|The list of column names to delete the data for column level results or errors only for selected columns.|List[string]|
 |check_category|The check category name, for example *volume* or *anomaly*.|string|
 |table_comparison_name|The name of a table comparison configuration. Deletes only table comparison results (and errors) for a given comparison.|string|
 |check_name|The name of a data quality check. Uses the short check name, for example *daily_row_count*.|string|
@@ -383,7 +383,7 @@ Model that returns the form definition and the form data to edit a single data q
 |[data_clean_job_template](../jobs/#DeleteStoredDataQueueJobParameters)|Configured parameters for the &quot;data clean&quot; job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|[DeleteStoredDataQueueJobParameters](../jobs/#DeleteStoredDataQueueJobParameters)|
 |data_grouping_configuration|The name of a data grouping configuration defined at a table that should be used for this check.|string|
 |[check_target](#CheckTargetModel)|Type of the check&#x27;s target (column, table).|[CheckTargetModel](#CheckTargetModel)|
-|configuration_requirements_errors|List of configuration errors that must be fixed before the data quality check could be executed.|string_list|
+|configuration_requirements_errors|List of configuration errors that must be fixed before the data quality check could be executed.|List[string]|
 |similar_checks|List of similar checks in other check types or in other time scales.|List[[SimilarCheckModel](#SimilarCheckModel)]|
 |can_edit|Boolean flag that decides if the current user can edit the check.|boolean|
 |can_run_checks|Boolean flag that decides if the current user can run checks.|boolean|
