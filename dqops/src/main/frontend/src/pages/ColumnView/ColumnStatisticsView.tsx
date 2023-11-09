@@ -42,6 +42,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   const [rowCount, setRowCount] = useState<number>()
 
   useEffect(() => {
+ 
     const fetchStatistics = async () => {
       try {
         const res: AxiosResponse<ColumnStatisticsModel> = await ColumnApiClient.getColumnStatistics(
@@ -50,17 +51,17 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
           table,
           column
         );
+        const newColumnStatistics: Record<string, TStatistics[]> = {
+          "Nulls": [{ type: "Nulls count" }, { type: "Nulls percent" }, { type: "Not nulls count" }, { type: "Not nulls percent" }],
+          "Uniqueness": [{ type: "Distinct count" }, { type: "Distinct percent" }, { type: "Duplicate count" }, { type: "Duplicate percent" }],
+          "Range": [{ type: "Min value" }, { type: "Max value" }, { type: "Median value" }, { type: "Sum value" }],
+          "strings": [{ type: "String min length" }, { type: "String max length" }, { type: "String mean length" }],
+          "Top most common values": Array(0)
+        };
+        setColumnStatistics(newColumnStatistics);
         if (res.data.statistics && res.data.statistics?.length > 0) {
           getColumnStatisticsModel(res.data);
-        } else { 
-          setColumnStatistics({
-            "Nulls" : [{type: "Nulls count"}, {type: "Nulls percent"}, {type: "Not nulls count"}, {type: "Not nulls percent"}],
-            "Uniqueness" : [{type: "Distinct count"}, {type: "Distinct percent"}, {type: "Duplicate count"}, {type: "Duplicate percent"}],
-            "Range" : [{type: "Min value"}, {type: "Max value"}, {type: "Median value"}, {type: "Sum value"}],
-            "strings" : [{type: "String min length"}, {type: "String max length"}, {type: "String mean length"}],
-            "Top most common values" : [],
-          });
-        }
+        } 
       } catch (err) {
         console.error(err);
       }
@@ -78,7 +79,7 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
 
     fetchStatistics();
     fetchRowStatistics();
-  }, [connection, schema, table, column, statisticsCollectedIndicator, columnStatistics]);
+  }, [connection, schema, table, column, statisticsCollectedIndicator]);
 
 
   const renderCategory = (value: string) => {
@@ -124,7 +125,13 @@ const ColumnStatisticsView = ({statisticsCollectedIndicator} : {statisticsCollec
   }
 
   const getColumnStatisticsModel = (fetchedColumnsStatistics: ColumnStatisticsModel) => {
-    const column_statistics_dictionary: Record<string, TStatistics[]> = initColumnStatisticsObject
+    const column_statistics_dictionary: Record<string, TStatistics[]> = {
+      "Nulls": [{ type: "Nulls count" }, { type: "Nulls percent" }, { type: "Not nulls count" }, { type: "Not nulls percent" }],
+      "Uniqueness": [{ type: "Distinct count" }, { type: "Distinct percent" }, { type: "Duplicate count" }, { type: "Duplicate percent" }],
+      "Range": [{ type: "Min value" }, { type: "Max value" }, { type: "Median value" }, { type: "Sum value" }],
+      "strings": [{ type: "String min length" }, { type: "String max length" }, { type: "String mean length" }],
+      "Top most common values": Array(0)
+    };
     const table_statistics_array : TStatistics[] = []
     if(fetchedColumnsStatistics.statistics && fetchedColumnsStatistics?.statistics.length > 0) {
       fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
