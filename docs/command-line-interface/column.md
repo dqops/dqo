@@ -159,7 +159,7 @@ dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |<p id="column list-h">`-h`</p><br/><p id="column list--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="column list-l">`-l`</p><br/><p id="column list--label">`--label`</p><br/>|Label filter| ||
 |<p id="column list-of">`-of`</p><br/><p id="column list--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="column list-tg">`-tg`</p><br/><p id="column list--tags">`--tags`</p><br/>|Data stream tag filter| ||
+|<p id="column list-tg">`-tg`</p><br/><p id="column list--tags">`--tags`</p><br/>|Data grouping static tag filter| ||
 
 
 

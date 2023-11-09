@@ -57,6 +57,7 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
             TIME_GRADIENT_COLUMN_NAME,
             CHECK_HASH_COLUMN_NAME,
             CHECK_CATEGORY_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME,
             CHECK_NAME_COLUMN_NAME,
             DATA_GROUP_NAME_COLUMN_NAME,
             ACTUAL_VALUE_COLUMN_NAME,

@@ -179,7 +179,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
                     }
                 }
 
-                if (statisticsDataScope == StatisticsDataScope.data_groupings && sensorExecutionResult.isSuccess() &&
+                if (statisticsDataScope == StatisticsDataScope.data_group && sensorExecutionResult.isSuccess() &&
                         sensorExecutionResult.getResultTable().rowCount() == 0) {
                     continue; // no results captured, moving to the next sensor
                 }

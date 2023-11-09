@@ -16,7 +16,7 @@ Custom check specification that describes a pair of a sensor name and rule name.
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
 |kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](/docs/reference/yaml/checkdefinitionyaml/#checkdefinitionspec)||[CheckDefinitionSpec](/docs/reference/yaml/checkdefinitionyaml/#checkdefinitionspec)| | | |
+|[spec](../checkdefinitionyaml/#checkdefinitionspec)||[CheckDefinitionSpec](../checkdefinitionyaml/#checkdefinitionspec)| | | |
 
 
 

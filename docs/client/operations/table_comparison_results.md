@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](/docs/client/models/table_comparison_results/#tablecomparisonresultsmodel)||[TableComparisonResultsModel](/docs/client/models/table_comparison_results/#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](../../models/table_comparison_results/#tablecomparisonresultsmodel)||[TableComparisonResultsModel](../../models/table_comparison_results/#tablecomparisonresultsmodel)|
 
 
 
@@ -28,7 +28,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|[time_scale](../../models/#checktimescale)|Time scale|[CheckTimeScale](../../models/#checktimescale)|:material-check-bold:|
 |table_comparison_configuration_name|Table comparison configuration name|string|:material-check-bold:|
 
 
@@ -61,7 +61,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](/docs/client/models/table_comparison_results/#tablecomparisonresultsmodel)||[TableComparisonResultsModel](/docs/client/models/table_comparison_results/#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](../../models/table_comparison_results/#tablecomparisonresultsmodel)||[TableComparisonResultsModel](../../models/table_comparison_results/#tablecomparisonresultsmodel)|
 
 
 
@@ -73,7 +73,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](/docs/client/models/#checktimescale)|Time scale|[CheckTimeScale](/docs/client/models/#checktimescale)|:material-check-bold:|
+|[time_scale](../../models/#checktimescale)|Time scale|[CheckTimeScale](../../models/#checktimescale)|:material-check-bold:|
 |table_comparison_configuration_name|Table comparison configuration name|string|:material-check-bold:|
 
 
@@ -106,7 +106,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_comparison_results_model](/docs/client/models/table_comparison_results/#tablecomparisonresultsmodel)||[TableComparisonResultsModel](/docs/client/models/table_comparison_results/#tablecomparisonresultsmodel)|
+|[table_comparison_results_model](../../models/table_comparison_results/#tablecomparisonresultsmodel)||[TableComparisonResultsModel](../../models/table_comparison_results/#tablecomparisonresultsmodel)|
 
 
 

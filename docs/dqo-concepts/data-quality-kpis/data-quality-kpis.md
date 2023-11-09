@@ -18,7 +18,7 @@ The final alert raised by the data quality check evaluation reflects the most se
 
 ## Aggregation of data quality KPIs
 Data quality KPIs can be aggregated at multiple levels, providing ways to measure the data quality for time periods 
-(days, weeks, months, etc.), data quality dimensions, data streams (such as by country), or any combination of these 
+(days, weeks, months, etc.), data quality dimensions, data groupings (such as by country), or any combination of these 
 grouping levels.
 
 The expected result of calculating the data quality KPI at different grouping levels may look like the tables below.
@@ -41,11 +41,11 @@ Data quality KPIs at a day and data quality dimension level.
 | 2022-10-03 | 94.6%     | 97.0%        | 94.3%    |
 | 2022-10-04 | 99.1%     | 93.2%        | 94.7%    |
 
-Additionally, data quality KPIs can be calculated for different [data streams](../data-grouping/data-grouping.md)
+Additionally, data quality KPIs can be calculated for different [data groupings](../data-grouping/data-grouping.md)
 separately. Data aggregated in a single database (or a data lake) can be loaded from different data sources. 
 To calculate a separate data quality KPI for each data source, it must be possible to identify that source at the data level.
 
-[Read more about data stream segmentation](../data-grouping/data-grouping.md)
+[Read more about data segmentation with data groupings](../data-grouping/data-grouping.md)
 
 Data quality KPIs can also be calculated for combinations of data sources (data streams), time periods and data quality
 dimensions. An example output of a data quality KPI calculation at a month, country-level data sources, and separate 
@@ -57,6 +57,7 @@ data quality dimensions would look like the following table:
 | 2022-10 | UK          |     99.2% |        94.6% |    96.2% |
 | 2022-10 | FR          |     94.6% |        97.0% |    94.3% |
 | 2022-10 | JP          |     99.1% |        93.2% |    94.7% |
+
 
 ## What's next
 - Look at some built-in [data quality KPI dashboards](../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 

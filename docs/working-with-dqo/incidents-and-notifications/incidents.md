@@ -58,10 +58,16 @@ To modify the settings of the Incidents, follow these steps:
 On the Incidents and Notifications tab, you can customize:
 
 - The level of grouping for data quality incidents.
+
 - The minimum severity level required for generating an incident.
-- Whether incidents should be created for the entire data source or for each data stream separately.
+
+- Whether incidents should be created for the entire data source or for each group of rows separately,
+  using [data grouping](../set-up-data-grouping/set-up-data-grouping.md).
+
 - The maximum duration of an incident in days. After this time, DQOps creates a new incident.
+
 - The time duration for muted incidents. If the incident is muted, DQOps will not create a new one.
+
 
 ## View and manage Incidents
 

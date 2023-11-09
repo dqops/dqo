@@ -12,10 +12,10 @@ The DQOps web interface is divided into three main areas.
 
 The navigation bar allows you to select the specific sections that you want to focus on.
 
-![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar.png)
+![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar1.png)
 
 - The **Data Sources** section allows you to [add new connections](../../working-with-dqo/adding-data-source-connection/index.md), import schemas and 
-    tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data streams](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
+    tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../run-data-quality-checks/run-data-quality-checks.md/#configure-date-or-datetime-column-for-partition-checks), 
     and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md),
@@ -27,7 +27,7 @@ The navigation bar allows you to select the specific sections that you want to f
     that measure data quality for each daily or monthly partition by creating a separate data quality score.
 - The **Data Quality Dashboards** section lets you [review the summaries of data quality monitoring](../../getting-started/review-results-on-dashboards/review-results-on-dashboards.md) on multiple built-in data quality dashboards.
 - The **Incidents** section helps you [review and manage the issues that arise during data quality monitoring](../../working-with-dqo/incidents-and-notifications/incidents.md).
-- The **Definitions** section lets you customize built-in data quality sensors and rules.  
+- The **Configuration** section lets you customize built-in data quality sensors and rules.  
 
 
 The right side of the navigation bar provides access to the main settings and some other functions.
@@ -39,6 +39,28 @@ The right side of the navigation bar provides access to the main settings and so
 - **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
 - **Notifications** - You can view DQO notifications and enable or disable the scheduler. A NEW tag will appear when there is a new notification.
 - **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
+
+### **Notifications**
+
+Notifications allows you to view executed jobs, such as running checks, collecting statistics, importing metadata, etc. 
+
+![Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+
+The notifications grant you access to a comprehensive log of all executed actions, allowing you to check the status of each action. These statuses can include "succeeded," "failed," "running," "waiting," "queued," or "cancelled." Furthermore, you can expand individual job entries to view sub-jobs and access additional details about specific tasks.
+
+Main functions of notifications:
+
+- In the top of notifications you can manage your job scheduler, which is responsible for executing scheduled jobs.
+
+![Job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
+
+- If the job is queued or running you can cancel or stop it by clicking the X button.
+
+![Canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
+
+- In notifications you can also view the result of executed checks by simply hovering on run checks job. Color of the square shows the highest severity status of the results.
+
+![Job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 
 ## Tree view
 
@@ -84,5 +106,14 @@ and data quality dashboards.
 
 Clicking on an object in the tree view always opens a new tab in the main workspace that helps in navigating between open elements. 
 
+## DQO tabs
+
+When you select an item from the tree view, it opens a new tab in the main workspace. You can open and close tabs within each section such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Checks**,**Data Quality Dashboards**, **Incidents** and **Configuration**. Each section can have a maximum of seven tabs open at a time.  If you try to add an eighth tab, the first one will be automatically removed to maintain the limit. These tabs are stored locally, which means that you can always return to them even after closing the application.
+
+![Tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tabs.png)
+
+If the tab's content no longer exists, a pop-up notification will appear and the corresponding tab will close automatically.
+
+![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png)
 
 

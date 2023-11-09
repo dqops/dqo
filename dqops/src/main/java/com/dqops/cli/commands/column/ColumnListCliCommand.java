@@ -76,7 +76,7 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 			completionCandidates = ColumnNameCompleter.class)
 	private String columnName = "*";
 
-	@CommandLine.Option(names = {"-tg", "--tags"}, description = "Data stream tag filter",
+	@CommandLine.Option(names = {"-tg", "--tags"}, description = "Data grouping static tag filter",
 			required = false)
 	private String[] tags;
 

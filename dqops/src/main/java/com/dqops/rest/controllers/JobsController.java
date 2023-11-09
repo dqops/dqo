@@ -374,7 +374,7 @@ public class JobsController {
         CollectStatisticsQueueJobParameters collectStatisticsQueueJobParameters = new CollectStatisticsQueueJobParameters(
                 statisticsCollectorSearchFilters,
                 progressListener,
-                StatisticsDataScope.data_groupings,
+                StatisticsDataScope.data_group,
                 false);
         runProfilersJob.setParameters(collectStatisticsQueueJobParameters);
         runProfilersJob.setJobBusinessKey(jobBusinessKey.orElse(null));
@@ -589,7 +589,7 @@ public class JobsController {
      * @param importParameters Import tables job parameters.
      * @return Job summary response with the identity of the started job.
      */
-    @PostMapping(value = "/importtables",consumes = "application/json", produces = "application/json")
+    @PostMapping(value = "/importtables", consumes = "application/json", produces = "application/json")
     @ApiOperation(value = "importTables", notes = "Starts a new background job that will import selected tables.", response = ImportTablesQueueJobResult.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

@@ -9,7 +9,9 @@ from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception
     DqopsDataQualityIssueDetectedException,
 )
 from dqops.airflow.common.tools.client_creator import create_client
-from dqops.airflow.common.tools.rule_severity_level_utility import get_severity_value
+from dqops.airflow.common.tools.rule_severity_level_utility import (
+    get_severity_value_from_rule_severity, get_severity_value_from_check_result,
+)
 from dqops.airflow.common.tools.server_response_verifier import (
     verify_server_response_correctness,
 )
@@ -20,10 +22,9 @@ from dqops.airflow.common.tools.url_resolver import extract_base_url
 from dqops.client import Client
 from dqops.client.api.check_results.get_table_data_quality_status import sync_detailed
 from dqops.client.models.check_time_scale import CheckTimeScale
-from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
-from dqops.client.models.table_data_quality_status_model import (
-    TableDataQualityStatusModel,
+from dqops.client.models.table_current_data_quality_status_model import (
+    TableCurrentDataQualityStatusModel,
 )
 from dqops.client.types import UNSET, Response, Unset
 
@@ -41,7 +42,9 @@ class DqopsAssertTableStatusOperator(BaseOperator):
         table_name: str,
         *,
         months: Union[Unset, None, int] = UNSET,
-        check_type: Union[Unset, None, CheckType] = UNSET,
+        profiling: Union[Unset, None, bool] = UNSET,
+        monitoring: Union[Unset, None, bool] = UNSET,
+        partitioned: Union[Unset, None, bool] = UNSET,
         check_time_scale: Union[Unset, None, CheckTimeScale] = UNSET,
         data_group: Union[Unset, None, str] = UNSET,
         check_name: Union[Unset, None, str] = UNSET,
@@ -67,8 +70,12 @@ class DqopsAssertTableStatusOperator(BaseOperator):
             Optional filter - the number of months to review the data quality check results.
             For partitioned checks, it is the number of months to analyze.
             The default value is 1 (which is the current month and 1 previous month).
-        check_type : Union[Unset, None, CheckType] = UNSET
-            Specifies type of checks to be executed. When not set, all types of checks will be executed. <br/> The enum is stored in _dqops.client.models.check_type_ module.
+        profiling : Union[Unset, None, bool] = UNSET
+            Boolean flag that enables detecting the last execution status of profiling checks. By default, DQOps does not read the status of profiling checks, unless this flag is True.
+        monitoring : Union[Unset, None, bool] = UNSET
+            Boolean flag that enables detecting the last execution status of monitoring checks. By default, DQOps detects the status of monitoring checks when this flag s None.
+        partitioned : Union[Unset, None, bool] = UNSET
+            Boolean flag that enables detecting the last execution status of partitioned checks. By default, DQOps detects the status of partitioned checks when this flag s None.
         check_time_scale : Union[Unset, None, CheckTimeScale] = UNSET
             Time scale filter for monitoring and partitioned checks (values: daily or monthly).
         data_group: Union[Unset, None, str] = UNSET
@@ -96,7 +103,9 @@ class DqopsAssertTableStatusOperator(BaseOperator):
         self.schema_name: str = schema_name
         self.table_name: str = table_name
         self.months: Union[Unset, None, int] = months
-        self.check_type: Union[Unset, None, CheckType] = check_type
+        self.profiling: Union[Unset, None, bool] = profiling
+        self.monitoring: Union[Unset, None, bool] = monitoring
+        self.partitioned: Union[Unset, None, bool] = partitioned
         self.check_time_scale: Union[Unset, None, CheckTimeScale] = check_time_scale
         self.data_group: Union[Unset, None, str] = data_group
         self.check_name: Union[Unset, None, str] = check_name
@@ -114,13 +123,15 @@ class DqopsAssertTableStatusOperator(BaseOperator):
         )
 
         try:
-            response: Response[TableDataQualityStatusModel] = sync_detailed(
+            response: Response[TableCurrentDataQualityStatusModel] = sync_detailed(
                 connection_name=self.connection_name,
                 schema_name=self.schema_name,
                 table_name=self.table_name,
                 client=client,
                 months=self.months,
-                check_type=self.check_type,
+                profiling=self.profiling,
+                monitoring=self.monitoring,
+                partitioned=self.partitioned,
                 check_time_scale=self.check_time_scale,
                 data_group=self.data_group,
                 check_name=self.check_name,
@@ -134,16 +145,15 @@ class DqopsAssertTableStatusOperator(BaseOperator):
 
         verify_server_response_correctness(response)
 
-        table_dq_status: TableDataQualityStatusModel = (
-            TableDataQualityStatusModel.from_dict(
+        table_dq_status: TableCurrentDataQualityStatusModel = (
+            TableCurrentDataQualityStatusModel.from_dict(
                 json.loads(response.content.decode("utf-8"))
             )
         )
         logging.info(table_dq_status.to_dict())
 
-        if table_dq_status.highest_severity_issue >= get_severity_value(
-            self.fail_at_severity
-        ):
+        if get_severity_value_from_check_result(table_dq_status.highest_severity_level) >= \
+                get_severity_value_from_rule_severity(self.fail_at_severity):
             raise DqopsDataQualityIssueDetectedException()
 
         return table_dq_status.to_dict()

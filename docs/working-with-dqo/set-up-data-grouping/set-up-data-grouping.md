@@ -25,12 +25,12 @@ To set up the default data grouping configuration template at the data source le
 1. In DQOps user interface, go to the **Data Source** section, select the data source of interest in the tree view on the left
     side, and select **Default Grouping Template** tab.
 
-    ![Default data stream template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/default-data-stream-template.jpg)
+    ![Default data grouping template tag](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/default-data-stream-template.jpg)
 
-2. In the **Default Data Stream Template** tab, write a tag for a data source or select the discriminator column that would
+2. In the **Default Data Grouping Template** tab, write a tag for a data source or select the discriminator column that would
     identify the data source. You can configure up to 9 different data grouping dimension levels.
 
-    ![Adding data stream](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-data-stream.jpg)
+    ![Adding data grouping](https://dqops.com/docs/images/working-with-dqo/set-up-data-stream/adding-data-stream.jpg)
 
 3. Once you have set the data grouping configuration, click on the **Save** button to save your changes.
 
@@ -138,7 +138,7 @@ data grouping configuration is copied to the *.dqotable.yaml* file.
 
 To set up a data grouping configuration at the table level
 
-1. Run the following command in DQOps Shell to edit YAML configuration file and define data stream.
+1. Run the following command in DQOps Shell to edit YAML configuration file and define the data grouping configuration.
 
     ```
     dqo> table edit
@@ -161,22 +161,23 @@ To set up a data grouping configuration at the table level
 
     Below is an examples of the YAML files showing a sample configuration of 2 data grouping configurations: 
 
-    - "Column_data_stream" with data grouping set on category column
-    - "Tag_data_stream" with data grouping by assigning a tag `landing_zone` to all data quality results.
+    - "group_by_country" with data grouping set on category column
+    - "group_by_area" with data grouping by assigning a tag `landing_zone` to all data quality results.
 
-    ``` yaml hl_lines="7-15"
+    ``` yaml hl_lines="7-16"
     apiVersion: dqo/v1
     kind: table
     spec:
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
-      data_streams:
-        Column_data_stream:
+      default_grouping_name: group_by_country
+      groupings:
+        group_by_country:
           level_1:
             source: column_value
-            column: category
-        Tag_data_stream:
+            column: country_name
+        group_by_area:
           level_1:
             source: tag
             tag: landing_zone
@@ -185,7 +186,7 @@ To set up a data grouping configuration at the table level
           type_snapshot:
             column_type: INT64
             nullable: true
-        address:
+        country_name:
           type_snapshot:
             column_type: STRING
             nullable: true

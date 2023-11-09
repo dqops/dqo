@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.dqops.data.checkresults.services.models;
+package com.dqops.data.checkresults.services.models.currentstatus;
 
+import com.dqops.data.checkresults.services.models.CheckResultStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -24,54 +25,37 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.
+ * The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "TableDataQualityStatusModel", description = "The table's most recent data quality status. " +
-        "It is a summary of the results of the most recently executed data quality checks on the table. " +
-        "Verify the value of the highest_severity_issue (0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, " +
+@ApiModel(value = "ColumnCurrentDataQualityStatusModel", description = "The column's most recent data quality status. " +
+        "It is a summary of the results of the most recently executed data quality checks on the column. " +
+        "Verify the value of the highest_severity_level to see if there are any data quality issues on the column. " +
+        "The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, " +
         "3 - a fatal data quality issue was detected.")
 @Data
-public class TableDataQualityStatusModel {
+public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder {
     /**
-     * The connection name in DQOps.
+     * The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.
      */
-    @JsonPropertyDescription("The connection name in DQOps.")
-    private String connectionName;
+    @JsonPropertyDescription("The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.")
+    private CheckResultStatus highestSeverityLevel;
 
     /**
-     * The schema name.
+     * The UTC timestamp when the most recent data quality check was executed on the column.
      */
-    @JsonPropertyDescription("The schema name.")
-    private String schemaName;
-
-    /**
-     * The table name.
-     */
-    @JsonPropertyDescription("The table name.")
-    private String tableName;
-
-    /**
-     * The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.
-     */
-    @JsonPropertyDescription("The severity of the highest identified data quality issue (1 = warning, 2 = error, 3 = fatal) or 0 when no data quality issues were identified. This field will be null if no data quality checks were executed on the table.")
-    private int highestSeverityIssue;
-
-    /**
-     * The UTC timestamp when the most recent data quality check was executed on the table.
-     */
-    @JsonPropertyDescription("The UTC timestamp when the most recent data quality check was executed on the table.")
+    @JsonPropertyDescription("The UTC timestamp when the most recent data quality check was executed on the column.")
     private Instant lastCheckExecutedAt;
 
     /**
-     * The total number of most recent checks that were executed on the table. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.
+     * The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.
      */
-    @JsonPropertyDescription("The total number of most recent checks that were executed on the table. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.")
+    @JsonPropertyDescription("The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.")
     private int executedChecks;
 
     /**
@@ -105,14 +89,14 @@ public class TableDataQualityStatusModel {
      */
     @JsonPropertyDescription("The number of data quality check execution errors that were reported due to access issues to the data source, " +
             "invalid mapping in DQOps, invalid queries in data quality sensors or invalid python rules. " +
-            "When an execution error is reported, the configuration of a data quality check on a table must be updated.")
+            "When an execution error is reported, the configuration of a data quality check on a column must be updated.")
     private int executionErrors;
 
     /**
-     * The names of failed data quality checks (keys) and severity of the highest data quality issue that was detected.
-     * Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].
+     * The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses
+     * that describe the most current status.
      */
-    @JsonPropertyDescription("The paths to all failed data quality checks (keys) and severity of the highest data quality issue that was detected. " +
-            "Table-level checks are identified by the check name. Column-level checks are identified as a check_name[column_name].")
-    private Map<String, CheckResultStatus> failedChecksStatuses = new HashMap<>();
+    @JsonPropertyDescription("The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses " +
+            "that describe the most current status.")
+    private Map<String, CheckCurrentDataQualityStatusModel> checks = new LinkedHashMap<>();
 }

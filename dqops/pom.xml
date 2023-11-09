@@ -699,7 +699,7 @@
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>swagger-ui-dist</artifactId>
-			<version>4.18.2</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
+			<version>5.9.2</version> <!-- When upgrading the package version, remember to change the version number in SwaggerConfiguration class -->
 		</dependency>
 		<dependency>
 			<groupId>com.github.jknack</groupId>

@@ -18,6 +18,7 @@ package com.dqops.core.jobqueue.jobs.table;
 import com.dqops.utils.docs.SampleStringsRegistry;
 import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
@@ -28,8 +29,13 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @EqualsAndHashCode(callSuper = false)
 public class ImportTablesQueueJobParameters {
+    @JsonPropertyDescription("Connection name")
     private String connectionName;
+
+    @JsonPropertyDescription("Schema name")
     private String schemaName;
+
+    @JsonPropertyDescription("Optional list of table names inside the schema. When the list of tables is empty, all tables are imported.")
     private List<String> tableNames;
 
     public ImportTablesQueueJobParameters() {

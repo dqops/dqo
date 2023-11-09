@@ -4,7 +4,6 @@ from dqops.airflow.table_status.dqops_assert_table_status_operator import (
     DqopsAssertTableStatusOperator,
 )
 from dqops.client.models.check_time_scale import CheckTimeScale
-from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.client.types import UNSET, Unset
 
@@ -74,7 +73,9 @@ class DqopsAssertPartitionedTableStatusOperator(DqopsAssertTableStatusOperator):
             schema_name=schema_name,
             table_name=table_name,
             months=months,
-            check_type=CheckType.PARTITIONED,
+            profiling=False,
+            monitoring=False,
+            partitioned=True,
             check_time_scale=check_time_scale,
             data_group=data_group,
             check_name=check_name,

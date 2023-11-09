@@ -46,7 +46,7 @@ in a table.
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -59,7 +59,7 @@ in a table.
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
@@ -68,14 +68,15 @@ in a table.
     ```
 The file starts with an import of reusable dialects specific to the database.
 
-| Maro name                          | Description                                                                                                                                       |
-|------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
-| `render_target_table`              | Adds target table name.                                                                                                                           |
-| `render_data_stream_projections`   | Optional data stream projection that allows tracking data quality results for different data streams aggregated in the same table.                |
-| `render_time_dimension_projection` | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately. |
-| `render_where_clause`              | WHERE clause is used to filter records.                                                                                                           |
-| `render_group_by`                  | GROUP BY statement group rows by dates, partitions or additional columns.                                                                         |
-| `render_order_by`                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                             |
+
+| Maro name                          | Description                                                                                                                                                                                                                                                                                                                                                                                                                  |
+|------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `render_target_table`              | Adds target table name.                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `render_data_grouping_projections` | Adds data [data grouping](../data-grouping/data-grouping.md) columns to the list of columns returned to support the **GROUP BY** clause. Read the [data grouping configuration](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) manual to learn how to configure data grouping. Data grouping configuration allows tracking data quality results for different groups of rows stored in the same table. |
+| `render_time_dimension_projection` | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately.                                                                                                                                                                                                                                                                            |
+| `render_where_clause`              | WHERE clause is used to filter records.                                                                                                                                                                                                                                                                                                                                                                                      |
+| `render_group_by`                  | GROUP BY statement group rows by dates, partitions or additional columns. The columns selected for data grouping are also returned.                                                                                                                                                                                                                                                                                          |
+| `render_order_by`                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                                                                                                                                                                                                                                                                                                        |
 
 
 ## Sensor types and categories
@@ -108,9 +109,12 @@ A full list of sensors within each category is available at the link.
 | [strings column sensors](../../../reference/sensors/column/strings-column-sensors/)        | Detects issues in columns with string-type data.                                                                                                                                                           |
 | [uniqueness column sensors](../../../reference/sensors/column/uniqueness-column-sensors/)  | Detect uniqueness and duplications.                                                                                                                                                                        |
 
+
 ## Sensor data storage
 
 DQOps stores a copy of the sensor data locally on the monitoring agent. The data files are stored as Apache Parquet files
-in an Apache Hive compatible folder tree, partitioned by the data source, monitored table name, and the month. A local 
-copy of the sensor data enables a true multi-cloud data collection, without accessing any sensitive data by an external 
-cloud or SaaS solution.
+in an Apache Hive compatible folder tree, partitioned by the data source, monitored table name, and the month.
+The sensor's query results are called **sensor readouts** in DQOps. The results are stored
+in a [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) parquet table as described in
+the [data storage](../data-storage/data-storage.md) concept.
+

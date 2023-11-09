@@ -34,6 +34,8 @@ import com.dqops.utils.docs.client.operations.OperationsDocumentationModelFactor
 import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactoryImpl;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
+import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
+import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
@@ -55,7 +57,6 @@ import java.util.stream.Collectors;
 public class GeneratePythonDocumentationPostProcessor {
     public static final Path baseClientDocsPath = Path.of("docs", "client");
     public static LinkageStore<String> linkageStore;
-    public static final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
 
     /**
      * Main method of the documentation generator that generates markdown documentation files for mkdocs.
@@ -117,6 +118,8 @@ public class GeneratePythonDocumentationPostProcessor {
                     renderedIndexYaml,
                     "########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY",
                     "########## END INCLUDE PYTHON CLIENT REFERENCE");
+
+            executePostCorrections(projectDir);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -250,5 +253,15 @@ public class GeneratePythonDocumentationPostProcessor {
             System.err.println("Cannot generate documentation for Python client, error: " + ex.getMessage());
             throw new RuntimeException(ex);
         }
+    }
+
+    private static void executePostCorrections(Path projectRoot) {
+        Path docPath = projectRoot.resolve("../docs").toAbsolutePath().normalize();
+        DocumentationFolder docsRootFolder = DocumentationFolderFactory.loadCurrentFiles(docPath);
+        DocumentationFolder docsRootFolderCorrected = DocumentationFolderFactory.loadCurrentFiles(docPath);
+
+        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService = new DocumentationFolderPostCorrectorServiceImpl();
+        documentationFolderPostCorrectorService.postProcessCorrect(projectRoot.toAbsolutePath(), docsRootFolderCorrected);
+        docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
     }
 }

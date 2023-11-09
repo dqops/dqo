@@ -39,6 +39,7 @@ class DqopsWaitForJobOperator(BaseOperator):
         *,
         task_id_to_wait_for: Union[Unset, None, str] = UNSET,
         base_url: str = "http://localhost:8888/",
+        job_business_key: Union[Unset, None, str] = UNSET,
         wait_timeout: Union[Unset, None, int] = UNSET,
         fail_on_timeout: bool = True,
         **kwargs
@@ -50,6 +51,8 @@ class DqopsWaitForJobOperator(BaseOperator):
             The id of a task that the operator will wait for.
         base_url : str [optional, default="http://localhost:8888/"]
             The base url to DQOps application.
+        job_business_key : Union[Unset, None, str] = UNSET
+            Job business key that is a user assigned unique job id, used to check the job status by looking up the job by a user assigned identifier, instead of the DQOps assigned job identifier.
         wait_timeout : int
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
@@ -59,6 +62,7 @@ class DqopsWaitForJobOperator(BaseOperator):
         super().__init__(**kwargs)
         self.task_id_to_wait_for = task_id_to_wait_for
         self.base_url: str = extract_base_url(base_url)
+        self.job_business_key: str = job_business_key
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
 
@@ -68,17 +72,13 @@ class DqopsWaitForJobOperator(BaseOperator):
         )
 
         try:
-            if self.task_id_to_wait_for != UNSET:
-                task_to_track: str = self.task_id_to_wait_for
-            else:
-                task_to_track = print(next(iter(context["task"].upstream_task_ids)))
-
-            ti: TaskInstance = context.get("task_instance")
-            xcom_job_result: ImportTablesQueueJobResult = ti.xcom_pull(
-                key="return_value", task_ids=task_to_track
+            job_id: str = (
+                self.job_business_key
+                if self.job_business_key is not UNSET
+                else self._gather_job_id(context)
             )
 
-            job_id: int = xcom_job_result["jobId"]["jobId"]
+            logging.info("the job id is : " + job_id)
 
             response: Response[DqoJobHistoryEntryModel] = sync_detailed(
                 job_id=job_id,
@@ -105,3 +105,18 @@ class DqopsWaitForJobOperator(BaseOperator):
             raise DqopsUnfinishedJobException()
 
         return job_result.to_dict()
+
+    def _gather_job_id(self, context) -> str:
+        if self.task_id_to_wait_for != UNSET:
+            task_to_track: str = self.task_id_to_wait_for
+        else:
+            task_to_track = print(next(iter(context["task"].upstream_task_ids)))
+
+        ti: TaskInstance = context.get("task_instance")
+        xcom_job_result: ImportTablesQueueJobResult = ti.xcom_pull(
+            key="return_value", task_ids=task_to_track
+        )
+
+        job_id: int = xcom_job_result["jobId"]["jobId"]
+
+        return job_id
