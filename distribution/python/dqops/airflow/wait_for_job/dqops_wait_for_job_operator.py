@@ -100,6 +100,10 @@ class DqopsWaitForJobOperator(BaseOperator):
             or job_result.status == DqoJobStatus.QUEUED
         ):
             raise DqopsUnfinishedJobException()
+        
+        if job_result.status == DqoJobStatus.FAILED:
+            self.retries = 0
+            raise DqopsJobFailedException(context["ti"], job_result.to_dict())
 
         return job_result.to_dict()
 
