@@ -2,40 +2,52 @@
 
 ## Prerequisites
 
-To use DQOps you need:
+To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from Git and compile it locally, you need:
 
-- Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+ -  Python version 3.8 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
 
-  To confirm that you have Python installed run the following command
-  ```
-  python --version
-  ```
-  To view the Python 3 version, run `python3 --version` instead.
+    To confirm that you have Python installed run the following command
 
-
-
-- Ability to install Python packages with pip.
-
-  To confirm that you have pip installed run the following command
-  ```
-  pip --version
-  ```
-  Current version of pip should be displayed.
+    ```
+    python --version
+    ```
+   
+    To view the Python 3 version, run `python3 --version` instead.
 
 
-- Installed JDK software (version 17) and set the JAVA_HOME environment variable.
+ -  Ability to install Python packages with pip.
 
-  To confirm that Java is installed on your system, please run this command:
-  ```
-  java --version
-  ```
-  A Java version should be displayed. If the above command shows 'java' is not recognized, it means Java is not
-  installed or the path is not properly set.
+    To confirm that you have pip installed run the following command
 
-  To ensure that the JAVA_HOME environmental variables are properly set, please run the following command:
-  ```
-  echo %JAVA_HOME%
-  ```
+    ```
+    pip --version
+    ```
+   
+    Current version of pip should be displayed.
+
+
+ -  Installed JDK software (version 17) and set the JAVA_HOME environment variable.
+
+    To confirm that Java is installed on your system, please run this command:
+
+    ```
+    java --version
+    ```
+   
+    A Java version should be displayed. If the above command shows 'java' is not recognized, it means Java is not
+    installed or the path is not properly set.
+
+    To ensure that the JAVA_HOME environmental variables are properly set, please run the following command:
+
+    === "Windows"
+        ```
+        echo %JAVA_HOME%
+        ```
+
+    === "MacOS/Linux"
+        ```
+        echo $JAVA_HOME
+        ```
 
 ## Installation
 
@@ -67,6 +79,8 @@ To use DQOps you need:
     The `DQOps User Home` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations.
     [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
 
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+
 5.  Login to DQOps Cloud.
 
     To use all DQOps features, such as storing data quality definitions and results in the cloud and the data quality dashboards, you
@@ -81,5 +95,9 @@ To use DQOps you need:
     [https://cloud.dqops.com/](https://cloud.dqops.com/) account. Since now on, your local DQOps instance is fully functional
     and can work mostly offline.
 
+    ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
+
 6.  Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
-    or by copying the link.
+    or by copying the link. You will see the welcome screen as shown below.
+
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)

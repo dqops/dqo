@@ -10,7 +10,7 @@ spec:
     data_type: enum
     allowed_values:
     - YYYY-MM-DD
-    - DD/MM/YYYY
     - "Month D, YYYY"
-    - YYYY/MM/DD
     - MM/DD/YYYY
+    - YYYY/MM/DD
+    - DD/MM/YYYY

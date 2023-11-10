@@ -1,33 +1,4 @@
 
-## SensorDefinitionYaml  
-Data quality sensor definition YAML schema for a data quality sensor specification.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../SensorDefinitionYaml/#SensorDefinitionSpec)||[SensorDefinitionSpec](../SensorDefinitionYaml/#SensorDefinitionSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## ParameterDefinitionSpec  
 Defines a single field that is a sensor parameter or a rule parameter.  
   
@@ -49,9 +20,22 @@ Defines a single field that is a sensor parameter or a rule parameter.
 |data_type|Parameter data type.|enum|date<br/>datetime<br/>boolean<br/>integer_list<br/>string<br/>double<br/>column_name<br/>string_list<br/>integer<br/>long<br/>enum<br/>object<br/>| | |
 |display_hint|UI control display hint.|enum|textarea<br/>| | |
 |required|True when the value for the parameter must be provided.|boolean| | | |
-|allowed_values|List of allowed values for a field that is of an enum type.|string_list| | | |
-|sample_values|List of sample values. The sample values are used in the documentation or help messages.|string_list| | | |
+|allowed_values|List of allowed values for a field that is of an enum type.|List[string]| | | |
+|sample_values|List of sample values. The sample values are used in the documentation or help messages.|List[string]| | | |
 
+
+
+
+
+
+
+
+
+___  
+
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
 
 
 
@@ -93,9 +77,25 @@ Data Quality sensor definition specification. Provides the configuration for a d
 
 ___  
 
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
+## SensorDefinitionYaml  
+Data quality sensor definition YAML schema for a data quality sensor specification.  
   
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](../SensorDefinitionYaml/#SensorDefinitionSpec)||[SensorDefinitionSpec](../SensorDefinitionYaml/#SensorDefinitionSpec)| | | |
+
 
 
 

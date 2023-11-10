@@ -1,5 +1,5 @@
 from airflow.exceptions import AirflowException
-
+from airflow.models.taskinstance import TaskInstance
 
 class DqopsDataQualityIssueDetectedException(AirflowException):
     """
@@ -8,6 +8,7 @@ class DqopsDataQualityIssueDetectedException(AirflowException):
 
     """
 
-    def __init__(self):
+    def __init__(self, ti: TaskInstance, return_value: dict):
         error_message: str = "DQOps has detected a data quality issue!"
         super().__init__(error_message)
+        ti.xcom_push("return_value", return_value)

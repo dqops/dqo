@@ -55,10 +55,21 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         Path sensorsPath = Path.of("docs", "reference", "sensors");
         sensorsFolder.setDirectPath(projectRootPath.resolve("..").resolve(sensorsPath).toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
-
         List<SensorDocumentationModel> sensorDocumentationModels = createSensorDocumentationModels(projectRootPath);
         List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
+
+        MainPageSensorDocumentationModel mainPageSensorDocumentationModel = new MainPageSensorDocumentationModel();
+        mainPageSensorDocumentationModel.setSensors(sensorGroupedDocumentationModels);
+
+        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("sensors/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = sensorsFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageSensorDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageSensorDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
+
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
 
         for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
             Path sensorFilePath = Path.of(sensorGroupedDocumentation.getTarget(),

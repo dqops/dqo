@@ -43,10 +43,10 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
      */
     @Override
     public DocumentationFolder renderCheckDocumentation(Path projectRootPath) {
-        DocumentationFolder rulesFolder = new DocumentationFolder();
-        rulesFolder.setFolderName("checks");
-        rulesFolder.setLinkName("Checks");
-        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/checks").toAbsolutePath().normalize());
+        DocumentationFolder checksFolder = new DocumentationFolder();
+        checksFolder.setFolderName("checks");
+        checksFolder.setLinkName("Checks");
+        checksFolder.setDirectPath(projectRootPath.resolve("../docs/checks").toAbsolutePath().normalize());
 
         List<CheckCategoryDocumentationModel> checkCategoryDocumentationModels = Stream.concat(this.checkDocumentationModelFactory.makeDocumentationForTableChecks().stream(),
                 this.checkDocumentationModelFactory.makeDocumentationForColumnChecks().stream()).collect(Collectors.toList());
@@ -55,7 +55,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         mainPageCheckDocumentationModel.setChecks(checkCategoryDocumentationModels);
 
         Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("checks/main_page_documentation");
-        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = rulesFolder.addNestedFile("index" + ".md");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = checksFolder.addNestedFile("index" + ".md");
         mainPageDocumentationMarkdownFile.setRenderContext(mainPageCheckDocumentationModel);
 
         String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageCheckDocumentationModel);
@@ -70,7 +70,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
             allChecksDocumentationModels.addAll(check.getCheckGroups());
         }
         for (SimilarChecksDocumentationModel similarCheck : allChecksDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(similarCheck.getTarget()
+            DocumentationMarkdownFile documentationMarkdownFile = checksFolder.addNestedFile(similarCheck.getTarget()
                     + "/" + similarCheck.getCategory()
                     + "/" + similarCheck.getPrimaryCheckName().replace(' ', '-') + ".md");
             documentationMarkdownFile.setRenderContext(similarCheck);
@@ -78,6 +78,6 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, similarCheck);
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
-        return rulesFolder;
+        return checksFolder;
     }
 }

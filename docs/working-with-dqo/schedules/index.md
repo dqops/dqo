@@ -56,13 +56,13 @@ connection or table.
 
 ## Starting a scheduler
 
+To start scheduler use the user interface. Simply switch on the **Jobs scheduler** using the button in the Notifications window
+on the [right upper right corner of the navigation bar](../../dqo-concepts/user-interface-overview/user-interface-overview.md).
+
+![Notifications - Scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+
 To initiate a scheduler in the DQOps Shell, simply enter the command `scheduler start`. To stop the scheduler, use the 
-command `scheduler stop`.
-
-You can also use the user interface to start the scheduler. Simply enable **Jobs scheduler** located in the Notifications
-on the [right side of the navigation bar.](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
-
-For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md). 
+command `scheduler stop`. For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md). 
 
 Scheduler can also be started in a server mode that continuously run a job scheduler and synchronize the data every 10 minutes.
 To do this, simply enter the command below in your terminal:

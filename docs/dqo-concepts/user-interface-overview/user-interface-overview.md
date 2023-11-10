@@ -4,7 +4,7 @@ The DQOps web interface is divided into three main areas.
 
 ![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/graphical-interface-overview.png)
 
-1. The [navigation bar](./#navigation-bar) has links to the main DQO data quality monitoring sections and provides access to the main settings and other functions.
+1. The [navigation bar](./#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](./#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
 3. The [main workspace](./#main-workspace) changes according to your selection in the navigation bar and the tree view.
 
@@ -32,39 +32,43 @@ The navigation bar allows you to select the specific sections that you want to f
 
 The right side of the navigation bar provides access to the main settings and some other functions.
 
-![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/rigth-part-of-the-navigation-bar.png)
+![DQOps Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/rigth-part-of-the-navigation-bar.png)
 
 - **Help** - Links to the support page, documentation, DQOps account manager and configuration parameters settings set at 
     the start of DQOps. You can change the configuration settings by [setting command line arguments at the start of the application](../../command-line-interface/dqo.md).
 - **Synchronize** - Synchronize locally stored results with your DQOps Cloud account.
-- **Notifications** - You can view DQO notifications and enable or disable the scheduler. A NEW tag will appear when there is a new notification.
+- **Notifications** - View DQOps notifications and enable/disable the scheduler. The Notifications icon displays **NEW** tag, when there is a new notification.
 - **User account** - Provide information about your account, current limits and access to the DQOps Cloud account. 
 
 ### **Notifications**
 
-Notifications allows you to view executed jobs, such as running checks, collecting statistics, importing metadata, etc. 
+Notifications provide a log of all completed tasks, such as running checks, gathering statistics, importing metadata, 
+synchronizing folders, etc. 
 
-![Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
+![DQOps Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
 
-The notifications grant you access to a comprehensive log of all executed actions, allowing you to check the status of each action. These statuses can include "succeeded," "failed," "running," "waiting," "queued," or "cancelled." Furthermore, you can expand individual job entries to view sub-jobs and access additional details about specific tasks.
+You can use the notifications to access a complete log of all jobs that have been executed. This log allows you to check
+the status of each action, which can be "succeeded," "failed," "running," "waiting," "queued," or "canceled." 
+Additionally, you can expand each job entry to view sub-jobs and access more detailed information about specific tasks.
 
-Main functions of notifications:
+**Main functions of notifications:**
 
-- In the top of notifications you can manage your job scheduler, which is responsible for executing scheduled jobs.
+- In the top part of notifications window you can start and stop the scheduler. You can [learn more about scheduling here](../../working-with-dqo/schedules/index.md). 
 
-![Job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
+    ![DQOps job scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-scheduler.png)
 
 - If the job is queued or running you can cancel or stop it by clicking the X button.
 
-![Canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
+    ![DQOps canceling job](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/cancel-job.png)
 
-- In notifications you can also view the result of executed checks by simply hovering on run checks job. Color of the square shows the highest severity status of the results.
+- You can view the result of executed checks by simply hovering on run checks job. Color of the square represents the highest
+    severity status of the results (green for a valid result, yellow for a warning, orange for an error and red for a fatal error).
 
-![Job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
+    ![DQOps job results](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/job-results.png)
 
 ## Tree view
 
-![Tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view.png)
+![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view.png)
 
 The tree view at the **Data Source**, **Profiling**, **Monitoring Checks** and **Partition Checks** displays all the added sources and allows
 expanding its schemas, tables, and columns. Additionally, on the Profiling, Monitoring Checks and Partition Checks sections the three view 
@@ -79,7 +83,7 @@ that there is a check configured on any category.
 
 ### **Tree view menu**
 
-![Tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu.png)
+![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu.png)
 
 Clicking on the tree vertical dots at the end of each element in the tree view opens a menu that allows to run functions
 specific to the elements such as:
@@ -106,9 +110,12 @@ and data quality dashboards.
 
 Clicking on an object in the tree view always opens a new tab in the main workspace that helps in navigating between open elements. 
 
-## DQO tabs
+## Tabbed interface
 
-When you select an item from the tree view, it opens a new tab in the main workspace. You can open and close tabs within each section such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Checks**,**Data Quality Dashboards**, **Incidents** and **Configuration**. Each section can have a maximum of seven tabs open at a time.  If you try to add an eighth tab, the first one will be automatically removed to maintain the limit. These tabs are stored locally, which means that you can always return to them even after closing the application.
+When you select an item from the tree view, it opens a new tab in the main workspace. You can open and close tabs within each section 
+such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Checks**,**Data Quality Dashboards**, **Incidents** and **Configuration**.
+Each section can have a maximum of seven tabs open at a time.  If you try to add an eighth tab, the first one will be automatically removed to maintain the limit. 
+These tabs are stored locally, which means that you can always return to them even after closing the application.
 
 ![Tabs](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tabs.png)
 

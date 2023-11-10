@@ -23,6 +23,7 @@ import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Objects;
 
@@ -43,6 +44,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelpers(ConditionalHelpers.class);
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
+        handlebars.registerHelper("single-line", singleLineHelper);
     }
 
     /**
@@ -97,7 +99,13 @@ public class HandlebarsDocumentationUtilities {
             if (!isObject(typeModel) && !isLinkableEnum(typeModel)) {
                 // Simple types
                 String dataTypeString = typeModel.getDataType().toString();
-                return dataTypeString.substring(0, dataTypeString.length() - "_type".length());
+                switch (typeModel.getDataType()) {
+                    case string_list_type:
+                    case integer_list_type:
+                        return String.format("List[%s]", dataTypeString.substring(0, dataTypeString.length() - "_list_type".length()));
+                    default:
+                        return dataTypeString.substring(0, dataTypeString.length() - "_type".length());
+                }
             }
 
             ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
@@ -137,5 +145,13 @@ public class HandlebarsDocumentationUtilities {
         }
 
         return ":material-check-bold:";
+    };
+
+    private static final Helper<String> singleLineHelper = (s, _ignore) -> {
+        if (s == null) {
+            return null;
+        }
+
+        return s.replaceAll("\\s+", " ");
     };
 }

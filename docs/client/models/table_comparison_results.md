@@ -14,7 +14,7 @@ The table comparison check result model for the most recent data comparison run.
 |errors|The number of data groups that were compared and the values did not match, raising an error severity level data quality issue.|integer|
 |fatals|The number of data groups that were compared and the values did not match, raising a fatal severity level data quality issue.|integer|
 |execution_errors|The number of execution errors in the check or rule that prevented comparing the tables.|integer|
-|not_matching_data_groups|A list of not matching data grouping names.|string_list|
+|not_matching_data_groups|A list of not matching data grouping names.|List[string]|
 
 
 ___  

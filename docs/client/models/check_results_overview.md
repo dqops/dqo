@@ -30,9 +30,9 @@ Check recent results overview. Returns the highest severity for the last several
 |time_periods|List of time periods for the results, returned as a local time, sorted from the newest to the oldest.|List[datetime]|
 |time_periods_utc|List of time periods for the results, returned as absolute UTC time.|List[[Instant](#Instant)]|
 |executed_at_timestamps|List of absolute timestamp (UTC) when the check was executed or an error was raised.|List[[Instant](#Instant)]|
-|time_period_display_texts|List of time periods, sorted descending, returned as a text with a possible time zone.|string_list|
+|time_period_display_texts|List of time periods, sorted descending, returned as a text with a possible time zone.|List[string]|
 |statuses|List of check severity levels or an error status, indexes with the severity levels match the time periods.|List[[CheckResultStatus](../check_results/#CheckResultStatus)]|
-|data_groups|List of data group names. Identifies the data group with the highest severity or error result.|string_list|
+|data_groups|List of data group names. Identifies the data group with the highest severity or error result.|List[string]|
 |results|List of sensor results. Returns the data quality result readout for the data group with the alert of the highest severity level.|List[double]|
 
 
