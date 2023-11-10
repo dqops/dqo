@@ -14,6 +14,7 @@ import clsx from 'clsx';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import SvgIcon from '../../SvgIcon';
+import DatePicker from '../../DatePicker';
 
 type TFirstLevelCheck = {
   checkName: string;
@@ -47,15 +48,24 @@ export default function TableQualityStatus() {
   const [categoryDimension, setCategoryDimension] = useState<
     'category' | 'dimension'
   >('category');
-  const getTableDataQualityStatus = () => {
-    CheckResultApi.getTableDataQualityStatus(connection, schema, table).then(
-      (res) => setTableDataQualityStatus(res.data)
-    );
+  const [month, setMonth] = useState<number | undefined>(1);
+  const [since, setSince] = useState<number | undefined>();
+
+  const getTableDataQualityStatus = (month?: number, since?: number) => {
+    CheckResultApi.getTableDataQualityStatus(
+      connection,
+      schema,
+      table,
+      month,
+      since
+    ).then((res) => setTableDataQualityStatus(res.data));
   };
 
   useEffect(() => {
     getTableDataQualityStatus();
-  }, [connection, schema, table]);
+  }, [connection, schema, table, month, since]);
+
+  console.log(month, since);
 
   // const colorCellBasedOnSeverity = (checks : TFirstLevelCheck[] | CheckCurrentDataQualityStatusModel[]) => {}
 
@@ -335,19 +345,32 @@ export default function TableQualityStatus() {
         </div>
         <div className="flex pb-6 gap-x-5">
           <RadioButton
-            checked={categoryDimension === 'category'}
+            checked={month === 1}
             label="Last month"
-            onClick={() => setCategoryDimension('category')}
+            onClick={() => {
+              setSince(undefined), setMonth(1);
+            }}
           />
           <RadioButton
-            checked={categoryDimension === 'dimension'}
+            checked={month === 3}
             label="Last 3 months"
-            onClick={() => setCategoryDimension('dimension')}
+            onClick={() => {
+              setSince(undefined), setMonth(3);
+            }}
           />
           <RadioButton
-            checked={categoryDimension === 'dimension'}
+            checked={month === undefined}
             label="Since"
-            onClick={() => setCategoryDimension('dimension')}
+            onClick={() => {
+              setMonth(undefined);
+            }}
+          />
+          <DatePicker
+            showIcon
+            placeholderText="Select date start"
+            onChange={setSince}
+            selected={since}
+            dateFormat="yyyy-MM-dd"
           />
         </div>
       </div>
@@ -392,31 +415,42 @@ export default function TableQualityStatus() {
       </div>
       <table className="border border-gray-150 mt-4 min-w-250">
         <thead>
-          <th className="p-4 border-b border-b-gray-150"></th>
-          {Object.keys(firstLevelChecks).map((key, index) => (
-            <th key={index} className={clsx('p-4 border-b border-b-gray-150')}>
+          <th
+            key="header_blank"
+            className="p-4 border-b border-b-gray-150"
+          ></th>
+          {Object.keys(firstLevelChecks).map((key) => (
+            <th
+              key={`header_${key}`}
+              className={clsx('p-4 border-b border-b-gray-150')}
+            >
               {key}
             </th>
           ))}
         </thead>
         <tbody>
-          <tr className="border-b border-b-gray-150">
-            <td className="font-bold px-4 ">Table level checks</td>
-            {Object.keys(firstLevelChecks).map((key, index) => (
+          <tr
+            key="row_table_level_checks"
+            className="border-b border-b-gray-150"
+          >
+            <td key="cell_table_level_checks_title" className="font-bold px-4">
+              Table level checks
+            </td>
+            {Object.keys(firstLevelChecks).map((key) => (
               <td
-                key={index}
+                key={`cell_table_level_checks_${key}`}
                 className={clsx(
                   'p-2 border-b border-b-gray-150',
                   colorCell(firstLevelChecks[key])
                 )}
               >
-                {' '}
                 <div
                   onClick={() => {
                     toggleExtendedChecks(key, 'table');
                   }}
                 >
                   <SvgIcon
+                    key={`svg_table_level_checks_${key}`}
                     name={
                       extendedChecks.find(
                         (x) =>
@@ -431,17 +465,23 @@ export default function TableQualityStatus() {
               </td>
             ))}
           </tr>
-          <tr className="border-b border-b-gray-150">
-            <td className="font-bold px-4 "></td>
-            {Object.keys(firstLevelChecks).map((key, index) => (
-              <td key={index}>
+          <tr
+            key="row_table_level_checks_blank"
+            className="border-b border-b-gray-150"
+          >
+            <td
+              key="cell_table_level_checks_blank"
+              className="font-bold px-4 "
+            ></td>
+            {Object.keys(firstLevelChecks).map((key) => (
+              <td key={`cell_table_level_checks_blank_${key}`}>
                 {extendedChecks.find(
                   (x) => x.checkType === key && x.categoryDimension === 'table'
                 ) &&
-                  (firstLevelChecks[key] ?? {}).map((x, index) =>
+                  (firstLevelChecks[key] ?? []).map((x, index) =>
                     x.checkType === 'table' ? (
                       <div
-                        key={index}
+                        key={`table_check_${key}_${index}`}
                         className={clsx(
                           calculateSeverityColor(
                             x.severity ??
@@ -460,9 +500,9 @@ export default function TableQualityStatus() {
           </tr>
           {Object.keys(tableDataQualityStatus.columns ?? {}).map(
             (key, index) => (
-              <>
+              <React.Fragment key={`column_${key}`}>
                 <tr
-                  key={index}
+                  key={`column_row_${key}`}
                   className={clsx(
                     index !==
                       Object.keys(tableDataQualityStatus.columns ?? {}).length -
@@ -470,55 +510,55 @@ export default function TableQualityStatus() {
                   )}
                 >
                   <td
+                    key={`column_cell_${key}`}
                     className="p-2 px-4 underline cursor-pointer"
                     onClick={() => openFirstLevelColumnTab(key)}
                   >
                     {key}
                   </td>
-                  {Object.keys(firstLevelChecks).map(
-                    (firstLevelChecksKey, jIndex) => (
-                      <td
-                        key={jIndex * 10}
-                        className={clsx(
-                          '',
-                          colorColumnCell(
-                            (tableDataQualityStatus.columns ?? {})[key],
-                            firstLevelChecksKey
-                          )
-                        )}
-                      >
-                        {' '}
-                        {colorColumnCell(
+                  {Object.keys(firstLevelChecks).map((firstLevelChecksKey) => (
+                    <td
+                      key={`cell_column_${key}_${firstLevelChecksKey}`}
+                      className={clsx(
+                        '',
+                        colorColumnCell(
                           (tableDataQualityStatus.columns ?? {})[key],
                           firstLevelChecksKey
-                        ) !== '' ? (
-                          <div
-                            onClick={() => {
-                              toggleExtendedChecks(key, firstLevelChecksKey);
-                            }}
-                          >
-                            <SvgIcon
-                              name={
-                                extendedChecks.find(
-                                  (x) =>
-                                    x.checkType === key &&
-                                    x.categoryDimension === firstLevelChecksKey
-                                )
-                                  ? 'chevron-right'
-                                  : 'chevron-down'
-                              }
-                              className="h-5 w-5"
-                            />
-                          </div>
-                        ) : null}
-                      </td>
-                    )
-                  )}
+                        )
+                      )}
+                    >
+                      {' '}
+                      {colorColumnCell(
+                        (tableDataQualityStatus.columns ?? {})[key],
+                        firstLevelChecksKey
+                      ) !== '' ? (
+                        <div
+                          onClick={() => {
+                            toggleExtendedChecks(key, firstLevelChecksKey);
+                          }}
+                        >
+                          <SvgIcon
+                            key={`svg_column_${key}_${firstLevelChecksKey}`}
+                            name={
+                              extendedChecks.find(
+                                (x) =>
+                                  x.checkType === key &&
+                                  x.categoryDimension === firstLevelChecksKey
+                              )
+                                ? 'chevron-right'
+                                : 'chevron-down'
+                            }
+                            className="h-5 w-5"
+                          />
+                        </div>
+                      ) : null}
+                    </td>
+                  ))}
                 </tr>
-                <tr>
-                  <td className="p-2 px-4 "></td>
-                  {Object.keys(firstLevelChecks).map((check, jIndex) => (
-                    <td key={index}>
+                <tr key={`column_row_blank_${key}`}>
+                  <td key={`column_cell_blank_${key}`} className="px-4 "></td>
+                  {Object.keys(firstLevelChecks).map((check) => (
+                    <td key={`cell_column_blank_${key}_${check}`}>
                       {extendedChecks.find(
                         (x) =>
                           x.checkType === key && x.categoryDimension === check
@@ -526,7 +566,7 @@ export default function TableQualityStatus() {
                         ? (firstLevelChecks[check] ?? []).map((x, index) =>
                             x.checkType === key ? (
                               <div
-                                key={index}
+                                key={`column_check_${key}_${check}_${index}`}
                                 className={clsx(
                                   calculateSeverityColor(
                                     x.severity ??
@@ -544,7 +584,7 @@ export default function TableQualityStatus() {
                     </td>
                   ))}
                 </tr>
-              </>
+              </React.Fragment>
             )
           )}
         </tbody>
