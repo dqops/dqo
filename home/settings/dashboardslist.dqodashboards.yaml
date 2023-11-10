@@ -397,7 +397,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Data quality issues count per check category
+        - dashboard_name: Data quality issues count per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
           height: 1870
@@ -821,7 +821,7 @@ spec:
             ds0.p_check_type: partitioned
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Data quality issue count per check category
+        - dashboard_name: Data quality issue count per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
           height: 1870
@@ -1067,7 +1067,7 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Data quality issues count per check category
+      - dashboard_name: Data quality issues count per check
         url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
         width: 1400
         height: 1870
