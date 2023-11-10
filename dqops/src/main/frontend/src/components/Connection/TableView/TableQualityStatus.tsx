@@ -126,18 +126,45 @@ export default function TableQualityStatus() {
     setFirstLevelChecks(data);
   };
 
+  const calculateSeverityColor = (
+    severity: CheckCurrentDataQualityStatusModelSeverityEnum
+  ) => {
+    if (
+      severity ===
+      CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+    ) {
+      return 'bg-gray-500';
+    }
+    if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal) {
+      return 'bg-red-500';
+    }
+    if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.error) {
+      return 'bg-orange-500';
+    } else if (
+      severity === CheckCurrentDataQualityStatusModelSeverityEnum.warning
+    ) {
+      return 'bg-yellow-500';
+    } else if (
+      severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid
+    ) {
+      return 'bg-teal-500';
+    }
+    return '';
+  };
+
   useEffect(() => {
     onChangeFirstLevelChecks();
   }, [categoryDimension, tableDataQualityStatus]);
 
-  console.log(extendedChecks);
+  console.log(firstLevelChecks);
 
   const colorCell = (checks: TFirstLevelCheck[]) => {
     if (
       checks.find(
         (x) =>
           x.severity ===
-          CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+            CheckCurrentDataQualityStatusModelSeverityEnum.execution_error &&
+          x.checkType === 'table'
       )
     ) {
       return 'bg-gray-500';
@@ -145,7 +172,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal
+          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal &&
+          x.checkType === 'table'
       )
     ) {
       return 'bg-red-500';
@@ -153,21 +181,25 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error
+          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error &&
+          x.checkType === 'table'
       )
     ) {
       return 'bg-orange-500';
     } else if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.warning
+          x.severity ===
+            CheckCurrentDataQualityStatusModelSeverityEnum.warning &&
+          x.checkType === 'table'
       )
     ) {
       return 'bg-yellow-500';
     } else if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid
+          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid &&
+          x.checkType === 'table'
       )
     ) {
       return 'bg-teal-500';
@@ -264,7 +296,6 @@ export default function TableQualityStatus() {
     checkType: string,
     categoryDimension: string
   ) => {
-    console.log(checkType, categoryDimension);
     const array = [...extendedChecks];
     if (
       array.find(
@@ -400,62 +431,120 @@ export default function TableQualityStatus() {
               </td>
             ))}
           </tr>
+          <tr className="border-b border-b-gray-150">
+            <td className="font-bold px-4 "></td>
+            {Object.keys(firstLevelChecks).map((key, index) => (
+              <td key={index}>
+                {extendedChecks.find(
+                  (x) => x.checkType === key && x.categoryDimension === 'table'
+                ) &&
+                  (firstLevelChecks[key] ?? {}).map((x, index) =>
+                    x.checkType === 'table' ? (
+                      <div
+                        key={index}
+                        className={clsx(
+                          calculateSeverityColor(
+                            x.severity ??
+                              CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                          )
+                        )}
+                      >
+                        {x.checkName}
+                      </div>
+                    ) : (
+                      ''
+                    )
+                  )}
+              </td>
+            ))}
+          </tr>
           {Object.keys(tableDataQualityStatus.columns ?? {}).map(
             (key, index) => (
-              <tr
-                key={index}
-                className={clsx(
-                  index !==
-                    Object.keys(tableDataQualityStatus.columns ?? {}).length -
-                      1 && 'my-2'
-                )}
-              >
-                <td
-                  className="p-2 px-4 underline cursor-pointer"
-                  onClick={() => openFirstLevelColumnTab(key)}
+              <>
+                <tr
+                  key={index}
+                  className={clsx(
+                    index !==
+                      Object.keys(tableDataQualityStatus.columns ?? {}).length -
+                        1 && 'my-2'
+                  )}
                 >
-                  {key}
-                </td>
-                {Object.keys(firstLevelChecks).map(
-                  (firstLevelChecksKey, jIndex) => (
-                    <td
-                      key={jIndex * 10}
-                      className={clsx(
-                        '',
-                        colorColumnCell(
+                  <td
+                    className="p-2 px-4 underline cursor-pointer"
+                    onClick={() => openFirstLevelColumnTab(key)}
+                  >
+                    {key}
+                  </td>
+                  {Object.keys(firstLevelChecks).map(
+                    (firstLevelChecksKey, jIndex) => (
+                      <td
+                        key={jIndex * 10}
+                        className={clsx(
+                          '',
+                          colorColumnCell(
+                            (tableDataQualityStatus.columns ?? {})[key],
+                            firstLevelChecksKey
+                          )
+                        )}
+                      >
+                        {' '}
+                        {colorColumnCell(
                           (tableDataQualityStatus.columns ?? {})[key],
                           firstLevelChecksKey
-                        )
-                      )}
-                    >
-                      {' '}
-                      {colorColumnCell(
-                        (tableDataQualityStatus.columns ?? {})[key],
-                        firstLevelChecksKey
-                      ) !== '' && (
-                        <div
-                          onClick={() => {
-                            toggleExtendedChecks(key, firstLevelChecksKey);
-                          }}
-                        >
-                          <SvgIcon
-                            name={
-                              extendedChecks.find(
-                                (x) =>
-                                  x.checkType === key &&
-                                  x.categoryDimension === firstLevelChecksKey
-                              )
-                                ? 'chevron-right'
-                                : 'chevron-down'
-                            }
-                            className="h-5 w-5"
-                          />
-                        </div>
-                      )}
+                        ) !== '' ? (
+                          <div
+                            onClick={() => {
+                              toggleExtendedChecks(key, firstLevelChecksKey);
+                            }}
+                          >
+                            <SvgIcon
+                              name={
+                                extendedChecks.find(
+                                  (x) =>
+                                    x.checkType === key &&
+                                    x.categoryDimension === firstLevelChecksKey
+                                )
+                                  ? 'chevron-right'
+                                  : 'chevron-down'
+                              }
+                              className="h-5 w-5"
+                            />
+                          </div>
+                        ) : null}
+                      </td>
+                    )
+                  )}
+                </tr>
+                <tr>
+                  <td className="p-2 px-4 "></td>
+                  {Object.keys(firstLevelChecks).map((check, jIndex) => (
+                    <td key={index}>
+                      {extendedChecks.find(
+                        (x) =>
+                          x.checkType === key && x.categoryDimension === check
+                      )
+                        ? (firstLevelChecks[check] ?? []).map((x, index) =>
+                            x.checkType === key ? (
+                              <div
+                                key={index}
+                                className={clsx(
+                                  calculateSeverityColor(
+                                    x.severity ??
+                                      CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                  )
+                                )}
+                              >
+                                {x.checkName}
+                              </div>
+                            ) : (
+                              ''
+                            )
+                          )
+                        : null}
                     </td>
-                  )
-                )}
-              </tr>
+                  ))}
+                </tr>
+              </>
             )
           )}
         </tbody>
