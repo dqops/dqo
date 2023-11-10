@@ -239,7 +239,7 @@ public class ConnectionModel {
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
 
                 setDateStart(null);
                 setDateEnd(null);
