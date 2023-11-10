@@ -80,6 +80,32 @@ export default function TableQualityStatus() {
         }
       }
     });
+    Object.values(tableDataQualityStatus.columns ?? {}).forEach((column) =>
+      Object.keys(column.checks ?? {}).forEach((key) => {
+        const categoryDimensionColumnKey =
+          categoryDimension === 'category'
+            ? (column.checks ?? {})[key]?.category
+            : (column.checks ?? {})[key]?.quality_dimension;
+        if (categoryDimensionColumnKey !== undefined) {
+          if (Object.keys(data).find((x) => x === categoryDimensionColumnKey)) {
+            data[categoryDimensionColumnKey].push({
+              checkName: key,
+              severity: (column.checks ?? {})[key]?.severity,
+              executedAt: (column.checks ?? {})[key]?.executed_at
+            });
+          } else {
+            data[categoryDimensionColumnKey] = [
+              {
+                checkName: key,
+                severity: (column.checks ?? {})[key]?.severity,
+                executedAt: (column.checks ?? {})[key]?.executed_at
+              }
+            ];
+          }
+        }
+      })
+    );
+
     setFirstLevelChecks(data);
   };
 
@@ -93,10 +119,27 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error
+          x.severity ===
+          CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+      )
+    ) {
+      return 'bg-gray-500';
+    }
+    if (
+      checks.find(
+        (x) =>
+          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal
       )
     ) {
       return 'bg-red-500';
+    }
+    if (
+      checks.find(
+        (x) =>
+          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error
+      )
+    ) {
+      return 'bg-orange-500';
     } else if (
       checks.find(
         (x) =>
@@ -129,6 +172,15 @@ export default function TableQualityStatus() {
         checks.push(check);
       }
     });
+    if (
+      checks.find(
+        (x) =>
+          x.severity ===
+          CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+      )
+    ) {
+      return 'bg-gray-500';
+    }
     if (
       checks.find(
         (x) =>
@@ -193,19 +245,39 @@ export default function TableQualityStatus() {
 
   return (
     <div className="p-4">
-      <div className="flex pb-6 gap-x-5">
-        <div>Group checks by: </div>
-        <RadioButton
-          checked={categoryDimension === 'category'}
-          label="category"
-          onClick={() => setCategoryDimension('category')}
-        />
-        <RadioButton
-          checked={categoryDimension === 'dimension'}
-          label="quality dimension"
-          onClick={() => setCategoryDimension('dimension')}
-        />
+      <div className="flex justify-between">
+        <div className="flex pb-6 gap-x-5">
+          <div>Group checks by: </div>
+          <RadioButton
+            checked={categoryDimension === 'category'}
+            label="category"
+            onClick={() => setCategoryDimension('category')}
+          />
+          <RadioButton
+            checked={categoryDimension === 'dimension'}
+            label="quality dimension"
+            onClick={() => setCategoryDimension('dimension')}
+          />
+        </div>
+        <div className="flex pb-6 gap-x-5">
+          <RadioButton
+            checked={categoryDimension === 'category'}
+            label="Last month"
+            onClick={() => setCategoryDimension('category')}
+          />
+          <RadioButton
+            checked={categoryDimension === 'dimension'}
+            label="Last 3 months"
+            onClick={() => setCategoryDimension('dimension')}
+          />
+          <RadioButton
+            checked={categoryDimension === 'dimension'}
+            label="Since"
+            onClick={() => setCategoryDimension('dimension')}
+          />
+        </div>
       </div>
+
       <div className="flex gap-x-5">
         <SectionWrapper title="Current table status">
           <div className="flex">
@@ -244,7 +316,7 @@ export default function TableQualityStatus() {
           </div>
         </SectionWrapper>
       </div>
-      <table className="border border-gray-150 mt-4">
+      <table className="border border-gray-150 mt-4 min-w-250">
         <thead>
           <th className="p-4 border-b border-b-gray-150"></th>
           {Object.keys(firstLevelChecks).map((key, index) => (
@@ -268,7 +340,14 @@ export default function TableQualityStatus() {
           </tr>
           {Object.keys(tableDataQualityStatus.columns ?? {}).map(
             (key, index) => (
-              <tr key={index} className="p-2">
+              <tr
+                key={index}
+                className={clsx(
+                  index !==
+                    Object.keys(tableDataQualityStatus.columns ?? {}).length -
+                      1 && 'my-2'
+                )}
+              >
                 <td
                   className="p-2 px-4 underline cursor-pointer"
                   onClick={() => openFirstLevelColumnTab(key)}
@@ -280,6 +359,7 @@ export default function TableQualityStatus() {
                     <td
                       key={jIndex * 10}
                       className={clsx(
+                        '',
                         colorColumnCell(
                           (tableDataQualityStatus.columns ?? {})[key],
                           firstLevelChecksKey
