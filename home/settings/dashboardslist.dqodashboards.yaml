@@ -662,7 +662,7 @@ spec:
         - dashboard_name: History of PII issues
           url: https://lookerstudio.google.com/embed/reporting/64912f8a-ff47-463e-b26d-3445e4d80717/page/c5B8C
           width: 1400
-          height: 2200
+          height: 2800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
