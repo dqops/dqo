@@ -415,7 +415,7 @@ spec:
             ds0.p_check_type: monitoring
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
-        - dashboard_name: Data quality failed checks per check category and day
+        - dashboard_name: Data quality failed checks per day
           url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/c5B8C
           width: 1400
           height: 2500
@@ -1085,7 +1085,7 @@ spec:
           ds0.p_check_type: all
           ds0.p_quality_dimension: all
           ds0.p_check_category: all
-      - dashboard_name: Data quality failed checks per check category and day
+      - dashboard_name: Data quality failed checks per day
         url: https://lookerstudio.google.com/embed/reporting/012ac681-13f0-4fb7-a138-4bf085f5634c/page/c5B8C
         width: 1400
         height: 2500
