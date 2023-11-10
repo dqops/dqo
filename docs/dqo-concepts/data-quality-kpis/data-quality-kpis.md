@@ -59,7 +59,36 @@ data quality dimensions would look like the following table:
 | 2022-10 | JP          |     99.1% |        93.2% |    94.7% |
 
 
+## Data quality KPIs dashboards
+
+With DQOps, you can easily view calculated data quality KPIs using [dashboards](../data-quality-dashboards/data-quality-dashboards.md). 
+Each type of checks (profiling, monitoring and partition) has a group of dedicated dashboards. To view dashboards, simply
+go to the **Data Quality Dashboard** section
+
+For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
+You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
+
+![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
+
+**KPIs per table and day** is another representative of KPIs dashboards. It allows reviewing data quality KPIs per table
+and day of the month.
+
+This dashboard allows filtering data by:
+
+* current and previous month,
+* connection,
+* schema,
+* data group,
+* data quality dimension,
+* check category,
+* check name,
+* column
+* table,
+* day of the month.
+
+![KPIs per table and day](https://dqops.com/docs/images/concepts/data-quality-dashboards/kpis-per-table-and-day.png)
+
 ## What's next
 - Look at some built-in [data quality KPI dashboards](../data-quality-dashboards/data-quality-dashboards.md#data-quality-kpis) 
-- Read about  [build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
+- Read about [build-in data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)
 - Learn how to [review results of data quality monitoring results on dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
