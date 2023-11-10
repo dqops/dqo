@@ -58,6 +58,8 @@ To use DQOps you need:
     After installation, you will be asked whether to initialize the `DQOps user home` folder in the default location. 
     Type Y to initialize the folder structure. Please remember that the current working folder must be empty.  
 
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+
 3.  Login to DQOps Cloud.
    
     To use all DQOps features, such as storing data quality definitions and results in the cloud and use data quality dashboards, you
@@ -74,6 +76,9 @@ To use DQOps you need:
     During the first registration, DQOps Cloud will generate your DQOps Cloud Pairing Key that is used to connect your local
     DQOps instance to the [data quality dashboards](../../dqo-concepts/data-quality-dashboards/data-quality-dashboards.md).
     You don't need to copy the DQOps Cloud Pairing Key. DQOps is smart enough to pick the DQOps Cloud API Key for you.
+
+    ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
+
     In case that you cancelled the registration procedure, you can copy the DQOps Cloud Pairing Key and configure your DQOps instance
     by using the following command from the [DQOps command-line shell](../../dqo-concepts/command-line-interface/command-line-interface.md)
 
@@ -82,8 +87,9 @@ To use DQOps you need:
     ```
 
 4.  Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
-    or by copying the link.
+    or by copying the link. You will see the welcome screen as shown below. 
 
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)
 
 ## Next step
 

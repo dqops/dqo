@@ -1,12 +1,15 @@
-# Install DQOps using PIP
+# Download DQOps using PIP
 
 DQOps is available as a Python package [dqops](https://pypi.org/project/dqops/). This package contains a bootstrapper that
 will download a full DQOps distribution from [DQO GitHub](https://github.com/dqops/dqo) and install a Java JRE 17 in a version
 specific to the current platform. DQOps runs on Windows, Linux and MacOS. Both x64 and arm8 platforms are supported.
 
-> DQOps python package is a quick option to run a local, non-production instance.
-> Please choose a [Docker distribution](run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
-> that can monitor the data quality at all times.
+!!! note "Running DQOps as a server"
+
+    DQOps python package is a quick option to run a local, non-production instance.
+    Please choose a [Docker distribution](run-dqo-as-docker-container.md) to run DQOps as a long-running production instance
+    that can monitor the data quality at all times.
+
 
 ## Prerequisites
 
@@ -61,6 +64,8 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     The `DQOps User Home` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations.
     [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md). 
 
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+
 3. Login to DQOps Cloud.
    
     To use all DQOps features, such as storing data quality definitions and results in the cloud and the data quality dashboards, you
@@ -75,5 +80,9 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
     [https://cloud.dqops.com/](https://cloud.dqops.com/) account. Since now on, your local DQOps instance is fully functional
     and can work mostly offline.
 
+    ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
+
 4. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
-   or by copying the link.
+    or by copying the link. You will see the welcome screen as shown below.
+
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)
