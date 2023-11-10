@@ -13,11 +13,13 @@ import RadioButton from '../../RadioButton';
 import clsx from 'clsx';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import SvgIcon from '../../SvgIcon';
 
 type TFirstLevelCheck = {
   checkName: string;
   severity?: CheckCurrentDataQualityStatusModelSeverityEnum;
   executedAt?: number | string;
+  checkType: string;
 };
 
 export default function TableQualityStatus() {
@@ -39,6 +41,9 @@ export default function TableQualityStatus() {
   const [firstLevelChecks, setFirstLevelChecks] = useState<
     Record<string, TFirstLevelCheck[]>
   >({});
+  const [extendedChecks, setExtendedChecks] = useState<
+    Array<{ checkType: string; categoryDimension: string }>
+  >([]);
   const [categoryDimension, setCategoryDimension] = useState<
     'category' | 'dimension'
   >('category');
@@ -66,7 +71,8 @@ export default function TableQualityStatus() {
           data[categoryDimensionKey].push({
             checkName: key,
             severity: (tableDataQualityStatus.checks ?? {})[key]?.severity,
-            executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at
+            executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at,
+            checkType: 'table'
           });
         } else {
           data[categoryDimensionKey] = [
@@ -74,31 +80,42 @@ export default function TableQualityStatus() {
               checkName: key,
               severity: (tableDataQualityStatus.checks ?? {})[key]?.severity,
               executedAt: (tableDataQualityStatus.checks ?? {})[key]
-                ?.executed_at
+                ?.executed_at,
+              checkType: 'table'
             }
           ];
         }
       }
     });
-    Object.values(tableDataQualityStatus.columns ?? {}).forEach((column) =>
-      Object.keys(column.checks ?? {}).forEach((key) => {
+    Object.keys(tableDataQualityStatus.columns ?? {}).forEach((column) =>
+      Object.keys(
+        (tableDataQualityStatus.columns ?? {})[column].checks ?? {}
+      ).forEach((key) => {
         const categoryDimensionColumnKey =
           categoryDimension === 'category'
-            ? (column.checks ?? {})[key]?.category
-            : (column.checks ?? {})[key]?.quality_dimension;
+            ? ((tableDataQualityStatus.columns ?? {})[column].checks ?? {})[key]
+                ?.category
+            : ((tableDataQualityStatus.columns ?? {})[column].checks ?? {})[key]
+                ?.quality_dimension;
         if (categoryDimensionColumnKey !== undefined) {
           if (Object.keys(data).find((x) => x === categoryDimensionColumnKey)) {
             data[categoryDimensionColumnKey].push({
               checkName: key,
-              severity: (column.checks ?? {})[key]?.severity,
-              executedAt: (column.checks ?? {})[key]?.executed_at
+              severity: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.severity,
+              executedAt: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.executed_at,
+              checkType: column
             });
           } else {
             data[categoryDimensionColumnKey] = [
               {
                 checkName: key,
-                severity: (column.checks ?? {})[key]?.severity,
-                executedAt: (column.checks ?? {})[key]?.executed_at
+                severity: ((tableDataQualityStatus.columns ?? {})[column]
+                  .checks ?? {})[key]?.severity,
+                executedAt: ((tableDataQualityStatus.columns ?? {})[column]
+                  .checks ?? {})[key]?.executed_at,
+                checkType: column
               }
             ];
           }
@@ -113,7 +130,7 @@ export default function TableQualityStatus() {
     onChangeFirstLevelChecks();
   }, [categoryDimension, tableDataQualityStatus]);
 
-  console.log(tableDataQualityStatus);
+  console.log(extendedChecks);
 
   const colorCell = (checks: TFirstLevelCheck[]) => {
     if (
@@ -243,6 +260,32 @@ export default function TableQualityStatus() {
     history.push(url);
   };
 
+  const toggleExtendedChecks = (
+    checkType: string,
+    categoryDimension: string
+  ) => {
+    console.log(checkType, categoryDimension);
+    const array = [...extendedChecks];
+    if (
+      array.find(
+        (item) =>
+          item.checkType === checkType &&
+          item.categoryDimension === categoryDimension
+      )
+    ) {
+      const filteredArray = array.filter(
+        (item) =>
+          !(
+            item.checkType === checkType &&
+            item.categoryDimension === categoryDimension
+          )
+      );
+      setExtendedChecks(filteredArray);
+    } else {
+      array.push({ checkType, categoryDimension });
+      setExtendedChecks(array);
+    }
+  };
   return (
     <div className="p-4">
       <div className="flex justify-between">
@@ -335,7 +378,26 @@ export default function TableQualityStatus() {
                   'p-2 border-b border-b-gray-150',
                   colorCell(firstLevelChecks[key])
                 )}
-              ></td>
+              >
+                {' '}
+                <div
+                  onClick={() => {
+                    toggleExtendedChecks(key, 'table');
+                  }}
+                >
+                  <SvgIcon
+                    name={
+                      extendedChecks.find(
+                        (x) =>
+                          x.checkType === key && x.categoryDimension === 'table'
+                      )
+                        ? 'chevron-right'
+                        : 'chevron-down'
+                    }
+                    className="h-5 w-5"
+                  />
+                </div>
+              </td>
             ))}
           </tr>
           {Object.keys(tableDataQualityStatus.columns ?? {}).map(
@@ -365,7 +427,32 @@ export default function TableQualityStatus() {
                           firstLevelChecksKey
                         )
                       )}
-                    ></td>
+                    >
+                      {' '}
+                      {colorColumnCell(
+                        (tableDataQualityStatus.columns ?? {})[key],
+                        firstLevelChecksKey
+                      ) !== '' && (
+                        <div
+                          onClick={() => {
+                            toggleExtendedChecks(key, firstLevelChecksKey);
+                          }}
+                        >
+                          <SvgIcon
+                            name={
+                              extendedChecks.find(
+                                (x) =>
+                                  x.checkType === key &&
+                                  x.categoryDimension === firstLevelChecksKey
+                              )
+                                ? 'chevron-right'
+                                : 'chevron-down'
+                            }
+                            className="h-5 w-5"
+                          />
+                        </div>
+                      )}
+                    </td>
                   )
                 )}
               </tr>
