@@ -98,6 +98,7 @@ nav:
           - Collect statistics operator: "integrations/airflow/collect-statistics-operator.md"
           - Table import operator: "integrations/airflow/table-import-operator.md"
           - Table status operator: "integrations/airflow/table-status-operator.md"
+          - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
       - Looker Studio: "integrations/looker-studio/creating-custom-dashboards.md"
       - Slack: "integrations/slack/configuring-slack-notifications.md"
       - Visual Studio Code: "integrations/visual-studio-code/index.md"
