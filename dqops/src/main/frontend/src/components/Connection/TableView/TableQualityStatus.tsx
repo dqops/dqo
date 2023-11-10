@@ -422,7 +422,7 @@ export default function TableQualityStatus() {
           {Object.keys(firstLevelChecks).map((key) => (
             <th
               key={`header_${key}`}
-              className={clsx('p-4 border-b border-b-gray-150')}
+              className={clsx('p-4 border-b min-w-40 w-40 border-b-gray-150')}
             >
               {key}
             </th>
@@ -444,24 +444,27 @@ export default function TableQualityStatus() {
                   colorCell(firstLevelChecks[key])
                 )}
               >
-                <div
-                  onClick={() => {
-                    toggleExtendedChecks(key, 'table');
-                  }}
-                >
-                  <SvgIcon
-                    key={`svg_table_level_checks_${key}`}
-                    name={
-                      extendedChecks.find(
-                        (x) =>
-                          x.checkType === key && x.categoryDimension === 'table'
-                      )
-                        ? 'chevron-right'
-                        : 'chevron-down'
-                    }
-                    className="h-5 w-5"
-                  />
-                </div>
+                {colorCell(firstLevelChecks[key]) !== '' ? (
+                  <div
+                    onClick={() => {
+                      toggleExtendedChecks(key, 'table');
+                    }}
+                  >
+                    <SvgIcon
+                      key={`svg_table_level_checks_${key}`}
+                      name={
+                        extendedChecks.find(
+                          (x) =>
+                            x.checkType === key &&
+                            x.categoryDimension === 'table'
+                        )
+                          ? 'chevron-right'
+                          : 'chevron-down'
+                      }
+                      className="h-5 w-5"
+                    />
+                  </div>
+                ) : null}
               </td>
             ))}
           </tr>
