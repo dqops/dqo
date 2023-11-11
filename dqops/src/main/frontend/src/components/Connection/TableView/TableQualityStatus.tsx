@@ -431,7 +431,9 @@ export default function TableQualityStatus() {
           {Object.keys(firstLevelChecks).map((key) => (
             <th
               key={`header_${key}`}
-              className={clsx('p-4 border-b min-w-50 w-50 border-b-gray-150')}
+              className={clsx(
+                'p-4 border-b min-w-50 w-50 border-b-gray-150 font-bold'
+              )}
             >
               {key}
             </th>
@@ -445,29 +447,37 @@ export default function TableQualityStatus() {
             {Object.keys(firstLevelChecks).map((key) => (
               <td
                 key={`cell_table_level_checks_${key}`}
-                className={clsx('p-2 h-10 ', colorCell(firstLevelChecks[key]))}
+                className="p-2 h-full w-full"
               >
-                {colorCell(firstLevelChecks[key]) !== '' ? (
+                <div className="h-full flex w-50 items-center ">
+                  {colorCell(firstLevelChecks[key]) !== '' ? (
+                    <div
+                      onClick={() => {
+                        toggleExtendedChecks(key, 'table');
+                      }}
+                    >
+                      <SvgIcon
+                        key={`svg_table_level_checks_${key}`}
+                        name={
+                          extendedChecks.find(
+                            (x) =>
+                              x.checkType === key &&
+                              x.categoryDimension === 'table'
+                          )
+                            ? 'chevron-right'
+                            : 'chevron-down'
+                        }
+                        className="h-5 w-5 pr-1"
+                      />
+                    </div>
+                  ) : null}
                   <div
-                    onClick={() => {
-                      toggleExtendedChecks(key, 'table');
-                    }}
-                  >
-                    <SvgIcon
-                      key={`svg_table_level_checks_${key}`}
-                      name={
-                        extendedChecks.find(
-                          (x) =>
-                            x.checkType === key &&
-                            x.categoryDimension === 'table'
-                        )
-                          ? 'chevron-right'
-                          : 'chevron-down'
-                      }
-                      className="h-5 w-5"
-                    />
-                  </div>
-                ) : null}
+                    className={clsx(
+                      'w-43 h-12',
+                      colorCell(firstLevelChecks[key])
+                    )}
+                  ></div>
+                </div>
               </td>
             ))}
           </tr>
@@ -496,7 +506,7 @@ export default function TableQualityStatus() {
                         >
                           <div
                             className={clsx(
-                              'cursor-auto h-12 w-full text-xs font-bold ',
+                              'cursor-auto h-12 w-full text-sm  p-2',
                               calculateSeverityColor(
                                 x.severity ??
                                   CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
@@ -530,7 +540,7 @@ export default function TableQualityStatus() {
                 >
                   <td
                     key={`column_cell_${key}`}
-                    className="p-2 px-4 underline cursor-pointer"
+                    className="p-2 px-4 underline cursor-pointer font-bold"
                     onClick={() => openFirstLevelColumnTab(key)}
                   >
                     {key}
@@ -538,55 +548,64 @@ export default function TableQualityStatus() {
                   {Object.keys(firstLevelChecks).map((firstLevelChecksKey) => (
                     <td
                       key={`cell_column_${key}_${firstLevelChecksKey}`}
-                      className={clsx(
-                        // 'border border-gray-150',
-                        colorColumnCell(
-                          (tableDataQualityStatus.columns ?? {})[key],
-                          firstLevelChecksKey
-                        )
-                      )}
+                      className="p-2 h-full w-full"
                     >
                       {' '}
                       {colorColumnCell(
                         (tableDataQualityStatus.columns ?? {})[key],
                         firstLevelChecksKey
                       ) !== '' ? (
-                        <div
-                          onClick={() => {
-                            toggleExtendedChecks(key, firstLevelChecksKey);
-                          }}
-                        >
-                          <SvgIcon
-                            key={`svg_column_${key}_${firstLevelChecksKey}`}
-                            name={
-                              extendedChecks.find(
-                                (x) =>
-                                  x.checkType === key &&
-                                  x.categoryDimension === firstLevelChecksKey
+                        <div className="h-full flex w-50 items-center ">
+                          <div
+                            onClick={() => {
+                              toggleExtendedChecks(key, firstLevelChecksKey);
+                            }}
+                          >
+                            <SvgIcon
+                              key={`svg_column_${key}_${firstLevelChecksKey}`}
+                              name={
+                                extendedChecks.find(
+                                  (x) =>
+                                    x.checkType === key &&
+                                    x.categoryDimension === firstLevelChecksKey
+                                )
+                                  ? 'chevron-right'
+                                  : 'chevron-down'
+                              }
+                              className="h-5 w-5 pr-1"
+                            />
+                          </div>
+                          <div
+                            className={clsx(
+                              'h-12 w-43',
+                              // 'border border-gray-150',
+                              colorColumnCell(
+                                (tableDataQualityStatus.columns ?? {})[key],
+                                firstLevelChecksKey
                               )
-                                ? 'chevron-right'
-                                : 'chevron-down'
-                            }
-                            className="h-5 w-5"
-                          />
+                            )}
+                          ></div>
                         </div>
                       ) : null}
                     </td>
                   ))}
                 </tr>
                 <tr key={`column_row_blank_${key}`}>
-                  <td key={`column_cell_blank_${key}`} className="px-4 "></td>
+                  <td
+                    key={`column_cell_blank_${key}`}
+                    className="font-bold px-4 "
+                  ></td>
                   {Object.keys(firstLevelChecks).map((check) => (
                     <td
                       key={`cell_column_blank_${key}_${check}`}
                       valign="baseline"
-                      className="w-50"
                     >
                       {extendedChecks.find(
                         (x) =>
                           x.checkType === key && x.categoryDimension === check
-                      )
-                        ? (firstLevelChecks[check] ?? []).map((x, index) =>
+                      ) ? (
+                        <div className="w-50">
+                          {(firstLevelChecks[check] ?? []).map((x, index) =>
                             x.checkType === key ? (
                               <Tooltip
                                 key={`column_check_${key}_${check}_${index}`}
@@ -594,14 +613,15 @@ export default function TableQualityStatus() {
                               >
                                 <div
                                   className={clsx(
-                                    'cursor-auto h-12 text-xs font-bold text-center flex items-center',
+                                    'cursor-auto h-12 text-sm p-2',
                                     calculateSeverityColor(
                                       x.severity ??
                                         CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
                                     )
                                   )}
                                   style={{
-                                    whiteSpace: 'normal'
+                                    whiteSpace: 'normal',
+                                    wordBreak: 'break-word'
                                   }}
                                 >
                                   {x.checkName}
@@ -610,8 +630,9 @@ export default function TableQualityStatus() {
                             ) : (
                               ''
                             )
-                          )
-                        : null}
+                          )}
+                        </div>
+                      ) : null}
                     </td>
                   ))}
                 </tr>
