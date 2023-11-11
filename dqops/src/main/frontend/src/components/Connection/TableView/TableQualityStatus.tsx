@@ -15,6 +15,8 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import SvgIcon from '../../SvgIcon';
 import DatePicker from '../../DatePicker';
+import { Tooltip } from '@material-tailwind/react';
+import moment from 'moment';
 
 type TFirstLevelCheck = {
   checkName: string;
@@ -57,7 +59,10 @@ export default function TableQualityStatus() {
       schema,
       table,
       month,
-      since
+      since,
+      checkTypes === CheckTypes.PROFILING ? true : undefined,
+      checkTypes === CheckTypes.MONITORING ? true : undefined,
+      checkTypes === CheckTypes.PARTITIONED ? true : undefined
     ).then((res) => setTableDataQualityStatus(res.data));
   };
 
@@ -143,7 +148,7 @@ export default function TableQualityStatus() {
       severity ===
       CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
     ) {
-      return 'bg-gray-500';
+      return 'bg-gray-150';
     }
     if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal) {
       return 'bg-red-500';
@@ -177,7 +182,7 @@ export default function TableQualityStatus() {
           x.checkType === 'table'
       )
     ) {
-      return 'bg-gray-500';
+      return 'bg-gray-150';
     }
     if (
       checks.find(
@@ -238,7 +243,7 @@ export default function TableQualityStatus() {
           CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
       )
     ) {
-      return 'bg-gray-500';
+      return 'bg-gray-150';
     }
     if (
       checks.find(
@@ -329,8 +334,8 @@ export default function TableQualityStatus() {
   };
   return (
     <div className="p-4">
-      <div className="flex justify-between">
-        <div className="flex pb-6 gap-x-5">
+      <div className="flex justify-between items-center">
+        <div className="flex pb-6 gap-x-5 items-center">
           <div>Group checks by: </div>
           <RadioButton
             checked={categoryDimension === 'category'}
@@ -377,13 +382,17 @@ export default function TableQualityStatus() {
 
       <div className="flex gap-x-5">
         <SectionWrapper title="Current table status">
-          <div className="flex">
+          <div className="flex gap-x-2">
             <div onClick={() => onChangeFirstLevelChecks()}>Status:</div>
             <div>{tableDataQualityStatus.highest_severity_level}</div>
           </div>
           <div className="flex gap-x-2">
             <div>Last check executed at:</div>
-            <div>{tableDataQualityStatus.last_check_executed_at}</div>
+            <div>
+              {moment(tableDataQualityStatus.last_check_executed_at).format(
+                'YYYY-MM-DD HH:mm:ss'
+              )}
+            </div>
           </div>
         </SectionWrapper>
         <SectionWrapper title="Total checks executed">
@@ -422,27 +431,21 @@ export default function TableQualityStatus() {
           {Object.keys(firstLevelChecks).map((key) => (
             <th
               key={`header_${key}`}
-              className={clsx('p-4 border-b min-w-40 w-40 border-b-gray-150')}
+              className={clsx('p-4 border-b min-w-50 w-50 border-b-gray-150')}
             >
               {key}
             </th>
           ))}
         </thead>
         <tbody>
-          <tr
-            key="row_table_level_checks"
-            className="border-b border-b-gray-150"
-          >
-            <td key="cell_table_level_checks_title" className="font-bold px-4">
+          <tr key="row_table_level_checks" className="">
+            <td key="cell_table_level_checks_title" className="font-bold px-4 ">
               Table level checks
             </td>
             {Object.keys(firstLevelChecks).map((key) => (
               <td
                 key={`cell_table_level_checks_${key}`}
-                className={clsx(
-                  'p-2 border-b border-b-gray-150',
-                  colorCell(firstLevelChecks[key])
-                )}
+                className={clsx('p-2 h-10 ', colorCell(firstLevelChecks[key]))}
               >
                 {colorCell(firstLevelChecks[key]) !== '' ? (
                   <div
@@ -477,27 +480,40 @@ export default function TableQualityStatus() {
               className="font-bold px-4 "
             ></td>
             {Object.keys(firstLevelChecks).map((key) => (
-              <td key={`cell_table_level_checks_blank_${key}`}>
+              <td
+                valign="baseline"
+                key={`cell_table_level_checks_blank_${key}`}
+              >
                 {extendedChecks.find(
                   (x) => x.checkType === key && x.categoryDimension === 'table'
-                ) &&
-                  (firstLevelChecks[key] ?? []).map((x, index) =>
-                    x.checkType === 'table' ? (
-                      <div
-                        key={`table_check_${key}_${index}`}
-                        className={clsx(
-                          calculateSeverityColor(
-                            x.severity ??
-                              CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
-                          )
-                        )}
-                      >
-                        {x.checkName}
-                      </div>
-                    ) : (
-                      ''
-                    )
-                  )}
+                ) && (
+                  <div className="w-50">
+                    {(firstLevelChecks[key] ?? []).map((x, index) =>
+                      x.checkType === 'table' ? (
+                        <Tooltip
+                          key={`table_check_${key}_${index}`}
+                          content={x.executedAt}
+                        >
+                          <div
+                            className={clsx(
+                              'cursor-auto h-12 w-full text-xs font-bold ',
+                              calculateSeverityColor(
+                                x.severity ??
+                                  CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                              )
+                            )}
+                            style={{
+                              whiteSpace: 'normal',
+                              wordBreak: 'break-word'
+                            }}
+                          >
+                            {x.checkName}
+                          </div>
+                        </Tooltip>
+                      ) : null
+                    )}
+                  </div>
+                )}
               </td>
             ))}
           </tr>
@@ -523,7 +539,7 @@ export default function TableQualityStatus() {
                     <td
                       key={`cell_column_${key}_${firstLevelChecksKey}`}
                       className={clsx(
-                        '',
+                        // 'border border-gray-150',
                         colorColumnCell(
                           (tableDataQualityStatus.columns ?? {})[key],
                           firstLevelChecksKey
@@ -561,24 +577,36 @@ export default function TableQualityStatus() {
                 <tr key={`column_row_blank_${key}`}>
                   <td key={`column_cell_blank_${key}`} className="px-4 "></td>
                   {Object.keys(firstLevelChecks).map((check) => (
-                    <td key={`cell_column_blank_${key}_${check}`}>
+                    <td
+                      key={`cell_column_blank_${key}_${check}`}
+                      valign="baseline"
+                      className="w-50"
+                    >
                       {extendedChecks.find(
                         (x) =>
                           x.checkType === key && x.categoryDimension === check
                       )
                         ? (firstLevelChecks[check] ?? []).map((x, index) =>
                             x.checkType === key ? (
-                              <div
+                              <Tooltip
                                 key={`column_check_${key}_${check}_${index}`}
-                                className={clsx(
-                                  calculateSeverityColor(
-                                    x.severity ??
-                                      CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
-                                  )
-                                )}
+                                content={x.executedAt}
                               >
-                                {x.checkName}
-                              </div>
+                                <div
+                                  className={clsx(
+                                    'cursor-auto h-12 text-xs font-bold text-center flex items-center',
+                                    calculateSeverityColor(
+                                      x.severity ??
+                                        CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                    )
+                                  )}
+                                  style={{
+                                    whiteSpace: 'normal'
+                                  }}
+                                >
+                                  {x.checkName}
+                                </div>
+                              </Tooltip>
                             ) : (
                               ''
                             )
