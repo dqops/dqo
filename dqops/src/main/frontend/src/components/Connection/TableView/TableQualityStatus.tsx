@@ -72,10 +72,6 @@ export default function TableQualityStatus() {
     getTableDataQualityStatus();
   }, [connection, schema, table, month, since]);
 
-  console.log(month, since);
-
-  // const colorCellBasedOnSeverity = (checks : TFirstLevelCheck[] | CheckCurrentDataQualityStatusModel[]) => {}
-
   const onChangeFirstLevelChecks = () => {
     const data: Record<string, TFirstLevelCheck[]> = {};
     Object.keys(tableDataQualityStatus.checks ?? {}).flatMap((key) => {
@@ -192,8 +188,6 @@ export default function TableQualityStatus() {
   useEffect(() => {
     onChangeFirstLevelChecks();
   }, [categoryDimension, tableDataQualityStatus]);
-
-  console.log(firstLevelChecks);
 
   const colorCell = (checks: TFirstLevelCheck[]) => {
     if (
@@ -759,4 +753,3 @@ export default function TableQualityStatus() {
     </div>
   );
 }
-// `${x.executedAt},  ${x.category},  ${x.qualityDimension}`
