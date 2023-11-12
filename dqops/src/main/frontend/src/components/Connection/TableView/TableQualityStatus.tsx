@@ -69,7 +69,7 @@ export default function TableQualityStatus() {
   };
 
   useEffect(() => {
-    getTableDataQualityStatus();
+    getTableDataQualityStatus(month, since);
   }, [connection, schema, table, month, since]);
 
   const onChangeFirstLevelChecks = () => {
