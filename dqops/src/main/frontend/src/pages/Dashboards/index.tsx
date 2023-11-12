@@ -95,7 +95,7 @@ const Dashboards = () => {
               (item: AuthenticatedDashboardModel) =>
                 (item?.folder_path || '')
                   .split('/')
-                  .concat(item.dashboard?.dashboard_name || '')
+                  .concat(item?.dashboard?.dashboard_name || '')
                   .join('-') === tab.value
             );
 
