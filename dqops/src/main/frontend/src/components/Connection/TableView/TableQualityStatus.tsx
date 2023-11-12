@@ -473,7 +473,7 @@ export default function TableQualityStatus() {
             <th
               key={`header_${key}`}
               className={clsx(
-                'p-4 border-b min-w-50 w-50 border-b-gray-150 font-bold'
+                'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold'
               )}
             >
               {key}
@@ -487,7 +487,7 @@ export default function TableQualityStatus() {
             </td>
             {Object.keys(firstLevelChecks).map((key) => (
               <td key={`cell_table_level_checks_${key}`} className=" h-full ">
-                <div className="h-full flex w-50 items-center ">
+                <div className="h-full flex w-40 items-center ">
                   {colorCell(firstLevelChecks[key]) !== '' ? (
                     <div
                       onClick={() => {
@@ -540,7 +540,7 @@ export default function TableQualityStatus() {
                 {extendedChecks.find(
                   (x) => x.checkType === key && x.categoryDimension === 'table'
                 ) && (
-                  <div className="w-48">
+                  <div className="w-40">
                     {(firstLevelChecks[key] ?? []).map((x, index) =>
                       x.checkType === 'table' ? (
                         <Tooltip
@@ -572,13 +572,14 @@ export default function TableQualityStatus() {
                         >
                           <div
                             className={clsx(
-                              'cursor-auto h-12 text-sm ml-5 p-2',
+                              'cursor-auto h-12 ml-5 p-2',
                               calculateSeverityColor(
                                 x.severity ??
                                   CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
                               )
                             )}
                             style={{
+                              fontSize: '12px',
                               whiteSpace: 'normal',
                               wordBreak: 'break-word',
                               ...(calculateSeverityColor(
@@ -627,7 +628,7 @@ export default function TableQualityStatus() {
                         (tableDataQualityStatus.columns ?? {})[key],
                         firstLevelChecksKey
                       ) !== '' ? (
-                        <div className="h-full flex w-50 items-center ">
+                        <div className="h-full flex w-40 items-center ">
                           <div
                             onClick={() => {
                               toggleExtendedChecks(key, firstLevelChecksKey);
@@ -684,7 +685,7 @@ export default function TableQualityStatus() {
                         (x) =>
                           x.checkType === key && x.categoryDimension === check
                       ) ? (
-                        <div className="w-48">
+                        <div className="w-40">
                           {(firstLevelChecks[check] ?? []).map((x, index) =>
                             x.checkType === key ? (
                               <Tooltip
@@ -720,13 +721,14 @@ export default function TableQualityStatus() {
                               >
                                 <div
                                   className={clsx(
-                                    'cursor-auto h-12 text-sm p-2 ml-5',
+                                    'cursor-auto h-12 p-2 ml-5',
                                     calculateSeverityColor(
                                       x.severity ??
                                         CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
                                     )
                                   )}
                                   style={{
+                                    fontSize: '12px',
                                     whiteSpace: 'normal',
                                     wordBreak: 'break-word',
                                     ...(calculateSeverityColor(
