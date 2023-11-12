@@ -23,6 +23,8 @@ type TFirstLevelCheck = {
   severity?: CheckCurrentDataQualityStatusModelSeverityEnum;
   executedAt?: number | string;
   checkType: string;
+  category?: string;
+  qualityDimension?: string;
 };
 
 export default function TableQualityStatus() {
@@ -87,7 +89,10 @@ export default function TableQualityStatus() {
             checkName: key,
             severity: (tableDataQualityStatus.checks ?? {})[key]?.severity,
             executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at,
-            checkType: 'table'
+            checkType: 'table',
+            category: (tableDataQualityStatus.checks ?? {})[key]?.category,
+            qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
+              ?.quality_dimension
           });
         } else {
           data[categoryDimensionKey] = [
@@ -96,7 +101,10 @@ export default function TableQualityStatus() {
               severity: (tableDataQualityStatus.checks ?? {})[key]?.severity,
               executedAt: (tableDataQualityStatus.checks ?? {})[key]
                 ?.executed_at,
-              checkType: 'table'
+              checkType: 'table',
+              category: (tableDataQualityStatus.checks ?? {})[key]?.category,
+              qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
+                ?.quality_dimension
             }
           ];
         }
@@ -120,7 +128,11 @@ export default function TableQualityStatus() {
                 .checks ?? {})[key]?.severity,
               executedAt: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.executed_at,
-              checkType: column
+              checkType: column,
+              category: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.category,
+              qualityDimension: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.quality_dimension
             });
           } else {
             data[categoryDimensionColumnKey] = [
@@ -130,15 +142,25 @@ export default function TableQualityStatus() {
                   .checks ?? {})[key]?.severity,
                 executedAt: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.executed_at,
-                checkType: column
+                checkType: column,
+                category: ((tableDataQualityStatus.columns ?? {})[column]
+                  .checks ?? {})[key]?.category,
+                qualityDimension: ((tableDataQualityStatus.columns ?? {})[
+                  column
+                ].checks ?? {})[key]?.quality_dimension
               }
             ];
           }
         }
       })
     );
+    const sortedData: Record<string, TFirstLevelCheck[]> = {};
+    const keys = Object.keys(data).sort();
 
-    setFirstLevelChecks(data);
+    keys.forEach((key) => {
+      sortedData[key] = data[key];
+    });
+    setFirstLevelChecks(sortedData);
   };
 
   const calculateSeverityColor = (
@@ -151,18 +173,18 @@ export default function TableQualityStatus() {
       return 'bg-gray-150';
     }
     if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal) {
-      return 'bg-red-500';
+      return 'bg-red-200';
     }
     if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.error) {
-      return 'bg-orange-500';
+      return 'bg-orange-200';
     } else if (
       severity === CheckCurrentDataQualityStatusModelSeverityEnum.warning
     ) {
-      return 'bg-yellow-500';
+      return 'bg-yellow-200';
     } else if (
       severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid
     ) {
-      return 'bg-teal-500';
+      return 'bg-green-200';
     }
     return '';
   };
@@ -191,7 +213,7 @@ export default function TableQualityStatus() {
           x.checkType === 'table'
       )
     ) {
-      return 'bg-red-500';
+      return 'bg-red-200';
     }
     if (
       checks.find(
@@ -200,7 +222,7 @@ export default function TableQualityStatus() {
           x.checkType === 'table'
       )
     ) {
-      return 'bg-orange-500';
+      return 'bg-orange-200';
     } else if (
       checks.find(
         (x) =>
@@ -209,7 +231,7 @@ export default function TableQualityStatus() {
           x.checkType === 'table'
       )
     ) {
-      return 'bg-yellow-500';
+      return 'bg-yellow-200';
     } else if (
       checks.find(
         (x) =>
@@ -217,7 +239,7 @@ export default function TableQualityStatus() {
           x.checkType === 'table'
       )
     ) {
-      return 'bg-teal-500';
+      return 'bg-green-200';
     }
     return '';
   };
@@ -251,7 +273,7 @@ export default function TableQualityStatus() {
           x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal
       )
     ) {
-      return 'bg-red-500';
+      return 'bg-red-200';
     }
     if (
       checks.find(
@@ -259,7 +281,7 @@ export default function TableQualityStatus() {
           x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error
       )
     ) {
-      return 'bg-orange-500';
+      return 'bg-orange-200';
     }
     if (
       checks.find(
@@ -267,7 +289,7 @@ export default function TableQualityStatus() {
           x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.warning
       )
     ) {
-      return 'bg-yellow-500';
+      return 'bg-yellow-200';
     }
     if (
       checks.find(
@@ -275,7 +297,7 @@ export default function TableQualityStatus() {
           x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid
       )
     ) {
-      return 'bg-teal-500';
+      return 'bg-green-200';
     }
     return '';
   };
@@ -331,6 +353,25 @@ export default function TableQualityStatus() {
       array.push({ checkType, categoryDimension });
       setExtendedChecks(array);
     }
+  };
+
+  const backgroundStyle: React.CSSProperties = {
+    background: `
+        repeating-linear-gradient(
+          45deg,
+          #ffffff,
+          #ffffff 5px,
+          #cccccc 5px,
+          #cccccc 10px
+        ),
+        repeating-linear-gradient(
+          45deg,
+          #cccccc,
+          #cccccc 5px,
+          #ffffff 5px,
+          #ffffff 10px
+        )`,
+    height: '48px'
   };
   return (
     <div className="p-4">
@@ -422,7 +463,7 @@ export default function TableQualityStatus() {
           </div>
         </SectionWrapper>
       </div>
-      <table className="border border-gray-150 mt-4 min-w-250">
+      <table className="border border-gray-150 mt-4">
         <thead>
           <th
             key="header_blank"
@@ -445,10 +486,7 @@ export default function TableQualityStatus() {
               Table level checks
             </td>
             {Object.keys(firstLevelChecks).map((key) => (
-              <td
-                key={`cell_table_level_checks_${key}`}
-                className="p-2 h-full w-full"
-              >
+              <td key={`cell_table_level_checks_${key}`} className=" h-full ">
                 <div className="h-full flex w-50 items-center ">
                   {colorCell(firstLevelChecks[key]) !== '' ? (
                     <div
@@ -476,6 +514,11 @@ export default function TableQualityStatus() {
                       'w-43 h-12',
                       colorCell(firstLevelChecks[key])
                     )}
+                    style={{
+                      ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
+                        ? backgroundStyle
+                        : {})
+                    }}
                   ></div>
                 </div>
               </td>
@@ -497,16 +540,39 @@ export default function TableQualityStatus() {
                 {extendedChecks.find(
                   (x) => x.checkType === key && x.categoryDimension === 'table'
                 ) && (
-                  <div className="w-50">
+                  <div className="w-48">
                     {(firstLevelChecks[key] ?? []).map((x, index) =>
                       x.checkType === 'table' ? (
                         <Tooltip
                           key={`table_check_${key}_${index}`}
-                          content={x.executedAt}
+                          content={
+                            <div>
+                              <div className="flex gap-x-2">
+                                <div className="w-42">Executed at:</div>
+                                <div>
+                                  {moment(x.executedAt).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                  )}
+                                </div>
+                              </div>
+                              <div className="flex gap-x-2">
+                                <div className="w-42">Severity level:</div>
+                                <div>{x.severity}</div>
+                              </div>
+                              <div className="flex gap-x-2">
+                                <div className="w-42">Category:</div>
+                                <div>{x.category}</div>
+                              </div>
+                              <div className="flex gap-x-2">
+                                <div className="w-42">Quality Dimension:</div>
+                                <div>{x.qualityDimension}</div>
+                              </div>
+                            </div>
+                          }
                         >
                           <div
                             className={clsx(
-                              'cursor-auto h-12 w-full text-sm  p-2',
+                              'cursor-auto h-12 text-sm ml-5 p-2',
                               calculateSeverityColor(
                                 x.severity ??
                                   CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
@@ -514,7 +580,13 @@ export default function TableQualityStatus() {
                             )}
                             style={{
                               whiteSpace: 'normal',
-                              wordBreak: 'break-word'
+                              wordBreak: 'break-word',
+                              ...(calculateSeverityColor(
+                                x.severity ??
+                                  CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                              ) === 'bg-gray-150'
+                                ? backgroundStyle
+                                : {})
                             }}
                           >
                             {x.checkName}
@@ -548,7 +620,7 @@ export default function TableQualityStatus() {
                   {Object.keys(firstLevelChecks).map((firstLevelChecksKey) => (
                     <td
                       key={`cell_column_${key}_${firstLevelChecksKey}`}
-                      className="p-2 h-full w-full"
+                      className=" h-full"
                     >
                       {' '}
                       {colorColumnCell(
@@ -584,6 +656,14 @@ export default function TableQualityStatus() {
                                 firstLevelChecksKey
                               )
                             )}
+                            style={{
+                              ...(colorColumnCell(
+                                (tableDataQualityStatus.columns ?? {})[key],
+                                firstLevelChecksKey
+                              ) === 'bg-gray-150'
+                                ? backgroundStyle
+                                : {})
+                            }}
                           ></div>
                         </div>
                       ) : null}
@@ -604,16 +684,43 @@ export default function TableQualityStatus() {
                         (x) =>
                           x.checkType === key && x.categoryDimension === check
                       ) ? (
-                        <div className="w-50">
+                        <div className="w-48">
                           {(firstLevelChecks[check] ?? []).map((x, index) =>
                             x.checkType === key ? (
                               <Tooltip
                                 key={`column_check_${key}_${check}_${index}`}
-                                content={x.executedAt}
+                                content={
+                                  <div>
+                                    <div className="flex gap-x-2">
+                                      <div className="w-42">Executed at:</div>
+                                      <div>
+                                        {moment(x.executedAt).format(
+                                          'YYYY-MM-DD HH:mm:ss'
+                                        )}
+                                      </div>
+                                    </div>
+                                    <div className="flex gap-x-2">
+                                      <div className="w-42">
+                                        Severity level:
+                                      </div>
+                                      <div>{x.severity}</div>
+                                    </div>
+                                    <div className="flex gap-x-2">
+                                      <div className="w-42">Category:</div>
+                                      <div>{x.category}</div>
+                                    </div>
+                                    <div className="flex gap-x-2">
+                                      <div className="w-42">
+                                        Quality Dimension:
+                                      </div>
+                                      <div>{x.qualityDimension}</div>
+                                    </div>
+                                  </div>
+                                }
                               >
                                 <div
                                   className={clsx(
-                                    'cursor-auto h-12 text-sm p-2',
+                                    'cursor-auto h-12 text-sm p-2 ml-5',
                                     calculateSeverityColor(
                                       x.severity ??
                                         CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
@@ -621,7 +728,13 @@ export default function TableQualityStatus() {
                                   )}
                                   style={{
                                     whiteSpace: 'normal',
-                                    wordBreak: 'break-word'
+                                    wordBreak: 'break-word',
+                                    ...(calculateSeverityColor(
+                                      x.severity ??
+                                        CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                    ) === 'bg-gray-150'
+                                      ? backgroundStyle
+                                      : {})
                                   }}
                                 >
                                   {x.checkName}
@@ -644,3 +757,4 @@ export default function TableQualityStatus() {
     </div>
   );
 }
+// `${x.executedAt},  ${x.category},  ${x.qualityDimension}`
