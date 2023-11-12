@@ -383,11 +383,11 @@ export default function TableQualityStatus() {
       <div className="flex gap-x-5">
         <SectionWrapper title="Current table status">
           <div className="flex gap-x-2">
-            <div onClick={() => onChangeFirstLevelChecks()}>Status:</div>
+            <div className="w-43">Status:</div>
             <div>{tableDataQualityStatus.highest_severity_level}</div>
           </div>
           <div className="flex gap-x-2">
-            <div>Last check executed at:</div>
+            <div className="w-43">Last check executed at:</div>
             <div>
               {moment(tableDataQualityStatus.last_check_executed_at).format(
                 'YYYY-MM-DD HH:mm:ss'
@@ -397,27 +397,27 @@ export default function TableQualityStatus() {
         </SectionWrapper>
         <SectionWrapper title="Total checks executed">
           <div className="flex gap-x-2">
-            <div>Total checks executed:</div>
+            <div className="w-42">Total checks executed:</div>
             <div>{tableDataQualityStatus.executed_checks}</div>
           </div>
           <div className="flex gap-x-2">
-            <div>Valid:</div>
+            <div className="w-42">Valid:</div>
             <div>{tableDataQualityStatus.valid_results}</div>
           </div>
           <div className="flex gap-x-2">
-            <div>Warnings:</div>
+            <div className="w-42">Warnings:</div>
             <div>{tableDataQualityStatus.warnings}</div>
           </div>
           <div className="flex gap-x-2">
-            <div>Errors:</div>
+            <div className="w-42">Errors:</div>
             <div>{tableDataQualityStatus.errors}</div>
           </div>
           <div className="flex gap-x-2">
-            <div>Fatals:</div>
+            <div className="w-42">Fatals:</div>
             <div>{tableDataQualityStatus.fatals}</div>
           </div>
           <div className="flex gap-x-2">
-            <div>Execution errors:</div>
+            <div className="w-42">Execution errors:</div>
             <div>{tableDataQualityStatus.execution_errors}</div>
           </div>
         </SectionWrapper>
@@ -464,8 +464,8 @@ export default function TableQualityStatus() {
                               x.checkType === key &&
                               x.categoryDimension === 'table'
                           )
-                            ? 'chevron-right'
-                            : 'chevron-down'
+                            ? 'chevron-down'
+                            : 'chevron-right'
                         }
                         className="h-5 w-5 pr-1"
                       />
@@ -569,8 +569,8 @@ export default function TableQualityStatus() {
                                     x.checkType === key &&
                                     x.categoryDimension === firstLevelChecksKey
                                 )
-                                  ? 'chevron-right'
-                                  : 'chevron-down'
+                                  ? 'chevron-down'
+                                  : 'chevron-right'
                               }
                               className="h-5 w-5 pr-1"
                             />
