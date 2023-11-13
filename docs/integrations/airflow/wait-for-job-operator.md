@@ -53,26 +53,56 @@ To track the task, there are three ways you can configure the operator:
 - Setting the job_business_key
 
 With the first approach, the operator uses the return_value pushed to Airflow's XCom to retrieve the job ID  information.
-To make this work, it is crucial to set the “wait for job “task directly after the long-running task.
-The wait for job task has to be a downstream task to the long-running task.
-Otherwise, the automatically passed job ID will not work or the job ID passed to the wait for job task will not come from the long-running task,
+To make this work, it is crucial to set the _wait for job_ task directly after the long-running task.
+The __wait for job__ task has to be a downstream task to the long-running task.
+Otherwise, the automatically passed job ID will not work or the job ID passed to the _wait for job_ task will not come from the long-running task,
 but the upstream one.
 
 task_id_to_wait_for ##################################### todo
 
 job_business_key ##################################### todo
 
-## Preparation
-Before starting any task in Airflow, it is important to determine if it can be completed within the default 120 seconds.
+
+## Usage example
+
+Before starting any task in Airflow, it is important to determine if the task can be completed within the default 120 seconds.
 
 A point of interest might be a run checks operator since the time of checks execution depends on number of checks and the data size.
 
-############################################################ todo
+```python
+import pendulum
+from airflow import DAG
+from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
+from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJobOperator
+from dqops.client.models.check_type import CheckType
+from dqops.client.models.rule_severity_level import RuleSeverityLevel
 
+with DAG(
+    dag_id="example_connection_wait_for_job_run_checks",
+    schedule="@once",
+    start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
+    catchup=False,
+    tags=["dqops_example"]
+) as dag:
+    run_checks_task = DqopsRunChecksOperator(
+        task_id="dqops_run_checks_operator_task",
+        base_url="http://host.docker.internal:8888",
+        connection="example_connection",
+        fail_at_severity=RuleSeverityLevel.WARNING,
+        check_type=CheckType.MONITORING
+    )
+   
+    wait_for_job = DqopsWaitForJobOperator(
+        task_id="dqops_wait_for_job",
+        base_url="http://host.docker.internal:8888",
+        retries=200,
+        retry_delay=30,
+        trigger_rule="all_done"
+    )
 
+    run_checks_task >> wait_for_job
 
-
-
+```
 
 
 ## Troubleshooting
