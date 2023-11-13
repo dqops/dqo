@@ -509,7 +509,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
             ? x.currentSeverity
             : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal &&
-          x.checkType === 'highest'
+          x.checkType === 'table'
       )
     ) {
       return 'bg-red-200';
@@ -521,7 +521,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
             ? x.currentSeverity
             : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error &&
-          x.checkType === 'highest'
+          x.checkType === 'table'
       )
     ) {
       return 'bg-orange-200';
@@ -532,7 +532,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
             ? x.currentSeverity
             : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning &&
-          x.checkType === 'highest'
+          x.checkType === 'table'
       )
     ) {
       return 'bg-yellow-200';
@@ -730,8 +730,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                   {colorCell(firstLevelChecks[key]) !== '' ? (
                     <div
                       className={clsx(
-                        'w-43 h-12 flex justify-end',
-                        colorCell(firstLevelChecks[key])
+                        'w-43 h-12 flex ',
+                        colorCell(firstLevelChecks[key]),
+                        severityType === 'current' ? '' : 'justify-end'
                       )}
                       style={{
                         ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
@@ -741,7 +742,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                     >
                       <div
                         className={clsx(
-                          ' h-3 w-3 mr-2 mt-2',
+                          ' h-3 w-3 mr-2 mt-2 ml-2',
                           colorCircle(firstLevelChecks[key])
                         )}
                         style={{
@@ -898,12 +899,13 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                           </div>
                           <div
                             className={clsx(
-                              'h-12 w-43 flex justify-end',
+                              'h-12 w-43 flex',
                               // 'border border-gray-150',
                               colorColumnCell(
                                 (tableDataQualityStatus.columns ?? {})[key],
                                 firstLevelChecksKey
-                              )
+                              ),
+                              severityType === 'current' ? '' : 'justify-end'
                             )}
                             style={{
                               ...(colorColumnCell(
@@ -916,7 +918,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                           >
                             {' '}
                             <div
-                              className="h-3 w-3 mr-2 mt-2"
+                              className="h-3 w-3 ml-2 mt-2 mr-2"
                               style={{
                                 borderRadius: '6px',
                                 ...(colorColumnCellCircle(
