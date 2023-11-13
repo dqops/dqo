@@ -33,34 +33,37 @@ The second option is to use a **job business key** that can be set by a user, wh
 The table presents the parameters that are supported by the _wait for job_ operator.
 All parameters are optional.
 
-| Name                | Description                                                                                                                                                                                                         | Type                                                                                                                             |
-|---------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
-| task_id_to_wait_for | The ID of a task that the operator will wait for.                                                                                                                                                                   | int                                                                                                                              |
-| base_url            | The base URL to the DQOps application.                                                                                                                                                                              | str [optional, default="http://localhost:8888/"]                                                                                 |
-| job_business_key    | Job business key is a user-assigned unique job ID, used to check the job status by looking up the job by a user-assigned identifier, instead of the DQOps-assigned job identifier.                                  | Union[Unset, None, str] = UNSET                  |
-| wait_timeout        | Execution timeout value in seconds. It prevents hanging tasks if action is never completed. If not set, the default timeout is 120 seconds. | int                                                                                                                              |
-| fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                                                 | bool [optional, default=True]                                                                                                    |
+| Name                | Description                                                                                                                                                                        | Type                                              |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
+| task_id_to_wait_for | The ID of a task that the operator will wait for.                                                                                                                                  | int                                               |
+| base_url            | The base URL to the DQOps application.                                                                                                                                             | str [optional, default="http://localhost:8888/"]  |
+| job_business_key    | Job business key is a user-assigned unique job ID, used to check the job status by looking up the job by a user-assigned identifier, instead of the DQOps-assigned job identifier. | Union[Unset, None, str] = UNSET                   |
+| wait_timeout        | Execution timeout value in seconds. It prevents hanging tasks if action is never completed. If not set, the default timeout is 120 seconds.                                        | int                                               |
+| fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                | bool [optional, default=True]                     |
 
 The operator inherits from BaseOperator and adds the above parameters.
 For the complete list of BaseOperator parameters, visit the official Airflow webpage https://airflow.apache.org/
 
+
 ## Setup the task to be tracked
 
-To track the task, there are three ways you can configure the operator:
+To track the task, use one of three ways of configuration the operator:
 
 - Automatically passed job id
 - Setting the task_id_to_wait_for
 - Setting the job_business_key
 
-With the first approach, the operator uses the return_value pushed to Airflow's XCom to retrieve the job ID  information.
+With the first approach, the operator uses the return_value pushed to Airflow's XCom to retrieve the job ID value.
 To make this work, it is crucial to set the _wait for job_ task directly after the long-running task.
-The __wait for job__ task has to be a downstream task to the long-running task.
-Otherwise, the automatically passed job ID will not work or the job ID passed to the _wait for job_ task will not come from the long-running task,
-but the upstream one.
+The _wait for job_ task has to be a downstream task to the long-running task.
+Otherwise, the automatically passed job ID will not work or the job ID passed to the _wait for job_ task does not come from the long-running task,
+but does come the upstream one.
 
-task_id_to_wait_for ##################################### todo
+The second approach use the task_id_to_wait_for parameter. 
+The value of the parameter has to be the name of the task to be tracked.
 
-job_business_key ##################################### todo
+Third approach use the job_business_key parameter. The same value has to be set to the both, the job and the tracking task.
+The value of the job_business_key has to be unique in the system, for each of the executions. 
 
 
 ## Usage example
@@ -116,8 +119,8 @@ Each part of the DAG can be executed on a different machine in a different envir
 
 **Missing a wait for job task**
 
-It is important to ensure that the __wait for job__ task only appears once as a node in the DAG.
-As the name DAG stands for Directed Acyclic Graph, a single __wait for job__ task should not be used to track multiple long-running tasks.
+It is important to ensure that the _wait for job_ task only appears once as a node in the DAG.
+As the name DAG stands for Directed Acyclic Graph, a single _wait for job_ task should not be used to track multiple long-running tasks.
 If this happens, the node will become a cyclic node, and the DAG will be broken.
 
-To avoid this issue, make sure that the DAG uses a separate __wait for job__ tasks for each of the tracked tasks.
+To avoid this issue, make sure that the DAG uses a separate _wait for job_ tasks for each of the tracked tasks.
