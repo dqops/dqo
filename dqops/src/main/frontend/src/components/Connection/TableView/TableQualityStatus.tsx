@@ -20,7 +20,8 @@ import moment from 'moment';
 
 type TFirstLevelCheck = {
   checkName: string;
-  severity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
+  currentSeverity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
+  highestSeverity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
   executedAt?: number | string;
   checkType: string;
   category?: string;
@@ -52,6 +53,9 @@ export default function TableQualityStatus() {
   const [categoryDimension, setCategoryDimension] = useState<
     'category' | 'dimension'
   >('category');
+  const [severityType, setSeverityType] = useState<'current' | 'highest'>(
+    'current'
+  );
   const [month, setMonth] = useState<number | undefined>(1);
   const [since, setSince] = useState<number | undefined>();
 
@@ -83,8 +87,10 @@ export default function TableQualityStatus() {
         if (Object.keys(data).find((x) => x === categoryDimensionKey)) {
           data[categoryDimensionKey].push({
             checkName: key,
-            severity: (tableDataQualityStatus.checks ?? {})[key]
+            currentSeverity: (tableDataQualityStatus.checks ?? {})[key]
               ?.current_severity,
+            highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
+              ?.highest_historical_severity,
             executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at,
             checkType: 'table',
             category: (tableDataQualityStatus.checks ?? {})[key]?.category,
@@ -95,8 +101,10 @@ export default function TableQualityStatus() {
           data[categoryDimensionKey] = [
             {
               checkName: key,
-              severity: (tableDataQualityStatus.checks ?? {})[key]
+              currentSeverity: (tableDataQualityStatus.checks ?? {})[key]
                 ?.current_severity,
+              highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
+                ?.highest_historical_severity,
               executedAt: (tableDataQualityStatus.checks ?? {})[key]
                 ?.executed_at,
               checkType: 'table',
@@ -122,8 +130,10 @@ export default function TableQualityStatus() {
           if (Object.keys(data).find((x) => x === categoryDimensionColumnKey)) {
             data[categoryDimensionColumnKey].push({
               checkName: key,
-              severity: ((tableDataQualityStatus.columns ?? {})[column]
+              currentSeverity: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.current_severity,
+              highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.highest_historical_severity,
               executedAt: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.executed_at,
               checkType: column,
@@ -136,8 +146,10 @@ export default function TableQualityStatus() {
             data[categoryDimensionColumnKey] = [
               {
                 checkName: key,
-                severity: ((tableDataQualityStatus.columns ?? {})[column]
+                currentSeverity: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.current_severity,
+                highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
+                  .checks ?? {})[key]?.highest_historical_severity,
                 executedAt: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.executed_at,
                 checkType: column,
@@ -193,13 +205,15 @@ export default function TableQualityStatus() {
 
   useEffect(() => {
     onChangeFirstLevelChecks();
-  }, [categoryDimension, tableDataQualityStatus]);
+  }, [categoryDimension, tableDataQualityStatus, severityType]);
 
   const colorCell = (checks: TFirstLevelCheck[]) => {
     if (
       checks.find(
         (x) =>
-          x.severity ===
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error &&
           x.checkType === 'table'
       )
@@ -209,7 +223,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity ===
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal &&
           x.checkType === 'table'
       )
@@ -219,7 +235,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity ===
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error &&
           x.checkType === 'table'
       )
@@ -228,7 +246,9 @@ export default function TableQualityStatus() {
     } else if (
       checks.find(
         (x) =>
-          x.severity ===
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning &&
           x.checkType === 'table'
       )
@@ -237,7 +257,9 @@ export default function TableQualityStatus() {
     } else if (
       checks.find(
         (x) =>
-          x.severity ===
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
             CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid &&
           x.checkType === 'table'
       )
@@ -264,7 +286,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.current_severity ===
+          (severityType === 'current'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
       )
     ) {
@@ -273,7 +297,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.current_severity ===
+          (severityType === 'current'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal
       )
     ) {
@@ -282,7 +308,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.current_severity ===
+          (severityType === 'current'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error
       )
     ) {
@@ -291,7 +319,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.current_severity ===
+          (severityType === 'current'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning
       )
     ) {
@@ -300,7 +330,9 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.current_severity ===
+          (severityType === 'current'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
           CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid
       )
     ) {
@@ -426,6 +458,19 @@ export default function TableQualityStatus() {
             dateFormat="yyyy-MM-dd"
           />
         </div>
+      </div>
+      <div className="flex items-center gap-x-3 pb-6">
+        <div>Show status: </div>
+        <RadioButton
+          label="Current severity status"
+          checked={severityType === 'current'}
+          onClick={() => setSeverityType('current')}
+        />
+        <RadioButton
+          label="Highest severity status"
+          checked={severityType === 'highest'}
+          onClick={() => setSeverityType('highest')}
+        />
       </div>
 
       <div className="flex gap-x-5">
@@ -563,8 +608,16 @@ export default function TableQualityStatus() {
                                 </div>
                               </div>
                               <div className="flex gap-x-2">
-                                <div className="w-42">Severity level:</div>
-                                <div>{x.severity}</div>
+                                <div className="w-42">
+                                  Current severity level:
+                                </div>
+                                <div>{x.currentSeverity}</div>
+                              </div>
+                              <div className="flex gap-x-2">
+                                <div className="w-42">
+                                  Highest historical severity level:
+                                </div>
+                                <div>{x.highestSeverity}</div>
                               </div>
                               <div className="flex gap-x-2">
                                 <div className="w-42">Category:</div>
@@ -581,8 +634,11 @@ export default function TableQualityStatus() {
                             className={clsx(
                               'cursor-auto h-12 ml-5 p-2',
                               calculateSeverityColor(
-                                x.severity ??
-                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                severityType === 'current'
+                                  ? x.currentSeverity ??
+                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                  : x.highestSeverity ??
+                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                               )
                             )}
                             style={{
@@ -590,8 +646,11 @@ export default function TableQualityStatus() {
                               whiteSpace: 'normal',
                               wordBreak: 'break-word',
                               ...(calculateSeverityColor(
-                                x.severity ??
-                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                severityType === 'current'
+                                  ? x.currentSeverity ??
+                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                  : x.highestSeverity ??
+                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                               ) === 'bg-gray-150'
                                 ? backgroundStyle
                                 : {})
@@ -709,9 +768,15 @@ export default function TableQualityStatus() {
                                     </div>
                                     <div className="flex gap-x-2">
                                       <div className="w-42">
-                                        Severity level:
+                                        Current severity level:
                                       </div>
-                                      <div>{x.severity}</div>
+                                      <div>{x.currentSeverity}</div>
+                                    </div>
+                                    <div className="flex gap-x-2">
+                                      <div className="w-42">
+                                        Highest historical severity level:
+                                      </div>
+                                      <div>{x.highestSeverity}</div>
                                     </div>
                                     <div className="flex gap-x-2">
                                       <div className="w-42">Category:</div>
@@ -730,8 +795,11 @@ export default function TableQualityStatus() {
                                   className={clsx(
                                     'cursor-auto h-12 p-2 ml-5',
                                     calculateSeverityColor(
-                                      x.severity ??
-                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                      severityType === 'current'
+                                        ? x.currentSeverity ??
+                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                        : x.highestSeverity ??
+                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                                     )
                                   )}
                                   style={{
@@ -739,8 +807,11 @@ export default function TableQualityStatus() {
                                     whiteSpace: 'normal',
                                     wordBreak: 'break-word',
                                     ...(calculateSeverityColor(
-                                      x.severity ??
-                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                      severityType === 'current'
+                                        ? x.currentSeverity ??
+                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                        : x.highestSeverity ??
+                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                                     ) === 'bg-gray-150'
                                       ? backgroundStyle
                                       : {})
