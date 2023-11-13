@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import {
   CheckCurrentDataQualityStatusModel,
-  CheckCurrentDataQualityStatusModelSeverityEnum,
+  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
   ColumnCurrentDataQualityStatusModel,
   TableCurrentDataQualityStatusModel
 } from '../../../api';
@@ -20,7 +20,7 @@ import moment from 'moment';
 
 type TFirstLevelCheck = {
   checkName: string;
-  severity?: CheckCurrentDataQualityStatusModelSeverityEnum;
+  severity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
   executedAt?: number | string;
   checkType: string;
   category?: string;
@@ -83,7 +83,8 @@ export default function TableQualityStatus() {
         if (Object.keys(data).find((x) => x === categoryDimensionKey)) {
           data[categoryDimensionKey].push({
             checkName: key,
-            severity: (tableDataQualityStatus.checks ?? {})[key]?.severity,
+            severity: (tableDataQualityStatus.checks ?? {})[key]
+              ?.current_severity,
             executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at,
             checkType: 'table',
             category: (tableDataQualityStatus.checks ?? {})[key]?.category,
@@ -94,7 +95,8 @@ export default function TableQualityStatus() {
           data[categoryDimensionKey] = [
             {
               checkName: key,
-              severity: (tableDataQualityStatus.checks ?? {})[key]?.severity,
+              severity: (tableDataQualityStatus.checks ?? {})[key]
+                ?.current_severity,
               executedAt: (tableDataQualityStatus.checks ?? {})[key]
                 ?.executed_at,
               checkType: 'table',
@@ -121,7 +123,7 @@ export default function TableQualityStatus() {
             data[categoryDimensionColumnKey].push({
               checkName: key,
               severity: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.severity,
+                .checks ?? {})[key]?.current_severity,
               executedAt: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.executed_at,
               checkType: column,
@@ -135,7 +137,7 @@ export default function TableQualityStatus() {
               {
                 checkName: key,
                 severity: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.severity,
+                  .checks ?? {})[key]?.current_severity,
                 executedAt: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.executed_at,
                 checkType: column,
@@ -160,25 +162,29 @@ export default function TableQualityStatus() {
   };
 
   const calculateSeverityColor = (
-    severity: CheckCurrentDataQualityStatusModelSeverityEnum
+    severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum
   ) => {
     if (
       severity ===
-      CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
     ) {
       return 'bg-gray-150';
     }
-    if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal) {
+    if (
+      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal
+    ) {
       return 'bg-red-200';
     }
-    if (severity === CheckCurrentDataQualityStatusModelSeverityEnum.error) {
+    if (
+      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error
+    ) {
       return 'bg-orange-200';
     } else if (
-      severity === CheckCurrentDataQualityStatusModelSeverityEnum.warning
+      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning
     ) {
       return 'bg-yellow-200';
     } else if (
-      severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid
+      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid
     ) {
       return 'bg-green-200';
     }
@@ -194,7 +200,7 @@ export default function TableQualityStatus() {
       checks.find(
         (x) =>
           x.severity ===
-            CheckCurrentDataQualityStatusModelSeverityEnum.execution_error &&
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error &&
           x.checkType === 'table'
       )
     ) {
@@ -203,7 +209,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal &&
+          x.severity ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal &&
           x.checkType === 'table'
       )
     ) {
@@ -212,7 +219,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error &&
+          x.severity ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error &&
           x.checkType === 'table'
       )
     ) {
@@ -221,7 +229,7 @@ export default function TableQualityStatus() {
       checks.find(
         (x) =>
           x.severity ===
-            CheckCurrentDataQualityStatusModelSeverityEnum.warning &&
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning &&
           x.checkType === 'table'
       )
     ) {
@@ -229,7 +237,8 @@ export default function TableQualityStatus() {
     } else if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid &&
+          x.severity ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid &&
           x.checkType === 'table'
       )
     ) {
@@ -255,8 +264,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity ===
-          CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+          x.current_severity ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
       )
     ) {
       return 'bg-gray-150';
@@ -264,7 +273,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.fatal
+          x.current_severity ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal
       )
     ) {
       return 'bg-red-200';
@@ -272,7 +282,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.error
+          x.current_severity ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error
       )
     ) {
       return 'bg-orange-200';
@@ -280,7 +291,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.warning
+          x.current_severity ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning
       )
     ) {
       return 'bg-yellow-200';
@@ -288,7 +300,8 @@ export default function TableQualityStatus() {
     if (
       checks.find(
         (x) =>
-          x.severity === CheckCurrentDataQualityStatusModelSeverityEnum.valid
+          x.current_severity ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid
       )
     ) {
       return 'bg-green-200';
@@ -569,7 +582,7 @@ export default function TableQualityStatus() {
                               'cursor-auto h-12 ml-5 p-2',
                               calculateSeverityColor(
                                 x.severity ??
-                                  CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                               )
                             )}
                             style={{
@@ -578,7 +591,7 @@ export default function TableQualityStatus() {
                               wordBreak: 'break-word',
                               ...(calculateSeverityColor(
                                 x.severity ??
-                                  CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                  CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                               ) === 'bg-gray-150'
                                 ? backgroundStyle
                                 : {})
@@ -718,7 +731,7 @@ export default function TableQualityStatus() {
                                     'cursor-auto h-12 p-2 ml-5',
                                     calculateSeverityColor(
                                       x.severity ??
-                                        CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                                     )
                                   )}
                                   style={{
@@ -727,7 +740,7 @@ export default function TableQualityStatus() {
                                     wordBreak: 'break-word',
                                     ...(calculateSeverityColor(
                                       x.severity ??
-                                        CheckCurrentDataQualityStatusModelSeverityEnum.execution_error
+                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                                     ) === 'bg-gray-150'
                                       ? backgroundStyle
                                       : {})
