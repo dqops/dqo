@@ -550,7 +550,31 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     }
     return '';
   };
-  console.log(tableDataQualityStatus);
+
+  const openFirstLevelTableTab = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      checkTypes,
+      connection,
+      schema,
+      table,
+      timeScale ?? 'advanced'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      checkTypes,
+      connection,
+      schema,
+      table
+    );
+    dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value,
+        state: {},
+        label: table
+      })
+    );
+    history.push(url);
+  };
 
   return (
     <div className="p-4">
@@ -666,8 +690,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
             <th
               key={`header_${key}`}
               className={clsx(
-                'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold'
+                'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold cursor-pointer underline'
               )}
+              onClick={() => openFirstLevelTableTab()}
             >
               {key}
             </th>
