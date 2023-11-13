@@ -28,7 +28,11 @@ type TFirstLevelCheck = {
   qualityDimension?: string;
 };
 
-export default function TableQualityStatus() {
+interface IProps {
+  timeScale?: 'daily' | 'monthly';
+}
+
+export default function TableQualityStatus({ timeScale }: IProps) {
   const {
     checkTypes,
     connection,
@@ -68,13 +72,14 @@ export default function TableQualityStatus() {
       since,
       checkTypes === CheckTypes.PROFILING ? true : undefined,
       checkTypes === CheckTypes.MONITORING ? true : undefined,
-      checkTypes === CheckTypes.PARTITIONED ? true : undefined
+      checkTypes === CheckTypes.PARTITIONED ? true : undefined,
+      timeScale
     ).then((res) => setTableDataQualityStatus(res.data));
   };
 
   useEffect(() => {
     getTableDataQualityStatus(month, since);
-  }, [connection, schema, table, month, since]);
+  }, [connection, schema, table, month, since, checkTypes, timeScale]);
 
   const onChangeFirstLevelChecks = () => {
     const data: Record<string, TFirstLevelCheck[]> = {};
@@ -341,6 +346,78 @@ export default function TableQualityStatus() {
     return '';
   };
 
+  const colorColumnCellCircle = (
+    column: ColumnCurrentDataQualityStatusModel,
+    firstLevelCheck: string
+  ) => {
+    const checks: CheckCurrentDataQualityStatusModel[] = [];
+    Object.values(column.checks ?? {}).forEach((check) => {
+      if (
+        categoryDimension === 'category'
+          ? check.category === firstLevelCheck
+          : check.quality_dimension === firstLevelCheck
+      ) {
+        checks.push(check);
+      }
+    });
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+      )
+    ) {
+      return 'bg-gray-150';
+    }
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal
+      )
+    ) {
+      return 'bg-red-200';
+    }
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error
+      )
+    ) {
+      return 'bg-orange-200';
+    }
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning
+      )
+    ) {
+      return 'bg-yellow-200';
+    }
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.current_severity
+            : x.highest_historical_severity) ===
+          CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid
+      )
+    ) {
+      return 'bg-green-200';
+    }
+    return '';
+  };
+
   const openFirstLevelColumnTab = (column: string) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
       checkTypes,
@@ -409,9 +486,72 @@ export default function TableQualityStatus() {
           #cccccc 5px,
           #ffffff 5px,
           #ffffff 10px
-        )`,
-    height: '48px'
+        )`
   };
+
+  const colorCircle = (checks: TFirstLevelCheck[]) => {
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error &&
+          x.checkType === 'table'
+      )
+    ) {
+      return 'bg-gray-150';
+    }
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal &&
+          x.checkType === 'highest'
+      )
+    ) {
+      return 'bg-red-200';
+    }
+    if (
+      checks.find(
+        (x) =>
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error &&
+          x.checkType === 'highest'
+      )
+    ) {
+      return 'bg-orange-200';
+    } else if (
+      checks.find(
+        (x) =>
+          (severityType === 'current'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning &&
+          x.checkType === 'highest'
+      )
+    ) {
+      return 'bg-yellow-200';
+    } else if (
+      checks.find(
+        (x) =>
+          (severityType === 'highest'
+            ? x.currentSeverity
+            : x.highestSeverity) ===
+            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid &&
+          x.checkType === 'table'
+      )
+    ) {
+      return 'bg-green-200';
+    }
+    return '';
+  };
+  console.log(tableDataQualityStatus);
+
   return (
     <div className="p-4">
       <div className="flex justify-between items-center">
@@ -428,49 +568,50 @@ export default function TableQualityStatus() {
             onClick={() => setCategoryDimension('dimension')}
           />
         </div>
-        <div className="flex pb-6 gap-x-5">
-          <RadioButton
-            checked={month === 1}
-            label="Last month"
-            onClick={() => {
-              setSince(undefined), setMonth(1);
-            }}
-          />
-          <RadioButton
-            checked={month === 3}
-            label="Last 3 months"
-            onClick={() => {
-              setSince(undefined), setMonth(3);
-            }}
-          />
-          <RadioButton
-            checked={month === undefined}
-            label="Since"
-            onClick={() => {
-              setMonth(undefined);
-            }}
-          />
-          <DatePicker
-            showIcon
-            placeholderText="Select date start"
-            onChange={setSince}
-            selected={since}
-            dateFormat="yyyy-MM-dd"
-          />
+        <div>
+          <div className="flex pb-6 gap-x-5">
+            <RadioButton
+              checked={month === 1}
+              label="Last month"
+              onClick={() => {
+                setSince(undefined), setMonth(1);
+              }}
+            />
+            <RadioButton
+              checked={month === 3}
+              label="Last 3 months"
+              onClick={() => {
+                setSince(undefined), setMonth(3);
+              }}
+            />
+            <RadioButton
+              checked={month === undefined}
+              label="Since"
+              onClick={() => {
+                setMonth(undefined);
+              }}
+            />
+            <DatePicker
+              showIcon
+              placeholderText="Select date start"
+              onChange={setSince}
+              selected={since}
+              dateFormat="yyyy-MM-dd"
+            />
+          </div>
+          <div className="flex items-center gap-x-3 pb-6">
+            <RadioButton
+              label="Current severity status"
+              checked={severityType === 'current'}
+              onClick={() => setSeverityType('current')}
+            />
+            <RadioButton
+              label="Highest severity status"
+              checked={severityType === 'highest'}
+              onClick={() => setSeverityType('highest')}
+            />
+          </div>
         </div>
-      </div>
-      <div className="flex items-center gap-x-3 pb-6">
-        <div>Show status: </div>
-        <RadioButton
-          label="Current severity status"
-          checked={severityType === 'current'}
-          onClick={() => setSeverityType('current')}
-        />
-        <RadioButton
-          label="Highest severity status"
-          checked={severityType === 'highest'}
-          onClick={() => setSeverityType('highest')}
-        />
       </div>
 
       <div className="flex gap-x-5">
@@ -561,17 +702,33 @@ export default function TableQualityStatus() {
                       />
                     </div>
                   ) : null}
-                  <div
-                    className={clsx(
-                      'w-43 h-12',
-                      colorCell(firstLevelChecks[key])
-                    )}
-                    style={{
-                      ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
-                        ? backgroundStyle
-                        : {})
-                    }}
-                  ></div>
+                  {colorCell(firstLevelChecks[key]) !== '' ? (
+                    <div
+                      className={clsx(
+                        'w-43 h-12 flex justify-end',
+                        colorCell(firstLevelChecks[key])
+                      )}
+                      style={{
+                        ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
+                          ? backgroundStyle
+                          : {})
+                      }}
+                    >
+                      <div
+                        className={clsx(
+                          ' h-3 w-3 mr-2 mt-2',
+                          colorCircle(firstLevelChecks[key])
+                        )}
+                        style={{
+                          borderRadius: '6px',
+                          ...(colorCircle(firstLevelChecks[key]) ===
+                          'bg-gray-150'
+                            ? backgroundStyle
+                            : {})
+                        }}
+                      ></div>
+                    </div>
+                  ) : null}
                 </div>
               </td>
             ))}
@@ -716,7 +873,7 @@ export default function TableQualityStatus() {
                           </div>
                           <div
                             className={clsx(
-                              'h-12 w-43',
+                              'h-12 w-43 flex justify-end',
                               // 'border border-gray-150',
                               colorColumnCell(
                                 (tableDataQualityStatus.columns ?? {})[key],
@@ -731,7 +888,21 @@ export default function TableQualityStatus() {
                                 ? backgroundStyle
                                 : {})
                             }}
-                          ></div>
+                          >
+                            {' '}
+                            <div
+                              className="h-3 w-3 mr-2 mt-2"
+                              style={{
+                                borderRadius: '6px',
+                                ...(colorColumnCellCircle(
+                                  (tableDataQualityStatus.columns ?? {})[key],
+                                  firstLevelChecksKey
+                                ) === 'bg-gray-150'
+                                  ? backgroundStyle
+                                  : {})
+                              }}
+                            ></div>
+                          </div>
                         </div>
                       ) : null}
                     </td>

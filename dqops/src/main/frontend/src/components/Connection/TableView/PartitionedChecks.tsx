@@ -36,8 +36,12 @@ const initTabs = [
     value: 'monthly'
   },
   {
-    label: 'Table quality status',
-    value: 'table-quality-status'
+    label: 'Table quality status daily',
+    value: 'table-quality-status-daily'
+  },
+  {
+    label: 'Table quality status monthly',
+    value: 'table-quality-status-monthly'
   },
   {
     label: 'Daily Comparisons',
@@ -191,7 +195,8 @@ const TablePartitionedChecksView = () => {
       tab !== 'monthly' &&
       tab !== 'daily_comparisons' &&
       tab !== 'monthly_comparisons' &&
-      tab !== 'table-quality-status'
+      tab !== 'table-quality-status-daily' &&
+      tab !== 'table-quality-status-monthly'
     ) {
       history.push(
         ROUTES.TABLE_LEVEL_PAGE(
@@ -272,7 +277,12 @@ const TablePartitionedChecksView = () => {
           loading={loading}
         />
       )}
-      {tab === 'table-quality-status' && <TableQualityStatus />}
+      {tab === 'table-quality-status-daily' && (
+        <TableQualityStatus timeScale="daily" />
+      )}
+      {tab === 'table-quality-status-monthly' && (
+        <TableQualityStatus timeScale="monthly" />
+      )}
       {tab === 'daily_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
