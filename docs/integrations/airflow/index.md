@@ -10,7 +10,7 @@ Operators are available for actions such as:
   setting up the default data quality checks
 - **[DqopsAssertTableStatusOperator](./table-status-operator.md)** verifies the most recent data quality status of a table,
   the operator breaks DAG processing if any **fatal** severity issues are detected in the most recent data quality check run 
-
+- **[DqopsWaitForJobOperator](./wait-for-job-operator.md)** tracks the execution of long-running tasks
 
 ## DQOps python package for Airflow
 
