@@ -70,9 +70,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
       table,
       month,
       since,
-      checkTypes === CheckTypes.PROFILING ? true : undefined,
-      checkTypes === CheckTypes.MONITORING ? true : undefined,
-      checkTypes === CheckTypes.PARTITIONED ? true : undefined,
+      checkTypes === CheckTypes.PROFILING,
+      checkTypes === CheckTypes.MONITORING,
+      checkTypes === CheckTypes.PARTITIONED,
       timeScale
     ).then((res) => setTableDataQualityStatus(res.data));
   };
