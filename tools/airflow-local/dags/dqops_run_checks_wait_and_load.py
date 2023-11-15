@@ -16,12 +16,13 @@ with DAG(
     tags=["dqops_example"]
 ) as dag:
     run_checks = DqopsRunChecksOperator(
-        task_id="dqops_run_checks_operator_task",
+        task_id="dqops_run_checks",
         # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
         base_url="http://host.docker.internal:8888",
         connection="example_connection",
-        fail_at_severity=RuleSeverityLevel.WARNING,
-        check_type=CheckType.MONITORING
+        check_type=CheckType.MONITORING,
+        fail_on_timeout=False,
+        wait_timeout=10
     )
    
     wait_for_job = DqopsWaitForJobOperator(
@@ -31,7 +32,7 @@ with DAG(
         # the total time in seconds for the operator to wait will be the product of retries number and the retry_delay
         retries=2,
         retry_delay=10, # in seconds
-        trigger_rule="all_done"
+        # trigger_rule="all_done" # crucial when the upstream tracked task do not use fail_on_timeout parameter
         # the below parameter is set automatically when the wait for job operator has the only one upstream task
         # otherwise the parameter has to be set manually because the operator can only wait for a single job 
         # task_id_to_wait_for="dqops_table_import_task",
