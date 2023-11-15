@@ -6,7 +6,7 @@ It will update the table in DQOps application for recently added columns or upda
 
 ## Operator parameters
 
-Parameters that indentify the table that should be imported to DQOps.
+Parameters that identify the table that should be imported to DQOps.
 
 | Name              | Description                                                                                                                                                                                                          | Type                                                          |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|

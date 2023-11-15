@@ -5,12 +5,16 @@ from typing import Any, Dict, Union
 from airflow.models.baseoperator import BaseOperator
 from airflow.models.taskinstance import TaskInstance
 from httpx import ReadTimeout
+from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import DqopsDataQualityIssueDetectedException
 from dqops.airflow.common.exceptions.dqops_job_failed_exception import DqopsJobFailedException
 
 from dqops.airflow.common.exceptions.dqops_unfinished_job_exception import (
     DqopsUnfinishedJobException,
 )
 from dqops.airflow.common.tools.client_creator import create_client
+from dqops.airflow.common.tools.rule_severity_level_utility import (
+    get_severity_value_from_rule_severity,
+)
 from dqops.airflow.common.tools.server_response_verifier import (
     verify_server_response_correctness,
 )
@@ -22,9 +26,13 @@ from dqops.client import Client
 from dqops.client.api.jobs.wait_for_job import sync_detailed
 from dqops.client.models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
 from dqops.client.models.dqo_job_status import DqoJobStatus
+from dqops.client.models.dqo_job_type import DqoJobType
+from dqops.client.models.run_checks_result import RunChecksResult
 from dqops.client.models.import_tables_queue_job_result import (
     ImportTablesQueueJobResult,
 )
+from dqops.client.models.rule_severity_level import RuleSeverityLevel
+from dqops.client.models.run_checks_queue_job_result import RunChecksQueueJobResult
 from dqops.client.types import UNSET, Response, Unset
 
 
@@ -43,6 +51,7 @@ class DqopsWaitForJobOperator(BaseOperator):
         job_business_key: Union[Unset, None, str] = UNSET,
         wait_timeout: Union[Unset, None, int] = UNSET,
         fail_on_timeout: bool = True,
+        fail_at_severity: RuleSeverityLevel = RuleSeverityLevel.FATAL,
         **kwargs
     ) -> Union[Dict[str, Any], None]:
         """
@@ -58,6 +67,8 @@ class DqopsWaitForJobOperator(BaseOperator):
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
             Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.
+        fail_at_severity: RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL]
+            (Used only when tracking run checks task) The threshold level of rule severity, causing that an airflow task finishes with failed status.
         """
 
         super().__init__(**kwargs)
@@ -66,6 +77,7 @@ class DqopsWaitForJobOperator(BaseOperator):
         self.job_business_key: str = job_business_key
         self.wait_timeout: int = wait_timeout
         self.fail_on_timeout: bool = fail_on_timeout
+        self.fail_at_severity: RuleSeverityLevel = fail_at_severity
 
     def execute(self, context):
         client: Client = create_client(
@@ -75,7 +87,7 @@ class DqopsWaitForJobOperator(BaseOperator):
         try:
             job_id: str = self._gather_job_id(context)
 
-            logging.info("the job id is : " + job_id)
+            logging.info("the job id to be tracked : " + job_id)
 
             response: Response[DqoJobHistoryEntryModel] = sync_detailed(
                 job_id=job_id,
@@ -89,10 +101,10 @@ class DqopsWaitForJobOperator(BaseOperator):
 
         verify_server_response_correctness(response)
 
-        job_result: ImportTablesQueueJobResult = ImportTablesQueueJobResult.from_dict(
-            json.loads(response.content.decode("utf-8"))
-        )
-        logging.info(job_result.to_dict())
+        json_response = json.loads(response.content.decode("utf-8"))
+        logging.info(json_response)
+
+        job_result: DqoJobHistoryEntryModel = DqoJobHistoryEntryModel.from_dict(json_response)
 
         if (
             job_result.status == DqoJobStatus.RUNNING
@@ -104,6 +116,18 @@ class DqopsWaitForJobOperator(BaseOperator):
         if job_result.status == DqoJobStatus.FAILED:
             self.retries = 0
             raise DqopsJobFailedException(context["ti"], job_result.to_dict())
+
+        run_check_result: Union[RunChecksResult, None] = job_result.parameters.run_checks_parameters.run_checks_result
+
+        if job_result.job_type == DqoJobType.RUN_CHECKS and run_check_result is not None:
+
+            if (
+                run_check_result.highest_severity is not None
+                    and get_severity_value_from_rule_severity(run_check_result.highest_severity)
+                >= get_severity_value_from_rule_severity(self.fail_at_severity)
+            ):
+                self.retries = 0
+                raise DqopsDataQualityIssueDetectedException(context["ti"], job_result.to_dict())
 
         return job_result.to_dict()
 

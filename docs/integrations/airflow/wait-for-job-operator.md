@@ -33,13 +33,15 @@ The second option is to use a **job business key** that can be set by a user, wh
 The table presents the parameters that are supported by the _wait for job_ operator.
 All parameters are optional.
 
-| Name                | Description                                                                                                                                                                        | Type                                              |
-|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------|
-| task_id_to_wait_for | The ID of a task that the operator will wait for.                                                                                                                                  | int                                               |
-| base_url            | The base URL to the DQOps application.                                                                                                                                             | str [optional, default="http://localhost:8888/"]  |
-| job_business_key    | Job business key is a user-assigned unique job ID, used to check the job status by looking up the job by a user-assigned identifier, instead of the DQOps-assigned job identifier. | Union[Unset, None, str] = UNSET                   |
-| wait_timeout        | Execution timeout value in seconds. It prevents hanging tasks if action is never completed. If not set, the default timeout is 120 seconds.                                        | int                                               |
-| fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                | bool [optional, default=True]                     |
+| Name                | Description                                                                                                                                                                        | Type                                                          |
+|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
+| task_id_to_wait_for | The ID of a task that the operator will wait for.                                                                                                                                  | int                                                           |
+| base_url            | The base URL to the DQOps application.                                                                                                                                             | str [optional, default="http://localhost:8888/"]              |
+| job_business_key    | Job business key is a user-assigned unique job ID, used to check the job status by looking up the job by a user-assigned identifier, instead of the DQOps-assigned job identifier. | Union[Unset, None, str] = UNSET                               |
+| wait_timeout        | Execution timeout value in seconds. It prevents hanging tasks if action is never completed. If not set, the default timeout is 120 seconds.                                        | int                                                           |
+| fail_on_timeout     | Timeout is leading the task status to Failed by default. It can be omitted marking the task as Success by setting the flag to True.                                                | bool [optional, default=True]                                 |
+| fail_at_severity    | (Used only when tracking run checks task) The threshold level of rule severity, causing that an airflow task finishes with failed status.                                          | RuleSeverityLevel [optional, default=RuleSeverityLevel.FATAL] |
+
 
 The operator inherits from BaseOperator and adds the above parameters.
 For the complete list of BaseOperator parameters, visit the official Airflow webpage https://airflow.apache.org/
