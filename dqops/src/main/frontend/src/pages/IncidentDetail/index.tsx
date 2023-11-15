@@ -250,7 +250,7 @@ export const IncidentDetail = () => {
           ),
           value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
           state: {},
-          label: ''
+          label: table
         })
       );
       history.push(
