@@ -182,3 +182,12 @@ An approach is different in case of long-running Airflow tasks that take several
 Instead of using a single operator, usage of WaitForJobOperator as an addition to the long-running task is necessary.
 
 Check the [wait for job operator](wait-for-job-operator.md) page for more details.
+
+## What's next
+
+- [Learn how to use run checks operator](run-checks-use-case.md)
+- [Learn about collect statistics operator](collect-statistics-operator.md)
+- [Learn about table import operator](table-import-operator.md)
+- [Learn about table status operator](table-status-operator.md)
+- [Learn about wait for job operator](wait-for-job-operator.md)
+- [Learn about webhooks notifications](../webhooks/index.md)

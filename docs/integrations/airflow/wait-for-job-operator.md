@@ -90,7 +90,7 @@ with DAG(
     tags=["dqops_example"]
 ) as dag:
     run_checks_task = DqopsRunChecksOperator(
-        task_id="dqops_run_checks_operator_task",
+        task_id="dqops_run_checks",
         base_url="http://host.docker.internal:8888",
         connection="example_connection",
         fail_at_severity=RuleSeverityLevel.WARNING,
@@ -126,3 +126,11 @@ As the name DAG stands for Directed Acyclic Graph, a single _wait for job_ task 
 If this happens, the node will become a cyclic node, and the DAG will be broken.
 
 To avoid this issue, make sure that the DAG uses a separate _wait for job_ tasks for each of the tracked tasks.
+
+## What's next
+
+- [Check wait for job operator in action](run-checks-use-case.md)
+- [Learn about run checks operator](run-checks-operator.md)
+- [Learn about collect statistics operator](collect-statistics-operator.md)
+- [Learn about table import operator](table-import-operator.md)
+- [Learn about table status operator](table-status-operator.md)

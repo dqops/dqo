@@ -127,3 +127,11 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **running**: The job is now running.
 - **succeeded**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
+
+## What's next
+
+- [Learn about run checks operator](run-checks-operator.md)
+- [Learn how to use run checks operator](run-checks-use-case.md)
+- [Learn about table import operator](table-import-operator.md)
+- [Learn about table status operator](table-status-operator.md)
+- [Learn about wait for job operator](wait-for-job-operator.md)

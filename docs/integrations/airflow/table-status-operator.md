@@ -182,3 +182,10 @@ TableDataQualityStatusModel contains the following fields:
   When an execution error is reported, the configuration of a data quality check on a table must be updated.
 - **checks** is a dictionary of data quality checks, storing objects that describe the current data quality status of the check and the last check's execution timestamp
 - **columns** is a dictionary of columns covered by data quality checks, storing objects that describe the current data quality status of checks configured on that column
+
+## What's next
+
+- [Learn about run checks operator](run-checks-operator.md)
+- [Learn how to use run checks operator](run-checks-use-case.md)
+- [Learn about collect statistics operator](collect-statistics-operator.md)
+- [Learn about table import operator](table-import-operator.md)
