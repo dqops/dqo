@@ -52,9 +52,25 @@ Slack integration allows you to receive notifications whenever an issue is detec
         You can divide connections or even different statuses of incidents and link them to different Slack channels within a single Slack application.
 
 
-## Configuration steps in DQOps
+## Types of webhooks configuration in DQOps
 
-To add a Webhook URL to DQOps:
+Configuration of webhooks in DQOps platform can be done in two different ways.
+
+First of them is the default webhooks configuration available under Configuration menu, shown on screen below.
+
+![default-webhooks-page](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-slack-notifications/default-webhooks-page.png)
+
+The second way is to configure webhooks on a connection level under the Notifications and Incidents tab, 
+presented in [Configuration steps in DQOps](#configuration-steps-in-dqops) section.
+
+DQOps uses both of them when preparing notifications. 
+When the connection does not set the webhook link on it's level,
+the corresponding value from default webhooks is set (e.g. opened incident webhook value).
+
+## Configuration steps in DQOps on a connection level
+
+Here are the steps to add a Webhook URL to DQOps. 
+The example shows the steps to configure webhooks on a connection level, which is similar to the default webhooks.
 
 1. Open the DQOps application and go to the **Data Sources** section.
 
