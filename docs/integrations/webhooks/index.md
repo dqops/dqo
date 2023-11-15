@@ -134,7 +134,7 @@ Below is the example of raw text message in the Markdown language which you can 
 
 A notification has a special field called **issue URL**, which allows user to add an URL from an external ticketing system. 
 The issue URL can be added at any time. 
-Adding an Issue URL to an incident allows easy access to the issue in the ticketing system.
+Adding an Issue URL to an incident provides easy access to the issue in the ticketing system.
 
 ## Next steps
 
