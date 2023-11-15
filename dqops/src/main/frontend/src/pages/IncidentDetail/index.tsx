@@ -269,13 +269,13 @@ export const IncidentDetail = () => {
     };
 
     return (
-      <div className="flex items-center text-teal-500">
+      <div className="flex items-center">
         <Button
           label={checkType + ' ' + (timeScale !== undefined ? timeScale : '')}
-          color="primary"
+          
           variant="text"
           onClick={redirectTableQualityStatus}
-          className="m-0 p-0 px-1"
+          className="m-0 p-0 px-1 text-black font-bold"
         />
         <SvgIcon name="chevron-right" className="w-4 h-4" />
       </div>
