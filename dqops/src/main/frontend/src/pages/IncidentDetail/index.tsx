@@ -14,7 +14,7 @@ import { Pagination } from '../../components/Pagination';
 import moment from 'moment';
 import useDebounce from '../../hooks/useDebounce';
 import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
-import { IncidentModel, IncidentModelStatusEnum } from '../../api';
+import { IncidentIssueHistogramModel, IncidentModel, IncidentModelStatusEnum } from '../../api';
 import Select from '../../components/Select';
 import { IncidentsApi } from '../../services/apiClient';
 import { IconButton, Tooltip } from '@material-tailwind/react';
@@ -71,17 +71,6 @@ const options = [
   }
 ];
 
-const tableQualityStatusOptions: Array<{
-  checkType: CheckTypes;
-  timeScale?: 'daily' | 'monthly';
-}> = [
-  { checkType: CheckTypes.PROFILING },
-  { checkType: CheckTypes.PARTITIONED, timeScale: 'daily' },
-  { checkType: CheckTypes.PARTITIONED, timeScale: 'monthly' },
-  { checkType: CheckTypes.MONITORING, timeScale: 'daily' },
-  { checkType: CheckTypes.MONITORING, timeScale: 'monthly' }
-];
-
 export const IncidentDetail = () => {
   const {
     connection,
@@ -108,7 +97,7 @@ export const IncidentDetail = () => {
     filters = {}
   } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
-
+  const { histograms}: { histograms: IncidentIssueHistogramModel } = useSelector(getFirstLevelIncidentsState);
   useEffect(() => {
     IncidentsApi.getIncident(connection, year, month, incidentId).then(
       (res) => {
@@ -230,6 +219,19 @@ export const IncidentDetail = () => {
     );
   };
 
+  const tableQualityStatusOptions: Array<{
+    checkType: CheckTypes;
+    timeScale?: 'daily' | 'monthly';
+    show?: boolean
+  }> = [
+    { checkType: CheckTypes.PROFILING, show: histograms.hasProfilingIssues },
+    { checkType: CheckTypes.PARTITIONED, timeScale: 'daily', show: histograms.hasPartitionedIssues },
+    { checkType: CheckTypes.PARTITIONED, timeScale: 'monthly', show: histograms.hasPartitionedIssues },
+    { checkType: CheckTypes.MONITORING, timeScale: 'daily', show: histograms.hasMonitoringIssues },
+    { checkType: CheckTypes.MONITORING, timeScale: 'monthly', show: histograms.hasMonitoringIssues }
+  ];
+  
+
   const routeTableQualityStatus = (
     checkType: CheckTypes,
     timeScale?: 'daily' | 'monthly'
@@ -292,7 +294,7 @@ export const IncidentDetail = () => {
             </div>
           </div>
           <div className="flex space-x-3">
-            {tableQualityStatusOptions.map((x) =>
+            {tableQualityStatusOptions.filter((y) => y.show).map((x) =>
               routeTableQualityStatus(x.checkType, x.timeScale)
             )}
             <Button
