@@ -129,7 +129,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials()
   },[])
-console.log(connectionBasic?.parallel_jobs_limit)
+
   return (
     <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
