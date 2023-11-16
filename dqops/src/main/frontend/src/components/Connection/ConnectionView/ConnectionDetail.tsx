@@ -151,7 +151,7 @@ const ConnectionDetail = () => {
               <div>Parallel jobs limit:</div>
             </td>
             <td className="px-4 py-2">
-              <div>{connectionBasic?.parallel_runs_limit}</div>
+              <div>{connectionBasic?.parallel_jobs_limit}</div>
             </td>
           </tr>
         </tbody>
