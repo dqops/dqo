@@ -32,6 +32,7 @@ import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
+import Input from '../../Input';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -128,7 +129,7 @@ const ConnectionDetail = () => {
   useEffect(() => {
     getSharedCredentials()
   },[])
-
+console.log(connectionBasic?.parallel_jobs_limit)
   return (
     <div className={clsx("p-4",userProfile.can_manage_scheduler !== true ? "pointer-events-none cursor-not-allowed" : "")}>
       <ConnectionActionGroup
@@ -151,7 +152,14 @@ const ConnectionDetail = () => {
               <div>Parallel jobs limit:</div>
             </td>
             <td className="px-4 py-2">
-              <div>{connectionBasic?.parallel_jobs_limit}</div>
+              <div>
+                <Input
+                  value={connectionBasic?.parallel_jobs_limit}
+                  onChange={(e) =>
+                    !isNaN(Number(e.target.value)) && onChange({ ...connectionBasic, parallel_jobs_limit: Number(e.target.value)})
+                  }
+                />
+              </div>
             </td>
           </tr>
         </tbody>
