@@ -27,7 +27,7 @@ export default function UserListDetail() {
     useEffect(() => {
         setLoading(true)
         UsersApi.getAllUsers()
-        .then((res) => setDqoCloudUsers(res.data))
+        .then((res) => setDqoCloudUsers(res.data.filter((x) => !x.email?.includes("dqops"))))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false))
     }, [reshreshUsersIndicator])
