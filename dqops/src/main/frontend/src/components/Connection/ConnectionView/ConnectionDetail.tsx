@@ -145,6 +145,14 @@ const ConnectionDetail = () => {
             <td className="px-4 py-2">
               <div>{connectionBasic?.connection_name}</div>
             </td>
+          </tr> 
+          <tr> 
+            <td className="px-4 py-2">
+              <div>Parallel jobs limit:</div>
+            </td>
+            <td className="px-4 py-2">
+              <div>{connectionBasic?.parallel_runs_limit}</div>
+            </td>
           </tr>
         </tbody>
       </table>
