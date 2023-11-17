@@ -100,6 +100,7 @@ nav:
           - Table status operator: "integrations/airflow/table-status-operator.md"
           - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
           - Run checks use case: "integrations/airflow/run-checks-use-case.md"
+          - Dbt use case: "integrations/airflow/dbt-use-case.md"
       - Looker Studio: "integrations/looker-studio/creating-custom-dashboards.md"
       - Slack: "integrations/slack/configuring-slack-notifications.md"
       - Visual Studio Code: "integrations/visual-studio-code/index.md"

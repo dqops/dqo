@@ -12,10 +12,23 @@ Operators are available for actions such as:
   the operator breaks DAG processing if any **fatal** severity issues are detected in the most recent data quality check run 
 - **[DqopsWaitForJobOperator](./wait-for-job-operator.md)** tracks the execution of long-running tasks
 
+
 ## DQOps python package for Airflow
 
 To use DQOps Airflow Operator an installation of the python package is required.
 DQOps publishes the package on the official repository Python Package Index (PyPI). https://pypi.org/project/dqops/
+
+
+## Combining DQOps with data pipelines in Airflow.
+
+Start the observation of the data quality at every step of the existing data pipelines.
+Might your technology stack is based on a database that is supported in DQOps. 
+[Check the complete list of the built databases connectors](../../working-with-dqo/adding-data-source-connection/index.md).
+
+For an immediate checks setup DQOps platform implements dozens of sensors. 
+Just activate a few of them choosing from the list.
+
+Any business specific type of data verification is possible since checks are that are fully customizable.
 
 
 ## Troubleshooting 
