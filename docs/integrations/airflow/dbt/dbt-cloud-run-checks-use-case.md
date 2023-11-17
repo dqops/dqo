@@ -1,32 +1,7 @@
-# DbtCloud job execution with DQOps
+# DQOps run checks example with the DbtCloud
 
-Airflow orchestrated pipelines for loading data do not provide observability facilities.
-It requires to open external applications or web pages and to search for loaded data.
-The inspection of loaded data with simple checks are configured complexly in Airflow.
-It also limits the long-term view perspective on the issue, because the review of a single result of e.g. an SQL query to the data has a lack of context.
-
-DQOps provides the automatic verification of the data that are available straight in the Airflow DAG execution details.
-Also, when the data issue occurs, it will be visible on the main Airflow page.
-
-All results are collected to the DQOps platform where the seasonal data issues can be observed.
-
-Using the DQOps with the **dbt** provides additional prospect to control the pipeline depending on the data.
-Loading data to a broken table can be prevented, which might ease the cleaning of it.
-
-
-## Pre-execution requirements
-
-Entry requirements include:
-
-- Installation of python package from PyPi called dqops
-- Configuration of data source and checks in DQOps
-- Installation of apache-airflow-providers-dbt-cloud with dbt operators
-
-
-## The example of use the dbt with DQOps
-
-The DAG configuration presents the use of dbt with DQOps. 
-The example runs the load process in DbtCloud surrounded by data quality verification of a single table, 
+The Airflow's DAG configuration presents the use of the DbtCloud with the DQOps' run checks operator. 
+The example executes the load job in DbtCloud surrounded by data quality verification of a single table, 
 done before and after loading the data. 
 
 !!! info "Wait for job operator usage"
@@ -134,6 +109,6 @@ He will know about the issue because the last task of the DAG will fail as below
 
 ## What's next
 
-- [Learn about run checks operator](run-checks-operator.md)
-- [Learn about webhooks notifications](../webhooks/index.md)
-- [Learn about wait for job operator](wait-for-job-operator.md)
+- [Learn about run checks operator](../../run-checks-operator.md)
+- [Learn about webhooks notifications](../../../webhooks/index.md)
+- [Learn about wait for job operator](../../wait-for-job-operator.md)
