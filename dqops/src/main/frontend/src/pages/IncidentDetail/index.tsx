@@ -1,54 +1,54 @@
-import React, { useEffect, useState } from "react";
-import IncidentsLayout from "../../components/IncidentsLayout";
-import SvgIcon from "../../components/SvgIcon";
-import { useHistory, useParams } from "react-router-dom";
-import Input from "../../components/Input";
-import { useSelector } from "react-redux";
-import { getFirstLevelIncidentsState } from "../../redux/selectors";
-import { useActionDispatch } from "../../hooks/useActionDispatch";
+import React, { useEffect, useState } from 'react';
+import IncidentsLayout from '../../components/IncidentsLayout';
+import SvgIcon from '../../components/SvgIcon';
+import { useHistory, useParams } from 'react-router-dom';
+import Input from '../../components/Input';
+import { useSelector } from 'react-redux';
+import { getFirstLevelIncidentsState } from '../../redux/selectors';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getIncidentsIssues,
-  setIncidentsFilter,
-} from "../../redux/actions/incidents.actions";
-import { Pagination } from "../../components/Pagination";
-import moment from "moment";
-import useDebounce from "../../hooks/useDebounce";
-import { IncidentIssueFilter } from "../../redux/reducers/incidents.reducer";
-import { IncidentModel, IncidentModelStatusEnum } from "../../api";
-import Select from "../../components/Select";
-import { IncidentsApi } from "../../services/apiClient";
-import { IconButton, Tooltip } from "@material-tailwind/react";
-import { getDaysString } from "../../utils";
-import AddIssueUrlDialog from "../IncidentConnection/AddIssueUrlDialog";
-import { IncidentIssueList } from "./IncidentIssueList";
-import { useTree } from "../../contexts/treeContext";
-import IncidentNavigation from "./IncidentNavigation";
-import Button from "../../components/Button";
-import { HistogramChart } from "./HistogramChart";
-import SectionWrapper from "../../components/Dashboard/SectionWrapper";
-import { addFirstLevelTab as addSourceFirstLevelTab } from "../../redux/actions/source.actions";
-import { CheckTypes, ROUTES } from "../../shared/routes";
+  setIncidentsFilter
+} from '../../redux/actions/incidents.actions';
+import { Pagination } from '../../components/Pagination';
+import moment from 'moment';
+import useDebounce from '../../hooks/useDebounce';
+import { IncidentIssueFilter } from '../../redux/reducers/incidents.reducer';
+import { IncidentIssueHistogramModel, IncidentModel, IncidentModelStatusEnum } from '../../api';
+import Select from '../../components/Select';
+import { IncidentsApi } from '../../services/apiClient';
+import { IconButton, Tooltip } from '@material-tailwind/react';
+import { getDaysString } from '../../utils';
+import AddIssueUrlDialog from '../IncidentConnection/AddIssueUrlDialog';
+import { IncidentIssueList } from './IncidentIssueList';
+import { useTree } from '../../contexts/treeContext';
+import IncidentNavigation from './IncidentNavigation';
+import Button from '../../components/Button';
+import { HistogramChart } from './HistogramChart';
+import SectionWrapper from '../../components/Dashboard/SectionWrapper';
+import { addFirstLevelTab, addFirstLevelTab as addSourceFirstLevelTab } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
 
 const statusOptions = [
   {
     label: 'OPEN',
     value: IncidentModelStatusEnum.open,
-    icon: <SvgIcon name="info-filled" className="text-red-900 w-6 h-6" />,
+    icon: <SvgIcon name="info-filled" className="text-red-900 w-6 h-6" />
   },
   {
     label: 'ACKNOWLEDGED',
     value: IncidentModelStatusEnum.acknowledged,
-    icon: <div className="w-5 h-5 rounded-full bg-black" />,
+    icon: <div className="w-5 h-5 rounded-full bg-black" />
   },
   {
     label: 'RESOLVED',
     value: IncidentModelStatusEnum.resolved,
-    icon: <SvgIcon name="check-circle" className="text-primary w-6 h-6" />,
+    icon: <SvgIcon name="check-circle" className="text-primary w-6 h-6" />
   },
   {
     label: 'MUTED',
     value: IncidentModelStatusEnum.muted,
-    icon: <SvgIcon name="stop" className="w-6 h-6" />,
+    icon: <SvgIcon name="stop" className="w-6 h-6" />
   }
 ];
 
@@ -68,33 +68,51 @@ const options = [
   {
     label: 'All issues',
     value: undefined
-  },
+  }
 ];
 
 export const IncidentDetail = () => {
-  const { connection, year: strYear, month: strMonth, id: incidentId }: { connection: string, year: string, month: string, id: string } = useParams();
+  const {
+    connection,
+    year: strYear,
+    month: strMonth,
+    id: incidentId
+  }: {
+    connection: string;
+    year: string;
+    month: string;
+    id: string;
+  } = useParams();
   const year = parseInt(strYear, 10);
   const month = parseInt(strMonth, 10);
   const [incidentDetail, setIncidentDetail] = useState<IncidentModel>();
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 300);
   const [open, setOpen] = useState(false);
   const dispatch = useActionDispatch();
   const { sidebarWidth } = useTree();
-  const { issues, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const {
+    issues,
+    isEnd,
+    filters = {}
+  } = useSelector(getFirstLevelIncidentsState);
   const history = useHistory();
-
+  const { histograms}: { histograms: IncidentIssueHistogramModel } = useSelector(getFirstLevelIncidentsState);
   useEffect(() => {
-    IncidentsApi.getIncident(connection, year, month, incidentId).then(res => {
-      setIncidentDetail(res.data);
-    });
+    IncidentsApi.getIncident(connection, year, month, incidentId).then(
+      (res) => {
+        setIncidentDetail(res.data);
+      }
+    );
 
-    dispatch(getIncidentsIssues({
-      connection,
-      year,
-      month,
-      incidentId
-    }));
+    dispatch(
+      getIncidentsIssues({
+        connection,
+        year,
+        month,
+        incidentId
+      })
+    );
   }, [connection, year, month, incidentId]);
 
   const onChangeIncidentStatus = async (status: IncidentModelStatusEnum) => {
@@ -102,10 +120,16 @@ export const IncidentDetail = () => {
 
     setIncidentDetail({
       ...incidentDetail,
-      status,
+      status
     });
 
-    await IncidentsApi.setIncidentStatus(incidentDetail.connection || "", incidentDetail.year || 0, incidentDetail.month || 0, incidentDetail.incidentId || "", status);
+    await IncidentsApi.setIncidentStatus(
+      incidentDetail.connection || '',
+      incidentDetail.year || 0,
+      incidentDetail.month || 0,
+      incidentDetail.incidentId || '',
+      status
+    );
   };
 
   const handleAddIssueUrl = async (issueUrl: string) => {
@@ -113,32 +137,41 @@ export const IncidentDetail = () => {
 
     setIncidentDetail({
       ...incidentDetail,
-      issueUrl,
+      issueUrl
     });
-    await IncidentsApi.setIncidentIssueUrl(incidentDetail?.connection || "", incidentDetail?.year || 0, incidentDetail?.month || 0, incidentDetail?.incidentId || "", issueUrl);
+    await IncidentsApi.setIncidentIssueUrl(
+      incidentDetail?.connection || '',
+      incidentDetail?.year || 0,
+      incidentDetail?.month || 0,
+      incidentDetail?.incidentId || '',
+      issueUrl
+    );
   };
 
   const onChangeFilter = (obj: Partial<IncidentIssueFilter>) => {
-    dispatch(setIncidentsFilter({
-      ...filters || {},
-      ...obj
-    }));
-    dispatch(getIncidentsIssues({
-      ...filters || {},
-      ...obj,
-      connection,
-      year,
-      month,
-      incidentId
-    }));
+    dispatch(
+      setIncidentsFilter({
+        ...(filters || {}),
+        ...obj
+      })
+    );
+    dispatch(
+      getIncidentsIssues({
+        ...(filters || {}),
+        ...obj,
+        connection,
+        year,
+        month,
+        incidentId
+      })
+    );
   };
-
 
   useEffect(() => {
     onChangeFilter({
       filter: debouncedSearchTerm,
       page: 1
-    })
+    });
   }, [debouncedSearchTerm]);
 
   const getWarnings = (minimumSeverity?: number) => {
@@ -153,23 +186,100 @@ export const IncidentDetail = () => {
     if (Math.floor(highestSeverity / 3) > 1) return `${highestSeverity} Fatals`;
 
     return 'Fatal';
-  }
+  };
 
   const goToConfigure = () => {
     const schema = incidentDetail?.schema || '';
     const table = incidentDetail?.table || '';
-    dispatch(addSourceFirstLevelTab(CheckTypes.SOURCES, {
-      url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+    dispatch(
+      addSourceFirstLevelTab(CheckTypes.SOURCES, {
+        url: ROUTES.TABLE_INCIDENTS_NOTIFICATION(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          table
+        ),
+        state: {},
+        label: 'Incident Configuration'
+      })
+    );
+    history.push(
+      ROUTES.TABLE_INCIDENTS_NOTIFICATION(
         CheckTypes.SOURCES,
         connection,
         schema,
         table
-      ),
-      value: ROUTES.TABLE_INCIDENTS_NOTIFICATION_VALUE(CheckTypes.SOURCES, connection, schema, table),
-      state: {},
-      label: 'Incident Configuration'
-    }));
-    history.push(ROUTES.TABLE_INCIDENTS_NOTIFICATION(CheckTypes.SOURCES, connection, schema, table));
+      )
+    );
+  };
+
+  const tableQualityStatusOptions: Array<{
+    checkType: CheckTypes;
+    timeScale?: 'daily' | 'monthly';
+    show?: boolean
+  }> = [
+    { checkType: CheckTypes.PROFILING, show: histograms.hasProfilingIssues },
+    { checkType: CheckTypes.PARTITIONED, timeScale: 'daily', show: histograms.hasPartitionedIssues },
+    { checkType: CheckTypes.PARTITIONED, timeScale: 'monthly', show: histograms.hasPartitionedIssues },
+    { checkType: CheckTypes.MONITORING, timeScale: 'daily', show: histograms.hasMonitoringIssues },
+    { checkType: CheckTypes.MONITORING, timeScale: 'monthly', show: histograms.hasMonitoringIssues }
+  ];
+  
+
+  const routeTableQualityStatus = (
+    checkType: CheckTypes,
+    timeScale?: 'daily' | 'monthly'
+  ) => {
+    const redirectTableQualityStatus = () => {
+      const schema = incidentDetail?.schema || '';
+      const table = incidentDetail?.table || '';
+      dispatch(
+        addFirstLevelTab(checkType, {
+          url: ROUTES.TABLE_LEVEL_PAGE(
+            checkType,
+            connection,
+            schema,
+            table,
+            `table-quality-status${
+              timeScale !== undefined ? ('-' + timeScale) : ''
+            }`
+          ),
+          value: ROUTES.TABLE_LEVEL_VALUE(checkType, connection, schema, table),
+          state: {},
+          label: table
+        })
+      );
+      history.push(
+        ROUTES.TABLE_LEVEL_PAGE(
+          checkType,
+          connection,
+          schema,
+          table,
+          `table-quality-status${
+            timeScale !== undefined ? ('-' + timeScale) : ''
+          }`
+        )
+      );
+    };
+
+    return (
+      <div className="flex items-center">
+        <Button
+          label={checkType + ' ' + (timeScale !== undefined ? timeScale : '')}
+          
+          variant="text"
+          onClick={redirectTableQualityStatus}
+          className="m-0 p-0 px-1 text-black font-bold"
+        />
+        <SvgIcon name="chevron-right" className="w-4 h-4" />
+      </div>
+    );
   };
 
   return (
@@ -179,13 +289,20 @@ export const IncidentDetail = () => {
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="database" className="w-5 h-5 shrink-0" />
-            <div className="text-xl font-semibold truncate">Data quality incident {`${year}/${month}/${incidentId}`}</div>
+            <div className="text-xl font-semibold truncate">
+              Data quality incident {`${year}/${month}/${incidentId}`}
+            </div>
           </div>
-          <Button
-            label="Configure table notification"
-            color="primary"
-            onClick={goToConfigure}
-          ></Button>
+          <div className="flex space-x-3">
+            {tableQualityStatusOptions.filter((y) => y.show).map((x) =>
+              routeTableQualityStatus(x.checkType, x.timeScale)
+            )}
+            <Button
+              label="Configure table notification"
+              color="primary"
+              onClick={goToConfigure}
+            ></Button>
+          </div>
         </div>
         <div className="flex items-center p-4 gap-6 mb-4">
           <div className="grow">
@@ -212,7 +329,9 @@ export const IncidentDetail = () => {
           <SectionWrapper title="Table">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Connection</div>
-              <div className="flex-[2] font-bold">{incidentDetail?.connection}</div>
+              <div className="flex-[2] font-bold">
+                {incidentDetail?.connection}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Schema</div>
@@ -224,7 +343,9 @@ export const IncidentDetail = () => {
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Table priority</div>
-              <div className="flex-[2] font-bold">{incidentDetail?.tablePriority}</div>
+              <div className="flex-[2] font-bold">
+                {incidentDetail?.tablePriority}
+              </div>
             </div>
           </SectionWrapper>
           <SectionWrapper title="Status and time range">
@@ -241,37 +362,64 @@ export const IncidentDetail = () => {
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">First seen:</div>
               <div className="flex-[2] font-bold">
-                <span className="mr-2">{moment(incidentDetail?.firstSeen).format("YYYY-MM-DD")}</span>
-                {Number(getDaysString(incidentDetail?.firstSeen || 0).match(/[-]{0,1}\d+/gm)) >=1 && ("(" + getDaysString(incidentDetail?.firstSeen || 0) + ")") }
+                <span className="mr-2">
+                  {moment(incidentDetail?.firstSeen).format('YYYY-MM-DD')}
+                </span>
+                {Number(
+                  getDaysString(incidentDetail?.firstSeen || 0).match(
+                    /[-]{0,1}\d+/gm
+                  )
+                ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.firstSeen || 0) + ')'}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Last seen:</div>
               <div className="flex-[2] font-bold">
-                <span className="mr-2">{moment(incidentDetail?.lastSeen).format("YYYY-MM-DD")}</span>
-                {Number(getDaysString(incidentDetail?.lastSeen || 0).match(/[-]{0,1}\d+/gm)) >=1 && ("(" + getDaysString(incidentDetail?.lastSeen || 0) + ")") }
+                <span className="mr-2">
+                  {moment(incidentDetail?.lastSeen).format('YYYY-MM-DD')}
+                </span>
+                {Number(
+                  getDaysString(incidentDetail?.lastSeen || 0).match(
+                    /[-]{0,1}\d+/gm
+                  )
+                ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.lastSeen || 0) + ')'}
               </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Valid until</div>
               <div className="flex-[2] font-bold">
-                <span className="mr-2">{moment(incidentDetail?.incidentUntil).format("YYYY-MM-DD")}</span>
-                {Number(getDaysString(incidentDetail?.incidentUntil || 0).match(/[-]{0,1}\d+/gm)) >=1 && ("(" + getDaysString(incidentDetail?.incidentUntil || 0) + ")") }
+                <span className="mr-2">
+                  {moment(incidentDetail?.incidentUntil).format('YYYY-MM-DD')}
+                </span>
+                {Number(
+                  getDaysString(incidentDetail?.incidentUntil || 0).match(
+                    /[-]{0,1}\d+/gm
+                  )
+                ) >= 1 &&
+                  '(' + getDaysString(incidentDetail?.incidentUntil || 0) + ')'}
               </div>
             </div>
           </SectionWrapper>
           <SectionWrapper title="Severity statistics">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Minimum issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{getWarnings(incidentDetail?.minimumSeverity)}</div>
+              <div className="flex-[1] text-right font-bold">
+                {getWarnings(incidentDetail?.minimumSeverity)}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Highest detected issue severity:</div>
-              <div className="flex-[1] text-right font-bold">{getSeverity(incidentDetail?.highestSeverity)}</div>
+              <div className="flex-[1] text-right font-bold">
+                {getSeverity(incidentDetail?.highestSeverity)}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-[2]">Total data quality issues:</div>
-              <div className="flex-[1] text-right font-bold">{incidentDetail?.failedChecksCount}</div>
+              <div className="flex-[1] text-right font-bold">
+                {incidentDetail?.failedChecksCount}
+              </div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex-[2]">Issue url:</div>
@@ -290,7 +438,12 @@ export const IncidentDetail = () => {
                           className="max-w-80 py-4 px-4 bg-gray-800 delay-300"
                           placement="top-start"
                         >
-                          {incidentDetail?.issueUrl.length > 15 ? '...' + incidentDetail?.issueUrl.substring(incidentDetail?.issueUrl.length - 15) : incidentDetail?.issueUrl}
+                          {incidentDetail?.issueUrl.length > 15
+                            ? '...' +
+                              incidentDetail?.issueUrl.substring(
+                                incidentDetail?.issueUrl.length - 15
+                              )
+                            : incidentDetail?.issueUrl}
                         </Tooltip>
                       </a>
                       <IconButton
@@ -319,30 +472,43 @@ export const IncidentDetail = () => {
           <SectionWrapper title="Data quality issue grouping">
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Quality dimension:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.qualityDimension}</div>
+              <div className="flex-1 font-bold">
+                {incidentDetail?.qualityDimension}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Check category:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.checkCategory}</div>
+              <div className="flex-1 font-bold">
+                {incidentDetail?.checkCategory}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Check type:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.checkType}</div>
+              <div className="flex-1 font-bold">
+                {incidentDetail?.checkType}
+              </div>
             </div>
             <div className="flex gap-3 mb-3 items-center">
               <div className="flex-1">Check name:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.checkName}</div>
+              <div className="flex-1 font-bold">
+                {incidentDetail?.checkName}
+              </div>
             </div>
             <div className="flex gap-3 items-center">
               <div className="flex-1">Data group:</div>
-              <div className="flex-1 font-bold">{incidentDetail?.dataGroup}</div>
+              <div className="flex-1 font-bold">
+                {incidentDetail?.dataGroup}
+              </div>
             </div>
           </SectionWrapper>
         </div>
 
         <HistogramChart onChangeFilter={onChangeFilter} />
         <div className="px-4 ">
-          <div className="py-3 mb-5 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
+          <div
+            className="py-3 mb-5 overflow-auto"
+            style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}
+          >
             <IncidentIssueList
               incidentDetail={incidentDetail}
               filters={filters}
@@ -356,10 +522,12 @@ export const IncidentDetail = () => {
             pageSize={filters.pageSize || 50}
             totalPages={10}
             isEnd={isEnd}
-            onChange={(page, pageSize) => onChangeFilter({
-              page,
-              pageSize
-            })}
+            onChange={(page, pageSize) =>
+              onChangeFilter({
+                page,
+                pageSize
+              })
+            }
           />
         </div>
       </div>
