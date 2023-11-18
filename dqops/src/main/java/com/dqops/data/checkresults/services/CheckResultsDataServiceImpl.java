@@ -892,7 +892,7 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
 
         Selection rowSelection = Selection.withRange(0, sourceTable.rowCount());
 
-        if (!filterParameters.isPartitioned()) {
+        if (!filterParameters.isProfiling()) {
             rowSelection = rowSelection.and(sourceTable.textColumn(CheckResultsColumnNames.CHECK_TYPE_COLUMN_NAME)
                     .isNotEqualTo(CheckType.profiling.getDisplayName()));
         }
