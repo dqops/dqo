@@ -137,35 +137,35 @@ public class CheckResultEntryModel {
     public static Comparator<CheckResultEntryModel> makeSortComparator(CheckResultSortOrder sortOrder) {
         switch (sortOrder) {
             case executedAt:
-                return Comparator.comparing(o -> o.executedAt);
+                return Comparator.comparing(o -> o.executedAt, Comparator.nullsFirst(Comparator.naturalOrder()));
             case checkHash:
-                return Comparator.comparing(o -> o.checkHash);
+                return Comparator.comparing(o -> o.checkHash, Comparator.nullsFirst(Comparator.naturalOrder()));
             case checkCategory:
-                return Comparator.comparing(o -> o.checkCategory);
+                return Comparator.comparing(o -> o.checkCategory, Comparator.nullsFirst(Comparator.naturalOrder()));
             case checkName:
-                return Comparator.comparing(o -> o.checkName);
+                return Comparator.comparing(o -> o.checkName, Comparator.nullsFirst(Comparator.naturalOrder()));
             case checkDisplayName:
-                return Comparator.comparing(o -> o.checkDisplayName);
+                return Comparator.comparing(o -> o.checkDisplayName, Comparator.nullsFirst(Comparator.naturalOrder()));
             case checkType:
-                return Comparator.comparing(o -> o.checkType);
+                return Comparator.comparing(o -> o.checkType, Comparator.nullsFirst(Comparator.naturalOrder()));
             case actualValue:
-                return Comparator.comparing(o -> o.actualValue);
+                return Comparator.comparing(o -> o.actualValue, Comparator.nullsFirst(Comparator.naturalOrder()));
             case expectedValue:
-                return Comparator.comparing(o -> o.expectedValue);
+                return Comparator.comparing(o -> o.expectedValue, Comparator.nullsFirst(Comparator.naturalOrder()));
             case severity:
-                return Comparator.comparing(o -> o.severity);
+                return Comparator.comparing(o -> o.severity, Comparator.nullsFirst(Comparator.naturalOrder()));
             case columnName:
-                return Comparator.comparing(o -> o.columnName);
+                return Comparator.comparing(o -> o.columnName, Comparator.nullsFirst(Comparator.naturalOrder()));
             case dataGroup:
-                return Comparator.comparing(o -> o.dataGroup);
+                return Comparator.comparing(o -> o.dataGroup, Comparator.nullsFirst(Comparator.naturalOrder()));
             case timeGradient:
-                return Comparator.comparing(o -> o.timeGradient);
+                return Comparator.comparing(o -> o.timeGradient, Comparator.nullsFirst(Comparator.naturalOrder()));
             case timePeriod:
-                return Comparator.comparing(o -> o.timePeriod);
+                return Comparator.comparing(o -> o.timePeriod, Comparator.nullsFirst(Comparator.naturalOrder()));
             case qualityDimension:
-                return Comparator.comparing(o -> o.qualityDimension);
+                return Comparator.comparing(o -> o.qualityDimension, Comparator.nullsFirst(Comparator.naturalOrder()));
             case sensorName:
-                return Comparator.comparing(o -> o.sensorName);
+                return Comparator.comparing(o -> o.sensorName, Comparator.nullsFirst(Comparator.naturalOrder()));
             default:
                 throw new NoSuchElementException("Unsupported sort order on: " + sortOrder);
         }
