@@ -6,7 +6,7 @@ It will update the table in DQOps application for recently added columns or upda
 
 ## Operator parameters
 
-Parameters that indentify the table that should be imported to DQOps.
+Parameters that identify the table that should be imported to DQOps.
 
 | Name              | Description                                                                                                                                                                                                          | Type                                                          |
 |-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
@@ -149,3 +149,11 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **running**: The job is now running.
 - **succeeded**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
+
+## What's next
+
+- [Learn about run checks operator](run-checks-operator.md)
+- [Learn how to use run checks operator](run-checks-use-case.md)
+- [Learn about collect statistics operator](collect-statistics-operator.md)
+- [Learn about table status operator](table-status-operator.md)
+- [Learn about wait for job operator](wait-for-job-operator.md)

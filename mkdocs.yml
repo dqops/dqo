@@ -94,11 +94,12 @@ nav:
       - "integrations/index.md"
       - Airflow:
           - Setup: "integrations/airflow/index.md"
-          - Run check operator: "integrations/airflow/run-checks-operator.md"
+          - Run checks operator: "integrations/airflow/run-checks-operator.md"
           - Collect statistics operator: "integrations/airflow/collect-statistics-operator.md"
           - Table import operator: "integrations/airflow/table-import-operator.md"
           - Table status operator: "integrations/airflow/table-status-operator.md"
           - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
+          - Run checks use case: "integrations/airflow/run-checks-use-case.md"
       - Looker Studio: "integrations/looker-studio/creating-custom-dashboards.md"
       - Slack: "integrations/slack/configuring-slack-notifications.md"
       - Visual Studio Code: "integrations/visual-studio-code/index.md"
