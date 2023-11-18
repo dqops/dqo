@@ -167,6 +167,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
               runCheckType={issue.checkType}
               onClose={closeCheckDetails}
               category={incidentDetail?.checkCategory}
+              comparisonName={issue.tableComparison}
             />
           </td>
         </tr>
