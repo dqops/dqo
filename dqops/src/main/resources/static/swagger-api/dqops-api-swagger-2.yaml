@@ -28418,7 +28418,7 @@ definitions:
         format: "int64"
         description: "Connection hash that identifies the connection using a unique\
           \ hash code."
-      parallel_runs_limit:
+      parallel_jobs_limit:
         type: "integer"
         format: "int32"
         description: "The concurrency limit for the maximum number of parallel SQL\
