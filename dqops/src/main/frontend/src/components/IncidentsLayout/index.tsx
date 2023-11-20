@@ -7,12 +7,14 @@ import { IRootState } from '../../redux/reducers';
 import PageTabs from '../PageTabs';
 import { useHistory} from 'react-router-dom';
 import {
+  addFirstLevelTab,
   closeFirstLevelTab,
   setActiveFirstLevelTab
 } from '../../redux/actions/incidents.actions';
 import { TabOption } from '../PageTabs/tab';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { useTree } from '../../contexts/treeContext';
+import { ROUTES } from '../../shared/routes';
 
 interface LayoutProps {
   children?: any;
@@ -49,20 +51,39 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
   }, [pageTabs]);
 
   useEffect(() => {
-    if (activeTab) {
+    if (activeTab && activeTab.length !== 0 && window.location.pathname !== '/incidents/' && window.location.pathname !== '/incidents') {
       history.push(activeTab);
     }
   }, [activeTab]);
 
+  useEffect(() => {
+    if (window.location.pathname === '/incidents/' || window.location.pathname === '/incidents') {
+      const url = ROUTES.INCIDENT_CONNECTION('new-tab')
+      dispatch(addFirstLevelTab({
+        url,
+        value: '',
+        state: {
+          filters: {
+            openIncidents: true,
+            acknowledgedIncidents: true,
+            page: 1,
+            pageSize: 50
+          }
+        },
+        label: 'New Tab'
+      }))
+    }
+  }, [window.location]);
+
   return (
     <div
-      className="flex min-h-screen overflow-hidden"
+      className="flex min-h-screen h-full overflow-hidden "
       style={{ height: '100%', overflowY: 'hidden' }}
     >
       <Header />
       <IncidentsTree />
       <div
-        className="flex flex-1 h-full"
+        className="flex min-h-screen flex-1 "
         style={{ height: '100%', overflowY: 'hidden' }}
       >
         <div
@@ -72,7 +93,7 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
             maxWidth: `calc(100vw - 320px)`
           }}
         >
-          <div className="flex-1 h-full flex flex-col">
+          <div className="flex-1 h-full flex flex-col ">
             <PageTabs
               tabs={tabOptions}
               activeTab={activeTab}
