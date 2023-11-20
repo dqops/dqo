@@ -197,7 +197,7 @@ spec:
           - dashboard_name: Minimum, maximum, and average delay
             url: https://lookerstudio.google.com/embed/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
             width: 1400
-            height: 1400
+            height: 1600
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: profiling
@@ -612,7 +612,7 @@ spec:
           - dashboard_name: Minimum, maximum, and average delay
             url: https://lookerstudio.google.com/embed/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
             width: 1400
-            height: 1400
+            height: 1600
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: monitoring
