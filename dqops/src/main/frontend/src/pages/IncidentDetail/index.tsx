@@ -223,12 +223,12 @@ export const IncidentDetail = () => {
     checkType: CheckTypes;
     timeScale?: 'daily' | 'monthly';
     show?: boolean
-  }> = [
-    { checkType: CheckTypes.PROFILING, show: histograms.hasProfilingIssues },
-    { checkType: CheckTypes.PARTITIONED, timeScale: 'daily', show: histograms.hasPartitionedIssues },
-    { checkType: CheckTypes.PARTITIONED, timeScale: 'monthly', show: histograms.hasPartitionedIssues },
-    { checkType: CheckTypes.MONITORING, timeScale: 'daily', show: histograms.hasMonitoringIssues },
-    { checkType: CheckTypes.MONITORING, timeScale: 'monthly', show: histograms.hasMonitoringIssues }
+  }> = histograms && [
+    { checkType: CheckTypes.PROFILING, show: histograms?.hasProfilingIssues },
+    { checkType: CheckTypes.PARTITIONED, timeScale: 'daily', show: histograms?.hasPartitionedIssues },
+    { checkType: CheckTypes.PARTITIONED, timeScale: 'monthly', show: histograms?.hasPartitionedIssues },
+    { checkType: CheckTypes.MONITORING, timeScale: 'daily', show: histograms?.hasMonitoringIssues },
+    { checkType: CheckTypes.MONITORING, timeScale: 'monthly', show: histograms?.hasMonitoringIssues }
   ];
   
 
@@ -294,7 +294,7 @@ export const IncidentDetail = () => {
             </div>
           </div>
           <div className="flex space-x-3">
-            {tableQualityStatusOptions.filter((y) => y.show).map((x) =>
+            {tableQualityStatusOptions?.filter((y) => y.show).map((x) =>
               routeTableQualityStatus(x.checkType, x.timeScale)
             )}
             <Button
