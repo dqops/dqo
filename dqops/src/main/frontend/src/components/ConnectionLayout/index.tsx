@@ -85,7 +85,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
       onConfirm={() => new Promise(() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)})}
       isCancelExcluded={true} 
       onClose={() => {dispatch(closeFirstLevelTab(checkTypes, firstLevelActiveTab)), setObjectNotFound(false)}}
-      message='The definition of this object was deleted in DQOps user home. The tab will be closed.'/>
+      message='The definition of this object was deleted in the DQOps user home. The tab will be closed.'/>
     </MainLayout>
     
   );
