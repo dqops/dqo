@@ -174,7 +174,7 @@ const Dashboards = () => {
         onClose={() => {
           closeTab(activeTab), setObjectNotFound(false);
         }}
-        message="The definition of this object was deleted in DQOps user home. The tab will be closed."
+        message="The definition of this object was deleted in the DQOps user home. The tab will be closed."
       />
     </DashboardLayout>
   );
