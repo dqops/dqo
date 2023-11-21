@@ -56,6 +56,8 @@ public enum RuleSeverityLevel {
                 return error;
             case 3:
                 return fatal;
+            case 4:
+                return null; // execution error is excluded
 
             default:
                 throw new IllegalArgumentException("Invalid severity level: " + severity);

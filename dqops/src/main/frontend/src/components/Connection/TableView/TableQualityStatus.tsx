@@ -22,7 +22,7 @@ type TFirstLevelCheck = {
   checkName: string;
   currentSeverity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
   highestSeverity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
-  executedAt?: number | string;
+  lastExecutedAt?: number | string;
   checkType: string;
   category?: string;
   qualityDimension?: string;
@@ -96,7 +96,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               ?.current_severity,
             highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
               ?.highest_historical_severity,
-            executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at,
+            lastExecutedAt: (tableDataQualityStatus.checks ?? {})[key]?.last_executed_at,
             checkType: 'table',
             category: (tableDataQualityStatus.checks ?? {})[key]?.category,
             qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
@@ -110,8 +110,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                 ?.current_severity,
               highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
                 ?.highest_historical_severity,
-              executedAt: (tableDataQualityStatus.checks ?? {})[key]
-                ?.executed_at,
+              lastExecutedAt: (tableDataQualityStatus.checks ?? {})[key]
+                ?.last_executed_at,
               checkType: 'table',
               category: (tableDataQualityStatus.checks ?? {})[key]?.category,
               qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
@@ -139,8 +139,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                 .checks ?? {})[key]?.current_severity,
               highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.highest_historical_severity,
-              executedAt: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.executed_at,
+              lastExecutedAt: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.last_executed_at,
               checkType: column,
               category: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.category,
@@ -155,8 +155,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                   .checks ?? {})[key]?.current_severity,
                 highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.highest_historical_severity,
-                executedAt: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.executed_at,
+                lastExecutedAt: ((tableDataQualityStatus.columns ?? {})[column]
+                  .checks ?? {})[key]?.last_executed_at,
                 checkType: column,
                 category: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.category,
@@ -642,7 +642,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
         <SectionWrapper title="Current table status">
           <div className="flex gap-x-2">
             <div className="w-43">Status:</div>
-            <div>{tableDataQualityStatus.highest_severity_level}</div>
+            <div>{tableDataQualityStatus.current_severity}</div>
           </div>
           <div className="flex gap-x-2">
             <div className="w-43">Last check executed at:</div>
@@ -788,9 +788,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                             content={
                               <div>
                                 <div className="flex gap-x-2">
-                                  <div className="w-42">Executed at:</div>
+                                  <div className="w-42">Last executed at:</div>
                                   <div>
-                                    {moment(x.executedAt).format(
+                                    {moment(x.lastExecutedAt).format(
                                       'YYYY-MM-DD HH:mm:ss'
                                     )}
                                   </div>
@@ -973,9 +973,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                   content={
                                     <div>
                                       <div className="flex gap-x-2">
-                                        <div className="w-42">Executed at:</div>
+                                        <div className="w-42">Last executed at:</div>
                                         <div>
-                                          {moment(x.executedAt).format(
+                                          {moment(x.lastExecutedAt).format(
                                             'YYYY-MM-DD HH:mm:ss'
                                           )}
                                         </div>

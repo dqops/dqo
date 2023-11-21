@@ -783,48 +783,40 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 checkCurrentStatusModel.setQualityDimension(Strings.isNullOrEmpty(qualityDimension) ? null : qualityDimension);
                 checkCurrentStatusModel.setCheckType(Strings.isNullOrEmpty(checkTypeString) ? null : Enum.valueOf(CheckType.class, checkTypeString));
                 checkCurrentStatusModel.setTimeScale(checkTimeScale);
+                checkCurrentStatusModel.setLastExecutedAt(executedAt);
+                checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
+                checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
                 currentStatusHolder.getChecks().put(checkName, checkCurrentStatusModel);
             } else {
-                String checkTypeString = checkTypeColumn.get(i);
-                boolean isPartitionedCheck = Objects.equals(checkTypeString, CheckType.partitioned.getDisplayName());
-                if (!isPartitionedCheck && checkCurrentStatusModel.getExecutedAt().isAfter(executedAt)) {
-                    if (severity != 4 && (checkCurrentStatusModel.getHighestHistoricalSeverity() == null ||
-                            severity > checkCurrentStatusModel.getHighestHistoricalSeverity().getSeverity())) {
-                        checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
+                if (severity != 4 && (checkCurrentStatusModel.getHighestHistoricalSeverity() == null ||
+                        severity > checkCurrentStatusModel.getHighestHistoricalSeverity().getSeverity())) {
+                    checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
+                }
+
+                if (checkCurrentStatusModel.getLastExecutedAt() != null) {
+                    if (executedAt != null && executedAt.isAfter(checkCurrentStatusModel.getLastExecutedAt())) {
+                        checkCurrentStatusModel.setLastExecutedAt(executedAt);
+
+                        String checkTypeString = checkTypeColumn.get(i);
+                        boolean isPartitionedCheck = Objects.equals(checkTypeString, CheckType.partitioned.getDisplayName());
+
+                        if (isPartitionedCheck) {
+                            // for partitioned checks, the current status is the highest severity status from other partitions
+                            if (checkCurrentStatusModel.getCurrentSeverity() == null || severity > checkCurrentStatusModel.getCurrentSeverity().getSeverity()) {
+                                checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
+                            }
+                        } else {
+                            checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
+                        }
                     }
-
-                    continue;  // we have the current status, we are skipping... but we are including the status of all partitions, also if their results were collected earlier
+                } else {
+                    checkCurrentStatusModel.setLastExecutedAt(executedAt);
+                    checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
                 }
-            }
-
-            if (checkCurrentStatusModel.getExecutedAt() != null) {
-                if (executedAt != null && executedAt.isAfter(checkCurrentStatusModel.getExecutedAt())) {
-                    checkCurrentStatusModel.setExecutedAt(executedAt);
-                }
-            } else {
-                checkCurrentStatusModel.setExecutedAt(executedAt);
-            }
-
-            if (tableStatusModel.getHighestSeverityLevel() == null || (severity > tableStatusModel.getHighestSeverityLevel().getSeverity() && severity != 4)) {
-                tableStatusModel.setHighestSeverityLevel(CheckResultStatus.fromSeverity(severity));
-            }
-
-            if (columnCurrentDataQualityStatusModel != null) {
-                if (columnCurrentDataQualityStatusModel.getHighestSeverityLevel() == null ||
-                        (severity > columnCurrentDataQualityStatusModel.getHighestSeverityLevel().getSeverity() && severity != 4)) {
-                    columnCurrentDataQualityStatusModel.setHighestSeverityLevel(CheckResultStatus.fromSeverity(severity));
-                }
-            }
-
-            if (checkCurrentStatusModel.getCurrentSeverity() == null || severity > checkCurrentStatusModel.getCurrentSeverity().getSeverity()) {
-                checkCurrentStatusModel.setCurrentSeverity(CheckResultStatus.fromSeverity(severity));
-            }
-
-            if (severity != 4 && (checkCurrentStatusModel.getHighestHistoricalSeverity() == null ||
-                    severity > checkCurrentStatusModel.getHighestHistoricalSeverity().getSeverity())) {
-                checkCurrentStatusModel.setHighestHistoricalSeverity(RuleSeverityLevel.fromSeverityLevel(severity));
             }
         }
+
+        tableStatusModel.calculateHighestCurrentAndHistoricSeverity();
 
         return tableStatusModel;
     }

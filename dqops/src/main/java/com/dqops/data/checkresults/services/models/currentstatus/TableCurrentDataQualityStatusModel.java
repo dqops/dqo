@@ -17,6 +17,7 @@
 package com.dqops.data.checkresults.services.models.currentstatus;
 
 import com.dqops.data.checkresults.services.models.CheckResultStatus;
+import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -59,10 +60,24 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private String tableName;
 
     /**
-     * The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.
+     * The data quality issue severity for this table. An additional value *execution_error* is used to tell that the check,
+     * sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule.
+     * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */
-    @JsonPropertyDescription("The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.")
-    private CheckResultStatus highestSeverityLevel;
+    @JsonPropertyDescription("The data quality issue severity for this table. An additional value *execution_error* is used to tell that the check, " +
+            "sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. " +
+            "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
+    private CheckResultStatus currentSeverity;
+
+    /**
+     * The highest severity of previous executions of this data quality issue in the analyzed time range.
+     * It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore.
+     * For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.
+     */
+    @JsonPropertyDescription("The highest severity of previous executions of this data quality issue in the analyzed time range. " +
+            "It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. " +
+            "For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.")
+    private RuleSeverityLevel highestHistoricalSeverity;
 
     /**
      * The UTC timestamp when the most recent data quality check was executed on the table.
@@ -123,4 +138,39 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
      */
     @JsonPropertyDescription("Dictionary of data statues for all columns that have any known data quality results. The keys in the dictionary are the column names.")
     private Map<String, ColumnCurrentDataQualityStatusModel> columns = new LinkedHashMap<>();
+
+    /**
+     * Analyzes all table level checks and column level checks to calculate the highest severity level at a table level.
+     */
+    public void calculateHighestCurrentAndHistoricSeverity() {
+        for (ColumnCurrentDataQualityStatusModel columnModel : columns.values()) {
+            columnModel.calculateHighestCurrentAndHistoricSeverity();
+
+            if (this.currentSeverity == null) {
+                this.currentSeverity = columnModel.getCurrentSeverity();
+            } else if (this.currentSeverity.getSeverity() < columnModel.getCurrentSeverity().getSeverity()) {
+                this.currentSeverity = columnModel.getCurrentSeverity();
+            }
+
+            if (this.highestHistoricalSeverity == null) {
+                this.highestHistoricalSeverity = columnModel.getHighestHistoricalSeverity();
+            } else if (this.highestHistoricalSeverity.getSeverity() < columnModel.getHighestHistoricalSeverity().getSeverity()) {
+                this.highestHistoricalSeverity = columnModel.getHighestHistoricalSeverity();
+            }
+        }
+
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+            if (this.currentSeverity == null) {
+                this.currentSeverity = checkStatusModel.getCurrentSeverity();
+            } else if (this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
+                this.currentSeverity = checkStatusModel.getCurrentSeverity();
+            }
+
+            if (this.highestHistoricalSeverity == null) {
+                this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
+            } else if (this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
+                this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
+            }
+        }
+    }
 }

@@ -15097,7 +15097,7 @@
           "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
           "enum" : [ "valid", "warning", "error", "fatal" ]
         },
-        "executed_at" : {
+        "last_executed_at" : {
           "type" : "integer",
           "format" : "int64",
           "description" : "The UTC timestamp when the check was recently executed."
@@ -19644,10 +19644,15 @@
     "ColumnCurrentDataQualityStatusModel" : {
       "type" : "object",
       "properties" : {
-        "highest_severity_level" : {
+        "current_severity" : {
           "type" : "string",
-          "description" : "The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.",
+          "description" : "The data quality issue severity for this column. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
           "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+        },
+        "highest_historical_severity" : {
+          "type" : "string",
+          "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
+          "enum" : [ "valid", "warning", "error", "fatal" ]
         },
         "last_check_executed_at" : {
           "type" : "integer",
@@ -19692,7 +19697,7 @@
           }
         }
       },
-      "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the highest_severity_level to see if there are any data quality issues on the column. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, 3 - a fatal data quality issue was detected."
+      "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the current_severity to see if there are any data quality issues on the column."
     },
     "ColumnDailyMonitoringCheckCategoriesSpec" : {
       "type" : "object",
@@ -34168,10 +34173,15 @@
           "type" : "string",
           "description" : "The table name."
         },
-        "highest_severity_level" : {
+        "current_severity" : {
           "type" : "string",
-          "description" : "The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.",
+          "description" : "The data quality issue severity for this table. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
           "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+        },
+        "highest_historical_severity" : {
+          "type" : "string",
+          "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
+          "enum" : [ "valid", "warning", "error", "fatal" ]
         },
         "last_check_executed_at" : {
           "type" : "integer",
