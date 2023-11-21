@@ -20,19 +20,6 @@ Check detailed results. Returned in the context of a single data group, with a s
 
 ___  
 
-## CheckResultStatus  
-Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
-|-----------|-------------|
-|string|valid<br/>warning<br/>execution_error<br/>error<br/>fatal<br/>|
-
-___  
-
 ## RuleSeverityLevel  
 Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.  
   
@@ -43,6 +30,19 @@ Rule severity levels. Matches the severity level name (warning - 1, alert - 2, f
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|valid<br/>warning<br/>error<br/>fatal<br/>|
+
+___  
+
+## CheckResultStatus  
+Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.  
+  
+
+**The structure of this object is described below**  
+  
+
+|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
+|-----------|-------------|
+|string|valid<br/>warning<br/>execution_error<br/>error<br/>fatal<br/>|
 
 ___  
 
@@ -57,8 +57,8 @@ The most recent data quality status for a single data quality check.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[current_severity](../check_results/#CheckResultStatus)|The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor&#x27;s template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|[CheckResultStatus](../check_results/#CheckResultStatus)|
-|[highest_historical_severity](#RuleSeverityLevel)|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|[RuleSeverityLevel](#RuleSeverityLevel)|
+|[current_severity](#CheckResultStatus)|The data quality issue severity for this data quality check. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient  permissions to the table or an error in the sensor&#x27;s template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|[CheckResultStatus](#CheckResultStatus)|
+|[highest_historical_severity](../check_results/#RuleSeverityLevel)|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|[RuleSeverityLevel](../check_results/#RuleSeverityLevel)|
 |[check_type](../#CheckType)|The check type: profiling, monitoring, partitioned.|[CheckType](../#CheckType)|
 |[time_scale](../#CheckTimeScale)|The check time scale for *monitoring* and *partitioned* check types. The time scales are *daily* and *monthly*. The profiling checks do not have a time scale.|[CheckTimeScale](../#CheckTimeScale)|
 |category|Check category name, such as nulls, schema, strings, volume.|string|
@@ -76,7 +76,8 @@ The column validity status. It is a summary of the results of the most recently 
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[highest_severity_level](../check_results/#CheckResultStatus)|The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.|[CheckResultStatus](../check_results/#CheckResultStatus)|
+|[current_severity](../check_results/#RuleSeverityLevel)|The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|[RuleSeverityLevel](../check_results/#RuleSeverityLevel)|
+|[highest_historical_severity](../check_results/#RuleSeverityLevel)|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|[RuleSeverityLevel](../check_results/#RuleSeverityLevel)|
 |executed_checks|The total number of most recent checks that were executed on the column. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|integer|
 |valid_results|The number of most recent valid data quality checks that passed without raising any issues.|integer|
 |warnings|The number of most recent data quality checks that failed by raising a warning severity data quality issue.|integer|
@@ -100,7 +101,8 @@ The table validity status. It is a summary of the results of the most recently e
 |connection_name|The connection name in DQOps.|string|
 |schema_name|The schema name.|string|
 |table_name|The table name.|string|
-|[highest_severity_level](#CheckResultStatus)|The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.|[CheckResultStatus](#CheckResultStatus)|
+|[current_severity](#RuleSeverityLevel)|The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.|[RuleSeverityLevel](#RuleSeverityLevel)|
+|[highest_historical_severity](../check_results/#RuleSeverityLevel)|The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.|[RuleSeverityLevel](../check_results/#RuleSeverityLevel)|
 |executed_checks|The total number of most recent checks that were executed on the table. Table comparison checks that are comparing groups of data are counted as the number of compared data groups.|integer|
 |valid_results|The number of most recent valid data quality checks that passed without raising any issues.|integer|
 |warnings|The number of most recent data quality checks that failed by raising a warning severity data quality issue.|integer|

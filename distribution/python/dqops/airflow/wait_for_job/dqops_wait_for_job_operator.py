@@ -5,9 +5,13 @@ from typing import Any, Dict, Union
 from airflow.models.baseoperator import BaseOperator
 from airflow.models.taskinstance import TaskInstance
 from httpx import ReadTimeout
-from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import DqopsDataQualityIssueDetectedException
-from dqops.airflow.common.exceptions.dqops_job_failed_exception import DqopsJobFailedException
 
+from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception import (
+    DqopsDataQualityIssueDetectedException,
+)
+from dqops.airflow.common.exceptions.dqops_job_failed_exception import (
+    DqopsJobFailedException,
+)
 from dqops.airflow.common.exceptions.dqops_unfinished_job_exception import (
     DqopsUnfinishedJobException,
 )
@@ -27,12 +31,11 @@ from dqops.client.api.jobs.wait_for_job import sync_detailed
 from dqops.client.models.dqo_job_history_entry_model import DqoJobHistoryEntryModel
 from dqops.client.models.dqo_job_status import DqoJobStatus
 from dqops.client.models.dqo_job_type import DqoJobType
-from dqops.client.models.run_checks_result import RunChecksResult
 from dqops.client.models.import_tables_queue_job_result import (
     ImportTablesQueueJobResult,
 )
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
-from dqops.client.models.run_checks_queue_job_result import RunChecksQueueJobResult
+from dqops.client.models.run_checks_result import RunChecksResult
 from dqops.client.types import UNSET, Response, Unset
 
 
@@ -104,7 +107,9 @@ class DqopsWaitForJobOperator(BaseOperator):
         json_response = json.loads(response.content.decode("utf-8"))
         logging.info(json_response)
 
-        job_result: DqoJobHistoryEntryModel = DqoJobHistoryEntryModel.from_dict(json_response)
+        job_result: DqoJobHistoryEntryModel = DqoJobHistoryEntryModel.from_dict(
+            json_response
+        )
 
         if (
             job_result.status == DqoJobStatus.RUNNING
@@ -112,27 +117,34 @@ class DqopsWaitForJobOperator(BaseOperator):
             or job_result.status == DqoJobStatus.QUEUED
         ):
             raise DqopsUnfinishedJobException()
-        
+
         if job_result.status == DqoJobStatus.FAILED:
             self.retries = 0
             raise DqopsJobFailedException(context["ti"], job_result.to_dict())
 
-        run_check_result: Union[RunChecksResult, None] = job_result.parameters.run_checks_parameters.run_checks_result
+        run_check_result: Union[
+            RunChecksResult, None
+        ] = job_result.parameters.run_checks_parameters.run_checks_result
 
-        if job_result.job_type == DqoJobType.RUN_CHECKS and run_check_result is not None:
-
+        if (
+            job_result.job_type == DqoJobType.RUN_CHECKS
+            and run_check_result is not None
+        ):
             if (
                 run_check_result.highest_severity is not None
-                    and get_severity_value_from_rule_severity(run_check_result.highest_severity)
+                and get_severity_value_from_rule_severity(
+                    run_check_result.highest_severity
+                )
                 >= get_severity_value_from_rule_severity(self.fail_at_severity)
             ):
                 self.retries = 0
-                raise DqopsDataQualityIssueDetectedException(context["ti"], job_result.to_dict())
+                raise DqopsDataQualityIssueDetectedException(
+                    context["ti"], job_result.to_dict()
+                )
 
         return job_result.to_dict()
 
     def _gather_job_id(self, context) -> str:
-
         if self.job_business_key is not UNSET:
             return self.job_business_key
 

@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Union
 
 from airflow.models.baseoperator import BaseOperator
 from httpx import ReadTimeout
@@ -82,26 +82,26 @@ class DqopsRunChecksOperator(BaseOperator):
             'source\*', '\*_prod', 'prefix\*suffix'.
         full_table_name : str [optional, default=UNSET]
             The name of the table with the schema. The schema and table name. It is provided as *<schema_name>.<table_name>*,
-            for example *public.fact_sales*. 
-            The schema and table name accept patterns both in the schema name and table name parts. 
+            for example *public.fact_sales*.
+            The schema and table name accept patterns both in the schema name and table name parts.
             Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.
-        enabled : Union[Unset, bool] 
+        enabled : Union[Unset, bool]
             A boolean flag to target enabled tables, columns or checks. When the value of this
             field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are
             not implicitly disabled.
-        tags : Union[Unset, List[str]] 
+        tags : Union[Unset, List[str]]
             An array of tags assigned to the table. All tags must be present on a table to
             match. The tags can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The tags are assigned to the table
             on the data grouping screen when any of the data grouping hierarchy level is assigned a static value, which is a
             tag.
-        labels : Union[Unset, List[str]] 
+        labels : Union[Unset, List[str]]
             An array of labels assigned to the table. All labels must be present on a
             table to match. The labels can use patterns:  'prefix\*', '\*suffix', 'prefix\*suffix'. The labels are assigned
             on the labels screen and stored in the *labels* node in the *.dqotable.yaml* file.
         column : Union[Unset, str]
             The column name. This field accepts search patterns in the format: 'fk_\*', '\*_id',
             'prefix\*suffix'.
-        column_data_type : Union[Unset, str] 
+        column_data_type : Union[Unset, str]
             The column data type that was imported from the data source and is stored
             in the [columns -> column_name -> type_snapshot ->
             column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
@@ -115,18 +115,18 @@ class DqopsRunChecksOperator(BaseOperator):
         time_scale : Union[Unset, CheckTimeScale]
         check_category : Union[Unset, str]
             The target check category, for example: *nulls*, *volume*, *anomaly*.
-        table_comparison_name : Union[Unset, str] 
+        table_comparison_name : Union[Unset, str]
             The name of a configured table comparison. When the table comparison
             is provided, DQOps will only perform table comparison checks that compare data between tables.
-        check_name : Union[Unset, str] 
+        check_name : Union[Unset, str]
             The target check name to run only this named check. Uses the short check name
             which is the name of the deepest folder in the *checks* folder. This field supports search patterns such as:
             'profiling_\*', '\*_count', 'profiling_\*_percent'.
-        sensor_name : Union[Unset, str] 
+        sensor_name : Union[Unset, str]
             The target sensor name to run only data quality checks that are using this
             sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports
             search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.
-        
+
         wait_timeout : int [optional, default=UNSET]
             Time in seconds for execution that client will wait. It prevents from hanging the task for an action that is never completed. If not set, the timeout is read form the client defaults, which value is 120 seconds.
         fail_on_timeout : bool [optional, default=True]
@@ -139,7 +139,7 @@ class DqopsRunChecksOperator(BaseOperator):
         self.base_url: str = extract_base_url(base_url)
         self.job_business_key: Union[Unset, None, str] = job_business_key
         self.api_key: str = api_key
-        
+
         self.connection: Union[Unset, str] = connection
         self.full_table_name: Union[Unset, str] = full_table_name
         self.enabled: Union[Unset, bool] = enabled
@@ -176,7 +176,7 @@ class DqopsRunChecksOperator(BaseOperator):
             check_category=self.check_category,
             table_comparison_name=self.table_comparison_name,
             check_name=self.check_name,
-            sensor_name=self.sensor_name
+            sensor_name=self.sensor_name,
         )
         params: RunChecksParameters = RunChecksParameters(check_search_filters=filters)
 
@@ -218,6 +218,8 @@ class DqopsRunChecksOperator(BaseOperator):
             >= get_severity_value_from_rule_severity(self.fail_at_severity)
             and job_result.status != DqoJobStatus.CANCELLED
         ):
-            raise DqopsDataQualityIssueDetectedException(context["ti"], job_result.to_dict())
+            raise DqopsDataQualityIssueDetectedException(
+                context["ti"], job_result.to_dict()
+            )
 
         return job_result.to_dict()

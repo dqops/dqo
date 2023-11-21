@@ -28,8 +28,8 @@ import java.util.Map;
  * to the service getter of the dictionary that returns data quality check statuses keyed by the check name, but on a table or column levels.
  */
 public interface CurrentDataQualityStatusHolder {
-    CheckResultStatus getCurrentSeverity();
-    void setCurrentSeverity(CheckResultStatus currentSeverity);
+    RuleSeverityLevel getCurrentSeverity();
+    void setCurrentSeverity(RuleSeverityLevel currentSeverity);
 
     RuleSeverityLevel getHighestHistoricalSeverity();
     void setHighestHistoricalSeverity(RuleSeverityLevel highestHistoricalSeverity);

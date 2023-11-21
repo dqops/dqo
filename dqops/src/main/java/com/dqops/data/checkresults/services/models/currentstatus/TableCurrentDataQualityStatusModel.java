@@ -16,7 +16,6 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
-import com.dqops.data.checkresults.services.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -60,14 +59,12 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
     private String tableName;
 
     /**
-     * The data quality issue severity for this table. An additional value *execution_error* is used to tell that the check,
-     * sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule.
+     * The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
      * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */
-    @JsonPropertyDescription("The data quality issue severity for this table. An additional value *execution_error* is used to tell that the check, " +
-            "sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. " +
+    @JsonPropertyDescription("The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. " +
             "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
-    private CheckResultStatus currentSeverity;
+    private RuleSeverityLevel currentSeverity;
 
     /**
      * The highest severity of previous executions of this data quality issue in the analyzed time range.
@@ -148,27 +145,31 @@ public class TableCurrentDataQualityStatusModel implements CurrentDataQualitySta
 
             if (this.currentSeverity == null) {
                 this.currentSeverity = columnModel.getCurrentSeverity();
-            } else if (this.currentSeverity.getSeverity() < columnModel.getCurrentSeverity().getSeverity()) {
+            } else if (columnModel.getCurrentSeverity() != null &&
+                    this.currentSeverity.getSeverity() < columnModel.getCurrentSeverity().getSeverity()) {
                 this.currentSeverity = columnModel.getCurrentSeverity();
             }
 
             if (this.highestHistoricalSeverity == null) {
                 this.highestHistoricalSeverity = columnModel.getHighestHistoricalSeverity();
-            } else if (this.highestHistoricalSeverity.getSeverity() < columnModel.getHighestHistoricalSeverity().getSeverity()) {
+            } else if (columnModel.getHighestHistoricalSeverity() != null &&
+                    this.highestHistoricalSeverity.getSeverity() < columnModel.getHighestHistoricalSeverity().getSeverity()) {
                 this.highestHistoricalSeverity = columnModel.getHighestHistoricalSeverity();
             }
         }
 
         for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
             if (this.currentSeverity == null) {
-                this.currentSeverity = checkStatusModel.getCurrentSeverity();
-            } else if (this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
-                this.currentSeverity = checkStatusModel.getCurrentSeverity();
+                this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
+            } else if (checkStatusModel.getCurrentSeverity() != null &&
+                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
+                this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             }
 
             if (this.highestHistoricalSeverity == null) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
-            } else if (this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
+            } else if (checkStatusModel.getHighestHistoricalSeverity() != null &&
+                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             }
         }

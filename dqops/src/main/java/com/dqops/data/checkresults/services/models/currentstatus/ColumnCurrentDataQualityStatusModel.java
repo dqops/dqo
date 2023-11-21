@@ -16,8 +16,6 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
-import com.dqops.checks.CheckType;
-import com.dqops.data.checkresults.services.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -41,14 +39,12 @@ import java.util.Map;
 @Data
 public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder {
     /**
-     * The data quality issue severity for this column. An additional value *execution_error* is used to tell that the check,
-     * sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule.
+     * The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
      * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */
-    @JsonPropertyDescription("The data quality issue severity for this column. An additional value *execution_error* is used to tell that the check, " +
-            "sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. " +
+    @JsonPropertyDescription("The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. " +
             "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
-    private CheckResultStatus currentSeverity;
+    private RuleSeverityLevel currentSeverity;
 
     /**
      * The highest severity of previous executions of this data quality issue in the analyzed time range.
@@ -120,14 +116,16 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     public void calculateHighestCurrentAndHistoricSeverity() {
         for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
             if (this.currentSeverity == null) {
-                this.currentSeverity = checkStatusModel.getCurrentSeverity();
-            } else if (this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
-                this.currentSeverity = checkStatusModel.getCurrentSeverity();
+                this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
+            } else if (checkStatusModel.getCurrentSeverity() != null &&
+                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
+                this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
             }
 
             if (this.highestHistoricalSeverity == null) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
-            } else if (this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
+            } else if (checkStatusModel.getHighestHistoricalSeverity() != null &&
+                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
                 this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
             }
         }

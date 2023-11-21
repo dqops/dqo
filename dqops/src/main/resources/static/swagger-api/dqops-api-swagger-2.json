@@ -19646,8 +19646,8 @@
       "properties" : {
         "current_severity" : {
           "type" : "string",
-          "description" : "The data quality issue severity for this column. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
-          "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+          "description" : "The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
+          "enum" : [ "valid", "warning", "error", "fatal" ]
         },
         "highest_historical_severity" : {
           "type" : "string",
@@ -34175,8 +34175,8 @@
         },
         "current_severity" : {
           "type" : "string",
-          "description" : "The data quality issue severity for this table. An additional value *execution_error* is used to tell that the check, sensor or rule failed to execute due to insufficient permissions to the table or an error in the sensor's template or a Python rule. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
-          "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+          "description" : "The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
+          "enum" : [ "valid", "warning", "error", "fatal" ]
         },
         "highest_historical_severity" : {
           "type" : "string",
