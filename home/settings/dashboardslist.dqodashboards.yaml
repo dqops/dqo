@@ -738,7 +738,7 @@ spec:
         - dashboard_name: Current table partition status per check category
           url: https://lookerstudio.google.com/embed/reporting/6c58d29c-7de3-4051-8b27-396981f5e8f2/page/c5B8C
           width: 1400
-          height: 1400
+          height: 1900
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
