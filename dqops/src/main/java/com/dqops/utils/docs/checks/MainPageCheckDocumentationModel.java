@@ -26,6 +26,21 @@ import java.util.List;
 @Data
 public class MainPageCheckDocumentationModel {
     /**
+     * File header.
+     */
+    private String header;
+
+    /**
+     * Description of the file.
+     */
+    private String helpText;
+
+    /**
+     * Targets in provided checks.
+     */
+    private List<String> checkTargets = new ArrayList<>();
+
+    /**
      * List of all checks.
      */
     private List<CheckCategoryDocumentationModel> checks = new ArrayList<>();

@@ -25,6 +25,8 @@ import com.github.jknack.handlebars.io.FileTemplateLoader;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -45,6 +47,7 @@ public class HandlebarsDocumentationUtilities {
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
         handlebars.registerHelper("single-line", singleLineHelper);
+        handlebars.registerHelper("var", variableHelper);
     }
 
     /**
@@ -153,5 +156,43 @@ public class HandlebarsDocumentationUtilities {
         }
 
         return s.replaceAll("\\s+", " ");
+    };
+
+    private static final Helper<String> variableHelper = new Helper<>() {
+        Map<Long, Map<String, String>> state = new HashMap<>();
+
+        @Override
+        public CharSequence apply(String variableName, Options options) {
+            if (variableName == null) {
+                return "";
+            }
+
+            Long scope = getScope(options);
+            String value = options.param(0, null);
+            if (value == null) {
+                return Objects.requireNonNullElse(getValue(scope, variableName), "");
+            } else {
+                setValue(scope, variableName, value);
+                return "";
+            }
+        }
+
+        private Long getScope(Options options) {
+            return Long.parseLong(Integer.toString(options.fn.filename().hashCode()));
+        }
+
+        private String getValue(Long scope, String variableName) {
+            Map<String, String> scopedState = state.computeIfAbsent(scope, _i -> new HashMap<>());
+            return scopedState.getOrDefault(variableName, null);
+        }
+
+        private void setValue(Long scope, String variableName, String value) {
+            if (!state.containsKey(scope)) {
+                state.put(scope, new HashMap<>());
+            }
+
+            Map<String, String> scopedState = state.get(scope);
+            scopedState.put(variableName, value);
+        }
     };
 }
