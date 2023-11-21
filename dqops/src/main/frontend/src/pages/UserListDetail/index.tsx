@@ -99,18 +99,18 @@ export default function UserListDetail() {
                     <td className='px-6 py-2 text-left block w-100'>{user.email}</td>
                     <td className='px-6 py-2 text-left block w-50'>{user.accountRole}</td>
                     <td className='px-6 py-2 text-left block max-w-100'>
-                        <Button label='edit' variant='text' color='primary' 
+                        <Button label='Edit' variant='text' color='primary' 
                         onClick={() =>user.email ?  editDqoCloudUser(user.email, user.accountRole) : null}
                         disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}
                         />
                     </td>
                     <td className="px-6 py-2 text-left block max-w-100">
-                        <Button label='delete' variant='text' color='primary' 
+                        <Button label='Delete' variant='text' color='primary' 
                         onClick={() => setSelectedEmailToDelete(user.email ?? '')}
                         disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/>
                     </td>
                     <td className="px-6 py-2 text-left block max-w-100">
-                        <Button label='change password' variant='text' color='primary' onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
+                        <Button label='Change password' variant='text' color='primary' onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
                         disabled={userProfile.account_role !== "admin" && !(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/>
                     </td>
                 </tr>
