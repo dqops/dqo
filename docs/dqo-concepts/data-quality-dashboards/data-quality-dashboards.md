@@ -203,7 +203,7 @@ This dashboard allows filtering data by:
 ### **Data Quality Dimensions**
 
 **Data Quality Dimensions** group contains dashboards dedicated for different data quality dimension such as availability,
-completeness, timeliness or volume. 
+completeness, or timeliness. 
 
 **Availability**, **completeness** and **validity** dimensions has at least two dashboards. One dedicated to reviewing current issues and the
 other to history of issues. 
@@ -219,10 +219,8 @@ other to history of issues.
 * History of table freshness
 * Minimum, maximum and average delay
 
-**Volume** dimension dashboards in the **Monitoring** group help to evaluate the largest tables by number of rows and empty 
-or too small tables. While dashboards in the **Partitions** group display daily partitions row count and too small partitions.
 
-**Current completeness issues on columns** is a representative of **Completeness** subgroup. This dashboard summarizes 
+**Current completeness issues on columns** is a representative of **Completeness** subgroup. This dashboard summarizes
 results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
 [not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
 
@@ -245,6 +243,12 @@ This dashboard allows filtering data by:
 ![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns.png)
 
 
+### **Volume**
+
+**Volume** dashboards in the **Monitoring** group help to evaluate the largest tables by number of rows and empty 
+or too small tables. While dashboards in the **Partitions** group (**Partition volume statistics**) display daily 
+partitions row count and too small partitions.
+
 **Largest tables by number of rows** is a representative of **Volume** subgroup. This dashboard displays tables monitored
 with [row_count](../../checks/table/volume/row-count.md) check and allows review the number of rows in these tables. 
 
@@ -257,7 +261,6 @@ This dashboard allows filtering data by:
 * data group,
 * stages,
 * table.
-
 
 ![Largest tables by number of rows](https://dqops.com/docs/images/concepts/data-quality-dashboards/largest-tables-by-number-of-rows.png)
 
