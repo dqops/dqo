@@ -3,17 +3,17 @@ import pendulum
 from airflow import DAG
 
 from airflow.operators.dummy import DummyOperator
+from airflow.operators.bash import BashOperator
 # from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
+from dqops.airflow.table_status.dqops_assert_table_status_operator import DqopsAssertTableStatusOperator
 from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJobOperator
 from dqops.client.models.check_type import CheckType
 from dqops.client.models.rule_severity_level import RuleSeverityLevel
 
-## todo all below #############################################
 
-
-PATH_TO_DBT_PROJECT = "<path to your dbt project>"
-PATH_TO_DBT_VENV = "<path to your venv activate binary>"
+DBT_PROJECT = "<path to root dbt projects directory>"
+DBT_VENV_PATH = "<path to venv>"
 
 run_checks_common_args = {
     "base_url" : "http://host.docker.internal:8888",
@@ -32,64 +32,43 @@ wait_for_job_common_args = {
 }
 
 with DAG(
-    dag_id="dbt_cloud_example",
+    dag_id="dbt_core_example",
     schedule=datetime.timedelta(hours=12),
     start_date=pendulum.datetime(2021, 1, 1, tz="UTC"),
     catchup=False,
     tags=["dqops_example"]
 ) as dag:
-    pre_load_run_checks = DqopsRunChecksOperator(
-        task_id="dqops_run_checks_pre_load",
-        **run_checks_common_args
+
+    assert_status_task = DqopsAssertTableStatusOperator(
+        task_id="dqops_assert_table_status_operator_task",
+        # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
+        base_url="http://host.docker.internal:8888",
+        connection_name="example_connection",
+        schema_name="maven_restaurant_ratings",
+        table_name="consumers"
     )
 
-    post_load_run_checks = DqopsRunChecksOperator(
-        task_id="dqops_run_checks_post_load",
-        **run_checks_common_args
-    )
-   
-    pre_load_wait_for_job = DqopsWaitForJobOperator(
-        task_id="dqops_wait_for_job_pre_load",
-        **wait_for_job_common_args
-    )
+    # dummy task
+    dbt_run_load = BashOperator(task_id="dbt_run_load", bash_command="echo 1")
 
-    post_load_wait_for_job = DqopsWaitForJobOperator(
-        task_id="dqops_wait_for_job_post_load",
-        **wait_for_job_common_args
-    )
-
-    dbt_run_load = DummyOperator(task_id="dbt_run_load")
-
-
-
-
-@dag(
-    start_date=datetime(2023, 3, 23),
-    schedule="@daily",
-    catchup=False,
-)
-def simple_dbt_dag():
-    dbt_run = BashOperator(
-        task_id="dbt_run",
-        bash_command="source $PATH_TO_DBT_VENV && dbt run --models .",
-        env={"PATH_TO_DBT_VENV": PATH_TO_DBT_VENV},
-        cwd=PATH_TO_DBT_PROJECT,
-    )
-
-
-
-    # dbt_run_load = DbtCloudRunJobOperator(
+    # dbt_run_load = BashOperator(
     #     task_id="dbt_run_load",
-    #     dbt_cloud_conn_id="<your cloud connection id in dbt>",
-    #     account_id="<your account id in dbt>",
-    #     job_id="<your job id>",
-    #     check_interval = 120, # every this time the job status in dbt is checked
-    #     timeout = 60 * 60 * 6, # 6 hours
-    #     wait_for_termination=True
+    #     bash_command="source $DBT_VENV_PATH && dbt run --select <dbt project name with model>",
+    #     env={"DBT_VENV_PATH": DBT_VENV_PATH},
+    #     cwd=DBT_PROJECT,
     # )
 
-    pre_load_run_checks >> \
-    pre_load_wait_for_job >> \
+    run_checks = DqopsRunChecksOperator(
+        task_id="dqops_run_checks",
+        **run_checks_common_args
+    )
+
+    wait_for_job = DqopsWaitForJobOperator(
+        task_id="dqops_wait_for_job",
+        **wait_for_job_common_args
+    )
+
+    assert_status_task >> \
     dbt_run_load >> \
-    post_load_run_checks >> \
-    post_load_wait_for_job
+    run_checks >> \
+    wait_for_job

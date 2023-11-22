@@ -90,7 +90,7 @@ Testing the data twice has two reasons.
 The first is the load job will not start and will not insert new data to the broken table until it is fixed.
 The check works like a fuse here.
 
-The second verification is aimed to check the rows that have already arrived to the table.
+The second verification is aimed to check the rows that have already arrived at the table.
 
 In case of completeness issue of loaded data, the data engineer responsible for this table can react instantly. 
 He will know about the issue because the last task of the DAG will fail as below.
