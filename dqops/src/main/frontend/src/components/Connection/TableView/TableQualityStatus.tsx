@@ -22,7 +22,7 @@ type TFirstLevelCheck = {
   checkName: string;
   currentSeverity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
   highestSeverity?: CheckCurrentDataQualityStatusModelCurrentSeverityEnum;
-  executedAt?: number | string;
+  lastExecutedAt?: number | string;
   checkType: string;
   category?: string;
   qualityDimension?: string;
@@ -70,9 +70,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
       table,
       month,
       since,
-      checkTypes === CheckTypes.PROFILING ? true : undefined,
-      checkTypes === CheckTypes.MONITORING ? true : undefined,
-      checkTypes === CheckTypes.PARTITIONED ? true : undefined,
+      checkTypes === CheckTypes.PROFILING,
+      checkTypes === CheckTypes.MONITORING,
+      checkTypes === CheckTypes.PARTITIONED,
       timeScale
     ).then((res) => setTableDataQualityStatus(res.data));
   };
@@ -96,7 +96,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               ?.current_severity,
             highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
               ?.highest_historical_severity,
-            executedAt: (tableDataQualityStatus.checks ?? {})[key]?.executed_at,
+            lastExecutedAt: (tableDataQualityStatus.checks ?? {})[key]?.last_executed_at,
             checkType: 'table',
             category: (tableDataQualityStatus.checks ?? {})[key]?.category,
             qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
@@ -110,8 +110,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                 ?.current_severity,
               highestSeverity: (tableDataQualityStatus.checks ?? {})[key]
                 ?.highest_historical_severity,
-              executedAt: (tableDataQualityStatus.checks ?? {})[key]
-                ?.executed_at,
+              lastExecutedAt: (tableDataQualityStatus.checks ?? {})[key]
+                ?.last_executed_at,
               checkType: 'table',
               category: (tableDataQualityStatus.checks ?? {})[key]?.category,
               qualityDimension: (tableDataQualityStatus.checks ?? {})[key]
@@ -139,8 +139,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                 .checks ?? {})[key]?.current_severity,
               highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.highest_historical_severity,
-              executedAt: ((tableDataQualityStatus.columns ?? {})[column]
-                .checks ?? {})[key]?.executed_at,
+              lastExecutedAt: ((tableDataQualityStatus.columns ?? {})[column]
+                .checks ?? {})[key]?.last_executed_at,
               checkType: column,
               category: ((tableDataQualityStatus.columns ?? {})[column]
                 .checks ?? {})[key]?.category,
@@ -155,8 +155,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                   .checks ?? {})[key]?.current_severity,
                 highestSeverity: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.highest_historical_severity,
-                executedAt: ((tableDataQualityStatus.columns ?? {})[column]
-                  .checks ?? {})[key]?.executed_at,
+                lastExecutedAt: ((tableDataQualityStatus.columns ?? {})[column]
+                  .checks ?? {})[key]?.last_executed_at,
                 checkType: column,
                 category: ((tableDataQualityStatus.columns ?? {})[column]
                   .checks ?? {})[key]?.category,
@@ -642,7 +642,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
         <SectionWrapper title="Current table status">
           <div className="flex gap-x-2">
             <div className="w-43">Status:</div>
-            <div>{tableDataQualityStatus.highest_severity_level}</div>
+            <div>{tableDataQualityStatus.current_severity}</div>
           </div>
           <div className="flex gap-x-2">
             <div className="w-43">Last check executed at:</div>
@@ -680,358 +680,377 @@ export default function TableQualityStatus({ timeScale }: IProps) {
           </div>
         </SectionWrapper>
       </div>
-      <table className="border border-gray-150 mt-4">
-        <thead>
-          <th
-            key="header_blank"
-            className="p-4 border-b border-b-gray-150"
-          ></th>
-          {Object.keys(firstLevelChecks).map((key) => (
+      {Object.keys(firstLevelChecks).length > 0 ? (
+        <table className="border border-gray-150 mt-4">
+          <thead>
             <th
-              key={`header_${key}`}
-              className={clsx(
-                'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold cursor-pointer underline'
-              )}
-              onClick={() => openFirstLevelTableTab()}
-            >
-              {key}
-            </th>
-          ))}
-        </thead>
-        <tbody>
-          <tr key="row_table_level_checks" className="">
-            <td key="cell_table_level_checks_title" className="font-bold px-4 ">
-              Table level checks
-            </td>
+              key="header_blank"
+              className="p-4 border-b border-b-gray-150"
+            ></th>
             {Object.keys(firstLevelChecks).map((key) => (
-              <td key={`cell_table_level_checks_${key}`} className=" h-full ">
-                <div className="h-full flex w-40 items-center ">
-                  {colorCell(firstLevelChecks[key]) !== '' ? (
-                    <div
-                      onClick={() => {
-                        toggleExtendedChecks(key, 'table');
-                      }}
-                    >
-                      <SvgIcon
-                        key={`svg_table_level_checks_${key}`}
-                        name={
-                          extendedChecks.find(
-                            (x) =>
-                              x.checkType === key &&
-                              x.categoryDimension === 'table'
-                          )
-                            ? 'chevron-down'
-                            : 'chevron-right'
-                        }
-                        className="h-5 w-5 pr-1"
-                      />
-                    </div>
-                  ) : null}
-                  {colorCell(firstLevelChecks[key]) !== '' ? (
-                    <div
-                      className={clsx(
-                        'w-43 h-12 flex ',
-                        colorCell(firstLevelChecks[key]),
-                        severityType === 'current' ? '' : 'justify-end'
-                      )}
-                      style={{
-                        ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
-                          ? backgroundStyle
-                          : {})
-                      }}
-                    >
+              <th
+                key={`header_${key}`}
+                className={clsx(
+                  'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold cursor-pointer underline'
+                )}
+                onClick={() => openFirstLevelTableTab()}
+              >
+                {key}
+              </th>
+            ))}
+          </thead>
+          <tbody>
+            <tr key="row_table_level_checks" className="">
+              <td
+                key="cell_table_level_checks_title"
+                className="font-bold px-4 "
+              >
+                Table level checks
+              </td>
+              {Object.keys(firstLevelChecks).map((key) => (
+                <td key={`cell_table_level_checks_${key}`} className=" h-full ">
+                  <div className="h-full flex w-40 items-center ">
+                    {colorCell(firstLevelChecks[key]) !== '' ? (
+                      <div
+                        onClick={() => {
+                          toggleExtendedChecks(key, 'table');
+                        }}
+                      >
+                        <SvgIcon
+                          key={`svg_table_level_checks_${key}`}
+                          name={
+                            extendedChecks.find(
+                              (x) =>
+                                x.checkType === key &&
+                                x.categoryDimension === 'table'
+                            )
+                              ? 'chevron-down'
+                              : 'chevron-right'
+                          }
+                          className="h-5 w-5 pr-1"
+                        />
+                      </div>
+                    ) : null}
+                    {colorCell(firstLevelChecks[key]) !== '' ? (
                       <div
                         className={clsx(
-                          ' h-3 w-3 mr-2 mt-2 ml-2',
-                          colorCircle(firstLevelChecks[key])
+                          'w-43 h-12 flex ',
+                          colorCell(firstLevelChecks[key]),
+                          severityType === 'current' ? '' : 'justify-end'
                         )}
                         style={{
-                          borderRadius: '6px',
-                          ...(colorCircle(firstLevelChecks[key]) ===
-                          'bg-gray-150'
+                          ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
                             ? backgroundStyle
                             : {})
                         }}
-                      ></div>
-                    </div>
-                  ) : null}
-                </div>
-              </td>
-            ))}
-          </tr>
-          <tr
-            key="row_table_level_checks_blank"
-            className="border-b border-b-gray-150"
-          >
-            <td
-              key="cell_table_level_checks_blank"
-              className="font-bold px-4 "
-            ></td>
-            {Object.keys(firstLevelChecks).map((key) => (
-              <td
-                valign="baseline"
-                key={`cell_table_level_checks_blank_${key}`}
-              >
-                {extendedChecks.find(
-                  (x) => x.checkType === key && x.categoryDimension === 'table'
-                ) && (
-                  <div className="w-40">
-                    {(firstLevelChecks[key] ?? []).map((x, index) =>
-                      x.checkType === 'table' ? (
-                        <Tooltip
-                          key={`table_check_${key}_${index}`}
-                          content={
-                            <div>
-                              <div className="flex gap-x-2">
-                                <div className="w-42">Executed at:</div>
-                                <div>
-                                  {moment(x.executedAt).format(
-                                    'YYYY-MM-DD HH:mm:ss'
-                                  )}
-                                </div>
-                              </div>
-                              <div className="flex gap-x-2">
-                                <div className="w-42">
-                                  Current severity level:
-                                </div>
-                                <div>{x.currentSeverity}</div>
-                              </div>
-                              <div className="flex gap-x-2">
-                                <div className="w-42">
-                                  Highest historical severity level:
-                                </div>
-                                <div>{x.highestSeverity}</div>
-                              </div>
-                              <div className="flex gap-x-2">
-                                <div className="w-42">Category:</div>
-                                <div>{x.category}</div>
-                              </div>
-                              <div className="flex gap-x-2">
-                                <div className="w-42">Quality Dimension:</div>
-                                <div>{x.qualityDimension}</div>
-                              </div>
-                            </div>
-                          }
-                        >
-                          <div
-                            className={clsx(
-                              'cursor-auto h-12 ml-5 p-2',
-                              calculateSeverityColor(
-                                severityType === 'current'
-                                  ? x.currentSeverity ??
-                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                                  : x.highestSeverity ??
-                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                              )
-                            )}
-                            style={{
-                              fontSize: '12px',
-                              whiteSpace: 'normal',
-                              wordBreak: 'break-word',
-                              ...(calculateSeverityColor(
-                                severityType === 'current'
-                                  ? x.currentSeverity ??
-                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                                  : x.highestSeverity ??
-                                      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                              ) === 'bg-gray-150'
-                                ? backgroundStyle
-                                : {})
-                            }}
-                          >
-                            {x.checkName}
-                          </div>
-                        </Tooltip>
-                      ) : null
-                    )}
+                      >
+                        <div
+                          className={clsx(
+                            ' h-3 w-3 mr-2 mt-2 ml-2',
+                            colorCircle(firstLevelChecks[key])
+                          )}
+                          style={{
+                            borderRadius: '6px',
+                            ...(colorCircle(firstLevelChecks[key]) ===
+                            'bg-gray-150'
+                              ? backgroundStyle
+                              : {})
+                          }}
+                        ></div>
+                      </div>
+                    ) : null}
                   </div>
-                )}
-              </td>
-            ))}
-          </tr>
-          {Object.keys(tableDataQualityStatus.columns ?? {}).map(
-            (key, index) => (
-              <React.Fragment key={`column_${key}`}>
-                <tr
-                  key={`column_row_${key}`}
-                  className={clsx(
-                    index !==
-                      Object.keys(tableDataQualityStatus.columns ?? {}).length -
-                        1 && 'my-2'
-                  )}
+                </td>
+              ))}
+            </tr>
+            <tr
+              key="row_table_level_checks_blank"
+              className="border-b border-b-gray-150"
+            >
+              <td
+                key="cell_table_level_checks_blank"
+                className="font-bold px-4 "
+              ></td>
+              {Object.keys(firstLevelChecks).map((key) => (
+                <td
+                  valign="baseline"
+                  key={`cell_table_level_checks_blank_${key}`}
                 >
-                  <td
-                    key={`column_cell_${key}`}
-                    className="p-2 px-4 underline cursor-pointer font-bold"
-                    onClick={() => openFirstLevelColumnTab(key)}
-                  >
-                    {key}
-                  </td>
-                  {Object.keys(firstLevelChecks).map((firstLevelChecksKey) => (
-                    <td
-                      key={`cell_column_${key}_${firstLevelChecksKey}`}
-                      className=" h-full"
-                    >
-                      {' '}
-                      {colorColumnCell(
-                        (tableDataQualityStatus.columns ?? {})[key],
-                        firstLevelChecksKey
-                      ) !== '' ? (
-                        <div className="h-full flex w-40 items-center ">
-                          <div
-                            onClick={() => {
-                              toggleExtendedChecks(key, firstLevelChecksKey);
-                            }}
+                  {extendedChecks.find(
+                    (x) =>
+                      x.checkType === key && x.categoryDimension === 'table'
+                  ) && (
+                    <div className="w-40">
+                      {(firstLevelChecks[key] ?? []).map((x, index) =>
+                        x.checkType === 'table' ? (
+                          <Tooltip
+                            key={`table_check_${key}_${index}`}
+                            content={
+                              <div>
+                                <div className="flex gap-x-2">
+                                  <div className="w-42">Last executed at:</div>
+                                  <div>
+                                    {moment(x.lastExecutedAt).format(
+                                      'YYYY-MM-DD HH:mm:ss'
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex gap-x-2">
+                                  <div className="w-42">
+                                    Current severity level:
+                                  </div>
+                                  <div>{x.currentSeverity}</div>
+                                </div>
+                                <div className="flex gap-x-2">
+                                  <div className="w-42">
+                                    Highest historical severity level:
+                                  </div>
+                                  <div>{x.highestSeverity}</div>
+                                </div>
+                                <div className="flex gap-x-2">
+                                  <div className="w-42">Category:</div>
+                                  <div>{x.category}</div>
+                                </div>
+                                <div className="flex gap-x-2">
+                                  <div className="w-42">Quality Dimension:</div>
+                                  <div>{x.qualityDimension}</div>
+                                </div>
+                              </div>
+                            }
                           >
-                            <SvgIcon
-                              key={`svg_column_${key}_${firstLevelChecksKey}`}
-                              name={
-                                extendedChecks.find(
-                                  (x) =>
-                                    x.checkType === key &&
-                                    x.categoryDimension === firstLevelChecksKey
-                                )
-                                  ? 'chevron-down'
-                                  : 'chevron-right'
-                              }
-                              className="h-5 w-5 pr-1"
-                            />
-                          </div>
-                          <div
-                            className={clsx(
-                              'h-12 w-43 flex',
-                              // 'border border-gray-150',
-                              colorColumnCell(
-                                (tableDataQualityStatus.columns ?? {})[key],
-                                firstLevelChecksKey
-                              ),
-                              severityType === 'current' ? '' : 'justify-end'
-                            )}
-                            style={{
-                              ...(colorColumnCell(
-                                (tableDataQualityStatus.columns ?? {})[key],
-                                firstLevelChecksKey
-                              ) === 'bg-gray-150'
-                                ? backgroundStyle
-                                : {})
-                            }}
-                          >
-                            {' '}
                             <div
-                              className="h-3 w-3 ml-2 mt-2 mr-2"
+                              className={clsx(
+                                'cursor-auto h-12 ml-5 p-2',
+                                calculateSeverityColor(
+                                  severityType === 'current'
+                                    ? x.currentSeverity ??
+                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                    : x.highestSeverity ??
+                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                )
+                              )}
                               style={{
-                                borderRadius: '6px',
-                                ...(colorColumnCellCircle(
-                                  (tableDataQualityStatus.columns ?? {})[key],
-                                  firstLevelChecksKey
+                                fontSize: '12px',
+                                whiteSpace: 'normal',
+                                wordBreak: 'break-word',
+                                ...(calculateSeverityColor(
+                                  severityType === 'current'
+                                    ? x.currentSeverity ??
+                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                    : x.highestSeverity ??
+                                        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
                                 ) === 'bg-gray-150'
                                   ? backgroundStyle
                                   : {})
                               }}
-                            ></div>
-                          </div>
-                        </div>
-                      ) : null}
-                    </td>
-                  ))}
-                </tr>
-                <tr key={`column_row_blank_${key}`}>
-                  <td
-                    key={`column_cell_blank_${key}`}
-                    className="font-bold px-4 "
-                  ></td>
-                  {Object.keys(firstLevelChecks).map((check) => (
+                            >
+                              {x.checkName}
+                            </div>
+                          </Tooltip>
+                        ) : null
+                      )}
+                    </div>
+                  )}
+                </td>
+              ))}
+            </tr>
+            {Object.keys(tableDataQualityStatus.columns ?? {}).map(
+              (key, index) => (
+                <React.Fragment key={`column_${key}`}>
+                  <tr
+                    key={`column_row_${key}`}
+                    className={clsx(
+                      index !==
+                        Object.keys(tableDataQualityStatus.columns ?? {})
+                          .length -
+                          1 && 'my-2'
+                    )}
+                  >
                     <td
-                      key={`cell_column_blank_${key}_${check}`}
-                      valign="baseline"
+                      key={`column_cell_${key}`}
+                      className="p-2 px-4 underline cursor-pointer font-bold"
+                      onClick={() => openFirstLevelColumnTab(key)}
                     >
-                      {extendedChecks.find(
-                        (x) =>
-                          x.checkType === key && x.categoryDimension === check
-                      ) ? (
-                        <div className="w-40">
-                          {(firstLevelChecks[check] ?? []).map((x, index) =>
-                            x.checkType === key ? (
-                              <Tooltip
-                                key={`column_check_${key}_${check}_${index}`}
-                                content={
-                                  <div>
-                                    <div className="flex gap-x-2">
-                                      <div className="w-42">Executed at:</div>
-                                      <div>
-                                        {moment(x.executedAt).format(
-                                          'YYYY-MM-DD HH:mm:ss'
-                                        )}
-                                      </div>
-                                    </div>
-                                    <div className="flex gap-x-2">
-                                      <div className="w-42">
-                                        Current severity level:
-                                      </div>
-                                      <div>{x.currentSeverity}</div>
-                                    </div>
-                                    <div className="flex gap-x-2">
-                                      <div className="w-42">
-                                        Highest historical severity level:
-                                      </div>
-                                      <div>{x.highestSeverity}</div>
-                                    </div>
-                                    <div className="flex gap-x-2">
-                                      <div className="w-42">Category:</div>
-                                      <div>{x.category}</div>
-                                    </div>
-                                    <div className="flex gap-x-2">
-                                      <div className="w-42">
-                                        Quality Dimension:
-                                      </div>
-                                      <div>{x.qualityDimension}</div>
-                                    </div>
-                                  </div>
-                                }
+                      {key}
+                    </td>
+                    {Object.keys(firstLevelChecks).map(
+                      (firstLevelChecksKey) => (
+                        <td
+                          key={`cell_column_${key}_${firstLevelChecksKey}`}
+                          className=" h-full"
+                        >
+                          {' '}
+                          {colorColumnCell(
+                            (tableDataQualityStatus.columns ?? {})[key],
+                            firstLevelChecksKey
+                          ) !== '' ? (
+                            <div className="h-full flex w-40 items-center ">
+                              <div
+                                onClick={() => {
+                                  toggleExtendedChecks(
+                                    key,
+                                    firstLevelChecksKey
+                                  );
+                                }}
                               >
-                                <div
-                                  className={clsx(
-                                    'cursor-auto h-12 p-2 ml-5',
-                                    calculateSeverityColor(
-                                      severityType === 'current'
-                                        ? x.currentSeverity ??
-                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                                        : x.highestSeverity ??
-                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                <SvgIcon
+                                  key={`svg_column_${key}_${firstLevelChecksKey}`}
+                                  name={
+                                    extendedChecks.find(
+                                      (x) =>
+                                        x.checkType === key &&
+                                        x.categoryDimension ===
+                                          firstLevelChecksKey
                                     )
-                                  )}
+                                      ? 'chevron-down'
+                                      : 'chevron-right'
+                                  }
+                                  className="h-5 w-5 pr-1"
+                                />
+                              </div>
+                              <div
+                                className={clsx(
+                                  'h-12 w-43 flex',
+                                  // 'border border-gray-150',
+                                  colorColumnCell(
+                                    (tableDataQualityStatus.columns ?? {})[key],
+                                    firstLevelChecksKey
+                                  ),
+                                  severityType === 'current'
+                                    ? ''
+                                    : 'justify-end'
+                                )}
+                                style={{
+                                  ...(colorColumnCell(
+                                    (tableDataQualityStatus.columns ?? {})[key],
+                                    firstLevelChecksKey
+                                  ) === 'bg-gray-150'
+                                    ? backgroundStyle
+                                    : {})
+                                }}
+                              >
+                                {' '}
+                                <div
+                                  className="h-3 w-3 ml-2 mt-2 mr-2"
                                   style={{
-                                    fontSize: '12px',
-                                    whiteSpace: 'normal',
-                                    wordBreak: 'break-word',
-                                    ...(calculateSeverityColor(
-                                      severityType === 'current'
-                                        ? x.currentSeverity ??
-                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-                                        : x.highestSeverity ??
-                                            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                    borderRadius: '6px',
+                                    ...(colorColumnCellCircle(
+                                      (tableDataQualityStatus.columns ?? {})[
+                                        key
+                                      ],
+                                      firstLevelChecksKey
                                     ) === 'bg-gray-150'
                                       ? backgroundStyle
                                       : {})
                                   }}
+                                ></div>
+                              </div>
+                            </div>
+                          ) : null}
+                        </td>
+                      )
+                    )}
+                  </tr>
+                  <tr key={`column_row_blank_${key}`}>
+                    <td
+                      key={`column_cell_blank_${key}`}
+                      className="font-bold px-4 "
+                    ></td>
+                    {Object.keys(firstLevelChecks).map((check) => (
+                      <td
+                        key={`cell_column_blank_${key}_${check}`}
+                        valign="baseline"
+                      >
+                        {extendedChecks.find(
+                          (x) =>
+                            x.checkType === key && x.categoryDimension === check
+                        ) ? (
+                          <div className="w-40">
+                            {(firstLevelChecks[check] ?? []).map((x, index) =>
+                              x.checkType === key ? (
+                                <Tooltip
+                                  key={`column_check_${key}_${check}_${index}`}
+                                  content={
+                                    <div>
+                                      <div className="flex gap-x-2">
+                                        <div className="w-42">Last executed at:</div>
+                                        <div>
+                                          {moment(x.lastExecutedAt).format(
+                                            'YYYY-MM-DD HH:mm:ss'
+                                          )}
+                                        </div>
+                                      </div>
+                                      <div className="flex gap-x-2">
+                                        <div className="w-42">
+                                          Current severity level:
+                                        </div>
+                                        <div>{x.currentSeverity}</div>
+                                      </div>
+                                      <div className="flex gap-x-2">
+                                        <div className="w-42">
+                                          Highest historical severity level:
+                                        </div>
+                                        <div>{x.highestSeverity}</div>
+                                      </div>
+                                      <div className="flex gap-x-2">
+                                        <div className="w-42">Category:</div>
+                                        <div>{x.category}</div>
+                                      </div>
+                                      <div className="flex gap-x-2">
+                                        <div className="w-42">
+                                          Quality Dimension:
+                                        </div>
+                                        <div>{x.qualityDimension}</div>
+                                      </div>
+                                    </div>
+                                  }
                                 >
-                                  {x.checkName}
-                                </div>
-                              </Tooltip>
-                            ) : (
-                              ''
-                            )
-                          )}
-                        </div>
-                      ) : null}
-                    </td>
-                  ))}
-                </tr>
-              </React.Fragment>
-            )
-          )}
-        </tbody>
-      </table>
+                                  <div
+                                    className={clsx(
+                                      'cursor-auto h-12 p-2 ml-5',
+                                      calculateSeverityColor(
+                                        severityType === 'current'
+                                          ? x.currentSeverity ??
+                                              CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                          : x.highestSeverity ??
+                                              CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                      )
+                                    )}
+                                    style={{
+                                      fontSize: '12px',
+                                      whiteSpace: 'normal',
+                                      wordBreak: 'break-word',
+                                      ...(calculateSeverityColor(
+                                        severityType === 'current'
+                                          ? x.currentSeverity ??
+                                              CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                          : x.highestSeverity ??
+                                              CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
+                                      ) === 'bg-gray-150'
+                                        ? backgroundStyle
+                                        : {})
+                                    }}
+                                  >
+                                    {x.checkName}
+                                  </div>
+                                </Tooltip>
+                              ) : (
+                                ''
+                              )
+                            )}
+                          </div>
+                        ) : null}
+                      </td>
+                    ))}
+                  </tr>
+                </React.Fragment>
+              )
+            )}
+          </tbody>
+        </table>
+      ) : (
+        <div className="mt-5">No data quality check results</div>
+      )}
     </div>
   );
 }

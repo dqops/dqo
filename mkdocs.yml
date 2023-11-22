@@ -129,6 +129,7 @@ nav:
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - REST API Python client:
     - models:
+      - 'client/models/index.md'
       - checks: 'client/models/checks.md'
       - check_results: 'client/models/check_results.md'
       - check_results_overview: 'client/models/check_results_overview.md'
@@ -140,7 +141,6 @@ nav:
       - environment: 'client/models/environment.md'
       - errors: 'client/models/errors.md'
       - incidents: 'client/models/incidents.md'
-      - index: 'client/models/index.md'
       - jobs: 'client/models/jobs.md'
       - log_shipping: 'client/models/log_shipping.md'
       - rules: 'client/models/rules.md'
@@ -153,6 +153,7 @@ nav:
       - table_comparison_results: 'client/models/table_comparison_results.md'
       - users: 'client/models/users.md'
     - operations:
+      - 'client/operations/index.md'
       - checks: 'client/operations/checks.md'
       - check_results: 'client/operations/check_results.md'
       - check_results_overview: 'client/operations/check_results_overview.md'
@@ -166,7 +167,6 @@ nav:
       - errors: 'client/operations/errors.md'
       - healthcheck: 'client/operations/healthcheck.md'
       - incidents: 'client/operations/incidents.md'
-      - index: 'client/operations/index.md'
       - jobs: 'client/operations/jobs.md'
       - log_shipping: 'client/operations/log_shipping.md'
       - rules: 'client/operations/rules.md'

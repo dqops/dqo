@@ -88,7 +88,8 @@ An example of the response from the DQOps platform is shown below.
   'connection_name': 'example_connection', 
   'schema_name': 'maven_restaurant_ratings', 
   'table_name': 'consumers', 
-  'highest_severity_issue': 'fatal', 
+  'current_severity': 'fatal',
+  'highest_historical_severity': 'fatal',
   'last_check_executed_at': '2023-11-08T17:23:00.188Z', 
   'executed_checks': 148, 
   'valid_results': 143, 
@@ -101,21 +102,24 @@ An example of the response from the DQOps platform is shown below.
   },
   'checks': {
     'daily_table_availability': {
-      'severity': 'valid',
-      'executed_at': '2023-11-08T17:23:00.188Z',
+      'current_severity': 'valid',
+      'highest_historical_severity': 'valid',
+      'last_executed_at': '2023-11-08T17:23:00.188Z',
       'category': 'availability',
       'quality_dimension': 'Availability'
     },
     'daily_column_count_changed': {
-      'severity': 'fatal',
-      'executed_at': '2023-11-08T17:23:00.187Z',
+      'current_severity': 'fatal',
+      'highest_historical_severity': 'fatal',
+      'last_executed_at': '2023-11-08T17:23:00.187Z',
       'category': 'schema',
       'quality_dimension': "Consistency"
     }
   },
   'columns': {
     'date': {
-      'highest_severity_level': 'valid',
+      'current_severity': 'valid',
+      'highest_historical_severity': 'valid',
       'last_check_executed_at': '2023-11-08T17:23:00.108Z',
       'executed_checks': 36,
       'valid_results': 31,
@@ -125,14 +129,16 @@ An example of the response from the DQOps platform is shown below.
       'execution_errors': 5,
       'checks': {
         'daily_column_type_changed': {
-          'severity': 'valid',
-          'executed_at': '2023-11-08T17:23:00.073Z',
+          'current_severity': 'valid',
+          'highest_historical_severity': 'valid',
+          'last_executed_at': '2023-11-08T17:23:00.073Z',
           'category': 'schema',
           'quality_dimension': 'Consistency'
         },
         'daily_column_exists': {
-          'severity': 'valid',
-          'executed_at': '2023-11-08T17:23:00.074Z',
+          'current_severity': 'valid',
+          'highest_historical_severity': 'valid',
+          'last_executed_at': '2023-11-08T17:23:00.074Z',
           'category': 'schema',
           'quality_dimension': 'Validity'
         }
@@ -152,9 +158,10 @@ Here we used the default number of months which is from the beginning of the pre
     In such a case, we need to check if data was loaded or adjust the rule thresholds if the number of rows is as expected.
 
 
-Furthermore, the task will finish with Failed Airflow status as we did not set the **maximum_severity_threshold** parameter.
+Furthermore, the task will finish with Failed Airflow status as we did not set the **fail_at_severity** parameter.
 
-As we did not set the maximum_severity_threshold parameter, the task will finish with Failed Airflow status. Technically, the executed operator returns the TableDataQualityStatusModel object with the relevant status details. 
+As we did not set the maximum_severity_threshold parameter, the task will finish with Failed Airflow status.
+Technically, the executed operator returns the TableDataQualityStatusModel object with the relevant status details. 
 Depending on whether the task execution was successful or not, the task instance will be marked as either Success or Failed, respectively.
 
 ## TableDataQualityStatusModel fields 
@@ -164,12 +171,18 @@ TableDataQualityStatusModel contains the following fields:
 - **connection_name**: The name of the connection in DQOps.
 - **schema_name**: The name of the schema.
 - **table_name**: The name of the table.
-- **highest_severity_issue**: The highest severity level of all identified data quality issues. Returned values are:
+- **current_severity**: The highest severity level of all identified data quality issues on the table and columns, 
+    but only for the most recently executed data quality check. Returned values are:
     - **valid** when no data quality issues were detected
     - **warning** when only warnings were detected
     - **error** when regular data quality issues were detected
     - **fatal** when a fatal data quality was detected that should result in stopping the data pipeline to avoid loading invalid data 
-    - **execution_error** when errors in sensors or rules were detected, preventing from executing data quality checks
+- **highest_historical_severity**: The highest severity level of all identified data quality issues on the table and columns, 
+    also including previously detected issues, even if the issue was corrected and the **current_severity** is valid. Returned values are:
+    - **valid** when no data quality issues were detected
+    - **warning** when only warnings were detected
+    - **error** when regular data quality issues were detected
+    - **fatal** when a fatal data quality was detected that should result in stopping the data pipeline to avoid loading invalid data
 - **last_check_executed_at**: The UTC timestamp of the most recent data quality check executed on the table.
 - **executed_checks**: The total number of most recent checks executed on the table. 
   For table comparison checks that compare groups of data this field is the number of compared data groups.

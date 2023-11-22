@@ -78,7 +78,7 @@ spec:
         - dashboard_name: Profiling KPIs per table - summary
           url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
           width: 1400
-          height: 2150
+          height: 2210
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -139,7 +139,7 @@ spec:
           - dashboard_name: History of completeness issues
             url: https://lookerstudio.google.com/embed/reporting/635dde1c-5e84-417c-b5b6-5a630f1c077d/page/c5B8C
             width: 1400
-            height: 2200
+            height: 2800
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: profiling
@@ -197,7 +197,7 @@ spec:
           - dashboard_name: Minimum, maximum, and average delay
             url: https://lookerstudio.google.com/embed/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
             width: 1400
-            height: 1400
+            height: 1600
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: profiling
@@ -213,27 +213,26 @@ spec:
           - dashboard_name: History of validity issues
             url: https://lookerstudio.google.com/embed/reporting/36d67f2d-2cb0-4f56-90f8-b84acd72ed3f/page/c5B8C
             width: 1400
-            height: 2200
+            height: 2800
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: profiling
-      - folder_name: Volume
-        dashboards:
-          - dashboard_name: Largest tables by number of rows
-            url: https://lookerstudio.google.com/embed/reporting/776b972d-3504-479a-98ed-2b8cb703279d/page/c5B8C
-            width: 1400
-            height: 1200
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: profiling
-          - dashboard_name: Empty or too small tables
-            url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8/page/c5B8C
-            width: 1400
-            height: 1800
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: profiling
-
+    - folder_name: Volume
+      dashboards:
+        - dashboard_name: Largest tables by number of rows
+          url: https://lookerstudio.google.com/embed/reporting/776b972d-3504-479a-98ed-2b8cb703279d/page/c5B8C
+          width: 1400
+          height: 1200
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
+        - dashboard_name: Empty or too small tables
+          url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8/page/c5B8C
+          width: 1400
+          height: 1800
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: profiling
     - folder_name: PII
       dashboards:
         - dashboard_name: PII data detected
@@ -243,8 +242,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: History of PII issues
           url: https://lookerstudio.google.com/embed/reporting/64912f8a-ff47-463e-b26d-3445e4d80717/page/c5B8C
           width: 1400
@@ -252,8 +249,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
     - folder_name: Schema changes
       folders:
         - folder_name: Table-level issues
@@ -554,7 +549,7 @@ spec:
         - dashboard_name: History of completeness issues
           url: https://lookerstudio.google.com/embed/reporting/635dde1c-5e84-417c-b5b6-5a630f1c077d/page/c5B8C
           width: 1400
-          height: 2200
+          height: 2800
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -612,7 +607,7 @@ spec:
           - dashboard_name: Minimum, maximum, and average delay
             url: https://lookerstudio.google.com/embed/reporting/e2097c01-04b3-451d-8b31-4579f3e468fb/page/c5B8C
             width: 1400
-            height: 1400
+            height: 1600
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: monitoring
@@ -628,26 +623,26 @@ spec:
           - dashboard_name: History of validity issues
             url: https://lookerstudio.google.com/embed/reporting/36d67f2d-2cb0-4f56-90f8-b84acd72ed3f/page/c5B8C
             width: 1400
-            height: 2200
+            height: 2800
             parameters:
               ds0.token: '%DQO_CLOUD_TOKEN%'
               ds0.p_check_type: monitoring
-      - folder_name: Volume
-        dashboards:
-          - dashboard_name: Largest tables by number of rows
-            url: https://lookerstudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
-            width: 1400
-            height: 1700
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: monitoring
-          - dashboard_name: Empty or too small tables
-            url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8/page/c5B8C
-            width: 1400
-            height: 2200
-            parameters:
-              ds0.token: '%DQO_CLOUD_TOKEN%'
-              ds0.p_check_type: monitoring
+    - folder_name: Volume
+      dashboards:
+        - dashboard_name: Largest tables by number of rows
+          url: https://lookerstudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
+          width: 1400
+          height: 1700
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
+        - dashboard_name: Empty or too small tables
+          url: https://lookerstudio.google.com/embed/reporting/263e1ff4-c620-498f-9618-c418708f24e8/page/c5B8C
+          width: 1400
+          height: 2200
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+            ds0.p_check_type: monitoring
     - folder_name: PII
       dashboards:
         - dashboard_name: PII data detected
@@ -657,8 +652,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
         - dashboard_name: History of PII issues
           url: https://lookerstudio.google.com/embed/reporting/64912f8a-ff47-463e-b26d-3445e4d80717/page/c5B8C
           width: 1400
@@ -666,8 +659,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-            ds0.p_quality_dimension: all
-            ds0.p_check_category: all
     - folder_name: Schema changes
       folders:
         - folder_name: Table-level issues
@@ -738,7 +729,7 @@ spec:
         - dashboard_name: Current table partition status per check category
           url: https://lookerstudio.google.com/embed/reporting/6c58d29c-7de3-4051-8b27-396981f5e8f2/page/c5B8C
           width: 1400
-          height: 1400
+          height: 1900
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -747,7 +738,7 @@ spec:
         - dashboard_name: Current table partition status per data quality dimension
           url: https://lookerstudio.google.com/embed/reporting/9d9802a4-775b-4e39-8b09-d5b1e9ae6893/page/c5B8C
           width: 1400
-          height: 1400
+          height: 1900
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -863,7 +854,7 @@ spec:
         - dashboard_name: KPIs per table - summary
           url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
           width: 1400
-          height: 2150
+          height: 2210
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -962,6 +953,22 @@ spec:
               ds0.p_check_type: partitioned
           - dashboard_name: History of completeness issues
             url: https://lookerstudio.google.com/embed/reporting/635dde1c-5e84-417c-b5b6-5a630f1c077d/page/c5B8C
+            width: 1400
+            height: 2800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: partitioned
+      - folder_name: Validity
+        dashboards:
+          - dashboard_name: Current validity issues on columns
+            url: https://lookerstudio.google.com/embed/reporting/fd21ecdf-6ffa-4aff-94f3-cfd531750bab/page/c5B8C
+            width: 1400
+            height: 1800
+            parameters:
+              ds0.token: '%DQO_CLOUD_TOKEN%'
+              ds0.p_check_type: partitioned
+          - dashboard_name: History of validity issues
+            url: https://lookerstudio.google.com/embed/reporting/36d67f2d-2cb0-4f56-90f8-b84acd72ed3f/page/c5B8C
             width: 1400
             height: 2800
             parameters:
@@ -1108,7 +1115,7 @@ spec:
       - dashboard_name: KPIs per table - summary
         url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
         width: 1400
-        height: 2150
+        height: 2210
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
