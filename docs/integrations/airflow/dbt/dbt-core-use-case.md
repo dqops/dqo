@@ -1,13 +1,18 @@
-# DQOps run checks example with the DbtCloud
+# DQOps run checks example with the Dbt Core 
 
-The Airflow's DAG configuration presents the use of the DbtCloud with the DQOps' run checks operator. 
-The example executes the load job in DbtCloud surrounded by data quality verification of a single table, 
+## todo all below ######################################
+
+The Airflow's DAG configuration presents the use of dbt with DQOps. 
+The example runs the load process in DbtCloud surrounded by data quality verification of a single table, 
 done before and after loading the data. 
 
 !!! info "Wait for job operator usage"
 
     The use of _wait for job_ operator in the example prevents from Airflow worker allocation in purpose for waiting until the run checks task has finished.
     This operator can be safely removed when you are sure that your table is lightweight and the DQOps' checks execution lasts less than the default 120 seconds timeout.
+
+
+It is recommended that the dbt project should be configured under the python's virtual environment that resolves the dependency conflicts between packages.
 
 
 ```python
