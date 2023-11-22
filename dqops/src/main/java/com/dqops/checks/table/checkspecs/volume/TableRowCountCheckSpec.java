@@ -23,7 +23,7 @@ import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleFatalParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

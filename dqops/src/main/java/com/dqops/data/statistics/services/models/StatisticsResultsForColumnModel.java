@@ -17,6 +17,7 @@ package com.dqops.data.statistics.services.models;
 
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -71,4 +72,16 @@ public class StatisticsResultsForColumnModel {
      */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
+
+    public static class StatisticsResultsForColumnModelSampleFactory implements SampleValueFactory<StatisticsResultsForColumnModel> {
+        @Override
+        public StatisticsResultsForColumnModel createSample() {
+            return new StatisticsResultsForColumnModel() {{
+                setChecks(checkListModels);
+                setCanRunChecks(true);
+                setCanEdit(false);
+                setCanDeleteData(true);
+            }};
+        }
+    }
 }

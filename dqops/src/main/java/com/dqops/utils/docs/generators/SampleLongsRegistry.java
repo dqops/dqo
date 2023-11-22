@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs;
+package com.dqops.utils.docs.generators;
 
 import com.dqops.metadata.sources.PhysicalTableName;
 

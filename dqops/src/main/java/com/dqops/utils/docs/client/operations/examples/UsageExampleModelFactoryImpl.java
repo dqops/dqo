@@ -60,7 +60,7 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
                     .append("-H \"Content-Type: application/json\"").append(newLine)
                     .append("-d").append(newLine);
 
-            String payload = PathParameterFillerUtility.getSampleFromTypeModel(requestBody.getTypeModel());
+            String payload = PathParameterFillerUtility.getSampleFromTypeModel(requestBody.getTypeModel(), false);
             String payloadPadded = payload.replace("\"", "\\\"")
                     .replace(System.lineSeparator(), " ");
             renderedExample.append("\"")

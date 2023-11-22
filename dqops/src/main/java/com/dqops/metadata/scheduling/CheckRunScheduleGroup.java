@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.scheduling;
 
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 
 /**
  * The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.

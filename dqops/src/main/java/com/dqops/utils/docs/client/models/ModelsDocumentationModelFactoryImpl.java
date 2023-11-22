@@ -18,7 +18,7 @@ package com.dqops.utils.docs.client.models;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.DocumentationReflectionService;
 import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
-import com.dqops.utils.docs.TypeModel;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;

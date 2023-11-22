@@ -16,6 +16,7 @@
 package com.dqops.utils.docs;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ObjectDataType;
 import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
@@ -24,7 +25,6 @@ import com.github.jknack.handlebars.io.FileTemplateLoader;
 import io.swagger.models.auth.In;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
