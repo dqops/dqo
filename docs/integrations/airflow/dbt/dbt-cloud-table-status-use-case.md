@@ -48,25 +48,25 @@ with DAG(
 
 ## The execution
 
-The use of table status operator prevents from running load task on table with a data quality issue.
+The use of table status operator prevents from running the load task on the table with a data quality issue.
 
-The table status operation reads results from all checks that are set on the table and it's columns.
+The table status operation reads results from all checks that are set on the table and its columns.
 Then it looks for any data quality issue.
 
 !!! info "Schedules in DQOps"
 
-    DQOps has built in [scheduling component](../../../working-with-dqo/schedules/index.md). It allows to run checks automatically on a different time of day.
+    DQOps has a built-in [scheduling component](../../../working-with-dqo/schedules/index.md). It allows you to run checks automatically on a different time of day.
 
 The issue found by the table status is equal to finding at least one failed check on the tested table. 
 The example do not use any of optional parameters of the DqopsAssertTableStatusOperator, 
-so failed checks do not depend on [parameters that are available in the operator](../../table-status-operator.md) 
+so failed checks do not depend on [parameters that are available in the operator](../table-status-operator.md) 
 such as check type, quality dimension or any other, that can limit the number of sensors that the table status task verifies.
 
-If failed check exist, the Airflow DAG execution will not be completed as below. Loading stage will not start.
+If any failed check exists, the Airflow DAG execution will not be completed as below. Loading stage will not start.
 
 ![dbt-use-case-1](https://dqops.com/docs/images/integrations/airflow/dbt/dbt-cloud-table-status/dbt-cloud-table-status-1.png)
 
-To find out the cause, open DQOps UI and reach Incidents tab in menu. 
+To find out the cause, open DQOps UI and reach the Incidents tab in the menu. 
 Then select the connection of the table.
 
 !!! tip "Re-run data quality checks"
@@ -82,7 +82,7 @@ As you can see, the DAG is completed successfully.
 
 ![dbt-use-case-2](https://dqops.com/docs/images/integrations/airflow/dbt/dbt-cloud-table-status/dbt-cloud-table-status-2.png)
 
-It will protect the execution of loading task in the future, when issues appears.
+It will protect the execution of the loading task in the future, when issues appear.
 
 ## Checks execution after the dbt load job
 
@@ -119,12 +119,12 @@ from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJ
 
 ```
 
-The code only runs the run checks task that do not wait for the execution of it.
+The code only runs the run checks task that does not wait for the execution of it.
 This is why the wait_timeout parameter is set to 1 second.
 
 
 ## What's next
 
-- [Learn about run checks operator](../../run-checks-operator.md)
-- [Learn about webhooks notifications](../../../webhooks/index.md)
-- [Learn about wait for job operator](../../wait-for-job-operator.md)
+- [Learn about run checks operator](../run-checks-operator.md)
+- [Learn about webhooks notifications](../../webhooks/index.md)
+- [Learn about wait for job operator](../wait-for-job-operator.md)

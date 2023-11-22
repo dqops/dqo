@@ -109,6 +109,6 @@ He will know about the issue because the last task of the DAG will fail as below
 
 ## What's next
 
-- [Learn about run checks operator](../../run-checks-operator.md)
-- [Learn about webhooks notifications](../../../webhooks/index.md)
-- [Learn about wait for job operator](../../wait-for-job-operator.md)
+- [Learn about run checks operator](../run-checks-operator.md)
+- [Learn about webhooks notifications](../../webhooks/index.md)
+- [Learn about wait for job operator](../wait-for-job-operator.md)

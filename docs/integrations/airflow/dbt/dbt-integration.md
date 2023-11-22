@@ -34,6 +34,6 @@ Entry requirements include:
 
 ## What's next
 
-- [Learn about run checks Airflow operator](../../run-checks-operator.md)
-- [Learn about wait for job Airflow operator](../../wait-for-job-operator.md)
+- [Learn about run checks Airflow operator](../run-checks-operator.md)
+- [Learn about wait for job Airflow operator](../wait-for-job-operator.md)
 
