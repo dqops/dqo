@@ -27,7 +27,7 @@ export default function UserListDetail() {
     useEffect(() => {
         setLoading(true)
         UsersApi.getAllUsers()
-        .then((res) => setDqoCloudUsers(res.data.filter((x) => !x.email?.includes("dqops"))))
+        .then((res) => setDqoCloudUsers(res.data))
         .catch((err) => console.error(err))
         .finally(() => setLoading(false))
     }, [reshreshUsersIndicator])
@@ -58,18 +58,24 @@ export default function UserListDetail() {
         .catch((err) => console.error(err))
     }
 
+    const changePrincipalPassword = async (password: string) => {
+        await UsersApi.changeCallerPassword(selectedEmailToChangePassword, password)
+        .then(() => setRefreshUsersIndicator(!reshreshUsersIndicator))
+        .catch((err) => console.error(err))
+    }
+
     const addDqoCloudUser = () => {
          dispatch(
            addFirstLevelTab({
              url: ROUTES.USER_DETAIL("new"),
              value: ROUTES.USER_DETAIL_VALUE("new"),
              label: "Create User",
-             state: {create: true
-             }
+             state: {create: true}
            })
          )
     }
-    if(loading){
+
+    if (loading) {
         return(
         <DefinitionLayout>
             <div className='w-full h-screen flex items-center justify-center'>
@@ -84,6 +90,7 @@ export default function UserListDetail() {
             <thead className='border-b w-full border-b-gray-400 relative flex items-center'>
                 <th className="px-6 py-4 text-left block w-100">User email</th>
                 <th className="px-6 py-4 text-left block w-50">User role</th>
+                {userProfile.license_type?.toLowerCase() !== 'free' ? 
                 <Button label='Add user'
                  color='primary'
                  variant='contained'
@@ -92,6 +99,7 @@ export default function UserListDetail() {
                  disabled={!!(userProfile.users_limit && userProfile.users_limit <= dqoCloudUsers?.length  &&
                  (userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE') || userProfile.can_manage_users !== true)} 
                 />
+                : null}
             </thead>
             <tbody>
                 {dqoCloudUsers?.map((user, index) => 
@@ -99,15 +107,19 @@ export default function UserListDetail() {
                     <td className='px-6 py-2 text-left block w-100'>{user.email}</td>
                     <td className='px-6 py-2 text-left block w-50'>{user.accountRole}</td>
                     <td className='px-6 py-2 text-left block max-w-100'>
+                        {userProfile.license_type?.toLowerCase() !== 'free' ? 
                         <Button label='Edit' variant='text' color='primary' 
                         onClick={() =>user.email ?  editDqoCloudUser(user.email, user.accountRole) : null}
                         disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}
                         />
+                        : <div className='w-24'></div> }
                     </td>
                     <td className="px-6 py-2 text-left block max-w-100">
+                        { userProfile.user !== user.email && userProfile.license_type?.toLowerCase() !== 'free' ? 
                         <Button label='Delete' variant='text' color='primary' 
                         onClick={() => setSelectedEmailToDelete(user.email ?? '')}
-                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/>
+                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/> 
+                        : <div className='w-24'></div> }
                     </td>
                     <td className="px-6 py-2 text-left block max-w-100">
                         <Button label='Change password' variant='text' color='primary' onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
@@ -118,7 +130,7 @@ export default function UserListDetail() {
             </tbody>
         </table>
         <ConfirmDialog open={selectedEmailToDelete.length!==0} onClose={() => setSelectedEmailToDelete('')} onConfirm={deleteDqoCloudUser} message={`Are you sure you want to delete ${selectedEmailToDelete} user?`}/>
-        <ChangeUserPasswordDialog open={selectedEmailToChangePassword.length!==0} onClose={() => setSelectedEmailToChangePassword('')} handleSubmit={changeDqoCloudUserPassword}  />
+        <ChangeUserPasswordDialog open={selectedEmailToChangePassword.length!==0} onClose={() => setSelectedEmailToChangePassword('')} handleSubmit={userProfile.user !== selectedEmailToChangePassword ? changeDqoCloudUserPassword : changePrincipalPassword}  />
     </DefinitionLayout>
   )
 }
