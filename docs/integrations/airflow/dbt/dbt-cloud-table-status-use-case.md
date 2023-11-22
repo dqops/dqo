@@ -3,24 +3,12 @@
 The Airflow's DAG configuration presents the use of the DbtCloud with the DQOps' table status operator.
 The example executes the load job in DbtCloud preceded by the table status Airflow operator that verifies the overall status of the table based on checks defined in DQOps on this table.
 
-
-
-!!! info "Wait for job operator usage"
-
-    The use of _wait for job_ operator in the example prevents from Airflow worker allocation in purpose for waiting until the run checks task has finished.
-    This operator can be safely removed when you are sure that your table is lightweight and the DQOps' checks execution lasts less than the default 120 seconds timeout.
-
-
 ```python
 import datetime
 import pendulum
 from airflow import DAG
 
 from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
-from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
-from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJobOperator
-from dqops.client.models.check_type import CheckType
-from dqops.client.models.rule_severity_level import RuleSeverityLevel
 from dqops.airflow.table_status.dqops_assert_table_status_operator import DqopsAssertTableStatusOperator
 
 with DAG(
@@ -41,15 +29,6 @@ with DAG(
         fail_on_timeout=False,
         wait_timeout=10
     )
-   
-    pre_load_wait_for_job = DqopsWaitForJobOperator(
-        task_id="dqops_wait_for_job_pre_load",
-        # local DQOps instance on a localhost can be reached from images with substitution the "host.docker.internal" in place of "localhost"
-        base_url="http://host.docker.internal:8888",
-        # the total time in seconds for the operator to wait will be the product of retries number and the retry_delay
-        retries=30,
-        retry_delay=60 # in seconds
-    )
 
     dbt_run_load = DbtCloudRunJobOperator(
         task_id="dbt_run_load",
@@ -62,7 +41,6 @@ with DAG(
     )
 
     assert_status_task >> \
-    pre_load_wait_for_job >> \
     dbt_run_load
 
 ```
@@ -88,29 +66,61 @@ If failed check exist, the Airflow DAG execution will not be completed as below.
 
 ![dbt-use-case-1](https://dqops.com/docs/images/integrations/airflow/dbt/dbt-cloud-table-status/dbt-cloud-table-status-1.png)
 
-To find out the cause, open DQOps UI. 
-Reach either Incidents tab and select the connection of the table or go to the checks
-
-The status can be reviewed in DQOps UI.
-
-#### todo  below #############################################################
-
+To find out the cause, open DQOps UI and reach Incidents tab in menu. 
+Then select the connection of the table.
 
 !!! tip "Re-run data quality checks"
 
     On a need of the data quality verification, clearing the __run_checks_post_load__ task makes Airflow will reschedule it immediately
     It will not run the whole dag from the beginning but the last two tasks of the presented example only.
 
-
-
-
+Below DAG is executed after data improvements.
 
 ![dbt-use-case-3](https://dqops.com/docs/images/integrations/airflow/dbt/dbt-cloud-table-status/dbt-cloud-table-status-3.png)
 
-
-Finally, 
+As you can see, the DAG is completed successfully. 
 
 ![dbt-use-case-2](https://dqops.com/docs/images/integrations/airflow/dbt/dbt-cloud-table-status/dbt-cloud-table-status-2.png)
+
+It will protect the execution of loading task in the future, when issues appears.
+
+## Checks execution after the dbt load job
+
+Use run checks operator to execute checks after the loading task. 
+It will trigger checks that will collect data from the table for the table status task of the next DAG execution.
+This approach will not require any scheduling in the DQOps application.
+
+The example only shows the additional python code to the previous, above example. 
+
+
+```python
+# the import section
+
+...
+from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
+from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJobOperator
+...
+
+# the task definitions
+
+...
+    run_checks = DqopsRunChecksOperator(
+        task_id="dqops_run_checks",
+        base_url="http://host.docker.internal:8888",
+        connection="marketing_with_dbt",
+        full_table_name="marketing_final.new_customers_us_daily"
+        fail_on_timeout=False,
+        wait_timeout=1
+    )
+
+    assert_status_task >> \
+    dbt_run_load >> \
+    run_checks
+
+```
+
+The code only runs the run checks task that do not wait for the execution of it.
+This is why the wait_timeout parameter is set to 1 second.
 
 
 ## What's next

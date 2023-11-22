@@ -5,6 +5,7 @@ from airflow import DAG
 from airflow.operators.dummy import DummyOperator
 # from airflow.providers.dbt.cloud.operators.dbt import DbtCloudRunJobOperator
 from dqops.airflow.table_status.dqops_assert_table_status_operator import DqopsAssertTableStatusOperator
+from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 
 with DAG(
     dag_id="dbt_cloud_with_table_status_example",
@@ -35,5 +36,15 @@ with DAG(
     #     wait_for_termination=True
     # )
 
+    run_checks = DqopsRunChecksOperator(
+        task_id="dqops_run_checks",
+        base_url="http://host.docker.internal:8888",
+        connection="example_connection",
+        full_table_name="maven_restaurant_ratings.consumers",
+        fail_on_timeout=False,
+        wait_timeout=1
+    )
+
     assert_status_task >> \
-    dbt_run_load
+    dbt_run_load >> \
+    run_checks
