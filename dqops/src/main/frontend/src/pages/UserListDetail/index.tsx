@@ -75,6 +75,8 @@ export default function UserListDetail() {
          )
     }
 
+    const canUserPerformActions = userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true
+
     if (loading) {
         return(
         <DefinitionLayout>
@@ -97,7 +99,7 @@ export default function UserListDetail() {
                  className='absolute right-2 top-2 w-40'
                  onClick={addDqoCloudUser}
                  disabled={!!(userProfile.users_limit && userProfile.users_limit <= dqoCloudUsers?.length  &&
-                 (userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE') || userProfile.can_manage_users !== true)} 
+                 canUserPerformActions)} 
                 />
                 : null}
             </thead>
@@ -108,22 +110,22 @@ export default function UserListDetail() {
                     <td className='px-6 py-2 text-left block w-50'>{user.accountRole}</td>
                     <td className='px-6 py-2 text-left block max-w-100'>
                         {userProfile.license_type?.toLowerCase() !== 'free' ? 
-                        <Button label='Edit' variant='text' color='primary' 
+                        <Button label='Edit' variant='text' color={canUserPerformActions ? 'primary' : 'secondary'} 
                         onClick={() =>user.email ?  editDqoCloudUser(user.email, user.accountRole) : null}
-                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}
+                        disabled={!canUserPerformActions}
                         />
                         : <div className='w-24'></div> }
                     </td>
                     <td className="px-6 py-2 text-left block max-w-100">
                         { userProfile.user !== user.email && userProfile.license_type?.toLowerCase() !== 'free' ? 
-                        <Button label='Delete' variant='text' color='primary' 
+                        <Button label='Delete' variant='text' color={canUserPerformActions ? 'primary' : 'secondary'}  
                         onClick={() => setSelectedEmailToDelete(user.email ?? '')}
-                        disabled={!(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/> 
+                        disabled={!canUserPerformActions}/> 
                         : <div className='w-24'></div> }
                     </td>
                     <td className="px-6 py-2 text-left block max-w-100">
-                        <Button label='Change password' variant='text' color='primary' onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
-                        disabled={userProfile.account_role !== "admin" && !(userProfile.license_type === 'TEAM' || userProfile.license_type === 'ENTERPRISE' || userProfile.can_manage_users === true)}/>
+                        <Button label='Change password' variant='text' color={!(userProfile.account_role !== "admin" && !canUserPerformActions) ? 'primary' : 'secondary'} onClick={() => setSelectedEmailToChangePassword(user.email ?? '')} 
+                        disabled={userProfile.account_role !== "admin" && !canUserPerformActions}/>
                     </td>
                 </tr>
                 )}

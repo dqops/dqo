@@ -2,7 +2,7 @@
 
 In configuration section you are able to manage DQO users. 
 
-![Users-List](https://dqops.com/docs/images/working-with-dqo/users-managment/usersList.png)
+![Users-List](https://dqops.com/docs/images/working-with-dqo/users-managment/usersList2.png)
 
 **There are 5 types of user roles:**
 
