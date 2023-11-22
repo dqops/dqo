@@ -756,7 +756,7 @@ spec:
         - dashboard_name: Column partition status per data quality dimension
           url: https://lookerstudio.google.com/embed/reporting/738d9b7e-9240-458c-9bc0-211f8be55798/page/c5B8C
           width: 1400
-          height: 1800
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
