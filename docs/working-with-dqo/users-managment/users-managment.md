@@ -6,11 +6,14 @@ In configuration section you are able to manage DQO users.
 
 **There are 5 types of user roles:**
 
-- Admin (Administrator of the account who can manage users and perform all actions)
-- Editor (Editor who can configure and run data quality checks)
-- Operator (The user can run data quality checks, but cannot make changes)
-- Viewer (Read-only viewer)
-- None (No access rights role)
+| User role                        | Description                                                                                                                                                                                                                   |
+|:----------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Admin              | Administrator of the account who can manage users and perform all actions                     |
+| Editor            | Editor who can configure and run data quality checksmaintenance.                                                                                                      |
+| Operator           | The user can run data quality checks, but cannot make changes                 |
+| Viewer               | Read-only viewer     |
+| None | No access rights role |
+
 
 Admin can add new users by clicking Add new user button, that will open then tab where it is possible to set users email and role. To add the user click the Save button
 
