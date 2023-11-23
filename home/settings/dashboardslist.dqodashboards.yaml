@@ -852,9 +852,9 @@ spec:
             ds0.p_quality_dimension: all
             ds0.p_check_category: all
         - dashboard_name: KPIs per table - summary
-          url: https://lookerstudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/6e88623a-31f5-41eb-a811-53ba001c86bc/page/c5B8C
           width: 1400
-          height: 2210
+          height: 2150
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
