@@ -1,11 +1,9 @@
 import pendulum
 from airflow import DAG
-from dqops.client.models.rule_severity_level import RuleSeverityLevel
-
 from dqops.airflow.run_checks.dqops_run_checks_operator import DqopsRunChecksOperator
 from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJobOperator
-
 from dqops.client.models.check_type import CheckType
+from dqops.client.models.rule_severity_level import RuleSeverityLevel
 
 with DAG(
     dag_id="example_connection_wait_for_job_run_checks",

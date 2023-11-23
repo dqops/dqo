@@ -23,10 +23,10 @@ const LeftView = () => {
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
   const { dashboardFolders } = useSelector(
-    (state: IRootState) => state.dashboard
+    (state: IRootState) => state?.dashboard
   );
-  const { openDashboardFolder, sidebarWidth, setSidebarWidth,} = useDashboard();
-  const dispatch = useActionDispatch()
+  const { openDashboardFolder, sidebarWidth, setSidebarWidth } = useDashboard();
+  const dispatch = useActionDispatch();
   const startResizing = useCallback(() => {
     setIsResizing(true);
   }, []);
@@ -62,35 +62,52 @@ const LeftView = () => {
     };
   }, [resize, stopResizing]);
 
-  
   const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
-    const { changeActiveTab, dashboardStatus, toggleDashboardFolder, activeTab } =
-    useDashboard();
-    
+    const {
+      changeActiveTab,
+      dashboardStatus,
+      toggleDashboardFolder,
+      activeTab
+    } = useDashboard();
+
     const key = useMemo(
       () => [...parents, folder].map((item) => item.folder_name).join('-'),
       [folder, parents]
+    );
+
+    useEffect(() => {
+      if (selected !== activeTab) {
+        setSelected(activeTab);
+      }
+    }, [activeTab]);
+
+    const [mouseEnterTimeout, setMouseEnterTimeout] = useState<
+      NodeJS.Timeout | undefined
+    >(undefined);
+    const handleMouseEnter = (
+      e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+      label: string,
+      url: string
+    ) => {
+      setMouseEnterTimeout(
+        setTimeout(() => {
+          const height = e.clientY;
+          dispatch(getDashboardTooltipState({ height, label, url }));
+        }, 100)
       );
-      
-      useEffect(() => {
-        if(selected !== activeTab){
-          setSelected(activeTab);
-        }
-      },[activeTab]);
-      
-    const [mouseEnterTimeout, setMouseEnterTimeout] = useState<NodeJS.Timeout | undefined>(undefined);
-    const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, label: string, url: string) => {
-      setMouseEnterTimeout(setTimeout(() => {
-        const height = e.clientY;
-        dispatch(getDashboardTooltipState({height, label, url}));
-      }, 100))
     };
 
     const handleMouseLeave = () => {
       if (mouseEnterTimeout) {
         clearTimeout(mouseEnterTimeout);
       }
-      dispatch(getDashboardTooltipState({ height: undefined, label: undefined, url: undefined }));
+      dispatch(
+        getDashboardTooltipState({
+          height: undefined,
+          label: undefined,
+          url: undefined
+        })
+      );
     };
 
     return (
@@ -116,11 +133,11 @@ const LeftView = () => {
                 parents={[...parents, folder]}
               />
             ))}
-            {folder.dashboards?.map((dashboard, jIndex) => (
+            {folder?.dashboards?.map((dashboard, jIndex) => (
               <div
                 key={jIndex}
                 className={
-                  selected === [key, dashboard.dashboard_name].join('-')
+                  selected === [key, dashboard?.dashboard_name].join('-')
                     ? 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 bg-gray-300 hover:bg-gray-300 relative'
                     : 'group cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300 relative'
                 }
@@ -131,23 +148,31 @@ const LeftView = () => {
                     parents,
                     [
                       key,
-                      dashboard.dashboard_name ? dashboard.dashboard_name : ''
+                      dashboard?.dashboard_name ? dashboard?.dashboard_name : ''
                     ].join('-'),
                     true
                   );
                   setSelected(
                     [
                       key,
-                      dashboard.dashboard_name ? dashboard.dashboard_name : ''
+                      dashboard?.dashboard_name ? dashboard?.dashboard_name : ''
                     ].join('-')
                   );
                 }}
               >
                 <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
-                <div className="text-[13px] leading-1.5 whitespace-nowrap" 
-                      onMouseEnter={(e) => handleMouseEnter(e, dashboard.dashboard_name ?? '', dashboard.url ?? '')}
-                      onMouseLeave={() => handleMouseLeave()}>
-                  {dashboard.dashboard_name}
+                <div
+                  className="text-[13px] leading-1.5 whitespace-nowrap"
+                  onMouseEnter={(e) =>
+                    handleMouseEnter(
+                      e,
+                      dashboard?.dashboard_name ?? '',
+                      dashboard.url ?? ''
+                    )
+                  }
+                  onMouseLeave={() => handleMouseLeave()}
+                >
+                  {dashboard?.dashboard_name}
                 </div>
               </div>
             ))}
@@ -174,7 +199,7 @@ const LeftView = () => {
       <div
         className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-20 top-16"
         onMouseDown={startResizing}
-        style={{ left: sidebarWidth, userSelect: "none" }}
+        style={{ left: sidebarWidth, userSelect: 'none' }}
       />
     </div>
   );

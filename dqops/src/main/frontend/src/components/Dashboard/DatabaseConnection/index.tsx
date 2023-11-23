@@ -258,6 +258,7 @@ const DatabaseConnection = ({
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
           label="Connection Name"
+          className='mb-4'
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
@@ -265,7 +266,13 @@ const DatabaseConnection = ({
           error={!!nameError}
           helperText={nameError}
         />
-
+          <Input
+          label="Parallel jobs limit"
+          value={database.parallel_jobs_limit}
+          onChange={(e) =>
+           !isNaN(Number(e.target.value)) && onChange({ ...database, parallel_jobs_limit: Number(e.target.value)})
+          }
+        />
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}
         </div>

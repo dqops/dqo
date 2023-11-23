@@ -16,6 +16,7 @@
 package com.dqops.cli.terminal;
 
 import com.dqops.cli.terminal.ansi.UrlFormatter;
+import org.jline.terminal.Size;
 import org.jline.terminal.Terminal;
 import org.jline.utils.InfoCmp;
 
@@ -69,7 +70,11 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
      */
     @Override
     public Integer getTerminalWidth() {
-        return this.terminal.getWidth();
+        Size size = this.terminal.getSize();
+        if (size == null) {
+            return 80;
+        }
+        return size.getColumns();
     }
 
     /**
@@ -78,6 +83,10 @@ public class TerminalWriterImpl extends TerminalWriterAbstract {
      */
     @Override
     public Integer getTerminalHeight() {
-        return this.terminal.getHeight();
+        Size size = this.terminal.getSize();
+        if (size == null) {
+            return 50;
+        }
+        return size.getRows();
     }
 }

@@ -1,11 +1,12 @@
-# Checks
+# {{header}}
 
-**This is a list of the checks in DQOps broken down by category and a brief description of what they do.**
+**{{helpText}}**
 
-## Table checks
+{{#each checkTargets}}
+{{#if (gt checkTargets.length 1)}}## {{capitalizeFirst this}} checks{{/if}}
 {{#each checks}}
-{{#if ( eq target "table")}}
-### **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
+{{#if (eq target ../this)}}
+{{#if (gt checkTargets.length 1)}}#{{/if}}## **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
 {{categoryHelp}}
 {{#each checkGroups}}
 | Check name | Check type | Description |
@@ -16,18 +17,4 @@
 {{else}}
 {{/if}}
 {{/each}}
-
-## Column checks
-{{#each checks}}
-{{#if ( eq target "column")}}
-### **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
-{{categoryHelp}}
-{{#each checkGroups}}
-| Check name | Check type | Description |
-|------------|------------|-------------|
-{{#each allChecks}}|[{{checkName}}](./{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
-{{/each}}
-{{/each}}
-{{else}}
-{{/if}}
 {{/each}}

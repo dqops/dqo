@@ -79,6 +79,8 @@ To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from Git and c
     The `DQOps User Home` folder locally stores data such as sensor readouts and checkout results, as well as data source configurations.
     [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
 
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+
 5.  Login to DQOps Cloud.
 
     To use all DQOps features, such as storing data quality definitions and results in the cloud and the data quality dashboards, you
@@ -93,5 +95,9 @@ To pull **[dqops/dqo](https://github.com/dqops/dqo.git)** project from Git and c
     [https://cloud.dqops.com/](https://cloud.dqops.com/) account. Since now on, your local DQOps instance is fully functional
     and can work mostly offline.
 
+    ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
+
 6.  Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888)
-    or by copying the link.
+    or by copying the link. You will see the welcome screen as shown below.
+
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)

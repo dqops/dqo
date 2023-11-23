@@ -23,6 +23,18 @@ To configure Webhooks, follow these steps:
 
 ![Configuring webhooks](https://dqops.com/docs/images/working-with-dqo/incidents-and-notifications/configuring-webhooks.png)
 
+## Types of webhooks configuration
+
+Configuration of webhooks in DQOps platform can be done in two different ways.
+
+First, is the default webhooks configuration available under Configuration menu.
+Second, is to configure webhooks on a connection level under the Notifications and Incidents tab. 
+
+DQOps uses both of them when preparing notifications.
+When the connection does not set the webhook link on it's level,
+the corresponding value from default webhooks is set (e.g. opened incident webhook value).
+
+
 ## Content of notification message
 
 An incident notification message contains complete information about the incident. 
@@ -134,7 +146,7 @@ Below is the example of raw text message in the Markdown language which you can 
 
 A notification has a special field called **issue URL**, which allows user to add an URL from an external ticketing system. 
 The issue URL can be added at any time. 
-Adding an Issue URL to an incident allows easy access to the issue in the ticketing system.
+Adding an Issue URL to an incident provides easy access to the issue in the ticketing system.
 
 ## Next steps
 

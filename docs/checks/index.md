@@ -2,6 +2,7 @@
 
 **This is a list of the checks in DQOps broken down by category and a brief description of what they do.**
 
+
 ## Table checks
 
 
@@ -1561,6 +1562,8 @@ Counts the number or percent of duplicate or unique values in a column.
 |[monthly_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-change-distinct-percent-since-yesterday)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
 |[daily_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#daily-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
 |[monthly_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+
+
 
 
 

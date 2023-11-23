@@ -67,8 +67,8 @@ RUN mkdir $DQO_USER_HOME
 RUN touch $DQO_USER_HOME/.DQO_USER_HOME_NOT_MOUNTED
 COPY --from=dqo-home /dqo/home home
 
-COPY distribution/dqo_docker_entrypoint.sh /dqo/home/
-RUN chmod +x /dqo/home/dqo_docker_entrypoint.sh
+COPY distribution/dqo_docker_entrypoint.sh /dqo/home/bin/
+RUN chmod +x /dqo/home/bin/dqo_docker_entrypoint.sh
 
 # copy spring dependencies
 ARG DEPENDENCY=/workspace/app/dqops/target/dependency
@@ -76,4 +76,4 @@ COPY --from=dqo-libs /workspace/app/lib/target/output/dqo-lib/jars /dqo/app/lib
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/lib /dqo/app/lib
 COPY --from=dqo-libs ${DEPENDENCY}/META-INF /dqo/app/META-INF
 COPY --from=dqo-libs ${DEPENDENCY}/BOOT-INF/classes /dqo/app
-ENTRYPOINT ["/dqo/home/dqo_docker_entrypoint.sh"]
+ENTRYPOINT ["/dqo/home/bin/dqo_docker_entrypoint.sh"]

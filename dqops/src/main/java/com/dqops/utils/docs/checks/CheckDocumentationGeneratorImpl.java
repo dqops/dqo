@@ -23,6 +23,7 @@ import com.github.jknack.handlebars.Template;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -52,13 +53,19 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
                 this.checkDocumentationModelFactory.makeDocumentationForColumnChecks().stream()).collect(Collectors.toList());
 
         MainPageCheckDocumentationModel mainPageCheckDocumentationModel = new MainPageCheckDocumentationModel();
+        mainPageCheckDocumentationModel.setHeader("Checks");
+        mainPageCheckDocumentationModel.setHelpText("This is a list of the checks in DQOps broken down by category and a brief description of what they do.");
+        mainPageCheckDocumentationModel.setCheckTargets(checkCategoryDocumentationModels.stream()
+                .map(CheckCategoryDocumentationModel::getTarget)
+                .distinct()
+                .collect(Collectors.toList()));
         mainPageCheckDocumentationModel.setChecks(checkCategoryDocumentationModels);
 
-        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("checks/main_page_documentation");
+        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("checks/main_page_documentation");
         DocumentationMarkdownFile mainPageDocumentationMarkdownFile = checksFolder.addNestedFile("index" + ".md");
         mainPageDocumentationMarkdownFile.setRenderContext(mainPageCheckDocumentationModel);
 
-        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageCheckDocumentationModel);
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageCheckDocumentationModel);
         mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
 
 
@@ -78,6 +85,60 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, similarCheck);
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
+
+        for (DocumentationFolder targetFolder : checksFolder.getSubFolders()) {
+            MainPageCheckDocumentationModel indexPageCheckDocumentationModel = renderIndexPageForCheckCategory(checkCategoryDocumentationModels,
+                    targetFolder.getFolderName(),
+                    Optional.empty());
+            DocumentationMarkdownFile indexFile = targetFolder.addNestedFile("index" + ".md");
+            indexFile.setRenderContext(indexPageCheckDocumentationModel);
+            String renderedIndexDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, indexPageCheckDocumentationModel);
+            indexFile.setFileContent(renderedIndexDocument);
+
+            for (DocumentationFolder categoryFolder : targetFolder.getSubFolders()) {
+                MainPageCheckDocumentationModel categoryIndexPageCheckDocumentationModel = renderIndexPageForCheckCategory(checkCategoryDocumentationModels,
+                        targetFolder.getFolderName(),
+                        Optional.of(categoryFolder.getFolderName()));
+                DocumentationMarkdownFile categoryIndexFile = categoryFolder.addNestedFile("index" + ".md");
+                categoryIndexFile.setRenderContext(categoryIndexPageCheckDocumentationModel);
+                String renderedCategoryIndexDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, categoryIndexPageCheckDocumentationModel);
+                categoryIndexFile.setFileContent(renderedCategoryIndexDocument);
+            }
+        }
+
         return checksFolder;
+    }
+
+    private MainPageCheckDocumentationModel renderIndexPageForCheckCategory(List<CheckCategoryDocumentationModel> allCheckCategories,
+                                                                            String checkTarget,
+                                                                            Optional<String> checkCategory) {
+        Stream<CheckCategoryDocumentationModel> checkCategoriesStream = allCheckCategories.stream()
+                .filter(checkCategoryModel -> checkCategoryModel.getTarget().equals(checkTarget));
+        if (checkCategory.isPresent()) {
+            checkCategoriesStream = checkCategoriesStream.filter(
+                    checkCategoryModel -> checkCategoryModel.getCategoryName().equals(checkCategory.get()));
+        }
+        List<CheckCategoryDocumentationModel> checkCategoryDocumentationModels = checkCategoriesStream.collect(Collectors.toList());
+
+        MainPageCheckDocumentationModel indexPageCheckDocumentationModel = new MainPageCheckDocumentationModel();
+        String header = "Checks/" + checkTarget;
+        if (checkCategory.isPresent()) {
+            header = header + "/" + checkCategory.get();
+            indexPageCheckDocumentationModel.setHelpText(String.format(
+                    "This is a list of %s %s checks in DQOps and a brief description of what they do.",
+                    checkCategory.get(), checkTarget));
+        } else {
+            indexPageCheckDocumentationModel.setHelpText(String.format(
+                    "This is a list of %s checks in DQOps broken down by category and a brief description of what they do.",
+                    checkTarget));
+        }
+        indexPageCheckDocumentationModel.setHeader(header);
+
+        indexPageCheckDocumentationModel.setCheckTargets(checkCategoryDocumentationModels.stream()
+                .map(CheckCategoryDocumentationModel::getTarget)
+                .distinct()
+                .collect(Collectors.toList()));
+        indexPageCheckDocumentationModel.setChecks(checkCategoryDocumentationModels);
+        return indexPageCheckDocumentationModel;
     }
 }

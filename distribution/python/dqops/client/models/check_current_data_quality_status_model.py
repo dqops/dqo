@@ -22,7 +22,7 @@ class CheckCurrentDataQualityStatusModel:
         Attributes:
             current_severity (Union[Unset, CheckResultStatus]):
             highest_historical_severity (Union[Unset, RuleSeverityLevel]):
-            executed_at (Union[Unset, int]): The UTC timestamp when the check was recently executed.
+            last_executed_at (Union[Unset, int]): The UTC timestamp when the check was recently executed.
             check_type (Union[Unset, CheckType]):
             time_scale (Union[Unset, CheckTimeScale]):
             category (Union[Unset, str]): Check category name, such as nulls, schema, strings, volume.
@@ -31,7 +31,7 @@ class CheckCurrentDataQualityStatusModel:
 
     current_severity: Union[Unset, CheckResultStatus] = UNSET
     highest_historical_severity: Union[Unset, RuleSeverityLevel] = UNSET
-    executed_at: Union[Unset, int] = UNSET
+    last_executed_at: Union[Unset, int] = UNSET
     check_type: Union[Unset, CheckType] = UNSET
     time_scale: Union[Unset, CheckTimeScale] = UNSET
     category: Union[Unset, str] = UNSET
@@ -47,7 +47,7 @@ class CheckCurrentDataQualityStatusModel:
         if not isinstance(self.highest_historical_severity, Unset):
             highest_historical_severity = self.highest_historical_severity.value
 
-        executed_at = self.executed_at
+        last_executed_at = self.last_executed_at
         check_type: Union[Unset, str] = UNSET
         if not isinstance(self.check_type, Unset):
             check_type = self.check_type.value
@@ -66,8 +66,8 @@ class CheckCurrentDataQualityStatusModel:
             field_dict["current_severity"] = current_severity
         if highest_historical_severity is not UNSET:
             field_dict["highest_historical_severity"] = highest_historical_severity
-        if executed_at is not UNSET:
-            field_dict["executed_at"] = executed_at
+        if last_executed_at is not UNSET:
+            field_dict["last_executed_at"] = last_executed_at
         if check_type is not UNSET:
             field_dict["check_type"] = check_type
         if time_scale is not UNSET:
@@ -98,7 +98,7 @@ class CheckCurrentDataQualityStatusModel:
                 _highest_historical_severity
             )
 
-        executed_at = d.pop("executed_at", UNSET)
+        last_executed_at = d.pop("last_executed_at", UNSET)
 
         _check_type = d.pop("check_type", UNSET)
         check_type: Union[Unset, CheckType]
@@ -121,7 +121,7 @@ class CheckCurrentDataQualityStatusModel:
         check_current_data_quality_status_model = cls(
             current_severity=current_severity,
             highest_historical_severity=highest_historical_severity,
-            executed_at=executed_at,
+            last_executed_at=last_executed_at,
             check_type=check_type,
             time_scale=time_scale,
             category=category,

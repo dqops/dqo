@@ -16,7 +16,7 @@
 
 package com.dqops.data.checkresults.services.models.currentstatus;
 
-import com.dqops.data.checkresults.services.models.CheckResultStatus;
+import com.dqops.rules.RuleSeverityLevel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,16 +35,26 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "ColumnCurrentDataQualityStatusModel", description = "The column's most recent data quality status. " +
         "It is a summary of the results of the most recently executed data quality checks on the column. " +
-        "Verify the value of the highest_severity_level to see if there are any data quality issues on the column. " +
-        "The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, " +
-        "3 - a fatal data quality issue was detected.")
+        "Verify the value of the current_severity to see if there are any data quality issues on the column.")
 @Data
 public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualityStatusHolder {
     /**
-     * The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.
+     * The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups.
+     * For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.
      */
-    @JsonPropertyDescription("The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.")
-    private CheckResultStatus highestSeverityLevel;
+    @JsonPropertyDescription("The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. " +
+            "For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.")
+    private RuleSeverityLevel currentSeverity;
+
+    /**
+     * The highest severity of previous executions of this data quality issue in the analyzed time range.
+     * It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore.
+     * For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.
+     */
+    @JsonPropertyDescription("The highest severity of previous executions of this data quality issue in the analyzed time range. " +
+            "It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. " +
+            "For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.")
+    private RuleSeverityLevel highestHistoricalSeverity;
 
     /**
      * The UTC timestamp when the most recent data quality check was executed on the column.
@@ -99,4 +109,25 @@ public class ColumnCurrentDataQualityStatusModel implements CurrentDataQualitySt
     @JsonPropertyDescription("The dictionary of statuses for data quality checks. The keys are data quality check names, the values are the current data quality check statuses " +
             "that describe the most current status.")
     private Map<String, CheckCurrentDataQualityStatusModel> checks = new LinkedHashMap<>();
+
+    /**
+     * Calculates the highest current severity status and historic severity status from all checks.
+     */
+    public void calculateHighestCurrentAndHistoricSeverity() {
+        for (CheckCurrentDataQualityStatusModel checkStatusModel : checks.values()) {
+            if (this.currentSeverity == null) {
+                this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
+            } else if (checkStatusModel.getCurrentSeverity() != null &&
+                    this.currentSeverity.getSeverity() < checkStatusModel.getCurrentSeverity().getSeverity()) {
+                this.currentSeverity = RuleSeverityLevel.fromCheckSeverity(checkStatusModel.getCurrentSeverity());
+            }
+
+            if (this.highestHistoricalSeverity == null) {
+                this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
+            } else if (checkStatusModel.getHighestHistoricalSeverity() != null &&
+                    this.highestHistoricalSeverity.getSeverity() < checkStatusModel.getHighestHistoricalSeverity().getSeverity()) {
+                this.highestHistoricalSeverity = checkStatusModel.getHighestHistoricalSeverity();
+            }
+        }
+    }
 }

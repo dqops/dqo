@@ -153,7 +153,7 @@ public class CliInitializerImpl implements CliInitializer {
      * Shows the initial information with the links to the UI.
      */
     protected void displayUiLinks() {
-        String dqoUiHome = this.localUrlAddresses.getDqoUiUrl();
+        String dqoUiHome = this.localUrlAddresses.getDqopsUiUrl();
         String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
         this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
         this.terminalWriter.writeUrl(dqoUiHome, "- DQOps User Interface Console (" + dqoUiHome + ")\n");
@@ -189,20 +189,23 @@ public class CliInitializerImpl implements CliInitializer {
         }
         finally {
             this.jobQueueMonitoringService.start();
-            this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesInBackground();
             this.dqoJobQueue.start();
             this.parentDqoJobQueue.start();
 
-            if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
-                    this.dqoSchedulerConfigurationProperties.getStart()) {
-                this.jobSchedulerService.start(
-                        this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
-                        this.dqoSchedulerConfigurationProperties.getCheckRunMode());
-                this.jobSchedulerService.triggerMetadataSynchronization();
-            }
+            if (CliApplication.isRequiredWebServer()) {
+                this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesInBackground();
 
-            if (CliApplication.isRequiredWebServer() && !this.rootConfigurationProperties.isSilent()) {
-                this.displayUiLinks();
+                if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
+                        this.dqoSchedulerConfigurationProperties.getStart()) {
+                    this.jobSchedulerService.start(
+                            this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
+                            this.dqoSchedulerConfigurationProperties.getCheckRunMode());
+                    this.jobSchedulerService.triggerMetadataSynchronization();
+                }
+
+                if (!this.rootConfigurationProperties.isSilent()) {
+                    this.displayUiLinks();
+                }
             }
         }
     }

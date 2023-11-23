@@ -24,6 +24,7 @@ import {
   getFirstLevelState
 } from '../../../redux/selectors';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
+import TableQualityStatus from './TableQualityStatus';
 
 const initTabs = [
   {
@@ -33,6 +34,14 @@ const initTabs = [
   {
     label: 'Monthly',
     value: 'monthly'
+  },
+  {
+    label: 'Table quality status daily',
+    value: 'table-quality-status-daily'
+  },
+  {
+    label: 'Table quality status monthly',
+    value: 'table-quality-status-monthly'
   },
   {
     label: 'Daily Comparisons',
@@ -185,7 +194,9 @@ const TablePartitionedChecksView = () => {
       tab !== 'daily' &&
       tab !== 'monthly' &&
       tab !== 'daily_comparisons' &&
-      tab !== 'monthly_comparisons'
+      tab !== 'monthly_comparisons' &&
+      tab !== 'table-quality-status-daily' &&
+      tab !== 'table-quality-status-monthly'
     ) {
       history.push(
         ROUTES.TABLE_LEVEL_PAGE(
@@ -232,7 +243,7 @@ const TablePartitionedChecksView = () => {
       )
     );
   };
-
+  console.log(tab);
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
@@ -266,12 +277,18 @@ const TablePartitionedChecksView = () => {
           loading={loading}
         />
       )}
+      {tab === 'table-quality-status-daily' && (
+        <TableQualityStatus timeScale="daily" />
+      )}
+      {tab === 'table-quality-status-monthly' && (
+        <TableQualityStatus timeScale="monthly" />
+      )}
       {tab === 'daily_comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           timePartitioned="daily"
           checksUI={dailyPartitionedChecks}
-           onUpdateChecks = {onUpdate}
+          onUpdateChecks={onUpdate}
         />
       )}
       {tab === 'monthly_comparisons' && (
@@ -279,7 +296,7 @@ const TablePartitionedChecksView = () => {
           checkTypes={checkTypes}
           timePartitioned="monthly"
           checksUI={monthlyPartitionedChecks}
-          onUpdateChecks = {onUpdate}
+          onUpdateChecks={onUpdate}
         />
       )}
     </div>

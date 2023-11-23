@@ -13,30 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.dqops.rest.server;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
-import org.springframework.stereotype.Component;
+/**
+ * Returns the configuration of the default web server url.
+ */
+public interface LocalUrlAddresses {
+    /**
+     * Returns the url of the DQOps user interface.
+     *
+     * @return URL of the DQOps user interface.
+     */
+    String getDqopsUiUrl();
 
-@Component
-public class LocalUrlAddresses {
-    public static final String protocol = "http://";
-    public static final String serverHost = "localhost";
-    public static final String swaggerUiPath = "/swagger-ui";
-
-    private final ServerProperties serverProperties;
-
-    @Autowired
-    public LocalUrlAddresses(ServerProperties serverProperties) {
-        this.serverProperties = serverProperties;
-    }
-
-    public String getDqoUiUrl() {
-        return protocol + serverHost + ":" + serverProperties.getPort();
-    }
-
-    public String getSwaggerUiUrl() {
-        return getDqoUiUrl() + swaggerUiPath + "/";
-    }
+    /**
+     * Returns the url to the swagger UI frontend.
+     *
+     * @return Swagger ui frontend url.
+     */
+    String getSwaggerUiUrl();
 }

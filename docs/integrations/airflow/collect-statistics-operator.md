@@ -22,8 +22,9 @@ Parameters allow selection of specific connections, tables and columns which sta
 | wait_timeout      | The number of seconds the client will wait for activity before terminating the idle task. If not set, the timeout is read from the client’s default value, which is set to 120 seconds.                              | int                                     |
 | fail_on_timeout   | By default, exceeding the timeout limit causes the status of the task to end with the Failed status. By setting the flag of this parameter to True, the status of the failed task will result in the Success status. | bool [optional, default=True]           |
 
-Above parameters are the only parameters that are the addition to the standard parameters of BaseOperator, from which the described operator inherits.
-For the complete list of parameters that are supported by BaseOperator, visit the official Airflow webpage https://airflow.apache.org/
+The operator inherits from BaseOperator and adds the above parameters.
+For the complete list of BaseOperator parameters, visit the official Airflow webpage https://airflow.apache.org/
+
 
 ## Set up the operator
 
@@ -115,7 +116,6 @@ Job id has a type of DqoQueueJobId which includes job tracking details:
 | total_collected_results        | The total number of results that were collected.                                            | integer   |
 
 
-
 ## Status
 
 Status field is the DqoJobStatus enum, which have one of values:
@@ -127,3 +127,11 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **running**: The job is now running.
 - **succeeded**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
+
+## What's next
+
+- [Learn about run checks operator](run-checks-operator.md)
+- [Learn how to use run checks operator](run-checks-use-case.md)
+- [Learn about table import operator](table-import-operator.md)
+- [Learn about table status operator](table-status-operator.md)
+- [Learn about wait for job operator](wait-for-job-operator.md)

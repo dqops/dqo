@@ -59,29 +59,33 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
   };
 
   const navigate = () => {
-    const url = ROUTES.COLUMN_LEVEL_PAGE(
-      incidentDetail?.checkType ?? "profiling",
-      incidentDetail?.connection ?? "",
-      incidentDetail?.schema ?? "",
-      incidentDetail?.table ?? "",
-      issue.columnName ?? "",
-      'detail'
-    );
-    const value = ROUTES.COLUMN_LEVEL_VALUE(
-      incidentDetail?.checkType ?? "profiling",
-      incidentDetail?.connection ?? "",
-      incidentDetail?.schema ?? "",
-      incidentDetail?.table ?? "",
-      issue.columnName ?? ""
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.PROFILING, {
-        url,
-        value,
-        state: {},
-        label: issue.columnName
-      })
-    );
+    const {
+      checkType = 'profiling',
+      connection = '',
+      schema = '',
+      table = '',
+    } = incidentDetail || {};
+    const columnName = issue.columnName
+    const defaultCheckType = "profiling";
+  
+    let url, value, label;
+    if (columnName && columnName.length > 0) {
+      url = ROUTES.COLUMN_LEVEL_PAGE(checkType ?? defaultCheckType, connection , schema, table, columnName, 'detail');
+      value = ROUTES.COLUMN_LEVEL_VALUE(checkType ?? defaultCheckType, connection, schema, table, columnName);
+      label = columnName;
+    } else {
+      url = ROUTES.TABLE_LEVEL_PAGE(checkType ?? defaultCheckType, connection, schema, table, 'advanced');
+      value = ROUTES.TABLE_LEVEL_VALUE(checkType ?? defaultCheckType, connection, schema, table);
+      label = table;
+    }
+  
+    const tabData = {
+      url,
+      value,
+      state: {},
+      label,
+    };  
+    dispatch(addFirstLevelTab(CheckTypes.PROFILING, tabData));
     history.push(url);
   };
 
@@ -159,7 +163,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <tr>
           <td colSpan={12}>
             <CheckDetails
-              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              checkTypes={(issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
               connection={incidentDetail?.connection ?? ''}
               schema={incidentDetail?.schema ?? ''}
               table={incidentDetail?.table ?? ''}
@@ -167,6 +171,8 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
               runCheckType={issue.checkType}
               onClose={closeCheckDetails}
               category={incidentDetail?.checkCategory}
+              comparisonName={issue.tableComparison}
+              column={issue.columnName}
             />
           </td>
         </tr>

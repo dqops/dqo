@@ -1,6 +1,7 @@
 from airflow.exceptions import AirflowException
 from airflow.models.taskinstance import TaskInstance
 
+
 class DqopsJobFailedException(AirflowException):
     """
     Exception used in airflow to mark status of task execution as Failed.

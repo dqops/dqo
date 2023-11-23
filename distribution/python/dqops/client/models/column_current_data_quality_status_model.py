@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..models.check_result_status import CheckResultStatus
+from ..models.rule_severity_level import RuleSeverityLevel
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -18,12 +18,12 @@ T = TypeVar("T", bound="ColumnCurrentDataQualityStatusModel")
 @_attrs_define
 class ColumnCurrentDataQualityStatusModel:
     """The column's most recent data quality status. It is a summary of the results of the most recently executed data
-    quality checks on the column. Verify the value of the highest_severity_level to see if there are any data quality
-    issues on the column. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was
-    detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.
+    quality checks on the column. Verify the value of the current_severity to see if there are any data quality issues
+    on the column.
 
         Attributes:
-            highest_severity_level (Union[Unset, CheckResultStatus]):
+            current_severity (Union[Unset, RuleSeverityLevel]):
+            highest_historical_severity (Union[Unset, RuleSeverityLevel]):
             last_check_executed_at (Union[Unset, int]): The UTC timestamp when the most recent data quality check was
                 executed on the column.
             executed_checks (Union[Unset, int]): The total number of most recent checks that were executed on the column.
@@ -45,7 +45,8 @@ class ColumnCurrentDataQualityStatusModel:
                 describe the most current status.
     """
 
-    highest_severity_level: Union[Unset, CheckResultStatus] = UNSET
+    current_severity: Union[Unset, RuleSeverityLevel] = UNSET
+    highest_historical_severity: Union[Unset, RuleSeverityLevel] = UNSET
     last_check_executed_at: Union[Unset, int] = UNSET
     executed_checks: Union[Unset, int] = UNSET
     valid_results: Union[Unset, int] = UNSET
@@ -57,9 +58,13 @@ class ColumnCurrentDataQualityStatusModel:
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        highest_severity_level: Union[Unset, str] = UNSET
-        if not isinstance(self.highest_severity_level, Unset):
-            highest_severity_level = self.highest_severity_level.value
+        current_severity: Union[Unset, str] = UNSET
+        if not isinstance(self.current_severity, Unset):
+            current_severity = self.current_severity.value
+
+        highest_historical_severity: Union[Unset, str] = UNSET
+        if not isinstance(self.highest_historical_severity, Unset):
+            highest_historical_severity = self.highest_historical_severity.value
 
         last_check_executed_at = self.last_check_executed_at
         executed_checks = self.executed_checks
@@ -75,8 +80,10 @@ class ColumnCurrentDataQualityStatusModel:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if highest_severity_level is not UNSET:
-            field_dict["highest_severity_level"] = highest_severity_level
+        if current_severity is not UNSET:
+            field_dict["current_severity"] = current_severity
+        if highest_historical_severity is not UNSET:
+            field_dict["highest_historical_severity"] = highest_historical_severity
         if last_check_executed_at is not UNSET:
             field_dict["last_check_executed_at"] = last_check_executed_at
         if executed_checks is not UNSET:
@@ -103,12 +110,21 @@ class ColumnCurrentDataQualityStatusModel:
         )
 
         d = src_dict.copy()
-        _highest_severity_level = d.pop("highest_severity_level", UNSET)
-        highest_severity_level: Union[Unset, CheckResultStatus]
-        if isinstance(_highest_severity_level, Unset):
-            highest_severity_level = UNSET
+        _current_severity = d.pop("current_severity", UNSET)
+        current_severity: Union[Unset, RuleSeverityLevel]
+        if isinstance(_current_severity, Unset):
+            current_severity = UNSET
         else:
-            highest_severity_level = CheckResultStatus(_highest_severity_level)
+            current_severity = RuleSeverityLevel(_current_severity)
+
+        _highest_historical_severity = d.pop("highest_historical_severity", UNSET)
+        highest_historical_severity: Union[Unset, RuleSeverityLevel]
+        if isinstance(_highest_historical_severity, Unset):
+            highest_historical_severity = UNSET
+        else:
+            highest_historical_severity = RuleSeverityLevel(
+                _highest_historical_severity
+            )
 
         last_check_executed_at = d.pop("last_check_executed_at", UNSET)
 
@@ -132,7 +148,8 @@ class ColumnCurrentDataQualityStatusModel:
             checks = ColumnCurrentDataQualityStatusModelChecks.from_dict(_checks)
 
         column_current_data_quality_status_model = cls(
-            highest_severity_level=highest_severity_level,
+            current_severity=current_severity,
+            highest_historical_severity=highest_historical_severity,
             last_check_executed_at=last_check_executed_at,
             executed_checks=executed_checks,
             valid_results=valid_results,
