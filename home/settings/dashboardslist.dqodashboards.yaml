@@ -6,31 +6,17 @@ spec:
   folders:
     - folder_name: Table profiling status
       dashboards:
-        - dashboard_name: Table profiling status per data quality dimension
+        - dashboard_name: Table profiling status
           url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
           width: 1400
-          height: 1400
+          height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-        - dashboard_name: Table profiling status per check category
-          url: https://lookerstudio.google.com/embed/reporting/4ff08521-65d9-448d-9d78-fd3fe415a557/page/c5B8C
-          width: 1400
-          height: 1400
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-        - dashboard_name: Column profiling status per data quality dimension
+        - dashboard_name: Column profiling status
           url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
           width: 1400
-          height: 1760
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: profiling
-        - dashboard_name: Column profiling status per check category
-          url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
-          width: 1400
-          height: 1760
+          height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -296,26 +282,19 @@ spec:
                 ds0.p_check_type: profiling
 - folder_name: Monitoring
   folders:
-    - folder_name: Current table status
+    - folder_name: Current status
       dashboards:
-        - dashboard_name: Current table status per data quality dimension
+        - dashboard_name: Current table status
           url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
           width: 1400
-          height: 1400
+          height: 1600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-        - dashboard_name: Current table status per check category
-          url: https://lookerstudio.google.com/embed/reporting/4ff08521-65d9-448d-9d78-fd3fe415a557/page/c5B8C
-          width: 1400
-          height: 1400
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
-        - dashboard_name: Current column status per data quality dimension
+        - dashboard_name: Current column status
           url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
           width: 1400
-          height: 1760
+          height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -676,31 +655,17 @@ spec:
   folders:
     - folder_name: Current status
       dashboards:
-        - dashboard_name: Table partition status per check category
-          url: https://lookerstudio.google.com/embed/reporting/6c58d29c-7de3-4051-8b27-396981f5e8f2/page/c5B8C
-          width: 1400
-          height: 1400
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-        - dashboard_name: Table partition status per data quality dimension
-          url: https://lookerstudio.google.com/embed/reporting/9d9802a4-775b-4e39-8b09-d5b1e9ae6893/page/c5B8C
-          width: 1400
-          height: 1400
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: partitioned
-        - dashboard_name: Column partition status per check category
-          url: https://lookerstudio.google.com/embed/reporting/2921e451-adef-4769-a96b-2497daed58db/page/c5B8C
+        - dashboard_name: Table partition status
+          url: https://lookerstudio.google.com/embed/reporting/c09b3c93-8762-4834-86ab-c97bc37135e3/page/c5B8C
           width: 1400
           height: 2000
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: Column partition status per data quality dimension
-          url: https://lookerstudio.google.com/embed/reporting/738d9b7e-9240-458c-9bc0-211f8be55798/page/c5B8C
+        - dashboard_name: Column partition status
+          url: https://lookerstudio.google.com/embed/reporting/2921e451-adef-4769-a96b-2497daed58db/page/c5B8C
           width: 1400
-          height: 2100
+          height: 2300
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
