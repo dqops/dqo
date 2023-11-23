@@ -314,13 +314,7 @@ export const getCheckResults =
     const successCallback = (
       res: AxiosResponse<CheckResultsListModel[]>
     ) => {
-      const checks = [...res.data]
-
-    if (checks && checks[0] && checks[0].checkResultEntries && comparisonName && comparisonName.length > 0) {
-      checks[0].checkResultEntries = checks[0].checkResultEntries.filter(entry => entry.tableComparison === comparisonName);
-    }
-    
-    const filteredChecks = checks.filter((item) => item.checkName === checkName)
+      const filteredChecks = [...res.data]
 
       dispatch(
         getCheckResultsSuccess(
