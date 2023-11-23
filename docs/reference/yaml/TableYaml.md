@@ -1,5 +1,5 @@
 
-## ColumnUniquenessDistinctCountStatisticsCollectorSpec  
+## ColumnStatisticsCollectorsRootCategoriesSpec  
   
   
 
@@ -14,8 +14,11 @@
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/uniqueness-column-sensors/#distinct-count)|Profiler parameters|[ColumnUniquenessDistinctCountSensorParametersSpec](../../sensors/column/uniqueness-column-sensors/#distinct-count)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+|[nulls](../TableYaml/#ColumnNullsStatisticsCollectorsSpec)|Configuration of null values profilers on a column level.|[ColumnNullsStatisticsCollectorsSpec](../TableYaml/#ColumnNullsStatisticsCollectorsSpec)| | | |
+|[strings](../TableYaml/#ColumnStringsStatisticsCollectorsSpec)|Configuration of string (text) profilers on a column level.|[ColumnStringsStatisticsCollectorsSpec](../TableYaml/#ColumnStringsStatisticsCollectorsSpec)| | | |
+|[uniqueness](../TableYaml/#ColumnUniquenessStatisticsCollectorsSpec)|Configuration of profilers that analyse uniqueness of values (distinct count).|[ColumnUniquenessStatisticsCollectorsSpec](../TableYaml/#ColumnUniquenessStatisticsCollectorsSpec)| | | |
+|[range](../TableYaml/#ColumnRangeStatisticsCollectorsSpec)|Configuration of profilers that analyse the range of values (min, max).|[ColumnRangeStatisticsCollectorsSpec](../TableYaml/#ColumnRangeStatisticsCollectorsSpec)| | | |
+|[sampling](../TableYaml/#ColumnSamplingStatisticsCollectorsSpec)|Configuration of profilers that collect the column samples.|[ColumnSamplingStatisticsCollectorsSpec](../TableYaml/#ColumnSamplingStatisticsCollectorsSpec)| | | |
 
 
 
@@ -27,7 +30,7 @@
 
 ___  
 
-## TableSchemaColumnCountStatisticsCollectorSpec  
+## ColumnNullsStatisticsCollectorsSpec  
   
   
 
@@ -42,8 +45,10 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/table/schema-table-sensors/#column-count)|Profiler parameters|[TableColumnCountSensorParametersSpec](../../sensors/table/schema-table-sensors/#column-count)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+|[nulls_count](../TableYaml/#ColumnNullsNullsCountStatisticsCollectorSpec)|Configuration of the profiler that counts null column values.|[ColumnNullsNullsCountStatisticsCollectorSpec](../TableYaml/#ColumnNullsNullsCountStatisticsCollectorSpec)| | | |
+|[nulls_percent](../TableYaml/#ColumnNullsNullsPercentStatisticsCollectorSpec)|Configuration of the profiler that measures the percentage of null values.|[ColumnNullsNullsPercentStatisticsCollectorSpec](../TableYaml/#ColumnNullsNullsPercentStatisticsCollectorSpec)| | | |
+|[not_nulls_count](../TableYaml/#ColumnNullsNotNullsCountStatisticsCollectorSpec)|Configuration of the profiler that counts not null column values.|[ColumnNullsNotNullsCountStatisticsCollectorSpec](../TableYaml/#ColumnNullsNotNullsCountStatisticsCollectorSpec)| | | |
+|[not_nulls_percent](../TableYaml/#ColumnNullsNotNullsPercentStatisticsCollectorSpec)|Configuration of the profiler that measures the percentage of not null values.|[ColumnNullsNotNullsPercentStatisticsCollectorSpec](../TableYaml/#ColumnNullsNotNullsPercentStatisticsCollectorSpec)| | | |
 
 
 
@@ -55,8 +60,8 @@ ___
 
 ___  
 
-## TableVolumeStatisticsCollectorsSpec  
-  
+## TablePartitionedChecksRootSpec  
+Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)  
   
 
 
@@ -70,7 +75,8 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[row_count](../TableYaml/#TableVolumeRowCountStatisticsCollectorSpec)|Configuration of the row count profiler.|[TableVolumeRowCountStatisticsCollectorSpec](../TableYaml/#TableVolumeRowCountStatisticsCollectorSpec)| | | |
+|[daily](../partitioned/table-daily-partitioned-checks/#TableDailyPartitionedCheckCategoriesSpec)|Configuration of day partitioned data quality checks evaluated at a table level.|[TableDailyPartitionedCheckCategoriesSpec](../partitioned/table-daily-partitioned-checks/#TableDailyPartitionedCheckCategoriesSpec)| | | |
+|[monthly](../partitioned/table-monthly-partitioned-checks/#TableMonthlyPartitionedCheckCategoriesSpec)|Configuration of monthly partitioned data quality checks evaluated at a table level..|[TableMonthlyPartitionedCheckCategoriesSpec](../partitioned/table-monthly-partitioned-checks/#TableMonthlyPartitionedCheckCategoriesSpec)| | | |
 
 
 
@@ -82,7 +88,7 @@ ___
 
 ___  
 
-## ColumnStringsStringMinLengthStatisticsCollectorSpec  
+## TableStatisticsCollectorsRootCategoriesSpec  
   
   
 
@@ -97,8 +103,8 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/strings-column-sensors/#string-min-length)|Profiler parameters|[ColumnStringsStringMinLengthSensorParametersSpec](../../sensors/column/strings-column-sensors/#string-min-length)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+|[volume](../TableYaml/#TableVolumeStatisticsCollectorsSpec)|Configuration of volume statistics collectors on a table level.|[TableVolumeStatisticsCollectorsSpec](../TableYaml/#TableVolumeStatisticsCollectorsSpec)| | | |
+|[schema](../TableYaml/#TableSchemaStatisticsCollectorsSpec)||[TableSchemaStatisticsCollectorsSpec](../TableYaml/#TableSchemaStatisticsCollectorsSpec)| | | |
 
 
 
@@ -110,8 +116,8 @@ ___
 
 ___  
 
-## ColumnPartitionedChecksRootSpec  
-Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)  
+## TableSchemaStatisticsCollectorsSpec  
+  
   
 
 
@@ -125,8 +131,7 @@ Container of column level partitioned checks, divided by the time window (daily,
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](../partitioned/column-daily-partitioned-checks/#ColumnDailyPartitionedCheckCategoriesSpec)|Configuration of day partitioned data quality checks evaluated at a column level.|[ColumnDailyPartitionedCheckCategoriesSpec](../partitioned/column-daily-partitioned-checks/#ColumnDailyPartitionedCheckCategoriesSpec)| | | |
-|[monthly](../partitioned/column-monthly-partitioned-checks/#ColumnMonthlyPartitionedCheckCategoriesSpec)|Configuration of monthly partitioned data quality checks evaluated at a column level.|[ColumnMonthlyPartitionedCheckCategoriesSpec](../partitioned/column-monthly-partitioned-checks/#ColumnMonthlyPartitionedCheckCategoriesSpec)| | | |
+|[column_count](../TableYaml/#TableSchemaColumnCountStatisticsCollectorSpec)|Configuration of the column count profiler.|[TableSchemaColumnCountStatisticsCollectorSpec](../TableYaml/#TableSchemaColumnCountStatisticsCollectorSpec)| | | |
 
 
 
@@ -155,6 +160,34 @@ Container of column level monitoring, divided by the time window (daily, monthly
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[daily](../monitoring/column-daily-monitoring-checks/#ColumnDailyMonitoringCheckCategoriesSpec)|Configuration of daily monitoring evaluated at a column level.|[ColumnDailyMonitoringCheckCategoriesSpec](../monitoring/column-daily-monitoring-checks/#ColumnDailyMonitoringCheckCategoriesSpec)| | | |
 |[monthly](../monitoring/column-monthly-monitoring-checks/#ColumnMonthlyMonitoringCheckCategoriesSpec)|Configuration of monthly monitoring evaluated at a column level.|[ColumnMonthlyMonitoringCheckCategoriesSpec](../monitoring/column-monthly-monitoring-checks/#ColumnMonthlyMonitoringCheckCategoriesSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnRangeSumValueStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/numeric-column-sensors/#sum)|Profiler parameters|[ColumnNumericSumSensorParametersSpec](../../sensors/column/numeric-column-sensors/#sum)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
 
@@ -195,35 +228,7 @@ Table and column definition file that defines a list of tables and columns that 
 
 ___  
 
-## TablePartitionedChecksRootSpec  
-Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](../partitioned/table-daily-partitioned-checks/#TableDailyPartitionedCheckCategoriesSpec)|Configuration of day partitioned data quality checks evaluated at a table level.|[TableDailyPartitionedCheckCategoriesSpec](../partitioned/table-daily-partitioned-checks/#TableDailyPartitionedCheckCategoriesSpec)| | | |
-|[monthly](../partitioned/table-monthly-partitioned-checks/#TableMonthlyPartitionedCheckCategoriesSpec)|Configuration of monthly partitioned data quality checks evaluated at a table level..|[TableMonthlyPartitionedCheckCategoriesSpec](../partitioned/table-monthly-partitioned-checks/#TableMonthlyPartitionedCheckCategoriesSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnRangeStatisticsCollectorsSpec  
+## ColumnUniquenessDistinctPercentStatisticsCollectorSpec  
   
   
 
@@ -238,38 +243,35 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[min_value](../TableYaml/#ColumnRangeMinValueStatisticsCollectorSpec)|Configuration of the profiler that finds the minimum value in the column.|[ColumnRangeMinValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeMinValueStatisticsCollectorSpec)| | | |
-|[median_value](../TableYaml/#ColumnRangeMedianValueStatisticsCollectorSpec)|Configuration of the profiler that finds the median value in the column.|[ColumnRangeMedianValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeMedianValueStatisticsCollectorSpec)| | | |
-|[max_value](../TableYaml/#ColumnRangeMaxValueStatisticsCollectorSpec)|Configuration of the profiler that finds the maximum value in the column.|[ColumnRangeMaxValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeMaxValueStatisticsCollectorSpec)| | | |
-|[sum_value](../TableYaml/#ColumnRangeSumValueStatisticsCollectorSpec)|Configuration of the profiler that finds the sum value in the column.|[ColumnRangeSumValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeSumValueStatisticsCollectorSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnSamplingColumnSamplesStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/sampling-column-sensors/#column-samples)|Profiler parameters|[ColumnSamplingColumnSamplesSensorParametersSpec](../../sensors/column/sampling-column-sensors/#column-samples)| | | |
+|[parameters](../../sensors/column/uniqueness-column-sensors/#distinct-percent)|Profiler parameters|[ColumnUniquenessDistinctPercentSensorParametersSpec](../../sensors/column/uniqueness-column-sensors/#distinct-percent)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnSamplingStatisticsCollectorsSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[column_samples](../TableYaml/#ColumnSamplingColumnSamplesStatisticsCollectorSpec)|Configuration of the profiler that finds the maximum string length.|[ColumnSamplingColumnSamplesStatisticsCollectorSpec](../TableYaml/#ColumnSamplingColumnSamplesStatisticsCollectorSpec)| | | |
 
 
 
@@ -326,37 +328,7 @@ Table specification that defines data quality tests that are enabled on a table 
 
 ___  
 
-## TableIncidentGroupingSpec  
-Configuration of data quality incident grouping on a table level. Defines how similar data quality issues are grouped into incidents.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|grouping_level|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|enum|table_dimension_category_name<br/>table_dimension<br/>table_dimension_category_type<br/>table<br/>table_dimension_category<br/>| | |
-|minimum_severity|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|enum|warning<br/>error<br/>fatal<br/>| | |
-|divide_by_data_group|Create separate data quality incidents for each data group, creating different incidents for different groups of rows. By default, data groups are ignored for grouping data quality issues into data quality incidents.|boolean| | | |
-|disabled|Disables data quality incident creation for failed data quality checks on the table.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnRangeMinValueStatisticsCollectorSpec  
+## TableVolumeRowCountStatisticsCollectorSpec  
   
   
 
@@ -371,7 +343,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../TableYaml/#ColumnRangeMinValueSensorParametersSpec)|Profiler parameters|[ColumnRangeMinValueSensorParametersSpec](../TableYaml/#ColumnRangeMinValueSensorParametersSpec)| | | |
+|[parameters](../../sensors/table/volume-table-sensors/#row-count)|Profiler parameters|[TableVolumeRowCountSensorParametersSpec](../../sensors/table/volume-table-sensors/#row-count)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
@@ -384,36 +356,8 @@ ___
 
 ___  
 
-## ColumnNullsNotNullsCountStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/nulls-column-sensors/#not-null-count)|Profiler parameters|[ColumnNullsNotNullsCountSensorParametersSpec](../../sensors/column/nulls-column-sensors/#not-null-count)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnUniquenessDistinctPercentStatisticsCollectorSpec  
-  
+## DataGroupingConfigurationSpecMap  
+Dictionary of named data grouping configurations defined on a table level.  
   
 
 
@@ -427,38 +371,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/uniqueness-column-sensors/#distinct-percent)|Profiler parameters|[ColumnUniquenessDistinctPercentSensorParametersSpec](../../sensors/column/uniqueness-column-sensors/#distinct-percent)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## PartitionIncrementalTimeWindowSpec  
-Configuration of the time window for running incremental partition checks.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|daily_partitioning_recent_days|Number of recent days that are analyzed by daily partitioned checks in incremental mode. The default value is 7 days back.|integer| | | |
-|daily_partitioning_include_today|Analyze also today&#x27;s data by daily partitioned checks in incremental mode. The default value is false, which means that the today&#x27;s and the future partitions are not analyzed, only yesterday&#x27;s partition and earlier daily partitions are analyzed because today&#x27;s data could be still incomplete. Change the value to &#x27;true&#x27; if the current day should be also analyzed. The change may require configuring the schedule for daily checks correctly, to run after the data load.|boolean| | | |
-|monthly_partitioning_recent_months|Number of recent months that are analyzed by monthly partitioned checks in incremental mode. The default value is 1 month back which means the previous calendar month.|integer| | | |
-|monthly_partitioning_include_current_month|Analyze also this month&#x27;s data by monthly partitioned checks in incremental mode. The default value is false, which means that the current month is not analyzed and future data is also filtered out because the current month could be incomplete. Set the value to &#x27;true&#x27; if the current month should be analyzed before the end of the month. The schedule for running monthly checks should be also configured to run more frequently (daily, hourly, etc.).|boolean| | | |
+|self||Dict[string, [DataGroupingConfigurationSpec](../ConnectionYaml/#DataGroupingConfigurationSpec)]| | | |
 
 
 
@@ -498,8 +411,8 @@ ___
 
 ___  
 
-## TableComparisonGroupingColumnsPairsListSpec  
-List of column pairs used for grouping and joining in the table comparison checks.  
+## ColumnNullsNullsPercentStatisticsCollectorSpec  
+  
   
 
 
@@ -513,7 +426,94 @@ List of column pairs used for grouping and joining in the table comparison check
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||List[[TableComparisonGroupingColumnsPairSpec](../TableYaml/#TableComparisonGroupingColumnsPairSpec)]| | | |
+|[parameters](../../sensors/column/nulls-column-sensors/#null-percent)|Profiler parameters|[ColumnNullsNullsPercentSensorParametersSpec](../../sensors/column/nulls-column-sensors/#null-percent)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnStringsStringDatatypeDetectStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/datatype-column-sensors/#string-datatype-detect)|Profiler parameters|[ColumnDatatypeStringDatatypeDetectSensorParametersSpec](../../sensors/column/datatype-column-sensors/#string-datatype-detect)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnStringsStatisticsCollectorsSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[string_max_length](../TableYaml/#ColumnStringsStringMaxLengthStatisticsCollectorSpec)|Configuration of the profiler that finds the maximum string length.|[ColumnStringsStringMaxLengthStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringMaxLengthStatisticsCollectorSpec)| | | |
+|[string_mean_length](../TableYaml/#ColumnStringsStringMeanLengthStatisticsCollectorSpec)|Configuration of the profiler that finds the mean string length.|[ColumnStringsStringMeanLengthStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringMeanLengthStatisticsCollectorSpec)| | | |
+|[string_min_length](../TableYaml/#ColumnStringsStringMinLengthStatisticsCollectorSpec)|Configuration of the profiler that finds the min string length.|[ColumnStringsStringMinLengthStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringMinLengthStatisticsCollectorSpec)| | | |
+|[string_datatype_detect](../TableYaml/#ColumnStringsStringDatatypeDetectStatisticsCollectorSpec)|Configuration of the profiler that detects datatype.|[ColumnStringsStringDatatypeDetectStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringDatatypeDetectStatisticsCollectorSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnRangeMedianValueStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/numeric-column-sensors/#percentile)|Profiler parameters|[ColumnNumericMedianSensorParametersSpec](../../sensors/column/numeric-column-sensors/#percentile)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
 
@@ -560,38 +560,7 @@ Column specification that identifies a single column.
 
 ___  
 
-## ColumnTypeSnapshotSpec  
-Stores the column data type captured at the time of the table metadata import.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|column_type|Column data type using the monitored database type names.|string| | | |
-|nullable|Column is nullable.|boolean| | | |
-|length|Maximum length of text and binary columns.|integer| | | |
-|precision|Precision of a numeric (decimal) data type.|integer| | | |
-|scale|Scale of a numeric (decimal) data type.|integer| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnStringsStatisticsCollectorsSpec  
+## ColumnUniquenessDistinctCountStatisticsCollectorSpec  
   
   
 
@@ -606,84 +575,7 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[string_max_length](../TableYaml/#ColumnStringsStringMaxLengthStatisticsCollectorSpec)|Configuration of the profiler that finds the maximum string length.|[ColumnStringsStringMaxLengthStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringMaxLengthStatisticsCollectorSpec)| | | |
-|[string_mean_length](../TableYaml/#ColumnStringsStringMeanLengthStatisticsCollectorSpec)|Configuration of the profiler that finds the mean string length.|[ColumnStringsStringMeanLengthStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringMeanLengthStatisticsCollectorSpec)| | | |
-|[string_min_length](../TableYaml/#ColumnStringsStringMinLengthStatisticsCollectorSpec)|Configuration of the profiler that finds the min string length.|[ColumnStringsStringMinLengthStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringMinLengthStatisticsCollectorSpec)| | | |
-|[string_datatype_detect](../TableYaml/#ColumnStringsStringDatatypeDetectStatisticsCollectorSpec)|Configuration of the profiler that detects datatype.|[ColumnStringsStringDatatypeDetectStatisticsCollectorSpec](../TableYaml/#ColumnStringsStringDatatypeDetectStatisticsCollectorSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnSpecMap  
-Dictionary of columns indexed by a physical column name.  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnUniquenessDuplicateCountStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/uniqueness-column-sensors/#duplicate-count)|Profiler parameters|[ColumnUniquenessDuplicateCountSensorParametersSpec](../../sensors/column/uniqueness-column-sensors/#duplicate-count)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnRangeMaxValueStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../TableYaml/#ColumnRangeMaxValueSensorParametersSpec)|Profiler parameters|[ColumnRangeMaxValueSensorParametersSpec](../TableYaml/#ColumnRangeMaxValueSensorParametersSpec)| | | |
+|[parameters](../../sensors/column/uniqueness-column-sensors/#distinct-count)|Profiler parameters|[ColumnUniquenessDistinctCountSensorParametersSpec](../../sensors/column/uniqueness-column-sensors/#distinct-count)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
@@ -724,23 +616,14 @@ Column level sensor that finds the maximum value. It works on any data type that
 
 ___  
 
-## TableOwnerSpec  
-Table owner information.  
+## ColumnSpecMap  
+Dictionary of columns indexed by a physical column name.  
   
 
 
 
 
 
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|data_steward|Data steward name|string| | | |
-|application|Business application name|string| | | |
 
 
 
@@ -752,7 +635,35 @@ Table owner information.
 
 ___  
 
-## ColumnRangeMedianValueStatisticsCollectorSpec  
+## ColumnRangeMinValueSensorParametersSpec  
+Column level sensor that finds the minimum value. It works on any data type that supports the MIN functions.
+ The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnUniquenessDuplicateCountStatisticsCollectorSpec  
   
   
 
@@ -767,215 +678,8 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/numeric-column-sensors/#percentile)|Profiler parameters|[ColumnNumericMedianSensorParametersSpec](../../sensors/column/numeric-column-sensors/#percentile)| | | |
+|[parameters](../../sensors/column/uniqueness-column-sensors/#duplicate-count)|Profiler parameters|[ColumnUniquenessDuplicateCountSensorParametersSpec](../../sensors/column/uniqueness-column-sensors/#duplicate-count)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnStatisticsCollectorsRootCategoriesSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls](../TableYaml/#ColumnNullsStatisticsCollectorsSpec)|Configuration of null values profilers on a column level.|[ColumnNullsStatisticsCollectorsSpec](../TableYaml/#ColumnNullsStatisticsCollectorsSpec)| | | |
-|[strings](../TableYaml/#ColumnStringsStatisticsCollectorsSpec)|Configuration of string (text) profilers on a column level.|[ColumnStringsStatisticsCollectorsSpec](../TableYaml/#ColumnStringsStatisticsCollectorsSpec)| | | |
-|[uniqueness](../TableYaml/#ColumnUniquenessStatisticsCollectorsSpec)|Configuration of profilers that analyse uniqueness of values (distinct count).|[ColumnUniquenessStatisticsCollectorsSpec](../TableYaml/#ColumnUniquenessStatisticsCollectorsSpec)| | | |
-|[range](../TableYaml/#ColumnRangeStatisticsCollectorsSpec)|Configuration of profilers that analyse the range of values (min, max).|[ColumnRangeStatisticsCollectorsSpec](../TableYaml/#ColumnRangeStatisticsCollectorsSpec)| | | |
-|[sampling](../TableYaml/#ColumnSamplingStatisticsCollectorsSpec)|Configuration of profilers that collect the column samples.|[ColumnSamplingStatisticsCollectorsSpec](../TableYaml/#ColumnSamplingStatisticsCollectorsSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableMonitoringChecksSpec  
-Container of table level monitoring, divided by the time window (daily, monthly, etc.)  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](../monitoring/table-daily-monitoring-checks/#TableDailyMonitoringCheckCategoriesSpec)|Configuration of daily monitoring evaluated at a table level.|[TableDailyMonitoringCheckCategoriesSpec](../monitoring/table-daily-monitoring-checks/#TableDailyMonitoringCheckCategoriesSpec)| | | |
-|[monthly](../monitoring/table-monthly-monitoring-checks/#TableMonthlyMonitoringCheckCategoriesSpec)|Configuration of monthly monitoring evaluated at a table level.|[TableMonthlyMonitoringCheckCategoriesSpec](../monitoring/table-monthly-monitoring-checks/#TableMonthlyMonitoringCheckCategoriesSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnNullsNullsCountStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/nulls-column-sensors/#null-count)|Profiler parameters|[ColumnNullsNullsCountSensorParametersSpec](../../sensors/column/nulls-column-sensors/#null-count)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnNullsNotNullsPercentStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/nulls-column-sensors/#not-null-percent)|Profiler parameters|[ColumnNullsNotNullsPercentSensorParametersSpec](../../sensors/column/nulls-column-sensors/#not-null-percent)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnStringsStringDatatypeDetectStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/datatype-column-sensors/#string-datatype-detect)|Profiler parameters|[ColumnDatatypeStringDatatypeDetectSensorParametersSpec](../../sensors/column/datatype-column-sensors/#string-datatype-detect)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnNullsStatisticsCollectorsSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls_count](../TableYaml/#ColumnNullsNullsCountStatisticsCollectorSpec)|Configuration of the profiler that counts null column values.|[ColumnNullsNullsCountStatisticsCollectorSpec](../TableYaml/#ColumnNullsNullsCountStatisticsCollectorSpec)| | | |
-|[nulls_percent](../TableYaml/#ColumnNullsNullsPercentStatisticsCollectorSpec)|Configuration of the profiler that measures the percentage of null values.|[ColumnNullsNullsPercentStatisticsCollectorSpec](../TableYaml/#ColumnNullsNullsPercentStatisticsCollectorSpec)| | | |
-|[not_nulls_count](../TableYaml/#ColumnNullsNotNullsCountStatisticsCollectorSpec)|Configuration of the profiler that counts not null column values.|[ColumnNullsNotNullsCountStatisticsCollectorSpec](../TableYaml/#ColumnNullsNotNullsCountStatisticsCollectorSpec)| | | |
-|[not_nulls_percent](../TableYaml/#ColumnNullsNotNullsPercentStatisticsCollectorSpec)|Configuration of the profiler that measures the percentage of not null values.|[ColumnNullsNotNullsPercentStatisticsCollectorSpec](../TableYaml/#ColumnNullsNotNullsPercentStatisticsCollectorSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableComparisonConfigurationSpec  
-Identifies a data comparison configuration between a parent table (the compared table) and the target table from another data source (a reference table).  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|reference_table_connection_name|The name of the connection in DQOp where the reference table (the source of truth) is configured. When the connection name is not provided, DQOps will find the reference table on the connection of the parent table.|string| | | |
-|reference_table_schema_name|The name of the schema where the reference table is imported into DQOps. The reference table&#x27;s metadata must be imported into DQOps.|string| | | |
-|reference_table_name|The name of the reference table that is imported into DQOps. The reference table&#x27;s metadata must be imported into DQOps.|string| | | |
-|compared_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.|string| | | |
-|reference_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.|string| | | |
-|check_type|The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is &#x27;profiling&#x27;.|enum|profiling<br/>partitioned<br/>monitoring<br/>| | |
-|time_scale|The time scale that this check comparison configuration is applicable. Supported values are &#x27;daily&#x27; and &#x27;monthly&#x27; for monitoring and partitioned checks or an empty value for profiling checks.|enum|daily<br/>monthly<br/>| | |
-|[grouping_columns](../TableYaml/#TableComparisonGroupingColumnsPairsListSpec)|List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.|[TableComparisonGroupingColumnsPairsListSpec](../TableYaml/#TableComparisonGroupingColumnsPairsListSpec)| | | |
 
 
 
@@ -1045,7 +749,7 @@ Configuration of timestamp related columns on a table level.
 
 ___  
 
-## ColumnSamplingStatisticsCollectorsSpec  
+## ColumnSamplingColumnSamplesStatisticsCollectorSpec  
   
   
 
@@ -1060,7 +764,94 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[column_samples](../TableYaml/#ColumnSamplingColumnSamplesStatisticsCollectorSpec)|Configuration of the profiler that finds the maximum string length.|[ColumnSamplingColumnSamplesStatisticsCollectorSpec](../TableYaml/#ColumnSamplingColumnSamplesStatisticsCollectorSpec)| | | |
+|[parameters](../../sensors/column/sampling-column-sensors/#column-samples)|Profiler parameters|[ColumnSamplingColumnSamplesSensorParametersSpec](../../sensors/column/sampling-column-sensors/#column-samples)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonGroupingColumnsPairsListSpec  
+List of column pairs used for grouping and joining in the table comparison checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|self||List[[TableComparisonGroupingColumnsPairSpec](../TableYaml/#TableComparisonGroupingColumnsPairSpec)]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnNullsNullsCountStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/nulls-column-sensors/#null-count)|Profiler parameters|[ColumnNullsNullsCountSensorParametersSpec](../../sensors/column/nulls-column-sensors/#null-count)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnTypeSnapshotSpec  
+Stores the column data type captured at the time of the table metadata import.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|column_type|Column data type using the monitored database type names.|string| | | |
+|nullable|Column is nullable.|boolean| | | |
+|length|Maximum length of text and binary columns.|integer| | | |
+|precision|Precision of a numeric (decimal) data type.|integer| | | |
+|scale|Scale of a numeric (decimal) data type.|integer| | | |
 
 
 
@@ -1100,7 +891,35 @@ Dictionary of data comparison configurations between the current table (the pare
 
 ___  
 
-## TableVolumeRowCountStatisticsCollectorSpec  
+## TableMonitoringChecksSpec  
+Container of table level monitoring, divided by the time window (daily, monthly, etc.)  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily](../monitoring/table-daily-monitoring-checks/#TableDailyMonitoringCheckCategoriesSpec)|Configuration of daily monitoring evaluated at a table level.|[TableDailyMonitoringCheckCategoriesSpec](../monitoring/table-daily-monitoring-checks/#TableDailyMonitoringCheckCategoriesSpec)| | | |
+|[monthly](../monitoring/table-monthly-monitoring-checks/#TableMonthlyMonitoringCheckCategoriesSpec)|Configuration of monthly monitoring evaluated at a table level.|[TableMonthlyMonitoringCheckCategoriesSpec](../monitoring/table-monthly-monitoring-checks/#TableMonthlyMonitoringCheckCategoriesSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnRangeMaxValueStatisticsCollectorSpec  
   
   
 
@@ -1115,146 +934,8 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/table/volume-table-sensors/#row-count)|Profiler parameters|[TableVolumeRowCountSensorParametersSpec](../../sensors/table/volume-table-sensors/#row-count)| | | |
+|[parameters](../TableYaml/#ColumnRangeMaxValueSensorParametersSpec)|Profiler parameters|[ColumnRangeMaxValueSensorParametersSpec](../TableYaml/#ColumnRangeMaxValueSensorParametersSpec)| | | |
 |disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnNullsNullsPercentStatisticsCollectorSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/nulls-column-sensors/#null-percent)|Profiler parameters|[ColumnNullsNullsPercentSensorParametersSpec](../../sensors/column/nulls-column-sensors/#null-percent)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DataGroupingConfigurationSpecMap  
-Dictionary of named data grouping configurations defined on a table level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [DataGroupingConfigurationSpec](../ConnectionYaml/#DataGroupingConfigurationSpec)]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableStatisticsCollectorsRootCategoriesSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](../TableYaml/#TableVolumeStatisticsCollectorsSpec)|Configuration of volume statistics collectors on a table level.|[TableVolumeStatisticsCollectorsSpec](../TableYaml/#TableVolumeStatisticsCollectorsSpec)| | | |
-|[schema](../TableYaml/#TableSchemaStatisticsCollectorsSpec)||[TableSchemaStatisticsCollectorsSpec](../TableYaml/#TableSchemaStatisticsCollectorsSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableSchemaStatisticsCollectorsSpec  
-  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[column_count](../TableYaml/#TableSchemaColumnCountStatisticsCollectorSpec)|Configuration of the column count profiler.|[TableSchemaColumnCountStatisticsCollectorSpec](../TableYaml/#TableSchemaColumnCountStatisticsCollectorSpec)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ColumnRangeMinValueSensorParametersSpec  
-Column level sensor that finds the minimum value. It works on any data type that supports the MIN functions.
- The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|filter|SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator.|string| | | |
 
 
 
@@ -1296,7 +977,7 @@ ___
 
 ___  
 
-## ColumnStringsStringMeanLengthStatisticsCollectorSpec  
+## ColumnRangeStatisticsCollectorsSpec  
   
   
 
@@ -1311,8 +992,10 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/strings-column-sensors/#string-mean-length)|Profiler parameters|[ColumnStringsStringMeanLengthSensorParametersSpec](../../sensors/column/strings-column-sensors/#string-mean-length)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+|[min_value](../TableYaml/#ColumnRangeMinValueStatisticsCollectorSpec)|Configuration of the profiler that finds the minimum value in the column.|[ColumnRangeMinValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeMinValueStatisticsCollectorSpec)| | | |
+|[median_value](../TableYaml/#ColumnRangeMedianValueStatisticsCollectorSpec)|Configuration of the profiler that finds the median value in the column.|[ColumnRangeMedianValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeMedianValueStatisticsCollectorSpec)| | | |
+|[max_value](../TableYaml/#ColumnRangeMaxValueStatisticsCollectorSpec)|Configuration of the profiler that finds the maximum value in the column.|[ColumnRangeMaxValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeMaxValueStatisticsCollectorSpec)| | | |
+|[sum_value](../TableYaml/#ColumnRangeSumValueStatisticsCollectorSpec)|Configuration of the profiler that finds the sum value in the column.|[ColumnRangeSumValueStatisticsCollectorSpec](../TableYaml/#ColumnRangeSumValueStatisticsCollectorSpec)| | | |
 
 
 
@@ -1324,8 +1007,8 @@ ___
 
 ___  
 
-## ColumnRangeSumValueStatisticsCollectorSpec  
-  
+## TableIncidentGroupingSpec  
+Configuration of data quality incident grouping on a table level. Defines how similar data quality issues are grouped into incidents.  
   
 
 
@@ -1339,8 +1022,38 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[parameters](../../sensors/column/numeric-column-sensors/#sum)|Profiler parameters|[ColumnNumericSumSensorParametersSpec](../../sensors/column/numeric-column-sensors/#sum)| | | |
-|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+|grouping_level|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|enum|table_dimension_category_name<br/>table_dimension<br/>table_dimension_category_type<br/>table<br/>table_dimension_category<br/>| | |
+|minimum_severity|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|enum|warning<br/>error<br/>fatal<br/>| | |
+|divide_by_data_group|Create separate data quality incidents for each data group, creating different incidents for different groups of rows. By default, data groups are ignored for grouping data quality issues into data quality incidents.|boolean| | | |
+|disabled|Disables data quality incident creation for failed data quality checks on the table.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnPartitionedChecksRootSpec  
+Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[daily](../partitioned/column-daily-partitioned-checks/#ColumnDailyPartitionedCheckCategoriesSpec)|Configuration of day partitioned data quality checks evaluated at a column level.|[ColumnDailyPartitionedCheckCategoriesSpec](../partitioned/column-daily-partitioned-checks/#ColumnDailyPartitionedCheckCategoriesSpec)| | | |
+|[monthly](../partitioned/column-monthly-partitioned-checks/#ColumnMonthlyPartitionedCheckCategoriesSpec)|Configuration of monthly partitioned data quality checks evaluated at a column level.|[ColumnMonthlyPartitionedCheckCategoriesSpec](../partitioned/column-monthly-partitioned-checks/#ColumnMonthlyPartitionedCheckCategoriesSpec)| | | |
 
 
 
@@ -1370,6 +1083,293 @@ Configuration of a pair of columns on the compared table and the reference table
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |compared_table_column_name|The name of the column on the compared table (the parent table) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the reference table.|string| | | |
 |reference_table_column_name|The name of the column on the reference table (the source of truth) that is used in the GROUP BY clause to group rows before compared aggregates (row counts, sums, etc.) are calculated. This column is also used to join (match) results to the compared table.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnNullsNotNullsCountStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/nulls-column-sensors/#not-null-count)|Profiler parameters|[ColumnNullsNotNullsCountSensorParametersSpec](../../sensors/column/nulls-column-sensors/#not-null-count)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnNullsNotNullsPercentStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/nulls-column-sensors/#not-null-percent)|Profiler parameters|[ColumnNullsNotNullsPercentSensorParametersSpec](../../sensors/column/nulls-column-sensors/#not-null-percent)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableVolumeStatisticsCollectorsSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[row_count](../TableYaml/#TableVolumeRowCountStatisticsCollectorSpec)|Configuration of the row count profiler.|[TableVolumeRowCountStatisticsCollectorSpec](../TableYaml/#TableVolumeRowCountStatisticsCollectorSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableSchemaColumnCountStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/table/schema-table-sensors/#column-count)|Profiler parameters|[TableColumnCountSensorParametersSpec](../../sensors/table/schema-table-sensors/#column-count)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnRangeMinValueStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../TableYaml/#ColumnRangeMinValueSensorParametersSpec)|Profiler parameters|[ColumnRangeMinValueSensorParametersSpec](../TableYaml/#ColumnRangeMinValueSensorParametersSpec)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonConfigurationSpec  
+Identifies a data comparison configuration between a parent table (the compared table) and the target table from another data source (a reference table).  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|reference_table_connection_name|The name of the connection in DQOp where the reference table (the source of truth) is configured. When the connection name is not provided, DQOps will find the reference table on the connection of the parent table.|string| | | |
+|reference_table_schema_name|The name of the schema where the reference table is imported into DQOps. The reference table&#x27;s metadata must be imported into DQOps.|string| | | |
+|reference_table_name|The name of the reference table that is imported into DQOps. The reference table&#x27;s metadata must be imported into DQOps.|string| | | |
+|compared_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the compared table. This expression must be a SQL expression that will be added to the WHERE clause when querying the compared table.|string| | | |
+|reference_table_filter|Optional custom SQL filter expression that is added to the SQL query that retrieves the data from the reference table (the source of truth). This expression must be a SQL expression that will be added to the WHERE clause when querying the reference table.|string| | | |
+|check_type|The type of checks (profiling, monitoring, partitioned) that this check comparison configuration is applicable. The default value is &#x27;profiling&#x27;.|enum|profiling<br/>partitioned<br/>monitoring<br/>| | |
+|time_scale|The time scale that this check comparison configuration is applicable. Supported values are &#x27;daily&#x27; and &#x27;monthly&#x27; for monitoring and partitioned checks or an empty value for profiling checks.|enum|daily<br/>monthly<br/>| | |
+|[grouping_columns](../TableYaml/#TableComparisonGroupingColumnsPairsListSpec)|List of column pairs from both the compared table and the reference table that are used in a GROUP BY clause  for grouping both the compared table and the reference table (the source of truth). The columns are used in the next of the table comparison to join the results of data groups (row counts, sums of columns) between the compared table and the reference table to compare the differences.|[TableComparisonGroupingColumnsPairsListSpec](../TableYaml/#TableComparisonGroupingColumnsPairsListSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## PartitionIncrementalTimeWindowSpec  
+Configuration of the time window for running incremental partition checks.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|daily_partitioning_recent_days|Number of recent days that are analyzed by daily partitioned checks in incremental mode. The default value is 7 days back.|integer| | | |
+|daily_partitioning_include_today|Analyze also today&#x27;s data by daily partitioned checks in incremental mode. The default value is false, which means that the today&#x27;s and the future partitions are not analyzed, only yesterday&#x27;s partition and earlier daily partitions are analyzed because today&#x27;s data could be still incomplete. Change the value to &#x27;true&#x27; if the current day should be also analyzed. The change may require configuring the schedule for daily checks correctly, to run after the data load.|boolean| | | |
+|monthly_partitioning_recent_months|Number of recent months that are analyzed by monthly partitioned checks in incremental mode. The default value is 1 month back which means the previous calendar month.|integer| | | |
+|monthly_partitioning_include_current_month|Analyze also this month&#x27;s data by monthly partitioned checks in incremental mode. The default value is false, which means that the current month is not analyzed and future data is also filtered out because the current month could be incomplete. Set the value to &#x27;true&#x27; if the current month should be analyzed before the end of the month. The schedule for running monthly checks should be also configured to run more frequently (daily, hourly, etc.).|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableOwnerSpec  
+Table owner information.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|data_steward|Data steward name|string| | | |
+|application|Business application name|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnStringsStringMeanLengthStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/strings-column-sensors/#string-mean-length)|Profiler parameters|[ColumnStringsStringMeanLengthSensorParametersSpec](../../sensors/column/strings-column-sensors/#string-mean-length)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ColumnStringsStringMinLengthStatisticsCollectorSpec  
+  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[parameters](../../sensors/column/strings-column-sensors/#string-min-length)|Profiler parameters|[ColumnStringsStringMinLengthSensorParametersSpec](../../sensors/column/strings-column-sensors/#string-min-length)| | | |
+|disabled|Disables this profiler. Only enabled profilers are executed during a profiling process.|boolean| | | |
 
 
 

@@ -10,7 +10,6 @@ from dqops.airflow.common.exceptions.dqops_data_quality_issue_detected_exception
 )
 from dqops.airflow.common.tools.client_creator import create_client
 from dqops.airflow.common.tools.rule_severity_level_utility import (
-    get_severity_value_from_check_result,
     get_severity_value_from_rule_severity,
 )
 from dqops.airflow.common.tools.server_response_verifier import (

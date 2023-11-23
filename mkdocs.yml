@@ -111,7 +111,7 @@ nav:
       - Webhooks: "integrations/webhooks/index.md"
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
-    - index: 'command-line-interface/index.md'
+    - 'command-line-interface/index.md'
     - dqo: 'command-line-interface/dqo.md'
     - cls: 'command-line-interface/cls.md'
     - connection: 'command-line-interface/connection.md'
@@ -182,30 +182,39 @@ nav:
 ########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Checks:
+    - 'checks/index.md'
     - table:
+      - 'checks/table/index.md'
       - accuracy:
+        - 'checks/table/accuracy/index.md'
         - total row count match percent: 'checks/table/accuracy/total-row-count-match-percent.md'
       - availability:
+        - 'checks/table/availability/index.md'
         - table availability: 'checks/table/availability/table-availability.md'
       - comparisons:
+        - 'checks/table/comparisons/index.md'
         - row count match: 'checks/table/comparisons/row-count-match.md'
         - column count match: 'checks/table/comparisons/column-count-match.md'
       - schema:
+        - 'checks/table/schema/index.md'
         - column count: 'checks/table/schema/column-count.md'
         - column count changed: 'checks/table/schema/column-count-changed.md'
         - column list changed: 'checks/table/schema/column-list-changed.md'
         - column list or order changed: 'checks/table/schema/column-list-or-order-changed.md'
         - column types changed: 'checks/table/schema/column-types-changed.md'
       - sql:
+        - 'checks/table/sql/index.md'
         - sql condition passed percent on table: 'checks/table/sql/sql-condition-passed-percent-on-table.md'
         - sql condition failed count on table: 'checks/table/sql/sql-condition-failed-count-on-table.md'
         - sql aggregate expr table: 'checks/table/sql/sql-aggregate-expr-table.md'
       - timeliness:
+        - 'checks/table/timeliness/index.md'
         - data freshness: 'checks/table/timeliness/data-freshness.md'
         - data staleness: 'checks/table/timeliness/data-staleness.md'
         - data ingestion delay: 'checks/table/timeliness/data-ingestion-delay.md'
         - reload lag: 'checks/table/timeliness/reload-lag.md'
       - volume:
+        - 'checks/table/volume/index.md'
         - row count: 'checks/table/volume/row-count.md'
         - row count anomaly differencing 30 days: 'checks/table/volume/row-count-anomaly-differencing-30-days.md'
         - row count anomaly differencing: 'checks/table/volume/row-count-anomaly-differencing.md'
@@ -216,13 +225,16 @@ nav:
         - row count anomaly stationary 30 days: 'checks/table/volume/row-count-anomaly-stationary-30-days.md'
         - row count anomaly stationary: 'checks/table/volume/row-count-anomaly-stationary.md'
     - column:
+      - 'checks/column/index.md'
       - accuracy:
+        - 'checks/column/accuracy/index.md'
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
         - total min match percent: 'checks/column/accuracy/total-min-match-percent.md'
         - total max match percent: 'checks/column/accuracy/total-max-match-percent.md'
         - total average match percent: 'checks/column/accuracy/total-average-match-percent.md'
         - total not null count match percent: 'checks/column/accuracy/total-not-null-count-match-percent.md'
       - anomaly:
+        - 'checks/column/anomaly/index.md'
         - mean anomaly stationary 30 days: 'checks/column/anomaly/mean-anomaly-stationary-30-days.md'
         - mean anomaly stationary: 'checks/column/anomaly/mean-anomaly-stationary.md'
         - median anomaly stationary 30 days: 'checks/column/anomaly/median-anomaly-stationary-30-days.md'
@@ -244,9 +256,11 @@ nav:
         - sum anomaly stationary 30 days: 'checks/column/anomaly/sum-anomaly-stationary-30-days.md'
         - sum anomaly stationary: 'checks/column/anomaly/sum-anomaly-stationary.md'
       - bool:
+        - 'checks/column/bool/index.md'
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'
       - comparisons:
+        - 'checks/column/comparisons/index.md'
         - sum match: 'checks/column/comparisons/sum-match.md'
         - min match: 'checks/column/comparisons/min-match.md'
         - max match: 'checks/column/comparisons/max-match.md'
@@ -254,16 +268,20 @@ nav:
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
       - datatype:
+        - 'checks/column/datatype/index.md'
         - string datatype detected: 'checks/column/datatype/string-datatype-detected.md'
         - string datatype changed: 'checks/column/datatype/string-datatype-changed.md'
       - datetime:
+        - 'checks/column/datetime/index.md'
         - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
       - integrity:
+        - 'checks/column/integrity/index.md'
         - foreign key not match count: 'checks/column/integrity/foreign-key-not-match-count.md'
         - foreign key match percent: 'checks/column/integrity/foreign-key-match-percent.md'
       - nulls:
+        - 'checks/column/nulls/index.md'
         - nulls count: 'checks/column/nulls/nulls-count.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
         - nulls percent anomaly stationary 30 days: 'checks/column/nulls/nulls-percent-anomaly-stationary-30-days.md'
@@ -275,6 +293,7 @@ nav:
         - not nulls count: 'checks/column/nulls/not-nulls-count.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
       - numeric:
+        - 'checks/column/numeric/index.md'
         - negative count: 'checks/column/numeric/negative-count.md'
         - negative percent: 'checks/column/numeric/negative-percent.md'
         - non negative count: 'checks/column/numeric/non-negative-count.md'
@@ -301,19 +320,23 @@ nav:
         - invalid longitude count: 'checks/column/numeric/invalid-longitude-count.md'
         - valid longitude percent: 'checks/column/numeric/valid-longitude-percent.md'
       - pii:
+        - 'checks/column/pii/index.md'
         - contains usa phone percent: 'checks/column/pii/contains-usa-phone-percent.md'
         - contains usa zipcode percent: 'checks/column/pii/contains-usa-zipcode-percent.md'
         - contains email percent: 'checks/column/pii/contains-email-percent.md'
         - contains ip4 percent: 'checks/column/pii/contains-ip4-percent.md'
         - contains ip6 percent: 'checks/column/pii/contains-ip6-percent.md'
       - schema:
+        - 'checks/column/schema/index.md'
         - column exists: 'checks/column/schema/column-exists.md'
         - column type changed: 'checks/column/schema/column-type-changed.md'
       - sql:
+        - 'checks/column/sql/index.md'
         - sql condition passed percent on column: 'checks/column/sql/sql-condition-passed-percent-on-column.md'
         - sql condition failed count on column: 'checks/column/sql/sql-condition-failed-count-on-column.md'
         - sql aggregate expr column: 'checks/column/sql/sql-aggregate-expr-column.md'
       - strings:
+        - 'checks/column/strings/index.md'
         - string max length: 'checks/column/strings/string-max-length.md'
         - string min length: 'checks/column/strings/string-min-length.md'
         - string mean length: 'checks/column/strings/string-mean-length.md'
@@ -350,6 +373,7 @@ nav:
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - expected strings in top values count: 'checks/column/strings/expected-strings-in-top-values-count.md'
       - uniqueness:
+        - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'
         - distinct percent: 'checks/column/uniqueness/distinct-percent.md'
         - duplicate count: 'checks/column/uniqueness/duplicate-count.md'
@@ -366,11 +390,11 @@ nav:
         - change distinct percent since 7 days: 'checks/column/uniqueness/change-distinct-percent-since-7-days.md'
         - change distinct percent since 30 days: 'checks/column/uniqueness/change-distinct-percent-since-30-days.md'
         - change distinct percent since yesterday: 'checks/column/uniqueness/change-distinct-percent-since-yesterday.md'
-    - index: 'checks/index.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
     - Sensors:
+      - 'reference/sensors/index.md'
       - table:
         - accuracy table sensors: 'reference/sensors/table/accuracy-table-sensors.md'
         - availability table sensors: 'reference/sensors/table/availability-table-sensors.md'
@@ -393,11 +417,10 @@ nav:
         - sql column sensors: 'reference/sensors/column/sql-column-sensors.md'
         - strings column sensors: 'reference/sensors/column/strings-column-sensors.md'
         - uniqueness column sensors: 'reference/sensors/column/uniqueness-column-sensors.md'
-      - index: 'reference/sensors/index.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
     - Rules:
-      - index: 'reference/rules/index.md'
+      - 'reference/rules/index.md'
       - Averages: 'reference/rules/Averages.md'
       - Change: 'reference/rules/Change.md'
       - Comparison: 'reference/rules/Comparison.md'
