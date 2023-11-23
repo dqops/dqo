@@ -163,7 +163,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <tr>
           <td colSpan={12}>
             <CheckDetails
-              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              checkTypes={(issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
               connection={incidentDetail?.connection ?? ''}
               schema={incidentDetail?.schema ?? ''}
               table={incidentDetail?.table ?? ''}
