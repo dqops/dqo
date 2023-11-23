@@ -95,16 +95,16 @@ spec:
     - folder_name: Check results
       dashboards:
         - dashboard_name: Current data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/3791ed2b-322b-4d31-bfdf-0e0904aeed61/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/0e9be767-6774-47e5-b606-7be492963233/page/c5B8C
           width: 1550
-          height: 2700
+          height: 3200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
         - dashboard_name: History of data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/c435d91b-254b-4156-8ee9-d7db205ad264/page/c5B8C
           width: 1550
-          height: 2900
+          height: 3400
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -356,7 +356,7 @@ spec:
         - dashboard_name: Highest issue severity per table and day
           url: https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -505,16 +505,16 @@ spec:
     - folder_name: Check results
       dashboards:
         - dashboard_name: Current data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/3791ed2b-322b-4d31-bfdf-0e0904aeed61/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/0e9be767-6774-47e5-b606-7be492963233/page/c5B8C
           width: 1550
-          height: 2700
+          height: 3200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
         - dashboard_name: History of data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/c435d91b-254b-4156-8ee9-d7db205ad264/page/c5B8C
           width: 1550
-          height: 2900
+          height: 3400
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -926,16 +926,16 @@ spec:
     - folder_name: Check results
       dashboards:
         - dashboard_name: Current data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/3791ed2b-322b-4d31-bfdf-0e0904aeed61/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/0e9be767-6774-47e5-b606-7be492963233/page/c5B8C
           width: 1550
-          height: 2700
+          height: 3200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: History of data quality check results
-          url: https://lookerstudio.google.com/embed/reporting/6668ceec-b8b3-4a33-add1-8f9887dae61f/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/c435d91b-254b-4156-8ee9-d7db205ad264/page/c5B8C
           width: 1550
-          height: 2900
+          height: 3400
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
