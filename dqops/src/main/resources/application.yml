@@ -180,8 +180,8 @@ dqo:
     static-files-cache-control-max-age: 604800
     dynamic-files-cache-control-max-age: 0
   cli:
-    oneshot:
-      terminal-width: 150
+    terminal:
+      width: 150
   docker:
     user-home:
       allow-unmounted: false

@@ -71,6 +71,8 @@ To use DQOps you need:
     After installation, you will be asked whether to initialize the [DQOps user home folder](../../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder.  
     The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
 
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+
 6.  Login to DQOps Cloud.
 
     To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
@@ -82,5 +84,9 @@ To use DQOps you need:
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQOps application.
     The API Key is now stored in the configuration file.
 
+    ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
+
 7.  Open the DQOps User Interface Console by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888/)
-    or by copying the link to your browser.
+    or by copying the link to your browser. You will see the welcome screen as shown below.
+
+    ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)

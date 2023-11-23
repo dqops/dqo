@@ -1,18 +1,20 @@
 import React, { useEffect } from "react";
 import Button from "../Button";
 import { useActionDispatch } from "../../hooks/useActionDispatch";
-import { getConnections, addFirstLevelTab } from "../../redux/actions/incidents.actions";
+import { getConnections, addFirstLevelTab, closeFirstLevelTab } from "../../redux/actions/incidents.actions";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import SvgIcon from "../SvgIcon";
 import clsx from "clsx";
 import { IncidentsPerConnectionModel } from "../../api";
 import { ROUTES } from "../../shared/routes";
+import { useHistory } from "react-router-dom";
 
 const IncidentsTree = () => {
   const dispatch = useActionDispatch();
   const { connections, activeTab } = useSelector((state: IRootState) => state.incidents);
-  const selectedConnection = activeTab ? activeTab.split('/')[2] : '';
+  const selectedConnection = activeTab && activeTab.length > 0 && activeTab !== '/incidents/new-tab' ? activeTab?.split('/')[2] : '';
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getConnections());
@@ -26,8 +28,12 @@ const IncidentsTree = () => {
     if (connection.connection === selectedConnection) {
       return;
     }
+    if(activeTab === '/incidents/new-tab') {
+      dispatch(closeFirstLevelTab('/incidents/new-tab'));
+    }
+    const url = ROUTES.INCIDENT_CONNECTION(connection?.connection ?? "")
     dispatch(addFirstLevelTab({
-      url: ROUTES.INCIDENT_CONNECTION(connection?.connection ?? ""),
+      url,
       value: ROUTES.INCIDENT_CONNECTION_VALUE(connection?.connection ?? ""),
       state: {
         filters: {
@@ -39,6 +45,7 @@ const IncidentsTree = () => {
       },
       label: connection?.connection ?? ""
     }))
+    history.push(url)
   };
 
   return (

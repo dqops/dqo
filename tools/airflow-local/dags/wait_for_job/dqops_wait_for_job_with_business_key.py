@@ -1,8 +1,5 @@
-from datetime import date
-from typing import List
 import pendulum
 from airflow import DAG
-import time
 
 from dqops.airflow.table_import.dqops_table_import_operator import DqopsTableImportOperator
 from dqops.airflow.wait_for_job.dqops_wait_for_job_operator import DqopsWaitForJobOperator

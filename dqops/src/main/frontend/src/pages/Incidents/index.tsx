@@ -4,8 +4,7 @@ import IncidentsLayout from "../../components/IncidentsLayout";
 export const Incidents = () => {
   return (
     <IncidentsLayout>
-      <div>
-        Incidents Page
+      <div className="w-full h-full bg-white">
       </div>
     </IncidentsLayout>
   );

@@ -95,7 +95,7 @@ const Dashboards = () => {
               (item: AuthenticatedDashboardModel) =>
                 (item?.folder_path || '')
                   .split('/')
-                  .concat(item.dashboard?.dashboard_name || '')
+                  .concat(item?.dashboard?.dashboard_name || '')
                   .join('-') === tab.value
             );
 
@@ -174,7 +174,7 @@ const Dashboards = () => {
         onClose={() => {
           closeTab(activeTab), setObjectNotFound(false);
         }}
-        message="The definition of this object was deleted in DQOps user home. The tab will be closed."
+        message="The definition of this object was deleted in the DQOps user home. The tab will be closed."
       />
     </DashboardLayout>
   );

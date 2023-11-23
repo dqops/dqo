@@ -16,7 +16,7 @@ To view dashboards, simply go to the **Data Quality Dashboard** section, and sel
 view on the left. There are several groups and subgroups of data quality dashboards dedicated to analyzing results from 
 data quality checks.
 
-For example, to review the summary KPIs of all executed monitoring you can use the **KPIs scorecard - summary** dashboard.
+For example, to review the summary KPIs of all executed monitoring checks you can use the **KPIs scorecard - summary** dashboard.
 You can find it in the **Monitoring** group, **Data quality KPIs** subgroup.
 
 ![KPIs scorecard - summary](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png)
@@ -127,7 +127,7 @@ per day of the month, or per table and day of the month.
 
 **Data quality failed checks per table and day** is a representative of this group.
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * severity
 * current and previous month,
@@ -158,7 +158,7 @@ With these dashboards, senior management can review a summary of data quality KP
 **KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
 and day of the month. 
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * current and previous month,
 * connection,
@@ -181,7 +181,7 @@ This dashboard allow filtering data by:
 **History of data quality check results** is a representative of this group. This dashboard displays all executed
 checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * time window (from last 7 days to last 6 months)
 * connection,
@@ -203,7 +203,7 @@ This dashboard allow filtering data by:
 ### **Data Quality Dimensions**
 
 **Data Quality Dimensions** group contains dashboards dedicated for different data quality dimension such as availability,
-completeness, timeliness or volume. 
+completeness, or timeliness. 
 
 **Availability**, **completeness** and **validity** dimensions has at least two dashboards. One dedicated to reviewing current issues and the
 other to history of issues. 
@@ -219,14 +219,12 @@ other to history of issues.
 * History of table freshness
 * Minimum, maximum and average delay
 
-**Volume** dimension dashboards in the **Monitoring** group help to evaluate the largest tables by number of rows and empty 
-or too small tables. While dashboards in the **Partitions** group display daily partitions row count and too small partitions.
 
-**Current completeness issues on columns** is a representative of **Completeness** subgroup. This dashboard summarizes 
+**Current completeness issues on columns** is a representative of **Completeness** subgroup. This dashboard summarizes
 results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
 [not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * time window (from last 7 days to last 3 months)
 * connection,
@@ -245,10 +243,16 @@ This dashboard allow filtering data by:
 ![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns.png)
 
 
+### **Volume**
+
+**Volume** dashboards in the **Monitoring** group help to evaluate the largest tables by number of rows and empty 
+or too small tables. While dashboards in the **Partitions** group (**Partition volume statistics**) display daily 
+partitions row count and too small partitions.
+
 **Largest tables by number of rows** is a representative of **Volume** subgroup. This dashboard displays tables monitored
 with [row_count](../../checks/table/volume/row-count.md) check and allows review the number of rows in these tables. 
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * time window (from last 7 days to last 3 months)
 * row count
@@ -257,7 +261,6 @@ This dashboard allow filtering data by:
 * data group,
 * stages,
 * table.
-
 
 ![Largest tables by number of rows](https://dqops.com/docs/images/concepts/data-quality-dashboards/largest-tables-by-number-of-rows.png)
 
@@ -293,7 +296,7 @@ from all table-level schema change checks ([column count](../../checks/table/sch
 [column list or order changed,](../../checks/table/schema/column-list-or-order-changed.md),
 [column types changed](../../checks/table/schema/column-types-changed.md)). 
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * time window (from last 7 days to last 6 months)
 * connection,
@@ -323,7 +326,7 @@ This dashboard allow filtering data by:
 **Details of execution errors** is a representative of this group. It allows to view detail source of the error (table, column and check),
 time when the error occurred and detailed error message. It also displays daily distribution of errors.
 
-This dashboard allow filtering data by:
+This dashboard allows filtering data by:
 
 * time window (from last 7 days to last 6 months)
 * connection,

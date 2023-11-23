@@ -65,7 +65,7 @@ public class CheckCurrentDataQualityStatusModel {
      * The UTC timestamp when the check was recently executed.
      */
     @JsonPropertyDescription("The UTC timestamp when the check was recently executed.")
-    private Instant executedAt;
+    private Instant lastExecutedAt;
 
     /**
      * The check type: profiling, monitoring, partitioned.

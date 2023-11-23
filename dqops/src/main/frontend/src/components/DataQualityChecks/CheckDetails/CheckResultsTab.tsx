@@ -296,16 +296,16 @@ const CheckResultsTab = ({
   }, [mode]);
 
   const allResults = results
-    // .map((result) =>
-    //   (result.checkResultEntries || [])
-    //   // .filter((item) => item.tableComparison === comparisonName)
-    //   .map((item) => ({
-    //     ...item,
-    //     checkName: result.checkName
-    //   }))
-    // )
-    // .reduce((arr, el) => [...arr, ...el], []);
-    // console.log(results)
+    .map((result) =>
+      (result.checkResultEntries || [])
+      .map((item) => ({
+        ...item,
+        checkName: results[0].checkName,
+        executedAt: Number(moment(getLocalDateInUserTimeZone(new Date(String(item.executedAt)))).format('YYYY-MM-DD HH:mm:ss')),
+        timePeriod: item.timePeriod?.replace(/T/g, " ")
+      }))
+    )
+    .reduce((arr, el) => [...arr, ...el], []);
 
   return (
     <div

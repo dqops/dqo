@@ -32,6 +32,7 @@ import { CheckTypes } from "../../../shared/routes";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
+import Input from '../../Input';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -144,6 +145,21 @@ const ConnectionDetail = () => {
             </td>
             <td className="px-4 py-2">
               <div>{connectionBasic?.connection_name}</div>
+            </td>
+          </tr> 
+          <tr> 
+            <td className="px-4 py-2">
+              <div>Parallel jobs limit:</div>
+            </td>
+            <td className="px-4 py-2">
+              <div>
+                <Input
+                  value={connectionBasic?.parallel_jobs_limit}
+                  onChange={(e) =>
+                    !isNaN(Number(e.target.value)) && onChange({ ...connectionBasic, parallel_jobs_limit: Number(e.target.value)})
+                  }
+                />
+              </div>
             </td>
           </tr>
         </tbody>

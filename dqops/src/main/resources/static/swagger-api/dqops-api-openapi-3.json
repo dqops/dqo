@@ -20767,7 +20767,7 @@
             "$ref" : "#/components/schemas/RuleSeverityLevel",
             "exampleSetFlag" : false
           },
-          "executed_at" : {
+          "last_executed_at" : {
             "type" : "integer",
             "description" : "The UTC timestamp when the check was recently executed.",
             "format" : "int64",
@@ -20814,7 +20814,7 @@
               "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
               "enum" : [ "valid", "warning", "error", "fatal" ]
             },
-            "executed_at" : {
+            "last_executed_at" : {
               "type" : "integer",
               "format" : "int64",
               "description" : "The UTC timestamp when the check was recently executed."
@@ -32737,8 +32737,12 @@
       "ColumnCurrentDataQualityStatusModel" : {
         "type" : "object",
         "properties" : {
-          "highest_severity_level" : {
-            "$ref" : "#/components/schemas/CheckResultStatus",
+          "current_severity" : {
+            "$ref" : "#/components/schemas/RuleSeverityLevel",
+            "exampleSetFlag" : false
+          },
+          "highest_historical_severity" : {
+            "$ref" : "#/components/schemas/RuleSeverityLevel",
             "exampleSetFlag" : false
           },
           "last_check_executed_at" : {
@@ -32814,16 +32818,21 @@
             }
           }
         },
-        "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the highest_severity_level to see if there are any data quality issues on the column. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, 3 - a fatal data quality issue was detected.",
+        "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the current_severity to see if there are any data quality issues on the column.",
         "exampleSetFlag" : false,
         "types" : [ "object" ],
         "jsonSchema" : {
           "type" : "object",
           "properties" : {
-            "highest_severity_level" : {
+            "current_severity" : {
               "type" : "string",
-              "description" : "The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the column.",
-              "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+              "description" : "The most recent data quality issue severity for this column. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
+              "enum" : [ "valid", "warning", "error", "fatal" ]
+            },
+            "highest_historical_severity" : {
+              "type" : "string",
+              "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
+              "enum" : [ "valid", "warning", "error", "fatal" ]
             },
             "last_check_executed_at" : {
               "type" : "integer",
@@ -32869,7 +32878,7 @@
               }
             }
           },
-          "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the highest_severity_level to see if there are any data quality issues on the column. The values of severity levels are: 0 - all data quality checks passed, 1 - a warning was detected, 2 - an error was detected, 3 - a fatal data quality issue was detected."
+          "description" : "The column's most recent data quality status. It is a summary of the results of the most recently executed data quality checks on the column. Verify the value of the current_severity to see if there are any data quality issues on the column."
         }
       },
       "ColumnDailyMonitoringCheckCategoriesSpec" : {
@@ -58950,7 +58959,7 @@
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
-          "parallel_runs_limit" : {
+          "parallel_jobs_limit" : {
             "type" : "integer",
             "description" : "The concurrency limit for the maximum number of parallel SQL queries executed on this connection.",
             "format" : "int32",
@@ -59078,7 +59087,7 @@
               "format" : "int64",
               "description" : "Connection hash that identifies the connection using a unique hash code."
             },
-            "parallel_runs_limit" : {
+            "parallel_jobs_limit" : {
               "type" : "integer",
               "format" : "int32",
               "description" : "The concurrency limit for the maximum number of parallel SQL queries executed on this connection."
@@ -70850,8 +70859,12 @@
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
-          "highest_severity_level" : {
-            "$ref" : "#/components/schemas/CheckResultStatus",
+          "current_severity" : {
+            "$ref" : "#/components/schemas/RuleSeverityLevel",
+            "exampleSetFlag" : false
+          },
+          "highest_historical_severity" : {
+            "$ref" : "#/components/schemas/RuleSeverityLevel",
             "exampleSetFlag" : false
           },
           "last_check_executed_at" : {
@@ -70961,10 +70974,15 @@
               "type" : "string",
               "description" : "The table name."
             },
-            "highest_severity_level" : {
+            "current_severity" : {
               "type" : "string",
-              "description" : "The severity of the highest identified data quality issue. This field will be null if no data quality checks were executed on the table.",
-              "enum" : [ "valid", "warning", "error", "fatal", "execution_error" ]
+              "description" : "The most recent data quality issue severity for this table. When the table is monitored using data grouping, it is the highest issue severity of all recently analyzed data groups. For partitioned checks, it is the highest severity of all results for all partitions (time periods) in the analyzed time range.",
+              "enum" : [ "valid", "warning", "error", "fatal" ]
+            },
+            "highest_historical_severity" : {
+              "type" : "string",
+              "description" : "The highest severity of previous executions of this data quality issue in the analyzed time range. It can be different from the *current_severity* if the data quality issue was solved and the most recently data quality issue did not detect it anymore. For partitioned checks, this field returns the same value as the *current_severity*, because data quality issues in older partitions are still valid.",
+              "enum" : [ "valid", "warning", "error", "fatal" ]
             },
             "last_check_executed_at" : {
               "type" : "integer",

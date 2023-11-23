@@ -61,7 +61,7 @@ public class ConnectionModel {
      * The concurrency limit for the maximum number of parallel SQL queries executed on this connection.
      */
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
-    private Integer parallelRunsLimit;
+    private Integer parallelJobsLimit;
 
     /**
      * Database provider type (required). Accepts: bigquery, snowflake, etc.
@@ -194,7 +194,7 @@ public class ConnectionModel {
             boolean isOperator) {
         return new ConnectionModel() {{
             setConnectionName(connectionName);
-            setParallelRunsLimit(connectionSpec.getParallelJobsLimit());
+            setParallelJobsLimit(connectionSpec.getParallelJobsLimit());
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
             setBigquery(connectionSpec.getBigquery());
@@ -239,7 +239,7 @@ public class ConnectionModel {
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
 
                 setDateStart(null);
                 setDateEnd(null);
@@ -258,7 +258,7 @@ public class ConnectionModel {
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setParallelJobsLimit(this.parallelRunsLimit);
+        targetConnectionSpec.setParallelJobsLimit(this.parallelJobsLimit);
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());

@@ -33,7 +33,7 @@ class ConnectionModel:
     Attributes:
         connection_name (Union[Unset, str]): Connection name.
         connection_hash (Union[Unset, int]): Connection hash that identifies the connection using a unique hash code.
-        parallel_runs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
+        parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         provider_type (Union[Unset, ProviderType]):
         bigquery (Union[Unset, BigQueryParametersSpec]):
@@ -66,7 +66,7 @@ class ConnectionModel:
 
     connection_name: Union[Unset, str] = UNSET
     connection_hash: Union[Unset, int] = UNSET
-    parallel_runs_limit: Union[Unset, int] = UNSET
+    parallel_jobs_limit: Union[Unset, int] = UNSET
     provider_type: Union[Unset, ProviderType] = UNSET
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
@@ -93,7 +93,7 @@ class ConnectionModel:
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
         connection_hash = self.connection_hash
-        parallel_runs_limit = self.parallel_runs_limit
+        parallel_jobs_limit = self.parallel_jobs_limit
         provider_type: Union[Unset, str] = UNSET
         if not isinstance(self.provider_type, Unset):
             provider_type = self.provider_type.value
@@ -171,8 +171,8 @@ class ConnectionModel:
             field_dict["connection_name"] = connection_name
         if connection_hash is not UNSET:
             field_dict["connection_hash"] = connection_hash
-        if parallel_runs_limit is not UNSET:
-            field_dict["parallel_runs_limit"] = parallel_runs_limit
+        if parallel_jobs_limit is not UNSET:
+            field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if provider_type is not UNSET:
             field_dict["provider_type"] = provider_type
         if bigquery is not UNSET:
@@ -244,7 +244,7 @@ class ConnectionModel:
 
         connection_hash = d.pop("connection_hash", UNSET)
 
-        parallel_runs_limit = d.pop("parallel_runs_limit", UNSET)
+        parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _provider_type = d.pop("provider_type", UNSET)
         provider_type: Union[Unset, ProviderType]
@@ -379,7 +379,7 @@ class ConnectionModel:
         connection_model = cls(
             connection_name=connection_name,
             connection_hash=connection_hash,
-            parallel_runs_limit=parallel_runs_limit,
+            parallel_jobs_limit=parallel_jobs_limit,
             provider_type=provider_type,
             bigquery=bigquery,
             snowflake=snowflake,

@@ -28,12 +28,15 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Describes a single documentation folder with markdown documentation files that is generated.
  */
 @Data
 public class DocumentationFolder {
+    public static final String INDEX_FILE_NAME = "index.md";
+
     /**
      * Folder name.
      */
@@ -156,13 +159,29 @@ public class DocumentationFolder {
         stringBuilder.append(':');
         resultLines.add(stringBuilder.toString());
 
+        List<DocumentationMarkdownFile> markdownFiles = this.files.stream()
+                .filter(file -> !file.getFileName().equals(INDEX_FILE_NAME)).collect(Collectors.toList());
+        if (markdownFiles.size() < files.size()) {
+            StringBuilder fileLineBuilder = new StringBuilder();
+            fileLineBuilder.append(indent); // base indent
+            fileLineBuilder.append("  "); // file indent
+            fileLineBuilder.append("- '");
+            fileLineBuilder.append(folderNamePrefix);
+            fileLineBuilder.append(this.folderName);
+            fileLineBuilder.append('/');
+            fileLineBuilder.append(INDEX_FILE_NAME);
+            fileLineBuilder.append("'");
+
+            resultLines.add(fileLineBuilder.toString());
+        }
+
         for (DocumentationFolder subFolder : this.subFolders) {
             String subFolderPrefix = folderNamePrefix + this.folderName + "/";
             List<String> subfolderLines = subFolder.generateMkDocsNavigation(indentSpaces + 2, subFolderPrefix);
             resultLines.addAll(subfolderLines);
         }
 
-        for (DocumentationMarkdownFile markdownFile : this.files) {
+        for (DocumentationMarkdownFile markdownFile : markdownFiles) {
             StringBuilder fileLineBuilder = new StringBuilder();
             fileLineBuilder.append(indent); // base indent
             fileLineBuilder.append("  "); // file indent

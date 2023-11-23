@@ -1,16 +1,24 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { ITab } from '../shared/interfaces';
-import {AuthenticatedDashboardModel, DashboardsFolderSpec, DashboardSpec} from "../api";
-import { DashboardsApi } from "../services/apiClient";
+import {
+  AuthenticatedDashboardModel,
+  DashboardsFolderSpec,
+  DashboardSpec
+} from '../api';
+import { DashboardsApi } from '../services/apiClient';
 
 const DashboardContext = React.createContext({} as any);
 
 function DashboardProvider(props: any) {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
-  const [openedDashboards, setOpenedDashboards] = useState<AuthenticatedDashboardModel[]>([]);
-  const [dashboardStatus, setDashboardStatus] = useState<Record<string, boolean>>({});
+  const [openedDashboards, setOpenedDashboards] = useState<
+    AuthenticatedDashboardModel[]
+  >([]);
+  const [dashboardStatus, setDashboardStatus] = useState<
+    Record<string, boolean>
+  >({});
   const [sidebarWidth, setSidebarWidth] = useState(310);
   const [error, setError] = useState<Record<string, boolean>>({});
 
@@ -38,27 +46,39 @@ function DashboardProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, folders: DashboardsFolderSpec[], key: string, isNew = false) => {
+  const changeActiveTab = async (
+    dashboard: DashboardSpec,
+    folder: string,
+    folders: DashboardsFolderSpec[],
+    key: string,
+    isNew = false
+  ) => {
     const existTab = tabs.find((item) => item.value === key);
     if (existTab) {
       setActiveTab(key);
     } else {
       const newTab = {
-        label: dashboard.dashboard_name ?? '',
-        value: key ?? '',
+        label: dashboard?.dashboard_name ?? '',
+        value: key ?? ''
       };
 
       if (activeTab) {
         const activeNode = tabs.find((item) => item.value === activeTab);
         const editorTab = tabs.find((item) => item.type === 'editor');
         if (activeNode?.type === 'editor') {
-          const newTabs = tabs.map((item) => (item.value === activeTab ? newTab : item));
+          const newTabs = tabs.map((item) =>
+            item.value === activeTab ? newTab : item
+          );
           setTabs(newTabs);
         } else if (editorTab) {
-          const newTabs = tabs.map((item) => (item.value === editorTab.value ? newTab : item));
+          const newTabs = tabs.map((item) =>
+            item.value === editorTab.value ? newTab : item
+          );
           setTabs(newTabs);
         } else {
-          const newTabs = isNew ? [...tabs, newTab ] : tabs.map((item) => (item.value === activeTab ? newTab : item));
+          const newTabs = isNew
+            ? [...tabs, newTab]
+            : tabs.map((item) => (item.value === activeTab ? newTab : item));
           setTabs(newTabs);
         }
       } else {
@@ -70,18 +90,55 @@ function DashboardProvider(props: any) {
       let tabId = '';
       try {
         if (folders.length === 0) {
-          tabId = [folder, dashboard.dashboard_name].join('-');
+          tabId = [folder, dashboard?.dashboard_name].join('-');
           console.log('tabId', tabId);
-          res = await DashboardsApi.getDashboardLevel1(folder, dashboard.dashboard_name ?? '', window.location.origin);
+          res = await DashboardsApi.getDashboardLevel1(
+            folder,
+            dashboard?.dashboard_name ?? '',
+            window.location.origin
+          );
         } else if (folders.length === 1) {
-          tabId = [folders[0].folder_name, folder, dashboard.dashboard_name].join('-');
-          res = await DashboardsApi.getDashboardLevel2(folders[0].folder_name || '', folder, dashboard.dashboard_name ?? '', window.location.origin);
+          tabId = [
+            folders[0].folder_name,
+            folder,
+            dashboard?.dashboard_name
+          ].join('-');
+          res = await DashboardsApi.getDashboardLevel2(
+            folders[0].folder_name || '',
+            folder,
+            dashboard?.dashboard_name ?? '',
+            window.location.origin
+          );
         } else if (folders.length === 2) {
-          tabId = [folders[0].folder_name, folders[1].folder_name, folder, dashboard.dashboard_name].join('-');
-          res = await DashboardsApi.getDashboardLevel3(folders[0].folder_name || '', folders[1].folder_name || '', folder, dashboard.dashboard_name ?? '', window.location.origin);
+          tabId = [
+            folders[0].folder_name,
+            folders[1].folder_name,
+            folder,
+            dashboard?.dashboard_name
+          ].join('-');
+          res = await DashboardsApi.getDashboardLevel3(
+            folders[0].folder_name || '',
+            folders[1].folder_name || '',
+            folder,
+            dashboard?.dashboard_name ?? '',
+            window.location.origin
+          );
         } else if (folders.length === 3) {
-          tabId = [folders[0].folder_name, folders[1].folder_name, folders[2].folder_name, folder, dashboard.dashboard_name].join('-');
-          res = await DashboardsApi.getDashboardLevel4(folders[0].folder_name || '', folders[1].folder_name || '', folders[2].folder_name || '', folder, dashboard.dashboard_name ?? '', window.location.origin);
+          tabId = [
+            folders[0].folder_name,
+            folders[1].folder_name,
+            folders[2].folder_name,
+            folder,
+            dashboard?.dashboard_name
+          ].join('-');
+          res = await DashboardsApi.getDashboardLevel4(
+            folders[0].folder_name || '',
+            folders[1].folder_name || '',
+            folders[2].folder_name || '',
+            folder,
+            dashboard?.dashboard_name ?? '',
+            window.location.origin
+          );
         }
         const authenticatedDashboard: AuthenticatedDashboardModel = res?.data;
         setOpenedDashboards([...openedDashboards, authenticatedDashboard]);
@@ -89,7 +146,7 @@ function DashboardProvider(props: any) {
           ...prev,
           [tabId]: false
         }));
-      } catch(err) {
+      } catch (err) {
         setError((prev) => ({
           ...prev,
           [tabId]: true
@@ -102,19 +159,25 @@ function DashboardProvider(props: any) {
     onAddTab();
   }, []);
 
-  const toggleDashboardFolder = useCallback((key: string) => {
-    setDashboardStatus({
-      ...dashboardStatus,
-      [key]: !dashboardStatus[key]
-    });
-  }, [dashboardStatus]);
+  const toggleDashboardFolder = useCallback(
+    (key: string) => {
+      setDashboardStatus({
+        ...dashboardStatus,
+        [key]: !dashboardStatus[key]
+      });
+    },
+    [dashboardStatus]
+  );
 
-  const openDashboardFolder = useCallback((keys: string[]) => {
-    setDashboardStatus({
-      ...dashboardStatus,
-      ...keys.reduce((obj, key) => ({ ...obj, [key]: true }), {})
-    });
-  }, [dashboardStatus]);
+  const openDashboardFolder = useCallback(
+    (keys: string[]) => {
+      setDashboardStatus({
+        ...dashboardStatus,
+        ...keys.reduce((obj, key) => ({ ...obj, [key]: true }), {})
+      });
+    },
+    [dashboardStatus]
+  );
 
   return (
     <DashboardContext.Provider
@@ -131,7 +194,7 @@ function DashboardProvider(props: any) {
         openDashboardFolder,
         sidebarWidth,
         setSidebarWidth,
-        error,
+        error
       }}
       {...props}
     />
