@@ -298,13 +298,6 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-        - dashboard_name: Current column status per check category
-          url: https://lookerstudio.google.com/embed/reporting/20c67e41-5830-4242-aac4-fe4131d2bb92/page/c5B8C
-          width: 1400
-          height: 1760
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-            ds0.p_check_type: monitoring
     - folder_name: Highest issue severity per day
       dashboards:
         - dashboard_name: Highest issue severity per table and day
