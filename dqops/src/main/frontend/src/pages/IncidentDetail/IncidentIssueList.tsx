@@ -123,6 +123,9 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           <div>{typeof issue.expectedValue === 'number' ? issue.expectedValue : ''}</div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+          {issue.dataGroup}
+        </td>
+        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {getIssueSeverityLevel(issue.severity)}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
@@ -151,9 +154,6 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {issue.durationMs}
-        </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.dataGroup}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
           <span>{issue.id}</span>
@@ -266,6 +266,15 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
               onChange={handleSortChange}
             />
           </th>
+          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            <SortableColumn
+              className="justify-end"
+              label="Data Group"
+              order="dataGroup"
+              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
+          </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <SortableColumn
               className="justify-end"
@@ -301,15 +310,6 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             Duration Ms
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            <SortableColumn
-              className="justify-end"
-              label="Data Group"
-              order="dataGroup"
-              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             Id
