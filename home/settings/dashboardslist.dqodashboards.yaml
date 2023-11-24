@@ -54,7 +54,7 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
-        - dashboard_name: KPIs per quality dimension and data group name
+        - dashboard_name: KPIs per quality dimension and data group
           url: https://lookerstudio.google.com/embed/reporting/b083a666-d556-4103-bb6b-a9be7f98149d/page/c5B8C
           width: 1400
           height: 1500
@@ -406,18 +406,18 @@ spec:
         - dashboard_name: KPIs per data grouping and day
           url: https://lookerstudio.google.com/embed/reporting/0b397977-89a3-4ffe-8c80-da96b240494b/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
         - dashboard_name: KPIs per check and day
           url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
-        - dashboard_name: KPIs per quality dimension and data group name
+        - dashboard_name: KPIs per quality dimension and data group
           url: https://lookerstudio.google.com/embed/reporting/b083a666-d556-4103-bb6b-a9be7f98149d/page/c5B8C
           width: 1400
           height: 1500
@@ -757,32 +757,32 @@ spec:
         - dashboard_name: KPIs per table and daily partition
           url: https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per column and daily partition
           url: https://lookerstudio.google.com/embed/reporting/9c4baa39-8876-4cde-8906-7ecb4df81344/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per data grouping and daily partition
           url: https://lookerstudio.google.com/embed/reporting/0b397977-89a3-4ffe-8c80-da96b240494b/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per check and daily partition
           url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: KPIs per quality dimension and data group name
+        - dashboard_name: KPIs per quality dimension and data group
           url: https://lookerstudio.google.com/embed/reporting/b083a666-d556-4103-bb6b-a9be7f98149d/page/c5B8C
           width: 1400
           height: 1500
@@ -1015,14 +1015,14 @@ spec:
       - dashboard_name: KPIs per data grouping and day
         url: https://lookerstudio.google.com/embed/reporting/0b397977-89a3-4ffe-8c80-da96b240494b/page/c5B8C
         width: 1400
-        height: 1600
+        height: 2100
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
       - dashboard_name: KPIs per check and day
         url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
         width: 1400
-        height: 1600
+        height: 2100
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
