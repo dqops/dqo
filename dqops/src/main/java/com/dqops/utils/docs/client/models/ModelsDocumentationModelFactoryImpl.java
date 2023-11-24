@@ -27,7 +27,6 @@ import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.github.therapi.runtimejavadoc.ClassJavadoc;
 import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
-import com.google.common.base.CaseFormat;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -38,6 +37,8 @@ import java.util.stream.Collectors;
 
 public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationModelFactory {
 
+    public static final String SHARED_MODELS_IDENTIFIER = "Common";
+
     private final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
@@ -45,13 +46,15 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
     public ModelsSuperiorObjectDocumentationModel createDocumentationForSharedModels(Collection<ComponentModel> componentModels) {
         List<ComponentModel> sharedModels = componentModels.stream()
                 .filter(componentModel -> componentModel.getDocsLink() == null
-                        || componentModel.getDocsLink().toUri().getPath().contains("models/#"))
+                        || componentModel.getDocsLink().toUri().getPath().contains(SHARED_MODELS_IDENTIFIER))
                 .sorted(Comparator.comparing(ComponentModel::getClassName))
                 .collect(Collectors.toList());
 
         Map<String, ComponentModel> componentModelMap = componentModels.stream().collect(Collectors.toMap(ComponentModel::getClassName, Function.identity()));
 
-        return generateModelsSuperiorObjectDocumentationModel("index.md", sharedModels, componentModelMap);
+        return generateModelsSuperiorObjectDocumentationModel(SHARED_MODELS_IDENTIFIER + ".md",
+                sharedModels,
+                componentModelMap);
     }
 
     @Override
@@ -84,6 +87,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                     controllerName + ".md", controllerModels, componentModelMap);
             documentationModels.add(controllerDocumentation);
         }
+        documentationModels.sort(
+                Comparator.comparing(ModelsSuperiorObjectDocumentationModel::getLocationFilePath));
         return documentationModels;
     }
 
@@ -93,7 +98,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                 : null;
         return docsLink != null
                 && docsLink.contains("client/")
-                && !docsLink.contains("models/#");
+                && !docsLink.contains(SHARED_MODELS_IDENTIFIER);
     }
 
     private String absoluteFilePathToRef(String absoluteFilePath) {
@@ -204,7 +209,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             modelsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
             modelsObjectDocumentationModel.setObjectClassPath(
                     Path.of(absoluteFilePathToRef("/docs/client/models/" + destinationPath))
-                            .resolve("#" + classInfo.getReflectedClass().getSimpleName())
+                            .resolve("#" + classInfo.getReflectedClass().getSimpleName().toLowerCase())
+                            .toString()
             );
 
             for (FieldInfo info : infoFields) {
@@ -261,7 +267,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                             .collect(Collectors.toList());
                     modelsObjectDocumentationModel.setEnumValues(enumValues);
                 }
-                objectComponentModel.setDocsLink(modelsObjectDocumentationModel.getObjectClassPath());
+                objectComponentModel.setDocsLink(Path.of(modelsObjectDocumentationModel.getObjectClassPath()));
             }
 
             visitedObjects.put(targetClass, modelsObjectDocumentationModel);
@@ -286,9 +292,9 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             String simpleClassName = clazz.getSimpleName();
             ComponentModel componentModel = componentModelMap.get(simpleClassName);
             if (componentModel != null && componentModel.getDocsLink() != null) {
-                return componentModel.getDocsLink().toString().replace('\\', '/');
+                return componentModel.getDocsLink().toString();
             } else {
-                return "#" + simpleClassName;
+                return "#" + simpleClassName.toLowerCase();
             }
         };
 

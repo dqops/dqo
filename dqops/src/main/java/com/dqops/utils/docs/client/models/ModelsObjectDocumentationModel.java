@@ -44,7 +44,7 @@ public class ModelsObjectDocumentationModel {
     /**
      * Object class path.
      */
-    private Path objectClassPath;
+    private String objectClassPath;
     /**
      * Enum values for enum typed objects.
      */
