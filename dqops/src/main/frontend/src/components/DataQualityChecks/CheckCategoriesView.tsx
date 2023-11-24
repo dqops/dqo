@@ -84,9 +84,22 @@ const CheckCategoriesView = ({
     shouldExtend();
   }, []);
 
+  const getExtendCheckCategoryModelWithDeletedChecks = () => {
+    const checkResultCopy = [...checkResultsOverview]
+      const deletedChecksArray = checkResultCopy.filter(
+        obj1 => category.checks && !category.checks.find(obj2 => obj1.checkName === obj2.check_name) 
+        && obj1.checkCategory === category.category
+        );
+        console.log(deletedChecksArray)
+        // const deletedCheckModels :  CheckModel = deletedChecksArray.map((x) => ({
+          
+        // }))
+        // return deletedCheckModels;
+  }
+
   return (
     <Fragment>
-      <tr>
+      <tr onClick={() => getExtendCheckCategoryModelWithDeletedChecks()}>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -175,6 +188,7 @@ const CheckCategoriesView = ({
             comparisonName={category.comparison_name}
             isDefaultEditing={isDefaultEditing}
             canUserRunChecks={userProfile.can_run_checks}
+            isAlreadyDeleted= {true}
           />
         ))}
       <DeleteOnlyDataDialog
