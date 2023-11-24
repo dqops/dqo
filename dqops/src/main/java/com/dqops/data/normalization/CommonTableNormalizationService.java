@@ -106,12 +106,30 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
-                                                 DateTimeColumn sortedTimePeriodColumn,
-                                                 long checkHash,
-                                                 long tableHash,
-                                                 long columnHash,
-                                                 int rowCount);
+    TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                 DateTimeColumn sortedTimePeriodColumn,
+                                 long checkHash,
+                                 long tableHash,
+                                 long columnHash,
+                                 int rowCount);
+
+    /**
+     * Creates and fills the "id" column by combining hashes for the error table.
+     *
+     * @param sortedDataGroupingHashColumn Data grouping hashes column.
+     * @param errorMessageColumn         Error message column.
+     * @param checkHash                  Check hash value.
+     * @param tableHash                  Table hash value.
+     * @param columnHash                 Column hash value (or 0L when the check is not on a column level).
+     * @param rowCount                   Row count.
+     * @return ID column, filled with values.
+     */
+    TextColumn createErrorRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                      TextColumn errorMessageColumn,
+                                      long checkHash,
+                                      long tableHash,
+                                      long columnHash,
+                                      int rowCount);
 
     /**
      * Creates and fills the "id" column by combining hashes.
@@ -127,11 +145,11 @@ public interface CommonTableNormalizationService {
      * @param rowCount                   Row count.
      * @return ID column, filled with values.
      */
-    TextColumn createRowIdColumnAndUpdateIndexes(LongColumn sortedDataGroupingHashColumn,
-                                                 InstantColumn sortedTimePeriodColumn,
-                                                 IntColumn sampleIndexColumn,
-                                                 long checkHash,
-                                                 long tableHash,
-                                                 long columnHash,
-                                                 int rowCount);
+    TextColumn createRowIdColumn(LongColumn sortedDataGroupingHashColumn,
+                                 InstantColumn sortedTimePeriodColumn,
+                                 IntColumn sampleIndexColumn,
+                                 long checkHash,
+                                 long tableHash,
+                                 long columnHash,
+                                 int rowCount);
 }
