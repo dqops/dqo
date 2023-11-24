@@ -747,7 +747,7 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: KPI history for daily partitions
+        - dashboard_name: KPI history
           url: https://lookerstudio.google.com/embed/reporting/cf08567c-cd0f-4059-a9be-53d9eb2997e9/page/c5B8C
           width: 1400
           height: 1700
@@ -755,28 +755,28 @@ spec:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per table and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/39dacda7-8490-4adb-8851-ef2d69e0e4b6/page/c5B8C
           width: 1400
           height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per column and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/9c4baa39-8876-4cde-8906-7ecb4df81344/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/8056e6d0-8baa-4d01-b194-fd333c8b34ea/page/c5B8C
           width: 1400
           height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per data grouping and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/0b397977-89a3-4ffe-8c80-da96b240494b/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/213aa0ed-1896-4a9b-a834-cedc138d9e6a/page/c5B8C
           width: 1400
           height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: KPIs per check and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/912c3348-cb6a-4871-a3af-21e8573e3339/page/c5B8C
           width: 1400
           height: 2100
           parameters:
