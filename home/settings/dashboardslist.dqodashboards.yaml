@@ -665,30 +665,30 @@ spec:
     - folder_name: Highest issue severity per day
       dashboards:
         - dashboard_name: Highest issue severity status per table and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/cbfe15f6-d34d-4c7a-8c88-09061123adb8/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: Highest issue severity status per column and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/474cb75b-e9f0-486b-bf12-e910d0330d8b/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/6b1cf498-d37e-4f1f-bd73-8c82a0f669de/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: Highest issue severity status per data grouping and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/a3ee7747-53c0-4645-a83c-a2432d186375/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
         - dashboard_name: Highest issue severity status per check and daily partition
-          url: https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/c5B8C
+          url: https://lookerstudio.google.com/embed/reporting/5b855c4e-8afd-4623-92eb-d033be7f75b9/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -702,7 +702,7 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: Data quality issue count per check
+        - dashboard_name: Data quality issues count per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
           height: 1870
@@ -836,7 +836,7 @@ spec:
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
-        - dashboard_name: Too small partitions
+        - dashboard_name: Too small daily partitions
           url: https://lookerstudio.google.com/embed/reporting/44394e69-6f83-4e16-a903-404418b2eddb/page/c5B8C
           width: 1400
           height: 2850
