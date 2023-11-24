@@ -91,12 +91,14 @@ const CheckCategoriesView = ({
         && obj1.checkCategory === category.category
         );
         console.log(deletedChecksArray)
-        // const deletedCheckModels :  CheckModel = deletedChecksArray.map((x) => ({
+        const deletedCheckModels :  CheckModel[] = deletedChecksArray.map((x) => ({
+          check_name: x.checkName,
+          check_hash: x.checkHash,
           
-        // }))
-        // return deletedCheckModels;
+        }))
+        return deletedCheckModels;
   }
-
+console.log(getExtendCheckCategoryModelWithDeletedChecks())
   return (
     <Fragment>
       <tr onClick={() => getExtendCheckCategoryModelWithDeletedChecks()}>
@@ -188,9 +190,41 @@ const CheckCategoriesView = ({
             comparisonName={category.comparison_name}
             isDefaultEditing={isDefaultEditing}
             canUserRunChecks={userProfile.can_run_checks}
-            isAlreadyDeleted= {true}
           />
         ))}
+        {getExtendCheckCategoryModelWithDeletedChecks().map((check, index) => (
+          <CheckListItem
+            check={check}
+            key={index}
+            onChange={(item) =>
+              handleChangeDataGroupingConfiguration(item, index)
+            }
+            checkResult={checkResultsOverview.find(
+              (item) =>
+                item.checkHash == check.check_hash
+            )}
+            getCheckOverview={getCheckOverview}
+            onUpdate={onUpdate}
+            timeWindowFilter={timeWindowFilter}
+            mode={mode}
+            changeCopyUI={(value: boolean) =>
+              changeCopyUI(
+                category.category ?? '',
+                check.check_name ?? '',
+                value
+              )
+            }
+            checkedCopyUI={
+              copyCategory?.checks?.find(
+                (item) => item.check_name === check.check_name
+              )?.configured
+            }
+            category={category.category}
+            comparisonName={category.comparison_name}
+            isDefaultEditing={isDefaultEditing}
+            canUserRunChecks={userProfile.can_run_checks}
+            isAlreadyDeleted={true}
+          /> ))}
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}

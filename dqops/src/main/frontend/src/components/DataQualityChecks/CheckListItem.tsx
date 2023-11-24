@@ -454,8 +454,8 @@ const CheckListItem = ({
               <Tooltip
                 content="Results"
                 className="max-w-80 py-4 px-4 bg-gray-800"
-              >
-                <div className="w-5 h-5">
+              > 
+                <div className={clsx("w-5 h-5", isAlreadyDeleted === true ? "pl-[129px] pr-11" : "")}>
                   <SvgIcon
                     name="rectangle-list"
                     className="text-gray-700 h-5 cursor-pointer"
