@@ -5,7 +5,8 @@ import {
   CheckResultsOverviewDataModel,
   TimeWindowFilterParameters,
   CheckModel,
-  QualityCategoryModel
+  QualityCategoryModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useSelector } from 'react-redux';
 import { JobApiClient } from '../../services/apiClient';
@@ -90,15 +91,14 @@ const CheckCategoriesView = ({
         obj1 => category.checks && !category.checks.find(obj2 => obj1.checkName === obj2.check_name) 
         && obj1.checkCategory === category.category
         );
-        console.log(deletedChecksArray)
         const deletedCheckModels :  CheckModel[] = deletedChecksArray.map((x) => ({
           check_name: x.checkName,
           check_hash: x.checkHash,
-          
+          run_checks_job_template: {checkType: checkTypes as CheckSearchFiltersCheckTypeEnum}
         }))
         return deletedCheckModels;
   }
-console.log(getExtendCheckCategoryModelWithDeletedChecks())
+
   return (
     <Fragment>
       <tr onClick={() => getExtendCheckCategoryModelWithDeletedChecks()}>

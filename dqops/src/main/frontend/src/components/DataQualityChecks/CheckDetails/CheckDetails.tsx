@@ -4,7 +4,6 @@ import {
   DqoJobHistoryEntryModelStatusEnum,
   CheckModel,
   DeleteStoredDataQueueJobParameters,
-  CheckResultEntryModel
 } from '../../../api';
 import { JobApiClient } from '../../../services/apiClient';
 import CheckResultsTab from './CheckResultsTab';
