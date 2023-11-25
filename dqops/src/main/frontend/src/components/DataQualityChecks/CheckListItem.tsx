@@ -558,6 +558,7 @@ const CheckListItem = ({
           </div>
         </td>
         <td className="py-2 px-4 bg-yellow-100 relative">
+        {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.warning}
@@ -574,9 +575,11 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
           <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
+          {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.error}
@@ -593,8 +596,10 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
         </td>
-        <td className="py-2 px-4 bg-red-100">
+        <td className="py-2 px-4 bg-red-100 h-18">
+        {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.fatal}
@@ -611,6 +616,7 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
         </td>
       </tr>
       {expanded && (
