@@ -96,7 +96,7 @@ const CheckCategoriesView = ({
           check_hash: x.checkHash,
           run_checks_job_template: {checkType: checkTypes as CheckSearchFiltersCheckTypeEnum}
         }))
-        return deletedCheckModels;
+        return deletedCheckModels ?? [];
   }
 
   return (

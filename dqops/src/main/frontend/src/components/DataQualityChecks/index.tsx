@@ -4,7 +4,8 @@ import {
   CheckContainerModel,
   CheckContainerModelEffectiveScheduleEnabledStatusEnum,
   CheckModel,
-  EffectiveScheduleModelScheduleLevelEnum
+  EffectiveScheduleModelScheduleLevelEnum,
+  QualityCategoryModel
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -299,6 +300,16 @@ const DataQualityChecks = ({
       value: item
     })
   );
+  const getCustomCategoryBasedOnResults = () => {
+    const checkResultCopy = [...checkResultsOverview]
+      const missingCategory = checkResultCopy.filter(
+        obj1 => checksUI.categories && !checksUI.categories.find(obj2 => obj1.checkCategory === obj2.category || obj1.checkCategory + "/" + obj1.comparisonName === obj2.category)  
+        );
+        const customCategory :  QualityCategoryModel[] = missingCategory.map((x) => ({
+          category: x.checkCategory
+        }))
+   return customCategory ?? [];
+  } 
 
   return (
     <div
@@ -429,7 +440,10 @@ const DataQualityChecks = ({
           isDefaultEditing={isDefaultEditing}
         />
         <tbody>
-          {checksUI?.categories.map((category, index) => (
+          {[
+              ...(checksUI?.categories ?? []),
+              ...(getCustomCategoryBasedOnResults() ?? []),
+            ].map((category, index) => (
             <CheckCategoriesView
               key={index}
               category={category}
