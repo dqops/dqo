@@ -69,16 +69,20 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
         RefreshTableRequest refreshTableRequest = new RefreshTableRequest();
         refreshTableRequest.setTable(targetTableParameter);
 
-        if (targetTableModifiedPartitions.getAffectedConnections().size() > 0) {
+        if (!targetTableModifiedPartitions.getAffectedConnections().isEmpty()) {
             refreshTableRequest.setConnections(new ArrayList<>(targetTableModifiedPartitions.getAffectedConnections()));
         }
 
-        if (targetTableModifiedPartitions.getAffectedTables().size() > 0) {
+        if (!targetTableModifiedPartitions.getAffectedTables().isEmpty()) {
             refreshTableRequest.setTables(new ArrayList<>(targetTableModifiedPartitions.getAffectedTables()));
         }
 
-        if (targetTableModifiedPartitions.getAffectedMonths().size() > 0) {
+        if (!targetTableModifiedPartitions.getAffectedMonths().isEmpty()) {
             refreshTableRequest.setMonths(new ArrayList<>(targetTableModifiedPartitions.getAffectedMonths()));
+        }
+
+        if (!targetTableModifiedPartitions.getAffectedPartitions().isEmpty()) {
+            refreshTableRequest.setPartitions(new ArrayList<>(targetTableModifiedPartitions.getAffectedPartitions()));
         }
 
         tenantDataWarehouseApi.refreshNativeTable(refreshTableRequest);
