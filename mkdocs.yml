@@ -89,7 +89,7 @@ nav:
       - Incidents and notifications: "working-with-dqo/incidents-and-notifications/incidents.md"
       - Set up data grouping: "working-with-dqo/set-up-data-grouping/set-up-data-grouping.md"
       - Compare tables: "working-with-dqo/table-comparison/table-comparison.md"
-      - Access managment: "working-with-dqo/users-managment/users-managment.md"
+      - User and access management: "working-with-dqo/access-management/access-management.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell/working-with-dqo-shell.md"
   - Integrations:
       - "integrations/index.md"
