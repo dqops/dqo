@@ -158,73 +158,40 @@ const CheckCategoriesView = ({
         </td>
       </tr>
       {category.checks &&
-        isExtended &&
-        category.checks.map((check, index) => (
-          <CheckListItem
-            check={check}
-            key={index}
-            onChange={(item) =>
-              handleChangeDataGroupingConfiguration(item, index)
-            }
-            checkResult={checkResultsOverview.find(
-              (item) =>
-                item.checkHash == check.check_hash
-            )}
-            getCheckOverview={getCheckOverview}
-            onUpdate={onUpdate}
-            timeWindowFilter={timeWindowFilter}
-            mode={mode}
-            changeCopyUI={(value: boolean) =>
-              changeCopyUI(
-                category.category ?? '',
-                check.check_name ?? '',
-                value
-              )
-            }
-            checkedCopyUI={
-              copyCategory?.checks?.find(
-                (item) => item.check_name === check.check_name
-              )?.configured
-            }
-            category={category.category}
-            comparisonName={category.comparison_name}
-            isDefaultEditing={isDefaultEditing}
-            canUserRunChecks={userProfile.can_run_checks}
-          />
-        ))}
-        {getExtendCheckCategoryModelWithDeletedChecks().map((check, index) => (
-          <CheckListItem
-            check={check}
-            key={index}
-            onChange={(item) =>
-              handleChangeDataGroupingConfiguration(item, index)
-            }
-            checkResult={checkResultsOverview.find(
-              (item) =>
-                item.checkHash == check.check_hash
-            )}
-            getCheckOverview={getCheckOverview}
-            onUpdate={onUpdate}
-            timeWindowFilter={timeWindowFilter}
-            mode={mode}
-            changeCopyUI={(value: boolean) =>
-              changeCopyUI(
-                category.category ?? '',
-                check.check_name ?? '',
-                value
-              )
-            }
-            checkedCopyUI={
-              copyCategory?.checks?.find(
-                (item) => item.check_name === check.check_name
-              )?.configured
-            }
-            category={category.category}
-            comparisonName={category.comparison_name}
-            isDefaultEditing={isDefaultEditing}
-            canUserRunChecks={userProfile.can_run_checks}
-            isAlreadyDeleted={true}
-          /> ))}
+  isExtended &&
+  [...category.checks, ...getExtendCheckCategoryModelWithDeletedChecks()].map(
+    (check, index) => (
+      <CheckListItem
+        check={check}
+        key={index}
+        onChange={(item) =>
+          handleChangeDataGroupingConfiguration(item, index)
+        }
+        checkResult={checkResultsOverview.find(
+          (item) => item.checkHash === check.check_hash
+        )}
+        getCheckOverview={getCheckOverview}
+        onUpdate={onUpdate}
+        timeWindowFilter={timeWindowFilter}
+        mode={mode}
+        changeCopyUI={(value) =>
+          changeCopyUI(category.category ?? '', check.check_name ?? '', value)
+        }
+        checkedCopyUI={
+          copyCategory?.checks?.find(
+            (item) => item.check_name === check.check_name
+          )?.configured
+        }
+        category={category.category}
+        comparisonName={category.comparison_name}
+        isDefaultEditing={isDefaultEditing}
+        canUserRunChecks={userProfile.can_run_checks}
+        isAlreadyDeleted={category.checks && !category.checks.find(x => x === 
+          check
+        )}
+      />
+    )
+  )}
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}
