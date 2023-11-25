@@ -19,7 +19,7 @@ Note that only a user with an Admin role can change other users, and options to 
 other users. If you are using a single-user license, you will see only one user.
 
 
-![Users-List](https://dqops.com/docs/images/working-with-dqo/users-managment/usersList2.png)
+![Users-List](https://dqops.com/docs/images/working-with-dqo/users-managment/userList3.png)
 
 
 ## Add a new user
