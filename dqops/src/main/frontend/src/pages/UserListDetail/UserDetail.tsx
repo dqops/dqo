@@ -50,7 +50,7 @@ export default function UserDetail() {
   return (
     <DefinitionLayout>
       <div className='w-full border-b border-b-gray-400 flex justify-end '>  
-        <Button label={(create===true || email === undefined) ? 'Add user' : 'Edit user'}
+        <Button label={'Save'}
          color='primary'
          variant='contained'
          className=' w-40 mr-10 my-3'
