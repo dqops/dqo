@@ -15367,124 +15367,126 @@
       "properties" : {
         "id" : {
           "type" : "string",
-          "description" : "Check result ID."
+          "description" : "Check result primary key"
         },
         "checkHash" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Check hash."
+          "description" : "Check hash, do not set a value when writing results to DQOps"
         },
         "checkCategory" : {
           "type" : "string",
-          "description" : "Check category name."
+          "description" : "Check category name"
         },
         "checkName" : {
           "type" : "string",
-          "description" : "Check name."
+          "description" : "Check name"
         },
         "checkDisplayName" : {
           "type" : "string",
-          "description" : "Check display name."
+          "description" : "Check display name"
         },
         "checkType" : {
           "type" : "string",
-          "description" : "Check type."
+          "description" : "Check type",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         },
         "actualValue" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Actual value."
+          "description" : "Actual value"
         },
         "expectedValue" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Expected value."
+          "description" : "Expected value"
         },
         "warningLowerBound" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Warning lower bound."
+          "description" : "Warning lower bound"
         },
         "warningUpperBound" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Warning upper bound."
+          "description" : "Warning upper bound"
         },
         "errorLowerBound" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Error lower bound."
+          "description" : "Error lower bound"
         },
         "errorUpperBound" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Error upper bound."
+          "description" : "Error upper bound"
         },
         "fatalLowerBound" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Fatal lower bound."
+          "description" : "Fatal lower bound"
         },
         "fatalUpperBound" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Fatal upper bound."
+          "description" : "Fatal upper bound"
         },
         "severity" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Severity."
+          "description" : "Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal"
         },
         "columnName" : {
           "type" : "string",
-          "description" : "Column name."
+          "description" : "Column name"
         },
         "dataGroup" : {
           "type" : "string",
-          "description" : "Data group."
+          "description" : "Data group name"
         },
         "durationMs" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Duration (ms)."
+          "description" : "Duration (ms)"
         },
         "executedAt" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Executed at."
+          "description" : "Executed at timestamp"
         },
         "timeGradient" : {
           "type" : "string",
-          "description" : "Time gradient."
+          "description" : "Time gradient",
+          "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
         },
         "timePeriod" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Time period."
+          "description" : "Time period"
         },
         "includeInKpi" : {
           "type" : "boolean",
-          "description" : "Include in KPI."
+          "description" : "Include in KPI"
         },
         "includeInSla" : {
           "type" : "boolean",
-          "description" : "Include in SLA."
+          "description" : "Include in SLA"
         },
         "provider" : {
           "type" : "string",
-          "description" : "Provider."
+          "description" : "Provider name"
         },
         "qualityDimension" : {
           "type" : "string",
-          "description" : "Quality dimension."
+          "description" : "Data quality dimension"
         },
         "sensorName" : {
           "type" : "string",
-          "description" : "Sensor name."
+          "description" : "Sensor name"
         },
         "tableComparison" : {
           "type" : "string",
-          "description" : "Table comparison name."
+          "description" : "Table comparison name"
         }
       }
     },
@@ -15494,34 +15496,35 @@
         "checkHash" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Check hash."
+          "description" : "Check hash"
         },
         "checkCategory" : {
           "type" : "string",
-          "description" : "Check category name."
+          "description" : "Check category name"
         },
         "checkName" : {
           "type" : "string",
-          "description" : "Check name."
+          "description" : "Check name"
         },
         "checkDisplayName" : {
           "type" : "string",
-          "description" : "Check display name."
+          "description" : "Check display name"
         },
         "checkType" : {
           "type" : "string",
-          "description" : "Check type."
+          "description" : "Check type",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         },
         "dataGroups" : {
           "type" : "array",
-          "description" : "Data groups list.",
+          "description" : "Data groups list",
           "items" : {
             "type" : "string"
           }
         },
         "dataGroup" : {
           "type" : "string",
-          "description" : "Selected data group."
+          "description" : "Selected data group"
         },
         "checkResultEntries" : {
           "type" : "array",
@@ -30681,68 +30684,74 @@
         "actualValue" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Actual value."
+          "description" : "Actual value"
         },
         "expectedValue" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Expected value."
+          "description" : "Expected value"
         },
         "columnName" : {
           "type" : "string",
-          "description" : "Column name."
+          "description" : "Column name"
         },
         "dataGroup" : {
           "type" : "string",
-          "description" : "Data group."
+          "description" : "Data group"
+        },
+        "checkType" : {
+          "type" : "string",
+          "description" : "Check type",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         },
         "durationMs" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Duration (ms)."
+          "description" : "Duration (ms)"
         },
         "executedAt" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Executed at."
+          "description" : "Executed at"
         },
         "timeGradient" : {
           "type" : "string",
-          "description" : "Time gradient."
+          "description" : "Time gradient",
+          "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
         },
         "timePeriod" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Time period."
+          "description" : "Time period"
         },
         "provider" : {
           "type" : "string",
-          "description" : "Provider."
+          "description" : "Provider name"
         },
         "qualityDimension" : {
           "type" : "string",
-          "description" : "Quality dimension."
+          "description" : "Data quality dimension"
         },
         "sensorName" : {
           "type" : "string",
-          "description" : "Sensor name."
+          "description" : "Sensor name"
         },
         "readoutId" : {
           "type" : "string",
-          "description" : "Sensor readout id."
+          "description" : "Sensor readout ID"
         },
         "errorMessage" : {
           "type" : "string",
-          "description" : "Error message."
+          "description" : "Error message"
         },
         "errorSource" : {
           "type" : "string",
-          "description" : "Error source."
+          "description" : "Error source"
         },
         "errorTimestamp" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Error timestamp."
+          "description" : "Error timestamp"
         },
         "tableComparison" : {
           "type" : "string",
@@ -30755,35 +30764,36 @@
       "properties" : {
         "checkName" : {
           "type" : "string",
-          "description" : "Check name."
+          "description" : "Check name"
         },
         "checkDisplayName" : {
           "type" : "string",
-          "description" : "Check display name."
+          "description" : "Check display name"
         },
         "checkType" : {
           "type" : "string",
-          "description" : "Check type."
+          "description" : "Check type",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         },
         "checkHash" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Check hash."
+          "description" : "Check hash"
         },
         "checkCategory" : {
           "type" : "string",
-          "description" : "Check category name."
+          "description" : "Check category name"
         },
         "dataGroupsNames" : {
           "type" : "array",
-          "description" : "Data groups list.",
+          "description" : "Data groups list",
           "items" : {
             "type" : "string"
           }
         },
         "dataGroup" : {
           "type" : "string",
-          "description" : "Selected data group."
+          "description" : "Selected data group"
         },
         "errorEntries" : {
           "type" : "array",
@@ -32477,68 +32487,70 @@
       "properties" : {
         "id" : {
           "type" : "string",
-          "description" : "Sensor readout ID."
+          "description" : "Sensor readout primary key"
         },
         "checkName" : {
           "type" : "string",
-          "description" : "Check name."
+          "description" : "Check name"
         },
         "checkDisplayName" : {
           "type" : "string",
-          "description" : "Check display name."
+          "description" : "Check display name"
         },
         "checkType" : {
           "type" : "string",
-          "description" : "Check type."
+          "description" : "Check type",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         },
         "actualValue" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Actual value."
+          "description" : "Actual value"
         },
         "expectedValue" : {
           "type" : "number",
           "format" : "double",
-          "description" : "Expected value."
+          "description" : "Expected value"
         },
         "columnName" : {
           "type" : "string",
-          "description" : "Column name."
+          "description" : "Column name"
         },
         "dataGroup" : {
           "type" : "string",
-          "description" : "Data group."
+          "description" : "Data group"
         },
         "durationMs" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Duration (ms)."
+          "description" : "Duration (ms)"
         },
         "executedAt" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Executed at."
+          "description" : "Executed at"
         },
         "timeGradient" : {
           "type" : "string",
-          "description" : "Time gradient."
+          "description" : "Time gradient",
+          "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
         },
         "timePeriod" : {
           "type" : "string",
           "format" : "date-time",
-          "description" : "Time period."
+          "description" : "Time period"
         },
         "provider" : {
           "type" : "string",
-          "description" : "Provider."
+          "description" : "Provider name"
         },
         "qualityDimension" : {
           "type" : "string",
-          "description" : "Quality dimension."
+          "description" : "Data quality dimension"
         },
         "tableComparison" : {
           "type" : "string",
-          "description" : "Quality dimension."
+          "description" : "Table comparison name"
         }
       }
     },
@@ -32547,39 +32559,40 @@
       "properties" : {
         "checkName" : {
           "type" : "string",
-          "description" : "Check name."
+          "description" : "Check name"
         },
         "checkDisplayName" : {
           "type" : "string",
-          "description" : "Check display name."
+          "description" : "Check display name"
         },
         "checkType" : {
           "type" : "string",
-          "description" : "Check type."
+          "description" : "Check type",
+          "enum" : [ "profiling", "monitoring", "partitioned" ]
         },
         "checkHash" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "Check hash."
+          "description" : "Check hash"
         },
         "checkCategory" : {
           "type" : "string",
-          "description" : "Check category name."
+          "description" : "Check category name"
         },
         "sensorName" : {
           "type" : "string",
-          "description" : "Sensor name."
+          "description" : "Sensor name"
         },
         "dataGroupNames" : {
           "type" : "array",
-          "description" : "Data groups list.",
+          "description" : "List of data groups that have values for this sensor readout (list of time series)",
           "items" : {
             "type" : "string"
           }
         },
         "dataGroup" : {
           "type" : "string",
-          "description" : "Selected data group."
+          "description" : "Selected data group"
         },
         "sensorReadoutEntries" : {
           "type" : "array",

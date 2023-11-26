@@ -17,6 +17,7 @@ package com.dqops.data.errors.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
+import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.services.models.ErrorEntryModel;
@@ -128,13 +129,13 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
                 String checkCategory = row.getString(ErrorsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
                 String checkDisplayName = row.getString(ErrorsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
                 String checkName = row.getString(ErrorsColumnNames.CHECK_NAME_COLUMN_NAME);
-                String checkType = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
+                String checkTypeString = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
                 errorsListModel = new ErrorsListModel();
                 errorsListModel.setCheckCategory(checkCategory);
                 errorsListModel.setCheckName(checkName);
                 errorsListModel.setCheckHash(checkHash);
-                errorsListModel.setCheckType(checkType);
+                errorsListModel.setCheckType(CheckType.fromString(checkTypeString));
                 errorsListModel.setCheckDisplayName(checkDisplayName);
                 errorsListModel.setDataGroup(dataGroupNameForCheck);
 
@@ -173,10 +174,11 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
 
         String columnName = TableRowUtility.getSanitizedStringValue(row, ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME);
         String dataGroupName = row.getString(ErrorsColumnNames.DATA_GROUP_NAME_COLUMN_NAME);
+        String checkTypeString = row.getString(ErrorsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
         Integer durationMs = row.getInt(ErrorsColumnNames.DURATION_MS_COLUMN_NAME);
         Instant executedAt = row.getInstant(ErrorsColumnNames.EXECUTED_AT_COLUMN_NAME);
-        String timeGradient = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
+        String timeGradientString = row.getString(ErrorsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         LocalDateTime timePeriod = row.getDateTime(ErrorsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
         String provider = row.getString(ErrorsColumnNames.PROVIDER_COLUMN_NAME);
@@ -195,10 +197,11 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
 
             setColumnName(columnName);
             setDataGroup(dataGroupName);
+            setCheckType(CheckType.fromString(checkTypeString));
 
             setDurationMs(durationMs);
             setExecutedAt(executedAt);
-            setTimeGradient(timeGradient);
+            setTimeGradient(TimePeriodGradient.fromString(timeGradientString));
             setTimePeriod(timePeriod);
 
             setProvider(provider);

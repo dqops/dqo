@@ -8,32 +8,32 @@ Detailed results for a single check. Represent one row in the check results tabl
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|id|Check result ID.|string|
-|check_hash|Check hash.|long|
-|check_category|Check category name.|string|
-|check_name|Check name.|string|
-|check_display_name|Check display name.|string|
-|check_type|Check type.|string|
-|actual_value|Actual value.|double|
-|expected_value|Expected value.|double|
-|warning_lower_bound|Warning lower bound.|double|
-|warning_upper_bound|Warning upper bound.|double|
-|error_lower_bound|Error lower bound.|double|
-|error_upper_bound|Error upper bound.|double|
-|fatal_lower_bound|Fatal lower bound.|double|
-|fatal_upper_bound|Fatal upper bound.|double|
-|severity|Severity.|integer|
-|column_name|Column name.|string|
-|data_group|Data group.|string|
-|duration_ms|Duration (ms).|integer|
-|time_gradient|Time gradient.|string|
-|time_period|Time period.|datetime|
-|include_in_kpi|Include in KPI.|boolean|
-|include_in_sla|Include in SLA.|boolean|
-|provider|Provider.|string|
-|quality_dimension|Quality dimension.|string|
-|sensor_name|Sensor name.|string|
-|table_comparison|Table comparison name.|string|
+|id|Check result primary key|string|
+|check_hash|Check hash, do not set a value when writing results to DQOps|long|
+|check_category|Check category name|string|
+|check_name|Check name|string|
+|check_display_name|Check display name|string|
+|[check_type](../#CheckType)|Check type|[CheckType](../#CheckType)|
+|actual_value|Actual value|double|
+|expected_value|Expected value|double|
+|warning_lower_bound|Warning lower bound|double|
+|warning_upper_bound|Warning upper bound|double|
+|error_lower_bound|Error lower bound|double|
+|error_upper_bound|Error upper bound|double|
+|fatal_lower_bound|Fatal lower bound|double|
+|fatal_upper_bound|Fatal upper bound|double|
+|severity|Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal|integer|
+|column_name|Column name|string|
+|data_group|Data group name|string|
+|duration_ms|Duration (ms)|integer|
+|[time_gradient](../errors/#TimePeriodGradient)|Time gradient|[TimePeriodGradient](../errors/#TimePeriodGradient)|
+|time_period|Time period|datetime|
+|include_in_kpi|Include in KPI|boolean|
+|include_in_sla|Include in SLA|boolean|
+|provider|Provider name|string|
+|quality_dimension|Data quality dimension|string|
+|sensor_name|Sensor name|string|
+|table_comparison|Table comparison name|string|
 
 
 ___  

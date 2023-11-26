@@ -17,6 +17,7 @@ package com.dqops.metadata.timeseries;
 
 import com.dqops.checks.CheckTimeScale;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.parquet.Strings;
 
 /**
  * Time series gradient type (daily, monthly, quarterly, monthly, weekly, hourly).
@@ -80,6 +81,45 @@ public enum TimePeriodGradient {
      */
     public int getRank() {
         return rank;
+    }
+
+    /**
+     * Converts a string to a time gradient.
+     * @param value String value
+     * @return Time gradient.
+     */
+    public static TimePeriodGradient fromString(String value) {
+        if (Strings.isNullOrEmpty(value)) {
+            return null;
+        }
+
+        switch (value) {
+            case "day":
+            case "daily":
+                return day;
+
+            case "month":
+            case "monthly": // to allow compatibility with time monitoring and partitioned time gradients
+                return month;
+
+            case "hour":
+                return hour;
+
+            case "year":
+                return year;
+
+            case "quarter":
+                return quarter;
+
+            case "week":
+                return week;
+
+            case "millisecond":
+                return millisecond;
+
+            default:
+                throw new EnumConstantNotPresentException(TimePeriodGradient.class, value);
+        }
     }
 
     /**

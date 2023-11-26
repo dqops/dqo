@@ -5,6 +5,8 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 from dateutil.parser import isoparse
 
+from ..models.check_type import CheckType
+from ..models.time_period_gradient import TimePeriodGradient
 from ..types import UNSET, Unset
 
 T = TypeVar("T", bound="ErrorEntryModel")
@@ -14,21 +16,22 @@ T = TypeVar("T", bound="ErrorEntryModel")
 class ErrorEntryModel:
     """
     Attributes:
-        actual_value (Union[Unset, float]): Actual value.
-        expected_value (Union[Unset, float]): Expected value.
-        column_name (Union[Unset, str]): Column name.
-        data_group (Union[Unset, str]): Data group.
-        duration_ms (Union[Unset, int]): Duration (ms).
-        executed_at (Union[Unset, int]): Executed at.
-        time_gradient (Union[Unset, str]): Time gradient.
-        time_period (Union[Unset, datetime.datetime]): Time period.
-        provider (Union[Unset, str]): Provider.
-        quality_dimension (Union[Unset, str]): Quality dimension.
-        sensor_name (Union[Unset, str]): Sensor name.
-        readout_id (Union[Unset, str]): Sensor readout id.
-        error_message (Union[Unset, str]): Error message.
-        error_source (Union[Unset, str]): Error source.
-        error_timestamp (Union[Unset, datetime.datetime]): Error timestamp.
+        actual_value (Union[Unset, float]): Actual value
+        expected_value (Union[Unset, float]): Expected value
+        column_name (Union[Unset, str]): Column name
+        data_group (Union[Unset, str]): Data group
+        check_type (Union[Unset, CheckType]):
+        duration_ms (Union[Unset, int]): Duration (ms)
+        executed_at (Union[Unset, int]): Executed at
+        time_gradient (Union[Unset, TimePeriodGradient]):
+        time_period (Union[Unset, datetime.datetime]): Time period
+        provider (Union[Unset, str]): Provider name
+        quality_dimension (Union[Unset, str]): Data quality dimension
+        sensor_name (Union[Unset, str]): Sensor name
+        readout_id (Union[Unset, str]): Sensor readout ID
+        error_message (Union[Unset, str]): Error message
+        error_source (Union[Unset, str]): Error source
+        error_timestamp (Union[Unset, datetime.datetime]): Error timestamp
         table_comparison (Union[Unset, str]): Table comparison name
     """
 
@@ -36,9 +39,10 @@ class ErrorEntryModel:
     expected_value: Union[Unset, float] = UNSET
     column_name: Union[Unset, str] = UNSET
     data_group: Union[Unset, str] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
     duration_ms: Union[Unset, int] = UNSET
     executed_at: Union[Unset, int] = UNSET
-    time_gradient: Union[Unset, str] = UNSET
+    time_gradient: Union[Unset, TimePeriodGradient] = UNSET
     time_period: Union[Unset, datetime.datetime] = UNSET
     provider: Union[Unset, str] = UNSET
     quality_dimension: Union[Unset, str] = UNSET
@@ -55,9 +59,16 @@ class ErrorEntryModel:
         expected_value = self.expected_value
         column_name = self.column_name
         data_group = self.data_group
+        check_type: Union[Unset, str] = UNSET
+        if not isinstance(self.check_type, Unset):
+            check_type = self.check_type.value
+
         duration_ms = self.duration_ms
         executed_at = self.executed_at
-        time_gradient = self.time_gradient
+        time_gradient: Union[Unset, str] = UNSET
+        if not isinstance(self.time_gradient, Unset):
+            time_gradient = self.time_gradient.value
+
         time_period: Union[Unset, str] = UNSET
         if not isinstance(self.time_period, Unset):
             time_period = self.time_period.isoformat()
@@ -85,6 +96,8 @@ class ErrorEntryModel:
             field_dict["columnName"] = column_name
         if data_group is not UNSET:
             field_dict["dataGroup"] = data_group
+        if check_type is not UNSET:
+            field_dict["checkType"] = check_type
         if duration_ms is not UNSET:
             field_dict["durationMs"] = duration_ms
         if executed_at is not UNSET:
@@ -123,11 +136,23 @@ class ErrorEntryModel:
 
         data_group = d.pop("dataGroup", UNSET)
 
+        _check_type = d.pop("checkType", UNSET)
+        check_type: Union[Unset, CheckType]
+        if isinstance(_check_type, Unset):
+            check_type = UNSET
+        else:
+            check_type = CheckType(_check_type)
+
         duration_ms = d.pop("durationMs", UNSET)
 
         executed_at = d.pop("executedAt", UNSET)
 
-        time_gradient = d.pop("timeGradient", UNSET)
+        _time_gradient = d.pop("timeGradient", UNSET)
+        time_gradient: Union[Unset, TimePeriodGradient]
+        if isinstance(_time_gradient, Unset):
+            time_gradient = UNSET
+        else:
+            time_gradient = TimePeriodGradient(_time_gradient)
 
         _time_period = d.pop("timePeriod", UNSET)
         time_period: Union[Unset, datetime.datetime]
@@ -162,6 +187,7 @@ class ErrorEntryModel:
             expected_value=expected_value,
             column_name=column_name,
             data_group=data_group,
+            check_type=check_type,
             duration_ms=duration_ms,
             executed_at=executed_at,
             time_gradient=time_gradient,

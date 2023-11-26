@@ -1810,6 +1810,7 @@ from .table_volume_row_count_statistics_collector_spec import (
 )
 from .table_volume_statistics_collectors_spec import TableVolumeStatisticsCollectorsSpec
 from .temporal_unit import TemporalUnit
+from .time_period_gradient import TimePeriodGradient
 from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
 from .value_changed_parameters_spec import ValueChangedParametersSpec
@@ -2635,6 +2636,7 @@ __all__ = (
     "TableVolumeRowCountStatisticsCollectorSpec",
     "TableVolumeStatisticsCollectorsSpec",
     "TemporalUnit",
+    "TimePeriodGradient",
     "TimestampColumnsSpec",
     "TimeWindowFilterParameters",
     "ValueChangedParametersSpec",

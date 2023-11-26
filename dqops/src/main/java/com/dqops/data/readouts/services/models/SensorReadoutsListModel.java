@@ -15,6 +15,7 @@
  */
 package com.dqops.data.readouts.services.models;
 
+import com.dqops.checks.CheckType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -31,23 +32,23 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class SensorReadoutsListModel {
-    @JsonPropertyDescription("Check name.")
+    @JsonPropertyDescription("Check name")
     private String checkName;
-    @JsonPropertyDescription("Check display name.")
+    @JsonPropertyDescription("Check display name")
     private String checkDisplayName;
-    @JsonPropertyDescription("Check type.")
-    private String checkType;
-    @JsonPropertyDescription("Check hash.")
+    @JsonPropertyDescription("Check type")
+    private CheckType checkType;
+    @JsonPropertyDescription("Check hash")
     private Long checkHash;
-    @JsonPropertyDescription("Check category name.")
+    @JsonPropertyDescription("Check category name")
     private String checkCategory;
 
-    @JsonPropertyDescription("Sensor name.")
+    @JsonPropertyDescription("Sensor name")
     private String sensorName;
 
-    @JsonPropertyDescription("Data groups list.")
+    @JsonPropertyDescription("List of data groups that have values for this sensor readout (list of time series)")
     private List<String> dataGroupNames;
-    @JsonPropertyDescription("Selected data group.")
+    @JsonPropertyDescription("Selected data group")
     private String dataGroup;
 
     @JsonPropertyDescription("Sensor readout entries")
