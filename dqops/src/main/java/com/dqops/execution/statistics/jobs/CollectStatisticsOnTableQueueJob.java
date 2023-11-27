@@ -126,7 +126,7 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
     public JobConcurrencyConstraint[] getConcurrencyConstraints() {
         Integer maxJobsPerConnection = this.parameters.getMaxJobsPerConnection();
 
-        if (maxJobsPerConnection == null) {
+        if (maxJobsPerConnection == null || maxJobsPerConnection <= 0) {
             return null; // no limits
         }
 
