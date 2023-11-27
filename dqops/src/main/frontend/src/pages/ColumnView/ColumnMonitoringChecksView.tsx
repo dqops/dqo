@@ -20,11 +20,11 @@ import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selector
 
 const initTabs = [
   {
-    label: 'Daily',
+    label: 'Daily checks',
     value: 'daily'
   },
   {
-    label: 'Monthly',
+    label: 'Monthly checks',
     value: 'monthly'
   }
 ];

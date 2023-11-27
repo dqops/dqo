@@ -28,11 +28,11 @@ import TableQualityStatus from './TableQualityStatus';
 
 const initTabs = [
   {
-    label: 'Daily',
+    label: 'Daily checks',
     value: 'daily'
   },
   {
-    label: 'Monthly',
+    label: 'Monthly checks',
     value: 'monthly'
   },
   {
@@ -44,11 +44,11 @@ const initTabs = [
     value: 'table-quality-status-monthly'
   },
   {
-    label: 'Daily Comparisons',
+    label: 'Daily comparisons',
     value: 'daily_comparisons'
   },
   {
-    label: 'Monthly Comparisons',
+    label: 'Monthly comparisons',
     value: 'monthly_comparisons'
   }
 ];

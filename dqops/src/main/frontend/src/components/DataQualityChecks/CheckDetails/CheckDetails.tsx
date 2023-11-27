@@ -31,15 +31,15 @@ import { IRootState } from '../../../redux/reducers';
 
 const tabs = [
   {
-    label: 'Check Results',
+    label: 'Check results',
     value: 'check_results'
   },
   {
-    label: 'Sensor Readouts',
+    label: 'Sensor readouts',
     value: 'sensor_readouts'
   },
   {
-    label: 'Execution Errors',
+    label: 'Execution errors',
     value: 'execution_errors'
   }
 ];
