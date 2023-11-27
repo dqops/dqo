@@ -18,6 +18,7 @@ package com.dqops.utils.docs.parquetfiles;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
+import com.dqops.utils.docs.rules.MainPageRuleDocumentationModel;
 import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
@@ -46,9 +47,19 @@ public class ParquetFilesDocumentationGeneratorImpl implements ParquetFilesDocum
         parquetFilesFolder.setLinkName("Parquet data files");
         parquetFilesFolder.setDirectPath(projectRootPath.resolve("../docs/reference/parquetfiles").toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("parquetfiles/parquetfiles_documentation");
-
         List<ParquetFileDocumentationModel> parquetFileDocumentationModels = parquetFilesDocumentationModelFactory.createDocumentationForParquetFiles();
+
+        MainPageParquetFileDocumentationModel mainPageParquetFileDocumentationModel = new MainPageParquetFileDocumentationModel();
+        mainPageParquetFileDocumentationModel.setParquetFiles(parquetFileDocumentationModels);
+
+        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("parquetfiles/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = parquetFilesFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageParquetFileDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageParquetFileDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("parquetfiles/parquetfiles_documentation");
 
         for (ParquetFileDocumentationModel parquetFileDocumentationModel : parquetFileDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = parquetFilesFolder.addNestedFile(parquetFileDocumentationModel.getParquetFileFullName() + ".md");
