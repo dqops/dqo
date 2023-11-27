@@ -23,10 +23,10 @@ spec:
 
     - folder_name: Data profiling issues count
       dashboards:
-        - dashboard_name: Profiling issues count per table
-          url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
+        - dashboard_name: Data quality executed checks per table
+          url: https://lookerstudio.google.com/embed/reporting/7723f12e-89e9-4372-8351-010c6dd7965f/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -330,10 +330,10 @@ spec:
             ds0.p_check_type: monitoring
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Data quality issues count per table
-          url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
+        - dashboard_name: Data quality executed checks per table
+          url: https://lookerstudio.google.com/embed/reporting/7723f12e-89e9-4372-8351-010c6dd7965f/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -695,10 +695,10 @@ spec:
 
     - folder_name: Data quality issues count
       dashboards:
-        - dashboard_name: Data quality issues count per table
-          url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
+        - dashboard_name: Data quality executed checks per table
+          url: https://lookerstudio.google.com/embed/reporting/7723f12e-89e9-4372-8351-010c6dd7965f/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: partitioned
@@ -919,10 +919,10 @@ spec:
   folders:
   - folder_name: Data quality issues count
     dashboards:
-      - dashboard_name: Data quality issues count per table
-        url: https://lookerstudio.google.com/embed/reporting/f758e975-1f9b-4be1-a3b9-73fb0caf1fc1/page/c5B8C
+      - dashboard_name: Data quality executed checks per table
+        url: https://lookerstudio.google.com/embed/reporting/7723f12e-89e9-4372-8351-010c6dd7965f/page/c5B8C
         width: 1400
-        height: 2500
+        height: 2700
         parameters:
           ds0.token: '%DQO_CLOUD_TOKEN%'
           ds0.p_check_type: all
