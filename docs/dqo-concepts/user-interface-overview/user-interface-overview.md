@@ -95,8 +95,8 @@ quality checks that can be customized. The tree view in this section also provid
 
 - **Default checks configuration:** This allows you to configure checks that are automatically enabled after importing new tables.
 - **Manage users:** This allows you to add new users and manage their roles.
-- **Default schedules:** This allows you to configure schedules that are automatically set after importing new tables.
-- **Defaults webhooks:** This allows you to configure webhooks.
+- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
+- **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
 - **Shared credentials:** This allows you to add and manage shared credentials.
 
 ![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration.png)
@@ -139,6 +139,51 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 ### **Check editor**
 
-In the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, the main workspace allows you to work with checks. 
+The main workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, is where you can work with checks.
 
 ![Check editor ](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor.png)
+
+
+The top section of the check editor workspace contains quick links that allow you to switch between different sections 
+while keeping the same level in the tree. For instance, if you are in the monitoring section on a table and click the 
+**Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
+same when you are on the column level.
+
+Below the quick links, there are tabs that allow you to switch between Profiling (only in Profiling section) or Daily 
+and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics 
+(only in Profiling section), or preview tables (only in Profiling section).
+
+Under the tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
+section, there is additional information about the date partitioning column.
+
+The table with data quality checks contains a list of checks divided into different data quality subcategories that you
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/#categories-of-checks)
+
+The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../checks/#severity-levels)
+
+On the left of the name of each check, there are several buttons and icons. And under the name of the check, there is a data quality
+dimension category to which this check was categorized.
+
+![Check buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-buttons.png)
+
+The buttons and icons allow you to:
+
+- Enable and disable checks by using the Switch and Disable button
+- Access check **Settings** where you can set Custom data groupings, modify inclusion/exclusion of check in KPI and SLA, modify the name of the Data Quality Dimension, add SQL WHERE condition, modify scheduling settings, or add Labels.
+
+    ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings.png) 
+
+- Check schedule status. 
+- Run data quality checks
+- View detailed results for checks, Sensor readouts, and Execution errors
+
+    ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results.png)
+
+- View detailed information about check. 
+- Check the results of the run check shown as a color square
+    - Green for a valid result
+    - Yellow for a warning
+    - Orange for an error
+    - Red for a fatal error
+    - Black for execution error.
+
