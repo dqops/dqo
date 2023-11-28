@@ -98,7 +98,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
     ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
 
@@ -121,7 +121,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
+8. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
 
 
 ### **Executing the checks using the DQOps Shell**

@@ -55,14 +55,35 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
     The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
     Here you can see that the default check warning threshold is 1 which allows you to validate whether your table is empty or not.
 
-    ![Row-count check configuration in the Monitoring section](https://dqops.com/docs/images/examples/row-count-check-configuration-in-the-monitoring-section.png)
+    
 
-2. Or go to the **Configuration** section
-    The Configuration section afford you to configure sensors, rules, data quality checks and default check configuration.
-    You can also configure row_count check in Configuration section.
-    ![Row-count check configuration in the Configuration section](https://dqops.com/docs/images/examples/row-count-check-configuration-in-the-configuration-section.png)
+2. Select the table or column mentioned in the example description from the **tree view** on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+
+3. Select the **Daily checks** tab.
+
+    In this tab you can find a list of data quality checks.
+
+
+4. Run the enabled check using the **Run check** button.
+
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+
+    ![Run check](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
+
+
+5. Access the results by clicking the **Results** button.
+
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
+
+    ![Check details](https://dqops.com/docs/images/examples/daily-row-count-check-details.png)
 
 3. Review the results which should be similar to the one below.
+
     The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
     The check gives a valid result (notice the green square on the left of the name of the check).
     Now you can be sure that you table is not empty.
@@ -129,14 +150,14 @@ To execute the check prepared in the example using the [user interface](../../dq
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
     In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
     ![Run check](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
 
@@ -234,8 +255,10 @@ To execute the check prepared in the example, run the following command in DQOps
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The number of rows is above 692 and the check gives valid result.
+
 ```
 Check evaluation summary per table:
 +---------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
@@ -244,6 +267,7 @@ Check evaluation summary per table:
 |table_row_count|america_health_rankings.ahr|1     |1             |1            |0       |0     |0           |0               |
 +---------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
+
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
 following command:
 
@@ -266,8 +290,10 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
+
 You can also see the results returned by the sensor. The actual value of rows in this example is 18155, which is above the minimum
 threshold level set in the warning (692).
+
 ```
 **************************************************
 Finished executing a sensor for a check row_count on the table america_health_rankings.ahr using a sensor definition table/volume/row_count, sensor result count: 1
@@ -280,6 +306,7 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

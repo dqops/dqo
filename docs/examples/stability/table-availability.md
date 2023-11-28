@@ -55,34 +55,34 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
+    In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-   ![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-table-availability-checks-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-table-availability-checks-details.png)
 
 
 6. Review the results which should be similar to the one below.
@@ -97,7 +97,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
     Below you can see the results displayed on the Current table status per check category dashboard showing results by connection, schema, check category and data group.
 
@@ -160,11 +160,14 @@ spec:
 A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
+
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The number of failures is 1 and the check gives warning result.
+
 ```
 Finished executing rules (thresholds) for a check daily_table_availability on the table america_health_rankings.ahr, verified rules count: 1
 
@@ -175,6 +178,7 @@ Rule evaluation results:
 |e2b1a9b0-023f-2baf-5e0f-a8d9427e379f|1.0         |0.0           |2023-09-04T00:00|2023-09-04T00:00:00Z|day          |0              |no grouping    |default                    |3492051126176682112|table_availability|bigquery|615130806917224725|america_health_rankings|ahr       |ahr               |5460786772265777882|daily_table_availability|daily_table_availability|monitoring|availability  |Availability     |table/availability/table_availability|4bc89ca3-0b0d-bada-0889-6235b4b35915|2023-09-04T12:41:15.179Z|910        |1       |3531467509473078844|true          |false         |10.0             |5.0              |0.0                |
 +------------------------------------+------------+--------------+----------------+--------------------+-------------+---------------+---------------+---------------------------+-------------------+------------------+--------+------------------+-----------------------+----------+------------------+-------------------+------------------------+------------------------+----------+--------------+-----------------+-------------------------------------+------------------------------------+------------------------+-----------+--------+-------------------+--------------+--------------+-----------------+-----------------+-------------------+
 ```
+
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
 following command:
 
@@ -209,7 +213,9 @@ GROUP BY time_period
 ORDER BY time_period
 **************************************************
 ```
+
 You can also see the results returned by the sensor. The actual value of the check is 1.0.
+
 ```
 **************************************************
 Finished executing a sensor for a check daily_table_availability on the table america_health_rankings.ahr using a sensor definition table/availability/table_availability, sensor result count: 1
@@ -222,6 +228,7 @@ Results returned by the sensor:
 +------------+-----------+--------------------+
 **************************************************
 ```
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

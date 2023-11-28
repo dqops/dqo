@@ -64,54 +64,54 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
+    In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-   ![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-false-percent-check-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-false-percent-check-details.png)
 
 
 6. Review the results which should be similar to the one below.
 
-   The actual value in this example is 99, which is above the minimum threshold level set in the warning (99).
-   The check gives a valid result (notice the green square on the left of the name of the check).
+    The actual value in this example is 99, which is above the minimum threshold level set in the warning (99).
+    The check gives a valid result (notice the green square on the left of the name of the check).
 
-   ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results.png)
+    ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results.png)
 
 
 7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
-   Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
+    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-   Below you can see the results displayed on the KPIs per check category - summary dashboard showing results by KPI, KPI per category, Datetime KPI, Pii KPI and Standard KPI.
+    Below you can see the results displayed on the KPIs per check category - summary dashboard showing results by KPI, KPI per category, Datetime KPI, Pii KPI and Standard KPI.
 
-   ![False-percent check results on KPIs per check category - summary dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-KPIs-per-check-category-summary-dashboard.png)
+    ![False-percent check results on KPIs per check category - summary dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-KPIs-per-check-category-summary-dashboard.png)
 
 ## Configuring a schedule at connection level
 
@@ -260,6 +260,7 @@ Results returned by the sensor:
 +----------------+------------------------+------------------------+
 **************************************************
 ```
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

@@ -75,34 +75,34 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
+    In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-   ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-details.png)
 
 
 6. Review the results which should be similar to the one below.
@@ -117,7 +117,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the Current table status per data quality dimension dashboard showing results by connection, schema, dimension and data group.
 
@@ -213,6 +213,7 @@ To execute the check prepared in the example, run the following command in DQOps
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 
 ```
@@ -223,6 +224,7 @@ Check evaluation summary per table:
 |america_health_rankings|america_health_rankings.ahr|1     |1             |0            |0       |0     |**1**       |0               |
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
+
 As you can see, the table failed the data quality check raising a fatal severity error.
 The percent of passed SQL expressions is below the 95.0% and the check raised the Fatal error.
 
@@ -256,8 +258,10 @@ GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
 **************************************************
 ```
+
 You can also see the results returned by the sensor. Now the actual value in this example is 92.6025888185073%, which is below the minimum
 threshold level set in the Fatal error (95.0%).
+
 ```
 **************************************************
 Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/sql/sql_condition_passed_percent, sensor result count: 1
@@ -311,127 +315,7 @@ spec:
         column_type: INT64
         nullable: true
 ```
-## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
-
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
-
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-valid-checks.png)
-
-1. Go to the **Monitoring** section.
-
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
-
-
-2. Select the table or column mentioned in the example description from the **tree view** on the left.
-
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
-
-
-3. Select the **Monitoring Checks** tab.
-
-   In this tab you can find a list of data quality checks.
-
-
-4. Run the enabled check using the **Run check** button.
-
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
-
-   ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-valid-run-checks.png)
-
-
-5. Access the results by clicking the **Results** button.
-
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
-
-   ![Check details](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-valid-checks-details.png)
-
-
-6. Review the results which should be similar to the one below.
-   
-    The actual value in this example is 100.
-    The check gives a valid result (notice the green square on the left of the name of the check).
-
-    ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-valid-checks-results.png)
-
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
-
-    Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
-
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
-
-    Below you can see the results displayed on the KPIs per table - summary dashboard showing results by KPIs per connection, KPIs per schema, KPIs per quality dimension and KPIs per check category.
-
-    ![SQL-condition-passed-percent results on KPIs per table - summary dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-valid-checks-results-on-KPIs-per-table-summary-dashboard.png)
-
-## Running the checks in the example and evaluating the results using DQOps Shell
-
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
-
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-Review the results which should be similar to the one below.
-The percent of passed SQL expressions is 100.0% so the result is valid.
-
-```
-Check evaluation summary per table:
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection             |Table                      |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-|america_health_rankings|america_health_rankings.ahr|1     |1             |1            |0       |0     |0           |0               |
-+-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
-following command:
-
-```
-check run --mode=debug
-```
-
-In the debug mode you can view the SQL query (sensor) executed in the check.
-
-```
-**************************************************
-Executing SQL on connection america_health_rankings (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-                         CASE
-                             WHEN (upper_ci >= lower_ci or upper_ci is NULL or lower_ci is NULL)
-                                  THEN 1
-                             ELSE 0
-                         END) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-```
-You can also see the results returned by the sensor. The actual value in this example is 100.0%.
-```
-**************************************************
-Finished executing a sensor for a check sql_condition_passed_percent_on_table on the table america_health_rankings.ahr using a sensor definition table/sql/sql_condition_passed_percent, sensor result count: 1
-
-Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|100.0       |2023-05-18T08:38:22.311Z|2023-05-18T08:38:22.311Z|
-+------------+------------------------+------------------------+
-**************************************************
-```
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

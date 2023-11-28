@@ -66,14 +66,14 @@ To execute the check prepared in the example using the [user interface](../../dq
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md). 
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
     In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
     ![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks.png)
 
@@ -198,6 +198,7 @@ To execute the check prepared in the example, run the following command in DQOps
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The number of null values in the `source` column is above 5 and the check raised warning.
 
@@ -209,8 +210,10 @@ Check evaluation summary per table:
 |america_health_rankings|america_health_rankings.ahr|1     |1             |1            |1       |0     |0           |0               |
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
+
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
 following command:
+
 ```
 check run --mode=debug
 ```

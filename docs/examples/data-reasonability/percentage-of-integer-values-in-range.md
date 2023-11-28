@@ -64,29 +64,29 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
+    In this tab you can find a list of data quality checks.
 
 
 4. Run the enabled check using the **Run check** button.
 
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-   ![Run check](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-run-checks.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-details.png)
 
 
 6. Review the results which should be similar to the one below.
@@ -101,7 +101,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
 8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the Current column status per check category dashboard showing results by connection, schema, check category and data group.
 
@@ -193,6 +193,7 @@ To execute the check prepared in the example, run the following command in DQOps
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The percentage of values between 1 and 100,000 in the `value` column is less than 95% and more than 90% and the check raised an error.
 
@@ -249,6 +250,7 @@ Results returned by the sensor:
 +-----------------+------------------------+------------------------+
 **************************************************
 ```
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
