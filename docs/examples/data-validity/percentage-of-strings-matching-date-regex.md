@@ -51,7 +51,7 @@ The `source_date` column of interest contains non-standard date format, in this 
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-The detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
@@ -189,7 +189,7 @@ spec:
 ```
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-The detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
