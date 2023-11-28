@@ -321,7 +321,7 @@ For more information on the `run` command, please refer to the [Command-line int
 
 ## Running the checks in the example and evaluating the results
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples). 
+The detailed explanation of [how to run the example is described here](../../#running-the-use-cases). 
 
 Even if we have started scheduler we can run all the checks to verify the results. 
 To execute the check prepared in the example, run the following command in DQOps Shell:

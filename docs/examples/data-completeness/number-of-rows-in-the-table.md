@@ -227,7 +227,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+The detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
