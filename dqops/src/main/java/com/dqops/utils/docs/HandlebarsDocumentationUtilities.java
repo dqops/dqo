@@ -21,10 +21,12 @@ import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
+import io.swagger.models.auth.In;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -44,9 +46,11 @@ public class HandlebarsDocumentationUtilities {
         handlebars = new Handlebars(new FileTemplateLoader(templateDir));
         handlebars.registerHelpers(StringHelpers.class);
         handlebars.registerHelpers(ConditionalHelpers.class);
+        handlebars.registerHelpers(IntegerMathHelpers.class);
         handlebars.registerHelper("render-type", renderTypeHelper);
         handlebars.registerHelper("checkmark", checkmarkHelper);
         handlebars.registerHelper("single-line", singleLineHelper);
+        handlebars.registerHelper("contains", containsHelper);
         handlebars.registerHelper("var", variableHelper);
     }
 
@@ -77,6 +81,94 @@ public class HandlebarsDocumentationUtilities {
         }
         catch (Exception ex) {
             throw new RuntimeException("Cannot render template " + template.filename() + ", error: " + ex.getMessage(), ex);
+        }
+    }
+
+    private enum IntegerMathHelpers implements Helper<Integer> {
+        add {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer sumUp = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(0, Integer::sum);
+
+                return n + sumUp;
+            }
+        },
+
+        subtract {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer sumUp = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(0, Integer::sum);
+
+                return n - sumUp;
+            }
+        },
+
+        multiply {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer multiplication = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(1, (a, b) -> a * b);
+
+                return n * multiplication;
+            }
+        },
+
+        divide {
+            @Override
+            public Integer apply(Integer n, Options options) throws IOException {
+                if (n == null) {
+                    return null;
+                }
+
+                if (Arrays.stream(options.params)
+                        .anyMatch(i -> !(i instanceof Integer))) {
+                    throw IntegerMathHelpers.nonIntegerParametersException(options.params);
+                }
+
+                Integer multiplication = Arrays.stream(options.params)
+                        .map(i->(Integer)i)
+                        .reduce(1, (a, b) -> a * b);
+
+                return n / multiplication;
+            }
+        },
+        ;
+
+        private static IOException nonIntegerParametersException(Object[] params) {
+            return new IOException(String.format("Not every parameter is an integer: %s",
+                    Arrays.toString(params)));
         }
     }
 
@@ -158,8 +250,19 @@ public class HandlebarsDocumentationUtilities {
         return s.replaceAll("\\s+", " ");
     };
 
+    private static final Helper<String> containsHelper = (s, o) -> {
+        if (s == null
+            || o.params.length == 0
+            || !(o.params[0] instanceof CharSequence)
+        ) {
+            return false;
+        }
+
+        return s.contains((CharSequence)o.params[0]);
+    };
+
     private static final Helper<String> variableHelper = new Helper<>() {
-        Map<Long, Map<String, String>> state = new HashMap<>();
+        final Map<Long, Map<String, String>> state = new HashMap<>();
 
         @Override
         public CharSequence apply(String variableName, Options options) {

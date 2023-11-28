@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2023 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,27 +17,16 @@ package com.dqops.utils.docs.parquetfiles;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Parquet file class description model. Contains info about class and all the columns occurring on them.
+ * Container object with a list of all parquet file types.
  */
 @Data
-public class ParquetFileDocumentationModel {
+public class MainPageParquetFileDocumentationModel {
     /**
-     * Parquet file class name.
+     * List of all parquet file types.
      */
-    private String parquetFileFullName;
-    /**
-     * Parquet file class description.
-     */
-    private String parquetFileDescription;
-    /**
-     * Parquet file class description.
-     */
-    private String parquetFileShortDescription;
-    /**
-     * Details about each column occurring on this class.
-     */
-    private List<ParquetColumnDetailsDocumentationModel> parquetColumnDetailsDocumentationModels;
+    private List<ParquetFileDocumentationModel> parquetFiles = new ArrayList<>();
 }

@@ -1,29 +1,18 @@
-# Sensors
+# {{header}}
 
-**This is a list of the sensors in DQOps broken down by category and a brief description of what they do.**
+**{{helpText}}**
 
-## Table sensors
+{{#each sensorTargets}}
+{{#if (gt sensorTargets.length 1)}}## {{capitalizeFirst this}} sensors{{/if}}
 {{#each sensors}}
-{{#if ( eq target "table")}}
+{{#if (eq target ../this)}}
 ### **{{category}}**{{#with "  "}}{{.}}{{/with}}
 
 | Sensor name | Description |
 |-------------|-------------|
-{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{category}}-table-sensors/#{{replace sensorName "_" "-"}})|{{single-line sensorParametersJavaDoc}}|
+{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{category}}-{{target}}-sensors/#{{replace sensorName "_" "-"}})|{{single-line sensorParametersJavaDoc}}|
 {{/each}}
 {{else}}
 {{/if}}
 {{/each}}
-
-## Column sensors
-{{#each sensors}}
-{{#if ( eq target "column")}}
-### **{{category}}**{{#with "  "}}{{.}}{{/with}}
-
-| Sensor name | Description |
-|-------------|-------------|
-{{#each collectedSensors}}|[{{sensorName}}](./{{target}}/{{category}}-column-sensors/#{{replace sensorName "_" "-"}})|{{single-line sensorParametersJavaDoc}}|
-{{/each}}
-{{else}}
-{{/if}}
 {{/each}}

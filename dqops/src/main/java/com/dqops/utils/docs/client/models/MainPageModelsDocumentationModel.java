@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.sensors;
+package com.dqops.utils.docs.client.models;
 
 import lombok.Data;
 
@@ -21,27 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Container object with a list of all sensors.
+ * Container object with a list of all models divided by controllers.
  */
 @Data
-public class MainPageSensorDocumentationModel {
+public class MainPageModelsDocumentationModel {
     /**
-     * File header.
+     * List of all models divided by controllers.
      */
-    private String header;
-
-    /**
-     * Description of the file.
-     */
-    private String helpText;
-
-    /**
-     * Targets in provided sensors.
-     */
-    private List<String> sensorTargets = new ArrayList<>();
-
-    /**
-     * List of all sensors.
-     */
-    private List<SensorGroupedDocumentationModel> sensors = new ArrayList<>();
+    private List<ModelsSuperiorObjectDocumentationModel> modelsSuperiorModels = new ArrayList<>();
 }

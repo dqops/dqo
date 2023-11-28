@@ -347,9 +347,9 @@ public class GenerateDocumentationPostProcessor {
      */
     protected static List<YamlDocumentationSchemaNode> getYamlDocumentationSchema() {
         List<YamlDocumentationSchemaNode> yamlDocumentationSchemaNodes = new ArrayList<>();
-        Path profilingPath = Path.of("profiling");
-        Path monitoringPath = Path.of("monitoring");
-        Path partitionedPath = Path.of("partitioned");
+        Path profilingPath = Path.of("profiling_checks");
+        Path monitoringPath = Path.of("monitoring_checks");
+        Path partitionedPath = Path.of("partitioned_checks");
 
         // Assumption: No cyclical dependencies (considering linkage to different docs pages).
         // Approach:   Ordering in the nodes list matters: bottom-up, starting from the leaves.

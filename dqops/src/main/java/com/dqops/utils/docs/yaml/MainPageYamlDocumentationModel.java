@@ -13,18 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.sensors;
+package com.dqops.utils.docs.yaml;
 
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Container object with a list of all sensors.
- */
 @Data
-public class MainPageSensorDocumentationModel {
+public class MainPageYamlDocumentationModel {
     /**
      * File header.
      */
@@ -35,13 +32,7 @@ public class MainPageSensorDocumentationModel {
      */
     private String helpText;
 
-    /**
-     * Targets in provided sensors.
-     */
-    private List<String> sensorTargets = new ArrayList<>();
+    private List<MainPageYamlDocumentationModel> subpages = new ArrayList<>();
 
-    /**
-     * List of all sensors.
-     */
-    private List<SensorGroupedDocumentationModel> sensors = new ArrayList<>();
+    private List<YamlSuperiorObjectDocumentationModel> superiorObjects = new ArrayList<>();
 }
