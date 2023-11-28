@@ -23,6 +23,7 @@ import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
+import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -110,6 +111,12 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("Oracle connection parameters.")
     private OracleParametersSpec oracle;
+
+    /**
+     * Spark connection parameters.
+     */
+    @JsonPropertyDescription("Spark connection parameters.")
+    private SparkParametersSpec spark;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
@@ -204,6 +211,7 @@ public class ConnectionModel {
             setSqlserver(connectionSpec.getSqlserver());
             setMysql(connectionSpec.getMysql());
             setOracle(connectionSpec.getOracle());
+            setSpark(connectionSpec.getSpark());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -266,6 +274,7 @@ public class ConnectionModel {
         targetConnectionSpec.setSqlserver(this.getSqlserver());
         targetConnectionSpec.setMysql(this.getMysql());
         targetConnectionSpec.setOracle(this.getOracle());
+        targetConnectionSpec.setSpark(this.getSpark());
     }
 
     public static class ConnectionModelSampleFactory implements SampleValueFactory<ConnectionModel> {

@@ -24,6 +24,7 @@ import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
+import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
 import com.dqops.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
@@ -68,6 +69,9 @@ public class SampleTableMetadataObjectMother {
 
             case oracle:
                 return OracleConnectionSpecObjectMother.create();
+
+            case spark:
+                return SparkConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -101,6 +105,9 @@ public class SampleTableMetadataObjectMother {
 
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();
+
+            case spark:
+                return SparkConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

@@ -23,6 +23,7 @@ import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
+import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -67,6 +68,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("sqlserver", o -> o.sqlserver);
             put("mysql", o -> o.mysql);
             put("oracle", o -> o.oracle);
+            put("spark", o -> o.spark);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("incident_grouping", o -> o.incidentGrouping);
@@ -107,16 +109,22 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     private SqlServerParametersSpec sqlserver;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).")
+    @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the mysql section or set the url (which is the MySQL JDBC url).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MysqlParametersSpec mysql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).")
+    @JsonPropertyDescription("Oracle connection parameters. Specify parameters in the oracle section or set the url (which is the Oracle JDBC url).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private OracleParametersSpec oracle;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private SparkParametersSpec spark;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -330,6 +338,20 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         setDirtyIf(!Objects.equals(this.oracle, oracle));
         this.oracle = oracle;
         propagateHierarchyIdToField(oracle, "oracle");
+    }
+
+    public SparkParametersSpec getSpark() {
+        return spark;
+    }
+
+    /**
+     * Sets the Spark connection parameters.
+     * @param spark New Spark connection parameters.
+     */
+    public void setSpark(SparkParametersSpec spark) {
+        setDirtyIf(!Objects.equals(this.spark, spark));
+        this.spark = spark;
+        propagateHierarchyIdToField(spark, "spark");
     }
 
     /**
