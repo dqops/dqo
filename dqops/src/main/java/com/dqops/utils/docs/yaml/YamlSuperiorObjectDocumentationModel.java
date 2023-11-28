@@ -15,6 +15,7 @@
  */
 package com.dqops.utils.docs.yaml;
 
+import com.dqops.utils.docs.TypeModel;
 import lombok.Data;
 
 import java.util.List;
@@ -33,20 +34,29 @@ public class YamlSuperiorObjectDocumentationModel {
      */
     private String superiorClassSimpleName;
     /**
+     * Superior class file path.
+     */
+    private String superiorClassFilePath;
+    /**
      * Superior class.
      */
     private Class<?> reflectedSuperiorClass;
+    /**
+     * Superior class data-type.
+     */
+    private TypeModel reflectedSuperiorDataType;
+
     /**
      * List of all superior class fields.
      */
     private List<YamlObjectDocumentationModel> classObjects;
 
     public String getLocationFilePath() {
-        if (this.superiorClassSimpleName == null) {
+        if (this.superiorClassFilePath == null) {
             return null;
         }
 
-        return this.superiorClassSimpleName + ".md";
+        return this.superiorClassFilePath + ".md";
     }
 
 }
