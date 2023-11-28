@@ -1,0 +1,45 @@
+<!-- Include MicroModal library -->
+<link rel="stylesheet" href="https://unpkg.com/micromodal/dist/micromodal.min.css" />
+<script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+
+<div class="md-copyright">
+        <div class="md-copyright__highlight">
+            {{ config.copyright }}
+        </div>
+
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+            Material for MkDocs
+        </a>
+
+        <!-- Show this content if the cookie is not valid -->
+        <div id="cookieInvalidContent">
+            <!-- Your additional HTML content here -->
+            <p>This content is shown when the cookie is not valid.</p>
+        </div>
+</div>
+
+<script>
+    function isCookieValid(name) {
+        var cookieValue = getCookie(name);
+        return cookieValue !== null && cookieValue !== '';
+    }
+
+    function getCookie(name) {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = cookies[i].trim();
+            if (cookie.indexOf(name + '=') === 0) {
+                return decodeURIComponent(cookie.substring(name.length + 1));
+            }
+        }
+        return null;
+    }
+
+    // Initialize MicroModal
+    MicroModal.init();
+
+        console.log("cookieValid")
+        MicroModal.show('cookieInvalidContent');
+    
+</script>
