@@ -808,7 +808,7 @@ const TableColumns = ({
                 className="flex justify-end cursor-pointer"
                 onClick={() => sortData<MyData>('unique_value')}
               >
-                <div>Distinct Count</div>
+                <div>Distinct count</div>
                 <div>
                   <SvgIcon name="chevron-up" className="w-3 h-3" />
                   <SvgIcon name="chevron-down" className="w-3 h-3" />
