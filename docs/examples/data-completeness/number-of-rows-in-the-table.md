@@ -63,7 +63,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
 3. Select the **Daily checks** tab.
 
-    In this tab you can find a list of data quality checks.
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
@@ -82,7 +82,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
     ![Check details](https://dqops.com/docs/images/examples/daily-row-count-check-details.png)
 
-3. Review the results which should be similar to the one below.
+    Review the results which should be similar to the one below.
 
     The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
     The check gives a valid result (notice the green square on the left of the name of the check).
@@ -90,10 +90,10 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
     ![Row-count check result](https://dqops.com/docs/images/examples/daily-row-count-check-result.png)
 
-4. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-5. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
     Below you can see the results displayed on the Empty or too small tables dashboard showing results by check name, severity, table stage, table, connection and schema.
@@ -152,7 +152,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 3. Select the **Daily checks** tab.
 
-    In this tab you can find a list of data quality checks.
+   This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor). 
 
 
 4. Run the enabled check using the **Run check** button.

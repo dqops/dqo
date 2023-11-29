@@ -93,7 +93,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 3. Select the **Profiling Checks** tab.
 
-    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor). On **Profiling** section, there is also a second tab [Basic data statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
 
 
 4. Run the enabled check using the **Run check** button.

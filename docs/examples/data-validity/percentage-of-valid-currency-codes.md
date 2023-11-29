@@ -77,7 +77,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 3. Select the **Daily checks** tab.
 
-    In this tab you can find a list of data quality checks.
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
@@ -96,19 +96,18 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     ![Check details](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-details.png)
 
-
-6. Review the results which should be similar to the one below.
+    Review the results which should be similar to the one below.
    
     The actual value in this example is 64, which is below the minimum threshold level set in the warning (75.0%).
     The check gives an error result (notice the orange square on the left of the name of the check).
 
     ![String-valid-currency-code-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-results.png)
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
     Below you can see the results displayed on the Current table status per check category dashboard showing results by connections, schemas, data group and check category.
