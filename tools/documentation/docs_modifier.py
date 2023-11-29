@@ -16,7 +16,7 @@ def main():
     number = 0
     for item in file_paths:
         modify_script_tags(item)
-        print(item)
+        print("modifying file : " + item)
         number+=1
 
     print("Total modified files : " + str(number))

@@ -1,6 +1,9 @@
 import re
 from file_handler import provide_file_content, save_lines_to_file
 
+regex_pattern: str = "<script[^<>]*>"
+compiled_regex: re.Pattern = re.compile(regex_pattern)
+
 def modify_script_tags(file_path: str):
 
     lines: list[str] = provide_file_content(file_path)
@@ -27,10 +30,6 @@ def _verify_tag_application(line: str):
 def _apply_tag_modification(line: str) -> str:
 
     replacement: str = " type=\"rocketlazyloadscript\">"
-
-    regex_pattern: str = "<script[^<]*>"
-
-    compiled_regex = re.compile(regex_pattern)
 
     result = compiled_regex.search(line)
     match_text = result.group(0)
