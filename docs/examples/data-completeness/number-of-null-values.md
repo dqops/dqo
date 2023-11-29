@@ -68,7 +68,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 3. Select the **Daily checks** tab.
 
-   This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
