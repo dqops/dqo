@@ -123,9 +123,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
-7. Enable the scheduler by clicking the toggle button.
+    By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-![Enable job scheduler](https://dqops.com/docs/images/examples/enable-job-scheduler.png)
+    ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
