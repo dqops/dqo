@@ -2,7 +2,7 @@ import re
 from file_handler import provide_file_content, save_lines_to_file
 
 regex_pattern: str = "<script[^<>]*>"
-compiled_regex: re.Pattern = re.compile(regex_pattern)
+opening_script_tag_pattern: re.Pattern = re.compile(regex_pattern)
 
 def modify_script_tags(file_path: str):
 
@@ -20,7 +20,6 @@ def modify_script_tags(file_path: str):
 def _verify_tag_application(line: str):
 
     script_tag_opening: str = "<script"
-
     script_exclusion_string: str = "lazyload.min.js"
 
     if script_tag_opening not in line or script_exclusion_string in line:
@@ -28,12 +27,15 @@ def _verify_tag_application(line: str):
     return True
 
 def _apply_tag_modification(line: str) -> str:
+    line_with_type: str = _replace_in_opening_script_tag(line, ">", " type=\"rocketlazyloadscript\">")
+    line_with_type_and_src_modification: str = _replace_in_opening_script_tag(line_with_type, "src", "data-rocket-src")
+    return line_with_type_and_src_modification
 
-    replacement: str = " type=\"rocketlazyloadscript\">"
+def _replace_in_opening_script_tag(line: str, replaced: str, replacement: str) -> str:
 
-    result = compiled_regex.search(line)
+    result = opening_script_tag_pattern.search(line)
     match_text = result.group(0)
 
-    modified_line: str = line.replace(match_text, match_text.replace(">", replacement))
+    modified_line: str = line.replace(match_text, match_text.replace(replaced, replacement))
 
     return modified_line

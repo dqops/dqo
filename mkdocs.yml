@@ -467,7 +467,9 @@ nav:
 ########## END INCLUDE PARQUET FILES REFERENCE
 extra_css:
   - stylesheets/extra.css
-# Visual settings
+extra_javascript:
+  - javascripts/lazyload.min.js
+  # Visual settings
 theme:
   name: material
   custom_dir: docs
