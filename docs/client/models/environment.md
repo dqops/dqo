@@ -21,7 +21,7 @@ REST API model that returns a key/value list of all DQOps configuration properti
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|properties|Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user configuration files, environment variables and &#x27;dqo&#x27; command arguments.|Dict[string, [Object](#Object)]|
+|properties|Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user configuration files, environment variables and &#x27;dqo&#x27; command arguments.|Dict[string, [Object](#object)]|
 
 
 ___  
@@ -58,7 +58,7 @@ The model that describes the current user and his access rights.
 |connection_tables_limit|Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.|integer|
 |tables_limit|Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.|integer|
 |jobs_limit|Limit of the number of supported concurrent jobs that DQOps can run in parallel on this instance.|integer|
-|[account_role](#DqoUserRole)|User role that limits possible operations that the current user can perform.|[DqoUserRole](#DqoUserRole)|
+|[account_role](#dqouserrole)|User role that limits possible operations that the current user can perform.|[DqoUserRole](#dqouserrole)|
 |can_manage_account|User is the administrator of the account and can perform security related actions, such as managing users.|boolean|
 |can_view_any_object|User can view any object and view all results.|boolean|
 |can_manage_scheduler|User can start and stop the job scheduler.|boolean|

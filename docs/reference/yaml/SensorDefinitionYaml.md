@@ -1,4 +1,46 @@
 
+## SensorDefinitionYaml  
+Data quality sensor definition YAML schema for a data quality sensor specification.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](../SensorDefinitionYaml/#SensorDefinitionSpec)||[SensorDefinitionSpec](../SensorDefinitionYaml/#SensorDefinitionSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## ParameterDefinitionsListSpec  
+List of parameter definitions - the parameters for custom sensors or custom rules.  
+  
+
+
+
+
+
+
+
+
+___  
+
 ## SensorDefinitionSpec  
 Data Quality sensor definition specification. Provides the configuration for a data quality sensor definition, sensor&#x27;s parameters, etc.  
   
@@ -53,48 +95,6 @@ Defines a single field that is a sensor parameter or a rule parameter.
 |required|True when the value for the parameter must be provided.|boolean| | | |
 |allowed_values|List of allowed values for a field that is of an enum type.|List[string]| | | |
 |sample_values|List of sample values. The sample values are used in the documentation or help messages.|List[string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## ParameterDefinitionsListSpec  
-List of parameter definitions - the parameters for custom sensors or custom rules.  
-  
-
-
-
-
-
-
-
-
-___  
-
-## SensorDefinitionYaml  
-Data quality sensor definition YAML schema for a data quality sensor specification.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../SensorDefinitionYaml/#SensorDefinitionSpec)||[SensorDefinitionSpec](../SensorDefinitionYaml/#SensorDefinitionSpec)| | | |
 
 
 

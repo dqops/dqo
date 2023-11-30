@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#CheckResultsListModel)]|
+|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#checkresultslistmodel)]|
 
 
 
@@ -29,7 +29,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -68,7 +68,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#CheckResultsListModel)]|
+|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#checkresultslistmodel)]|
 
 
 
@@ -81,7 +81,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -120,7 +120,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#CheckResultsListModel)]|
+|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#checkresultslistmodel)]|
 
 
 
@@ -171,7 +171,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_current_data_quality_status_model](../../models/check_results/#TableCurrentDataQualityStatusModel)||[TableCurrentDataQualityStatusModel](../../models/check_results/#TableCurrentDataQualityStatusModel)|
+|[table_current_data_quality_status_model](../../models/check_results/#tablecurrentdataqualitystatusmodel)||[TableCurrentDataQualityStatusModel](../../models/check_results/#tablecurrentdataqualitystatusmodel)|
 
 
 
@@ -188,7 +188,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |profiling|Optional check type filter to detect the current status of the profiling checks results. The default value is false, excluding profiling checks from the current table status detection. If enabled, only the status of the most recent check result is retrieved.|boolean| |
 |monitoring|Optional check type filter to detect the current status of the monitoring checks results. The default value is true, including monitoring checks in the current table status detection. If enabled, only the status of the most recent check result is retrieved.|boolean| |
 |partitioned|Optional check type filter to detect the current status of the partitioned checks results. The default value is true, including partitioned checks in the current table status detection. Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.|boolean| |
-|[check_time_scale](../../models/#CheckTimeScale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../../models/#CheckTimeScale)| |
+|[check_time_scale](../../models/Common/#checktimescale)|Optional time scale filter for monitoring and partitioned checks (values: daily or monthly).|[CheckTimeScale](../../models/Common/#checktimescale)| |
 |data_group|Optional data group|string| |
 |check_name|Optional check name|string| |
 |category|Optional check category name|string| |
@@ -225,7 +225,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#CheckResultsListModel)]|
+|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#checkresultslistmodel)]|
 
 
 
@@ -237,7 +237,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -276,7 +276,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#CheckResultsListModel)]|
+|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#checkresultslistmodel)]|
 
 
 
@@ -288,7 +288,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -327,7 +327,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#CheckResultsListModel)]|
+|check_results_list_model||List[[CheckResultsListModel](../../models/check_results/#checkresultslistmodel)]|
 
 
 

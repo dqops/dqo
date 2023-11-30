@@ -27,7 +27,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Rule model|[RuleModel](../../models/rules/#RuleModel)| |
+|Rule model|[RuleModel](../../models/rules/#rulemodel)| |
 
 
 
@@ -94,7 +94,7 @@ http://localhost:8888/api/rules
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|rule_list_model||List[[RuleListModel](../../models/rules/#RuleListModel)]|
+|rule_list_model||List[[RuleListModel](../../models/rules/#rulelistmodel)]|
 
 
 
@@ -128,7 +128,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_model](../../models/rules/#RuleModel)||[RuleModel](../../models/rules/#RuleModel)|
+|[rule_model](../../models/rules/#rulemodel)||[RuleModel](../../models/rules/#rulemodel)|
 
 
 
@@ -169,7 +169,7 @@ http://localhost:8888/api/definitions/rules
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_folder_model](../../models/rules/#RuleFolderModel)||[RuleFolderModel](../../models/rules/#RuleFolderModel)|
+|[rule_folder_model](../../models/rules/#rulefoldermodel)||[RuleFolderModel](../../models/rules/#rulefoldermodel)|
 
 
 
@@ -214,7 +214,7 @@ http://localhost:8888/api/rules/{fullRuleName}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of rule definitions|[RuleModel](../../models/rules/#RuleModel)| |
+|List of rule definitions|[RuleModel](../../models/rules/#rulemodel)| |
 
 
 

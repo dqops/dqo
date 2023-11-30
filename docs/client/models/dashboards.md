@@ -28,7 +28,7 @@ Model that describes a single authenticated dashboard.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |folder_path|Folder path|string|
-|[dashboard](#DashboardSpec)|Dashboard model with an unauthenticated url|[DashboardSpec](#DashboardSpec)|
+|[dashboard](#dashboardspec)|Dashboard model with an unauthenticated url|[DashboardSpec](#dashboardspec)|
 |authenticated_dashboard_url|Dashboard authenticated url with a short lived refresh token|string|
 
 
@@ -43,7 +43,7 @@ List of dashboards.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|self||List[[DashboardSpec](../dashboards/#DashboardSpec)]|
+|self||List[[DashboardSpec](../dashboards/#dashboardspec)]|
 
 
 ___  
@@ -72,8 +72,8 @@ Description of a folder with multiple dashboards or other folders.
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |folder_name|Folder name|string|
-|[dashboards](#DashboardListSpec)|List of data quality dashboard at this level.|[DashboardListSpec](#DashboardListSpec)|
-|[folders](#DashboardsFolderListSpec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](#DashboardsFolderListSpec)|
+|[dashboards](#dashboardlistspec)|List of data quality dashboard at this level.|[DashboardListSpec](#dashboardlistspec)|
+|[folders](#dashboardsfolderlistspec)|List of data quality dashboard folders at this level.|[DashboardsFolderListSpec](#dashboardsfolderlistspec)|
 
 
 ___  
