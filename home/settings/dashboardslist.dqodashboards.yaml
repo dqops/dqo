@@ -78,7 +78,7 @@ spec:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
 
-    - folder_name: Data Quality Dimensionsble
+    - folder_name: Data Quality Dimensions
       folders:
       - folder_name: Availability
         dashboards:
