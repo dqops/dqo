@@ -597,7 +597,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
                 CASE
                     WHEN REGEXP_CONTAINS(
                         CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                        r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
                 END
@@ -641,7 +641,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                         THEN 1
                     ELSE 0
                 END
@@ -669,7 +669,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
             WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                    WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -721,7 +721,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
                     WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                     WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                     WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                     WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                     WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                     WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1

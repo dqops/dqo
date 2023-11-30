@@ -29,7 +29,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations/#DataGroupingConfigurationTrimmedModel)| |
+|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations/#datagroupingconfigurationtrimmedmodel)| |
 
 
 
@@ -99,7 +99,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[data_grouping_configuration_model](../../models/data_grouping_configurations/#DataGroupingConfigurationModel)||[DataGroupingConfigurationModel](../../models/data_grouping_configurations/#DataGroupingConfigurationModel)|
+|[data_grouping_configuration_model](../../models/data_grouping_configurations/#datagroupingconfigurationmodel)||[DataGroupingConfigurationModel](../../models/data_grouping_configurations/#datagroupingconfigurationmodel)|
 
 
 
@@ -143,7 +143,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|data_grouping_configuration_list_model||List[[DataGroupingConfigurationListModel](../../models/data_grouping_configurations/#DataGroupingConfigurationListModel)]|
+|data_grouping_configuration_list_model||List[[DataGroupingConfigurationListModel](../../models/data_grouping_configurations/#datagroupingconfigurationlistmodel)]|
 
 
 
@@ -237,7 +237,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations/#DataGroupingConfigurationTrimmedModel)| |
+|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations/#datagroupingconfigurationtrimmedmodel)| |
 
 
 

@@ -22,7 +22,7 @@ Connection test status result model returned from REST API. Describes the status
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_result](#ConnectionTestStatus)|Connection test result|[ConnectionTestStatus](#ConnectionTestStatus)|
+|[connection_test_result](#connectionteststatus)|Connection test result|[ConnectionTestStatus](#connectionteststatus)|
 |error_message|Optional error message when the status is not &quot;SUCCESS&quot;|string|
 
 

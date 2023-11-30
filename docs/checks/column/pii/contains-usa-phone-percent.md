@@ -101,7 +101,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -124,7 +124,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST(analyzed_table.`target_column` AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -191,7 +191,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -218,7 +218,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -247,7 +247,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -268,7 +268,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -343,7 +343,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -374,7 +374,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -520,7 +520,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -542,7 +542,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST(analyzed_table.`target_column` AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -610,7 +610,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -636,7 +636,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -671,7 +671,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -691,7 +691,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -767,7 +767,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -797,7 +797,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -986,7 +986,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -1009,7 +1009,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST(analyzed_table.`target_column` AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -1076,7 +1076,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -1103,7 +1103,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -1132,7 +1132,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1153,7 +1153,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1228,7 +1228,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -1259,7 +1259,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -1406,7 +1406,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -1428,7 +1428,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST(analyzed_table.`target_column` AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -1496,7 +1496,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -1522,7 +1522,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -1557,7 +1557,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1577,7 +1577,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1653,7 +1653,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -1683,7 +1683,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -1872,7 +1872,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -1895,7 +1895,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST(analyzed_table.`target_column` AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -1962,7 +1962,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -1989,7 +1989,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -2018,7 +2018,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2039,7 +2039,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2114,7 +2114,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -2145,7 +2145,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -2292,7 +2292,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -2314,7 +2314,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST(analyzed_table.`target_column` AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -2382,7 +2382,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -2408,7 +2408,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -2443,7 +2443,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2463,7 +2463,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2539,7 +2539,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -2569,7 +2569,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -2764,7 +2764,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -2787,7 +2787,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST(analyzed_table.`target_column` AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -2854,7 +2854,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -2881,7 +2881,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -2910,7 +2910,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2931,7 +2931,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -3006,7 +3006,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -3037,7 +3037,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -3194,7 +3194,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -3216,7 +3216,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST(analyzed_table.`target_column` AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -3284,7 +3284,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -3310,7 +3310,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -3345,7 +3345,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3365,7 +3365,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3441,7 +3441,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -3471,7 +3471,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -3664,7 +3664,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -3687,7 +3687,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CASE
                         WHEN REGEXP_CONTAINS(
                             CAST(analyzed_table.`target_column` AS STRING),
-                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                            r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                         ) THEN 1
                         ELSE 0
                     END
@@ -3754,7 +3754,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -3781,7 +3781,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                        WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                             THEN 1
                         ELSE 0
                     END
@@ -3810,7 +3810,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -3831,7 +3831,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                 WHEN COUNT(*) = 0 THEN 0.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                        WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -3906,7 +3906,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -3937,7 +3937,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                        WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                         WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -4094,7 +4094,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -4116,7 +4116,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN REGEXP_CONTAINS(
                                 CAST(analyzed_table.`target_column` AS STRING),
-                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
+                                r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                             ) THEN 1
                             ELSE 0
                         END
@@ -4184,7 +4184,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -4210,7 +4210,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
+                            WHEN REGEXP_LIKE(analyzed_table."target_column", '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))')
                                 THEN 1
                             ELSE 0
                         END
@@ -4245,7 +4245,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING({{ lib.render_target_column('analyzed_table') }} from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4265,7 +4265,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
+                            WHEN SUBSTRING(analyzed_table."target_column" from '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))') IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4341,7 +4341,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
@@ -4371,7 +4371,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
-                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                            WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\(1/)\d{10,11}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
                             WHEN REGEXP_SUBSTR(analyzed_table."target_column",$$\d{10,11}$$) IS NOT NULL THEN 1

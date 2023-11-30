@@ -15,15 +15,9 @@
  */
 package com.dqops.utils.docs.client;
 
-import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
-import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
-import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
-import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
-import com.dqops.services.check.matching.SimilarCheckMatchingService;
-import com.dqops.services.check.matching.SimilarCheckMatchingServiceImpl;
-import com.dqops.utils.docs.*;
+import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
+import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.MkDocsIndexReplaceUtility;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGenerator;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGeneratorImpl;
@@ -36,7 +30,6 @@ import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
 import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
 import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
-import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;

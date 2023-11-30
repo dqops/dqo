@@ -1,33 +1,4 @@
 
-## RuleTimeWindowSettingsSpec  
-Rule historic data configuration. Specifies the number of past values for rules that are analyzing historic data.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|prediction_time_window|Number of historic time periods to look back for results. Returns results from previous time periods before the sensor readout timestamp to be used in a rule. Time periods are used in rules that need historic data to calculate an average to detect anomalies. e.g. when the sensor is configured to use a &#x27;day&#x27; time period, the rule will receive results from the time_periods number of days before the time period in the sensor readout. The default is 14 (days).|integer| | | |
-|min_periods_with_readouts|Minimum number of past time periods with a sensor readout that must be present in the data in order to call the rule. The rule is not called and the sensor readout is discarded as not analyzable (not enough historic data to perform prediction) when the number of past sensor readouts is not met. The default is 7.|integer| | | |
-|historic_data_point_grouping|Time period grouping for collecting previous data quality sensor results for the data quality rules that use historic data for prediction. For example, when the default time period grouping &#x27;day&#x27; is used, DQOps will find the most recent data quality sensor readout for each day and pass an array of most recent days per day in an array of historic sensor readout data points to a data quality rule for prediction.|enum|week<br/>month<br/>hour<br/>year<br/>last_n_readouts<br/>day<br/>quarter<br/>| | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## RuleDefinitionSpec  
 Custom data quality rule specification. Provides the custom rule configuration. For example, rules that require a range of historic values will have this configuration.  
   

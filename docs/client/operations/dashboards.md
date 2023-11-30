@@ -16,7 +16,7 @@ http://localhost:8888/api/dashboards
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dashboards_folder_spec||List[[DashboardsFolderSpec](../../models/dashboards/#DashboardsFolderSpec)]|
+|dashboards_folder_spec||List[[DashboardsFolderSpec](../../models/dashboards/#dashboardsfolderspec)]|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#AuthenticatedDashboardModel)||[AuthenticatedDashboardModel](../../models/dashboards/#AuthenticatedDashboardModel)|
+|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
 
 
 
@@ -93,7 +93,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#AuthenticatedDashboardModel)||[AuthenticatedDashboardModel](../../models/dashboards/#AuthenticatedDashboardModel)|
+|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
 
 
 
@@ -137,7 +137,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#AuthenticatedDashboardModel)||[AuthenticatedDashboardModel](../../models/dashboards/#AuthenticatedDashboardModel)|
+|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
 
 
 
@@ -182,7 +182,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#AuthenticatedDashboardModel)||[AuthenticatedDashboardModel](../../models/dashboards/#AuthenticatedDashboardModel)|
+|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
 
 
 
@@ -228,7 +228,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#AuthenticatedDashboardModel)||[AuthenticatedDashboardModel](../../models/dashboards/#AuthenticatedDashboardModel)|
+|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
 
 
 

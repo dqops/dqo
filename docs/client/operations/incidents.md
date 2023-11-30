@@ -16,7 +16,7 @@ http://localhost:8888/api/incidentstat
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incidents_per_connection_model||List[[IncidentsPerConnectionModel](../../models/incidents/#IncidentsPerConnectionModel)]|
+|incidents_per_connection_model||List[[IncidentsPerConnectionModel](../../models/incidents/#incidentsperconnectionmodel)]|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/incidents/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|incident_model||List[[IncidentModel](../../models/incidents/#IncidentModel)]|
+|incident_model||List[[IncidentModel](../../models/incidents/#incidentmodel)]|
 
 
 
@@ -68,8 +68,8 @@ http://localhost:8888/api/incidents/{connectionName}
 |page|Page number, the first page is 1|long| |
 |limit|Page size, the default is 50 rows|long| |
 |filter|Optional full text search filter that supports *prefix, suffix* and nest*ed filter expressions|string| |
-|[order](../../models/incidents/#IncidentSortOrder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](../../models/incidents/#IncidentSortOrder)| |
-|[direction](../../models/incidents/#SortDirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents/#SortDirection)| |
+|[order](../../models/incidents/#incidentsortorder)|Optional sort order, the default sort order is by the number of failed data quality checks|[IncidentSortOrder](../../models/incidents/#incidentsortorder)| |
+|[direction](../../models/incidents/#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents/#sortdirection)| |
 
 
 
@@ -101,7 +101,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_model](../../models/incidents/#IncidentModel)||[IncidentModel](../../models/incidents/#IncidentModel)|
+|[incident_model](../../models/incidents/#incidentmodel)||[IncidentModel](../../models/incidents/#incidentmodel)|
 
 
 
@@ -145,7 +145,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[incident_issue_histogram_model](../../models/incidents/#IncidentIssueHistogramModel)||[IncidentIssueHistogramModel](../../models/incidents/#IncidentIssueHistogramModel)|
+|[incident_issue_histogram_model](../../models/incidents/#incidentissuehistogrammodel)||[IncidentIssueHistogramModel](../../models/incidents/#incidentissuehistogrammodel)|
 
 
 
@@ -194,7 +194,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_result_entry_model||List[[CheckResultEntryModel](../../models/incidents/#CheckResultEntryModel)]|
+|check_result_entry_model||List[[CheckResultEntryModel](../../models/incidents/#checkresultentrymodel)]|
 
 
 
@@ -214,8 +214,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |date|Optional filter to return data quality issues only for a given date. The date should be an ISO8601 formatted date, it is treated as the timezone of the DQOps server.|string| |
 |column|Optional column name filter|string| |
 |check|Optional check name filter|string| |
-|[order](../../models/incidents/#CheckResultSortOrder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](../../models/incidents/#CheckResultSortOrder)| |
-|[direction](../../models/incidents/#SortDirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents/#SortDirection)| |
+|[order](../../models/incidents/#checkresultsortorder)|Optional sort order, the default sort order is by the execution date|[CheckResultSortOrder](../../models/incidents/#checkresultsortorder)| |
+|[direction](../../models/incidents/#sortdirection)|Optional sort direction, the default sort direction is ascending|[SortDirection](../../models/incidents/#sortdirection)| |
 
 
 
@@ -291,7 +291,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 |year|Year when the incident was first seen|long|:material-check-bold:|
 |month|Month when the incident was first seen|long|:material-check-bold:|
 |incident_id|Incident id|string|:material-check-bold:|
-|[status](../../models/incidents/#IncidentStatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](../../models/incidents/#IncidentStatus)|:material-check-bold:|
+|[status](../../models/incidents/#incidentstatus)|New incident status, supported values: open, acknowledged, resolved, muted|[IncidentStatus](../../models/incidents/#incidentstatus)|:material-check-bold:|
 
 
 

@@ -28,7 +28,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdi
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check search filters and table/column selectors.|[BulkCheckDisableParameters](../../models/connections/#BulkCheckDisableParameters)| |
+|Check search filters and table/column selectors.|[BulkCheckDisableParameters](../../models/connections/#bulkcheckdisableparameters)| |
 
 
 
@@ -73,7 +73,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulken
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check search filters and rules configuration|[AllChecksPatchParameters](../../models/connections/#AllChecksPatchParameters)| |
+|Check search filters and rules configuration|[AllChecksPatchParameters](../../models/connections/#allcheckspatchparameters)| |
 
 
 
@@ -161,7 +161,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../../models/#ConnectionModel)| |
+|Basic connection model|[ConnectionModel](../../models/Common/#connectionmodel)| |
 
 
 
@@ -194,7 +194,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../../models/#DqoQueueJobId)||[DqoQueueJobId](../../models/#DqoQueueJobId)|
+|[dqo_queue_job_id](../../models/Common/#dqoqueuejobid)||[DqoQueueJobId](../../models/Common/#dqoqueuejobid)|
 
 
 
@@ -235,7 +235,7 @@ http://localhost:8888/api/connections
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|connection_model||List[[ConnectionModel](../../models/#ConnectionModel)]|
+|connection_model||List[[ConnectionModel](../../models/Common/#connectionmodel)]|
 
 
 
@@ -269,7 +269,7 @@ http://localhost:8888/api/connections/{connectionName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_specification_model](../../models/connections/#ConnectionSpecificationModel)||[ConnectionSpecificationModel](../../models/connections/#ConnectionSpecificationModel)|
+|[connection_specification_model](../../models/connections/#connectionspecificationmodel)||[ConnectionSpecificationModel](../../models/connections/#connectionspecificationmodel)|
 
 
 
@@ -310,7 +310,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_model](../../models/#ConnectionModel)||[ConnectionModel](../../models/#ConnectionModel)|
+|[connection_model](../../models/Common/#connectionmodel)||[ConnectionModel](../../models/Common/#connectionmodel)|
 
 
 
@@ -351,7 +351,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../../models/#CommentSpec)]|
+|comment_spec||List[[CommentSpec](../../models/Common/#commentspec)]|
 
 
 
@@ -556,7 +556,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/#MonitoringScheduleSpec)||[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)|
+|[monitoring_schedule_spec](../../models/Common/#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)|
 
 
 
@@ -566,7 +566,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -653,7 +653,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Connection basic details|[ConnectionModel](../../models/#ConnectionModel)| |
+|Connection basic details|[ConnectionModel](../../models/Common/#connectionmodel)| |
 
 
 
@@ -697,7 +697,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments|List[[CommentSpec](../../models/#CommentSpec)]| |
+|List of comments|List[[CommentSpec](../../models/Common/#commentspec)]| |
 
 
 
@@ -865,7 +865,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
-|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -874,7 +874,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Monitoring schedule definition to store|[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)| |
+|Monitoring schedule definition to store|[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)| |
 
 
 
