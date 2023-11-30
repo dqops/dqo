@@ -15,6 +15,7 @@
  */
 package com.dqops.utils.docs.yaml;
 
+import com.dqops.checks.CheckTarget;
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
 import com.dqops.utils.docs.files.DocumentationFolder;
@@ -23,6 +24,7 @@ import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Yaml documentation generator that generate documentation for yaml.
@@ -49,10 +51,10 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
         yamlFolder.setLinkName("Yaml");
         yamlFolder.setDirectPath(projectRootPath.resolve("../docs/reference/yaml").toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("yaml/yaml_documentation");
-
         List<YamlSuperiorObjectDocumentationModel> yamlSuperiorObjectDocumentationModels =
                 yamlDocumentationModelFactory.createDocumentationForYaml(yamlDocumentationSchema);
+
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("yaml/yaml_documentation");
 
         for (YamlSuperiorObjectDocumentationModel yamlSuperiorObjectDocumentationModel : yamlSuperiorObjectDocumentationModels) {
             DocumentationMarkdownFile documentationMarkdownFile = yamlFolder.addNestedFile(yamlSuperiorObjectDocumentationModel.getLocationFilePath());
@@ -61,6 +63,50 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, yamlSuperiorObjectDocumentationModel);
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
+
+        List<DocumentationFolder> checkFolders = yamlFolder.getSubFolders().stream()
+                .filter(f -> f.getFolderName().toLowerCase().contains("check"))
+                .collect(Collectors.toList());
+        for (DocumentationFolder checkFolder : checkFolders) {
+            String checkTypeString = Path.of(checkFolder.getFolderName()).getFileName().toString();
+            MainPageYamlDocumentationModel mainPageYamlDocumentationModel = renderMainPageForCheckType(checkTypeString, yamlSuperiorObjectDocumentationModels);
+
+            Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("yaml/main_page_documentation");
+            DocumentationMarkdownFile mainPageDocumentationMarkdownFile = checkFolder.addNestedFile("index" + ".md");
+            mainPageDocumentationMarkdownFile.setRenderContext(mainPageYamlDocumentationModel);
+
+            String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageYamlDocumentationModel);
+            mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+        }
+
         return yamlFolder;
+    }
+
+    private static MainPageYamlDocumentationModel renderMainPageForCheckType(String checkTypeString,
+                                                                             List<YamlSuperiorObjectDocumentationModel> allSuperiorObjectDocumentationModels) {
+        MainPageYamlDocumentationModel indexPage = new MainPageYamlDocumentationModel();
+        indexPage.setHeader(checkTypeString);
+        CheckTarget[] checkTargets = CheckTarget.values();
+        for (CheckTarget checkTarget : checkTargets) {
+            MainPageYamlDocumentationModel checkTargetPage = new MainPageYamlDocumentationModel();
+            checkTargetPage.setHeader(checkTarget.name());
+
+            MainPageYamlDocumentationModel checkTypePage = new MainPageYamlDocumentationModel();
+            checkTypePage.setHeader(checkTypeString);
+            List<YamlSuperiorObjectDocumentationModel> superiorObjectDocumentationModels = allSuperiorObjectDocumentationModels.stream()
+                    .filter(model -> model.getReflectedSuperiorDataType()
+                            .getClassUsedOnTheFieldPath()
+                            .contains(checkTypeString))
+                    .filter(model -> model.getReflectedSuperiorDataType()
+                            .getClassUsedOnTheFieldPath()
+                            .contains(checkTarget.name()))
+                    .collect(Collectors.toList());
+            checkTypePage.setSuperiorObjects(superiorObjectDocumentationModels);
+
+            checkTargetPage.getSubpages().add(checkTypePage);
+            indexPage.getSubpages().add(checkTargetPage);
+        }
+
+        return indexPage;
     }
 }

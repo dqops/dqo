@@ -2,7 +2,7 @@
 
 The DQOps web interface is divided into three main areas.
 
-![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/graphical-interface-overview.png)
+![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview2.png)
 
 1. The [navigation bar](./#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
 2. The [tree view](./#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
@@ -68,25 +68,45 @@ Additionally, you can expand each job entry to view sub-jobs and access more det
 
 ## Tree view
 
-![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view.png)
-
 The tree view at the **Data Source**, **Profiling**, **Monitoring Checks** and **Partition Checks** displays all the added sources and allows
-expanding its schemas, tables, and columns. Additionally, on the Profiling, Monitoring Checks and Partition Checks sections the three view 
+expanding its schemas, tables, and columns. Additionally, on the Profiling, Monitoring Checks and Partition Checks sections the three view
 contains the list of checks.
+
+![DQOps tree view - monitoring](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-monitoring.png)
 
 Clicking on an object in the tree view displays settings, statistics or a list of table or column data quality checks on
 the main workspace. Clicking on an object always opens a new tab in the main workspace.
 
 In the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, when you configure checks on any table or column, this
 table or column is displayed in bold on the tree view. In the **Data Source** section the bolded column or table name indicates
-that there is a check configured on any category. 
+that there is a check configured on any category.
+
+The tree view in the **Data Quality Dashboards** section displays the list of built-in dashboards divided into categories.
+When you hover your cursor over a dashboard name, thumbnails will appear.
+
+![DQOps tree view - dashboards](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-dashboards.png)
+
+The tree view in the **Incidents** section displays a list of all added sources and the number of open incidents for the last 15 days (including today) in brackets.
+
+![DQOps tree view  - Incidents](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-incidents.png)
+
+In the **Configuration** section, the tree view displays a list of all built-in data quality sensors, rules and data 
+quality checks that can be customized. The tree view in this section also provides access to the configuration of the following:
+
+- **Default checks configuration:** This allows you to configure checks that are automatically enabled after importing new tables.
+- **Manage users:** This allows you to add new users and manage their roles.
+- **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
+- **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
+- **Shared credentials:** This allows you to add and manage shared credentials.
+
+![DQOps tree view - Configuration](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-configuration.png)
 
 ### **Tree view menu**
 
 ![DQOps tree view menu](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tree-view-menu.png)
 
-Clicking on the tree vertical dots at the end of each element in the tree view opens a menu that allows to run functions
-specific to the elements such as:
+Clicking on the tree vertical dots at the end of each element in the tree view in the **Profiling**, **Monitoring Checks**
+and **Partition Checks** sections opens a menu that allows to run the following functions:
 
 - Run all enabled checks on connection, schema, table or column
 - Collect statistics
@@ -96,12 +116,6 @@ specific to the elements such as:
 - Delete connection, schema, table or column
 - Delete data
 
-The tree view in the **Data Quality Dashboards** section displays the list of built-in dashboards divided into categories.
-
-The tree view in the **Incidents** section displays the list of all added sources and a number of open incident from 15 days including today in brackets. 
-
-The tree view in the **Definitions** section shows the list of all built-in data quality sensors and rules that can be customized.
-
 ## Main workspace
 
 Once you select a section from the navigation bar and tree view, the main workspace will show you various data quality 
@@ -110,10 +124,10 @@ and data quality dashboards.
 
 Clicking on an object in the tree view always opens a new tab in the main workspace that helps in navigating between open elements. 
 
-## Tabbed interface
+### **Tabbed interface**
 
 When you select an item from the tree view, it opens a new tab in the main workspace. You can open and close tabs within each section 
-such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Checks**,**Data Quality Dashboards**, **Incidents** and **Configuration**.
+such as **Data Source**, **Profiling**, **Monitoring Checks**, **Partition Checks**, **Data Quality Dashboards**, **Incidents** and **Configuration**.
 Each section can have a maximum of seven tabs open at a time.  If you try to add an eighth tab, the first one will be automatically removed to maintain the limit. 
 These tabs are stored locally, which means that you can always return to them even after closing the application.
 
@@ -123,4 +137,53 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 ![Closing tab](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/tab-will-closed.png)
 
+### **Check editor**
+
+The main workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, is where you can work with checks.
+
+![Check editor ](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor.png)
+
+
+The top section of the check editor workspace contains quick links that allow you to switch between different sections 
+while keeping the same level in the tree. For instance, if you are in the monitoring section on a table and click the 
+**Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
+same when you are on the column level.
+
+Below the quick links, there are tabs that allow you to switch between Profiling (only in Profiling section) or Daily 
+and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics 
+(only in Profiling section), or preview tables (only in Profiling section).
+
+Under the tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
+section, there is additional information about the date partitioning column.
+
+The table with data quality checks contains a list of checks divided into different data quality subcategories that you
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/#categories-of-checks)
+
+The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../checks/#severity-levels)
+
+On the left of the name of each check, there are several buttons and icons. And under the name of the check, there is a data quality
+dimension category to which this check was categorized.
+
+![Check buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-buttons.png)
+
+The buttons and icons allow you to:
+
+- Enable and disable checks by using the Switch and Disable button
+- Access check **Settings** where you can set Custom data groupings, modify inclusion/exclusion of check in KPI and SLA, modify the name of the Data Quality Dimension, add SQL WHERE condition, modify scheduling settings, or add Labels.
+
+    ![Settings buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-settings.png) 
+
+- Check schedule status. 
+- Run data quality checks
+- View detailed results for checks, Sensor readouts, and Execution errors
+
+    ![Results buttons](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/check-results.png)
+
+- View detailed information about check. 
+- Check the results of the run check shown as a color square
+    - Green for a valid result
+    - Yellow for a warning
+    - Orange for an error
+    - Red for a fatal error
+    - Black for execution error.
 

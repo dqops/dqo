@@ -123,6 +123,9 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
           <div>{typeof issue.expectedValue === 'number' ? issue.expectedValue : ''}</div>
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
+          {issue.dataGroup}
+        </td>
+        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {getIssueSeverityLevel(issue.severity)}
         </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
@@ -152,9 +155,6 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
           {issue.durationMs}
         </td>
-        <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-          {issue.dataGroup}
-        </td>
         <td className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
           <span>{issue.id}</span>
         </td>
@@ -163,7 +163,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
         <tr>
           <td colSpan={12}>
             <CheckDetails
-              checkTypes={(incidentDetail?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
+              checkTypes={(issue?.checkType ?? CheckTypes.PROFILING) as CheckTypes}
               connection={incidentDetail?.connection ?? ''}
               schema={incidentDetail?.schema ?? ''}
               table={incidentDetail?.table ?? ''}
@@ -172,6 +172,7 @@ export const IncidentIssueRow = ({ issue, incidentDetail }: IncidentIssueRowProp
               onClose={closeCheckDetails}
               category={incidentDetail?.checkCategory}
               comparisonName={issue.tableComparison}
+              column={issue.columnName}
             />
           </td>
         </tr>
@@ -265,6 +266,15 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
               onChange={handleSortChange}
             />
           </th>
+          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
+            <SortableColumn
+              className="justify-end"
+              label="Data Group"
+              order="dataGroup"
+              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
+              onChange={handleSortChange}
+            />
+          </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
             <SortableColumn
               className="justify-end"
@@ -300,15 +310,6 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             Duration Ms
-          </th>
-          <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            <SortableColumn
-              className="justify-end"
-              label="Data Group"
-              order="dataGroup"
-              direction={filters?.order === 'dataGroup' ? filters.direction : undefined}
-              onChange={handleSortChange}
-            />
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-left">
             Id

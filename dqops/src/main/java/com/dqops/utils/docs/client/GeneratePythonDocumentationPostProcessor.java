@@ -78,9 +78,6 @@ public class GeneratePythonDocumentationPostProcessor {
             System.out.println("Generating documentation for the python client: " + pythonClientDir);
 
             HandlebarsDocumentationUtilities.configure(projectDir);
-            Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
-            DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
-
             OpenAPI openAPI = getParsedSwaggerFile(swaggerFile);
 
             linkageStore = new LinkageStore<>();
@@ -100,6 +97,21 @@ public class GeneratePythonDocumentationPostProcessor {
                     .toAbsolutePath().normalize();
             DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
             modifiedClientFolder.setLinkName("REST API Python client");
+
+            Comparator<String> cherryPickComparator = (s1, s2) -> {
+                if (s1.equals(s2)) {
+                    return 0;
+                }
+                if (s1.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
+                    return -1;
+                }
+                if (s2.equals(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)) {
+                    return 1;
+                }
+                return 0;
+            };
+            modifiedClientFolder.sortByNameRecursive(cherryPickComparator.thenComparing(Comparator.naturalOrder()));
+
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
             MkDocsIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),
                     renderedIndexYaml,
@@ -136,7 +148,9 @@ public class GeneratePythonDocumentationPostProcessor {
                         .resolve("#" + modelName);
             } else {
                 // Model is used in several places.
-                modelDestination = baseModelDestination.resolve("#" + modelName);
+                modelDestination = baseModelDestination
+                        .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)
+                        .resolve("#" + modelName);
             }
 
             linkageStore.put(modelName, modelDestination);

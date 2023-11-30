@@ -49,6 +49,7 @@ interface ICheckListItemProps {
   comparisonName?: string;
   isDefaultEditing?: boolean;
   canUserRunChecks?: boolean;
+  isAlreadyDeleted ?: boolean
 }
 
 interface IRefetchResultsProps {
@@ -67,7 +68,8 @@ const CheckListItem = ({
   category,
   comparisonName,
   isDefaultEditing,
-  canUserRunChecks
+  canUserRunChecks,
+  isAlreadyDeleted
 }: ICheckListItemProps) => {
   const [expanded, setExpanded] = useState(false);
   const [activeTab, setActiveTab] = useState('check-settings');
@@ -331,7 +333,8 @@ const CheckListItem = ({
       >
         <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
           <div className="flex space-x-1 items-center">
-            {mode ? (
+
+            {isAlreadyDeleted !== true && (mode ? (
               <div className="w-5 h-5 block items-center">
                 {check?.configured && (
                   <Checkbox checked={checkedCopyUI} onChange={changeCopyUI} />
@@ -344,7 +347,8 @@ const CheckListItem = ({
                   onChange={onChangeConfigured}
                 />
               </div>
-            )}
+            ))}
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content={!check?.disabled ? 'Enabled' : 'Disabled'}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -363,6 +367,8 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
+            }
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content="Settings"
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -375,6 +381,8 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
+            }
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content={
                 check?.schedule_override?.disabled
@@ -397,10 +405,11 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
+            }
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
-              isDefaultEditing !== true && (
+              isDefaultEditing !== true && isAlreadyDeleted !== true && (
                 <Tooltip
                   content="Run Check"
                   className="max-w-80 py-4 px-4 bg-gray-800"
@@ -445,8 +454,8 @@ const CheckListItem = ({
               <Tooltip
                 content="Results"
                 className="max-w-80 py-4 px-4 bg-gray-800"
-              >
-                <div className="w-5 h-5">
+              > 
+                <div className={clsx("w-5 h-5", isAlreadyDeleted === true ? "pl-[129px] pr-11" : "")}>
                   <SvgIcon
                     name="rectangle-list"
                     className="text-gray-700 h-5 cursor-pointer"
@@ -455,6 +464,7 @@ const CheckListItem = ({
                 </div>
               </Tooltip>
             )}
+            {isAlreadyDeleted !== true &&
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -466,7 +476,7 @@ const CheckListItem = ({
                 />
               </div>
             </Tooltip>
-
+            }
             {checkResult && (
               <div className="flex space-x-1">
                 {checkResult?.statuses?.map((status, index) => (
@@ -548,6 +558,7 @@ const CheckListItem = ({
           </div>
         </td>
         <td className="py-2 px-4 bg-yellow-100 relative">
+        {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.warning}
@@ -564,9 +575,11 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
           <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td className="py-2 px-4 bg-orange-100">
+          {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.error}
@@ -583,8 +596,10 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
         </td>
-        <td className="py-2 px-4 bg-red-100">
+        <td className="py-2 px-4 bg-red-100 h-18">
+        {isAlreadyDeleted !== true &&
           <CheckRuleItem
             disabled={isDisabled}
             parameters={check?.rule?.fatal}
@@ -601,6 +616,7 @@ const CheckListItem = ({
             changeEnabled={changeEnabled}
             configuredType={enabledType}
           />
+        }
         </td>
       </tr>
       {expanded && (

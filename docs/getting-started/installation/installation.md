@@ -58,7 +58,7 @@ To use DQOps you need:
     After installation, you will be asked whether to initialize the `DQOps user home` folder in the default location. 
     Type Y to initialize the folder structure. Please remember that the current working folder must be empty.  
 
-    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
 3.  Login to DQOps Cloud.
    
@@ -66,6 +66,9 @@ To use DQOps you need:
     must create a DQOps Cloud account.
 
     Once the `DQOps user home` folder is initialized, DQOps will ask you to log in to your DQOps Cloud account.
+
+    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png)
+
     After typing Y, DQOps will open your browser and navigate to the DQOps Cloud registration page.
     If the browser did not open correctly, you can copy the link from the console and open it in your browser of choice.
     The DQOps Cloud account registration page is [https://cloud.dqops.com/registration](https://cloud.dqps.com/registration).

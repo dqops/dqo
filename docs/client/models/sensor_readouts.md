@@ -8,20 +8,20 @@ Detailed results for a single sensor. Represent one row in the sensor readouts t
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|id|Sensor readout ID.|string|
-|check_name|Check name.|string|
-|check_display_name|Check display name.|string|
-|check_type|Check type.|string|
-|actual_value|Actual value.|double|
-|expected_value|Expected value.|double|
-|column_name|Column name.|string|
-|data_group|Data group.|string|
-|duration_ms|Duration (ms).|integer|
-|time_gradient|Time gradient.|string|
-|time_period|Time period.|datetime|
-|provider|Provider.|string|
-|quality_dimension|Quality dimension.|string|
-|table_comparison|Quality dimension.|string|
+|id|Sensor readout primary key|string|
+|check_name|Check name|string|
+|check_display_name|Check display name|string|
+|[check_type](../#CheckType)|Check type|[CheckType](../#CheckType)|
+|actual_value|Actual value|double|
+|expected_value|Expected value|double|
+|column_name|Column name|string|
+|data_group|Data group|string|
+|duration_ms|Duration (ms)|integer|
+|[time_gradient](../errors/#TimePeriodGradient)|Time gradient|[TimePeriodGradient](../errors/#TimePeriodGradient)|
+|time_period|Time period|datetime|
+|provider|Provider name|string|
+|quality_dimension|Data quality dimension|string|
+|table_comparison|Table comparison name|string|
 
 
 ___  
@@ -35,14 +35,14 @@ Sensor readout detailed results. Returned in the context of a single data group,
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_name|Check name.|string|
-|check_display_name|Check display name.|string|
-|check_type|Check type.|string|
-|check_hash|Check hash.|long|
-|check_category|Check category name.|string|
-|sensor_name|Sensor name.|string|
-|data_group_names|Data groups list.|List[string]|
-|data_group|Selected data group.|string|
+|check_name|Check name|string|
+|check_display_name|Check display name|string|
+|[check_type](../#CheckType)|Check type|[CheckType](../#CheckType)|
+|check_hash|Check hash|long|
+|check_category|Check category name|string|
+|sensor_name|Sensor name|string|
+|data_group_names|List of data groups that have values for this sensor readout (list of time series)|List[string]|
+|data_group|Selected data group|string|
 |sensor_readout_entries|Sensor readout entries|List[[SensorReadoutEntryModel](#SensorReadoutEntryModel)]|
 
 

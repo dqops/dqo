@@ -1,0 +1,12 @@
+# models
+
+**This is a list of the models in DQOps REST API Python client broken down by individual controllers.**
+
+{{#each modelsSuperiorModels}}
+## {{cut locationFilePath ".md"}}{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+{{#each classObjects}}|[{{classSimpleName}}]({{objectClassPath}})|{{single-line classDescription}}|
+{{/each}}
+{{/each}}

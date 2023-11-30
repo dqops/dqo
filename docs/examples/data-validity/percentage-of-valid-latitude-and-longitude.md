@@ -54,7 +54,7 @@ The `latitude` and `longitude` columns of interest contains valid values.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
@@ -62,49 +62,48 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-   On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-   In this tab you can find a list of data quality checks.
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
 
-   You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-   ![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-   Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-   displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-   that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-   that occurred during the check's execution.
+    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
+    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
+    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    that occurred during the check's execution.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-details.png)
 
-
-6. Review the results which should be similar to the one below.
+    Review the results which should be similar to the one below.
    
     The actual value in this example is 99, which is above the minimum threshold level set in the warning (99.0%).
     The check gives a valid error (notice the green square on the left of the name of the check).
 
     ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results.png)
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-   go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
  
     Below you can see the results displayed on the Issues count per table dashboard showing results by severity level, table stage, table priority, issues per connection and issues per schema.
 
@@ -131,9 +130,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
-7. Enable the scheduler by clicking the toggle button.
+    By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-![Enable job scheduler](https://dqops.com/docs/images/examples/enable-job-scheduler.png)
+    ![Turn off scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
@@ -201,13 +200,14 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The percent of valid latitude and longitude values is above the 99% and the checks results are valid.
 
@@ -219,6 +219,7 @@ Check evaluation summary per table:
 |austin_311|austin_311.311_service_requests|2     |2             |2            |0       |0     |0           |0               |
 +----------+-------------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
+
 For a more detailed insight of how the checks are run, you can initiate the checks in debug mode by executing the
 following command:
 
@@ -295,6 +296,7 @@ Results returned by the sensor:
 |99.19006528255773|2023-05-08T13:34:23.984Z|2023-05-08T13:34:23.984Z|
 +-----------------+------------------------+------------------------+
 ```
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

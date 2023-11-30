@@ -50,7 +50,7 @@ The `source ` column of interest contains NULL values.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
@@ -66,14 +66,14 @@ To execute the check prepared in the example using the [user interface](../../dq
     On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md). 
 
 
-3. Select the **Monitoring Checks** tab.
+3. Select the **Daily checks** tab.
 
-    In this tab you can find a list of data quality checks.
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
     ![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks.png)
 
@@ -87,8 +87,7 @@ To execute the check prepared in the example using the [user interface](../../dq
  
     ![Check details](https://dqops.com/docs/images/examples/daily-null-count-check-details.png)
 
-
-6. Review the results which should be similar to the one below.
+    Review the results which should be similar to the one below.
    
     The actual value of null values in this example is 8, which is above the maximum threshold level set in the warning (5).
     The check gives a warning result (notice the yellow square on the left of the name of the check).
@@ -96,11 +95,11 @@ To execute the check prepared in the example using the [user interface](../../dq
     ![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results.png)
 
 
-7. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-8. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
     Below you can see the results displayed on the Issue severity status per column and day dashboard showing results by schemas, connections, data group, tables and highest issue severity per column and day of month.
@@ -128,9 +127,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 
-7. Enable the scheduler by clicking the toggle button. 
+    By default, scheduler is active. You can turn it off by clicking on notification icon in the top right corner of the screen, and clicking the toggle button.
 
-![Enable job scheduler](https://dqops.com/docs/images/examples/enable-job-scheduler.png)
+    ![Turn off job scheduler](https://dqops.com/docs/images/examples/turning-off-scheduler.png)
 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection. 
@@ -191,13 +190,14 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-The detailed explanation of how to run the example is described [here](../#running-the-examples).
+A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
 ``` 
 check run
 ```
+
 Review the results which should be similar to the one below.
 The number of null values in the `source` column is above 5 and the check raised warning.
 
@@ -209,8 +209,10 @@ Check evaluation summary per table:
 |america_health_rankings|america_health_rankings.ahr|1     |1             |1            |1       |0     |0           |0               |
 +-----------------------+---------------------------+------+--------------+-------------+--------+------+------------+----------------+
 ```
+
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
 following command:
+
 ```
 check run --mode=debug
 ```

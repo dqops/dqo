@@ -26,8 +26,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -240,5 +243,15 @@ public class DocumentationFolder {
                 System.err.println("Cannot write file " + documentationFile.getDirectPath() + ", error: " + ex.getMessage() + ", exception type: " + ex.getClass().toString());
             }
         }
+    }
+
+    /**
+     * Change order of subdirectories and files according to the provided comparator (in-place).
+     * @param comparator Comparator on subdirectory/file names.
+     */
+    public void sortByNameRecursive(Comparator<String> comparator) {
+        this.subFolders.sort((f1, f2) -> comparator.compare(f1.getFolderName(), f2.getFolderName()));
+        this.files.sort((f1, f2) -> comparator.compare(f1.getFileName(), f2.getFileName()));
+        this.subFolders.forEach(f -> f.sortByNameRecursive(comparator));
     }
 }

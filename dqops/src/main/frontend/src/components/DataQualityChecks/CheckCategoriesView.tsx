@@ -5,7 +5,8 @@ import {
   CheckResultsOverviewDataModel,
   TimeWindowFilterParameters,
   CheckModel,
-  QualityCategoryModel
+  QualityCategoryModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useSelector } from 'react-redux';
 import { JobApiClient } from '../../services/apiClient';
@@ -84,9 +85,23 @@ const CheckCategoriesView = ({
     shouldExtend();
   }, []);
 
+  const getExtendCheckCategoryModelWithDeletedChecks = () => {
+    const checkResultCopy = [...checkResultsOverview]
+      const deletedChecksArray = checkResultCopy.filter(
+        obj1 => category.checks && !category.checks.find(obj2 => obj1.checkName === obj2.check_name) 
+        && obj1.checkCategory === category.category
+        );
+        const deletedCheckModels :  CheckModel[] = deletedChecksArray.map((x) => ({
+          check_name: x.checkName,
+          check_hash: x.checkHash,
+          run_checks_job_template: {checkType: checkTypes as CheckSearchFiltersCheckTypeEnum}
+        }))
+        return deletedCheckModels ?? [];
+  }
+
   return (
     <Fragment>
-      <tr>
+      <tr onClick={() => getExtendCheckCategoryModelWithDeletedChecks()}>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -143,40 +158,40 @@ const CheckCategoriesView = ({
         </td>
       </tr>
       {category.checks &&
-        isExtended &&
-        category.checks.map((check, index) => (
-          <CheckListItem
-            check={check}
-            key={index}
-            onChange={(item) =>
-              handleChangeDataGroupingConfiguration(item, index)
-            }
-            checkResult={checkResultsOverview.find(
-              (item) =>
-                item.checkHash == check.check_hash
-            )}
-            getCheckOverview={getCheckOverview}
-            onUpdate={onUpdate}
-            timeWindowFilter={timeWindowFilter}
-            mode={mode}
-            changeCopyUI={(value: boolean) =>
-              changeCopyUI(
-                category.category ?? '',
-                check.check_name ?? '',
-                value
-              )
-            }
-            checkedCopyUI={
-              copyCategory?.checks?.find(
-                (item) => item.check_name === check.check_name
-              )?.configured
-            }
-            category={category.category}
-            comparisonName={category.comparison_name}
-            isDefaultEditing={isDefaultEditing}
-            canUserRunChecks={userProfile.can_run_checks}
-          />
-        ))}
+  isExtended &&
+  [...category.checks, ...getExtendCheckCategoryModelWithDeletedChecks()].map(
+    (check, index) => (
+      <CheckListItem
+        check={check}
+        key={index}
+        onChange={(item) =>
+          handleChangeDataGroupingConfiguration(item, index)
+        }
+        checkResult={checkResultsOverview.find(
+          (item) => item.checkHash === check.check_hash
+        )}
+        getCheckOverview={getCheckOverview}
+        onUpdate={onUpdate}
+        timeWindowFilter={timeWindowFilter}
+        mode={mode}
+        changeCopyUI={(value) =>
+          changeCopyUI(category.category ?? '', check.check_name ?? '', value)
+        }
+        checkedCopyUI={
+          copyCategory?.checks?.find(
+            (item) => item.check_name === check.check_name
+          )?.configured
+        }
+        category={category.category}
+        comparisonName={category.comparison_name}
+        isDefaultEditing={isDefaultEditing}
+        canUserRunChecks={userProfile.can_run_checks}
+        isAlreadyDeleted={category.checks && !category.checks.find(x => x === 
+          check
+        )}
+      />
+    )
+  )}
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}

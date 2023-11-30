@@ -17,15 +17,20 @@ package com.dqops.utils.docs.client.models;
 
 import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.LinkageStore;
+import com.dqops.utils.docs.checks.CheckCategoryDocumentationModel;
+import com.dqops.utils.docs.checks.MainPageCheckDocumentationModel;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.operations.OperationsSuperiorObjectDocumentationModel;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
+import com.dqops.utils.docs.sensors.MainPageSensorDocumentationModel;
 import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Python client documentation generator that generate documentation for models.
@@ -50,11 +55,11 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
         ModelsSuperiorObjectDocumentationModel sharedModelsDocumentationModel =
                 modelsDocumentationModelFactory.createDocumentationForSharedModels(componentModels);
         if (sharedModelsDocumentationModel != null) {
-            Template sharedTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/models/shared_models_documentation");
-            DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile("index.md");
+            DocumentationMarkdownFile documentationMarkdownFile = modelsFolder.addNestedFile(
+                    ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER + ".md");
             documentationMarkdownFile.setRenderContext(sharedModelsDocumentationModel);
 
-            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(sharedTemplate, sharedModelsDocumentationModel);
+            String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, sharedModelsDocumentationModel);
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
 
@@ -68,6 +73,18 @@ public class ModelsDocumentationGeneratorImpl implements ModelsDocumentationGene
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, modelsSuperiorObjectDocumentationModel);
             documentationMarkdownFile.setFileContent(renderedDocument);
         }
+
+        MainPageModelsDocumentationModel mainPageModelsDocumentationModel = new MainPageModelsDocumentationModel();
+        mainPageModelsDocumentationModel.getModelsSuperiorModels().add(sharedModelsDocumentationModel);
+        mainPageModelsDocumentationModel.getModelsSuperiorModels().addAll(modelsSuperiorObjectDocumentationModels);;
+
+        Template mainPageTemplate = HandlebarsDocumentationUtilities.compileTemplate("client/models/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = modelsFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageDocumentationMarkdownFile);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(mainPageTemplate, mainPageModelsDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
         return modelsFolder;
     }
 }

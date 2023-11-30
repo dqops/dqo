@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.check_type import CheckType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -16,20 +17,21 @@ T = TypeVar("T", bound="SensorReadoutsListModel")
 class SensorReadoutsListModel:
     """
     Attributes:
-        check_name (Union[Unset, str]): Check name.
-        check_display_name (Union[Unset, str]): Check display name.
-        check_type (Union[Unset, str]): Check type.
-        check_hash (Union[Unset, int]): Check hash.
-        check_category (Union[Unset, str]): Check category name.
-        sensor_name (Union[Unset, str]): Sensor name.
-        data_group_names (Union[Unset, List[str]]): Data groups list.
-        data_group (Union[Unset, str]): Selected data group.
+        check_name (Union[Unset, str]): Check name
+        check_display_name (Union[Unset, str]): Check display name
+        check_type (Union[Unset, CheckType]):
+        check_hash (Union[Unset, int]): Check hash
+        check_category (Union[Unset, str]): Check category name
+        sensor_name (Union[Unset, str]): Sensor name
+        data_group_names (Union[Unset, List[str]]): List of data groups that have values for this sensor readout (list
+            of time series)
+        data_group (Union[Unset, str]): Selected data group
         sensor_readout_entries (Union[Unset, List['SensorReadoutEntryModel']]): Sensor readout entries
     """
 
     check_name: Union[Unset, str] = UNSET
     check_display_name: Union[Unset, str] = UNSET
-    check_type: Union[Unset, str] = UNSET
+    check_type: Union[Unset, CheckType] = UNSET
     check_hash: Union[Unset, int] = UNSET
     check_category: Union[Unset, str] = UNSET
     sensor_name: Union[Unset, str] = UNSET
@@ -41,7 +43,10 @@ class SensorReadoutsListModel:
     def to_dict(self) -> Dict[str, Any]:
         check_name = self.check_name
         check_display_name = self.check_display_name
-        check_type = self.check_type
+        check_type: Union[Unset, str] = UNSET
+        if not isinstance(self.check_type, Unset):
+            check_type = self.check_type.value
+
         check_hash = self.check_hash
         check_category = self.check_category
         sensor_name = self.sensor_name
@@ -91,7 +96,12 @@ class SensorReadoutsListModel:
 
         check_display_name = d.pop("checkDisplayName", UNSET)
 
-        check_type = d.pop("checkType", UNSET)
+        _check_type = d.pop("checkType", UNSET)
+        check_type: Union[Unset, CheckType]
+        if isinstance(_check_type, Unset):
+            check_type = UNSET
+        else:
+            check_type = CheckType(_check_type)
 
         check_hash = d.pop("checkHash", UNSET)
 

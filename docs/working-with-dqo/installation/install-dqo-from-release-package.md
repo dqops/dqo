@@ -71,15 +71,18 @@ To use DQOps you need:
     After installation, you will be asked whether to initialize the [DQOps user home folder](../../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder.  
     The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../../dqo-concepts/data-storage/data-storage.md).
 
-    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder.png)
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
 6.  Login to DQOps Cloud.
 
     To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
     must create a DQOps cloud account.
+
+    Once the `DQOps user home` folder is initialized, DQOps will ask you to log in to your DQOps Cloud account. 
+
+    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png)
  
-    After creating the [DQOps user home folder](../../dqo-concepts/home-folders/dqops-user-home.md), you will be asked whether to log in to the DQOps cloud. After typing Y, you will be
-    redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
+    After typing Y, you will be redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQOps application.
     The API Key is now stored in the configuration file.

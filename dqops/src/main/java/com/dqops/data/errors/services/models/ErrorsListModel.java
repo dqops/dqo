@@ -15,6 +15,7 @@
  */
 package com.dqops.data.errors.services.models;
 
+import com.dqops.checks.CheckType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -31,20 +32,20 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class ErrorsListModel {
-    @JsonPropertyDescription("Check name.")
+    @JsonPropertyDescription("Check name")
     private String checkName;
-    @JsonPropertyDescription("Check display name.")
+    @JsonPropertyDescription("Check display name")
     private String checkDisplayName;
-    @JsonPropertyDescription("Check type.")
-    private String checkType;
-    @JsonPropertyDescription("Check hash.")
+    @JsonPropertyDescription("Check type")
+    private CheckType checkType;
+    @JsonPropertyDescription("Check hash")
     private Long checkHash;
-    @JsonPropertyDescription("Check category name.")
+    @JsonPropertyDescription("Check category name")
     private String checkCategory;
 
-    @JsonPropertyDescription("Data groups list.")
+    @JsonPropertyDescription("Data groups list")
     private List<String> dataGroupsNames;
-    @JsonPropertyDescription("Selected data group.")
+    @JsonPropertyDescription("Selected data group")
     private String dataGroup;
 
     @JsonPropertyDescription("Error entries")

@@ -22,6 +22,7 @@ import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -137,6 +138,7 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         indexPageCheckDocumentationModel.setCheckTargets(checkCategoryDocumentationModels.stream()
                 .map(CheckCategoryDocumentationModel::getTarget)
                 .distinct()
+                .sorted(Comparator.reverseOrder())
                 .collect(Collectors.toList()));
         indexPageCheckDocumentationModel.setChecks(checkCategoryDocumentationModels);
         return indexPageCheckDocumentationModel;

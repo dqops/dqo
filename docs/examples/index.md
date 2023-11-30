@@ -53,7 +53,10 @@ To run the examples, follow the steps below.
 
 2. Create DQOps `DQOps user home` folder.
 
-    After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder.  
+    After installation, you will be asked whether to initialize the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md) in the default location. Type Y to create the folder. . 
+
+    ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
+
     The DQOps user home folder locally stores data such as sensor and checkout readings, as well as data source configurations. [You can learn more about data storage here](../dqo-concepts/data-storage/data-storage.md).
 
 
@@ -62,8 +65,11 @@ To run the examples, follow the steps below.
     To use DQOps features, such as storing data quality definitions and results in the cloud or data quality dashboards, you
     must create a DQOps cloud account.
  
-    After creating the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md), you will be asked whether to log in to the DQOps cloud. After typing Y, you will be
-    redirected to https://cloud.dqops.com/registration, where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
+    After creating the [DQOps user home folder](../dqo-concepts/home-folders/dqops-user-home.md), you will be asked whether to log in to the DQOps cloud. 
+
+    ![Log in to DQOps Cloud](https://dqops.com/docs/images/getting-started/log-in-to-dqops-cloud3.png)
+
+    After typing Y, you will be redirected to [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration), where you can create a new account, use Google single sign-on (SSO) or log in if you already have an account.
  
     During the first registration, a unique identification code (API Key) will be generated and automatically passed to the DQOps application.
     The API Key is now stored in the configuration file.
@@ -87,12 +93,12 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 3. Select the **Profiling Checks** tab.
 
-    In this tab you can find a list of data quality checks. On **Profiling** section, there is also a second tab [Basic data statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor). On **Profiling** section, there is also a second tab [Basic data statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
 
 
 4. Run the enabled check using the **Run check** button.
 
-    You can also run all checks for the check category using the **Run check** button located at the end of the row with the name of the check group.
+    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
     ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
 
@@ -115,7 +121,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-3. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
+8. You can now [review the results on the data quality dashboards](../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md) as described in the Working with DQOps section.
 
 
 ### **Executing the checks using the DQOps Shell**

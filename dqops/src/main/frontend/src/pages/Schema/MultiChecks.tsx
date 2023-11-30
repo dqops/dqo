@@ -17,11 +17,11 @@ import RadioButton from '../../components/RadioButton';
 
 const tabs = [
   {
-    label: 'Daily',
+    label: 'Daily checks',
     value: 'daily'
   },
   {
-    label: 'Monthly',
+    label: 'Monthly checks',
     value: 'monthly'
   }
 ];

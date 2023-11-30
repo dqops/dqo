@@ -62,16 +62,19 @@ public class YamlDocumentationModelFactoryImpl implements YamlDocumentationModel
             Class<?> yamlClass = yamlDocumentationNode.getClazz();
             YamlSuperiorObjectDocumentationModel yamlSuperiorObjectDocumentationModel = new YamlSuperiorObjectDocumentationModel();
             yamlSuperiorObjectDocumentationModel.setSuperiorClassFullName(yamlClass.getName());
-            yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().toString().replace('\\', '/'));
+            yamlSuperiorObjectDocumentationModel.setSuperiorClassFilePath(yamlDocumentationNode.getPathToFile().toString());
+            yamlSuperiorObjectDocumentationModel.setSuperiorClassSimpleName(yamlDocumentationNode.getPathToFile().getFileName().toString());
 
             Map<Class<?>, YamlObjectDocumentationModel> yamlObjectDocumentationModels = new HashMap<>();
 
             generateYamlObjectDocumentationModelRecursive(
                     Path.of("docs", "reference", "yaml",
-                            yamlSuperiorObjectDocumentationModel.getSuperiorClassSimpleName()),
+                            yamlSuperiorObjectDocumentationModel.getSuperiorClassFilePath()),
                     yamlClass, yamlObjectDocumentationModels);
 
             yamlSuperiorObjectDocumentationModel.setReflectedSuperiorClass(yamlClass);
+            TypeModel yamlTypeModel = getObjectsTypeModel(yamlClass, yamlObjectDocumentationModels);
+            yamlSuperiorObjectDocumentationModel.setReflectedSuperiorDataType(yamlTypeModel);
             yamlSuperiorObjectDocumentationModel.setClassObjects(new ArrayList<>());
 
             for (Map.Entry<Class<?>, YamlObjectDocumentationModel> yamlObject : yamlObjectDocumentationModels.entrySet()) {

@@ -117,21 +117,21 @@ export const TABLE_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Daily',
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Monthly checks',
       value: 'monthly'
     }
   ],
   [CheckTypes.MONITORING]: [
     {
-      label: 'Daily',
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Monthly checks',
       value: 'monthly'
     }
   ]
@@ -170,21 +170,21 @@ export const COLUMN_LEVEL_TABS: {
   ],
   [CheckTypes.PARTITIONED]: [
     {
-      label: 'Daily',
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Monthly checks',
       value: 'monthly'
     }
   ],
   [CheckTypes.MONITORING]: [
     {
-      label: 'Daily',
+      label: 'Daily checks',
       value: 'daily'
     },
     {
-      label: 'Monthly',
+      label: 'Monthly checks',
       value: 'monthly'
     }
   ]

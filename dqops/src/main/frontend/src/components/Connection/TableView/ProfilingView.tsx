@@ -49,7 +49,7 @@ const tabs = [
     value: 'statistics'
   },
   {
-    label: 'Table Preview',
+    label: 'Table preview',
     value: 'preview'
   },
   {
@@ -57,11 +57,11 @@ const tabs = [
     value: 'table-quality-status'
   },
   {
-    label: 'Profiling Checks',
+    label: 'Profiling checks',
     value: 'advanced'
   },
   {
-    label: 'Table Comparisons',
+    label: 'Table comparisons',
     value: 'reference-comparisons'
   }
 ];
