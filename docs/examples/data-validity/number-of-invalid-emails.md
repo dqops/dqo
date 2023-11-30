@@ -8,6 +8,7 @@ Here is a table with some sample customer data. In this example, we will monitor
 
 The `email` column contains email values. We want to verify that the number of invalid emails does not exceed set thresholds.
 
+
 **SOLUTION**
 
 We will verify the data using monitoring [string_invalid_email_count](../../checks/column/strings/string-invalid-email-count.md) column check.

@@ -94,7 +94,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
    
     The actual value in this example is 99, which is above the minimum threshold level set in the warning (99.0%).
-    The check gives a valid error (notice the green square on the left of the name of the check).
+    The check gives a valid result (notice the green square on the left of the name of the check).
 
     ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results.png)
 

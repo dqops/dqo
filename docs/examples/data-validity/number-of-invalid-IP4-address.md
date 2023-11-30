@@ -4,7 +4,7 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
 
 **PROBLEM**
 
-Here is a table with some sample customer data. In this example, we will monitor the `ip4` column.
+Here is a table with some sample data. In this example, we will monitor the `ip4` column.
 
 The `ip4` column contains IP4 address values. We want to verify the number of invalid IP4 address values on `ip4` column.
 
