@@ -28464,6 +28464,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "presto"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28486,6 +28487,9 @@ definitions:
       oracle:
         description: "Oracle connection parameters."
         $ref: "#/definitions/OracleParametersSpec"
+      presto:
+        description: "Presto connection parameters."
+        $ref: "#/definitions/PrestoParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -28551,6 +28555,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "presto"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28579,6 +28584,10 @@ definitions:
         description: "Oracle connection parameters. Specify parameters in the postgresql\
           \ section or set the url (which is the Oracle JDBC url)."
         $ref: "#/definitions/OracleParametersSpec"
+      presto:
+        description: "Presto connection parameters. Specify parameters in the postgresql\
+          \ section or set the url (which is the Presto JDBC url)."
+        $ref: "#/definitions/PrestoParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -30399,6 +30408,33 @@ definitions:
         type: "object"
         additionalProperties:
           type: "string"
+  PrestoParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "Presto host name. Supports also a ${PRESTO_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "Presto port number. The default port is 8080. Supports also\
+          \ a ${PRESTO_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      user:
+        type: "string"
+        description: "Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        additionalProperties:
+          type: "string"
   ProviderSensorDefinitionSpec:
     type: "object"
     properties:
@@ -30449,6 +30485,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "presto"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -30476,6 +30513,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "presto"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"

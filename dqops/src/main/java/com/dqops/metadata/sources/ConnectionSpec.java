@@ -21,6 +21,7 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
@@ -67,6 +68,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("sqlserver", o -> o.sqlserver);
             put("mysql", o -> o.mysql);
             put("oracle", o -> o.oracle);
+            put("presto", o -> o.presto);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("incident_grouping", o -> o.incidentGrouping);
@@ -117,6 +119,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private OracleParametersSpec oracle;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Presto connection parameters. Specify parameters in the postgresql section or set the url (which is the Presto JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private PrestoParametersSpec presto;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -333,6 +341,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     }
 
     /**
+     * Returns the connection parameters for Presto.
+     * @return Presto connection parameters.
+     */
+    public PrestoParametersSpec getPresto() {
+        return presto;
+    }
+
+    /**
+     * Sets the Presto connection parameters.
+     * @param presto New Presto connection parameters.
+     */
+    public void setPresto(PrestoParametersSpec presto) {
+        setDirtyIf(!Objects.equals(this.presto, presto));
+        this.presto = presto;
+        propagateHierarchyIdToField(presto, "presto");
+    }
+
+    /**
      * Returns the configuration of schedules for each type of check.
      * @return Configuration of schedules for each type of checks.
      */
@@ -491,6 +517,15 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             if (cloned.redshift != null) {
                 cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.mysql != null) {
+                cloned.mysql = cloned.mysql.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.presto != null) {
+                cloned.presto = cloned.presto.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.oracle != null) {
+                cloned.oracle = cloned.oracle.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.sqlserver != null) {
                 cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider, secretValueLookupContext);

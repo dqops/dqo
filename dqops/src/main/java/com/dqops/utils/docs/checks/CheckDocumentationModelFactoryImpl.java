@@ -32,6 +32,7 @@ import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.oracle.OracleProviderDialectSettings;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
+import com.dqops.connectors.presto.PrestoProviderDialectSettings;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
@@ -689,6 +690,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new MysqlProviderDialectSettings();
             case oracle:
                 return new OracleProviderDialectSettings();
+            case presto:
+                return new PrestoProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

@@ -91,6 +91,12 @@
 			<artifactId>snowflake-jdbc</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.facebook.presto</groupId>
+			<artifactId>presto-jdbc</artifactId>
+			<version>0.284</version>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- Oracle and SQL Server drivers are excluded, because they are referenced by dqops project as regular dependencies (not runtime scope), because we need to use some classes or enums -->
 

@@ -42,6 +42,9 @@ public enum ProviderType {
 
     @JsonProperty("oracle")
     oracle,
+
+    @JsonProperty("presto")
+    presto,
     // TODO: add more connectors
 
     ;
@@ -61,6 +64,8 @@ public enum ProviderType {
                 return "MySQL";
             case oracle:
                 return "Oracle";
+            case presto:
+                return "Presto";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }

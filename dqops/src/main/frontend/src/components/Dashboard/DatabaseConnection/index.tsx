@@ -23,6 +23,8 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import PostgreSQLConnection from './PostgreSQLConnection';
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import PrestoConnection from './PrestoConnection';
+import PrestoLogo from '../../SvgIcon/svg/presto.svg';
 import RedshiftConnection from './RedshiftConnection';
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from './SqlServerConnection';
@@ -210,6 +212,13 @@ const DatabaseConnection = ({
           onChange={(oracle) => onChange({ ...database, oracle })}
           sharedCredentials = {sharedCredentials}
       />
+    ),
+    [ConnectionModelProviderTypeEnum.presto]: (
+      <PrestoConnection
+          presto={database.presto}
+          onChange={(presto) => onChange({ ...database, presto })}
+          sharedCredentials = {sharedCredentials}
+      />
     )
   };
 
@@ -229,6 +238,8 @@ const DatabaseConnection = ({
         return MySQLLogo;
       case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
+      case ConnectionModelProviderTypeEnum.presto:
+        return PrestoLogo;
       default:
         return '';
     }

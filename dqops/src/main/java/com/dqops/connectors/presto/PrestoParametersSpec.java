@@ -1,5 +1,5 @@
 /*
- * Copyright © 2021 DQOps (support@dqops.com)
+ * Copyright © 2023 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.connectors.postgresql;
+package com.dqops.connectors.presto;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.core.secrets.SecretValueLookupContext;
@@ -21,8 +21,6 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,47 +33,39 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Postgresql connection parameters.
+ * Presto connection parameters.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PostgresqlParametersSpec extends BaseProviderParametersSpec
+public class PrestoParametersSpec extends BaseProviderParametersSpec
         implements ConnectionProviderSpecificParameters {
-    private static final ChildHierarchyNodeFieldMapImpl<PostgresqlParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
+    private static final ChildHierarchyNodeFieldMapImpl<PrestoParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
     };
 
-    @CommandLine.Option(names = {"--postgresql-host"}, description = "PostgreSQL host name")
-    @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--presto-host"}, description = "Presto host name")
+    @JsonPropertyDescription("Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--postgresql-port"}, description = "PostgreSQL port number")
-    @JsonPropertyDescription("PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.")
+    @CommandLine.Option(names = {"--presto-port"}, description = "Presto port number")
+    @JsonPropertyDescription("Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--postgresql-database"}, description = "PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--presto-database"}, description = "Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
-    @CommandLine.Option(names = {"--postgresql-user"}, description = "PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--presto-user"}, description = "Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--postgresql-password"}, description = "PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--presto-password"}, description = "Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--postgresql-options"}, description = "PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("PostgreSQL connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
-    @CommandLine.Option(names = {"--postgresql-sslmode"}, description = "Connect to PostgreSQL using sslmode connection parameter")
-    @JsonPropertyDescription("Sslmode PostgreSQL connection parameter. The default value is disabled.")
-    private PostgresqlSslMode sslmode = PostgresqlSslMode.disable;
-
-    @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-A"}, description = "Presto additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -97,7 +87,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port number. The value should store an environment variable expression or a numeric postgresql port number.
+     * Returns the port number. The value should store an environment variable expression or a numeric presto port number.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
@@ -165,40 +155,6 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
-    }
-
-    /**
-     * Returns the flag to require SSL connection.
-     * @return True - require an SSL connection.
-     */
-    public PostgresqlSslMode getSslmode() {
-        return sslmode;
-    }
-
-    /**
-     * Sets a flag to require an SSL connection.
-     * @param sslmode True - ssl connection is required.
-     */
-    public void setSslmode(PostgresqlSslMode sslmode) {
-        setDirtyIf(!Objects.equals(this.sslmode, sslmode));
-        this.sslmode = sslmode;
-    }
-
-    /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
      * @return Key/value dictionary of additional JDBC properties.
      */
@@ -229,40 +185,26 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
      * Creates and returns a deep copy of this object.
      */
     @Override
-    public PostgresqlParametersSpec deepClone() {
-        PostgresqlParametersSpec cloned = (PostgresqlParametersSpec)super.deepClone();
+    public PrestoParametersSpec deepClone() {
+        PrestoParametersSpec cloned = (PrestoParametersSpec)super.deepClone();
         return cloned;
     }
 
     /**
      * Creates a trimmed and expanded version of the object without unwanted properties, but with all variables like ${ENV_VAR} expanded.
-     * @param secretValueProvider Secret provider.
+     * @param secretValueProvider Secret value provider.
      * @param lookupContext Secret lookup context.
      * @return Trimmed and expanded version of this object.
      */
-    public PostgresqlParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        PostgresqlParametersSpec cloned = this.deepClone();
+    public PrestoParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+        PrestoParametersSpec cloned = this.deepClone();
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
-        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
-    }
-
-    public static class PostgresqlParametersSpecSampleFactory implements SampleValueFactory<PostgresqlParametersSpec> {
-        @Override
-        public PostgresqlParametersSpec createSample() {
-            return new PostgresqlParametersSpec() {{
-                setHost("localhost");
-                setPort("5432");
-                setDatabase("db");
-                setUser(SampleStringsRegistry.getUserName());
-                setUser("PASSWD");
-            }};
-        }
     }
 }

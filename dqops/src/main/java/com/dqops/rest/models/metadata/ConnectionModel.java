@@ -21,6 +21,7 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
@@ -110,6 +111,12 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("Oracle connection parameters.")
     private OracleParametersSpec oracle;
+
+    /**
+     * Presto connection parameters.
+     */
+    @JsonPropertyDescription("Presto connection parameters.")
+    private PrestoParametersSpec presto;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
