@@ -27,46 +27,62 @@
                   X
                 </button>
               </div>
-              <p>
-                Check out eBook "A Step-by-Step Guide to Improve Data Quality"
-                created by the DQOps team based on their experience in data
-                cleansing and data quality monitoring.
-              </p>
-              <a
-                href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
-                target="_blank"
-              >
-                <img
-                  src="./images/ebook.png"
-                  alt="A step-by-step guide to improve data quality"
-                  title="A step-by-step guide to improve data quality"
-                />
-              </a>
+
+              <div class="popupcontainer">
+                <div class="imagepopupcontainer">
+                  <a
+                    href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
+                    target="_blank"
+                  >
+                    <img
+                      src="./images/ebook.png"
+                      alt="A step-by-step guide to improve data quality"
+                      title="A step-by-step guide to improve data quality"
+                      style="width: 1000px"
+                    />
+                  </a>
+                </div>
+                <div>
+                  <p style="font-weight: 700">
+                    Check out eBook "A Step-by-Step Guide to Improve Data
+                    Quality" created by the DQOps team based on their experience
+                    in data cleansing and data quality monitoring.
+                  </p>
+
+                  <button class="modal__btn">
+                    <a
+                      href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
+                      target="_blank"
+                      >Download free ebook
+                    </a>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <footer class="modal__footer">
-          <!-- <div class="_form_35" style="background-color: white"></div>
+        <!-- <footer class="modal__footer"> -->
+        <!-- <div class="_form_35" style="background-color: white"></div>
           <script
             src="https://dqo.activehosted.com/f/embed.php?id=35"
             type="text/javascript"
             charset="utf-8"
             style="background-color: white"
           ></script> -->
-          <button class="modal__btn">
+        <!-- <button class="modal__btn">
             <a
               href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
               target="_blank"
               >Download free ebook
             </a>
-          </button>
-        </footer>
+          </button> -->
+        <!-- </footer> -->
       </div>
     </div>
   </div>
 </div>
 <style>
-  #_form_6566CB7E7415E_ {
+  /* #_form_6566CB7E7415E_ {
     padding-top: 0px;
     padding-right: 0px;
     padding-bottom: 0px;
@@ -79,7 +95,13 @@
   #_form_6566CB7E7415E_._inline-form ._submit {
     font-family: Helvetica, Arial, sans-serif;
     background-color: white;
+  } */
+  .popupcontainer {
+    display: flex;
   }
+  /* .imagepopupcontainer {
+    width: 1000px;
+  } */
 
   .modal {
     display: flex;
@@ -164,6 +186,7 @@
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
     background-color: #6c91d5;
+    margin-top: 20px;
     color: black;
     border-radius: 0.25rem;
     border-style: none;
@@ -318,6 +341,11 @@ Mobile custom styles for individual modals
         width: 90% !important;
         min-width: 90% !important;
       }
+    }
+  }
+  @media (max-width: 1000px) {
+    .popupcontainer {
+      flex-direction: column;
     }
   }
 </style>
