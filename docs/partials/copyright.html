@@ -22,7 +22,7 @@
                   class="modal__btn"
                   data-micromodal-close
                   aria-label="Close this dialog window"
-                  style="padding: 0; width: 0px; height: 0px"
+                  style="padding: 0; width: 0px; height: 0px; font-weight: 700"
                 >
                   X
                 </button>
@@ -49,10 +49,11 @@
                     in data cleansing and data quality monitoring.
                   </p>
 
-                  <button class="modal__btn">
+                  <button class="modal__btn" style="margin-top: 20px">
                     <a
                       href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
                       target="_blank"
+                      style="font-weight: 700"
                       >Download free ebook
                     </a>
                   </button>
@@ -351,22 +352,28 @@ Mobile custom styles for individual modals
 </style>
 <script src="https://cdn.jsdelivr.net/npm/micromodal/dist/micromodal.min.js"></script>
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    try {
-      MicroModal.init({
-        awaitCloseAnimation: true,
-        onShow: function (modal) {},
-        onClose: function (modal) {},
-      })
+  console.log(document.cookie)
+  var array = document.cookie.split(".")
+  console.log(new Date(array[3]))
+  if (document.cookie.length === 0 || document.cookie === undefined) {
+    console.log(document.cookie)
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        MicroModal.init({
+          awaitCloseAnimation: true,
+          onShow: function (modal) {},
+          onClose: function (modal) {},
+        })
 
-      // Open the modal after 10 seconds
-      setTimeout(function () {
-        MicroModal.show("modal-1")
-      }, 10000)
-    } catch (e) {
-      console.log("micromodal error: ", e)
-    }
-  })
+        // Open the modal after 10 seconds
+        setTimeout(function () {
+          MicroModal.show("modal-1")
+        }, 10000)
+      } catch (e) {
+        console.log("micromodal error: ", e)
+      }
+    })
+  }
 </script>
 <!-- <div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
   <div class="modal__overlay" tabindex="-1" data-micromodal-close>
