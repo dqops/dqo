@@ -507,6 +507,11 @@ theme:
 plugins:
   - glightbox
   - search
+# replace above search with below commented section on update mkdocs-material to 9.4 at least
+#  - group:
+#      enabled: !ENV ENABLE_SEARCH
+#      plugins:
+#        - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
