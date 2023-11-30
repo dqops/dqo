@@ -11,7 +11,7 @@ To use the examples you need:
 
 - [Installed DQOps](../getting-started/installation/installation.md).
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).
 
 After installing Google Cloud CLI, log in to your GCP account, by running:
 
