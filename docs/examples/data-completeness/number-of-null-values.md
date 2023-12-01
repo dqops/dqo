@@ -90,7 +90,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
    
     The actual value of null values in this example is 8, which is above the maximum threshold level set in the warning (5).
-    The check gives a warning result (notice the yellow square on the left of the name of the check).
+    The check gives a warning result (notice the yellow square to the left of the check name).
 
     ![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results.png)
 

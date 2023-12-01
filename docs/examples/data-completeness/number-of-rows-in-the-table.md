@@ -85,7 +85,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
     Review the results which should be similar to the one below.
 
     The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
-    The check gives a valid result (notice the green square on the left of the name of the check).
+    The check gives a valid result (notice the green square to the left of the check name).
     Now you can be sure that you table is not empty.
 
     ![Row-count check result](https://dqops.com/docs/images/examples/daily-row-count-check-result.png)

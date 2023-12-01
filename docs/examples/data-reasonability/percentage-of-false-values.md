@@ -1,6 +1,6 @@
 # Percentage of false values
 
-This example shows how to detect that the percentage of false values remains above a set threshold.
+This example shows how to detect that the percentage of false boolean values remains above a set threshold.
 
 **PROBLEM**
 
@@ -15,14 +15,14 @@ a link to a copy of the PDF, which can be found on Google Cloud Storage.
 The `invalidOcr` column indicates if the OCR does match the raw file text (false value) or does not (true value). In case
 of the true value, the OCR process needs more work and the file is not ready to be transcribed.
 
-We want to verify the percentage of false values in the `invalidOcr` column, which will tell us what percentage of data is 
+We want to verify the percentage of false boolean values in the `invalidOcr` column, which will tell us what percentage of data is 
 ready to be transcribed.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.fcc_political_ads.content_info` using monitoring 
 [false_percent](../../checks/column/bool/false-percent.md) column check.
-Our goal is to verify that the percentage of false values on `invalidOcr` column does not fall below 99%. 
+Our goal is to verify that the percentage of false boolean values on `invalidOcr` column does not fall below 99%. 
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -96,7 +96,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
 
     The actual value in this example is 99, which is above the minimum threshold level set in the warning (99).
-    The check gives a valid result (notice the green square on the left of the name of the check).
+    The check gives a valid result (notice the green square to the left of the check name).
 
     ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results.png)
 

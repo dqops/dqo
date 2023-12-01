@@ -29,7 +29,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of valid values falls below 5.0%, a warning alert will be triggered.
+If the percentage of valid values falls below 5.0%, an error alert will be triggered.
 
 ## Data structure
 
@@ -90,8 +90,8 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     Review the results which should be similar to the one below.
    
-    The actual value in this example is 92, which is below the minimum threshold level set in the warning (99.0%).
-    The check gives a warning (notice the orange square on the left of the name of the check).
+    The actual value in this example is 92, which is below the minimum threshold level set in the error (95.0%).
+    The check raises an error issue (notice the orange square to the left of the check name).
 
     ![Values-in-range-numeric-percent check results](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results.png)
 

@@ -112,7 +112,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     The results should be similar to the one below.
    
     The actual value in this example is 100, which is above the minimum threshold level set in the warning (99.0%).
-    The check gives a valid result (notice the green square on the left of the name of the check).
+    The check gives a valid result (notice the green square to the left of the check name).
 
     ![Foreign-key-match-percent check results](https://dqops.com/docs/images/examples/daily-foreign-key-match-percent-checks-results.png)
 

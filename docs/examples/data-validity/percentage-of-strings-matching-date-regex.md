@@ -91,7 +91,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
    
     The actual value in this example is 0, which is below the minimum threshold level set in the warning (99.0%).
-    The check gives a fatal error (notice the red square on the left of the name of the check).
+    The check gives a fatal error (notice the red square to the left of the check name).
 
     ![String-match-date-regex-percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results.png)
 

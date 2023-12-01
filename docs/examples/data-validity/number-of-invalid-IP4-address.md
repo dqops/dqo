@@ -93,7 +93,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
    
     The actual value in this example is 5, which is above the maximum threshold level set in the warning (0).
-    The check gives a warning (notice the yellow square on the left of the name of the check).
+    The check gives a warning (notice the yellow square to the left of the check name).
 
     ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results.png)
 

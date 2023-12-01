@@ -99,7 +99,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
    
     The actual value in this example is 64, which is below the minimum threshold level set in the warning (75.0%).
-    The check gives an error result (notice the orange square on the left of the name of the check).
+    The check gives an error result (notice the orange square to the left of the check name).
 
     ![String-valid-currency-code-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-currency-code-percent-checks-results.png)
 
