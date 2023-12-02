@@ -17,29 +17,6 @@ import qs from "query-string";
 import { SettingsApi } from '../../../services/apiClient';
 import { MonitoringScheduleSpec } from '../../../api';
 
-const pageTabs = [
-  {
-    label: 'Profiling',
-    value: CheckRunMonitoringScheduleGroup.profiling
-  },
-  {
-    label: 'Monitoring daily',
-    value: CheckRunMonitoringScheduleGroup.monitoring_daily
-  },
-  {
-    label: 'Monitoring monthly',
-    value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-  },
-  {
-    label: 'Partitioned daily',
-    value: CheckRunMonitoringScheduleGroup.partitioned_daily
-  },
-  {
-    label: 'Partitioned monthly',
-    value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-  },
-]
-
 const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
 
