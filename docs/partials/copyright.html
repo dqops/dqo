@@ -150,28 +150,28 @@
 </style>
 <script src="https://cdn.jsdelivr.net/npm/micromodal/dist/micromodal.min.js"></script>
 <script>
-  // if (
-  //   document.cookie &&
-  //   document.cookie.length !== 0 &&
-  //   !document.cookie.includes(".expires=")
-  // ) {
-  let date = new Date(Date.now())
-  date = date.toUTCString()
-  document.cookie = ".expires=" + date
-  document.addEventListener("DOMContentLoaded", function () {
-    try {
-      MicroModal.init({
-        awaitCloseAnimation: true,
-        onShow: function (modal) {},
-        onClose: function (modal) {},
-      })
+  if (
+    document.cookie &&
+    document.cookie.length !== 0 &&
+    !document.cookie.includes(".expires=")
+  ) {
+    let date = new Date(Date.now())
+    date = date.toUTCString()
+    document.cookie = ".expires=" + date
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        MicroModal.init({
+          awaitCloseAnimation: true,
+          onShow: function (modal) {},
+          onClose: function (modal) {},
+        })
 
-      setTimeout(function () {
-        MicroModal.show("modal-1")
-      }, 10)
-    } catch (e) {
-      console.log("micromodal error: ", e)
-    }
-  })
-  // }
+        setTimeout(function () {
+          MicroModal.show("modal-1")
+        }, 10000)
+      } catch (e) {
+        console.log("micromodal error: ", e)
+      }
+    })
+  }
 </script>
