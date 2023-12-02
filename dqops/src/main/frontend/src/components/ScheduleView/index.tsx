@@ -91,20 +91,16 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
     setHour(val);
   };
 
-  useEffect(() => {
-    getData();
-  }, []);
-
-  useEffect(() => {
+   const checkCronExpresion = () => {
     const cron_expression = schedule?.cron_expression ?? '';
     if (cron_expression?.length === 0) {
       setMode('');
       return;
     }
-    if (mode !== 'custom'){
-      if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
+    if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
         setMode('minutes');
         const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+
         if (!matches) return;
         if (Number(matches[1]) < 0) {
           onChangeMinutes(0);
@@ -113,14 +109,15 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       } else {
         setMinutes((prevState) => ({
           ...prevState,
-          [mode as keyof TMinutes]: Number(matches[1]),
+          'minutes': Number(matches[1]),
         }));
       }
       return;
-    }
-    if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
+  }
+    else if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
       setMode('hour');
       const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+
       if (!matches) return;
       if (Number(matches[1]) < 0) {
         onChangeMinutes(0);
@@ -129,14 +126,15 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       } else {
         setMinutes((prevState) => ({
           ...prevState,
-          [mode as keyof TMinutes]: Number(matches[1]),
+          'hour': Number(matches[1]),
         }));
       }
       return;
     }
-    if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
+    else if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
       setMode('day');
       const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+
       if (!matches) return;
       
       if (Number(matches[2]) < 0) {
@@ -153,17 +151,27 @@ const ScheduleView = ({ schedule, handleChange, isDefault }: IScheduleViewProps)
       } else {
         setMinutes((prevState) => ({
           ...prevState,
-          [mode as keyof TMinutes]: Number(matches[1]),
+          'day': Number(matches[1]),
         }));
       }
       return;
     }
-  }
-    if(cron_expression?.length > 0) {
+    else {
       setMode("custom")
       return;
     }
+   }
+
+  useEffect(() => {
+    if (mode !== 'custom') {
+      checkCronExpresion()
+    } 
   }, [schedule]);
+
+  useEffect(() => {
+    checkCronExpresion()
+    getData();
+  }, []);
 
   const onChangeCronExpression = (e: ChangeEvent<HTMLInputElement>) => {
     if (mode === 'custom' ) {
