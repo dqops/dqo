@@ -155,9 +155,12 @@ const ConnectionDetail = () => {
               <div>
                 <Input
                   value={connectionBasic?.parallel_jobs_limit}
-                  onChange={(e) =>
-                    !isNaN(Number(e.target.value)) && onChange({ ...connectionBasic, parallel_jobs_limit: Number(e.target.value)})
-                  }
+                  onChange={(e) =>{
+                    if (!isNaN(Number(e.target.value))) {
+                       onChange({ ...connectionBasic, parallel_jobs_limit: String(e.target.value).length === 0 
+                         ? undefined : Number(e.target.value)})
+                     } 
+                   }}
                 />
               </div>
             </td>
