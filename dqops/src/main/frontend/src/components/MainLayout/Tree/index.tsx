@@ -407,7 +407,7 @@ const Tree = () => {
               className="max-w-120 py-4 px-4  delay-300 "
               placement="top-start"
             >
-              <div className="flex justify-between items-center  w-full">
+              <div className="flex flex-1 justify-between items-center">
                 <div
                   className={clsx(
                     `flex-1 truncate`,
@@ -416,15 +416,14 @@ const Tree = () => {
                 >
                   {node.label}
                 </div>
-                <div className="flex items-center justify-center relative">
-                  <div>
+                  <div className='relative '>
                     {node.parsingYamlError &&
-                    node.parsingYamlError.length > 0 ? (
+                    node.parsingYamlError.length > 0 ? (  
                       <Tooltip
-                        content={node.parsingYamlError}
-                        className="max-w-120 z-50"
-                        placement="right-start"
-                      >
+                      content={node.parsingYamlError}
+                      className="max-w-120 z-50"
+                      placement="right-start"
+                    >
                         <div
                           style={{
                             position: 'absolute',
@@ -436,8 +435,8 @@ const Tree = () => {
                         >
                           <SvgIcon name="warning" className="w-5 h-5" />
                         </div>
-                      </Tooltip>
-                    ) : null}
+                        </Tooltip>
+                     ) : null} 
                   </div>
                   <ContextMenu
                     node={node}
@@ -447,7 +446,6 @@ const Tree = () => {
                     openAddSchemaDialog={openAddSchemaDialog}
                   />
                 </div>
-              </div>
             </Tooltip>
           </div>
         </div>
