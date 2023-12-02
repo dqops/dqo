@@ -1,0 +1,177 @@
+<div class="modal micromodal-slide" id="modal-1" aria-hidden="true">
+  <div class="modal__overlay" tabindex="-1">
+    <div
+      class="modal__container"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-1-title"
+    >
+      <div
+        style="
+          width: 100%;
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        "
+      >
+        <button
+          class="modal__btn"
+          data-micromodal-close
+          aria-label="Close this dialog window"
+          style="padding: 0; width: 0px; height: 0px; font-weight: 700"
+        >
+          X
+        </button>
+      </div>
+
+      <div class="popupcontainer">
+        <div class="imagepopupcontainer">
+          <a
+            href="https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/"
+            target="_blank"
+          >
+            <img
+              src="\docs\images\ebook.png"
+              alt="A step-by-step guide to improve data quality"
+              title="A step-by-step guide to improve data quality"
+              id="imageEbook"
+            />
+          </a>
+        </div>
+        <div>
+          <p style="font-weight: 700" id="ebookDescription">
+            Check out eBook "A Step-by-Step Guide to Improve Data Quality"
+            created by the DQOps team based on their experience in data
+            cleansing and data quality monitoring.
+          </p>
+          <div class="_form_35" style="background-color: white"></div>
+          <script
+            src="https://dqo.activehosted.com/f/embed.php?id=35"
+            type="text/javascript"
+            charset="utf-8"
+            style="background-color: white"
+          ></script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .popupcontainer {
+    display: flex;
+  }
+
+  #imageEbook {
+    width: 800px;
+  }
+  .modal__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+  }
+
+  .modal__container {
+    background-color: white;
+    padding: 20px;
+    padding-top: 5px;
+    max-width: 640px;
+    height: 100%;
+    width: 50%;
+    border-radius: 4px;
+    overflow-y: hidden;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.5;
+    color: black;
+    margin-bottom: 10px;
+  }
+
+  @supports (display: flex) {
+    .modal__container {
+      height: initial;
+      max-height: 80vh;
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+  }
+
+  .modal__btn {
+    font-size: 0.875rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: 2303ee;
+    margin-top: 30px;
+    color: black;
+  }
+
+  .micromodal-slide {
+    display: none;
+  }
+
+  .micromodal-slide.is-open {
+    display: block;
+  }
+
+  @media only screen and (min-device-width: 320px) and (max-device-width: 660px) {
+    .modal__container {
+      width: 90% !important;
+      min-width: 90% !important;
+    }
+    #imageEbook {
+      width: 300px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .popupcontainer {
+      flex-direction: column;
+      margin-bottom: 20px;
+      margin-left: 15px;
+      margin-right: 15px;
+    }
+    .modal__container {
+      max-height: 95vh;
+    }
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/micromodal/dist/micromodal.min.js"></script>
+<script>
+  if (
+    document.cookie &&
+    document.cookie.length !== 0 &&
+    !document.cookie.includes(".expires=")
+  ) {
+    let date = new Date(Date.now())
+    date = date.toUTCString()
+    document.cookie = ".expires=" + date
+    document.addEventListener("DOMContentLoaded", function () {
+      try {
+        MicroModal.init({
+          awaitCloseAnimation: true,
+          onShow: function (modal) {},
+          onClose: function (modal) {},
+        })
+
+        setTimeout(function () {
+          MicroModal.show("modal-1")
+        }, 10000)
+      } catch (e) {
+        console.log("micromodal error: ", e)
+      }
+    })
+  }
+</script>
