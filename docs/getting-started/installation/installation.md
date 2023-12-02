@@ -71,7 +71,7 @@ To use DQOps you need:
 
     After typing Y, DQOps will open your browser and navigate to the DQOps Cloud registration page.
     If the browser did not open correctly, you can copy the link from the console and open it in your browser of choice.
-    The DQOps Cloud account registration page is [https://cloud.dqops.com/registration](https://cloud.dqps.com/registration).
+    The DQOps Cloud account registration page is [https://cloud.dqops.com/registration](https://cloud.dqops.com/registration).
 
     You can create your account by signing in with your Google account or use a custom email/password authentication.
     You can also log in to your existing DQOps Cloud account.
