@@ -269,9 +269,12 @@ const DatabaseConnection = ({
           <Input
           label="Parallel jobs limit"
           value={database.parallel_jobs_limit}
-          onChange={(e) =>
-           !isNaN(Number(e.target.value)) && onChange({ ...database, parallel_jobs_limit: Number(e.target.value)})
-          }
+          onChange={(e) =>{
+           if (!isNaN(Number(e.target.value))) {
+              onChange({ ...database, parallel_jobs_limit: String(e.target.value).length === 0 
+                ? undefined : Number(e.target.value)})
+            } 
+          }}
         />
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}
