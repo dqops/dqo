@@ -42,12 +42,65 @@ const pageTabs = [
 
 const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
-  const [tabs, setTabs] = useState(pageTabs);
+
+  const getPageTabs = () => {
+    switch(checkTypes) {
+      case CheckTypes.PROFILING : {
+        return [{
+          label: 'Profiling',
+          value: CheckRunMonitoringScheduleGroup.profiling
+        }]
+      }
+      case CheckTypes.SOURCES : {
+        return [{
+          label: 'Profiling',
+          value: CheckRunMonitoringScheduleGroup.profiling
+        },
+        {
+          label: 'Monitoring Daily',
+          value: CheckRunMonitoringScheduleGroup.monitoring_daily
+        },
+        {
+          label: 'Monitoring Monthly',
+          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+        },
+        {
+          label: 'Partition Daily',
+          value: CheckRunMonitoringScheduleGroup.partitioned_daily
+        },
+        {
+          label: 'Partition Monthly',
+          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+        }]
+      }
+      case CheckTypes.PARTITIONED : {
+        return [{
+          label: 'Partition Daily',
+          value: CheckRunMonitoringScheduleGroup.partitioned_daily
+        },
+        {
+          label: 'Partition Monthly',
+          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+        }]
+      }
+      case CheckTypes.MONITORING : {
+        return [{
+          label: 'Monitoring Daily',
+          value: CheckRunMonitoringScheduleGroup.monitoring_daily
+        },
+        {
+          label: 'Monitoring Monthly',
+          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+        }]
+      }
+    }    
+  }
+  const [tabs, setTabs] = useState(getPageTabs());
   const [updatedSchedule, setUpdatedSchedule] = useState<MonitoringScheduleSpec | undefined>()
   const [isDefaultUpdated, setIsDefaultUpdated] = useState(false)
   const dispatch = useActionDispatch();
   const location = useLocation() as any;
-  const { activeTab = CheckRunMonitoringScheduleGroup.profiling } = qs.parse(location.search) as any;
+  const { activeTab } = qs.parse(location.search) as any;
   const history = useHistory();
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -131,67 +184,7 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
   }, [connection]);
 
   useEffect(() => {
-    if (activeTab) {
-      return;
-    }
-
-    if (checkTypes === 'profiling') {
-      setTabs([
-        {
-          label: 'Profiling',
-          value: CheckRunMonitoringScheduleGroup.profiling
-        },
-      ]);
-      onChangeTab(CheckRunMonitoringScheduleGroup.profiling);
-    } else if (checkTypes === 'monitoring') {
-      setTabs([
-        {
-          label: 'Monitoring Daily',
-          value: CheckRunMonitoringScheduleGroup.monitoring_daily
-        },
-        {
-          label: 'Monitoring Monthly',
-          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-        },
-      ]);
-      onChangeTab(CheckRunMonitoringScheduleGroup.monitoring_daily);
-    } else if (checkTypes === 'partitioned') {
-      setTabs([
-        {
-          label: 'Partition Daily',
-          value: CheckRunMonitoringScheduleGroup.partitioned_daily
-        },
-        {
-          label: 'Partition Monthly',
-          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-        },
-      ]);
-      onChangeTab(CheckRunMonitoringScheduleGroup.partitioned_daily);
-    } else {
-      setTabs([
-        {
-          label: 'Profiling',
-          value: CheckRunMonitoringScheduleGroup.profiling
-        },
-        {
-          label: 'Monitoring Daily',
-          value: CheckRunMonitoringScheduleGroup.monitoring_daily
-        },
-        {
-          label: 'Monitoring Monthly',
-          value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-        },
-        {
-          label: 'Partition Daily',
-          value: CheckRunMonitoringScheduleGroup.partitioned_daily
-        },
-        {
-          label: 'Partition Monthly',
-          value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-        },
-      ]);
-      onChangeTab(CheckRunMonitoringScheduleGroup.profiling);
-    }
+    setTabs(getPageTabs())
   }, [checkTypes]);
 
   return (
@@ -202,7 +195,7 @@ const ScheduleDetail = ({ isDefault } : { isDefault ?: boolean }) => {
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+        <Tabs tabs={tabs} activeTab={activeTab && activeTab?.length > 0 ? activeTab : getPageTabs()[0].value} onChange={onChangeTab} />
       </div>
       <ScheduleView handleChange={handleChange} schedule={updatedSchedule} isDefault={isDefault}/>
     </div>
