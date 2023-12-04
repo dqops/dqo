@@ -21,7 +21,7 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-    {{ quote_identifier(macro_project_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+   {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
