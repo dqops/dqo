@@ -37,28 +37,7 @@ import java.util.Locale;
 @Component
 public class SparkProviderDialectSettings extends ProviderDialectSettings {
     public SparkProviderDialectSettings() {
-        super("\"", "\"", "\"\"", true);
+        super("`", "`", "`", true);
     }
 
-    //todo
-    /**
-     * Returns the best matching column type for the type snapshot (real column type returned by the database).
-     * Provider dialect settings subclasses that are specific to database providers may override this method.
-     *
-     * @param columnTypeSnapshot Column type snapshot.
-     * @return Data type category.
-     */
-//    @Override
-//    public DataTypeCategory detectColumnType(ColumnTypeSnapshotSpec columnTypeSnapshot) {
-//        if (columnTypeSnapshot == null || columnTypeSnapshot.getColumnType() == null) {
-//            return null;
-//        }
-//
-//        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
-//        if (StringCheckUtility.containsAny(columnType, "datetimeoffset")) {
-//            return DataTypeCategory.datetime_instant;
-//        }
-//
-//        return super.detectColumnType(columnTypeSnapshot);
-//    }
 }

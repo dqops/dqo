@@ -34,6 +34,8 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
 /**
@@ -165,6 +167,12 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
             Boolean asBoolean = (Boolean)constant;
             return asBoolean ? "1" : "0";
         }
+
+        if (constant instanceof LocalDate) {
+            LocalDate asLocalDate = (LocalDate)constant;
+            return "date('" + asLocalDate.format(DateTimeFormatter.ISO_DATE) + "')";
+        }
+
         return super.formatConstant(constant, columnType);
     }
 
@@ -179,40 +187,40 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {
-            return new ColumnTypeSnapshotSpec("NUMBER", null, 10, 0);
+            return new ColumnTypeSnapshotSpec("DECIMAL", null, 10, 0);
         }
         else if (columnType == ColumnType.INTEGER) {
-            return new ColumnTypeSnapshotSpec("NUMBER", null, 20, 0);
+            return new ColumnTypeSnapshotSpec("DECIMAL", null, 20, 0);
         }
         else if (columnType == ColumnType.LONG) {
-            return new ColumnTypeSnapshotSpec("NUMBER", null, 38, 0);
+            return new ColumnTypeSnapshotSpec("DECIMAL", null, 38, 0);
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("BINARY_FLOAT");
+            return new ColumnTypeSnapshotSpec("BINARY_FLOAT"); // todo
         }
         else if (columnType == ColumnType.BOOLEAN) {
-            return new ColumnTypeSnapshotSpec("NUMBER", null, 1, 0);
+            return new ColumnTypeSnapshotSpec("NUMBER", null, 1, 0); // todo
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("NVARCHAR2", 255);
+            return new ColumnTypeSnapshotSpec("STRING");
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("BINARY_DOUBLE");
+            return new ColumnTypeSnapshotSpec("BINARY_DOUBLE"); // todo
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
-            return new ColumnTypeSnapshotSpec("DATE");
+            return new ColumnTypeSnapshotSpec("DATE"); // todo
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP"); // todo
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP"); // todo
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP WITH TIME ZONE");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP WITH TIME ZONE"); // todo
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("NCLOB");
+            return new ColumnTypeSnapshotSpec("NCLOB"); // todo
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());

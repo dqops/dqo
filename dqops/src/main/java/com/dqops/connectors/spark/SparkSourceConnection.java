@@ -15,17 +15,16 @@
  */
 package com.dqops.connectors.spark;
 
-import com.dqops.connectors.ConnectionProviderSpecificParameters;
-import com.dqops.connectors.ConnectorOperationFailedException;
-import com.dqops.connectors.SourceSchemaModel;
-import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.*;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.*;
+import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +32,11 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Properties;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.*;
 
 /**
  * Spark source connection.
@@ -114,5 +114,67 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
+
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SHOW DATABASES");
+        String listSchemataSql = sqlBuilder.toString();
+        Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        List<SourceSchemaModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
+            String namespace = schemaRows.getString(rowIndex, "namespace");
+            SourceSchemaModel schemaModel = new SourceSchemaModel(namespace);
+            results.add(schemaModel);
+        }
+
+        return results;
+    }
+
+    @Override
+    public List<SourceTableModel> listTables(String schemaName) {
+
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SHOW tables FROM ");
+        sqlBuilder.append(schemaName);
+
+        String listTablesSql = sqlBuilder.toString();
+        Table tablesRows = this.executeQuery(listTablesSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        List<SourceTableModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
+            String tableName = tablesRows.getString(rowIndex, "table_name");
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+            results.add(schemaModel);
+        }
+
+        return results;
+    }
+
+    @Override
+    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    statement.execute(sqlStatement);
+                    return 0;
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
+                    ex, sqlStatement, connectionName);
+        }
+    }
+
 
 }
