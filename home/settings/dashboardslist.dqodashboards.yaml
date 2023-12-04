@@ -43,7 +43,7 @@ spec:
         - dashboard_name: Profiling KPIs scorecard - summary
           url: https://lookerstudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
           width: 1400
-          height: 1550
+          height: 1500
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
