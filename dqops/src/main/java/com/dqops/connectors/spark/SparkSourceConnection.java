@@ -15,14 +15,28 @@
  */
 package com.dqops.connectors.spark;
 
+import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.ConnectorOperationFailedException;
+import com.dqops.connectors.SourceSchemaModel;
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
+import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.PhysicalTableName;
 import com.zaxxer.hikari.HikariConfig;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Spark source connection.
@@ -42,61 +56,62 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         super(jdbcConnectionPool, secretValueProvider, sparkConnectionProvider);
     }
 
-
-    // todo
     /**
      * Creates a hikari connection pool config for the connection specification.
-     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return Hikari config.
      */
     @Override
-    public HikariConfig createHikariConfig() {
+    public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
         HikariConfig hikariConfig = new HikariConfig();
-//        ConnectionSpec connectionSpec = this.getConnectionSpec();
-//        SparkParametersSpec sparkParametersSpec = connectionSpec.getSpark();
-//
-//        String host = this.getSecretValueProvider().expandValue(sparkParametersSpec.getHost());
-//        StringBuilder jdbcConnectionBuilder = new StringBuilder();
-//        jdbcConnectionBuilder.append("jdbc:oracle:thin:@");
-//        jdbcConnectionBuilder.append(host);
-//
-//        String port = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPort());
-//        if (!Strings.isNullOrEmpty(port)) {
-//            try {
-//                int portNumber = Integer.parseInt(port);
-//                jdbcConnectionBuilder.append(':');
-//                jdbcConnectionBuilder.append(portNumber);
-//            }
-//            catch (NumberFormatException nfe) {
-//                throw new ConnectorOperationFailedException("Cannot create a connection to Spark, the port number is invalid: " + port, nfe);
-//            }
-//        }
-//        jdbcConnectionBuilder.append('/');
-//        String database = this.getSecretValueProvider().expandValue(sparkParametersSpec.getDatabase());
-//        if (!Strings.isNullOrEmpty(database)) {
-//            jdbcConnectionBuilder.append(database);
-//        }
-//
-//        String jdbcUrl = jdbcConnectionBuilder.toString();
-//        hikariConfig.setJdbcUrl(jdbcUrl);
-//
-//        Properties dataSourceProperties = new Properties();
-//        if (sparkParametersSpec.getProperties() != null) {
-//            dataSourceProperties.putAll(sparkParametersSpec.getProperties());
-//        }
-//
-//        String userName = this.getSecretValueProvider().expandValue(sparkParametersSpec.getUser());
+        ConnectionSpec connectionSpec = this.getConnectionSpec();
+        SparkParametersSpec sparkParametersSpec = connectionSpec.getSpark();
+
+        String host = this.getSecretValueProvider().expandValue(sparkParametersSpec.getHost(), secretValueLookupContext);
+        StringBuilder jdbcConnectionBuilder = new StringBuilder();
+        jdbcConnectionBuilder.append("jdbc:hive2://");
+        jdbcConnectionBuilder.append(host);
+
+        String port = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPort(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(port)) {
+            try {
+                int portNumber = Integer.parseInt(port);
+                jdbcConnectionBuilder.append(':');
+                jdbcConnectionBuilder.append(portNumber);
+            }
+            catch (NumberFormatException nfe) {
+                throw new ConnectorOperationFailedException("Cannot create a connection to Spark, the port number is invalid: " + port, nfe);
+            }
+        }
+        jdbcConnectionBuilder.append('/');
+        String database = this.getSecretValueProvider().expandValue(sparkParametersSpec.getDatabase(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(database)) {
+            jdbcConnectionBuilder.append(database);
+        }
+
+        String jdbcUrl = jdbcConnectionBuilder.toString();
+        hikariConfig.setJdbcUrl(jdbcUrl);
+
+        Properties dataSourceProperties = new Properties();
+        if (sparkParametersSpec.getProperties() != null) {
+            dataSourceProperties.putAll(sparkParametersSpec.getProperties());
+        }
+
+        // todo: not sure if commented code is applicable
+//        String userName = this.getSecretValueProvider().expandValue(sparkParametersSpec.getUser(), secretValueLookupContext);
 //        hikariConfig.setUsername(userName);
+        hikariConfig.setUsername("");
 //
-//        String password = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPassword());
+//        String password = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPassword(), secretValueLookupContext);
 //        hikariConfig.setPassword(password);
+        hikariConfig.setPassword("");
 //
-//        String options =  this.getSecretValueProvider().expandValue(sparkParametersSpec.getOptions());
+//        String options =  this.getSecretValueProvider().expandValue(sparkParametersSpec.getOptions(), secretValueLookupContext);
 //        if (!Strings.isNullOrEmpty(options)) {
 //            dataSourceProperties.put("options", options);
 //        }
-//
-//        hikariConfig.setDataSourceProperties(dataSourceProperties);
+
+        hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
 

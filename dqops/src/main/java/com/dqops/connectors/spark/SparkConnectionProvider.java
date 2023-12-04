@@ -23,9 +23,9 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.oracle.OracleParametersSpec;            // todo
 import com.dqops.connectors.oracle.OracleProviderDialectSettings;   // todo
 import com.dqops.connectors.oracle.OracleSourceConnection;          // todo
+import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
-import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -62,15 +62,18 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
      *
      * @param connectionSpec Connection specification.
      * @param openConnection Open the connection after creating.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return Connection object.
      */
     @Override
-    public SparkSourceConnection createConnection(ConnectionSpec connectionSpec, boolean openConnection) {
+    public SparkSourceConnection createConnection(ConnectionSpec connectionSpec,
+                                                  boolean openConnection,
+                                                  SecretValueLookupContext secretValueLookupContext) {
         assert connectionSpec != null;
         SparkSourceConnection connection = this.beanFactory.getBean(SparkSourceConnection.class);
         connection.setConnectionSpec(connectionSpec);
         if (openConnection) {
-            connection.open();
+            connection.open(secretValueLookupContext);
         }
         return connection;
     }

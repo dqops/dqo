@@ -26,18 +26,22 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.OracleContainer;
+import org.testcontainers.containers.startupcheck.IndefiniteWaitOneShotStartupCheckStrategy;
+import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.containers.wait.strategy.WaitStrategy;
 import org.testcontainers.images.builder.ImageFromDockerfile;
 
 import java.io.FileNotFoundException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 
 public class SparkConnectionSpecObjectMother {
-    private static GenericContainer<?> sharedContainer;
+    private static SparkContainer sharedContainer;
 
     private static final String SPARK_IMAGE_DOCKERFILE = "src/test/resources/dockerfiles/spark.Dockerfile";
-    private static final int PORT = 1521;
+    private static final int PORT = SparkContainer.SPARK_SQL_THRIFTSERVER_PORT;
 
     /**
      * Connection name to Spark.
@@ -52,7 +56,7 @@ public class SparkConnectionSpecObjectMother {
      * Creates a shared Spark container using Testcontainers. The container will be stopped when the unit/integration session will finish.
      * @return Shared container with a started Spark instance.
      */
-    public static GenericContainer<?> getSharedContainer() {
+    public static SparkContainer<?> getSharedContainer() {
 
         if (sharedContainer == null) {
 
@@ -63,9 +67,18 @@ public class SparkConnectionSpecObjectMother {
                 throw new RuntimeException(e);
             }
 
-            sharedContainer = new GenericContainer<>(
-                    new ImageFromDockerfile()
-                            .withDockerfile(dockerfilePath));
+            sharedContainer = new SparkContainer<>(dockerfilePath)
+                    .withExposedPorts(10000)
+//                    .withStartupCheckStrategy()
+                    .withStartupTimeoutSeconds(30)
+                    .waitingFor(Wait.forLogMessage(".*HiveThriftServer2 started.*\\s", 100))
+                    ;
+
+//
+//
+//            sharedContainer = new GenericContainer<>(
+//                    new ImageFromDockerfile()
+//                            .withDockerfile(dockerfilePath));
 
             sharedContainer.start();
         }
@@ -74,7 +87,7 @@ public class SparkConnectionSpecObjectMother {
     }
 
     /**
-     * Creates a default connection spec to Oracle database that should be started by test containers.
+     * Creates a default connection spec to Spark database that should be started by test containers.
      * @return Connection spec to a test container instance.
      */
     public static ConnectionSpec create() {
@@ -83,24 +96,25 @@ public class SparkConnectionSpecObjectMother {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
             setProviderType(ProviderType.spark);
-//            setSpark(new SparkParametersSpec()
-//            {{
-//                setHost("localhost");
-//                setPort(testContainer.getMappedPort(PORT).toString());
+            setSpark(new SparkParametersSpec()
+            {{
+                setHost("localhost");
+                setPort(testContainer.getMappedPort(PORT).toString());
+
 //                setDatabase(testContainer.getDatabaseName());
 //                setUser(testContainer.getUsername());
 //                setPassword(testContainer.getPassword());
 ////                setInitializationSql("alter session set NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'");
-//            }});
+            }});
         }};
         return connectionSpec;
     }
 
     /**
-     * Returns the default schema used for a testable Oracle database. Tables are created in this schema.
+     * Returns the default schema used for a testable Spark database. Tables are created in this schema.
      * @return Schema name.
      */
-//    public static String getSchemaName() {
-//        return "USER_TEST";
-//    }
+    public static String getSchemaName() {
+        return "default";
+    }
 }

@@ -625,7 +625,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 connectionSpec.setOracle(new OracleParametersSpec() {{
                     setDatabase("your_oracle_database");
                 }});
-                connectionSpec.setOracle(new SparkParametersSpec() {{
+                connectionSpec.setSpark(new SparkParametersSpec() {{
                     setDatabase("your_spark_database");
                 }});
                 connectionSpec.setProviderType(providerType);
