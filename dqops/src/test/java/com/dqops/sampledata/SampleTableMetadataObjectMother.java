@@ -26,6 +26,7 @@ import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
+import com.dqops.connectors.trino.TrinoConnectionSpecObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -64,14 +65,17 @@ public class SampleTableMetadataObjectMother {
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.create();
 
+            case presto:
+                return PrestoConnectionSpecObjectMother.create();
+
+            case trino:
+                return TrinoConnectionSpecObjectMother.create();
+
             case mysql:
                 return MysqlConnectionSpecObjectMother.create();
 
             case oracle:
                 return OracleConnectionSpecObjectMother.create();
-
-            case presto:
-                return PrestoConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -100,14 +104,17 @@ public class SampleTableMetadataObjectMother {
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.getSchemaName();
 
+            case presto:
+                return PrestoConnectionSpecObjectMother.getSchemaName();
+
+            case trino:
+                return TrinoConnectionSpecObjectMother.getSchemaName();
+
             case mysql:
                 return MysqlConnectionSpecObjectMother.getSchemaName();
 
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();
-
-            case presto:
-                return PrestoConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

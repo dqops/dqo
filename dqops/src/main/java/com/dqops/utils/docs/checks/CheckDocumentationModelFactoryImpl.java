@@ -39,6 +39,7 @@ import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
+import com.dqops.connectors.trino.TrinoProviderDialectSettings;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
@@ -686,12 +687,14 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new RedshiftProviderDialectSettings();
             case sqlserver:
                 return new SqlServerProviderDialectSettings();
+            case presto:
+                return new PrestoProviderDialectSettings();
+            case trino:
+                return new TrinoProviderDialectSettings();
             case mysql:
                 return new MysqlProviderDialectSettings();
             case oracle:
                 return new OracleProviderDialectSettings();
-            case presto:
-                return new PrestoProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

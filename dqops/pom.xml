@@ -792,6 +792,12 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
+			<groupId>io.trino</groupId>
+			<artifactId>trino-jdbc</artifactId>
+			<version>434</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
 			<artifactId>ojdbc8</artifactId>
 		</dependency>
@@ -862,6 +868,11 @@
 		<dependency>
 			<groupId>org.testcontainers</groupId>
 			<artifactId>presto</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>trino</artifactId>
 			<scope>test</scope>
 		</dependency>
     </dependencies>
