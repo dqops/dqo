@@ -20,9 +20,6 @@ import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.connectors.AbstractSqlConnectionProvider;
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.connectors.oracle.OracleParametersSpec;            // todo
-import com.dqops.connectors.oracle.OracleProviderDialectSettings;   // todo
-import com.dqops.connectors.oracle.OracleSourceConnection;          // todo
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;

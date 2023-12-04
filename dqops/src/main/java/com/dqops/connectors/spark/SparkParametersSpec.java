@@ -1,7 +1,6 @@
 package com.dqops.connectors.spark;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
-import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
@@ -16,7 +15,7 @@ import java.util.Objects;
 public class SparkParametersSpec extends BaseProviderParametersSpec
         implements ConnectionProviderSpecificParameters {
 
-    private static final ChildHierarchyNodeFieldMapImpl<OracleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
+    private static final ChildHierarchyNodeFieldMapImpl<SparkParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
         }
     };

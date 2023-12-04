@@ -17,25 +17,15 @@
 package com.dqops.connectors.spark;
 
 import com.dqops.connectors.ProviderType;
-import com.dqops.connectors.oracle.OracleParametersSpec;
-import com.dqops.connectors.testcontainers.TestContainersObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
-import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.ResourceUtils;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.OracleContainer;
-import org.testcontainers.containers.startupcheck.IndefiniteWaitOneShotStartupCheckStrategy;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.containers.wait.strategy.WaitStrategy;
-import org.testcontainers.images.builder.ImageFromDockerfile;
 
 import java.io.FileNotFoundException;
-import java.net.URL;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.Duration;
 
 public class SparkConnectionSpecObjectMother {
     private static SparkContainer sharedContainer;
