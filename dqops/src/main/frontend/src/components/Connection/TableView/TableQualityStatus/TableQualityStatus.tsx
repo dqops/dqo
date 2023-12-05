@@ -61,15 +61,16 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     'current'
   );
   const [month, setMonth] = useState<number | undefined>(1);
-  const [since, setSince] = useState<number | undefined>();
+  const [since, setSince] = useState<Date | undefined>(new Date());
 
-  const getTableDataQualityStatus = (month?: number, since?: number) => {
+  const getTableDataQualityStatus = (month?: number, since?: Date) => {
+    console.log(Number(moment(since).utc()))
     CheckResultApi.getTableDataQualityStatus(
       connection,
       schema,
       table,
       month,
-      since,
+      since ? Number(moment(since).utc()) : undefined,
       checkTypes === CheckTypes.PROFILING,
       checkTypes === CheckTypes.MONITORING,
       checkTypes === CheckTypes.PARTITIONED,
