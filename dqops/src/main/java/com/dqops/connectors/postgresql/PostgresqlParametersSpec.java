@@ -191,7 +191,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
 
     /**
      * Sets a flag to require an SSL connection.
-     * @param ssl True - ssl connection is required.
+     * @param sslmode True - ssl connection is required.
      */
     public void setSslmode(PostgresqlSslMode sslmode) {
         setDirtyIf(!Objects.equals(this.sslmode, sslmode));

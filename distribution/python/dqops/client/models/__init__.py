@@ -1392,6 +1392,8 @@ from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
 from .postgresql_parameters_spec_properties import PostgresqlParametersSpecProperties
 from .postgresql_ssl_mode import PostgresqlSslMode
+from .presto_parameters_spec import PrestoParametersSpec
+from .presto_parameters_spec_properties import PrestoParametersSpecProperties
 from .profiling_time_period import ProfilingTimePeriod
 from .provider_sensor_definition_spec import ProviderSensorDefinitionSpec
 from .provider_sensor_definition_spec_parameters import (
@@ -1813,6 +1815,8 @@ from .temporal_unit import TemporalUnit
 from .time_period_gradient import TimePeriodGradient
 from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
+from .trino_parameters_spec import TrinoParametersSpec
+from .trino_parameters_spec_properties import TrinoParametersSpecProperties
 from .value_changed_parameters_spec import ValueChangedParametersSpec
 
 __all__ = (
@@ -2434,6 +2438,8 @@ __all__ = (
     "PostgresqlParametersSpec",
     "PostgresqlParametersSpecProperties",
     "PostgresqlSslMode",
+    "PrestoParametersSpec",
+    "PrestoParametersSpecProperties",
     "ProfilingTimePeriod",
     "ProviderSensorDefinitionSpec",
     "ProviderSensorDefinitionSpecParameters",
@@ -2639,5 +2645,7 @@ __all__ = (
     "TimePeriodGradient",
     "TimestampColumnsSpec",
     "TimeWindowFilterParameters",
+    "TrinoParametersSpec",
+    "TrinoParametersSpecProperties",
     "ValueChangedParametersSpec",
 )

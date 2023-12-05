@@ -21483,14 +21483,14 @@
         "properties" : {
           "id" : {
             "type" : "string",
-            "description" : "Check result ID.",
+            "description" : "Check result primary key",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkHash" : {
             "type" : "integer",
-            "description" : "Check hash.",
+            "description" : "Check hash, do not set a value when writing results to DQOps",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21498,35 +21498,32 @@
           },
           "checkCategory" : {
             "type" : "string",
-            "description" : "Check category name.",
+            "description" : "Check category name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkName" : {
             "type" : "string",
-            "description" : "Check name.",
+            "description" : "Check name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkDisplayName" : {
             "type" : "string",
-            "description" : "Check display name.",
+            "description" : "Check display name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkType" : {
-            "type" : "string",
-            "description" : "Check type.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
           },
           "actualValue" : {
             "type" : "number",
-            "description" : "Actual value.",
+            "description" : "Actual value",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21534,7 +21531,7 @@
           },
           "expectedValue" : {
             "type" : "number",
-            "description" : "Expected value.",
+            "description" : "Expected value",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21542,7 +21539,7 @@
           },
           "warningLowerBound" : {
             "type" : "number",
-            "description" : "Warning lower bound.",
+            "description" : "Warning lower bound",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21550,7 +21547,7 @@
           },
           "warningUpperBound" : {
             "type" : "number",
-            "description" : "Warning upper bound.",
+            "description" : "Warning upper bound",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21558,7 +21555,7 @@
           },
           "errorLowerBound" : {
             "type" : "number",
-            "description" : "Error lower bound.",
+            "description" : "Error lower bound",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21566,7 +21563,7 @@
           },
           "errorUpperBound" : {
             "type" : "number",
-            "description" : "Error upper bound.",
+            "description" : "Error upper bound",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21574,7 +21571,7 @@
           },
           "fatalLowerBound" : {
             "type" : "number",
-            "description" : "Fatal lower bound.",
+            "description" : "Fatal lower bound",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21582,7 +21579,7 @@
           },
           "fatalUpperBound" : {
             "type" : "number",
-            "description" : "Fatal upper bound.",
+            "description" : "Fatal upper bound",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21590,7 +21587,7 @@
           },
           "severity" : {
             "type" : "integer",
-            "description" : "Severity.",
+            "description" : "Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal",
             "format" : "int32",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21598,21 +21595,21 @@
           },
           "columnName" : {
             "type" : "string",
-            "description" : "Column name.",
+            "description" : "Column name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dataGroup" : {
             "type" : "string",
-            "description" : "Data group.",
+            "description" : "Data group name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "durationMs" : {
             "type" : "integer",
-            "description" : "Duration (ms).",
+            "description" : "Duration (ms)",
             "format" : "int32",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21620,22 +21617,19 @@
           },
           "executedAt" : {
             "type" : "integer",
-            "description" : "Executed at.",
+            "description" : "Executed at timestamp",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
           "timeGradient" : {
-            "type" : "string",
-            "description" : "Time gradient.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/TimePeriodGradient",
+            "exampleSetFlag" : false
           },
           "timePeriod" : {
             "type" : "string",
-            "description" : "Time period.",
+            "description" : "Time period",
             "format" : "date-time",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21643,42 +21637,42 @@
           },
           "includeInKpi" : {
             "type" : "boolean",
-            "description" : "Include in KPI.",
+            "description" : "Include in KPI",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "includeInSla" : {
             "type" : "boolean",
-            "description" : "Include in SLA.",
+            "description" : "Include in SLA",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "boolean" ]
           },
           "provider" : {
             "type" : "string",
-            "description" : "Provider.",
+            "description" : "Provider name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "qualityDimension" : {
             "type" : "string",
-            "description" : "Quality dimension.",
+            "description" : "Data quality dimension",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "sensorName" : {
             "type" : "string",
-            "description" : "Sensor name.",
+            "description" : "Sensor name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "tableComparison" : {
             "type" : "string",
-            "description" : "Table comparison name.",
+            "description" : "Table comparison name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -21691,124 +21685,126 @@
           "properties" : {
             "id" : {
               "type" : "string",
-              "description" : "Check result ID."
+              "description" : "Check result primary key"
             },
             "checkHash" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Check hash."
+              "description" : "Check hash, do not set a value when writing results to DQOps"
             },
             "checkCategory" : {
               "type" : "string",
-              "description" : "Check category name."
+              "description" : "Check category name"
             },
             "checkName" : {
               "type" : "string",
-              "description" : "Check name."
+              "description" : "Check name"
             },
             "checkDisplayName" : {
               "type" : "string",
-              "description" : "Check display name."
+              "description" : "Check display name"
             },
             "checkType" : {
               "type" : "string",
-              "description" : "Check type."
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "actualValue" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Actual value."
+              "description" : "Actual value"
             },
             "expectedValue" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Expected value."
+              "description" : "Expected value"
             },
             "warningLowerBound" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Warning lower bound."
+              "description" : "Warning lower bound"
             },
             "warningUpperBound" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Warning upper bound."
+              "description" : "Warning upper bound"
             },
             "errorLowerBound" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Error lower bound."
+              "description" : "Error lower bound"
             },
             "errorUpperBound" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Error upper bound."
+              "description" : "Error upper bound"
             },
             "fatalLowerBound" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Fatal lower bound."
+              "description" : "Fatal lower bound"
             },
             "fatalUpperBound" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Fatal upper bound."
+              "description" : "Fatal upper bound"
             },
             "severity" : {
               "type" : "integer",
               "format" : "int32",
-              "description" : "Severity."
+              "description" : "Issue severity, 0 - valid, 1 - warning, 2 - error, 3 - fatal"
             },
             "columnName" : {
               "type" : "string",
-              "description" : "Column name."
+              "description" : "Column name"
             },
             "dataGroup" : {
               "type" : "string",
-              "description" : "Data group."
+              "description" : "Data group name"
             },
             "durationMs" : {
               "type" : "integer",
               "format" : "int32",
-              "description" : "Duration (ms)."
+              "description" : "Duration (ms)"
             },
             "executedAt" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Executed at."
+              "description" : "Executed at timestamp"
             },
             "timeGradient" : {
               "type" : "string",
-              "description" : "Time gradient."
+              "description" : "Time gradient",
+              "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
             },
             "timePeriod" : {
               "type" : "string",
               "format" : "date-time",
-              "description" : "Time period."
+              "description" : "Time period"
             },
             "includeInKpi" : {
               "type" : "boolean",
-              "description" : "Include in KPI."
+              "description" : "Include in KPI"
             },
             "includeInSla" : {
               "type" : "boolean",
-              "description" : "Include in SLA."
+              "description" : "Include in SLA"
             },
             "provider" : {
               "type" : "string",
-              "description" : "Provider."
+              "description" : "Provider name"
             },
             "qualityDimension" : {
               "type" : "string",
-              "description" : "Quality dimension."
+              "description" : "Data quality dimension"
             },
             "sensorName" : {
               "type" : "string",
-              "description" : "Sensor name."
+              "description" : "Sensor name"
             },
             "tableComparison" : {
               "type" : "string",
-              "description" : "Table comparison name."
+              "description" : "Table comparison name"
             }
           }
         }
@@ -21818,7 +21814,7 @@
         "properties" : {
           "checkHash" : {
             "type" : "integer",
-            "description" : "Check hash.",
+            "description" : "Check hash",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -21826,35 +21822,32 @@
           },
           "checkCategory" : {
             "type" : "string",
-            "description" : "Check category name.",
+            "description" : "Check category name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkName" : {
             "type" : "string",
-            "description" : "Check name.",
+            "description" : "Check name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkDisplayName" : {
             "type" : "string",
-            "description" : "Check display name.",
+            "description" : "Check display name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkType" : {
-            "type" : "string",
-            "description" : "Check type.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
           },
           "dataGroups" : {
             "type" : "array",
-            "description" : "Data groups list.",
+            "description" : "Data groups list",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -21867,7 +21860,7 @@
           },
           "dataGroup" : {
             "type" : "string",
-            "description" : "Selected data group.",
+            "description" : "Selected data group",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -21893,34 +21886,35 @@
             "checkHash" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Check hash."
+              "description" : "Check hash"
             },
             "checkCategory" : {
               "type" : "string",
-              "description" : "Check category name."
+              "description" : "Check category name"
             },
             "checkName" : {
               "type" : "string",
-              "description" : "Check name."
+              "description" : "Check name"
             },
             "checkDisplayName" : {
               "type" : "string",
-              "description" : "Check display name."
+              "description" : "Check display name"
             },
             "checkType" : {
               "type" : "string",
-              "description" : "Check type."
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "dataGroups" : {
               "type" : "array",
-              "description" : "Data groups list.",
+              "description" : "Data groups list",
               "items" : {
                 "type" : "string"
               }
             },
             "dataGroup" : {
               "type" : "string",
-              "description" : "Selected data group."
+              "description" : "Selected data group"
             },
             "checkResultEntries" : {
               "type" : "array",
@@ -59006,6 +59000,11 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "presto" : {
+            "$ref" : "#/components/schemas/PrestoParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "run_checks_job_template" : {
             "$ref" : "#/components/schemas/CheckSearchFilters",
             "extensions" : { },
@@ -59095,7 +59094,7 @@
             "provider_type" : {
               "type" : "string",
               "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "bigquery" : {
               "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -59131,6 +59130,11 @@
               "description" : "Oracle connection parameters.",
               "originalRef" : "#/components/schemas/OracleParametersSpec",
               "$ref" : "#/components/schemas/OracleParametersSpec"
+            },
+            "presto" : {
+              "description" : "Presto connection parameters.",
+              "originalRef" : "#/components/schemas/PrestoParametersSpec",
+              "$ref" : "#/components/schemas/PrestoParametersSpec"
             },
             "run_checks_job_template" : {
               "description" : "Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.",
@@ -59218,6 +59222,16 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "presto" : {
+            "$ref" : "#/components/schemas/PrestoParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "trino" : {
+            "$ref" : "#/components/schemas/TrinoParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "mysql" : {
             "$ref" : "#/components/schemas/MysqlParametersSpec",
             "extensions" : { },
@@ -59285,7 +59299,7 @@
             "provider_type" : {
               "type" : "string",
               "description" : "Database provider type (required).",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "bigquery" : {
               "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -59311,6 +59325,16 @@
               "description" : "SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).",
               "originalRef" : "#/components/schemas/SqlServerParametersSpec",
               "$ref" : "#/components/schemas/SqlServerParametersSpec"
+            },
+            "presto" : {
+              "description" : "Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).",
+              "originalRef" : "#/components/schemas/PrestoParametersSpec",
+              "$ref" : "#/components/schemas/PrestoParametersSpec"
+            },
+            "trino" : {
+              "description" : "Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).",
+              "originalRef" : "#/components/schemas/TrinoParametersSpec",
+              "$ref" : "#/components/schemas/TrinoParametersSpec"
             },
             "mysql" : {
               "description" : "MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).",
@@ -61641,7 +61665,7 @@
         "properties" : {
           "actualValue" : {
             "type" : "number",
-            "description" : "Actual value.",
+            "description" : "Actual value",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -61649,7 +61673,7 @@
           },
           "expectedValue" : {
             "type" : "number",
-            "description" : "Expected value.",
+            "description" : "Expected value",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -61657,21 +61681,25 @@
           },
           "columnName" : {
             "type" : "string",
-            "description" : "Column name.",
+            "description" : "Column name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dataGroup" : {
             "type" : "string",
-            "description" : "Data group.",
+            "description" : "Data group",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
+          "checkType" : {
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
+          },
           "durationMs" : {
             "type" : "integer",
-            "description" : "Duration (ms).",
+            "description" : "Duration (ms)",
             "format" : "int32",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -61679,22 +61707,19 @@
           },
           "executedAt" : {
             "type" : "integer",
-            "description" : "Executed at.",
+            "description" : "Executed at",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
           "timeGradient" : {
-            "type" : "string",
-            "description" : "Time gradient.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/TimePeriodGradient",
+            "exampleSetFlag" : false
           },
           "timePeriod" : {
             "type" : "string",
-            "description" : "Time period.",
+            "description" : "Time period",
             "format" : "date-time",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -61702,49 +61727,49 @@
           },
           "provider" : {
             "type" : "string",
-            "description" : "Provider.",
+            "description" : "Provider name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "qualityDimension" : {
             "type" : "string",
-            "description" : "Quality dimension.",
+            "description" : "Data quality dimension",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "sensorName" : {
             "type" : "string",
-            "description" : "Sensor name.",
+            "description" : "Sensor name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "readoutId" : {
             "type" : "string",
-            "description" : "Sensor readout id.",
+            "description" : "Sensor readout ID",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "errorMessage" : {
             "type" : "string",
-            "description" : "Error message.",
+            "description" : "Error message",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "errorSource" : {
             "type" : "string",
-            "description" : "Error source.",
+            "description" : "Error source",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "errorTimestamp" : {
             "type" : "string",
-            "description" : "Error timestamp.",
+            "description" : "Error timestamp",
             "format" : "date-time",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -61766,68 +61791,74 @@
             "actualValue" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Actual value."
+              "description" : "Actual value"
             },
             "expectedValue" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Expected value."
+              "description" : "Expected value"
             },
             "columnName" : {
               "type" : "string",
-              "description" : "Column name."
+              "description" : "Column name"
             },
             "dataGroup" : {
               "type" : "string",
-              "description" : "Data group."
+              "description" : "Data group"
+            },
+            "checkType" : {
+              "type" : "string",
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "durationMs" : {
               "type" : "integer",
               "format" : "int32",
-              "description" : "Duration (ms)."
+              "description" : "Duration (ms)"
             },
             "executedAt" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Executed at."
+              "description" : "Executed at"
             },
             "timeGradient" : {
               "type" : "string",
-              "description" : "Time gradient."
+              "description" : "Time gradient",
+              "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
             },
             "timePeriod" : {
               "type" : "string",
               "format" : "date-time",
-              "description" : "Time period."
+              "description" : "Time period"
             },
             "provider" : {
               "type" : "string",
-              "description" : "Provider."
+              "description" : "Provider name"
             },
             "qualityDimension" : {
               "type" : "string",
-              "description" : "Quality dimension."
+              "description" : "Data quality dimension"
             },
             "sensorName" : {
               "type" : "string",
-              "description" : "Sensor name."
+              "description" : "Sensor name"
             },
             "readoutId" : {
               "type" : "string",
-              "description" : "Sensor readout id."
+              "description" : "Sensor readout ID"
             },
             "errorMessage" : {
               "type" : "string",
-              "description" : "Error message."
+              "description" : "Error message"
             },
             "errorSource" : {
               "type" : "string",
-              "description" : "Error source."
+              "description" : "Error source"
             },
             "errorTimestamp" : {
               "type" : "string",
               "format" : "date-time",
-              "description" : "Error timestamp."
+              "description" : "Error timestamp"
             },
             "tableComparison" : {
               "type" : "string",
@@ -61841,28 +61872,25 @@
         "properties" : {
           "checkName" : {
             "type" : "string",
-            "description" : "Check name.",
+            "description" : "Check name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkDisplayName" : {
             "type" : "string",
-            "description" : "Check display name.",
+            "description" : "Check display name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkType" : {
-            "type" : "string",
-            "description" : "Check type.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
           },
           "checkHash" : {
             "type" : "integer",
-            "description" : "Check hash.",
+            "description" : "Check hash",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -61870,14 +61898,14 @@
           },
           "checkCategory" : {
             "type" : "string",
-            "description" : "Check category name.",
+            "description" : "Check category name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dataGroupsNames" : {
             "type" : "array",
-            "description" : "Data groups list.",
+            "description" : "Data groups list",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -61890,7 +61918,7 @@
           },
           "dataGroup" : {
             "type" : "string",
-            "description" : "Selected data group.",
+            "description" : "Selected data group",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -61915,35 +61943,36 @@
           "properties" : {
             "checkName" : {
               "type" : "string",
-              "description" : "Check name."
+              "description" : "Check name"
             },
             "checkDisplayName" : {
               "type" : "string",
-              "description" : "Check display name."
+              "description" : "Check display name"
             },
             "checkType" : {
               "type" : "string",
-              "description" : "Check type."
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "checkHash" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Check hash."
+              "description" : "Check hash"
             },
             "checkCategory" : {
               "type" : "string",
-              "description" : "Check category name."
+              "description" : "Check category name"
             },
             "dataGroupsNames" : {
               "type" : "array",
-              "description" : "Data groups list.",
+              "description" : "Data groups list",
               "items" : {
                 "type" : "string"
               }
             },
             "dataGroup" : {
               "type" : "string",
-              "description" : "Selected data group."
+              "description" : "Selected data group"
             },
             "errorEntries" : {
               "type" : "array",
@@ -64464,6 +64493,94 @@
           }
         }
       },
+      "PrestoParametersSpec" : {
+        "type" : "object",
+        "properties" : {
+          "host" : {
+            "type" : "string",
+            "description" : "Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "port" : {
+            "type" : "string",
+            "description" : "Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "database" : {
+            "type" : "string",
+            "description" : "Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "host" : {
+              "type" : "string",
+              "description" : "Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable."
+            },
+            "port" : {
+              "type" : "string",
+              "description" : "Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable."
+            },
+            "database" : {
+              "type" : "string",
+              "description" : "Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "user" : {
+              "type" : "string",
+              "description" : "Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "password" : {
+              "type" : "string",
+              "description" : "Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "properties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
       "ProviderSensorDefinitionSpec" : {
         "type" : "object",
         "properties" : {
@@ -64591,7 +64708,7 @@
             "provider_type" : {
               "type" : "string",
               "description" : "Provider type.",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "custom" : {
               "type" : "boolean",
@@ -64666,7 +64783,7 @@
             "providerType" : {
               "type" : "string",
               "description" : "Provider type.",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "providerSensorDefinitionSpec" : {
               "description" : "Provider specific sensor definition specification",
@@ -66361,35 +66478,32 @@
         "properties" : {
           "id" : {
             "type" : "string",
-            "description" : "Sensor readout ID.",
+            "description" : "Sensor readout primary key",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkName" : {
             "type" : "string",
-            "description" : "Check name.",
+            "description" : "Check name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkDisplayName" : {
             "type" : "string",
-            "description" : "Check display name.",
+            "description" : "Check display name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkType" : {
-            "type" : "string",
-            "description" : "Check type.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
           },
           "actualValue" : {
             "type" : "number",
-            "description" : "Actual value.",
+            "description" : "Actual value",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -66397,7 +66511,7 @@
           },
           "expectedValue" : {
             "type" : "number",
-            "description" : "Expected value.",
+            "description" : "Expected value",
             "format" : "double",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -66405,21 +66519,21 @@
           },
           "columnName" : {
             "type" : "string",
-            "description" : "Column name.",
+            "description" : "Column name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dataGroup" : {
             "type" : "string",
-            "description" : "Data group.",
+            "description" : "Data group",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "durationMs" : {
             "type" : "integer",
-            "description" : "Duration (ms).",
+            "description" : "Duration (ms)",
             "format" : "int32",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -66427,22 +66541,19 @@
           },
           "executedAt" : {
             "type" : "integer",
-            "description" : "Executed at.",
+            "description" : "Executed at",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "integer" ]
           },
           "timeGradient" : {
-            "type" : "string",
-            "description" : "Time gradient.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/TimePeriodGradient",
+            "exampleSetFlag" : false
           },
           "timePeriod" : {
             "type" : "string",
-            "description" : "Time period.",
+            "description" : "Time period",
             "format" : "date-time",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -66450,21 +66561,21 @@
           },
           "provider" : {
             "type" : "string",
-            "description" : "Provider.",
+            "description" : "Provider name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "qualityDimension" : {
             "type" : "string",
-            "description" : "Quality dimension.",
+            "description" : "Data quality dimension",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "tableComparison" : {
             "type" : "string",
-            "description" : "Quality dimension.",
+            "description" : "Table comparison name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -66477,68 +66588,70 @@
           "properties" : {
             "id" : {
               "type" : "string",
-              "description" : "Sensor readout ID."
+              "description" : "Sensor readout primary key"
             },
             "checkName" : {
               "type" : "string",
-              "description" : "Check name."
+              "description" : "Check name"
             },
             "checkDisplayName" : {
               "type" : "string",
-              "description" : "Check display name."
+              "description" : "Check display name"
             },
             "checkType" : {
               "type" : "string",
-              "description" : "Check type."
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "actualValue" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Actual value."
+              "description" : "Actual value"
             },
             "expectedValue" : {
               "type" : "number",
               "format" : "double",
-              "description" : "Expected value."
+              "description" : "Expected value"
             },
             "columnName" : {
               "type" : "string",
-              "description" : "Column name."
+              "description" : "Column name"
             },
             "dataGroup" : {
               "type" : "string",
-              "description" : "Data group."
+              "description" : "Data group"
             },
             "durationMs" : {
               "type" : "integer",
               "format" : "int32",
-              "description" : "Duration (ms)."
+              "description" : "Duration (ms)"
             },
             "executedAt" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Executed at."
+              "description" : "Executed at"
             },
             "timeGradient" : {
               "type" : "string",
-              "description" : "Time gradient."
+              "description" : "Time gradient",
+              "enum" : [ "year", "quarter", "month", "week", "day", "hour", "millisecond" ]
             },
             "timePeriod" : {
               "type" : "string",
               "format" : "date-time",
-              "description" : "Time period."
+              "description" : "Time period"
             },
             "provider" : {
               "type" : "string",
-              "description" : "Provider."
+              "description" : "Provider name"
             },
             "qualityDimension" : {
               "type" : "string",
-              "description" : "Quality dimension."
+              "description" : "Data quality dimension"
             },
             "tableComparison" : {
               "type" : "string",
-              "description" : "Quality dimension."
+              "description" : "Table comparison name"
             }
           }
         }
@@ -66548,28 +66661,25 @@
         "properties" : {
           "checkName" : {
             "type" : "string",
-            "description" : "Check name.",
+            "description" : "Check name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkDisplayName" : {
             "type" : "string",
-            "description" : "Check display name.",
+            "description" : "Check display name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "checkType" : {
-            "type" : "string",
-            "description" : "Check type.",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
+            "$ref" : "#/components/schemas/CheckType",
+            "exampleSetFlag" : false
           },
           "checkHash" : {
             "type" : "integer",
-            "description" : "Check hash.",
+            "description" : "Check hash",
             "format" : "int64",
             "extensions" : { },
             "exampleSetFlag" : false,
@@ -66577,21 +66687,21 @@
           },
           "checkCategory" : {
             "type" : "string",
-            "description" : "Check category name.",
+            "description" : "Check category name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "sensorName" : {
             "type" : "string",
-            "description" : "Sensor name.",
+            "description" : "Sensor name",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
           },
           "dataGroupNames" : {
             "type" : "array",
-            "description" : "Data groups list.",
+            "description" : "List of data groups that have values for this sensor readout (list of time series)",
             "extensions" : { },
             "exampleSetFlag" : false,
             "items" : {
@@ -66604,7 +66714,7 @@
           },
           "dataGroup" : {
             "type" : "string",
-            "description" : "Selected data group.",
+            "description" : "Selected data group",
             "extensions" : { },
             "exampleSetFlag" : false,
             "types" : [ "string" ]
@@ -66629,39 +66739,40 @@
           "properties" : {
             "checkName" : {
               "type" : "string",
-              "description" : "Check name."
+              "description" : "Check name"
             },
             "checkDisplayName" : {
               "type" : "string",
-              "description" : "Check display name."
+              "description" : "Check display name"
             },
             "checkType" : {
               "type" : "string",
-              "description" : "Check type."
+              "description" : "Check type",
+              "enum" : [ "profiling", "monitoring", "partitioned" ]
             },
             "checkHash" : {
               "type" : "integer",
               "format" : "int64",
-              "description" : "Check hash."
+              "description" : "Check hash"
             },
             "checkCategory" : {
               "type" : "string",
-              "description" : "Check category name."
+              "description" : "Check category name"
             },
             "sensorName" : {
               "type" : "string",
-              "description" : "Sensor name."
+              "description" : "Sensor name"
             },
             "dataGroupNames" : {
               "type" : "array",
-              "description" : "Data groups list.",
+              "description" : "List of data groups that have values for this sensor readout (list of time series)",
               "items" : {
                 "type" : "string"
               }
             },
             "dataGroup" : {
               "type" : "string",
-              "description" : "Selected data group."
+              "description" : "Selected data group"
             },
             "sensorReadoutEntries" : {
               "type" : "array",
@@ -76433,6 +76544,83 @@
           }
         }
       },
+      "TrinoParametersSpec" : {
+        "type" : "object",
+        "properties" : {
+          "host" : {
+            "type" : "string",
+            "description" : "Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "port" : {
+            "type" : "string",
+            "description" : "Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "database" : {
+            "type" : "string",
+            "description" : "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "host" : {
+              "type" : "string",
+              "description" : "Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable."
+            },
+            "port" : {
+              "type" : "string",
+              "description" : "Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable."
+            },
+            "database" : {
+              "type" : "string",
+              "description" : "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "user" : {
+              "type" : "string",
+              "description" : "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "properties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
       "ValueChangedParametersSpec" : {
         "type" : "object",
         "exampleSetFlag" : false,
@@ -76511,6 +76699,11 @@
         "exampleSetFlag" : false,
         "enum" : [ "column", "table" ]
       },
+      "TimePeriodGradient" : {
+        "type" : "string",
+        "exampleSetFlag" : false,
+        "enum" : [ "week", "month", "hour", "year", "millisecond", "day", "quarter" ]
+      },
       "FolderSynchronizationStatus" : {
         "type" : "string",
         "exampleSetFlag" : false,
@@ -76549,7 +76742,7 @@
       "ProviderType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "snowflake", "oracle", "postgresql", "redshift", "sqlserver", "mysql", "bigquery" ]
+        "enum" : [ "snowflake", "oracle", "postgresql", "redshift", "sqlserver", "trino", "mysql", "bigquery", "presto" ]
       },
       "ConnectionTestStatus" : {
         "type" : "string",
