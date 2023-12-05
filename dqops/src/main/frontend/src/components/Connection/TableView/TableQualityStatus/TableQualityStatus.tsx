@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { CheckResultApi } from '../../../services/apiClient';
+import { CheckResultApi } from '../../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
-import { CheckTypes, ROUTES } from '../../../shared/routes';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import {
   CheckCurrentDataQualityStatusModel,
   CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
   ColumnCurrentDataQualityStatusModel,
   TableCurrentDataQualityStatusModel
-} from '../../../api';
-import SectionWrapper from '../../Dashboard/SectionWrapper';
-import RadioButton from '../../RadioButton';
+} from '../../../../api';
+import SectionWrapper from '../../../Dashboard/SectionWrapper';
+import RadioButton from '../../../RadioButton';
 import clsx from 'clsx';
-import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
-import SvgIcon from '../../SvgIcon';
-import DatePicker from '../../DatePicker';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
+import SvgIcon from '../../../SvgIcon';
+import DatePicker from '../../../DatePicker';
 import { Tooltip } from '@material-tailwind/react';
 import moment from 'moment';
 
@@ -178,101 +178,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     setFirstLevelChecks(sortedData);
   };
 
-  const calculateSeverityColor = (
-    severity: CheckCurrentDataQualityStatusModelCurrentSeverityEnum
-  ) => {
-    if (
-      severity ===
-      CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
-    ) {
-      return 'bg-gray-150';
-    }
-    if (
-      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal
-    ) {
-      return 'bg-red-200';
-    }
-    if (
-      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error
-    ) {
-      return 'bg-orange-200';
-    } else if (
-      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning
-    ) {
-      return 'bg-yellow-200';
-    } else if (
-      severity === CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid
-    ) {
-      return 'bg-green-200';
-    }
-    return '';
-  };
-
   useEffect(() => {
     onChangeFirstLevelChecks();
   }, [categoryDimension, tableDataQualityStatus, severityType]);
-
-  const colorCell = (checks: TFirstLevelCheck[]) => {
-    if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-gray-150';
-    }
-    if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-red-200';
-    }
-    if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-orange-200';
-    } else if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-yellow-200';
-    } else if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-green-200';
-    }
-    return '';
-  };
 
   const colorColumnCell = (
     column: ColumnCurrentDataQualityStatusModel,
@@ -418,6 +326,102 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     return '';
   };
 
+
+  const getCheckStatusReversed = (checks: TFirstLevelCheck[]) => {
+    const severityMap = [
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid,
+      ]
+    
+    const checkType = 'table';
+
+    for (const severity of severityMap) {
+      const foundCheck = checks.find(
+        (x) =>
+          (severityType === 'highest' ? x.currentSeverity : x.highestSeverity) === severity &&
+          x.checkType === checkType
+      );
+  
+      if (foundCheck) {
+        return { status: severity, lastExecutedAt: foundCheck.lastExecutedAt };
+      }
+    }
+    return { status: CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error, lastExecutedAt: null };
+  };
+
+  const getCheckStatus = (checks: TFirstLevelCheck[]) => {
+    const severityMap = [
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning,
+        CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid,
+      ]
+    
+    const checkType = 'table';
+
+    for (const severity of severityMap) {
+      const foundCheck = checks.find(
+        (x) =>
+          (severityType === 'highest' ? x.highestSeverity : x.currentSeverity) === severity &&
+          x.checkType === checkType
+      );
+  
+      if (foundCheck) {
+        return { status: severity, lastExecutedAt: foundCheck.lastExecutedAt };
+      }
+    }
+  
+    return { status: CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error, lastExecutedAt: null };
+  };
+  
+
+  const getColor = (status: CheckCurrentDataQualityStatusModelCurrentSeverityEnum) => {
+    switch(status) {
+      case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error: 
+        return 'bg-gray-150';
+      case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal: 
+        return 'bg-red-200';
+      case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error: 
+        return 'bg-orange-200'; 
+      case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning: 
+        return 'bg-yellow-200'; 
+      case CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid: 
+        return 'bg-green-200';
+      default: 
+        return ''  
+    }
+  }
+
+  const openFirstLevelTableTab = () => {
+    const url = ROUTES.TABLE_LEVEL_PAGE(
+      checkTypes,
+      connection,
+      schema,
+      table,
+      timeScale ?? 'advanced'
+    );
+    const value = ROUTES.TABLE_LEVEL_VALUE(
+      checkTypes,
+      connection,
+      schema,
+      table
+    );
+    dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value,
+        state: {},
+        label: table
+      })
+    );
+    history.push(url);
+  };
+
+  
   const openFirstLevelColumnTab = (column: string) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
       checkTypes,
@@ -487,93 +491,6 @@ export default function TableQualityStatus({ timeScale }: IProps) {
           #ffffff 5px,
           #ffffff 10px
         )`
-  };
-
-  const colorCircle = (checks: TFirstLevelCheck[]) => {
-    if (
-      checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-gray-150';
-    }
-    if (
-      checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.fatal &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-red-200';
-    }
-    if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.error &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-orange-200';
-    } else if (
-      checks.find(
-        (x) =>
-          (severityType === 'current'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.warning &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-yellow-200';
-    } else if (
-      checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.currentSeverity
-            : x.highestSeverity) ===
-            CheckCurrentDataQualityStatusModelCurrentSeverityEnum.valid &&
-          x.checkType === 'table'
-      )
-    ) {
-      return 'bg-green-200';
-    }
-    return '';
-  };
-
-  const openFirstLevelTableTab = () => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      checkTypes,
-      connection,
-      schema,
-      table,
-      timeScale ?? 'advanced'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      checkTypes,
-      connection,
-      schema,
-      table
-    );
-    dispatch(
-      addFirstLevelTab(checkTypes, {
-        url,
-        value,
-        state: {},
-        label: table
-      })
-    );
-    history.push(url);
   };
 
   return (
@@ -710,7 +627,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               {Object.keys(firstLevelChecks).map((key) => (
                 <td key={`cell_table_level_checks_${key}`} className=" h-full ">
                   <div className="h-full flex w-40 items-center ">
-                    {colorCell(firstLevelChecks[key]) !== '' ? (
+                    {getColor(getCheckStatus(firstLevelChecks[key]).status) !== '' ? (
                       <div
                         onClick={() => {
                           toggleExtendedChecks(key, 'table');
@@ -731,32 +648,46 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                         />
                       </div>
                     ) : null}
-                    {colorCell(firstLevelChecks[key]) !== '' ? (
+                    {getColor(getCheckStatus(firstLevelChecks[key]).status) !== '' ? (
                       <div
                         className={clsx(
                           'w-43 h-12 flex ',
-                          colorCell(firstLevelChecks[key]),
+                          getColor(getCheckStatus(firstLevelChecks[key]).status),
                           severityType === 'current' ? '' : 'justify-end'
                         )}
                         style={{
-                          ...(colorCell(firstLevelChecks[key]) === 'bg-gray-150'
+                          ...(getColor(getCheckStatus(firstLevelChecks[key]).status) === 'bg-gray-150'
                             ? backgroundStyle
                             : {})
                         }}
                       >
+                        <Tooltip content={
+                        <div>
+                          <div className='flex justify-between w-80'>
+                            <div>Last executed at:</div>
+                            <div>{moment(getCheckStatusReversed(firstLevelChecks[key]).lastExecutedAt).format(
+                                      'YYYY-MM-DD HH:mm:ss'
+                                    )}</div>
+                          </div>
+                          <div className='flex justify-between'>
+                            <div>{severityType === 'current' ? 'Highest severity status:' : 'Current severity status:'}</div>
+                            <div>{getCheckStatusReversed(firstLevelChecks[key]).status}</div>
+                          </div>
+                        </div>}>
                         <div
                           className={clsx(
                             ' h-4 w-4 mr-2 mt-4 ml-2',
-                            colorCircle(firstLevelChecks[key])
-                          )}
-                          style={{
-                            borderRadius: '6px',
-                            ...(colorCircle(firstLevelChecks[key]) ===
-                            'bg-gray-150'
+                            getColor(getCheckStatusReversed(firstLevelChecks[key]).status)
+                            )}
+                            style={{
+                              borderRadius: '6px',
+                              ...(getColor(getCheckStatusReversed(firstLevelChecks[key]).status) ===
+                              'bg-gray-150'
                               ? backgroundStyle
                               : {})
-                          }}
-                        ></div>
+                            }}
+                            ></div>
+                        </Tooltip>
                       </div>
                     ) : null}
                   </div>
@@ -821,7 +752,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                             <div
                               className={clsx(
                                 'cursor-auto h-12 ml-5 p-2',
-                                calculateSeverityColor(
+                                getColor(
                                   severityType === 'current'
                                     ? x.currentSeverity ??
                                         CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -833,7 +764,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                 fontSize: '12px',
                                 whiteSpace: 'normal',
                                 wordBreak: 'break-word',
-                                ...(calculateSeverityColor(
+                                ...(getColor(
                                   severityType === 'current'
                                     ? x.currentSeverity ??
                                         CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -929,7 +860,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                     : {})
                                 }}
                               >
-                                {' '}
+                                <Tooltip content="123">
                                 <div
                                   className="h-4 w-4 ml-2 mt-4 mr-2"
                                   style={{
@@ -939,11 +870,12 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                         key
                                       ],
                                       firstLevelChecksKey
-                                    ) === 'bg-gray-150'
+                                      ) === 'bg-gray-150'
                                       ? backgroundStyle
                                       : {})
-                                  }}
-                                ></div>
+                                    }}
+                                    ></div>
+                                </Tooltip>
                               </div>
                             </div>
                           ) : null}
@@ -973,7 +905,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                   content={
                                     <div>
                                       <div className="flex gap-x-2">
-                                        <div className="w-42">Last executed at:</div>
+                                        <div className="w-50">Last executed at:</div>
                                         <div>
                                           {moment(x.lastExecutedAt).format(
                                             'YYYY-MM-DD HH:mm:ss'
@@ -981,23 +913,23 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                         </div>
                                       </div>
                                       <div className="flex gap-x-2">
-                                        <div className="w-42">
+                                        <div className="w-50">
                                           Current severity level:
                                         </div>
                                         <div>{x.currentSeverity}</div>
                                       </div>
                                       <div className="flex gap-x-2">
-                                        <div className="w-42">
+                                        <div className="w-50">
                                           Highest historical severity level:
                                         </div>
                                         <div>{x.highestSeverity}</div>
                                       </div>
                                       <div className="flex gap-x-2">
-                                        <div className="w-42">Category:</div>
+                                        <div className="w-50">Category:</div>
                                         <div>{x.category}</div>
                                       </div>
                                       <div className="flex gap-x-2">
-                                        <div className="w-42">
+                                        <div className="w-50">
                                           Quality Dimension:
                                         </div>
                                         <div>{x.qualityDimension}</div>
@@ -1008,7 +940,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                   <div
                                     className={clsx(
                                       'cursor-auto h-12 p-2 ml-5',
-                                      calculateSeverityColor(
+                                      getColor(
                                         severityType === 'current'
                                           ? x.currentSeverity ??
                                               CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error
@@ -1020,7 +952,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                       fontSize: '12px',
                                       whiteSpace: 'normal',
                                       wordBreak: 'break-word',
-                                      ...(calculateSeverityColor(
+                                      ...(getColor(
                                         severityType === 'current'
                                           ? x.currentSeverity ??
                                               CheckCurrentDataQualityStatusModelCurrentSeverityEnum.execution_error

@@ -36,7 +36,7 @@ import { TableReferenceComparisons } from './TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
 import { checkIfTabCouldExist } from '../../../utils';
 import TablePreview from './TablePreview';
-import TableQualityStatus from './TableQualityStatus';
+import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;

@@ -24,7 +24,7 @@ import {
   getFirstLevelState
 } from '../../../redux/selectors';
 import { TableReferenceComparisons } from './TableReferenceComparisons';
-import TableQualityStatus from './TableQualityStatus';
+import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
 
 const initTabs = [
   {
