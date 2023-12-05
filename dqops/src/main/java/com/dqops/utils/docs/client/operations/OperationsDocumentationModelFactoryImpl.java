@@ -29,6 +29,7 @@ import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.reflection.ObjectDataType;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
+import com.dqops.utils.string.StringCaseFormat;
 import com.google.common.base.CaseFormat;
 import com.google.inject.internal.MoreTypes;
 import io.swagger.v3.oas.models.media.ArraySchema;
@@ -102,7 +103,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
     }
 
     private String getObjectSimpleName(String name) {
-        return CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, name);
+        return StringCaseFormat.UPPER_CAMEL.to(StringCaseFormat.LOWER_UNDERSCORE_SEPARATE_NUMBER, name);
     }
 
     /**
