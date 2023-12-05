@@ -746,7 +746,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                       >
                         <div
                           className={clsx(
-                            ' h-3 w-3 mr-2 mt-2 ml-2',
+                            ' h-4 w-4 mr-2 mt-4 ml-2',
                             colorCircle(firstLevelChecks[key])
                           )}
                           style={{
@@ -931,7 +931,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                               >
                                 {' '}
                                 <div
-                                  className="h-3 w-3 ml-2 mt-2 mr-2"
+                                  className="h-4 w-4 ml-2 mt-4 mr-2"
                                   style={{
                                     borderRadius: '6px',
                                     ...(colorColumnCellCircle(
