@@ -18,61 +18,20 @@ package com.dqops.connectors.spark;
 
 import com.dqops.connectors.ProviderType;
 import com.dqops.metadata.sources.ConnectionSpec;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
-import org.springframework.util.ResourceUtils;
 import org.testcontainers.containers.GenericContainer;
-import org.testcontainers.containers.wait.strategy.Wait;
-
-import java.io.FileNotFoundException;
-import java.nio.file.Path;
 
 public class SparkConnectionSpecObjectMother {
     private static SparkContainer sharedContainer;
-
-    private static final String SPARK_IMAGE_DOCKERFILE = "src/test/resources/dockerfiles/spark.Dockerfile";
-    private static final int PORT = SparkContainer.SPARK_SQL_THRIFTSERVER_PORT;
-
-    /**
-     * Connection name to Spark.
-     */
-    public static final String CONNECTION_NAME = "spark_connection";
-
-    @Autowired
-    private ResourceLoader resourceLoader;
-
 
     /**
      * Creates a shared Spark container using Testcontainers. The container will be stopped when the unit/integration session will finish.
      * @return Shared container with a started Spark instance.
      */
     public static SparkContainer<?> getSharedContainer() {
-
         if (sharedContainer == null) {
-
-            Path dockerfilePath = null;
-            try {
-                dockerfilePath = ResourceUtils.getFile(SPARK_IMAGE_DOCKERFILE).getAbsoluteFile().toPath();
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-
-            sharedContainer = new SparkContainer<>(dockerfilePath)
-                    .withExposedPorts(10000)
-//                    .withStartupCheckStrategy()
-                    .withStartupTimeoutSeconds(30)
-                    .waitingFor(Wait.forLogMessage(".*HiveThriftServer2 started.*\\s", 100))
-                    ;
-
-//
-//
-//            sharedContainer = new GenericContainer<>(
-//                    new ImageFromDockerfile()
-//                            .withDockerfile(dockerfilePath));
-
+            sharedContainer = new SparkContainer<>();
             sharedContainer.start();
         }
-
         return sharedContainer;
     }
 
@@ -89,9 +48,7 @@ public class SparkConnectionSpecObjectMother {
             setSpark(new SparkParametersSpec()
             {{
                 setHost("localhost");
-                setPort(testContainer.getMappedPort(PORT).toString());
-
-//                setDatabase(testContainer.getDatabaseName());
+                setPort(testContainer.getMappedPort(SparkContainer.SPARK_SQL_THRIFTSERVER_PORT).toString());
 //                setUser(testContainer.getUsername());
 //                setPassword(testContainer.getPassword());
 ////                setInitializationSql("alter session set NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'");
@@ -105,6 +62,6 @@ public class SparkConnectionSpecObjectMother {
      * @return Schema name.
      */
     public static String getSchemaName() {
-        return "default";
+        return SparkContainer.getDefaultSchemaName();
     }
 }

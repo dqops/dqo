@@ -28464,6 +28464,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "spark"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28486,6 +28487,9 @@ definitions:
       oracle:
         description: "Oracle connection parameters."
         $ref: "#/definitions/OracleParametersSpec"
+      spark:
+        description: "Spark connection parameters."
+        $ref: "#/definitions/SparkParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -28551,6 +28555,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "spark"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28572,13 +28577,17 @@ definitions:
           \ sqlserver section or set the url (which is the SQL Server JDBC url)."
         $ref: "#/definitions/SqlServerParametersSpec"
       mysql:
-        description: "MySQL connection parameters. Specify parameters in the sqlserver\
+        description: "MySQL connection parameters. Specify parameters in the mysql\
           \ section or set the url (which is the MySQL JDBC url)."
         $ref: "#/definitions/MysqlParametersSpec"
       oracle:
-        description: "Oracle connection parameters. Specify parameters in the postgresql\
+        description: "Oracle connection parameters. Specify parameters in the oracle\
           \ section or set the url (which is the Oracle JDBC url)."
         $ref: "#/definitions/OracleParametersSpec"
+      spark:
+        description: "Spark connection parameters. Specify parameters in the spark\
+          \ section or set the url (which is the Spark JDBC url)."
+        $ref: "#/definitions/SparkParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -30449,6 +30458,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "spark"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -30476,6 +30486,7 @@ definitions:
         - "sqlserver"
         - "mysql"
         - "oracle"
+        - "spark"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
@@ -31328,6 +31339,25 @@ definitions:
         type: "string"
         description: "Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration\
           \ with a custom environment variable."
+      properties:
+        type: "object"
+        additionalProperties:
+          type: "string"
+  SparkParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "Spark host name. Supports also a ${SPARK_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "Spark port number. The default port is 10000. Supports also\
+          \ a ${SPARK_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "Spark database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
       properties:
         type: "object"
         additionalProperties:
