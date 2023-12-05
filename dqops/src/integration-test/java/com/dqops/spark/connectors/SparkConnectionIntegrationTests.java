@@ -15,13 +15,13 @@
  */
 package com.dqops.spark.connectors;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.connectors.*;
 import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
 import com.dqops.connectors.spark.SparkSourceConnection;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Objects;
 
 @SpringBootTest
-public class SparkConnectionIntegrationTests extends BaseBigQueryIntegrationTest {
+public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
     private SparkSourceConnection sut;
     private ConnectionSpec connectionSpec;
     private SecretValueLookupContext secretValueLookupContext;
