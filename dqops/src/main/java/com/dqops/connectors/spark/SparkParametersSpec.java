@@ -28,11 +28,23 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--spark-database"}, description = "Spark database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Spark database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private String database;
+    @CommandLine.Option(names = {"--spark-schema"}, description = "Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String schema;
 
-    @CommandLine.Option(names = {"-P"}, description = "Spark additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"--spark-user"}, description = "Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String user;
+
+    @CommandLine.Option(names = {"--spark-password"}, description = "Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String password;
+
+    @CommandLine.Option(names = {"--spark-options"}, description = "Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
+    @JsonPropertyDescription("Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
+    private String options;
+
+    @CommandLine.Option(names = {"-Sp"}, description = "Spark additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -71,20 +83,78 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a physical database name.
-     * @return Physical database name.
+     * Returns a schema name. Spark's database and schema terms are interchangeable.
+     * @return Schema name.
      */
-    public String getDatabase() {
-        return database;
+    public String getSchema() {
+        return schema;
     }
 
     /**
-     * Sets a physical database name.
-     * @param database Physical database name.
+     * Sets a schema name.
+     * @param schema Schema name.
      */
-    public void setDatabase(String database) {
-        setDirtyIf(!Objects.equals(this.database, database));
-        this.database = database;
+    public void setSchema(String schema) {
+        setDirtyIf(!Objects.equals(this.schema, schema));
+        this.schema = schema;
+    }
+
+    /**
+     * Returns a database name. Spark's database and schema terms are interchangeable.
+     * @return Database name.
+     */
+    public String getDatabase() {
+        return schema;
+    }
+
+    /**
+     * Returns the user that is used to log in to the data source (JDBC user or similar).
+     * @return User name.
+     */
+    public String getUser() {
+        return user;
+    }
+
+    /**
+     * Sets a user name.
+     * @param user User name.
+     */
+    public void setUser(String user) {
+        setDirtyIf(!Objects.equals(this.user, user));
+        this.user = user;
+    }
+
+    /**
+     * Returns a password used to authenticate to the server.
+     * @return Password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets a password that is used to connect to the database.
+     * @param password Password.
+     */
+    public void setPassword(String password) {
+        setDirtyIf(!Objects.equals(this.password, password));
+        this.password = password;
+    }
+
+    /**
+     * Returns the custom connection initialization options.
+     * @return Connection initialization options.
+     */
+    public String getOptions() {
+        return options;
+    }
+
+    /**
+     * Sets the connection initialization options.
+     * @param options Connection initialization options.
+     */
+    public void setOptions(String options) {
+        this.options = options;
     }
 
     /**

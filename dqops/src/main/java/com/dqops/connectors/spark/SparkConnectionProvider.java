@@ -23,6 +23,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -102,7 +103,7 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
             ConnectionSpec connectionSpec,
             boolean isHeadless,
             TerminalReader terminalReader,
-            TerminalWriter terminalWriter) { // todo
+            TerminalWriter terminalWriter) {
 
         SparkParametersSpec sparkSpec = connectionSpec.getSpark();
         if (sparkSpec == null) {
@@ -110,45 +111,45 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
             connectionSpec.setSpark(sparkSpec);
         }
 
-//        if (Strings.isNullOrEmpty(sparkSpec.getHost())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--oracle-host");
-//            }
-//
-//            sparkSpec.setHost(terminalReader.prompt("Oracle host name (--oracle-host)", "${ORACLE_HOST}", false));
-//        }
-//
-//        if (Strings.isNullOrEmpty(sparkSpec.getPort())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--oracle-port");
-//            }
-//
-//            sparkSpec.setPort(terminalReader.prompt("Oracle port number (--oracle-port)", "${ORACLE_PORT}", false));
-//        }
-//
-//        if (Strings.isNullOrEmpty(sparkSpec.getDatabase())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--oracle-database");
-//            }
-//
-//            sparkSpec.setDatabase(terminalReader.prompt("Oracle database name (--oracle-database)", "${ORACLE_DATABASE}", false));
-//        }
-//
-//        if (Strings.isNullOrEmpty(sparkSpec.getUser())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--oracle-user");
-//            }
-//
-//            sparkSpec.setUser(terminalReader.prompt("Oracle user name (--oracle-user)", "${ORACLE_USER}", false));
-//        }
-//
-//        if (Strings.isNullOrEmpty(sparkSpec.getPassword())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--oracle-password");
-//            }
-//
-//            sparkSpec.setPassword(terminalReader.prompt("Oracle user password (--oracle-password)", "${ORACLE_PASSWORD}", false));
-//        }
+        if (Strings.isNullOrEmpty(sparkSpec.getHost())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--spark-host");
+            }
+
+            sparkSpec.setHost(terminalReader.prompt("Spark host name (--spark-host)", "${SPARK_HOST}", false));
+        }
+
+        if (Strings.isNullOrEmpty(sparkSpec.getPort())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--spark-port");
+            }
+
+            sparkSpec.setPort(terminalReader.prompt("Spark port number (--spark-port)", "${SPARK_PORT}", false));
+        }
+
+        if (Strings.isNullOrEmpty(sparkSpec.getSchema())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--spark-schema");
+            }
+
+            sparkSpec.setSchema(terminalReader.prompt("Spark schema name (--spark-schema)", "${SPARK_SCHEMA}", false));
+        }
+
+        if (Strings.isNullOrEmpty(sparkSpec.getUser())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--spark-user");
+            }
+
+            sparkSpec.setUser(terminalReader.prompt("Spark user name (--spark-user)", "${SPARK_USER}", false));
+        }
+
+        if (Strings.isNullOrEmpty(sparkSpec.getPassword())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--spark-password");
+            }
+
+            sparkSpec.setPassword(terminalReader.prompt("Spark user password (--spark-password)", "${SPARK_PASSWORD}", false));
+        }
     }
 
     /**
@@ -159,7 +160,7 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
      * @return Formatted constant.
      */
     @Override
-    public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) { // todo
+    public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
         if (constant instanceof Boolean) {
             Boolean asBoolean = (Boolean)constant;
             return asBoolean ? "1" : "0";
@@ -180,44 +181,44 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
      * @return Column type snapshot.
      */
     @Override
-    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) { // todo
+    public ColumnTypeSnapshotSpec proposePhysicalColumnType(Column<?> dataColumn) {
         ColumnType columnType = dataColumn.type();
 
         if (columnType == ColumnType.SHORT) {
-            return new ColumnTypeSnapshotSpec("DECIMAL", null, 10, 0);
+            return new ColumnTypeSnapshotSpec("SMALLINT");
         }
         else if (columnType == ColumnType.INTEGER) {
-            return new ColumnTypeSnapshotSpec("DECIMAL", null, 20, 0);
+            return new ColumnTypeSnapshotSpec("INT");
         }
         else if (columnType == ColumnType.LONG) {
-            return new ColumnTypeSnapshotSpec("DECIMAL", null, 38, 0);
+            return new ColumnTypeSnapshotSpec("BIGINT");
         }
         else if (columnType == ColumnType.FLOAT) {
-            return new ColumnTypeSnapshotSpec("BINARY_FLOAT"); // todo
+            return new ColumnTypeSnapshotSpec("FLOAT");
         }
         else if (columnType == ColumnType.BOOLEAN) {
-            return new ColumnTypeSnapshotSpec("NUMBER", null, 1, 0); // todo
+            return new ColumnTypeSnapshotSpec("BOOLEAN");
         }
         else if (columnType == ColumnType.STRING) {
             return new ColumnTypeSnapshotSpec("STRING");
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("BINARY_DOUBLE"); // todo
+            return new ColumnTypeSnapshotSpec("STRING");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
-            return new ColumnTypeSnapshotSpec("DATE"); // todo
+            return new ColumnTypeSnapshotSpec("DATE");
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP"); // todo
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP"); // todo
+            return new ColumnTypeSnapshotSpec("TIMESTAMP_NTZ");
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP WITH TIME ZONE"); // todo
+            return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("NCLOB"); // todo
+            return new ColumnTypeSnapshotSpec("STRING");
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());

@@ -32,9 +32,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.Table;
-import tech.tablesaw.columns.Column;
 
-import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.*;
 
@@ -84,9 +82,9 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String database = this.getSecretValueProvider().expandValue(sparkParametersSpec.getDatabase(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(database)) {
-            jdbcConnectionBuilder.append(database);
+        String schema = this.getSecretValueProvider().expandValue(sparkParametersSpec.getSchema(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(schema)) {
+            jdbcConnectionBuilder.append(schema);
         }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
@@ -97,19 +95,16 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(sparkParametersSpec.getProperties());
         }
 
-        // todo: not sure if commented code is applicable
-//        String userName = this.getSecretValueProvider().expandValue(sparkParametersSpec.getUser(), secretValueLookupContext);
-//        hikariConfig.setUsername(userName);
-        hikariConfig.setUsername("");
-//
-//        String password = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPassword(), secretValueLookupContext);
-//        hikariConfig.setPassword(password);
-        hikariConfig.setPassword("");
-//
-//        String options =  this.getSecretValueProvider().expandValue(sparkParametersSpec.getOptions(), secretValueLookupContext);
-//        if (!Strings.isNullOrEmpty(options)) {
-//            dataSourceProperties.put("options", options);
-//        }
+        String userName = this.getSecretValueProvider().expandValue(sparkParametersSpec.getUser(), secretValueLookupContext);
+        hikariConfig.setUsername(userName);
+
+        String password = this.getSecretValueProvider().expandValue(sparkParametersSpec.getPassword(), secretValueLookupContext);
+        hikariConfig.setPassword(password);
+
+        String options =  this.getSecretValueProvider().expandValue(sparkParametersSpec.getOptions(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(options)) {
+            dataSourceProperties.put("options", options);
+        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
