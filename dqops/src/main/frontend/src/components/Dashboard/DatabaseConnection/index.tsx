@@ -232,6 +232,13 @@ const DatabaseConnection = ({
           onChange={(oracle) => onChange({ ...database, oracle })}
           sharedCredentials = {sharedCredentials}
       />
+    ),
+    [ConnectionModelProviderTypeEnum.spark]: (
+      <OracleConnection   // TODO: use spark connector
+          oracle={database.oracle}
+          onChange={(oracle) => onChange({ ...database, oracle })}
+          sharedCredentials = {sharedCredentials}
+      />
     )
   };
 
