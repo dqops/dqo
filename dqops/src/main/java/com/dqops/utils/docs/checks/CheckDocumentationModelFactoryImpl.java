@@ -37,6 +37,8 @@ import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeProviderDialectSettings;
+import com.dqops.connectors.spark.SparkParametersSpec;
+import com.dqops.connectors.spark.SparkProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
 import com.dqops.connectors.trino.TrinoProviderDialectSettings;
@@ -625,6 +627,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 connectionSpec.setOracle(new OracleParametersSpec() {{
                     setDatabase("your_oracle_database");
                 }});
+                connectionSpec.setSpark(new SparkParametersSpec() {{
+                    setSchema("your_spark_schema");
+                }});
                 connectionSpec.setProviderType(providerType);
 
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
@@ -695,6 +700,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new MysqlProviderDialectSettings();
             case oracle:
                 return new OracleProviderDialectSettings();
+            case spark:
+                return new SparkProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
