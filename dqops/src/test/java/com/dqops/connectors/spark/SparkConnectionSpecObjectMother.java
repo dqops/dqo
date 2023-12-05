@@ -49,9 +49,7 @@ public class SparkConnectionSpecObjectMother {
             {{
                 setHost("localhost");
                 setPort(testContainer.getMappedPort(SparkContainer.SPARK_SQL_THRIFTSERVER_PORT).toString());
-//                setUser(testContainer.getUsername());
-//                setPassword(testContainer.getPassword());
-////                setInitializationSql("alter session set NLS_DATE_FORMAT='YYYY-MM-DD HH24:MI:SS'");
+                // no username and password is required
             }});
         }};
         return connectionSpec;

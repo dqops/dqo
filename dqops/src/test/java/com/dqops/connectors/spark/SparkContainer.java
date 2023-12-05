@@ -24,19 +24,28 @@ public class SparkContainer<SELF extends SparkContainer<SELF>> extends JdbcDatab
     }
 
     public String getJdbcUrl() {
-        return "jdbc:hive2://" + this.getHost() + ":" + this.getMappedPort(SPARK_SQL_THRIFTSERVER_PORT);// + "/" + this.getSchemaName();  //";<sessionConfs>?<hiveConfs>#<hiveVars>";
+        return "jdbc:hive2://" + this.getHost() + ":" + this.getMappedPort(SPARK_SQL_THRIFTSERVER_PORT); // + "/" + this.getSchemaName();  //";<sessionConfs>?<hiveConfs>#<hiveVars>";
     }
 
+    /**
+     * The default username
+     */
     @Override
     public String getUsername() {
         return "";
     }
 
+    /**
+     * The default password
+     */
     @Override
     public String getPassword() {
         return "";
     }
 
+    /**
+     * The default schema
+     */
     public static String getDefaultSchemaName(){
         return "default";
     }
