@@ -17,9 +17,11 @@ if TYPE_CHECKING:
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
+    from ..models.presto_parameters_spec import PrestoParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
     from ..models.sql_server_parameters_spec import SqlServerParametersSpec
+    from ..models.trino_parameters_spec import TrinoParametersSpec
 
 
 T = TypeVar("T", bound="ConnectionSpec")
@@ -35,6 +37,8 @@ class ConnectionSpec:
         postgresql (Union[Unset, PostgresqlParametersSpec]):
         redshift (Union[Unset, RedshiftParametersSpec]):
         sqlserver (Union[Unset, SqlServerParametersSpec]):
+        presto (Union[Unset, PrestoParametersSpec]):
+        trino (Union[Unset, TrinoParametersSpec]):
         mysql (Union[Unset, MysqlParametersSpec]):
         oracle (Union[Unset, OracleParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
@@ -55,6 +59,8 @@ class ConnectionSpec:
     postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
     redshift: Union[Unset, "RedshiftParametersSpec"] = UNSET
     sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
+    presto: Union[Unset, "PrestoParametersSpec"] = UNSET
+    trino: Union[Unset, "TrinoParametersSpec"] = UNSET
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
@@ -91,6 +97,14 @@ class ConnectionSpec:
         sqlserver: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.sqlserver, Unset):
             sqlserver = self.sqlserver.to_dict()
+
+        presto: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.presto, Unset):
+            presto = self.presto.to_dict()
+
+        trino: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.trino, Unset):
+            trino = self.trino.to_dict()
 
         mysql: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.mysql, Unset):
@@ -142,6 +156,10 @@ class ConnectionSpec:
             field_dict["redshift"] = redshift
         if sqlserver is not UNSET:
             field_dict["sqlserver"] = sqlserver
+        if presto is not UNSET:
+            field_dict["presto"] = presto
+        if trino is not UNSET:
+            field_dict["trino"] = trino
         if mysql is not UNSET:
             field_dict["mysql"] = mysql
         if oracle is not UNSET:
@@ -177,9 +195,11 @@ class ConnectionSpec:
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
+        from ..models.presto_parameters_spec import PrestoParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
         from ..models.sql_server_parameters_spec import SqlServerParametersSpec
+        from ..models.trino_parameters_spec import TrinoParametersSpec
 
         d = src_dict.copy()
         _provider_type = d.pop("provider_type", UNSET)
@@ -223,6 +243,20 @@ class ConnectionSpec:
             sqlserver = UNSET
         else:
             sqlserver = SqlServerParametersSpec.from_dict(_sqlserver)
+
+        _presto = d.pop("presto", UNSET)
+        presto: Union[Unset, PrestoParametersSpec]
+        if isinstance(_presto, Unset):
+            presto = UNSET
+        else:
+            presto = PrestoParametersSpec.from_dict(_presto)
+
+        _trino = d.pop("trino", UNSET)
+        trino: Union[Unset, TrinoParametersSpec]
+        if isinstance(_trino, Unset):
+            trino = UNSET
+        else:
+            trino = TrinoParametersSpec.from_dict(_trino)
 
         _mysql = d.pop("mysql", UNSET)
         mysql: Union[Unset, MysqlParametersSpec]
@@ -281,6 +315,8 @@ class ConnectionSpec:
             postgresql=postgresql,
             redshift=redshift,
             sqlserver=sqlserver,
+            presto=presto,
+            trino=trino,
             mysql=mysql,
             oracle=oracle,
             parallel_jobs_limit=parallel_jobs_limit,

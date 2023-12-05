@@ -7,7 +7,7 @@ import { ConnectionModelProviderTypeEnum } from '../../../api';
 interface ISelectDatabaseProps {
   onSelect: (
     db: ConnectionModelProviderTypeEnum,
-    nameOfdatabase?: string
+    nameOfDatabase?: string
   ) => void;
 }
 

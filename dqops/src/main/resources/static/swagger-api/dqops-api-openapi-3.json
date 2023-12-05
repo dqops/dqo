@@ -59094,7 +59094,7 @@
             "provider_type" : {
               "type" : "string",
               "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "bigquery" : {
               "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -59222,6 +59222,16 @@
             "extensions" : { },
             "exampleSetFlag" : false
           },
+          "presto" : {
+            "$ref" : "#/components/schemas/PrestoParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
+          "trino" : {
+            "$ref" : "#/components/schemas/TrinoParametersSpec",
+            "extensions" : { },
+            "exampleSetFlag" : false
+          },
           "mysql" : {
             "$ref" : "#/components/schemas/MysqlParametersSpec",
             "extensions" : { },
@@ -59229,11 +59239,6 @@
           },
           "oracle" : {
             "$ref" : "#/components/schemas/OracleParametersSpec",
-            "extensions" : { },
-            "exampleSetFlag" : false
-          },
-          "presto" : {
-            "$ref" : "#/components/schemas/PrestoParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
@@ -59294,7 +59299,7 @@
             "provider_type" : {
               "type" : "string",
               "description" : "Database provider type (required).",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "bigquery" : {
               "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -59321,6 +59326,16 @@
               "originalRef" : "#/components/schemas/SqlServerParametersSpec",
               "$ref" : "#/components/schemas/SqlServerParametersSpec"
             },
+            "presto" : {
+              "description" : "Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).",
+              "originalRef" : "#/components/schemas/PrestoParametersSpec",
+              "$ref" : "#/components/schemas/PrestoParametersSpec"
+            },
+            "trino" : {
+              "description" : "Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).",
+              "originalRef" : "#/components/schemas/TrinoParametersSpec",
+              "$ref" : "#/components/schemas/TrinoParametersSpec"
+            },
             "mysql" : {
               "description" : "MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).",
               "originalRef" : "#/components/schemas/MysqlParametersSpec",
@@ -59330,11 +59345,6 @@
               "description" : "Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).",
               "originalRef" : "#/components/schemas/OracleParametersSpec",
               "$ref" : "#/components/schemas/OracleParametersSpec"
-            },
-            "presto" : {
-              "description" : "Presto connection parameters. Specify parameters in the postgresql section or set the url (which is the Presto JDBC url).",
-              "originalRef" : "#/components/schemas/PrestoParametersSpec",
-              "$ref" : "#/components/schemas/PrestoParametersSpec"
             },
             "parallel_jobs_limit" : {
               "type" : "integer",
@@ -64698,7 +64708,7 @@
             "provider_type" : {
               "type" : "string",
               "description" : "Provider type.",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "custom" : {
               "type" : "boolean",
@@ -64773,7 +64783,7 @@
             "providerType" : {
               "type" : "string",
               "description" : "Provider type.",
-              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+              "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
             },
             "providerSensorDefinitionSpec" : {
               "description" : "Provider specific sensor definition specification",
@@ -76534,6 +76544,83 @@
           }
         }
       },
+      "TrinoParametersSpec" : {
+        "type" : "object",
+        "properties" : {
+          "host" : {
+            "type" : "string",
+            "description" : "Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "port" : {
+            "type" : "string",
+            "description" : "Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "database" : {
+            "type" : "string",
+            "description" : "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "user" : {
+            "type" : "string",
+            "description" : "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "properties" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "string",
+              "extensions" : { },
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          }
+        },
+        "exampleSetFlag" : false,
+        "types" : [ "object" ],
+        "jsonSchema" : {
+          "type" : "object",
+          "properties" : {
+            "host" : {
+              "type" : "string",
+              "description" : "Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable."
+            },
+            "port" : {
+              "type" : "string",
+              "description" : "Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable."
+            },
+            "database" : {
+              "type" : "string",
+              "description" : "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "user" : {
+              "type" : "string",
+              "description" : "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+            },
+            "properties" : {
+              "type" : "object",
+              "additionalProperties" : {
+                "type" : "string"
+              }
+            }
+          }
+        }
+      },
       "ValueChangedParametersSpec" : {
         "type" : "object",
         "exampleSetFlag" : false,
@@ -76655,7 +76742,7 @@
       "ProviderType" : {
         "type" : "string",
         "exampleSetFlag" : false,
-        "enum" : [ "snowflake", "oracle", "postgresql", "redshift", "sqlserver", "mysql", "bigquery", "presto" ]
+        "enum" : [ "snowflake", "oracle", "postgresql", "redshift", "sqlserver", "trino", "mysql", "bigquery", "presto" ]
       },
       "ConnectionTestStatus" : {
         "type" : "string",

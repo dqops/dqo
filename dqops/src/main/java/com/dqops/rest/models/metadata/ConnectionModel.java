@@ -25,6 +25,7 @@ import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
@@ -101,6 +102,18 @@ public class ConnectionModel {
     private SqlServerParametersSpec sqlserver;
 
     /**
+     * Presto connection parameters.
+     */
+    @JsonPropertyDescription("Presto connection parameters.")
+    private PrestoParametersSpec presto;
+
+    /**
+     * Trino connection parameters.
+     */
+    @JsonPropertyDescription("Trino connection parameters.")
+    private TrinoParametersSpec trino;
+
+    /**
      * MySQL connection parameters.
      */
     @JsonPropertyDescription("MySQL connection parameters.")
@@ -111,12 +124,6 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("Oracle connection parameters.")
     private OracleParametersSpec oracle;
-
-    /**
-     * Presto connection parameters.
-     */
-    @JsonPropertyDescription("Presto connection parameters.")
-    private PrestoParametersSpec presto;
 
     /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.

@@ -28462,9 +28462,10 @@ definitions:
         - "postgresql"
         - "redshift"
         - "sqlserver"
+        - "presto"
+        - "trino"
         - "mysql"
         - "oracle"
-        - "presto"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28481,15 +28482,18 @@ definitions:
       sqlserver:
         description: "SqlServer connection parameters."
         $ref: "#/definitions/SqlServerParametersSpec"
+      presto:
+        description: "Presto connection parameters."
+        $ref: "#/definitions/PrestoParametersSpec"
+      trino:
+        description: "Trino connection parameters."
+        $ref: "#/definitions/TrinoParametersSpec"
       mysql:
         description: "MySQL connection parameters."
         $ref: "#/definitions/MysqlParametersSpec"
       oracle:
         description: "Oracle connection parameters."
         $ref: "#/definitions/OracleParametersSpec"
-      presto:
-        description: "Presto connection parameters."
-        $ref: "#/definitions/PrestoParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -28553,9 +28557,10 @@ definitions:
         - "postgresql"
         - "redshift"
         - "sqlserver"
+        - "presto"
+        - "trino"
         - "mysql"
         - "oracle"
-        - "presto"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28576,6 +28581,14 @@ definitions:
         description: "SQL Server connection parameters. Specify parameters in the\
           \ sqlserver section or set the url (which is the SQL Server JDBC url)."
         $ref: "#/definitions/SqlServerParametersSpec"
+      presto:
+        description: "Presto connection parameters. Specify parameters in the presto\
+          \ section or set the url (which is the Presto JDBC url)."
+        $ref: "#/definitions/PrestoParametersSpec"
+      trino:
+        description: "Trino connection parameters. Specify parameters in the trino\
+          \ section or set the url (which is the Trino JDBC url)."
+        $ref: "#/definitions/TrinoParametersSpec"
       mysql:
         description: "MySQL connection parameters. Specify parameters in the sqlserver\
           \ section or set the url (which is the MySQL JDBC url)."
@@ -28584,10 +28597,6 @@ definitions:
         description: "Oracle connection parameters. Specify parameters in the postgresql\
           \ section or set the url (which is the Oracle JDBC url)."
         $ref: "#/definitions/OracleParametersSpec"
-      presto:
-        description: "Presto connection parameters. Specify parameters in the postgresql\
-          \ section or set the url (which is the Presto JDBC url)."
-        $ref: "#/definitions/PrestoParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -30483,9 +30492,10 @@ definitions:
         - "postgresql"
         - "redshift"
         - "sqlserver"
+        - "presto"
+        - "trino"
         - "mysql"
         - "oracle"
-        - "presto"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -30511,9 +30521,10 @@ definitions:
         - "postgresql"
         - "redshift"
         - "sqlserver"
+        - "presto"
+        - "trino"
         - "mysql"
         - "oracle"
-        - "presto"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
@@ -35212,5 +35223,28 @@ definitions:
           \ order to detect data quality issues in each partition separately. It should\
           \ be a DATE type, DATETIME type (using a local server time zone) or a TIMESTAMP\
           \ type (a UTC absolute time)."
+  TrinoParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "Trino host name. Supports also a ${TRINO_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "Trino port number. The default port is 8080. Supports also a\
+          \ ${TRINO_PORT} configuration with a custom environment variable."
+      database:
+        type: "string"
+        description: "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      user:
+        type: "string"
+        description: "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      properties:
+        type: "object"
+        additionalProperties:
+          type: "string"
   ValueChangedParametersSpec:
     type: "object"

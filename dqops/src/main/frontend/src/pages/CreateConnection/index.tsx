@@ -16,12 +16,12 @@ const CreateConnection = () => {
 
   const onSelect = (
     db: ConnectionModelProviderTypeEnum,
-    nameOfdatabase?: string
+    nameOfDatabase?: string
   ) => {
     setDatabase({
       provider_type: db
     });
-    setNameofDB(nameOfdatabase ? nameOfdatabase : '');
+    setNameofDB(nameOfDatabase ? nameOfDatabase : '');
     setStep(1);
   };
 
@@ -53,7 +53,7 @@ const CreateConnection = () => {
           onNext={onNext}
           database={database}
           onChange={setDatabase}
-          nameOfdatabase={nameofDB.length !== 0 ? nameofDB : ''}
+          nameOfDatabase={nameofDB.length !== 0 ? nameofDB : ''}
         />
       )}
       {step === 2 && (

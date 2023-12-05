@@ -29668,7 +29668,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -29690,6 +29690,14 @@
           "description" : "SqlServer connection parameters.",
           "$ref" : "#/definitions/SqlServerParametersSpec"
         },
+        "presto" : {
+          "description" : "Presto connection parameters.",
+          "$ref" : "#/definitions/PrestoParametersSpec"
+        },
+        "trino" : {
+          "description" : "Trino connection parameters.",
+          "$ref" : "#/definitions/TrinoParametersSpec"
+        },
         "mysql" : {
           "description" : "MySQL connection parameters.",
           "$ref" : "#/definitions/MysqlParametersSpec"
@@ -29697,10 +29705,6 @@
         "oracle" : {
           "description" : "Oracle connection parameters.",
           "$ref" : "#/definitions/OracleParametersSpec"
-        },
-        "presto" : {
-          "description" : "Presto connection parameters.",
-          "$ref" : "#/definitions/PrestoParametersSpec"
         },
         "run_checks_job_template" : {
           "description" : "Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.",
@@ -29755,7 +29759,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required).",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -29777,6 +29781,14 @@
           "description" : "SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).",
           "$ref" : "#/definitions/SqlServerParametersSpec"
         },
+        "presto" : {
+          "description" : "Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).",
+          "$ref" : "#/definitions/PrestoParametersSpec"
+        },
+        "trino" : {
+          "description" : "Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).",
+          "$ref" : "#/definitions/TrinoParametersSpec"
+        },
         "mysql" : {
           "description" : "MySQL connection parameters. Specify parameters in the sqlserver section or set the url (which is the MySQL JDBC url).",
           "$ref" : "#/definitions/MysqlParametersSpec"
@@ -29784,10 +29796,6 @@
         "oracle" : {
           "description" : "Oracle connection parameters. Specify parameters in the postgresql section or set the url (which is the Oracle JDBC url).",
           "$ref" : "#/definitions/OracleParametersSpec"
-        },
-        "presto" : {
-          "description" : "Presto connection parameters. Specify parameters in the postgresql section or set the url (which is the Presto JDBC url).",
-          "$ref" : "#/definitions/PrestoParametersSpec"
         },
         "parallel_jobs_limit" : {
           "type" : "integer",
@@ -31842,7 +31850,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -31865,7 +31873,7 @@
         "providerType" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "mysql", "oracle", "presto" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle" ]
         },
         "providerSensorDefinitionSpec" : {
           "description" : "Provider specific sensor definition specification",
@@ -36306,6 +36314,33 @@
         "partition_by_column" : {
           "type" : "string",
           "description" : "Column name that contains the date, datetime or timestamp column for date/time partitioned data. Partition checks (daily partition checks and monthly partition checks) use this column in a GROUP BY clause in order to detect data quality issues in each partition separately. It should be a DATE type, DATETIME type (using a local server time zone) or a TIMESTAMP type (a UTC absolute time)."
+        }
+      }
+    },
+    "TrinoParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "host" : {
+          "type" : "string",
+          "description" : "Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable."
+        },
+        "port" : {
+          "type" : "string",
+          "description" : "Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable."
+        },
+        "database" : {
+          "type" : "string",
+          "description" : "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "user" : {
+          "type" : "string",
+          "description" : "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
         }
       }
     },
