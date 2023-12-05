@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -13,6 +12,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
 import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
+import { useSelector } from 'react-redux';
 
 const ColumnMonitoringChecksUIFilterView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: {
@@ -25,7 +25,7 @@ const ColumnMonitoringChecksUIFilterView = () => {
     category: string,
     checkName: string
   } = useParams();
-  const { monitoringChecksUIFilter, isUpdatedMonitoringChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { monitoringUIFilter, isUpdatedMonitoringChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -44,7 +44,7 @@ const ColumnMonitoringChecksUIFilterView = () => {
       tableName,
       columnName,
       timePartitioned,
-      monitoringChecksUIFilter
+      monitoringUIFilter
     );
     await dispatch(
       getColumnMonitoringChecksModelFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName, false)
@@ -82,7 +82,7 @@ const ColumnMonitoringChecksUIFilterView = () => {
         <DataQualityChecks
           onUpdate={() => {}}
           className="max-h-checks-1"
-          checksUI={monitoringChecksUIFilter}
+          checksUI={monitoringUIFilter}
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}

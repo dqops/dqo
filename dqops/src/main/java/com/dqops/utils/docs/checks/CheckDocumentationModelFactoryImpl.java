@@ -32,6 +32,7 @@ import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.oracle.OracleProviderDialectSettings;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlProviderDialectSettings;
+import com.dqops.connectors.presto.PrestoProviderDialectSettings;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.redshift.RedshiftProviderDialectSettings;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
@@ -40,6 +41,7 @@ import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.spark.SparkProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
+import com.dqops.connectors.trino.TrinoProviderDialectSettings;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
@@ -690,6 +692,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new RedshiftProviderDialectSettings();
             case sqlserver:
                 return new SqlServerProviderDialectSettings();
+            case presto:
+                return new PrestoProviderDialectSettings();
+            case trino:
+                return new TrinoProviderDialectSettings();
             case mysql:
                 return new MysqlProviderDialectSettings();
             case oracle:

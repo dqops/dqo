@@ -1,17 +1,47 @@
-# Percent of string in set
+# Percent of rows with string values in set
 
-Verifies that the percentage of strings from a set in a column does not fall below the minimum accepted percentage.
+Verifies that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
 
 We will be testing [Student Performance](https://www.kaggle.com/datasets/whenamancodes/student-performance) dataset. 
 This data approach student achievement in secondary education of two Portuguese schools. 
-The data attributes include student grades, demographic, social and school related features) and it was collected by using school reports and questionnaires. 
+The data attributes include student grades, demographic, social and school related features and it was collected by using school reports and questionnaires. 
 Two datasets are provided regarding the performance in two distinct subjects: Mathematics (mat) and Portuguese language (por). 
 In [Cortez and Silva, 2008], the two datasets were modeled under binary/five-level classification and regression tasks. 
 Important note: the target attribute G3 has a strong correlation with attributes G2 and G1.
 
 We are verifying if values in the tested column `Fjob` are one of accepted values.  
+
+**SOLUTION**
+
+We will verify the data using profiling [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
+Our data quality check will compare the values in the tested column to a set of accepted values. We're accepting only `services`, `at_home`, `teacher`.
+The SQL query that will be executed will use an IN SQL clause:
+
+```sql
+SELECT
+      100.0 * SUM(
+            CASE
+                WHEN analyzed_table.`Fjob` IN (`services`, `at_home`, `teacher`)
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+FROM `dqo-ai-testing`.`kaggle_student_performance`.`maths` AS analyzed_table
+```
+
+In this example, we will set three minimum percent thresholds levels for the check (a minimum accepted percentage of valid rows):
+
+- warning: 99
+- error: 98
+- fatal: 95
+
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+
+**VALUE**
+
+If the percent of string from a set values fall below 99, a warning alert will be triggered.
 
 ## Data structure
 
@@ -37,34 +67,6 @@ The `Fjob` column of interest contains father job's values.
 | 3    | 3    | services | **services** | home       | mother   | 1          | 2         |
 | 2    | 2    | other    | **other**    | home       | other    | 1          | 2         |
 
-**SOLUTION**
-
-We will verify the data using profiling [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
-Our data quality check will compare the values in the tested column to a set of accepted values. We're accepting only `services`, `at_home`, `teacher`.
-The SQL query that will be executed will use an IN SQL clause:
-
-```sql
-SELECT
-      100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`Fjob` IN (`services`, `at_home`, `teacher`)
-                    THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
-FROM `dqo-ai-testing`.`kaggle_student_performance`.`maths` AS analyzed_table
-```
-In this example, we will set three minimum percent thresholds levels for the check (a minimum accepted percentage of valid rows):
-
-- warning: 99
-- error: 98
-- fatal: 95
-
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
-
-**VALUE**
-
-If the percent of string from a set values fall below 99, a warning alert will be triggered.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
@@ -108,7 +110,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
 
     The actual value in this example is 40, which is below the minimum threshold level set in the warning (99).
-    The check gives a fatal result (notice the red square on the left of the name of the check).
+    The check gives a fatal result (notice the red square to the left of the check name).
 
     ![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results.png)
 
@@ -124,14 +126,14 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     ![String-in-set-percent check results on Issues count per check dashboard](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results-on-issues-count-per-check-dashboard.png)
 
-## Configuring a schedule at connection level
+## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
+After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
 
-![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 
 1. Navigate to the **Data Source** section.
 
@@ -139,9 +141,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 3. Click on the **Schedule** tab.
 
-4. Select the Monitoring Daily tab
+4. Select the **Monitoring daily** tab
 
-5. Select the **Run every day at** option and specify the time as 12:00.
+5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 

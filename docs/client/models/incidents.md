@@ -13,7 +13,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |check_category|Check category name|string|
 |check_name|Check name|string|
 |check_display_name|Check display name|string|
-|[check_type](../#CheckType)|Check type|[CheckType](../#CheckType)|
+|[check_type](../table_comparisons/#CheckType)|Check type|[CheckType](../table_comparisons/#CheckType)|
 |actual_value|Actual value|double|
 |expected_value|Expected value|double|
 |warning_lower_bound|Warning lower bound|double|
@@ -26,7 +26,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |column_name|Column name|string|
 |data_group|Data group name|string|
 |duration_ms|Duration (ms)|integer|
-|[time_gradient](../errors/#TimePeriodGradient)|Time gradient|[TimePeriodGradient](../errors/#TimePeriodGradient)|
+|[time_gradient](../errors/#timeperiodgradient)|Time gradient|[TimePeriodGradient](../errors/#timeperiodgradient)|
 |time_period|Time period|datetime|
 |include_in_kpi|Include in KPI|boolean|
 |include_in_sla|Include in SLA|boolean|
@@ -81,7 +81,7 @@ Model that returns histograms of the data quality issue occurrences related to a
 |has_profiling_issues|True when this data quality incident is based on data quality issues from profiling checks within the filters applied to search for linked data quality issues.|boolean|
 |has_monitoring_issues|True when this data quality incident is based on data quality issues from monitoring checks within the filters applied to search for linked data quality issues.|boolean|
 |has_partitioned_issues|True when this data quality incident is based on data quality issues from partitioned checks within the filters applied to search for linked data quality issues.|boolean|
-|days|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|Dict[date, [IncidentDailyIssuesCount](#IncidentDailyIssuesCount)]|
+|days|A map of the numbers of data quality issues per day, the day uses the DQOps server timezone.|Dict[date, [IncidentDailyIssuesCount](#incidentdailyissuescount)]|
 |columns|A map of column names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
 |checks|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
 

@@ -21,10 +21,12 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -66,6 +68,8 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("postgresql", o -> o.postgresql);
             put("redshift", o -> o.redshift);
             put("sqlserver", o -> o.sqlserver);
+            put("presto", o -> o.presto);
+            put("trino", o -> o.trino);
             put("mysql", o -> o.mysql);
             put("oracle", o -> o.oracle);
             put("spark", o -> o.spark);
@@ -107,6 +111,18 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private SqlServerParametersSpec sqlserver;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private PrestoParametersSpec presto;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TrinoParametersSpec trino;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("MySQL connection parameters. Specify parameters in the mysql section or set the url (which is the MySQL JDBC url).")
@@ -302,6 +318,42 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         setDirtyIf(!Objects.equals(this.sqlserver, sqlserver));
         this.sqlserver = sqlserver;
         propagateHierarchyIdToField(sqlserver, "sqlserver");
+    }
+
+    /**
+     * Returns the connection parameters for Presto.
+     * @return Presto connection parameters.
+     */
+    public PrestoParametersSpec getPresto() {
+        return presto;
+    }
+
+    /**
+     * Sets the Presto connection parameters.
+     * @param presto New Presto connection parameters.
+     */
+    public void setPresto(PrestoParametersSpec presto) {
+        setDirtyIf(!Objects.equals(this.presto, presto));
+        this.presto = presto;
+        propagateHierarchyIdToField(presto, "presto");
+    }
+
+    /**
+     * Returns the connection parameters for Trino.
+     * @return Trino connection parameters.
+     */
+    public TrinoParametersSpec getTrino() {
+        return trino;
+    }
+
+    /**
+     * Sets the Trino connection parameters.
+     * @param trino New Trino connection parameters.
+     */
+    public void setTrino(TrinoParametersSpec trino) {
+        setDirtyIf(!Objects.equals(this.trino, trino));
+        this.trino = trino;
+        propagateHierarchyIdToField(trino, "trino");
     }
 
     /**
@@ -514,8 +566,23 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             if (cloned.redshift != null) {
                 cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
+            if (cloned.mysql != null) {
+                cloned.mysql = cloned.mysql.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.presto != null) {
+                cloned.presto = cloned.presto.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.trino != null) {
+                cloned.trino = cloned.trino.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.oracle != null) {
+                cloned.oracle = cloned.oracle.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
             if (cloned.sqlserver != null) {
                 cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.spark != null) {
+                cloned.spark = cloned.spark.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.incidentGrouping != null) {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider, secretValueLookupContext);

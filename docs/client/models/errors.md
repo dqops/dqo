@@ -25,9 +25,9 @@ Detailed error statuses for a single check. Represent one row in the errors tabl
 |expected_value|Expected value|double|
 |column_name|Column name|string|
 |data_group|Data group|string|
-|[check_type](../#CheckType)|Check type|[CheckType](../#CheckType)|
+|[check_type](../table_comparisons/#CheckType)|Check type|[CheckType](../table_comparisons/#CheckType)|
 |duration_ms|Duration (ms)|integer|
-|[time_gradient](#TimePeriodGradient)|Time gradient|[TimePeriodGradient](#TimePeriodGradient)|
+|[time_gradient](#timeperiodgradient)|Time gradient|[TimePeriodGradient](#timeperiodgradient)|
 |time_period|Time period|datetime|
 |provider|Provider name|string|
 |quality_dimension|Data quality dimension|string|
@@ -52,12 +52,12 @@ Error detailed statuses. Returned in the context of a single data group, with a 
 |---------------|---------------------------------|-----------|
 |check_name|Check name|string|
 |check_display_name|Check display name|string|
-|[check_type](../#CheckType)|Check type|[CheckType](../#CheckType)|
+|[check_type](../table_comparisons/#CheckType)|Check type|[CheckType](../table_comparisons/#CheckType)|
 |check_hash|Check hash|long|
 |check_category|Check category name|string|
 |data_groups_names|Data groups list|List[string]|
 |data_group|Selected data group|string|
-|error_entries|Error entries|List[[ErrorEntryModel](#ErrorEntryModel)]|
+|error_entries|Error entries|List[[ErrorEntryModel](#errorentrymodel)]|
 
 
 ___  

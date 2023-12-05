@@ -63,7 +63,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_queue_job_id](../../models/#DqoQueueJobId)||[DqoQueueJobId](../../models/#DqoQueueJobId)|
+|[dqo_queue_job_id](../../models/Common/#dqoqueuejobid)||[DqoQueueJobId](../../models/Common/#dqoqueuejobid)|
 
 
 
@@ -107,7 +107,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_model](../../models/columns/#ColumnModel)||[ColumnModel](../../models/columns/#ColumnModel)|
+|[column_model](../../models/columns/#columnmodel)||[ColumnModel](../../models/columns/#columnmodel)|
 
 
 
@@ -151,7 +151,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_list_model](../../models/columns/#ColumnListModel)||[ColumnListModel](../../models/columns/#ColumnListModel)|
+|[column_list_model](../../models/columns/#columnlistmodel)||[ColumnListModel](../../models/columns/#columnlistmodel)|
 
 
 
@@ -195,7 +195,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|comment_spec||List[[CommentSpec](../../models/#CommentSpec)]|
+|comment_spec||List[[CommentSpec](../../models/Common/#commentspec)]|
 
 
 
@@ -283,7 +283,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/#CheckContainerListModel)||[CheckContainerListModel](../../models/#CheckContainerListModel)|
+|[check_container_list_model](../../models/Common/#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common/#checkcontainerlistmodel)|
 
 
 
@@ -296,7 +296,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -328,7 +328,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_daily_monitoring_check_categories_spec](../../models/columns/#ColumnDailyMonitoringCheckCategoriesSpec)||[ColumnDailyMonitoringCheckCategoriesSpec](../../models/columns/#ColumnDailyMonitoringCheckCategoriesSpec)|
+|[column_daily_monitoring_check_categories_spec](../../models/columns/#columndailymonitoringcheckcategoriesspec)||[ColumnDailyMonitoringCheckCategoriesSpec](../../models/columns/#columndailymonitoringcheckcategoriesspec)|
 
 
 
@@ -372,7 +372,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -385,7 +385,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -417,7 +417,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -430,7 +430,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -464,7 +464,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_monthly_monitoring_check_categories_spec](../../models/columns/#ColumnMonthlyMonitoringCheckCategoriesSpec)||[ColumnMonthlyMonitoringCheckCategoriesSpec](../../models/columns/#ColumnMonthlyMonitoringCheckCategoriesSpec)|
+|[column_monthly_monitoring_check_categories_spec](../../models/columns/#columnmonthlymonitoringcheckcategoriesspec)||[ColumnMonthlyMonitoringCheckCategoriesSpec](../../models/columns/#columnmonthlymonitoringcheckcategoriesspec)|
 
 
 
@@ -508,7 +508,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/#CheckContainerListModel)||[CheckContainerListModel](../../models/#CheckContainerListModel)|
+|[check_container_list_model](../../models/Common/#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common/#checkcontainerlistmodel)|
 
 
 
@@ -521,7 +521,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -553,7 +553,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_daily_partitioned_check_categories_spec](../../models/columns/#ColumnDailyPartitionedCheckCategoriesSpec)||[ColumnDailyPartitionedCheckCategoriesSpec](../../models/columns/#ColumnDailyPartitionedCheckCategoriesSpec)|
+|[column_daily_partitioned_check_categories_spec](../../models/columns/#columndailypartitionedcheckcategoriesspec)||[ColumnDailyPartitionedCheckCategoriesSpec](../../models/columns/#columndailypartitionedcheckcategoriesspec)|
 
 
 
@@ -597,7 +597,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -610,7 +610,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -642,7 +642,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -655,7 +655,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 |check_category|Check category|string|:material-check-bold:|
 |check_name|Check name|string|:material-check-bold:|
 
@@ -689,7 +689,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_monthly_partitioned_check_categories_spec](../../models/columns/#ColumnMonthlyPartitionedCheckCategoriesSpec)||[ColumnMonthlyPartitionedCheckCategoriesSpec](../../models/columns/#ColumnMonthlyPartitionedCheckCategoriesSpec)|
+|[column_monthly_partitioned_check_categories_spec](../../models/columns/#columnmonthlypartitionedcheckcategoriesspec)||[ColumnMonthlyPartitionedCheckCategoriesSpec](../../models/columns/#columnmonthlypartitionedcheckcategoriesspec)|
 
 
 
@@ -733,7 +733,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_profiling_check_categories_spec](../../models/columns/#ColumnProfilingCheckCategoriesSpec)||[ColumnProfilingCheckCategoriesSpec](../../models/columns/#ColumnProfilingCheckCategoriesSpec)|
+|[column_profiling_check_categories_spec](../../models/columns/#columnprofilingcheckcategoriesspec)||[ColumnProfilingCheckCategoriesSpec](../../models/columns/#columnprofilingcheckcategoriesspec)|
 
 
 
@@ -777,7 +777,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_list_model](../../models/#CheckContainerListModel)||[CheckContainerListModel](../../models/#CheckContainerListModel)|
+|[check_container_list_model](../../models/Common/#checkcontainerlistmodel)||[CheckContainerListModel](../../models/Common/#checkcontainerlistmodel)|
 
 
 
@@ -821,7 +821,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -865,7 +865,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -911,7 +911,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[column_statistics_model](../../models/columns/#ColumnStatisticsModel)||[ColumnStatisticsModel](../../models/columns/#ColumnStatisticsModel)|
+|[column_statistics_model](../../models/columns/#columnstatisticsmodel)||[ColumnStatisticsModel](../../models/columns/#columnstatisticsmodel)|
 
 
 
@@ -955,7 +955,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|column_list_model||List[[ColumnListModel](../../models/columns/#ColumnListModel)]|
+|column_list_model||List[[ColumnListModel](../../models/columns/#columnlistmodel)]|
 
 
 
@@ -998,7 +998,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[table_columns_statistics_model](../../models/columns/#TableColumnsStatisticsModel)||[TableColumnsStatisticsModel](../../models/columns/#TableColumnsStatisticsModel)|
+|[table_columns_statistics_model](../../models/columns/#tablecolumnsstatisticsmodel)||[TableColumnsStatisticsModel](../../models/columns/#tablecolumnsstatisticsmodel)|
 
 
 
@@ -1102,7 +1102,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic column information to store|[ColumnListModel](../../models/columns/#ColumnListModel)| |
+|Basic column information to store|[ColumnListModel](../../models/columns/#columnlistmodel)| |
 
 
 
@@ -1149,7 +1149,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|List[[CommentSpec](../../models/#CommentSpec)]| |
+|List of comments to stored (replaced) on the column or an empty object to clear the list of assigned comments on the column|List[[CommentSpec](../../models/Common/#commentspec)]| |
 
 
 
@@ -1243,7 +1243,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column|[ColumnDailyMonitoringCheckCategoriesSpec](../../models/columns/#ColumnDailyMonitoringCheckCategoriesSpec)| |
+|Configuration of daily column level data quality monitoring to configure on a column or an empty object to clear the list of assigned daily data quality monitoring on the column|[ColumnDailyMonitoringCheckCategoriesSpec](../../models/columns/#columndailymonitoringcheckcategoriesspec)| |
 
 
 
@@ -1282,7 +1282,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -1291,7 +1291,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the data quality monitoring configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -1338,7 +1338,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column|[ColumnMonthlyMonitoringCheckCategoriesSpec](../../models/columns/#ColumnMonthlyMonitoringCheckCategoriesSpec)| |
+|Configuration of monthly column level data quality monitoring to configure on a column or an empty object to clear the list of assigned monthly data quality monitoring on the column|[ColumnMonthlyMonitoringCheckCategoriesSpec](../../models/columns/#columnmonthlymonitoringcheckcategoriesspec)| |
 
 
 
@@ -1385,7 +1385,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnDailyPartitionedCheckCategoriesSpec](../../models/columns/#ColumnDailyPartitionedCheckCategoriesSpec)| |
+|Configuration of daily column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnDailyPartitionedCheckCategoriesSpec](../../models/columns/#columndailypartitionedcheckcategoriesspec)| |
 
 
 
@@ -1424,7 +1424,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -1433,7 +1433,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the data quality partitioned checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -1480,7 +1480,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnMonthlyPartitionedCheckCategoriesSpec](../../models/columns/#ColumnMonthlyPartitionedCheckCategoriesSpec)| |
+|Configuration of monthly column level data quality partitioned checks to configure on a column or an empty object to clear the list of assigned data quality partitioned checks on the column|[ColumnMonthlyPartitionedCheckCategoriesSpec](../../models/columns/#columnmonthlypartitionedcheckcategoriesspec)| |
 
 
 
@@ -1527,7 +1527,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column|[ColumnProfilingCheckCategoriesSpec](../../models/columns/#ColumnProfilingCheckCategoriesSpec)| |
+|Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column|[ColumnProfilingCheckCategoriesSpec](../../models/columns/#columnprofilingcheckcategoriesspec)| |
 
 
 
@@ -1574,7 +1574,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 

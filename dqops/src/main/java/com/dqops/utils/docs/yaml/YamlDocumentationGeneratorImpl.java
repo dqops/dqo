@@ -65,8 +65,10 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
         }
 
         List<DocumentationFolder> checkFolders = yamlFolder.getSubFolders().stream()
-                .filter(f -> f.getFolderName().toLowerCase().contains("check"))
-                .collect(Collectors.toList());
+                .filter(f -> f.getFolderName().contains("profiling")
+                        || f.getFolderName().contains("partitioned")
+                        || f.getFolderName().contains("monitoring")
+                ).collect(Collectors.toList());
         for (DocumentationFolder checkFolder : checkFolders) {
             String checkTypeString = Path.of(checkFolder.getFolderName()).getFileName().toString();
             MainPageYamlDocumentationModel mainPageYamlDocumentationModel = renderMainPageForCheckType(checkTypeString, yamlSuperiorObjectDocumentationModels);
@@ -92,7 +94,7 @@ public class YamlDocumentationGeneratorImpl implements YamlDocumentationGenerato
             checkTargetPage.setHeader(checkTarget.name());
 
             MainPageYamlDocumentationModel checkTypePage = new MainPageYamlDocumentationModel();
-            checkTypePage.setHeader(checkTypeString);
+            checkTypePage.setHeader(checkTypeString + "_checks");
             List<YamlSuperiorObjectDocumentationModel> superiorObjectDocumentationModels = allSuperiorObjectDocumentationModels.stream()
                     .filter(model -> model.getReflectedSuperiorDataType()
                             .getClassUsedOnTheFieldPath()

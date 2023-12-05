@@ -23,6 +23,10 @@ import SnowflakeConnection from './SnowflakeConnection';
 import SnowflakeLogo from '../../SvgIcon/svg/snowflake.svg';
 import PostgreSQLConnection from './PostgreSQLConnection';
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import PrestoConnection from './PrestoConnection';
+import PrestoLogo from '../../SvgIcon/svg/presto.svg';
+import TrinoConnection from './TrinoConnection';
+import TrinoLogo from '../../SvgIcon/svg/trino.svg';
 import RedshiftConnection from './RedshiftConnection';
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from './SqlServerConnection';
@@ -37,13 +41,13 @@ interface IDatabaseConnectionProps {
   onNext: () => void;
   database: ConnectionModel;
   onChange: (db: ConnectionModel) => void;
-  nameOfdatabase?: string;
+  nameOfDatabase?: string;
 }
 
 const DatabaseConnection = ({
   database,
   onChange,
-  nameOfdatabase
+  nameOfDatabase
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
@@ -143,6 +147,10 @@ const DatabaseConnection = ({
         return 'Amazon Redshift Connection Settings';
       case ConnectionModelProviderTypeEnum.sqlserver:
         return 'Microsoft SQL Server Connection Settings';
+      case ConnectionModelProviderTypeEnum.presto:
+        return 'PrestoDB Connection Settings';
+      case ConnectionModelProviderTypeEnum.trino:
+        return 'Trino Connection Settings';
       case ConnectionModelProviderTypeEnum.mysql:
         return 'MySQL Connection Settings';
       case ConnectionModelProviderTypeEnum.oracle:
@@ -197,6 +205,20 @@ const DatabaseConnection = ({
         sharedCredentials = {sharedCredentials}
       />
     ),
+    [ConnectionModelProviderTypeEnum.presto]: (
+      <PrestoConnection
+        presto={database.presto}
+        onChange={(presto) => onChange({ ...database, presto })}
+        sharedCredentials = {sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.trino]: (
+      <TrinoConnection
+        trino={database.trino}
+        onChange={(trino) => onChange({ ...database, trino })}
+        sharedCredentials = {sharedCredentials}
+      />
+    ),
     [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
@@ -225,6 +247,10 @@ const DatabaseConnection = ({
         return RedshiftLogo;
       case ConnectionModelProviderTypeEnum.sqlserver:
         return SqlServerLogo;
+      case ConnectionModelProviderTypeEnum.presto:
+        return PrestoLogo;
+      case ConnectionModelProviderTypeEnum.trino:
+        return TrinoLogo;
       case ConnectionModelProviderTypeEnum.mysql:
         return MySQLLogo;
       case ConnectionModelProviderTypeEnum.oracle:
@@ -240,14 +266,14 @@ const DatabaseConnection = ({
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
           <div>
-            {nameOfdatabase
-              ? nameOfdatabase + ' Connection Settings'
+            {nameOfDatabase
+              ? nameOfDatabase + ' Connection Settings'
               : getTitle(database.provider_type)}
           </div>
         </div>
-        {nameOfdatabase ? (
+        {nameOfDatabase ? (
           <SvgIcon
-            name={nameOfdatabase.toLowerCase().replace(/\s/g, '')}
+            name={nameOfDatabase.toLowerCase().replace(/\s/g, '')}
             className="mb-3 w-20 text-blue-500"
           />
         ) : (
@@ -269,9 +295,12 @@ const DatabaseConnection = ({
           <Input
           label="Parallel jobs limit"
           value={database.parallel_jobs_limit}
-          onChange={(e) =>
-           !isNaN(Number(e.target.value)) && onChange({ ...database, parallel_jobs_limit: Number(e.target.value)})
-          }
+          onChange={(e) =>{
+           if (!isNaN(Number(e.target.value))) {
+              onChange({ ...database, parallel_jobs_limit: String(e.target.value).length === 0 
+                ? undefined : Number(e.target.value)})
+            } 
+          }}
         />
         <div className="mt-6">
           {database.provider_type ? components[database.provider_type] : ''}

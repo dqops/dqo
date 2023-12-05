@@ -16,7 +16,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -50,7 +50,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -84,7 +84,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -118,7 +118,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -152,7 +152,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -186,7 +186,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_container_model](../../models/#CheckContainerModel)||[CheckContainerModel](../../models/#CheckContainerModel)|
+|[check_container_model](../../models/Common/#checkcontainermodel)||[CheckContainerModel](../../models/Common/#checkcontainermodel)|
 
 
 
@@ -220,7 +220,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[monitoring_schedule_spec](../../models/#MonitoringScheduleSpec)||[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)|
+|[monitoring_schedule_spec](../../models/Common/#monitoringschedulespec)||[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)|
 
 
 
@@ -229,7 +229,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -299,7 +299,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -336,7 +336,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -373,7 +373,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -410,7 +410,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -447,7 +447,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -484,7 +484,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/#CheckContainerModel)| |
+|Model with the changes to be applied to the data quality profiling checks configuration|[CheckContainerModel](../../models/Common/#checkcontainermodel)| |
 
 
 
@@ -519,7 +519,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|[scheduling_group](../../models/#CheckRunScheduleGroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/#CheckRunScheduleGroup)|:material-check-bold:|
+|[scheduling_group](../../models/Common/#checkrunschedulegroup)|Check scheduling group (named schedule)|[CheckRunScheduleGroup](../../models/Common/#checkrunschedulegroup)|:material-check-bold:|
 
 
 
@@ -528,7 +528,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
   
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/#MonitoringScheduleSpec)| |
+|Spec with default schedules changes to be applied to the default configuration.|[MonitoringScheduleSpec](../../models/Common/#monitoringschedulespec)| |
 
 
 

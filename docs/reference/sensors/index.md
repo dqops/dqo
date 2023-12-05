@@ -1,6 +1,7 @@
 # Sensors
 
-**This is a list of the sensors in DQOps broken down by category and a brief description of what they do.**
+**This is a list of sensors in DQOps broken down by category and a brief description of what they do.**
+
 
 ## Table sensors
 
@@ -334,5 +335,6 @@
 |[distinct_percent](./column/uniqueness-column-sensors/#distinct-percent)|Column level sensor that calculates the percentage of unique values in a column.|
 |[duplicate_count](./column/uniqueness-column-sensors/#duplicate-count)|Column level sensor that calculates the number of duplicate values in a given column.|
 |[duplicate_percent](./column/uniqueness-column-sensors/#duplicate-percent)|Column level sensor that calculates the percentage of rows that are duplicates.|
+
 
 

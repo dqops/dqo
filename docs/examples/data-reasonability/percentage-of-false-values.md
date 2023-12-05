@@ -1,6 +1,6 @@
 # Percentage of false values
 
-This example shows how to detect that the percentage of false values remains above a set threshold.
+This example shows how to detect that the percentage of false boolean values remains above a set threshold.
 
 **PROBLEM**
 
@@ -15,14 +15,14 @@ a link to a copy of the PDF, which can be found on Google Cloud Storage.
 The `invalidOcr` column indicates if the OCR does match the raw file text (false value) or does not (true value). In case
 of the true value, the OCR process needs more work and the file is not ready to be transcribed.
 
-We want to verify the percentage of false values in the `invalidOcr` column, which will tell us what percentage of data is 
+We want to verify the percentage of false boolean values in the `invalidOcr` column, which will tell us what percentage of data is 
 ready to be transcribed.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.fcc_political_ads.content_info` using monitoring 
 [false_percent](../../checks/column/bool/false-percent.md) column check.
-Our goal is to verify that the percentage of false values on `invalidOcr` column does not fall below 99%. 
+Our goal is to verify that the percentage of false boolean values on `invalidOcr` column does not fall below 99%. 
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -96,7 +96,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
 
     The actual value in this example is 99, which is above the minimum threshold level set in the warning (99).
-    The check gives a valid result (notice the green square on the left of the name of the check).
+    The check gives a valid result (notice the green square to the left of the check name).
 
     ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results.png)
 
@@ -112,14 +112,14 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     ![False-percent check results on KPIs per check category - summary dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-KPIs-per-check-category-summary-dashboard.png)
 
-## Configuring a schedule at connection level
+## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
+After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
 
-![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 
 1. Navigate to the **Data Source** section.
 
@@ -127,9 +127,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 3. Click on the **Schedule** tab.
 
-4. Select the Monitoring Daily tab
+4. Select the **Monitoring daily** tab
 
-5. Select the **Run every day at** option and specify the time as 12:00.
+5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 

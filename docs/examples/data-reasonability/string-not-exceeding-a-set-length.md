@@ -1,6 +1,6 @@
 # A string not exceeding a set length 
 
-The check verifies that the length of the string does not exceed the indicated value.
+This example shows how to verify that the maximal length of the string in a column does not exceed the set length.
 
 **PROBLEM**
 
@@ -10,23 +10,23 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
-The `measure_name` contains measure name data. We want to verify that the length of the string values in this column does not exceed 30.
+The `measure_name` contains measure name data. We want to verify that the length of the string values in this column does not exceed 30 characters.
 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
 [string_max_length](../../checks/column/strings/string-max-length.md) column check.
-Our goal is to verify if the number of valid length values on `measure_name` column does not exceed the setup thresholds.
+Our goal is to verify if the length of the strings in `measure_name` column does not exceed the set threshold.
 
 In this example, we will set one maximum thresholds level for the check:
 
-- warning: 30.0
+- error: 30.0
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
-If the string length exceed 30.0, a warning alert will be triggered.
+If the string length exceed 30.0, en error alert will be triggered.
 
 ## Data structure
 
@@ -86,8 +86,8 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     Review the results which should be similar to the one below.
    
-    The actual value in this example is 31, which is above the maximum threshold level set in the error (30).
-    The check gives an error(notice the orange square on the left of the name of the check).
+    The actual value in this example is 31, which is above the maximum threshold level set in the error field (30).
+    The check result in an error issue (notice the orange square to the left of the check name).
 
     ![String-max-length check results](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results.png)
 
@@ -102,14 +102,14 @@ To execute the check prepared in the example using the [user interface](../../dq
 
      ![String-max-length check results on KPIs per table and day dashboard](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results-on-KPIs-per-table-and-day-dashboard.png)
 
-## Configuring a schedule at connection level
+## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
+After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
 
-![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 
 1. Navigate to the **Data Source** section.
 
@@ -117,9 +117,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 3. Click on the **Schedule** tab.
 
-4. Select the Monitoring Daily tab
+4. Select the **Monitoring daily** tab
 
-5. Select the **Run every day at** option and specify the time as 12:00.
+5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 

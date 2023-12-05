@@ -37,6 +37,12 @@ public enum ProviderType {
     @JsonProperty("sqlserver")
     sqlserver,
 
+    @JsonProperty("presto")
+    presto,
+
+    @JsonProperty("trino")
+    trino,
+
     @JsonProperty("mysql")
     mysql,
 
@@ -61,6 +67,10 @@ public enum ProviderType {
                 return "Redshift";
             case sqlserver:
                 return "SQL Server";
+            case presto:
+                return "Presto";
+            case trino:
+                return "Trino";
             case mysql:
                 return "MySQL";
             case oracle:

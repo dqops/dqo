@@ -21,10 +21,12 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.connectors.presto.PrestoParametersSpec;
 import com.dqops.connectors.redshift.RedshiftParametersSpec;
 import com.dqops.connectors.snowflake.SnowflakeParametersSpec;
 import com.dqops.connectors.spark.SparkParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
+import com.dqops.connectors.trino.TrinoParametersSpec;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
@@ -99,6 +101,18 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("SqlServer connection parameters.")
     private SqlServerParametersSpec sqlserver;
+
+    /**
+     * Presto connection parameters.
+     */
+    @JsonPropertyDescription("Presto connection parameters.")
+    private PrestoParametersSpec presto;
+
+    /**
+     * Trino connection parameters.
+     */
+    @JsonPropertyDescription("Trino connection parameters.")
+    private TrinoParametersSpec trino;
 
     /**
      * MySQL connection parameters.

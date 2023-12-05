@@ -132,9 +132,10 @@ nav:
   - REST API Python client:
     - models:
       - 'client/models/index.md'
-      - checks: 'client/models/checks.md'
+      - Common: 'client/models/Common.md'
       - check_results: 'client/models/check_results.md'
       - check_results_overview: 'client/models/check_results_overview.md'
+      - checks: 'client/models/checks.md'
       - columns: 'client/models/columns.md'
       - connections: 'client/models/connections.md'
       - dashboards: 'client/models/dashboards.md'
@@ -147,18 +148,18 @@ nav:
       - log_shipping: 'client/models/log_shipping.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
-      - sensors: 'client/models/sensors.md'
       - sensor_readouts: 'client/models/sensor_readouts.md'
+      - sensors: 'client/models/sensors.md'
       - shared_credentials: 'client/models/shared_credentials.md'
-      - tables: 'client/models/tables.md'
-      - table_comparisons: 'client/models/table_comparisons.md'
       - table_comparison_results: 'client/models/table_comparison_results.md'
+      - table_comparisons: 'client/models/table_comparisons.md'
+      - tables: 'client/models/tables.md'
       - users: 'client/models/users.md'
     - operations:
       - 'client/operations/index.md'
-      - checks: 'client/operations/checks.md'
       - check_results: 'client/operations/check_results.md'
       - check_results_overview: 'client/operations/check_results_overview.md'
+      - checks: 'client/operations/checks.md'
       - columns: 'client/operations/columns.md'
       - connections: 'client/operations/connections.md'
       - dashboards: 'client/operations/dashboards.md'
@@ -173,12 +174,12 @@ nav:
       - log_shipping: 'client/operations/log_shipping.md'
       - rules: 'client/operations/rules.md'
       - schemas: 'client/operations/schemas.md'
-      - sensors: 'client/operations/sensors.md'
       - sensor_readouts: 'client/operations/sensor_readouts.md'
+      - sensors: 'client/operations/sensors.md'
       - shared_credentials: 'client/operations/shared_credentials.md'
-      - tables: 'client/operations/tables.md'
-      - table_comparisons: 'client/operations/table_comparisons.md'
       - table_comparison_results: 'client/operations/table_comparison_results.md'
+      - table_comparisons: 'client/operations/table_comparisons.md'
+      - tables: 'client/operations/tables.md'
       - timezones: 'client/operations/timezones.md'
       - users: 'client/operations/users.md'
 ########## END INCLUDE PYTHON CLIENT REFERENCE
@@ -398,6 +399,7 @@ nav:
     - Sensors:
       - 'reference/sensors/index.md'
       - table:
+        - 'reference/sensors/table/index.md'
         - accuracy table sensors: 'reference/sensors/table/accuracy-table-sensors.md'
         - availability table sensors: 'reference/sensors/table/availability-table-sensors.md'
         - schema table sensors: 'reference/sensors/table/schema-table-sensors.md'
@@ -405,6 +407,7 @@ nav:
         - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
         - volume table sensors: 'reference/sensors/table/volume-table-sensors.md'
       - column:
+        - 'reference/sensors/column/index.md'
         - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
         - datatype column sensors: 'reference/sensors/column/datatype-column-sensors.md'
@@ -432,14 +435,17 @@ nav:
 ########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
     - Yaml:
       - profiling:
+        - 'reference/yaml/profiling/index.md'
         - table profiling checks: 'reference/yaml/profiling/table-profiling-checks.md'
         - column profiling checks: 'reference/yaml/profiling/column-profiling-checks.md'
       - monitoring:
+        - 'reference/yaml/monitoring/index.md'
         - table daily monitoring checks: 'reference/yaml/monitoring/table-daily-monitoring-checks.md'
         - table monthly monitoring checks: 'reference/yaml/monitoring/table-monthly-monitoring-checks.md'
         - column daily monitoring checks: 'reference/yaml/monitoring/column-daily-monitoring-checks.md'
         - column monthly monitoring checks: 'reference/yaml/monitoring/column-monthly-monitoring-checks.md'
       - partitioned:
+        - 'reference/yaml/partitioned/index.md'
         - table daily partitioned checks: 'reference/yaml/partitioned/table-daily-partitioned-checks.md'
         - table monthly partitioned checks: 'reference/yaml/partitioned/table-monthly-partitioned-checks.md'
         - column daily partitioned checks: 'reference/yaml/partitioned/column-daily-partitioned-checks.md'
@@ -459,6 +465,7 @@ nav:
 ########## END INCLUDE YAML REFERENCE
 ########## INCLUDE PARQUET FILES REFERENCE - DO NOT MODIFY MANUALLY
     - Parquet data files:
+      - 'reference/parquetfiles/index.md'
       - check_results: 'reference/parquetfiles/check_results.md'
       - errors: 'reference/parquetfiles/errors.md'
       - incidents: 'reference/parquetfiles/incidents.md'
@@ -467,7 +474,9 @@ nav:
 ########## END INCLUDE PARQUET FILES REFERENCE
 extra_css:
   - stylesheets/extra.css
-# Visual settings
+extra_javascript:
+  - javascripts/lazyload.min.js
+  # Visual settings
 theme:
   name: material
   custom_dir: docs
@@ -505,6 +514,11 @@ theme:
 plugins:
   - glightbox
 #  - search
+# replace above search with below commented section on update mkdocs-material to 9.4 at least
+#  - group:
+#      enabled: !ENV ENABLE_SEARCH
+#      plugins:
+#        - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets

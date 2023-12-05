@@ -107,7 +107,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     Review the results which should be similar to the one below.
    
     The actual value in this example is 92, which is below the minimum threshold level set in the warning (100.0%).
-    The check gives a fatal error (notice the red square on the left of the name of the check).
+    The check gives a fatal error (notice the red square to the left of the check name).
 
     ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results.png)
 
@@ -122,14 +122,14 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     ![SQL-condition-passed-percent results on Current table status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-table-status-per-data-quality-dimension-dashboard.png)
 
-## Configuring a schedule at connection level
+## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After running the daily monitoring checks, let's set up a schedule for the entire connection to execute the checks every day at 12:00.
+After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
 
-![Configure scheduler for the connection](https://dqops.com/docs/images/examples/configure-scheduler-for-connection.png)
+![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 
 1. Navigate to the **Data Source** section.
 
@@ -137,9 +137,9 @@ After running the daily monitoring checks, let's set up a schedule for the entir
 
 3. Click on the **Schedule** tab.
 
-4. Select the Monitoring Daily tab
+4. Select the **Monitoring daily** tab
 
-5. Select the **Run every day at** option and specify the time as 12:00.
+5. Select the **Run every day at** and change the time, for example, to 10:00. You can also select any other option. 
 
 6. Once you have set the schedule, click on the **Save** button to save your changes.
 

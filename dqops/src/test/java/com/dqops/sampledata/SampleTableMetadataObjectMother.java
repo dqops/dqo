@@ -22,10 +22,12 @@ import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
+import com.dqops.connectors.presto.PrestoConnectionSpecObjectMother;
 import com.dqops.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import com.dqops.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import com.dqops.connectors.spark.SparkConnectionSpecObjectMother;
 import com.dqops.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
+import com.dqops.connectors.trino.TrinoConnectionSpecObjectMother;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProviderObjectMother;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -64,6 +66,12 @@ public class SampleTableMetadataObjectMother {
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.create();
 
+            case presto:
+                return PrestoConnectionSpecObjectMother.create();
+
+            case trino:
+                return TrinoConnectionSpecObjectMother.create();
+
             case mysql:
                 return MysqlConnectionSpecObjectMother.create();
 
@@ -99,6 +107,12 @@ public class SampleTableMetadataObjectMother {
 
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.getSchemaName();
+
+            case presto:
+                return PrestoConnectionSpecObjectMother.getSchemaName();
+
+            case trino:
+                return TrinoConnectionSpecObjectMother.getSchemaName();
 
             case mysql:
                 return MysqlConnectionSpecObjectMother.getSchemaName();

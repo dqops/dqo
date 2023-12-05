@@ -1,6 +1,6 @@
 # Percentage of rows containing USA zipcodes
 
-Column level check that ensures that the percentage of rows containing valid currency codes does not exceed set thresholds.
+Column level check that ensures that the percentage of rows containing valid USA zipcodes does not exceed set thresholds.
 
 **PROBLEM**
 
@@ -83,12 +83,12 @@ To execute the check prepared in the example using the [user interface](../../dq
     that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
     that occurred during the check's execution.
 
-   ![Check details](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-checks-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-checks-details.png)
 
     Review the results which should be similar to the one below.
    
     The actual value in this example is 98, which is above the maximum threshold level set in the warning (10.0%).
-    The check gives a fatal error (notice the red square on the left of the name of the check).
+    The check gives a fatal error (notice the red square to the left of the check name).
 
     ![Contains-usa-zipcode-percent check results](https://dqops.com/docs/images/examples/daily-contains-usa-zipcode-percent-checks-results.png)
 

@@ -16,7 +16,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#CheckResultsOverviewDataModel)]|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#checkresultsoverviewdatamodel)]|
 
 
 
@@ -29,7 +29,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -61,7 +61,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#CheckResultsOverviewDataModel)]|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#checkresultsoverviewdatamodel)]|
 
 
 
@@ -74,7 +74,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -106,7 +106,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#CheckResultsOverviewDataModel)]|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#checkresultsoverviewdatamodel)]|
 
 
 
@@ -150,7 +150,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#CheckResultsOverviewDataModel)]|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#checkresultsoverviewdatamodel)]|
 
 
 
@@ -162,7 +162,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -194,7 +194,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#CheckResultsOverviewDataModel)]|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#checkresultsoverviewdatamodel)]|
 
 
 
@@ -206,7 +206,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/#CheckTimeScale)|Time scale|[CheckTimeScale](../../models/#CheckTimeScale)|:material-check-bold:|
+|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
 
 
 
@@ -238,7 +238,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#CheckResultsOverviewDataModel)]|
+|check_results_overview_data_model||List[[CheckResultsOverviewDataModel](../../models/check_results_overview/#checkresultsoverviewdatamodel)]|
 
 
 
