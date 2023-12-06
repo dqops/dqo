@@ -3,12 +3,13 @@ import { CheckResultApi } from '../../../../services/apiClient';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../../shared/routes';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
-import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import RadioButton from '../../../RadioButton';
 import DatePicker from '../../../DatePicker';
 import moment from 'moment';
 import TableQualityStatusOverview from './TableQualityStatusOverview';
 import { TFirstLevelCheck } from './TableQualityStatusConstans';
+import TotalChecksExecuted from './TotalChecksExecuted';
+import CurrentTableStatus from './CurrentTableStatus';
 
 interface IProps {
   timeScale?: 'daily' | 'monthly';
@@ -224,46 +225,8 @@ export default function TableQualityStatus({ timeScale }: IProps) {
       </div>
 
       <div className="flex gap-x-5">
-        <SectionWrapper title="Current table status">
-          <div className="flex gap-x-2">
-            <div className="w-43">Status:</div>
-            <div>{tableDataQualityStatus.current_severity}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-43">Last check executed at:</div>
-            <div>
-              {moment(tableDataQualityStatus.last_check_executed_at).format(
-                'YYYY-MM-DD HH:mm:ss'
-              )}
-            </div>
-          </div>
-        </SectionWrapper>
-        <SectionWrapper title="Total checks executed">
-          <div className="flex gap-x-2">
-            <div className="w-42">Total checks executed:</div>
-            <div>{tableDataQualityStatus.executed_checks}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-42">Valid:</div>
-            <div>{tableDataQualityStatus.valid_results}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-42">Warnings:</div>
-            <div>{tableDataQualityStatus.warnings}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-42">Errors:</div>
-            <div>{tableDataQualityStatus.errors}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-42">Fatals:</div>
-            <div>{tableDataQualityStatus.fatals}</div>
-          </div>
-          <div className="flex gap-x-2">
-            <div className="w-42">Execution errors:</div>
-            <div>{tableDataQualityStatus.execution_errors}</div>
-          </div>
-        </SectionWrapper>
+        <CurrentTableStatus tableDataQualityStatus={tableDataQualityStatus} />
+        <TotalChecksExecuted tableDataQualityStatus={tableDataQualityStatus} />
       </div>
       {Object.keys(firstLevelChecks).length > 0 ? (
         <TableQualityStatusOverview

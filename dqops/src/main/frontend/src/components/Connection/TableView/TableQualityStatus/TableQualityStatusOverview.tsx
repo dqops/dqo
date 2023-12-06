@@ -1,23 +1,23 @@
 import clsx from 'clsx';
 import moment from 'moment';
 import React, { useState } from 'react';
-import {
-  CheckCurrentDataQualityStatusModel,
-  CheckCurrentDataQualityStatusModelCurrentSeverityEnum,
-  ColumnCurrentDataQualityStatusModel
-} from '../../../../api';
+import { CheckCurrentDataQualityStatusModelCurrentSeverityEnum } from '../../../../api';
 import SvgIcon from '../../../SvgIcon';
 import { useHistory, useParams } from 'react-router-dom';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { ROUTES, CheckTypes } from '../../../../shared/routes';
 import { Tooltip } from '@material-tailwind/react';
-import { getColor } from './TableQualityStatusUtils';
+import {
+  getColor,
+  getColumnCircleStatus,
+  getColumnStatus,
+  getTableCircleStatus,
+  getTableStatus
+} from './TableQualityStatusUtils';
 import {
   ITableParameters,
-  TFirstLevelCheck,
-  backgroundStyle,
-  severityMap
+  backgroundStyle
 } from './TableQualityStatusConstans';
 
 export default function TableQualityStatusOverview({
@@ -44,108 +44,13 @@ export default function TableQualityStatusOverview({
     table: string;
   } = useParams();
 
-  const getColumnStatus = (
-    column: ColumnCurrentDataQualityStatusModel,
-    firstLevelCheck: string
+  const openFirstLevelTableTab = (
+    checkTypes: CheckTypes,
+    connection: string,
+    schema: string,
+    table: string,
+    timeScale?: 'daily' | 'monthly'
   ) => {
-    const checks: CheckCurrentDataQualityStatusModel[] = [];
-    Object.values(column.checks ?? {}).forEach((check) => {
-      if (
-        categoryDimension === 'category'
-          ? check.category === firstLevelCheck
-          : check.quality_dimension === firstLevelCheck
-      ) {
-        checks.push(check);
-      }
-    });
-    for (const severity of severityMap) {
-      const foundCheck = checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.highest_historical_severity
-            : x.current_severity) === severity
-      );
-
-      if (foundCheck) {
-        return {
-          status: severity,
-          lastExecutedAt: foundCheck.last_executed_at
-        };
-      }
-    }
-    return { status: null, lastExecutedAt: null };
-  };
-
-  const getColumnCircleStatus = (
-    column: ColumnCurrentDataQualityStatusModel,
-    firstLevelCheck: string
-  ) => {
-    const checks: CheckCurrentDataQualityStatusModel[] = [];
-    Object.values(column.checks ?? {}).forEach((check) => {
-      if (
-        categoryDimension === 'category'
-          ? check.category === firstLevelCheck
-          : check.quality_dimension === firstLevelCheck
-      ) {
-        checks.push(check);
-      }
-    });
-    for (const severity of severityMap) {
-      const foundCheck = checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.current_severity
-            : x.highest_historical_severity) === severity
-      );
-
-      if (foundCheck) {
-        return {
-          status: severity,
-          lastExecutedAt: foundCheck.last_executed_at
-        };
-      }
-    }
-    return { status: null, lastExecutedAt: null };
-  };
-
-  const getTableCircleStatus = (checks: TFirstLevelCheck[]) => {
-    const checkType = 'table';
-
-    for (const severity of severityMap) {
-      const foundCheck = checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.currentSeverity
-            : x.highestSeverity) === severity && x.checkType === checkType
-      );
-
-      if (foundCheck) {
-        return { status: severity, lastExecutedAt: foundCheck.lastExecutedAt };
-      }
-    }
-
-    return { status: null, lastExecutedAt: null };
-  };
-
-  const getTableStatus = (checks: TFirstLevelCheck[]) => {
-    const checkType = 'table';
-    for (const severity of severityMap) {
-      const foundCheck = checks.find(
-        (x) =>
-          (severityType === 'highest'
-            ? x.highestSeverity
-            : x.currentSeverity) === severity && x.checkType === checkType
-      );
-
-      if (foundCheck) {
-        return { status: severity, lastExecutedAt: foundCheck.lastExecutedAt };
-      }
-    }
-
-    return { status: null, lastExecutedAt: null };
-  };
-
-  const openFirstLevelTableTab = () => {
     const url = ROUTES.TABLE_LEVEL_PAGE(
       checkTypes,
       connection,
@@ -170,7 +75,13 @@ export default function TableQualityStatusOverview({
     history.push(url);
   };
 
-  const openFirstLevelColumnTab = (column: string) => {
+  const openFirstLevelColumnTab = (
+    checkTypes: CheckTypes,
+    connection: string,
+    schema: string,
+    table: string,
+    column: string
+  ) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
       checkTypes,
       connection,
@@ -279,7 +190,15 @@ export default function TableQualityStatusOverview({
             className={clsx(
               'p-4 border-b min-w-40 w-40 border-b-gray-150 font-bold cursor-pointer underline'
             )}
-            onClick={() => openFirstLevelTableTab()}
+            onClick={() =>
+              openFirstLevelTableTab(
+                checkTypes,
+                connection,
+                schema,
+                table,
+                timeScale
+              )
+            }
           >
             {key}
           </th>
@@ -298,8 +217,9 @@ export default function TableQualityStatusOverview({
                   toggleExtendedChecks(key, 'table');
                 }}
               >
-                {getColor(getTableStatus(firstLevelChecks[key]).status) !==
-                '' ? (
+                {getColor(
+                  getTableStatus(severityType, firstLevelChecks[key]).status
+                ) !== '' ? (
                   <div>
                     <SvgIcon
                       key={`svg_table_level_checks_${key}`}
@@ -316,44 +236,60 @@ export default function TableQualityStatusOverview({
                     />
                   </div>
                 ) : null}
-                {getColor(getTableStatus(firstLevelChecks[key]).status) !==
-                '' ? (
+                {getColor(
+                  getTableStatus(severityType, firstLevelChecks[key]).status
+                ) !== '' ? (
                   <div
                     className={clsx(
                       'w-43 h-12 flex ',
-                      getColor(getTableStatus(firstLevelChecks[key]).status),
+                      getColor(
+                        getTableStatus(severityType, firstLevelChecks[key])
+                          .status
+                      ),
                       severityType === 'current' ? '' : 'justify-end'
                     )}
                     style={{
                       ...(getColor(
-                        getTableStatus(firstLevelChecks[key]).status
+                        getTableStatus(severityType, firstLevelChecks[key])
+                          .status
                       ) === 'bg-gray-150'
                         ? backgroundStyle
                         : {})
                     }}
                   >
-                    {getTableCircleStatus(firstLevelChecks[key])
+                    {getTableCircleStatus(severityType, firstLevelChecks[key])
                       .lastExecutedAt ? (
                       <Tooltip
                         content={renderTooltipContent(
                           moment(
-                            getTableCircleStatus(firstLevelChecks[key])
-                              .lastExecutedAt
+                            getTableCircleStatus(
+                              severityType,
+                              firstLevelChecks[key]
+                            ).lastExecutedAt
                           ).format('YYYY-MM-DD HH:mm:ss'),
-                          getTableCircleStatus(firstLevelChecks[key]).status
+                          getTableCircleStatus(
+                            severityType,
+                            firstLevelChecks[key]
+                          ).status
                         )}
                       >
                         <div
                           className={clsx(
                             ' h-4 w-4 mr-2 mt-4 ml-2',
                             getColor(
-                              getTableCircleStatus(firstLevelChecks[key]).status
+                              getTableCircleStatus(
+                                severityType,
+                                firstLevelChecks[key]
+                              ).status
                             )
                           )}
                           style={{
                             borderRadius: '6px',
                             ...(getColor(
-                              getTableCircleStatus(firstLevelChecks[key]).status
+                              getTableCircleStatus(
+                                severityType,
+                                firstLevelChecks[key]
+                              ).status
                             ) === 'bg-gray-150'
                               ? backgroundStyle
                               : {})
@@ -436,7 +372,15 @@ export default function TableQualityStatusOverview({
               <td
                 key={`column_cell_${key}`}
                 className="p-2 px-4 underline cursor-pointer font-bold"
-                onClick={() => openFirstLevelColumnTab(key)}
+                onClick={() =>
+                  openFirstLevelColumnTab(
+                    checkTypes,
+                    connection,
+                    schema,
+                    table,
+                    key
+                  )
+                }
               >
                 {key}
               </td>
@@ -451,6 +395,8 @@ export default function TableQualityStatusOverview({
                   {' '}
                   {getColor(
                     getColumnStatus(
+                      severityType,
+                      categoryDimension,
                       (tableDataQualityStatus.columns ?? {})[key],
                       firstLevelChecksKey
                     ).status
@@ -475,6 +421,8 @@ export default function TableQualityStatusOverview({
                         className={clsx(
                           'h-12 w-43 flex',
                           getColumnStatus(
+                            severityType,
+                            categoryDimension,
                             (tableDataQualityStatus.columns ?? {})[key],
                             firstLevelChecksKey
                           ),
@@ -483,6 +431,8 @@ export default function TableQualityStatusOverview({
                         style={{
                           ...(getColor(
                             getColumnStatus(
+                              severityType,
+                              categoryDimension,
                               (tableDataQualityStatus.columns ?? {})[key],
                               firstLevelChecksKey
                             ).status
@@ -492,6 +442,8 @@ export default function TableQualityStatusOverview({
                         }}
                       >
                         {getColumnCircleStatus(
+                          severityType,
+                          categoryDimension,
                           (tableDataQualityStatus.columns ?? {})[key],
                           firstLevelChecksKey
                         ).lastExecutedAt ? (
@@ -499,11 +451,15 @@ export default function TableQualityStatusOverview({
                             content={renderTooltipContent(
                               moment(
                                 getColumnCircleStatus(
+                                  severityType,
+                                  categoryDimension,
                                   (tableDataQualityStatus.columns ?? {})[key],
                                   firstLevelChecksKey
                                 ).lastExecutedAt
                               ).format('YYYY-MM-DD HH:mm:ss'),
                               getColumnCircleStatus(
+                                severityType,
+                                categoryDimension,
                                 (tableDataQualityStatus.columns ?? {})[key],
                                 firstLevelChecksKey
                               ).status
@@ -515,6 +471,8 @@ export default function TableQualityStatusOverview({
                                 borderRadius: '6px',
                                 ...(getColor(
                                   getColumnCircleStatus(
+                                    severityType,
+                                    categoryDimension,
                                     (tableDataQualityStatus.columns ?? {})[key],
                                     firstLevelChecksKey
                                   ).status
