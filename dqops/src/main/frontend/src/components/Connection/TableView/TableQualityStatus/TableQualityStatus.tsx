@@ -870,7 +870,12 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                         ) ? (
                           <div className="w-40">
                             {(firstLevelChecks[check] ?? []).map((x, index) =>
-                              x.checkType === key ? (
+                              x.checkType === key &&
+                              getColor(
+                                severityType === 'current'
+                                  ? x.currentSeverity
+                                  : x.highestSeverity
+                              ) !== '' ? (
                                 <Tooltip
                                   key={`column_check_${key}_${check}_${index}`}
                                   content={renderSecondLevelTooltip(x)}
