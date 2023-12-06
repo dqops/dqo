@@ -33,7 +33,7 @@ export const getColumnStatus = (
   firstLevelCheck: string
 ) => {
   const checks: CheckCurrentDataQualityStatusModel[] = [];
-  Object.values(column.checks ?? {}).forEach((check) => {
+  Object.values(column?.checks ?? {}).forEach((check) => {
     if (
       categoryDimension === 'category'
         ? check.category === firstLevelCheck
