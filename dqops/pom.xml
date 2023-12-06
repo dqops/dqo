@@ -496,6 +496,26 @@
 					<groupId>org.apache.parquet</groupId>
 					<artifactId>parquet-hadoop-bundle</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-metastore</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hadoop-yarn-server-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hadoop-yarn-server-web-proxy</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-shims</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hive</groupId>
+					<artifactId>hive-llap-server</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 
