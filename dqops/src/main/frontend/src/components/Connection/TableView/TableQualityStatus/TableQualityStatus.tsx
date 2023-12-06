@@ -70,7 +70,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
       schema,
       table,
       month,
-      since ? Number(moment(since).utc()) : undefined,
+       undefined,
       checkTypes === CheckTypes.PROFILING,
       checkTypes === CheckTypes.MONITORING,
       checkTypes === CheckTypes.PARTITIONED,
@@ -627,12 +627,13 @@ export default function TableQualityStatus({ timeScale }: IProps) {
               </td>
               {Object.keys(firstLevelChecks).map((key) => (
                 <td key={`cell_table_level_checks_${key}`} className=" h-full ">
-                  <div className="h-full flex w-40 items-center ">
+                  <div className="h-full flex w-40 items-center " 
+                       onClick={() => {
+                          toggleExtendedChecks(key, 'table');
+                        }}>
                     {getColor(getCheckStatus(firstLevelChecks[key]).status) !== '' ? (
                       <div
-                        onClick={() => {
-                          toggleExtendedChecks(key, 'table');
-                        }}
+                        
                       >
                         <SvgIcon
                           key={`svg_table_level_checks_${key}`}
