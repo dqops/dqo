@@ -663,6 +663,10 @@ public class DefaultsController {
             defaultMonitoringScheduleSpec = userHome.getDefaultSchedules().getSpec()
                     .getScheduleForCheckSchedulingGroup(schedulingGroup);
         }
+        
+        if (defaultMonitoringScheduleSpec == null) {
+            defaultMonitoringScheduleSpec = new MonitoringScheduleSpec();
+        }
 
         return new ResponseEntity<>(Mono.just(defaultMonitoringScheduleSpec), HttpStatus.OK);
     }
