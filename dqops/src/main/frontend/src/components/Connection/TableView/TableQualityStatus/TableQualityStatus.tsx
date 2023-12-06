@@ -753,6 +753,9 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                         <td
                           key={`cell_column_${key}_${firstLevelChecksKey}`}
                           className=" h-full"
+                          onClick={() => {
+                            toggleExtendedChecks(key, firstLevelChecksKey);
+                          }}
                         >
                           {' '}
                           {getColor(
@@ -762,14 +765,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                             ).status
                           ) !== '' ? (
                             <div className="h-full flex w-40 items-center ">
-                              <div
-                                onClick={() => {
-                                  toggleExtendedChecks(
-                                    key,
-                                    firstLevelChecksKey
-                                  );
-                                }}
-                              >
+                              <div>
                                 <SvgIcon
                                   key={`svg_column_${key}_${firstLevelChecksKey}`}
                                   name={
