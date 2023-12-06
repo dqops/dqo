@@ -224,7 +224,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     return { status: null, lastExecutedAt: null };
   };
 
-  const getColumnHeaderStatus = (
+  const getColumnCircleStatus = (
     column: ColumnCurrentDataQualityStatusModel,
     firstLevelCheck: string
   ) => {
@@ -785,7 +785,6 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                               <div
                                 className={clsx(
                                   'h-12 w-43 flex',
-                                  // 'border border-gray-150',
                                   getColumnStatus(
                                     (tableDataQualityStatus.columns ?? {})[key],
                                     firstLevelChecksKey
@@ -810,14 +809,14 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                 <Tooltip
                                   content={renderTooltipContent(
                                     moment(
-                                      getColumnStatus(
+                                      getColumnCircleStatus(
                                         (tableDataQualityStatus.columns ?? {})[
                                           key
                                         ],
                                         firstLevelChecksKey
                                       ).lastExecutedAt
                                     ).format('YYYY-MM-DD HH:mm:ss'),
-                                    getColumnHeaderStatus(
+                                    getColumnCircleStatus(
                                       (tableDataQualityStatus.columns ?? {})[
                                         key
                                       ],
@@ -830,7 +829,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                     style={{
                                       borderRadius: '6px',
                                       ...(getColor(
-                                        getColumnHeaderStatus(
+                                        getColumnCircleStatus(
                                           (tableDataQualityStatus.columns ??
                                             {})[key],
                                           firstLevelChecksKey
