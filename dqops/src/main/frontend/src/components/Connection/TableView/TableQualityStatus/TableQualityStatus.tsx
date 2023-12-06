@@ -632,34 +632,37 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                             : {})
                         }}
                       >
-                        <Tooltip
-                          content={renderTooltipContent(
-                            moment(
-                              getTableCircleStatus(firstLevelChecks[key])
-                                .lastExecutedAt
-                            ).format('YYYY-MM-DD HH:mm:ss'),
-                            getTableCircleStatus(firstLevelChecks[key]).status
-                          )}
-                        >
-                          <div
-                            className={clsx(
-                              ' h-4 w-4 mr-2 mt-4 ml-2',
-                              getColor(
+                        {getTableCircleStatus(firstLevelChecks[key])
+                          .lastExecutedAt ? (
+                          <Tooltip
+                            content={renderTooltipContent(
+                              moment(
                                 getTableCircleStatus(firstLevelChecks[key])
-                                  .status
-                              )
+                                  .lastExecutedAt
+                              ).format('YYYY-MM-DD HH:mm:ss'),
+                              getTableCircleStatus(firstLevelChecks[key]).status
                             )}
-                            style={{
-                              borderRadius: '6px',
-                              ...(getColor(
-                                getTableCircleStatus(firstLevelChecks[key])
-                                  .status
-                              ) === 'bg-gray-150'
-                                ? backgroundStyle
-                                : {})
-                            }}
-                          ></div>
-                        </Tooltip>
+                          >
+                            <div
+                              className={clsx(
+                                ' h-4 w-4 mr-2 mt-4 ml-2',
+                                getColor(
+                                  getTableCircleStatus(firstLevelChecks[key])
+                                    .status
+                                )
+                              )}
+                              style={{
+                                borderRadius: '6px',
+                                ...(getColor(
+                                  getTableCircleStatus(firstLevelChecks[key])
+                                    .status
+                                ) === 'bg-gray-150'
+                                  ? backgroundStyle
+                                  : {})
+                              }}
+                            ></div>
+                          </Tooltip>
+                        ) : null}
                       </div>
                     ) : null}
                   </div>
@@ -806,40 +809,44 @@ export default function TableQualityStatus({ timeScale }: IProps) {
                                     : {})
                                 }}
                               >
-                                <Tooltip
-                                  content={renderTooltipContent(
-                                    moment(
+                                {getColumnCircleStatus(
+                                  (tableDataQualityStatus.columns ?? {})[key],
+                                  firstLevelChecksKey
+                                ).lastExecutedAt ? (
+                                  <Tooltip
+                                    content={renderTooltipContent(
+                                      moment(
+                                        getColumnCircleStatus(
+                                          (tableDataQualityStatus.columns ??
+                                            {})[key],
+                                          firstLevelChecksKey
+                                        ).lastExecutedAt
+                                      ).format('YYYY-MM-DD HH:mm:ss'),
                                       getColumnCircleStatus(
                                         (tableDataQualityStatus.columns ?? {})[
                                           key
                                         ],
                                         firstLevelChecksKey
-                                      ).lastExecutedAt
-                                    ).format('YYYY-MM-DD HH:mm:ss'),
-                                    getColumnCircleStatus(
-                                      (tableDataQualityStatus.columns ?? {})[
-                                        key
-                                      ],
-                                      firstLevelChecksKey
-                                    ).status
-                                  )}
-                                >
-                                  <div
-                                    className="h-4 w-4 ml-2 mt-4 mr-2"
-                                    style={{
-                                      borderRadius: '6px',
-                                      ...(getColor(
-                                        getColumnCircleStatus(
-                                          (tableDataQualityStatus.columns ??
-                                            {})[key],
-                                          firstLevelChecksKey
-                                        ).status
-                                      ) === 'bg-gray-150'
-                                        ? backgroundStyle
-                                        : {})
-                                    }}
-                                  ></div>
-                                </Tooltip>
+                                      ).status
+                                    )}
+                                  >
+                                    <div
+                                      className="h-4 w-4 ml-2 mt-4 mr-2"
+                                      style={{
+                                        borderRadius: '6px',
+                                        ...(getColor(
+                                          getColumnCircleStatus(
+                                            (tableDataQualityStatus.columns ??
+                                              {})[key],
+                                            firstLevelChecksKey
+                                          ).status
+                                        ) === 'bg-gray-150'
+                                          ? backgroundStyle
+                                          : {})
+                                      }}
+                                    ></div>
+                                  </Tooltip>
+                                ) : null}
                               </div>
                             </div>
                           ) : null}
