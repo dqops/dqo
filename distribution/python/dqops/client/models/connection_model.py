@@ -18,10 +18,12 @@ if TYPE_CHECKING:
     from ..models.presto_parameters_spec import PrestoParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
+    from ..models.spark_parameters_spec import SparkParametersSpec
     from ..models.sql_server_parameters_spec import SqlServerParametersSpec
     from ..models.statistics_collector_search_filters import (
         StatisticsCollectorSearchFilters,
     )
+    from ..models.trino_parameters_spec import TrinoParametersSpec
 
 
 T = TypeVar("T", bound="ConnectionModel")
@@ -42,9 +44,11 @@ class ConnectionModel:
         postgresql (Union[Unset, PostgresqlParametersSpec]):
         redshift (Union[Unset, RedshiftParametersSpec]):
         sqlserver (Union[Unset, SqlServerParametersSpec]):
+        presto (Union[Unset, PrestoParametersSpec]):
+        trino (Union[Unset, TrinoParametersSpec]):
         mysql (Union[Unset, MysqlParametersSpec]):
         oracle (Union[Unset, OracleParametersSpec]):
-        presto (Union[Unset, PrestoParametersSpec]):
+        spark (Union[Unset, SparkParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -75,9 +79,11 @@ class ConnectionModel:
     postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
     redshift: Union[Unset, "RedshiftParametersSpec"] = UNSET
     sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
+    presto: Union[Unset, "PrestoParametersSpec"] = UNSET
+    trino: Union[Unset, "TrinoParametersSpec"] = UNSET
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
-    presto: Union[Unset, "PrestoParametersSpec"] = UNSET
+    spark: Union[Unset, "SparkParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -121,6 +127,14 @@ class ConnectionModel:
         if not isinstance(self.sqlserver, Unset):
             sqlserver = self.sqlserver.to_dict()
 
+        presto: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.presto, Unset):
+            presto = self.presto.to_dict()
+
+        trino: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.trino, Unset):
+            trino = self.trino.to_dict()
+
         mysql: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.mysql, Unset):
             mysql = self.mysql.to_dict()
@@ -129,9 +143,9 @@ class ConnectionModel:
         if not isinstance(self.oracle, Unset):
             oracle = self.oracle.to_dict()
 
-        presto: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.presto, Unset):
-            presto = self.presto.to_dict()
+        spark: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.spark, Unset):
+            spark = self.spark.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -192,12 +206,16 @@ class ConnectionModel:
             field_dict["redshift"] = redshift
         if sqlserver is not UNSET:
             field_dict["sqlserver"] = sqlserver
+        if presto is not UNSET:
+            field_dict["presto"] = presto
+        if trino is not UNSET:
+            field_dict["trino"] = trino
         if mysql is not UNSET:
             field_dict["mysql"] = mysql
         if oracle is not UNSET:
             field_dict["oracle"] = oracle
-        if presto is not UNSET:
-            field_dict["presto"] = presto
+        if spark is not UNSET:
+            field_dict["spark"] = spark
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -244,10 +262,12 @@ class ConnectionModel:
         from ..models.presto_parameters_spec import PrestoParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
+        from ..models.spark_parameters_spec import SparkParametersSpec
         from ..models.sql_server_parameters_spec import SqlServerParametersSpec
         from ..models.statistics_collector_search_filters import (
             StatisticsCollectorSearchFilters,
         )
+        from ..models.trino_parameters_spec import TrinoParametersSpec
 
         d = src_dict.copy()
         connection_name = d.pop("connection_name", UNSET)
@@ -298,6 +318,20 @@ class ConnectionModel:
         else:
             sqlserver = SqlServerParametersSpec.from_dict(_sqlserver)
 
+        _presto = d.pop("presto", UNSET)
+        presto: Union[Unset, PrestoParametersSpec]
+        if isinstance(_presto, Unset):
+            presto = UNSET
+        else:
+            presto = PrestoParametersSpec.from_dict(_presto)
+
+        _trino = d.pop("trino", UNSET)
+        trino: Union[Unset, TrinoParametersSpec]
+        if isinstance(_trino, Unset):
+            trino = UNSET
+        else:
+            trino = TrinoParametersSpec.from_dict(_trino)
+
         _mysql = d.pop("mysql", UNSET)
         mysql: Union[Unset, MysqlParametersSpec]
         if isinstance(_mysql, Unset):
@@ -312,12 +346,12 @@ class ConnectionModel:
         else:
             oracle = OracleParametersSpec.from_dict(_oracle)
 
-        _presto = d.pop("presto", UNSET)
-        presto: Union[Unset, PrestoParametersSpec]
-        if isinstance(_presto, Unset):
-            presto = UNSET
+        _spark = d.pop("spark", UNSET)
+        spark: Union[Unset, SparkParametersSpec]
+        if isinstance(_spark, Unset):
+            spark = UNSET
         else:
-            presto = PrestoParametersSpec.from_dict(_presto)
+            spark = SparkParametersSpec.from_dict(_spark)
 
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
@@ -403,9 +437,11 @@ class ConnectionModel:
             postgresql=postgresql,
             redshift=redshift,
             sqlserver=sqlserver,
+            presto=presto,
+            trino=trino,
             mysql=mysql,
             oracle=oracle,
-            presto=presto,
+            spark=spark,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

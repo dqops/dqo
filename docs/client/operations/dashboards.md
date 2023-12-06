@@ -36,9 +36,9 @@ http://localhost:8888/api/dashboards
 
 
 ___  
-## get_dashboard_level1  
+## get_dashboard_level_1  
 Returns a single dashboard in the tree of folder with a temporary authenticated url  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level1.py)
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_1.py)
   
 
 **GET**
@@ -79,9 +79,9 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 ___  
-## get_dashboard_level2  
+## get_dashboard_level_2  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level2.py)
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_2.py)
   
 
 **GET**
@@ -102,8 +102,8 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|:material-check-bold:|
-|folder2|Second level folder name|string|:material-check-bold:|
+|folder_1|Root folder name|string|:material-check-bold:|
+|folder_2|Second level folder name|string|:material-check-bold:|
 |dashboard_name|Dashboard name|string|:material-check-bold:|
 |window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
@@ -123,9 +123,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 ___  
-## get_dashboard_level3  
+## get_dashboard_level_3  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level3.py)
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_3.py)
   
 
 **GET**
@@ -146,9 +146,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|:material-check-bold:|
-|folder2|Second level folder name|string|:material-check-bold:|
-|folder3|Third level folder name|string|:material-check-bold:|
+|folder_1|Root folder name|string|:material-check-bold:|
+|folder_2|Second level folder name|string|:material-check-bold:|
+|folder_3|Third level folder name|string|:material-check-bold:|
 |dashboard_name|Dashboard name|string|:material-check-bold:|
 |window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
@@ -168,9 +168,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 ___  
-## get_dashboard_level4  
+## get_dashboard_level_4  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level4.py)
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_4.py)
   
 
 **GET**
@@ -191,10 +191,10 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|:material-check-bold:|
-|folder2|Second level folder name|string|:material-check-bold:|
-|folder3|Third level folder name|string|:material-check-bold:|
-|folder4|Fourth level folder name|string|:material-check-bold:|
+|folder_1|Root folder name|string|:material-check-bold:|
+|folder_2|Second level folder name|string|:material-check-bold:|
+|folder_3|Third level folder name|string|:material-check-bold:|
+|folder_4|Fourth level folder name|string|:material-check-bold:|
 |dashboard_name|Dashboard name|string|:material-check-bold:|
 |window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 
@@ -214,9 +214,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 ___  
-## get_dashboard_level5  
+## get_dashboard_level_5  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level5.py)
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_5.py)
   
 
 **GET**
@@ -237,11 +237,11 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
-|folder1|Root folder name|string|:material-check-bold:|
-|folder2|Second level folder name|string|:material-check-bold:|
-|folder3|Third level folder name|string|:material-check-bold:|
-|folder4|Fourth level folder name|string|:material-check-bold:|
-|folder5|Fifth level folder name|string|:material-check-bold:|
+|folder_1|Root folder name|string|:material-check-bold:|
+|folder_2|Second level folder name|string|:material-check-bold:|
+|folder_3|Third level folder name|string|:material-check-bold:|
+|folder_4|Fourth level folder name|string|:material-check-bold:|
+|folder_5|Fifth level folder name|string|:material-check-bold:|
 |dashboard_name|Dashboard name|string|:material-check-bold:|
 |window_location_origin|Optional url of the DQOps instance, it should be the value of window.location.origin.|string| |
 

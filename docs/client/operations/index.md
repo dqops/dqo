@@ -119,11 +119,11 @@ Provides access to data quality dashboards
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
 |[get_all_dashboards](./dashboards/#get_all_dashboards)|GET|Returns a list of root folders with dashboards|
-|[get_dashboard_level1](./dashboards/#get_dashboard_level1)|GET|Returns a single dashboard in the tree of folder with a temporary authenticated url|
-|[get_dashboard_level2](./dashboards/#get_dashboard_level2)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
-|[get_dashboard_level3](./dashboards/#get_dashboard_level3)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
-|[get_dashboard_level4](./dashboards/#get_dashboard_level4)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
-|[get_dashboard_level5](./dashboards/#get_dashboard_level5)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
+|[get_dashboard_level_1](./dashboards/#get_dashboard_level_1)|GET|Returns a single dashboard in the tree of folder with a temporary authenticated url|
+|[get_dashboard_level_2](./dashboards/#get_dashboard_level_2)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
+|[get_dashboard_level_3](./dashboards/#get_dashboard_level_3)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
+|[get_dashboard_level_4](./dashboards/#get_dashboard_level_4)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
+|[get_dashboard_level_5](./dashboards/#get_dashboard_level_5)|GET|Returns a single dashboard in the tree of folders with a temporary authenticated url|
 
 
 ## data_grouping_configurations  

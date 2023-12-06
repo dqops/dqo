@@ -9,6 +9,7 @@ class ProviderType(str, Enum):
     PRESTO = "presto"
     REDSHIFT = "redshift"
     SNOWFLAKE = "snowflake"
+    SPARK = "spark"
     SQLSERVER = "sqlserver"
     TRINO = "trino"
 

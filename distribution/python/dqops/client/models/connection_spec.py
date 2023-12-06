@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from ..models.presto_parameters_spec import PrestoParametersSpec
     from ..models.redshift_parameters_spec import RedshiftParametersSpec
     from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
+    from ..models.spark_parameters_spec import SparkParametersSpec
     from ..models.sql_server_parameters_spec import SqlServerParametersSpec
     from ..models.trino_parameters_spec import TrinoParametersSpec
 
@@ -41,6 +42,7 @@ class ConnectionSpec:
         trino (Union[Unset, TrinoParametersSpec]):
         mysql (Union[Unset, MysqlParametersSpec]):
         oracle (Union[Unset, OracleParametersSpec]):
+        spark (Union[Unset, SparkParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
@@ -63,6 +65,7 @@ class ConnectionSpec:
     trino: Union[Unset, "TrinoParametersSpec"] = UNSET
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
+    spark: Union[Unset, "SparkParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[
         Unset, "DataGroupingConfigurationSpec"
@@ -114,6 +117,10 @@ class ConnectionSpec:
         if not isinstance(self.oracle, Unset):
             oracle = self.oracle.to_dict()
 
+        spark: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.spark, Unset):
+            spark = self.spark.to_dict()
+
         parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
@@ -164,6 +171,8 @@ class ConnectionSpec:
             field_dict["mysql"] = mysql
         if oracle is not UNSET:
             field_dict["oracle"] = oracle
+        if spark is not UNSET:
+            field_dict["spark"] = spark
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
@@ -198,6 +207,7 @@ class ConnectionSpec:
         from ..models.presto_parameters_spec import PrestoParametersSpec
         from ..models.redshift_parameters_spec import RedshiftParametersSpec
         from ..models.snowflake_parameters_spec import SnowflakeParametersSpec
+        from ..models.spark_parameters_spec import SparkParametersSpec
         from ..models.sql_server_parameters_spec import SqlServerParametersSpec
         from ..models.trino_parameters_spec import TrinoParametersSpec
 
@@ -272,6 +282,13 @@ class ConnectionSpec:
         else:
             oracle = OracleParametersSpec.from_dict(_oracle)
 
+        _spark = d.pop("spark", UNSET)
+        spark: Union[Unset, SparkParametersSpec]
+        if isinstance(_spark, Unset):
+            spark = UNSET
+        else:
+            spark = SparkParametersSpec.from_dict(_spark)
+
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
@@ -319,6 +336,7 @@ class ConnectionSpec:
             trino=trino,
             mysql=mysql,
             oracle=oracle,
+            spark=spark,
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,

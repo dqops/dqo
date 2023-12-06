@@ -184,7 +184,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |months|Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).|long| |
-|since|Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.|long| |
+|since|Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.|string| |
 |profiling|Optional check type filter to detect the current status of the profiling checks results. The default value is false, excluding profiling checks from the current table status detection. If enabled, only the status of the most recent check result is retrieved.|boolean| |
 |monitoring|Optional check type filter to detect the current status of the monitoring checks results. The default value is true, including monitoring checks in the current table status detection. If enabled, only the status of the most recent check result is retrieved.|boolean| |
 |partitioned|Optional check type filter to detect the current status of the partitioned checks results. The default value is true, including partitioned checks in the current table status detection. Detection of the status of partitioned checks is different. When enabled, DQOps checks the highest severity status of all partitions since the **since** date or within the last **months**.|boolean| |

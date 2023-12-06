@@ -32,7 +32,7 @@ dqo> sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>
 |<p id="sensor edit--headless">`--headless`</p><br/><p id="sensor edit-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="sensor edit-h">`-h`</p><br/><p id="sensor edit--help">`--help`</p><br/>|Show the help for the command and parameters| ||
 |<p id="sensor edit-of">`-of`</p><br/><p id="sensor edit--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="sensor edit-p">`-p`</p><br/><p id="sensor edit--provider">`--provider`</p><br/>|Provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>oracle<br/>|
+|<p id="sensor edit-p">`-p`</p><br/><p id="sensor edit--provider">`--provider`</p><br/>|Provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>presto<br/>trino<br/>mysql<br/>oracle<br/>spark<br/>|
 |<p id="sensor edit-s">`-s`</p><br/><p id="sensor edit--sensor">`--sensor`</p><br/>|Sensor name| ||
 
 

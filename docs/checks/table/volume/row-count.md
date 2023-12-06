@@ -199,6 +199,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -251,6 +286,32 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -274,6 +335,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
         ```
 
   
@@ -450,6 +546,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -502,6 +638,32 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "SQL Server"
 
         === "Sensor template for SQL Server"
@@ -531,6 +693,46 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -736,6 +938,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -788,6 +1025,32 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -811,6 +1074,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
         ```
 
   
@@ -988,6 +1286,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1040,6 +1378,32 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "SQL Server"
 
         === "Sensor template for SQL Server"
@@ -1069,6 +1433,46 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -1274,6 +1678,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -1326,6 +1765,32 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -1349,6 +1814,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
         ```
 
   
@@ -1526,6 +2026,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -1578,6 +2118,32 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "SQL Server"
 
         === "Sensor template for SQL Server"
@@ -1607,6 +2173,46 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -1818,6 +2424,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            CAST(analyzed_table."date_column" AS date) AS time_period,
+            CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -1870,6 +2511,32 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -1897,6 +2564,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY CAST(analyzed_table.[date_column] AS date)
         
             
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            CAST(analyzed_table."date_column" AS date) AS time_period,
+            CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
         ```
 
   
@@ -2080,6 +2782,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -2132,6 +2874,32 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "SQL Server"
 
         === "Sensor template for SQL Server"
@@ -2159,6 +2927,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -2370,6 +3178,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -2422,6 +3265,32 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -2449,6 +3318,41 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
         
             
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+            {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+        FROM (
+            SELECT 1 AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} analyzed_table
+            {{- lib.render_where_clause() -}}
+        ) grouping_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT 1 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
         ```
 
   
@@ -2632,6 +3536,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Redshift"
 
         === "Sensor template for Redshift"
@@ -2684,6 +3628,32 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "SQL Server"
 
         === "Sensor template for SQL Server"
@@ -2711,6 +3681,46 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+                {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+            FROM (
+                SELECT 1 AS actual_value
+                    {{- lib.render_data_grouping_projections('analyzed_table') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} analyzed_table
+                {{- lib.render_where_clause() -}}
+            ) grouping_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(*) AS actual_value,
+            
+                            grouping_table.grouping_level_1,
+            
+                            grouping_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT 1 AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" analyzed_table) grouping_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 

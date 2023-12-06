@@ -1440,6 +1440,8 @@ from .similar_check_model import SimilarCheckModel
 from .snowflake_parameters_spec import SnowflakeParametersSpec
 from .snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
 from .sort_direction import SortDirection
+from .spark_parameters_spec import SparkParametersSpec
+from .spark_parameters_spec_properties import SparkParametersSpecProperties
 from .spring_error_payload import SpringErrorPayload
 from .sql_server_parameters_spec import SqlServerParametersSpec
 from .sql_server_parameters_spec_properties import SqlServerParametersSpecProperties
@@ -2484,6 +2486,8 @@ __all__ = (
     "SnowflakeParametersSpec",
     "SnowflakeParametersSpecProperties",
     "SortDirection",
+    "SparkParametersSpec",
+    "SparkParametersSpecProperties",
     "SpringErrorPayload",
     "SqlServerParametersSpec",
     "SqlServerParametersSpecProperties",

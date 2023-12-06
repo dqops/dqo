@@ -420,7 +420,7 @@ Data source provider type (dialect type).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>bigquery<br/>|
+|string|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>mysql<br/>bigquery<br/>presto<br/>|
 
 ___  
 
@@ -442,8 +442,11 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |[postgresql](../../../reference/yaml/ConnectionYaml/#postgresqlparametersspec)|PostgreSQL connection parameters.|[PostgresqlParametersSpec](../../../reference/yaml/ConnectionYaml/#postgresqlparametersspec)|
 |[redshift](../../../reference/yaml/ConnectionYaml/#redshiftparametersspec)|Redshift connection parameters.|[RedshiftParametersSpec](../../../reference/yaml/ConnectionYaml/#redshiftparametersspec)|
 |[sqlserver](../../../reference/yaml/ConnectionYaml/#sqlserverparametersspec)|SqlServer connection parameters.|[SqlServerParametersSpec](../../../reference/yaml/ConnectionYaml/#sqlserverparametersspec)|
+|[presto](../../../reference/yaml/ConnectionYaml/#prestoparametersspec)|Presto connection parameters.|[PrestoParametersSpec](../../../reference/yaml/ConnectionYaml/#prestoparametersspec)|
+|[trino](../../../reference/yaml/ConnectionYaml/#trinoparametersspec)|Trino connection parameters.|[TrinoParametersSpec](../../../reference/yaml/ConnectionYaml/#trinoparametersspec)|
 |[mysql](../../../reference/yaml/ConnectionYaml/#mysqlparametersspec)|MySQL connection parameters.|[MysqlParametersSpec](../../../reference/yaml/ConnectionYaml/#mysqlparametersspec)|
 |[oracle](../../../reference/yaml/ConnectionYaml/#oracleparametersspec)|Oracle connection parameters.|[OracleParametersSpec](../../../reference/yaml/ConnectionYaml/#oracleparametersspec)|
+|[spark](../../../reference/yaml/ConnectionYaml/#sparkparametersspec)|Spark connection parameters.|[SparkParametersSpec](../../../reference/yaml/ConnectionYaml/#sparkparametersspec)|
 |[run_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
 |[run_profiling_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
 |[run_monitoring_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|

@@ -70,20 +70,29 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
-                [--redshift-database=<database>] [--redshift-host=<host>]
-                [--redshift-options=<options>] [--redshift-password=<password>]
-                [--redshift-port=<port>] [--redshift-user=<user>]
-                [--snowflake-account=<account>]
+                [--presto-database=<database>] [--presto-host=<host>]
+                [--presto-password=<password>] [--presto-port=<port>]
+                [--presto-user=<user>] [--redshift-database=<database>]
+                [--redshift-host=<host>] [--redshift-options=<options>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>] [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
+                [--spark-host=<host>] [--spark-options=<options>]
+                [--spark-password=<password>] [--spark-port=<port>]
+                [--spark-schema=<schema>] [--spark-user=<user>]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [-F=<String=String>]... [-M=<String=String>]...
+                [--trino-database=<database>] [--trino-host=<host>]
+                [--trino-port=<port>] [--trino-user=<user>]
+                [-A=<String=String>]... [-F=<String=String>]...
+                [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
                 [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 **DQOps Shell synopsis**
@@ -108,20 +117,29 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
                 [--postgresql-sslmode=<sslmode>] [--postgresql-user=<user>]
-                [--redshift-database=<database>] [--redshift-host=<host>]
-                [--redshift-options=<options>] [--redshift-password=<password>]
-                [--redshift-port=<port>] [--redshift-user=<user>]
-                [--snowflake-account=<account>]
+                [--presto-database=<database>] [--presto-host=<host>]
+                [--presto-password=<password>] [--presto-port=<port>]
+                [--presto-user=<user>] [--redshift-database=<database>]
+                [--redshift-host=<host>] [--redshift-options=<options>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>] [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
+                [--spark-host=<host>] [--spark-options=<options>]
+                [--spark-password=<password>] [--spark-port=<port>]
+                [--spark-schema=<schema>] [--spark-user=<user>]
                 [--sqlserver-database=<database>] [--sqlserver-host=<host>]
                 [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
-                [-F=<String=String>]... [-M=<String=String>]...
+                [--trino-database=<database>] [--trino-host=<host>]
+                [--trino-port=<port>] [--trino-user=<user>]
+                [-A=<String=String>]... [-F=<String=String>]...
+                [-K=<String=String>]... [-M=<String=String>]...
                 [-O=<String=String>]... [-P=<String=String>]...
                 [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 
@@ -162,7 +180,12 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--postgresql-port">`--postgresql-port`</p><br/>|PostgreSQL port number| ||
 |<p id="connection add--postgresql-sslmode">`--postgresql-sslmode`</p><br/>|Connect to PostgreSQL using sslmode connection parameter| |disable<br/>allow<br/>prefer<br/>require<br/>verify_ca<br/>verify_full<br/>|
 |<p id="connection add--postgresql-user">`--postgresql-user`</p><br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>mysql<br/>oracle<br/>|
+|<p id="connection add--presto-database">`--presto-database`</p><br/>|Presto database name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add--presto-host">`--presto-host`</p><br/>|Presto host name| ||
+|<p id="connection add--presto-password">`--presto-password`</p><br/>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add--presto-port">`--presto-port`</p><br/>|Presto port number| ||
+|<p id="connection add--presto-user">`--presto-user`</p><br/>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>presto<br/>trino<br/>mysql<br/>oracle<br/>spark<br/>|
 |<p id="connection add--redshift-database">`--redshift-database`</p><br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--redshift-host">`--redshift-host`</p><br/>|Redshift host name| ||
 |<p id="connection add--redshift-options">`--redshift-options`</p><br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -175,6 +198,12 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--snowflake-role">`--snowflake-role`</p><br/>|Snowflake role name.| ||
 |<p id="connection add--snowflake-user">`--snowflake-user`</p><br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--snowflake-warehouse">`--snowflake-warehouse`</p><br/>|Snowflake warehouse name.| ||
+|<p id="connection add--spark-host">`--spark-host`</p><br/>|Spark host name| ||
+|<p id="connection add--spark-options">`--spark-options`</p><br/>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<p id="connection add--spark-password">`--spark-password`</p><br/>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add--spark-port">`--spark-port`</p><br/>|Spark port number| ||
+|<p id="connection add--spark-schema">`--spark-schema`</p><br/>|Spark schema name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add--spark-user">`--spark-user`</p><br/>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--sqlserver-database">`--sqlserver-database`</p><br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--sqlserver-disable-encryption">`--sqlserver-disable-encryption`</p><br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |<p id="connection add--sqlserver-host">`--sqlserver-host`</p><br/>|SQL Server host name| ||
@@ -182,12 +211,19 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--sqlserver-password">`--sqlserver-password`</p><br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--sqlserver-port">`--sqlserver-port`</p><br/>|SQL Server port number| ||
 |<p id="connection add--sqlserver-user">`--sqlserver-user`</p><br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add--trino-database">`--trino-database`</p><br/>|Trino database name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add--trino-host">`--trino-host`</p><br/>|Trino host name| ||
+|<p id="connection add--trino-port">`--trino-port`</p><br/>|Trino port number| ||
+|<p id="connection add--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection add-A">`-A`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
+|<p id="connection add-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-O">`-O`</p><br/>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-P">`-P`</p><br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-R">`-R`</p><br/>|Redshift additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-S">`-S`</p><br/>|SQL Server additional properties that are added to the JDBC connection string| ||
+|<p id="connection add-T">`-T`</p><br/>|Trino additional properties that are added to the JDBC connection string| ||
 
 
 
@@ -258,21 +294,29 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
-                   [--postgresql-user=<user>] [--redshift-database=<database>]
-                   [--redshift-host=<host>] [--redshift-options=<options>]
+                   [--postgresql-user=<user>] [--presto-database=<database>]
+                   [--presto-host=<host>] [--presto-password=<password>]
+                   [--presto-port=<port>] [--presto-user=<user>]
+                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
-                   [--snowflake-warehouse=<warehouse>]
-                   [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                   [--sqlserver-options=<options>]
+                   [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
+                   [--spark-options=<options>] [--spark-password=<password>]
+                   [--spark-port=<port>] [--spark-schema=<schema>]
+                   [--spark-user=<user>] [--sqlserver-database=<database>]
+                   [--sqlserver-host=<host>] [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [-F=<String=String>]...
+                   [--sqlserver-user=<user>] [--trino-database=<database>]
+                   [--trino-host=<host>] [--trino-port=<port>]
+                   [--trino-user=<user>] [-A=<String=String>]...
+                   [-F=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 **DQOps Shell synopsis**
@@ -297,21 +341,29 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-sslmode=<sslmode>]
-                   [--postgresql-user=<user>] [--redshift-database=<database>]
-                   [--redshift-host=<host>] [--redshift-options=<options>]
+                   [--postgresql-user=<user>] [--presto-database=<database>]
+                   [--presto-host=<host>] [--presto-password=<password>]
+                   [--presto-port=<port>] [--presto-user=<user>]
+                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-options=<options>]
                    [--redshift-password=<password>] [--redshift-port=<port>]
                    [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
-                   [--snowflake-warehouse=<warehouse>]
-                   [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                   [--sqlserver-options=<options>]
+                   [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
+                   [--spark-options=<options>] [--spark-password=<password>]
+                   [--spark-port=<port>] [--spark-schema=<schema>]
+                   [--spark-user=<user>] [--sqlserver-database=<database>]
+                   [--sqlserver-host=<host>] [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
-                   [--sqlserver-user=<user>] [-F=<String=String>]...
+                   [--sqlserver-user=<user>] [--trino-database=<database>]
+                   [--trino-host=<host>] [--trino-port=<port>]
+                   [--trino-user=<user>] [-A=<String=String>]...
+                   [-F=<String=String>]... [-K=<String=String>]...
                    [-M=<String=String>]... [-O=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -352,6 +404,11 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--postgresql-port">`--postgresql-port`</p><br/>|PostgreSQL port number| ||
 |<p id="connection update--postgresql-sslmode">`--postgresql-sslmode`</p><br/>|Connect to PostgreSQL using sslmode connection parameter| |disable<br/>allow<br/>prefer<br/>require<br/>verify_ca<br/>verify_full<br/>|
 |<p id="connection update--postgresql-user">`--postgresql-user`</p><br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--presto-database">`--presto-database`</p><br/>|Presto database name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--presto-host">`--presto-host`</p><br/>|Presto host name| ||
+|<p id="connection update--presto-password">`--presto-password`</p><br/>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--presto-port">`--presto-port`</p><br/>|Presto port number| ||
+|<p id="connection update--presto-user">`--presto-user`</p><br/>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--redshift-database">`--redshift-database`</p><br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--redshift-host">`--redshift-host`</p><br/>|Redshift host name| ||
 |<p id="connection update--redshift-options">`--redshift-options`</p><br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -364,6 +421,12 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--snowflake-role">`--snowflake-role`</p><br/>|Snowflake role name.| ||
 |<p id="connection update--snowflake-user">`--snowflake-user`</p><br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--snowflake-warehouse">`--snowflake-warehouse`</p><br/>|Snowflake warehouse name.| ||
+|<p id="connection update--spark-host">`--spark-host`</p><br/>|Spark host name| ||
+|<p id="connection update--spark-options">`--spark-options`</p><br/>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<p id="connection update--spark-password">`--spark-password`</p><br/>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--spark-port">`--spark-port`</p><br/>|Spark port number| ||
+|<p id="connection update--spark-schema">`--spark-schema`</p><br/>|Spark schema name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--spark-user">`--spark-user`</p><br/>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--sqlserver-database">`--sqlserver-database`</p><br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--sqlserver-disable-encryption">`--sqlserver-disable-encryption`</p><br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
 |<p id="connection update--sqlserver-host">`--sqlserver-host`</p><br/>|SQL Server host name| ||
@@ -371,12 +434,19 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--sqlserver-password">`--sqlserver-password`</p><br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--sqlserver-port">`--sqlserver-port`</p><br/>|SQL Server port number| ||
 |<p id="connection update--sqlserver-user">`--sqlserver-user`</p><br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--trino-database">`--trino-database`</p><br/>|Trino database name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update--trino-host">`--trino-host`</p><br/>|Trino host name| ||
+|<p id="connection update--trino-port">`--trino-port`</p><br/>|Trino port number| ||
+|<p id="connection update--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
+|<p id="connection update-A">`-A`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
+|<p id="connection update-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-O">`-O`</p><br/>|Oracle&#x27;s additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-P">`-P`</p><br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-R">`-R`</p><br/>|Redshift additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-S">`-S`</p><br/>|SQL Server additional properties that are added to the JDBC connection string| ||
+|<p id="connection update-T">`-T`</p><br/>|Trino additional properties that are added to the JDBC connection string| ||
 
 
 

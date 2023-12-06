@@ -68,6 +68,24 @@ Table sensor that executes a row count query.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+    FROM (
+        SELECT 1 AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}
+    ) grouping_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "Redshift"
       
     ```sql+jinja
@@ -94,6 +112,19 @@ Table sensor that executes a row count query.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Spark"
+      
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "SQL Server"
       
     ```sql+jinja
@@ -104,6 +135,24 @@ Table sensor that executes a row count query.
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Trino"
+      
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('grouping_table') }}
+        {{- lib.render_time_dimension_projection_reference('grouping_table') }}
+    FROM (
+        SELECT 1 AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} analyzed_table
+        {{- lib.render_where_clause() -}}
+    ) grouping_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

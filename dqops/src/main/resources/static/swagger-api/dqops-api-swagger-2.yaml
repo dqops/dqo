@@ -31425,8 +31425,6 @@ definitions:
         type: "object"
         additionalProperties:
           type: "string"
-      database:
-        type: "string"
   SpringErrorPayload:
     type: "object"
     properties:

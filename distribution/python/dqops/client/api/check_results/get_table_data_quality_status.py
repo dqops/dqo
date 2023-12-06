@@ -1,3 +1,4 @@
+import datetime
 from http import HTTPStatus
 from typing import Any, Dict, Optional, Union
 
@@ -18,7 +19,7 @@ def _get_kwargs(
     table_name: str,
     *,
     months: Union[Unset, None, int] = UNSET,
-    since: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, datetime.datetime] = UNSET,
     profiling: Union[Unset, None, bool] = UNSET,
     monitoring: Union[Unset, None, bool] = UNSET,
     partitioned: Union[Unset, None, bool] = UNSET,
@@ -34,7 +35,11 @@ def _get_kwargs(
     params: Dict[str, Any] = {}
     params["months"] = months
 
-    params["since"] = since
+    json_since: Union[Unset, None, str] = UNSET
+    if not isinstance(since, Unset):
+        json_since = since.isoformat() if since else None
+
+    params["since"] = json_since
 
     params["profiling"] = profiling
 
@@ -102,7 +107,7 @@ def sync_detailed(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    since: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, datetime.datetime] = UNSET,
     profiling: Union[Unset, None, bool] = UNSET,
     monitoring: Union[Unset, None, bool] = UNSET,
     partitioned: Union[Unset, None, bool] = UNSET,
@@ -126,7 +131,7 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        since (Union[Unset, None, int]):
+        since (Union[Unset, None, datetime.datetime]):
         profiling (Union[Unset, None, bool]):
         monitoring (Union[Unset, None, bool]):
         partitioned (Union[Unset, None, bool]):
@@ -176,7 +181,7 @@ def sync(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    since: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, datetime.datetime] = UNSET,
     profiling: Union[Unset, None, bool] = UNSET,
     monitoring: Union[Unset, None, bool] = UNSET,
     partitioned: Union[Unset, None, bool] = UNSET,
@@ -200,7 +205,7 @@ def sync(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        since (Union[Unset, None, int]):
+        since (Union[Unset, None, datetime.datetime]):
         profiling (Union[Unset, None, bool]):
         monitoring (Union[Unset, None, bool]):
         partitioned (Union[Unset, None, bool]):
@@ -245,7 +250,7 @@ async def asyncio_detailed(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    since: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, datetime.datetime] = UNSET,
     profiling: Union[Unset, None, bool] = UNSET,
     monitoring: Union[Unset, None, bool] = UNSET,
     partitioned: Union[Unset, None, bool] = UNSET,
@@ -269,7 +274,7 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        since (Union[Unset, None, int]):
+        since (Union[Unset, None, datetime.datetime]):
         profiling (Union[Unset, None, bool]):
         monitoring (Union[Unset, None, bool]):
         partitioned (Union[Unset, None, bool]):
@@ -317,7 +322,7 @@ async def asyncio(
     *,
     client: AuthenticatedClient,
     months: Union[Unset, None, int] = UNSET,
-    since: Union[Unset, None, int] = UNSET,
+    since: Union[Unset, None, datetime.datetime] = UNSET,
     profiling: Union[Unset, None, bool] = UNSET,
     monitoring: Union[Unset, None, bool] = UNSET,
     partitioned: Union[Unset, None, bool] = UNSET,
@@ -341,7 +346,7 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         months (Union[Unset, None, int]):
-        since (Union[Unset, None, int]):
+        since (Union[Unset, None, datetime.datetime]):
         profiling (Union[Unset, None, bool]):
         monitoring (Union[Unset, None, bool]):
         partitioned (Union[Unset, None, bool]):

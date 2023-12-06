@@ -32800,9 +32800,6 @@
           "additionalProperties" : {
             "type" : "string"
           }
-        },
-        "database" : {
-          "type" : "string"
         }
       }
     },

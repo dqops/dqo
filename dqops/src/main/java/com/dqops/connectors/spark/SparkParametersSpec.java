@@ -7,6 +7,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -56,7 +57,7 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"-Sp"}, description = "Spark additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-K"}, description = "Spark additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
@@ -115,6 +116,7 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
      * Returns a database name. Spark's database and schema terms are interchangeable.
      * @return Database name.
      */
+    @JsonIgnore
     public String getDatabase() {
         return schema;
     }
@@ -166,6 +168,7 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
      * @param options Connection initialization options.
      */
     public void setOptions(String options) {
+        setDirtyIf(!Objects.equals(this.options, options));
         this.options = options;
     }
 
