@@ -9635,8 +9635,8 @@
           "in" : "query",
           "description" : "Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.",
           "required" : false,
-          "type" : "integer",
-          "format" : "int64"
+          "type" : "string",
+          "format" : "date-time"
         }, {
           "name" : "profiling",
           "in" : "query",

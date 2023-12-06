@@ -30,6 +30,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,6 +44,8 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 /**
@@ -55,17 +58,21 @@ import java.util.Optional;
 public class CheckResultsController {
     private UserHomeContextFactory userHomeContextFactory;
     private CheckResultsDataService checkResultsDataService;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
      * @param checkResultsDataService Rule results data service.
+     * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
     public CheckResultsController(UserHomeContextFactory userHomeContextFactory,
-                                  CheckResultsDataService checkResultsDataService) {
+                                  CheckResultsDataService checkResultsDataService,
+                                  DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.checkResultsDataService = checkResultsDataService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -106,7 +113,7 @@ public class CheckResultsController {
             @ApiParam(name = "months", value = "Optional filter - the number of months to review the data quality check results. For partitioned checks, it is the number of months to analyze. The default value is 1 (which is the current month and 1 previous month).", required = false)
             @RequestParam(required = false) Optional<Integer> months,
             @ApiParam(name = "since", value = "Optional filter that accepts an UTC timestamp to read only data quality check results captured since that timestamp.", required = false)
-            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) Optional<Instant> since,
+            @RequestParam(required = false) Optional<LocalDateTime> since,
             @ApiParam(name = "profiling", value = "Optional check type filter to detect the current status of the profiling checks results. " +
                     "The default value is false, excluding profiling checks from the current table status detection. " +
                     "If enabled, only the status of the most recent check result is retrieved.", required = false)
@@ -166,7 +173,7 @@ public class CheckResultsController {
                 .category(category.orElse(null))
                 .tableComparison(tableComparison.orElse(null))
                 .qualityDimension(qualityDimension.orElse(null))
-                .since(since.orElse(null))
+                .since(since.isPresent() ? since.get().toInstant(this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(since.get())) : null)
                 .build();
 
         TableCurrentDataQualityStatusModel tableCurrentDataQualityStatusModel = this.checkResultsDataService
