@@ -33,6 +33,7 @@ import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
@@ -161,14 +162,15 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
-        if (constant instanceof Boolean) {
-            Boolean asBoolean = (Boolean)constant;
-            return asBoolean ? "1" : "0";
-        }
 
         if (constant instanceof LocalDate) {
             LocalDate asLocalDate = (LocalDate)constant;
             return "date('" + asLocalDate.format(DateTimeFormatter.ISO_DATE) + "')";
+        }
+
+        if (constant instanceof LocalDateTime) {
+            LocalDateTime asLocalTimeTime = (LocalDateTime)constant;
+            return "cast('" + asLocalTimeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + "' as timestamp)";
         }
 
         return super.formatConstant(constant, columnType);
