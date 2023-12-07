@@ -550,7 +550,6 @@ export const EditProfilingReferenceTable = ({
             referencedColumnsOptions: columnOptions
           }}
           onChangeParameters={onChangeParameters}
-          onUpdateChecks={onUpdateChecks}
         />
       </div>
       {reference &&

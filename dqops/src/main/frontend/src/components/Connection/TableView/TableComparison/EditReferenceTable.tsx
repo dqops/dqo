@@ -72,7 +72,6 @@ type EditReferenceTableProps = {
     referencedColumnsOptions: Option[];
   };
   onChangeParameters: (obj: Partial<TParameters>) => void;
-  onUpdateChecks: () => void;
 };
 
 const EditReferenceTable = ({
@@ -94,8 +93,7 @@ const EditReferenceTable = ({
   canUserCompareTables,
   onUpdateParent,
   columnOptions,
-  onChangeParameters,
-  onUpdateChecks
+  onChangeParameters
 }: EditReferenceTableProps) => {
   const [name, setName] = useState('');
   const [connectionOptions, setConnectionOptions] = useState<Option[]>([]);
