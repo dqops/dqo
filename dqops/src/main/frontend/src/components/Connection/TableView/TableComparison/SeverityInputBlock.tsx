@@ -7,10 +7,12 @@ type TSeverityInputBlock = {
   onChange: (obj: Partial<CompareThresholdsModel>) => void;
   reference: TableComparisonModel;
   onUpdateChecksUI: (
+    checksUI: any,
     type: 'row' | 'column',
     disabled?: boolean,
     severity?: TSeverityValues
   ) => void;
+  checksUI: any;
   type: 'row' | 'column';
 };
 
@@ -18,6 +20,7 @@ export default function SeverityInputBlock({
   onChange,
   reference,
   onUpdateChecksUI,
+  checksUI,
   type
 }: TSeverityInputBlock) {
   return (
@@ -35,7 +38,7 @@ export default function SeverityInputBlock({
             onChange({
               warning_difference_percent: Number(e.target.value)
             });
-            onUpdateChecksUI(type, undefined, {
+            onUpdateChecksUI(checksUI, type, undefined, {
               warning: Number(e.target.value)
             });
           }}
@@ -55,7 +58,7 @@ export default function SeverityInputBlock({
             onChange({
               error_difference_percent: Number(e.target.value)
             });
-            onUpdateChecksUI(type, undefined, {
+            onUpdateChecksUI(checksUI, type, undefined, {
               error: Number(e.target.value)
             });
           }}
@@ -75,7 +78,7 @@ export default function SeverityInputBlock({
             onChange({
               fatal_difference_percent: Number(e.target.value)
             });
-            onUpdateChecksUI(type, undefined, {
+            onUpdateChecksUI(checksUI, type, undefined, {
               fatal: Number(e.target.value)
             });
           }}

@@ -9,7 +9,6 @@ import {
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { useHistory, useParams } from 'react-router-dom';
 import {
-  ColumnComparisonModel,
   CompareThresholdsModel,
   TableComparisonModel,
   TableComparisonResultsModel,
@@ -72,9 +71,6 @@ export const EditProfilingReferenceTable = ({
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
-  const { tabs: pageTabs } = useSelector(
-    (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
-  );
   const [reference, setReference] = useState<TableComparisonModel>();
   const [showRowCount, setShowRowCount] = useState(false);
   const [showColumnCount, setShowColumnCount] = useState(false);
@@ -94,7 +90,6 @@ export const EditProfilingReferenceTable = ({
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [parameters, setParameters] = useState<TParameters>({});
-  const [tableChecksToUpdate, setTableChecksToUpdate] = useState<any>(checksUI);
 
   const onChangeParameters = (obj: Partial<TParameters>) => {
     setParameters((prevState) => ({
@@ -167,41 +162,22 @@ export const EditProfilingReferenceTable = ({
   };
 
   const onUpdateChecksUI = (
+    checksUI: any,
     type: 'row' | 'column',
     disabled?: boolean,
     severity?: TSeverityValues
   ) => {
-    const copiedChecks = { ...tableChecksToUpdate };
-    let checks = [];
-    if (
-      copiedChecks.categories.find(
-        (item: any) =>
-          String(item.category) ===
-          `comparison/${
-            (selectedReference ? selectedReference : parameters.name) ?? ''
-          }`
-      )
-    ) {
-      checks = copiedChecks.categories.find(
-        (item: any) =>
-          String(item.category) ===
-          `comparison/${
-            (selectedReference ? selectedReference : parameters.name) ?? ''
-          }`
-      ).checks;
-    } else {
-      checks = (
-        pageTabs.find((item) => item.value === firstLevelActiveTab)?.state
-          .checksUI as any
-      ).categories.find((item: any) =>
-        String(item.category).includes(
+    const checks = checksUI.categories.find(
+      (item: any) =>
+        String(item.category) ===
+        `comparisons/${
           (selectedReference ? selectedReference : parameters.name) ?? ''
-        )
-      ).checks;
-    }
+        }`
+    )?.checks;
+
     let selectedCheck;
     if (type === 'row') {
-      selectedCheck = checks.find((item: any) =>
+      selectedCheck = checks?.find((item: any) =>
         String(item.check_name).includes('row')
       );
     } else {
@@ -234,8 +210,6 @@ export const EditProfilingReferenceTable = ({
         selectedCheck.rule.fatal.configured = true;
       }
     }
-
-    setTableChecksToUpdate(copiedChecks as CheckContainerModel);
   };
 
   useEffect(() => {
@@ -498,6 +472,7 @@ export const EditProfilingReferenceTable = ({
   const rowKey = Object.keys(
     tableComparisonResults?.table_comparison_results ?? []
   ).find((key) => key.includes('row'));
+
   useEffect(() => {
     if (reference?.columns) {
       setComparedColumnOptions(
@@ -535,7 +510,6 @@ export const EditProfilingReferenceTable = ({
       </Tooltip>
     );
   };
-  console.log(checksUI, selectedReference);
 
   return (
     <div className="text-sm">
@@ -550,7 +524,7 @@ export const EditProfilingReferenceTable = ({
               timePartitioned,
               reference,
               handleChange,
-              tableChecksToUpdate
+              checksUI
             )
           }
           onBack={onBack}
@@ -630,7 +604,7 @@ export const EditProfilingReferenceTable = ({
                   <Checkbox
                     checked={showRowCount}
                     onChange={(checked) => {
-                      onUpdateChecksUI('row', checked);
+                      onUpdateChecksUI(checksUI, 'row', checked);
                     }}
                   />{' '}
                   {calculateColor(
@@ -660,7 +634,7 @@ export const EditProfilingReferenceTable = ({
                     <Checkbox
                       checked={showColumnCount}
                       onChange={(checked) => {
-                        onUpdateChecksUI('column', checked);
+                        onUpdateChecksUI(checksUI, 'column', checked);
                       }}
                     />
                   ) : null}
@@ -685,6 +659,7 @@ export const EditProfilingReferenceTable = ({
                           onChange={onChangeCompareRowCount}
                           reference={reference}
                           onUpdateChecksUI={onUpdateChecksUI}
+                          checksUI={checksUI}
                           type="row"
                         />
                       ) : null}
@@ -706,6 +681,7 @@ export const EditProfilingReferenceTable = ({
                           onChange={onChangeCompareColumnCount}
                           reference={reference}
                           onUpdateChecksUI={onUpdateChecksUI}
+                          checksUI={checksUI}
                           type="column"
                         />
                       ) : null}
