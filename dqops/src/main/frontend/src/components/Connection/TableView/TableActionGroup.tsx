@@ -203,7 +203,7 @@ const TableActionGroup = ({
           }
           variant="contained"
           label="Save"
-          className="!h-10"
+          className="w-40 !h-10"
           onClick={onUpdate}
           loading={isUpdating}
           disabled={isDisabled || userProfile.can_manage_data_sources !== true}
