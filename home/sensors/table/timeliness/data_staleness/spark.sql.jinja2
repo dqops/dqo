@@ -1,0 +1,39 @@
+{% import '/dialects/spark.sql.jinja2' as lib with context -%}
+
+{% macro render_current_ingestion_diff() -%}
+    {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    (
+        BIGINT(CURRENT_TIMESTAMP())
+        -
+        BIGINT(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}))
+    ) / 24.0 / 3600.0
+    {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    DATEDIFF(
+        CURRENT_DATE(),
+        MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
+    )
+    {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    (
+        BIGINT(CURRENT_DATETIME())
+        -
+        BIGINT(MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}))
+    ) / 24.0 / 3600.0
+    {%- else -%}
+    (
+        BIGINT(CURRENT_TIMESTAMP())
+        -
+        BIGINT(MAX(
+            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ))
+    ) / 24.0 / 3600.0
+    {%- endif -%}
+{%- endmacro -%}
+
+SELECT
+    {{ render_current_ingestion_diff() }} AS actual_value
+    {{- lib.render_data_grouping_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}

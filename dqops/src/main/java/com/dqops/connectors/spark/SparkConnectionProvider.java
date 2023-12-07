@@ -32,7 +32,9 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
@@ -161,14 +163,25 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
      */
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
+
         if (constant instanceof Boolean) {
             Boolean asBoolean = (Boolean)constant;
-            return asBoolean ? "1" : "0";
+            return asBoolean ? "true" : "false";
         }
 
         if (constant instanceof LocalDate) {
             LocalDate asLocalDate = (LocalDate)constant;
             return "date('" + asLocalDate.format(DateTimeFormatter.ISO_DATE) + "')";
+        }
+
+        if (constant instanceof LocalDateTime) {
+            LocalDateTime asLocalTimeTime = (LocalDateTime)constant;
+            return "cast('" + asLocalTimeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + "' as timestamp)";
+        }
+
+        if (constant instanceof Instant) {
+            Instant asInstant = (Instant)constant;
+            return "cast('" + asInstant + "' as timestamp)";
         }
 
         return super.formatConstant(constant, columnType);
@@ -212,7 +225,7 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("TIMESTAMP");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("TIMESTAMP_NTZ");
+            return new ColumnTypeSnapshotSpec("TIMESTAMP"); // TIMESTAMP_NTZ is supported in Spark 3.5 but we use 3.2.1
         }
         else if (columnType == ColumnType.INSTANT) {
             return new ColumnTypeSnapshotSpec("TIMESTAMP");
