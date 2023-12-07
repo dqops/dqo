@@ -23,7 +23,7 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { TableReferenceComparisons } from './TableReferenceComparisons';
+import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
 
 const initTabs = [

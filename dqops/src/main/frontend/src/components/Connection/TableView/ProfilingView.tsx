@@ -32,7 +32,7 @@ import {
   ColumnApiClient,
   DataGroupingConfigurationsApi
 } from '../../../services/apiClient';
-import { TableReferenceComparisons } from './TableReferenceComparisons';
+import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
 import { checkIfTabCouldExist } from '../../../utils';
 import TablePreview from './TablePreview';
