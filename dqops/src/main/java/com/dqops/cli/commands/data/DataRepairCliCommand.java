@@ -136,7 +136,7 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand, IConn
 
         RepairStoredDataQueueJob repairStoredDataJob = this.dqoQueueJobFactory.createRepairStoredDataJob();
         repairStoredDataJob.setRepairParameters(repairParameters);
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
         PushJobResult<RepairStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(repairStoredDataJob, principal);
         RepairStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
         return 0;

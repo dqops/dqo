@@ -42,6 +42,7 @@ import com.dqops.connectors.spark.SparkProviderDialectSettings;
 import com.dqops.connectors.sqlserver.SqlServerParametersSpec;
 import com.dqops.connectors.sqlserver.SqlServerProviderDialectSettings;
 import com.dqops.connectors.trino.TrinoProviderDialectSettings;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
@@ -193,7 +194,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     @Override
     public List<CheckCategoryDocumentationModel> makeDocumentationForTableChecks() {
-        UserHomeImpl userHome = new UserHomeImpl();
+        UserHomeImpl userHome = new UserHomeImpl(DqoUserIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
@@ -214,7 +215,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     @Override
     public List<CheckCategoryDocumentationModel> makeDocumentationForColumnChecks() {
-        UserHomeImpl userHome = new UserHomeImpl();
+        UserHomeImpl userHome = new UserHomeImpl(DqoUserIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);

@@ -98,7 +98,7 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
 
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create(this.getPrincipal());
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 checkRunReportingMode, true);

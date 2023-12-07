@@ -59,7 +59,7 @@ public class UserHomeContextFactoryImpl implements UserHomeContextFactory {
     @Override
     public UserHomeContext openLocalUserHome(DqoUserIdentity identity) {
         LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalUserHome();
-        UserHomeContext userHomeContext = new UserHomeContext(homeRoot);
+        UserHomeContext userHomeContext = new UserHomeContext(homeRoot, identity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, this.yamlSerializer, this.jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
         userHomeContext.setUserModelCache(this.userHomeContextCache);

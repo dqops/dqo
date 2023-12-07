@@ -15,6 +15,7 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.metadata.basespecs.Flushable;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
@@ -38,6 +39,12 @@ import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookN
  * a virtual file system or a database.
  */
 public interface UserHome extends Flushable, HierarchyNode {
+    /**
+     * Returns the user identity for whom the user home was opened. Also identifies the data domain, which is a folder with a copy of the DQOps user home for a given data domain.
+     * @return User identity.
+     */
+    DqoUserIdentity getUserIdentity();
+
     /**
      * Returns a list of connections.
      * @return Collection of connections.

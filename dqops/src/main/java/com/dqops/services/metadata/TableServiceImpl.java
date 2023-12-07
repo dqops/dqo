@@ -217,7 +217,7 @@ public class TableServiceImpl implements TableService {
     public List<PushJobResult<DeleteStoredDataResult>> deleteTables(
             Map<String, Iterable<PhysicalTableName>> connectionToTables,
             DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();

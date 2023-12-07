@@ -21,6 +21,8 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
 import com.dqops.core.dqocloud.login.InstanceCloudLoginService;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.secrets.signature.SignedObject;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -73,18 +75,21 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
     private final InstanceCloudLoginService instanceCloudLoginService;
     private final DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory;
     private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     @Autowired
     public AuthenticateWithDqoCloudWebFilter(DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                                              DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                              InstanceCloudLoginService instanceCloudLoginService,
                                              DqoAuthenticationTokenFactory dqoAuthenticationTokenFactory,
-                                             DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+                                             DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                             DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.dqoAuthenticationTokenFactory = dqoAuthenticationTokenFactory;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
@@ -129,7 +134,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
 
         String authorizationToken = extractAuthenticationBearerToken(request);
         if (authorizationToken != null) {
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getIdentity());  // NOTE: this operation will support only the api key of the primary data domain
             if (apiKey != null && Objects.equals(authorizationToken, apiKey.getApiKeyToken())) {
                 Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
@@ -273,7 +279,8 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
                 }
             }
 
-            if (this.dqoCloudApiKeyProvider.getApiKey() == null) {
+            DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
+            if (this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getIdentity()) == null) {
                 log.warn("DQOps Cloud pairing API Key missing, cannot use federated authentication");
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
                 return exchange.getResponse().writeAndFlushWith(Mono.empty());

@@ -71,7 +71,7 @@ public class CheckCliServiceImpl implements CheckCliService {
                                            TimeWindowFilterParameters timeWindowFilterParameters,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
-        DqoUserPrincipal principal = this.apiKeyPrincipalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal principal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun, principal);
     }
 
@@ -82,9 +82,10 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public void disableChecks(CheckSearchFilters filters) {
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         BulkCheckDisableParameters parameters = new BulkCheckDisableParameters();
         parameters.setCheckSearchFilters(filters);
-        this.checkService.disableChecks(parameters);
+        this.checkService.disableChecks(parameters, userPrincipal);
     }
 
     /**
@@ -94,7 +95,7 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public List<AllChecksModel> updateAllChecksPatch(AllChecksModelCliPatchParameters parameters) {
-        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters(), userPrincipal);
         prepareSampleCheckModelForUpdates(sampleModel);
         patchCheckModel(sampleModel, parameters);

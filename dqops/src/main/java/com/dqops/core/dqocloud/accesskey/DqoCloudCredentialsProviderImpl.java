@@ -19,6 +19,7 @@ import com.dqops.cloud.rest.api.AccessTokenIssueApi;
 import com.dqops.cloud.rest.handler.ApiClient;
 import com.dqops.cloud.rest.model.TenantAccessTokenModel;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +48,12 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
     /**
      * Issues a tenant access token to access the bucket.
      * @param rootType Root type.
+     * @param userIdentity Calling user identity.
      * @return Tenant access token.
      */
-    public TenantAccessTokenModel issueTenantAccessToken(DqoRoot rootType) {
-        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+    @Override
+    public TenantAccessTokenModel issueTenantAccessToken(DqoRoot rootType, DqoUserIdentity userIdentity) {
+        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userIdentity);
         AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(authenticatedClient);
         switch (rootType) {
             case data_sensor_readouts:

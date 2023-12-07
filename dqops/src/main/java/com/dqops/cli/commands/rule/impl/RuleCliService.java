@@ -21,6 +21,6 @@ import com.dqops.cli.commands.RuleFileExtension;
 /**
  * Service called from the "rule" cli commands to edit a template.
  */
-public interface RuleService {
+public interface RuleCliService {
 	CliOperationStatus editTemplate(String sensorName, RuleFileExtension ext);
 }

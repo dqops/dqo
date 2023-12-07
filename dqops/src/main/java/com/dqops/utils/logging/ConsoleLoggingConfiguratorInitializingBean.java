@@ -30,6 +30,8 @@ import com.dqops.core.configuration.DqoLoggingConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import net.logstash.logback.encoder.LogstashEncoder;
 import net.logstash.logback.fieldnames.LogstashFieldNames;
 import net.logstash.logback.stacktrace.ShortenedThrowableConverter;
@@ -48,20 +50,24 @@ import java.nio.charset.StandardCharsets;
 @Component
 @Lazy(false)
 public class ConsoleLoggingConfiguratorInitializingBean implements InitializingBean {
-    private DqoLoggingConfigurationProperties loggingConfigurationProperties;
-    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final DqoLoggingConfigurationProperties loggingConfigurationProperties;
+    private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * Dependency injection constructor.
      * @param loggingConfigurationProperties Configuration parameters with the logging settings.
      * @param dqoCloudApiKeyProvider DQOps Cloud api key provider.
+     * @param userPrincipalProvider Local user principal provider.
      */
     @Autowired
     public ConsoleLoggingConfiguratorInitializingBean(
             DqoLoggingConfigurationProperties loggingConfigurationProperties,
-            DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+            DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+            DqoUserPrincipalProvider userPrincipalProvider) {
         this.loggingConfigurationProperties = loggingConfigurationProperties;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -132,7 +138,8 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
      * @return Console appender.
      */
     private ConsoleAppender<ILoggingEvent> createConsoleAppender() {
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getIdentity());
         DqoCloudApiKeyPayload apiKeyPayload = apiKey != null ? apiKey.getApiKeyPayload() : null;
 
         ConsoleAppender<ILoggingEvent> consoleAppender =

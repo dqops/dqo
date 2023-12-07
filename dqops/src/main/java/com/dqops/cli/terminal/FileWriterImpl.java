@@ -16,12 +16,14 @@
 package com.dqops.cli.terminal;
 
 import com.dqops.cli.commands.CliOperationStatus;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.nio.file.Path;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -29,15 +31,18 @@ import java.util.Date;
 import java.util.TimeZone;
 
 @Component
-public class FileWritterImpl implements FileWritter {
+public class FileWriterImpl implements FileWriter {
 	private final UserHomeContextFactory userHomeContextFactory;
+	private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 	private final TerminalFactory terminalFactory;
 
 	@Autowired
-	public FileWritterImpl(TerminalFactory terminalFactory,
-						   UserHomeContextFactory userHomeContextFactory) {
+	public FileWriterImpl(TerminalFactory terminalFactory,
+						  UserHomeContextFactory userHomeContextFactory,
+						  DqoUserPrincipalProvider dqoUserPrincipalProvider) {
 		this.terminalFactory = terminalFactory;
 		this.userHomeContextFactory = userHomeContextFactory;
+		this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
 	}
 
 	/**
@@ -59,7 +64,9 @@ public class FileWritterImpl implements FileWritter {
 	@Override
 	public CliOperationStatus writeStringToFile(String content) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
-		Path userHomeFolderPath = this.userHomeContextFactory.openLocalUserHome().getHomeRoot().getPhysicalAbsolutePath();
+		DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+		Path userHomeFolderPath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
 
 		boolean response = this.terminalFactory.getReader().promptBoolean("Do you want to use default file name?", true);
 		try {
@@ -70,9 +77,9 @@ public class FileWritterImpl implements FileWritter {
 				exportDirectory.mkdir();
 				File newTableFile = new File(exportDirectory.getAbsolutePath() + "/" + newTableFileName);
 				newTableFile.createNewFile();
-				FileWriter myWriter = new FileWriter(newTableFile.getAbsolutePath());
-				myWriter.write(content);
-				myWriter.close();
+				try (java.io.FileWriter myWriter = new java.io.FileWriter(newTableFile.getAbsolutePath())) {
+					myWriter.write(content);
+				}
 
 				cliOperationStatus.setSuccessMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
 
@@ -80,9 +87,9 @@ public class FileWritterImpl implements FileWritter {
 			}
 			String filePath = this.terminalFactory.getReader().prompt("Write full file path:\n", "", false);
 			File newTableFile = new File(filePath);
-			FileWriter myWriter = new FileWriter(newTableFile);
-			myWriter.write(content);
-			myWriter.close();
+			try (java.io.FileWriter myWriter = new java.io.FileWriter(newTableFile)) {
+				myWriter.write(content);
+			}
 
 			cliOperationStatus.setSuccessMessage("Content saved to:\n" + newTableFile.getAbsolutePath());
 		} catch (Exception e) {

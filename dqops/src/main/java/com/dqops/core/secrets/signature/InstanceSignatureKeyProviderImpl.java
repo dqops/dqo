@@ -17,6 +17,8 @@
 package com.dqops.core.secrets.signature;
 
 import com.dqops.core.configuration.DqoInstanceConfigurationProperties;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.settings.LocalSettingsSpec;
@@ -41,6 +43,7 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties;
+    private DqoUserPrincipalProvider userPrincipalProvider;
     private SecureRandom secureRandom;
     private byte[] cachedInstanceKey;
     private final Object lock = new Object();
@@ -50,14 +53,17 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
      * @param userHomeContextFactory DQOps local home context factory - used to load the local user home.
      * @param secretValueProvider Secret value provider, used to decode secrets.
      * @param dqoInstanceConfigurationProperties DQOps instance (dqo.instance.*) configuration parameters.
+     * @param userPrincipalProvider Current user principal provider.
      */
     @Autowired
     public InstanceSignatureKeyProviderImpl(UserHomeContextFactory userHomeContextFactory,
                                             SecretValueProvider secretValueProvider,
-                                            DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties) {
+                                            DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
+                                            DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
         this.dqoInstanceConfigurationProperties = dqoInstanceConfigurationProperties;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -78,7 +84,8 @@ public class InstanceSignatureKeyProviderImpl implements InstanceSignatureKeyPro
                 return decodedSignatureKeyFromConfiguration;
             }
 
-            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+            DqoUserPrincipal userPrincipalForAdministrator = this.userPrincipalProvider.createUserPrincipalForAdministrator();
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getIdentity());
             SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
             LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
             String instanceKeyBase64String = null;

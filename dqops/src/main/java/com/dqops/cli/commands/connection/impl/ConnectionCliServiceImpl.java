@@ -108,8 +108,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus showTableForConnection(String connectionName, String fullTableName, TabularOutputFormat tabularOutputFormat) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -198,8 +198,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                                             String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -285,8 +285,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus loadSchemaList(String connectionName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
@@ -363,8 +363,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      * @return Connection list.
      */
     public FormattedTableDto<ConnectionListModel> loadConnectionTable(String connectionNameFilter, String[] dimensions, String[] labels) {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -411,8 +411,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus addConnection(String connectionName, ConnectionSpec connectionSpec) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
@@ -443,8 +443,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus removeConnection(String connectionName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -506,8 +506,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
     public CliOperationStatus updateConnection(String connectionName, ConnectionSpec connectionSpec) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -541,8 +541,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      */
     @Override
     public ConnectionWrapper getConnection(String connectionName) {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
@@ -577,8 +577,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
      */
     @Override
     public int launchEditorForConnection(String connectionName) {
-        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity userIdentity = userPrincipal.createIdentity();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity userIdentity = userPrincipal.getIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);

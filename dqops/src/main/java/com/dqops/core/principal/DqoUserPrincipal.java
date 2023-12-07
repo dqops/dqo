@@ -154,7 +154,7 @@ public class DqoUserPrincipal {
      * Creates a user identity object that identifies the user.
      * @return User identity object.
      */
-    public DqoUserIdentity createIdentity() {
-        return new DqoUserIdentity(this.name, this.accountRole, null);
+    public DqoUserIdentity getIdentity() {
+        return new DqoUserIdentity(this.name, this.accountRole, DqoUserIdentity.DEFAULT_DATA_DOMAIN);
     }
 }

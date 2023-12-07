@@ -23,6 +23,7 @@ import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.locks.AcquiredExclusiveWriteLock;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.*;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
@@ -69,6 +70,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
      * @param local Source file system, the changes on the source (the local files) will overwrite changes in the target (remote DQOps Cloud or similar).
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
+     * @param userIdentity User identity, also specified the data domain.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param apiKey API Key with the license limits.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
@@ -77,6 +79,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
     public SynchronizationResult synchronize(FileSystemChangeSet local,
                                              FileSystemChangeSet remote,
                                              DqoRoot dqoRoot,
+                                             DqoUserIdentity userIdentity,
                                              FileSynchronizationDirection synchronizationDirection,
                                              DqoCloudApiKey apiKey,
                                              FileSystemSynchronizationListener synchronizationListener) {
@@ -110,7 +113,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         FolderMetadata newLocalFolderIndex = null;
 
         this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.synchronizing);
-        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot)) {
+        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userIdentity.getDataDomain())) {
             assert local.getCurrentFileIndex().isEmpty() || local.getCurrentFileIndex().get().isFrozen();
             currentLocalFolderIndex = local.getCurrentFileIndex()
                     .orElseGet(() -> sourceFileSystemSynchronizationOperations.listFilesInFolder(
@@ -142,7 +145,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         unsyncedTargetChanges = lastRemoteFolderIndex.findFileDifferences(currentTargetFolderIndex);
 
         if (unsyncedTargetChanges != null || emptyRemoteFolders != null) {
-            try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot)) {
+            try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot, userIdentity.getDataDomain())) {
                 // download changes from the remote file system
                 if (unsyncedTargetChanges != null && (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.download)) {
                     downloadRemoteToLocalAsync(dqoRoot, synchronizationListener, localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations, targetFileSystemRoot,

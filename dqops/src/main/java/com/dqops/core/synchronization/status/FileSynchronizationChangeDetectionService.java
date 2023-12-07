@@ -15,6 +15,7 @@
  */
 package com.dqops.core.synchronization.status;
 
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 
 /**
@@ -25,16 +26,18 @@ public interface FileSynchronizationChangeDetectionService {
      * Detects if there are any unsynchronized changes in a given DQOps User home folder.
      *
      * @param dqoRoot User home folder to be analyzed.
+     * @param principal User principal that identifies the data domain.
      * @return True when there are local unsynchronized changes, false otherwise.
      */
-    boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot);
+    boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot, DqoUserPrincipal principal);
 
     /**
      * Detects changes in a folder. Optionally publishes a folder change status to "changed" if a change is detected.
      *
+     * @param principal User principal that identifies the data domain.
      * @param dqoRoot Folder to be analyzed.
      */
-    void detectAndPublishLocalFolderStatus(DqoRoot dqoRoot);
+    void detectAndPublishLocalFolderStatus(DqoRoot dqoRoot, DqoUserPrincipal principal);
 
     /**
      * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQOps Cloud.

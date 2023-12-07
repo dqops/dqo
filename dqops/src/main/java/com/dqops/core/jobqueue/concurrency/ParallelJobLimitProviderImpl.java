@@ -20,6 +20,8 @@ import com.dqops.core.configuration.DqoQueueConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudLimit;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,19 +30,23 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class ParallelJobLimitProviderImpl implements ParallelJobLimitProvider {
-    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
-    private DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
+    private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final DqoQueueConfigurationProperties dqoQueueConfigurationProperties;
+    private final DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * Default dependency injection constructor.
      * @param dqoCloudApiKeyProvider DQOps Cloud api key provider - used to retrieve the licensed limit of concurrent jobs.
      * @param dqoQueueConfigurationProperties DQOps Queue configuration parameters with a user-provided additional concurrency limit.
+     * @param userPrincipalProvider User principal provider.
      */
     @Autowired
     public ParallelJobLimitProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
-                                        DqoQueueConfigurationProperties dqoQueueConfigurationProperties) {
+                                        DqoQueueConfigurationProperties dqoQueueConfigurationProperties,
+                                        DqoUserPrincipalProvider userPrincipalProvider) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.dqoQueueConfigurationProperties = dqoQueueConfigurationProperties;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -49,7 +55,8 @@ public class ParallelJobLimitProviderImpl implements ParallelJobLimitProvider {
      */
     @Override
     public int getMaxDegreeOfParallelism() {
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+        DqoUserPrincipal userPrincipalForAdministrator = this.userPrincipalProvider.createUserPrincipalForAdministrator();
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getIdentity());
         if (apiKey == null) {
             return 1;
         }

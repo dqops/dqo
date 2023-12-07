@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrationTest {
+public class DqoCloudSynchronizationCliServiceIntegrationTests extends BaseIntegrationTest {
     private DqoCloudSynchronizationService sut;
     private FileSystemSynchronizationListener listener;
 

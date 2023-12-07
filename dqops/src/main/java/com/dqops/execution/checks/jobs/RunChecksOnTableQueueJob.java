@@ -81,7 +81,7 @@ public class RunChecksOnTableQueueJob extends DqoQueueJob<CheckExecutionSummary>
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create(this.getPrincipal());
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeSelectedChecksOnTable(
                 executionContext,
                 this.parameters.getConnection(),

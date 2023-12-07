@@ -15,6 +15,7 @@
  */
 package com.dqops.core.synchronization.service;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
@@ -25,33 +26,42 @@ import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListene
 public interface DqoCloudSynchronizationService {
     /**
      * Performs synchronization of a given user home folder to the DQOps Cloud.
+     *
      * @param dqoRoot User Home folder type to synchronize.
+     * @param userIdentity User identity that identifies the data domain.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     void synchronizeFolder(DqoRoot dqoRoot,
+                           DqoUserIdentity userIdentity,
                            FileSynchronizationDirection synchronizationDirection,
                            boolean forceRefreshNativeTable,
                            FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes all roots (sources, check definitions, data).
+     *
+     * @param userIdentity User identity that identifies the data domain.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeAll(FileSynchronizationDirection synchronizationDirection,
+    void synchronizeAll(DqoUserIdentity userIdentity,
+                        FileSynchronizationDirection synchronizationDirection,
                         boolean forceRefreshNativeTable,
                         FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes only the data roots (sensor readouts, rule results).
+     *
+     * @param userIdentity User identity that identifies the data domain.
      * @param fileSynchronizationDirection File synchronization direction (full, download, upload).
      * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeData(FileSynchronizationDirection fileSynchronizationDirection,
+    void synchronizeData(DqoUserIdentity userIdentity,
+                         FileSynchronizationDirection fileSynchronizationDirection,
                          boolean forceRefreshNativeTable,
                          FileSystemSynchronizationListener synchronizationListener);
 }

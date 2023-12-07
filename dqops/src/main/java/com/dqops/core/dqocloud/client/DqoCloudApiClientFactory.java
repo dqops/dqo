@@ -16,6 +16,7 @@
 package com.dqops.core.dqocloud.client;
 
 import com.dqops.cloud.rest.handler.ApiClient;
+import com.dqops.core.principal.DqoUserIdentity;
 
 /**
  * DQOps Cloud API client factory.
@@ -29,7 +30,8 @@ public interface DqoCloudApiClientFactory {
 
     /**
      * Creates an authenticated API client for the DQOps Cloud. The authentication uses the API Key that must be obtained by running the "login" CLI command.
+     * @param userIdentity Calling user identity, required to select the data domain.
      * @return Authenticated client.
      */
-    ApiClient createAuthenticatedClient();
+    ApiClient createAuthenticatedClient(DqoUserIdentity userIdentity);
 }

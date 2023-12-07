@@ -15,6 +15,7 @@
  */
 package com.dqops.core.dqocloud.buckets;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.cloud.storage.Storage;
 
@@ -26,6 +27,7 @@ public class DqoCloudRemoteBucket {
     private String bucketName;
     private String objectPrefix;
     private Storage storage;
+    private DqoUserIdentity userIdentity;
 
     /**
      * Creates a DQOps Cloud remote bucket summary object.
@@ -33,12 +35,14 @@ public class DqoCloudRemoteBucket {
      * @param bucketName Google storage bucket name.
      * @param objectPrefix Object prefix to be used as tentant's root folder.
      * @param storage Google Storage client, configured with proper credentials.
+     * @param userIdentity User identity that identifies the calling user and the data domain.
      */
-    public DqoCloudRemoteBucket(DqoRoot rootType, String bucketName, String objectPrefix, Storage storage) {
+    public DqoCloudRemoteBucket(DqoRoot rootType, String bucketName, String objectPrefix, Storage storage, DqoUserIdentity userIdentity) {
         this.rootType = rootType;
         this.bucketName = bucketName;
         this.objectPrefix = objectPrefix;
         this.storage = storage;
+        this.userIdentity = userIdentity;
     }
 
     /**
@@ -71,5 +75,13 @@ public class DqoCloudRemoteBucket {
      */
     public Storage getStorage() {
         return storage;
+    }
+
+    /**
+     * Returns the calling user identity, that identifies the data domain that will be synchronized.
+     * @return User identity with the data domain.
+     */
+    public DqoUserIdentity getUserIdentity() {
+        return userIdentity;
     }
 }

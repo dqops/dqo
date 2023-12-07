@@ -80,13 +80,14 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     public DqoCloudApiKey getApiKey(DqoUserIdentity userIdentity) {
         try {
             synchronized (this.lock) {
-                DqoCloudApiKey cachedApiKeyPerDomain = this.cachedApiKey.get(userIdentity.getDataDomain());
+                DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKey.get(userIdentity.getDataDomain()) : null;
 
                 if (cachedApiKeyPerDomain != null) {
                     return cachedApiKeyPerDomain;
                 }
 
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
+                DqoUserIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : DqoUserIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
                 SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
                 LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
                 String apiKey = null;
@@ -106,7 +107,11 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
                 }
 
                 DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
-                this.cachedApiKey.put(userIdentity.getDataDomain(), dqoCloudApiKey);
+                String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDomain();
+                if (Strings.isNullOrEmpty(apiKeyDomain)) {
+                    apiKeyDomain = DqoUserIdentity.DEFAULT_DATA_DOMAIN;
+                }
+                this.cachedApiKey.put(apiKeyDomain, dqoCloudApiKey);
                 return dqoCloudApiKey;
             }
         } catch (Exception e) {

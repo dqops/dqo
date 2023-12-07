@@ -19,6 +19,7 @@ import com.dqops.cloud.rest.api.TenantDataWarehouseApi;
 import com.dqops.cloud.rest.handler.ApiClient;
 import com.dqops.cloud.rest.model.RefreshTableRequest;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.TargetTableModifiedPartitions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,15 +56,16 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
     /**
      * Refreshes a target table, sending additional information with the list of modified connections, tables and months that should be refreshed.
      * @param targetTableModifiedPartitions Target table modified partitions. Identifies the target table and lists all unique connections, tables, dates of the month to be refreshed.
+     * @param userIdentity User identity that identifies the target data domain.
      */
     @Override
-    public void refreshNativeTable(TargetTableModifiedPartitions targetTableModifiedPartitions) {
+    public void refreshNativeTable(TargetTableModifiedPartitions targetTableModifiedPartitions, DqoUserIdentity userIdentity) {
         RefreshTableRequest.TableEnum targetTableParameter = ROOT_TABLE_REQUEST_MAPPING.get(targetTableModifiedPartitions.getTargetTable());
         if (targetTableParameter == null) {
             return; // this target is not stored in the data warehouse, it could be the "sources" folder with yaml files, etc.
         }
 
-        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+        ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userIdentity);
         TenantDataWarehouseApi tenantDataWarehouseApi = new TenantDataWarehouseApi(authenticatedClient);
 
         RefreshTableRequest refreshTableRequest = new RefreshTableRequest();

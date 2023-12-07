@@ -15,6 +15,8 @@
  */
 package com.dqops.core.scheduler.synchronize;
 
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.scheduler.schedules.UniqueSchedulesCollection;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -40,15 +42,18 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
     private HierarchyNodeTreeSearcher nodeTreeSearcher;
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     @Autowired
     public ScheduleChangeFinderServiceImpl(
             HierarchyNodeTreeSearcher nodeTreeSearcher,
             UserHomeContextFactory userHomeContextFactory,
-            SecretValueProvider secretValueProvider) {
+            SecretValueProvider secretValueProvider,
+            DqoUserPrincipalProvider dqoUserPrincipalProvider) {
         this.nodeTreeSearcher = nodeTreeSearcher;
         this.userHomeContextFactory = userHomeContextFactory;
         this.secretValueProvider = secretValueProvider;
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
@@ -56,7 +61,8 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      * @return All unique schedules to run data quality checks.
      */
     public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity()); // TODO: to support multiple data domains, we must iterate over data domains and scan them all
         UserHome userHome = userHomeContext.getUserHome();
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 

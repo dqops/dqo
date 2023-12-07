@@ -17,6 +17,7 @@
 package com.dqops.core.principal;
 
 import com.dqops.core.dqocloud.login.DqoUserRole;
+import org.apache.parquet.Strings;
 
 import java.util.Objects;
 
@@ -28,6 +29,11 @@ public class DqoUserIdentity {
      * The name of the default data domain.
      */
     public static final String DEFAULT_DATA_DOMAIN = "";
+
+    /**
+     * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
+     */
+    public static final DqoUserIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new DqoUserIdentity("admin", DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN);
 
     private String name;
     private DqoUserRole accountRole;
@@ -42,7 +48,7 @@ public class DqoUserIdentity {
     public DqoUserIdentity(String name, DqoUserRole accountRole, String dataDomain) {
         this.name = name;
         this.accountRole = accountRole;
-        this.dataDomain = dataDomain != null ? dataDomain : DEFAULT_DATA_DOMAIN;
+        this.dataDomain = !Strings.isNullOrEmpty(dataDomain) ? dataDomain : DEFAULT_DATA_DOMAIN;
     }
 
     /**

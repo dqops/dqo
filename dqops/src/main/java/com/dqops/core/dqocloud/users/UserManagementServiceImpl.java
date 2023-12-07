@@ -24,7 +24,6 @@ import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
@@ -61,7 +60,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             List<DqoUserModel> cloudUserList = accountUsersApi.listAccountUsers();
 
@@ -94,7 +93,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel cloudUserModel = accountUsersApi.getAccountUser(email);
 
@@ -129,7 +128,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -162,7 +161,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -194,7 +193,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.deleteAccountUser(email);
         }
@@ -225,7 +224,7 @@ public class UserManagementServiceImpl implements UserManagementService {
                 userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
             }
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.changeAccountUserPassword(email, newPassword);
         }

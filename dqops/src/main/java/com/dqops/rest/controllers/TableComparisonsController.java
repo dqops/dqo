@@ -97,7 +97,7 @@ public class TableComparisonsController {
             @RequestParam(required = false) Optional<CheckType> checkType,
             @ApiParam(name = "checkTimeScale", value = "Optional time scale filter for table comparisons specific to the monitoring and partitioned checks (values: daily or monthly).", required = false)
             @RequestParam(required = false) Optional<CheckTimeScale> checkTimeScale) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
         if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
@@ -150,7 +150,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Reference table configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
         if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -207,7 +207,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap = this.readTableComparisonConfigurationMap(userHomeContext, connectionName, schemaName, tableName);
         if (tableComparisonConfigurationSpecMap == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -276,7 +276,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -328,7 +328,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -378,7 +378,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -427,7 +427,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -476,7 +476,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -525,7 +525,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -574,7 +574,7 @@ public class TableComparisonsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -623,7 +623,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
@@ -834,7 +834,7 @@ public class TableComparisonsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         TableSpec tableSpec = this.readTableSpec(userHomeContext, connectionName, schemaName, tableName);
         if (tableSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);

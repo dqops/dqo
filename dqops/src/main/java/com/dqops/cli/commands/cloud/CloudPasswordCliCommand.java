@@ -66,7 +66,7 @@ public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        DqoUserPrincipal userPrincipal = this.principalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
         TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
         if (userPrincipal.getApiKeyPayload() == null) {

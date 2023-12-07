@@ -67,7 +67,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     @Override
     public List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters,
                                                        DqoUserPrincipal principal) {
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create(principal);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);

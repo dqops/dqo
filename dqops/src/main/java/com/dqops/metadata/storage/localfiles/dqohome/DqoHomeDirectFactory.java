@@ -22,6 +22,7 @@ import com.dqops.core.filesystem.cache.LocalFileSystemCacheImpl;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.utils.logging.UserErrorLoggerImpl;
 import com.dqops.utils.serialization.YamlSerializerImpl;
 
@@ -45,7 +46,7 @@ public class DqoHomeDirectFactory {
         LocalFileSystemCacheImpl localFileSystemCache = new LocalFileSystemCacheImpl(dqoCacheConfigurationProperties);
         LocalDqoHomeFileStorageServiceImpl localDqoHomeFileStorageService = new LocalDqoHomeFileStorageServiceImpl(dqoHomePath.toString(), localFileSystemCache);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
-        LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath());
+        LocalFolderTreeNode dqoHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN));
         DqoHomeContext dqoHomeContext = new DqoHomeContext(dqoHomeFolder);
         YamlSerializerImpl yamlSerializer = new YamlSerializerImpl(new DqoConfigurationProperties(), new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
         FileDqoHomeImpl fileDqoHome = FileDqoHomeImpl.create(dqoHomeContext, yamlSerializer);

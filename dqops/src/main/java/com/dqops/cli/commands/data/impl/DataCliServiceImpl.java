@@ -69,7 +69,7 @@ public class DataCliServiceImpl implements DataCliService {
 
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deleteStoredDataQueueJobParameters);
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
+        DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
         PushJobResult<DeleteStoredDataResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
 
         DeleteStoredDataResult deleteStoredDataResult = null;

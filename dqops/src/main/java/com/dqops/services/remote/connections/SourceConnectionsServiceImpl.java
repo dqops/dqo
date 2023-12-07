@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceConnection;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionList;
@@ -56,16 +57,20 @@ public class SourceConnectionsServiceImpl implements SourceConnectionsService {
 
     /**
      * Returns the status of the remote connection.
+     * @param principal User principal.
      * @param connectionSpec Connection spec model.
      * @param connectionName Connection name.
      * @param verifyNameUniqueness Verify if the name is unique. Name uniqueness is not verified when the connection is checked again on the connection details screen (re-tested).
      * @return Status of the remote connection.
      */
     @Override
-    public ConnectionTestModel testConnection(String connectionName, ConnectionSpec connectionSpec, boolean verifyNameUniqueness) {
+    public ConnectionTestModel testConnection(DqoUserPrincipal principal,
+                                              String connectionName,
+                                              ConnectionSpec connectionSpec,
+                                              boolean verifyNameUniqueness) {
         ConnectionTestModel connectionTestModel = new ConnectionTestModel();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 

@@ -15,6 +15,7 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
@@ -23,7 +24,6 @@ import java.util.Map;
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
  */
-
 public interface ParquetPartitionStorageService {
     /**
      * Reads the data of one monthly partition.
@@ -31,12 +31,14 @@ public interface ParquetPartitionStorageService {
      * @param partitionId     Partition id.
      * @param storageSettings Storage settings that identify the target table type that is loaded.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param userIdentity    User identity, specifies the data domain.
      * @return Returns a dataset table with the content of the partition. The table (data) is null if the parquet file was not found.
      */
     LoadedMonthlyPartition loadPartition(
             ParquetPartitionId partitionId,
             FileStorageSettings storageSettings,
-            String[] columnNames);
+            String[] columnNames,
+            DqoUserIdentity userIdentity);
 
     /**
      * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>.
@@ -47,6 +49,7 @@ public interface ParquetPartitionStorageService {
      * @param end             End date, the whole month of the given date is loaded.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param userIdentity    User identity, specifies the data domain.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     Map<ParquetPartitionId, LoadedMonthlyPartition> loadPartitionsForMonthsRange(
@@ -55,7 +58,8 @@ public interface ParquetPartitionStorageService {
             LocalDate start,
             LocalDate end,
             FileStorageSettings storageSettings,
-            String[] columnNames);
+            String[] columnNames,
+            DqoUserIdentity userIdentity);
 
     /**
      * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>,
@@ -68,6 +72,7 @@ public interface ParquetPartitionStorageService {
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @param maxRecentMonthsToLoad     Limit of partitions loaded, with the preference of the most recent ones.
+     * @param userIdentity    User identity, specifies the data domain.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(
@@ -77,7 +82,8 @@ public interface ParquetPartitionStorageService {
             LocalDate endBoundary,
             FileStorageSettings storageSettings,
             String[] columnNames,
-            int maxRecentMonthsToLoad);
+            int maxRecentMonthsToLoad,
+            DqoUserIdentity userIdentity);
 
     /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
@@ -88,17 +94,21 @@ public interface ParquetPartitionStorageService {
      * @param loadedPartition  Loaded partition, identifies the partition id. The loaded partition may contain no data.
      * @param tableDataChanges Table data changes to be applied.
      * @param storageSettings  Storage settings to identify the target folder, file names and column names used for matching.
+     * @param userIdentity     User identity, specifies the data domain.
      */
     void savePartition(LoadedMonthlyPartition loadedPartition,
                        TableDataChanges tableDataChanges,
-                       FileStorageSettings storageSettings);
+                       FileStorageSettings storageSettings,
+                       DqoUserIdentity userIdentity);
 
     /**
      * Deletes a partition file.
      * @param loadedPartitionId Partition id to delete.
-     * @param storageSettings Storage settings.
+     * @param storageSettings   Storage settings.
+     * @param userIdentity      User identity, specifies the data domain.
      * @return True when the file was removed, false otherwise.
      */
     boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
-                                FileStorageSettings storageSettings);
+                                FileStorageSettings storageSettings,
+                                DqoUserIdentity userIdentity);
 }

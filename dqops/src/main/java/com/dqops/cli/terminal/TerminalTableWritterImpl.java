@@ -32,14 +32,14 @@ import tech.tablesaw.api.TextColumn;
  */
 @Component
 public class TerminalTableWritterImpl implements TerminalTableWritter {
-	private final FileWritter fileWritter;
+	private final FileWriter fileWriter;
 	private final TerminalFactory terminalFactory;
 
 	@Autowired
 	TerminalTableWritterImpl(TerminalFactory terminalFactory,
-							 FileWritter fileWritter) {
+							 FileWriter fileWriter) {
 		this.terminalFactory = terminalFactory;
-		this.fileWritter = fileWritter;
+		this.fileWriter = fileWriter;
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 		String renderedTable = tableBuilder.build().render(180);
 
-		return this.fileWritter.writeStringToFile(renderedTable);
+		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	@Override
@@ -97,7 +97,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 		String renderedTable = tableBuilder.build().render(180);
 
-		return this.fileWritter.writeStringToFile(renderedTable);
+		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 
 		String renderedTable = tableBuilder.build().render(180);
 
-		return this.fileWritter.writeStringToFile(renderedTable);
+		return this.fileWriter.writeStringToFile(renderedTable);
 	}
 
 	/**

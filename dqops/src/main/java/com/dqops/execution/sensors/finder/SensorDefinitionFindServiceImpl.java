@@ -45,7 +45,8 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
         DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
 
         String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
-        HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(jinjaFileNameRelativeToHome);
+        String dataDomain = executionContext.getUserHomeContext().getUserIdentity().getDataDomain();
+        HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, jinjaFileNameRelativeToHome);
 
         if (userHome != null) {
             SensorDefinitionWrapper userSensorDefinitionWrapper = userHome.getSensors().getByObjectName(sensorName, true);

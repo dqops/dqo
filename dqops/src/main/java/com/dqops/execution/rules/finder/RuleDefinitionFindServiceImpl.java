@@ -53,7 +53,8 @@ public class RuleDefinitionFindServiceImpl implements RuleDefinitionFindService 
                 ruleName;
 
         String pythonFileNameRelativeToHome = BuiltInFolderNames.RULES + "/" + ruleName + ".py";
-        HomeFilePath pythonFileHomePath = HomeFilePath.fromFilePath(pythonFileNameRelativeToHome);
+        String dataDomain = executionContext.getUserHomeContext().getUserIdentity().getDataDomain();
+        HomeFilePath pythonFileHomePath = HomeFilePath.fromFilePath(dataDomain, pythonFileNameRelativeToHome);
 
         RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(bareRuleName, true);
         if (userRuleDefinitionWrapper != null) {

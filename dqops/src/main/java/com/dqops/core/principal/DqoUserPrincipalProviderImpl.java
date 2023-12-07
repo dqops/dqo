@@ -21,6 +21,8 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,7 @@ import java.util.List;
  * This provider should be called by operations executed from the DQOps command line to obtain the principal or when DQOps is running in a single user mode.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
@@ -57,8 +60,7 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
     //    return dqoUserPrincipalTest;
         /******** end of testing code */
 
-
-        DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey();
+        DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(null);
         if (dqoCloudApiKey == null) {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
@@ -69,5 +71,15 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
         DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
         DqoUserPrincipal userPrincipalFromApiKey = apiKeyPayload.createUserPrincipal();
         return userPrincipalFromApiKey;
+    }
+
+    /**
+     * Returns the principal of the local user who has direct access to the command line and runs operations on the DQOps shell.
+     *
+     * @return The principal of the local user who is using DQOps from the terminal.
+     */
+    @Override
+    public DqoUserPrincipal getLocalUserPrincipal() {
+        return createUserPrincipalForAdministrator();
     }
 }

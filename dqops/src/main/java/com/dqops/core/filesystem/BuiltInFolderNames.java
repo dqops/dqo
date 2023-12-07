@@ -88,4 +88,10 @@ public final class BuiltInFolderNames {
      * Local log folder inside the user home that stores logs.
      */
     public static final String LOGS = ".logs";
+
+    /**
+     * The folder with additional data domains. Each data domain is a subfolder under the "domains" folder,
+     * which is a new DQOps user home folder, but without nested data domains.
+     */
+    public static final String DATA_DOMAINS = "domains";
 }

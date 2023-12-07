@@ -74,7 +74,7 @@ public class CollectStatisticsQueueJob extends ParentDqoQueueJob<StatisticsColle
     public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create(this.getPrincipal());
         StatisticsCollectionExecutionSummary statisticsCollectionExecutionSummary = this.statisticsCollectorsExecutionService.executeStatisticsCollectors(
                 executionContext,
                 this.parameters.getStatisticsCollectorSearchFilters(),

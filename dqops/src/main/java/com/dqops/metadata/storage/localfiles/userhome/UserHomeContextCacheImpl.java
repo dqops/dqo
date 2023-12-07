@@ -80,8 +80,8 @@ public class UserHomeContextCacheImpl implements UserHomeContextCache {
             return this.cachedUserHomeContext;
         }
 
-        DqoUserPrincipal userPrincipalForDqopsOperator = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-        DqoUserIdentity operatorIdentity = userPrincipalForDqopsOperator.createIdentity();
+        DqoUserPrincipal localUserPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
+        DqoUserIdentity operatorIdentity = localUserPrincipal.getIdentity();
         UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(operatorIdentity);
         this.cachedUserHomeContext = cachedUserHomeContext;
         this.cachedAt = Instant.now();

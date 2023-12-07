@@ -16,6 +16,7 @@
 package com.dqops.services.remote.tables;
 
 import com.dqops.connectors.*;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
@@ -55,10 +56,11 @@ public class SourceTablesServiceImpl implements SourceTablesService {
      *
      * @param connectionName Connection name. Required import.
      * @param schemaName     Schema name.
+     * @param principal      Calling user principal.
      * @return Table list acquired remotely.
      */
-    public List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName, String schemaName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public List<RemoteTableListModel> showTablesOnRemoteSchema(String connectionName, String schemaName, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();

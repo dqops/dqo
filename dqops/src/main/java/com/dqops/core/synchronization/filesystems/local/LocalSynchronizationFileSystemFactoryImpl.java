@@ -16,6 +16,7 @@
 package com.dqops.core.synchronization.filesystems.local;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
@@ -47,10 +48,12 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     /**
      * Creates a DQOps file system that accesses physical files on the local file system.
      * @param rootType Root type (folder type).
+     * @param userIdentity User identity that identifies the data domain.
      * @return DQOps file system that can manage local files in a selected folder.
      */
-    public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType) {
-        Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType);
+    @Override
+    public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, DqoUserIdentity userIdentity) {
+        Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType, userIdentity);
         UserHomeFileSystemSynchronizationRoot userHomeFileSystemRoot = new UserHomeFileSystemSynchronizationRoot(absoluteLocalPathToFolder);
         return new SynchronizationRoot(userHomeFileSystemRoot, this.localFileSystemService);
     }
@@ -58,10 +61,11 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     /**
      * Returns an absolute path to a selected folder inside the DQO_USER_HOME.
      * @param rootType Root type (folder type).
+     * @param userIdentity User identity that identifies the data domain.
      * @return Absolute file system path to a requested folder.
      */
-    public Path getAbsoluteLocalPathToFolder(DqoRoot rootType) {
-        Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath();
+    public Path getAbsoluteLocalPathToFolder(DqoRoot rootType, DqoUserIdentity userIdentity) {
+        Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity);
 
         switch (rootType) {
             case data_sensor_readouts:

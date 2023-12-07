@@ -15,6 +15,7 @@
  */
 package com.dqops.core.configuration;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -27,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoUserConfigurationProperties implements Cloneable {
     private String home;
+    private String defaultDataDomain = DqoUserIdentity.DEFAULT_DATA_DOMAIN;
     private boolean hasLocalHome;
     private boolean initializeUserHome;
 
@@ -46,6 +48,22 @@ public class DqoUserConfigurationProperties implements Cloneable {
      */
     public void setHome(String home) {
         this.home = home;
+    }
+
+    /**
+     * Returns the name of the data domain that is mounted at the root DQOps user home folder.
+     * @return Default data domain.
+     */
+    public String getDefaultDataDomain() {
+        return defaultDataDomain;
+    }
+
+    /**
+     * Sets the name of the default data domain that is mounted at the root folder.
+     * @param defaultDataDomain Default data domain.
+     */
+    public void setDefaultDataDomain(String defaultDataDomain) {
+        this.defaultDataDomain = defaultDataDomain;
     }
 
     /**

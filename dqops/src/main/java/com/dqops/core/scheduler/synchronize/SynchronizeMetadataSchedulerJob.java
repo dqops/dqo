@@ -89,7 +89,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator(); // TODO: get the principal from the job
             DqoCloudApiKeyPayload cloudApiKeyPayload = principal.getApiKeyPayload();
             if (cloudApiKeyPayload == null) {
                 return;

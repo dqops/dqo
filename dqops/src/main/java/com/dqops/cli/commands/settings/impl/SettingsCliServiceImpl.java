@@ -21,6 +21,8 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudLimit;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.settings.SettingsWrapper;
@@ -39,21 +41,24 @@ import java.util.Map;
  * Settings management service.
  */
 @Component
-public class SettingsServiceImpl implements SettingsService {
+public class SettingsCliServiceImpl implements SettingsCliService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 	private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
 	private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+	private final DqoUserPrincipalProvider principalProvider;
 
 	@Autowired
-	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory,
-							   DefaultTimeZoneProvider defaultTimeZoneProvider,
-							   DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
-							   DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+	public SettingsCliServiceImpl(UserHomeContextFactory userHomeContextFactory,
+								  DefaultTimeZoneProvider defaultTimeZoneProvider,
+								  DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
+								  DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+								  DqoUserPrincipalProvider principalProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
 		this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
 		this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+		this.principalProvider = principalProvider;
 	}
 
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
@@ -75,7 +80,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus setSettingsEditor(String editorName, String editorPath) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -103,7 +109,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus removeSettingsEditor() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -134,7 +141,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus showSettingsEditor() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -164,7 +172,8 @@ public class SettingsServiceImpl implements SettingsService {
 	@Override
 	public CliOperationStatus initSettings(String editorName, String editorPath) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
-		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 
 		LocalSettingsSpec localSettingsSpec = new LocalSettingsSpec();
 		localSettingsSpec.setEditorName(editorName);
@@ -189,7 +198,8 @@ public class SettingsServiceImpl implements SettingsService {
 	@Override
 	public CliOperationStatus removeSettings() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
-		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 
 		SettingsWrapper settings = userHomeContext.getUserHome().getSettings();
 		if (settings == null || settings.getSpec() == null) {
@@ -212,7 +222,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus setApiKey(String key) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -239,7 +250,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus removeApiKey() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -272,7 +284,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus showApiKey() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -348,7 +361,8 @@ public class SettingsServiceImpl implements SettingsService {
 			}
 		}
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -375,7 +389,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus removeTimeZone() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
@@ -408,7 +423,8 @@ public class SettingsServiceImpl implements SettingsService {
 	public CliOperationStatus showTimeZone() {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		LocalSettingsSpec settings;
 		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {

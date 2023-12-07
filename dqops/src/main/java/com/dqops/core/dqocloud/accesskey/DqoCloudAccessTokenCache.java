@@ -15,6 +15,7 @@
  */
 package com.dqops.core.dqocloud.accesskey;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 
 /**
@@ -25,9 +26,10 @@ public interface DqoCloudAccessTokenCache {
      * Returns a current GCP bucket access token used to perform read/write operations on a customer's storage bucket for a given root folder.
      *
      * @param dqoRoot DQOps Root folder.
+     * @param userIdentity Calling user identity, used to identify the data domain.
      * @return Up-to-date access token.
      */
-    DqoCloudCredentials getCredentials(DqoRoot dqoRoot);
+    DqoCloudCredentials getCredentials(DqoRoot dqoRoot, DqoUserIdentity userIdentity);
 
     /**
      * Invalidates the cache. Called when all the keys should be abandoned, because the API key has changed.

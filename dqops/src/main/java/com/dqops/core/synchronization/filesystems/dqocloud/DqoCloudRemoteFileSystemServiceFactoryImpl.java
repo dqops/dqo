@@ -17,6 +17,7 @@ package com.dqops.core.synchronization.filesystems.dqocloud;
 
 import com.dqops.core.dqocloud.buckets.DqoCloudBucketAccessProvider;
 import com.dqops.core.dqocloud.buckets.DqoCloudRemoteBucket;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.core.synchronization.filesystems.gcp.GSFileSystemSynchronizationRoot;
@@ -50,10 +51,12 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
     /**
      * Creates a remote file system that accesses a remote DQOps Cloud bucket to read and write the tenant's data.
      * @param rootType Root type.
+     * @param userIdentity User identity.
      * @return DQOps Cloud remote file system.
      */
-    public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType) {
-        DqoCloudRemoteBucket remoteBucketClient = this.dqoCloudBucketAccessProvider.getRemoteBucketClientRW(rootType);
+    @Override
+    public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType, DqoUserIdentity userIdentity) {
+        DqoCloudRemoteBucket remoteBucketClient = this.dqoCloudBucketAccessProvider.getRemoteBucketClientRW(rootType, userIdentity);
         if (remoteBucketClient == null) {
             return null;
         }

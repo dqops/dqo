@@ -17,7 +17,7 @@ package com.dqops.cli.commands.cloud.sync;
 
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationService;
+import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationCliService;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
@@ -41,7 +41,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "sources", header = "Synchronize local \"sources\" connection and table level quality definitions with DQOps Cloud",
         description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"sources\" folder.")
 public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand {
-    private CloudSynchronizationService cloudSynchronizationService;
+    private CloudSynchronizationCliService cloudSynchronizationCliService;
     private TerminalFactory terminalFactory;
     private DqoUserPrincipalProvider principalProvider;
 
@@ -49,10 +49,10 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
     }
 
     @Autowired
-    public CloudSyncSourcesCliCommand(CloudSynchronizationService cloudSynchronizationService,
+    public CloudSyncSourcesCliCommand(CloudSynchronizationCliService cloudSynchronizationCliService,
                                       TerminalFactory terminalFactory,
                                       DqoUserPrincipalProvider principalProvider) {
-        this.cloudSynchronizationService = cloudSynchronizationService;
+        this.cloudSynchronizationCliService = cloudSynchronizationCliService;
         this.terminalFactory = terminalFactory;
         this.principalProvider = principalProvider;
     }
@@ -104,8 +104,8 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
     @Override
     public Integer call() throws Exception {
         try {
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
-            return this.cloudSynchronizationService.synchronizeRoot(
+            DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
+            return this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.sources, this.mode, this.direction, false, this.isHeadless(), true, principal);
         }
         catch (DqoQueueJobExecutionException cex) {

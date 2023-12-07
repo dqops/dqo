@@ -16,10 +16,13 @@
 package com.dqops.data.local;
 
 import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.DqoUserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.nio.file.Path;
+import java.util.Objects;
 
 /**
  * Service that returns an absolute path to the local user home, used to access data files.
@@ -39,10 +42,19 @@ public class LocalDqoUserHomePathProviderImpl implements LocalDqoUserHomePathPro
 
     /**
      * Returns the absolute path to the DQO_USER_HOME folder.
+     * @param userIdentity User identity that identifies the target data domain.
      * @return Absolute path to the DQOps user home folder.
      */
-    public Path getLocalUserHomePath() {
-        Path absolutePathToLocalUserHome = Path.of(this.dqoUserConfigurationProperties.getHome()).toAbsolutePath();
-        return absolutePathToLocalUserHome;
+    @Override
+    public Path getLocalUserHomePath(DqoUserIdentity userIdentity) {
+        Path absolutePathToLocalUserHomeRoot = Path.of(this.dqoUserConfigurationProperties.getHome()).toAbsolutePath();
+
+        if (!Objects.equals(userIdentity.getDataDomain(), this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
+            absolutePathToLocalUserHomeRoot = absolutePathToLocalUserHomeRoot
+                    .resolve(BuiltInFolderNames.DATA_DOMAINS)
+                    .resolve(userIdentity.getDataDomain());
+        }
+
+        return absolutePathToLocalUserHomeRoot;
     }
 }

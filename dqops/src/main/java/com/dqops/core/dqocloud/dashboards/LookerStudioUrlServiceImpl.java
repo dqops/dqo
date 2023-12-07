@@ -24,6 +24,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.metadata.dashboards.DashboardSpec;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,10 +69,11 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
 
     /**
      * Contacts the DQOps Cloud server and issues a short-lived refresh token scoped to access data quality dashboards using Looker Studio.
+     * @param userPrincipal Calling user principal, identifies the data domain.
      * @return API key scoped for accessing dashboards for the client's credentials.
      */
     @Override
-    public String getLookerStudioQueryApiKey() {
+    public String getLookerStudioQueryApiKey(DqoUserPrincipal userPrincipal) {
         try {
             synchronized (this.lock) {
                 if (this.lookerStudioApiKeyValidUntil != null && this.lookerStudioApiKeyValidUntil.isAfter(Instant.now())) {
@@ -79,7 +81,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
                 }
             }
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
             LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
             String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey();
 
@@ -102,10 +104,11 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
 
     /**
      * Returns a looker studio access token that could be sent to the connector to speed up setting up a connection to the quality data warehouse.
+     * @param userPrincipal Calling user principal, identifies the data domain.
      * @return Looker studio access token model.
      */
-    public TenantQueryAccessTokenModel getLookerStudioAccessToken() {
-        String lookerStudioQueryApiKey = getLookerStudioQueryApiKey();
+    public TenantQueryAccessTokenModel getLookerStudioAccessToken(DqoUserPrincipal userPrincipal) {
+        String lookerStudioQueryApiKey = getLookerStudioQueryApiKey(userPrincipal);
 
         try {
             synchronized (this.lock) {
@@ -148,12 +151,13 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
      * Creates an authenticated URL for a looker studio dashboard.
      * @param dashboardSpec Dashboard specification.
      * @param dqoWindowLocationOrigin URL to the DQOps instance (the window.location.origin value).
+     * @param userPrincipal Calling user principal, identifies the data domain.
      * @return Authenticated url to the dashboard with an appended short-lived refresh token.
      */
     @Override
-    public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec, String dqoWindowLocationOrigin) {
-        String refreshToken = this.getLookerStudioQueryApiKey();
-        TenantQueryAccessTokenModel lookerStudioAccessToken = this.getLookerStudioAccessToken();
+    public String makeAuthenticatedDashboardUrl(DashboardSpec dashboardSpec, String dqoWindowLocationOrigin, DqoUserPrincipal userPrincipal) {
+        String refreshToken = this.getLookerStudioQueryApiKey(userPrincipal);
+        TenantQueryAccessTokenModel lookerStudioAccessToken = this.getLookerStudioAccessToken(userPrincipal);
         String token = refreshToken +
                 ",t=" + lookerStudioAccessToken.getAccessToken() +
                 ",p=" + lookerStudioAccessToken.getBillingProjectId() +

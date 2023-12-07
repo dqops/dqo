@@ -129,7 +129,7 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 	 */
 	@Override
 	public Integer call() throws Exception {
-		DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
+		DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
 		CliOperationStatus cliOperationStatus = columnCliService.removeColumn(connectionName, fullTableName, columnName, principal);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;

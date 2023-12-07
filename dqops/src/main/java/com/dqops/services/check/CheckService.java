@@ -49,8 +49,9 @@ public interface CheckService {
      * Disable existing checks matching the provided filters.
      *
      * @param parameters Bulk check disable parameters.
+     * @param principal User principal who called the operation.
      */
-    void disableChecks(BulkCheckDisableParameters parameters);
+    void disableChecks(BulkCheckDisableParameters parameters, DqoUserPrincipal principal);
 
     /**
      * Update checks configuration based on provided parameters.

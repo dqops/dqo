@@ -17,6 +17,7 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialListImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
@@ -44,6 +45,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
 
     /**
      * Creates a file based user home implementation.
+     * @param userIdentity Calling user identity that specifies the data domain.
      * @param sources Sources list.
      * @param sensors Custom sensor list.
      * @param rules Custom rules list.
@@ -54,7 +56,8 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param dashboards Custom dashboards.
      * @param userHomeContext User home context.
      */
-    public FileUserHomeImpl(FileConnectionListImpl sources,
+    public FileUserHomeImpl(DqoUserIdentity userIdentity,
+                            FileConnectionListImpl sources,
                             FileSensorDefinitionListImpl sensors,
                             FileRuleDefinitionListImpl rules,
                             FileCheckDefinitionListImpl checks,
@@ -66,7 +69,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileObservabilityCheckWrapperImpl observabilityCheck,
                             FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
                             UserHomeContext userHomeContext) {
-        super(sources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
+        super(userIdentity, sources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
                 monitoringSchedules, observabilityCheck, notificationWebhooks);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
@@ -101,7 +104,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileObservabilityCheckWrapperImpl observabilityCheckSettings = new FileObservabilityCheckWrapperImpl(settingsFolder, yamlSerializer);
         FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer);
 
-        return new FileUserHomeImpl(dataSources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
+        return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources, sensors, rules, checks, settings, credentials, fileIndices, dashboards,
                 monitoringSchedules, observabilityCheckSettings, notificationWebhooks, userHomeContext);
     }
 

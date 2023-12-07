@@ -15,6 +15,8 @@
  */
 package com.dqops.core.filesystem.virtual;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.DqoUserIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -31,29 +33,45 @@ import java.util.Objects;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class HomeFolderPath extends ArrayList<FolderName> {
+    private final String dataDomain;
+
     /**
      * Creates an empty path to the root home folder.
+     * @param dataDomain The name of the data domain.
      */
     @Autowired
-    public HomeFolderPath() {
-	}
+    public HomeFolderPath(String dataDomain) {
+        this.dataDomain = dataDomain;
+    }
 
     /**
      * Creates a folder path as a list of sub-folder names that start at the home root folder.
+     * @param dataDomain The name of the data domain.
      * @param c Collection of folder names.
      */
-    public HomeFolderPath(Collection<? extends FolderName> c) {
+    public HomeFolderPath(String dataDomain, Collection<? extends FolderName> c) {
         super(c);
+        this.dataDomain = dataDomain;
     }
 
     /**
      * Creates a folder path as an array of sub-folder names that start at the home root folder.
+     * @param dataDomain The name of the data domain.
      * @param folders Array of folder names.
      */
-    public HomeFolderPath(FolderName... folders) {
+    public HomeFolderPath(String dataDomain, FolderName... folders) {
+        this.dataDomain = dataDomain;
 		for (FolderName folderName : folders) {
 			this.add(folderName);
         }
+    }
+
+    /**
+     * Returns the name of the data domain, which is the domain whose DQOps user home is referenced.
+     * @return Data domain name.
+     */
+    public String getDataDomain() {
+        return dataDomain;
     }
 
     /**
@@ -77,7 +95,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
             return null;
         }
 
-        return new HomeFolderPath(this.subList(0, this.size() - 1));
+        return new HomeFolderPath(this.dataDomain, this.subList(0, this.size() - 1));
     }
 
     /**
@@ -86,7 +104,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      */
     @Override
     public HomeFolderPath clone() {
-        HomeFolderPath cloned = new HomeFolderPath();
+        HomeFolderPath cloned = new HomeFolderPath(this.dataDomain);
         for(FolderName folder : this) {
             FolderName clonedFolder = folder.clone();
             cloned.add(clonedFolder);
@@ -95,12 +113,16 @@ public class HomeFolderPath extends ArrayList<FolderName> {
     }
 
     /**
-     * Converts the object to a relative path inside the home folder.
+     * Converts the object to a relative path inside the home folder. Includes also the path to a data domain subfolder.
      * @return Relative path.
      */
     public Path toRelativePath() {
         if (this.size() == 0) {
-            return Path.of("./");
+            if (!Objects.equals(DqoUserIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
+                return Path.of("./");
+            } else {
+                return Path.of(BuiltInFolderNames.DATA_DOMAINS, FileNameSanitizer.encodeForFileSystem(this.dataDomain));
+            }
         }
 
         String[] pathElements = new String[this.size() - 1];
@@ -109,6 +131,10 @@ public class HomeFolderPath extends ArrayList<FolderName> {
         }
 
         Path relativePath = Path.of(this.get(0).getFileSystemName(), pathElements);
+        if (!Objects.equals(DqoUserIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
+            relativePath = Path.of(BuiltInFolderNames.DATA_DOMAINS, FileNameSanitizer.encodeForFileSystem(this.dataDomain)).resolve(relativePath);
+        }
+
         return relativePath;
     }
 
@@ -152,7 +178,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      * @return Relative folder to the pathElementIndex-nth parent folder.
      */
     public HomeFolderPath extractSubFolderAt(int pathElementIndex) {
-        return new HomeFolderPath(this.subList(pathElementIndex, this.size()));
+        return new HomeFolderPath(this.dataDomain, this.subList(pathElementIndex, this.size()));
     }
 
     /**
@@ -196,6 +222,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         HomeFolderPath that = (HomeFolderPath) o;
+        if (!Objects.equals(this.dataDomain, that.dataDomain)) return false;
         if (this.size() != that.size()) return false;
         for(int i = 0; i < size(); i++) {
             if (!Objects.equals(this.get(i), that.get(i))) {
@@ -211,8 +238,8 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      */
     @Override
     public int hashCode() {
-        int hash = 0;
-        for(FolderName folderName : this) {
+        int hash = this.dataDomain.hashCode();
+        for (FolderName folderName : this) {
             hash = (hash * 29) ^ folderName.hashCode();
         }
         return hash;

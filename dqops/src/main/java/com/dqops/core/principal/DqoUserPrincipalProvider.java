@@ -28,4 +28,10 @@ public interface DqoUserPrincipalProvider {
      * @return User principal that has full admin rights when the instance is not authenticated to DQOps Cloud or limited to the role in the DQOps Cloud Api key.
      */
     DqoUserPrincipal createUserPrincipalForAdministrator();
+
+    /**
+     * Returns the principal of the local user who has direct access to the command line and runs operations on the DQOps shell.
+     * @return The principal of the local user who is using DQOps from the terminal.
+     */
+    DqoUserPrincipal getLocalUserPrincipal();
 }

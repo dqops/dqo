@@ -16,6 +16,7 @@
 package com.dqops.data.incidents.services;
 
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
+import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.checkresults.services.CheckResultsDataService;
 import com.dqops.data.checkresults.services.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.services.models.IncidentHistogramFilterParameters;
@@ -81,11 +82,12 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * Loads recent incidents on a connection.
      * @param connectionName Connection name.
      * @param filterParameters Incident filter parameters.
+     * @param principal        Calling user principal.
      * @return Collection of recent incidents.
      */
     @Override
     public Collection<IncidentModel> loadRecentIncidentsOnConnection(
-            String connectionName, IncidentListFilterParameters filterParameters) {
+            String connectionName, IncidentListFilterParameters filterParameters, DqoUserPrincipal principal) {
         IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName);
         LocalDate endDate = Instant.now().atOffset(ZoneOffset.UTC).toLocalDate();
         LocalDate startDate = filterParameters.getRecentMonths() > 1 ?
@@ -215,10 +217,11 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param year           Year when the incident was first seen.
      * @param month          Month of year when the incident was first seen.
      * @param incidentId     Incident id.
+     * @param principal      Calling user principal.
      * @return Incident model when the incident was found or null when the incident is not found.
      */
     @Override
-    public IncidentModel loadIncident(String connectionName, int year, int month, String incidentId) {
+    public IncidentModel loadIncident(String connectionName, int year, int month, String incidentId, DqoUserPrincipal principal) {
         IncidentsSnapshot incidentsSnapshot = this.incidentsSnapshotFactory.createSnapshot(connectionName);
         LocalDate incidentMonth = LocalDate.of(year, month, 1);
         LoadedMonthlyPartition monthPartition = incidentsSnapshot.getMonthPartition(incidentMonth, true);
@@ -245,6 +248,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param month            Month of year when the incident was first seen.
      * @param incidentId       The incident id.
      * @param filterParameters List filter parameters.
+     * @param principal        Calling user principal.
      * @return Array of check results for the incident.
      */
     @Override
@@ -252,8 +256,9 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                                                                int year,
                                                                int month,
                                                                String incidentId,
-                                                               CheckResultListFilterParameters filterParameters) {
-        IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
+                                                               CheckResultListFilterParameters filterParameters,
+                                                               DqoUserPrincipal principal) {
+        IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId, principal);
         if (incidentModel == null) {
             return null;
         }
@@ -278,6 +283,7 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
      * @param month            Month of year when the incident was first seen.
      * @param incidentId       The incident id.
      * @param filterParameters Filter to limit the issues included in the histogram.
+     * @param principal        Calling user principal.
      * @return Daily histogram of days when a data quality issue failed.
      */
     @Override
@@ -285,8 +291,9 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
                                                                             int year,
                                                                             int month,
                                                                             String incidentId,
-                                                                            IncidentHistogramFilterParameters filterParameters) {
-        IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId);
+                                                                            IncidentHistogramFilterParameters filterParameters,
+                                                                            DqoUserPrincipal principal) {
+        IncidentModel incidentModel = this.loadIncident(connectionName, year, month, incidentId, principal);
         if (incidentModel == null) {
             return null;
         }
@@ -305,18 +312,20 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
     /**
      * Returns a list of all connections, also counting the number of recent open incidents.
      *
+     * @param principal Calling user principal.
+     *
      * @return Collection of connection names, with a count of open incidents.
      */
     @Override
-    public Collection<IncidentsPerConnectionModel> findConnectionIncidentStats() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public Collection<IncidentsPerConnectionModel> findConnectionIncidentStats(DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
         ConnectionList connectionList = userHomeContext.getUserHome().getConnections();
         List<ConnectionWrapper> connectionWrappers = connectionList.toList();
 
         List<IncidentsPerConnectionModel> resultList = connectionWrappers.stream()
                 .map(connectionWrapper -> connectionWrapper.getName())
                 .sorted()
-                .map(connectionName -> loadConnectionStats(connectionName))
+                .map(connectionName -> loadConnectionStats(connectionName, principal))
                 .collect(Collectors.toList());
 
         return resultList;
@@ -325,9 +334,10 @@ public class IncidentsDataServiceImpl implements IncidentsDataService {
     /**
      * Creates a connection incident statistics model, counting the number of recent open incidents.
      * @param connectionName Connection name.
+     * @param principal      Calling user principal.
      * @return Connection incident stats model.
      */
-    public IncidentsPerConnectionModel loadConnectionStats(String connectionName) {
+    public IncidentsPerConnectionModel loadConnectionStats(String connectionName, DqoUserPrincipal principal) {
         IncidentsPerConnectionModel model = new IncidentsPerConnectionModel();
         model.setConnection(connectionName);
 
