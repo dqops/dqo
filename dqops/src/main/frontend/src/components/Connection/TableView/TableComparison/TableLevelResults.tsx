@@ -2,12 +2,12 @@ import React from 'react';
 
 type TTableLevelResults = {
   tableComparisonResults: any;
-  key: string;
+  type: string;
 };
 
 export default function TableLevelResults({
   tableComparisonResults,
-  key
+  type
 }: TTableLevelResults) {
   return (
     <div className="gap-y-3">
@@ -15,22 +15,22 @@ export default function TableLevelResults({
       <td className="flex justify-between w-2/3 ">
         <th className="text-xs font-light">Valid:</th>
         {
-          tableComparisonResults?.table_comparison_results?.[key ?? '']
+          tableComparisonResults?.table_comparison_results?.[type ?? '']
             ?.valid_results
         }
       </td>
       <td className="flex justify-between w-2/3 ">
         <th className="text-xs font-light">Errors:</th>
-        {tableComparisonResults?.table_comparison_results?.[key ?? '']?.errors}
+        {tableComparisonResults?.table_comparison_results?.[type ?? '']?.errors}
       </td>
       <td className="flex justify-between w-2/3 ">
         <th className="text-xs font-light">Fatal:</th>
-        {tableComparisonResults?.table_comparison_results?.[key ?? '']?.fatals}
+        {tableComparisonResults?.table_comparison_results?.[type ?? '']?.fatals}
       </td>
       <td className="flex justify-between w-2/3 ">
         <th className="text-xs font-light">Warning:</th>
         {
-          tableComparisonResults?.table_comparison_results?.[key ?? '']
+          tableComparisonResults?.table_comparison_results?.[type ?? '']
             ?.warnings
         }
       </td>

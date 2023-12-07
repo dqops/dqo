@@ -85,7 +85,6 @@ export const EditProfilingReferenceTable = ({
   const [jobId, setJobId] = useState<number>();
   const [loading, setLoading] = useState(false);
   const job = jobId ? job_dictionary_state[jobId] : undefined;
-  const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
   const [tableLevelComparisonExtended, settableLevelComparisonExtended] =
@@ -173,18 +172,22 @@ export const EditProfilingReferenceTable = ({
     severity?: TSeverityValues
   ) => {
     const copiedChecks = { ...tableChecksToUpdate };
-    let checks;
+    let checks = [];
     if (
-      copiedChecks.categories.find((item: any) =>
-        String(item.category).includes(
-          (selectedReference ? selectedReference : parameters.name) ?? ''
-        )
+      copiedChecks.categories.find(
+        (item: any) =>
+          String(item.category) ===
+          `comparison/${
+            (selectedReference ? selectedReference : parameters.name) ?? ''
+          }`
       )
     ) {
-      checks = copiedChecks.categories.find((item: any) =>
-        String(item.category).includes(
-          (selectedReference ? selectedReference : parameters.name) ?? ''
-        )
+      checks = copiedChecks.categories.find(
+        (item: any) =>
+          String(item.category) ===
+          `comparison/${
+            (selectedReference ? selectedReference : parameters.name) ?? ''
+          }`
       ).checks;
     } else {
       checks = (
@@ -399,23 +402,6 @@ export const EditProfilingReferenceTable = ({
     });
   };
 
-  const onChangeColumn = (
-    obj: Partial<ColumnComparisonModel>,
-    columnIndex: number
-  ) => {
-    const newColumns = reference?.columns?.map((item, index) =>
-      index === columnIndex
-        ? {
-            ...item,
-            ...obj
-          }
-        : item
-    );
-    onChange({
-      columns: newColumns
-    });
-  };
-
   useEffect(() => {
     if (showRowCount) {
       onChange({
@@ -428,12 +414,6 @@ export const EditProfilingReferenceTable = ({
       });
     }
   }, [showRowCount, showColumnCount]);
-
-  const handleExtend = (index: number) => {
-    const newArr = [...isElemExtended];
-    newArr[index] = !isElemExtended[index];
-    setIsElemExtended(newArr);
-  };
 
   const getResultsData = async () => {
     if (isCreating === false) {
@@ -513,12 +493,11 @@ export const EditProfilingReferenceTable = ({
 
   const columnKey = Object.keys(
     tableComparisonResults?.table_comparison_results ?? []
-  ).find((key) => key.includes('column_count_match'));
+  ).find((key) => key.includes('column'));
 
   const rowKey = Object.keys(
     tableComparisonResults?.table_comparison_results ?? []
-  ).find((key) => key.includes('row_count_match'));
-
+  ).find((key) => key.includes('row'));
   useEffect(() => {
     if (reference?.columns) {
       setComparedColumnOptions(
@@ -556,6 +535,7 @@ export const EditProfilingReferenceTable = ({
       </Tooltip>
     );
   };
+  console.log(checksUI, selectedReference);
 
   return (
     <div className="text-sm">
@@ -711,7 +691,7 @@ export const EditProfilingReferenceTable = ({
                       {rowKey ? (
                         <TableLevelResults
                           tableComparisonResults={tableComparisonResults}
-                          key={rowKey}
+                          type={rowKey}
                         />
                       ) : null}
                     </div>
@@ -732,7 +712,7 @@ export const EditProfilingReferenceTable = ({
                       {columnKey ? (
                         <TableLevelResults
                           tableComparisonResults={tableComparisonResults}
-                          key={columnKey}
+                          type={columnKey}
                         />
                       ) : null}
                     </div>
@@ -756,10 +736,7 @@ export const EditProfilingReferenceTable = ({
                   key={index}
                   item={item}
                   index={index}
-                  isElemExtended={isElemExtended}
-                  handleExtend={handleExtend}
                   columnOptions={columnOptions}
-                  onChangeColumn={onChangeColumn}
                   checkTypes={checkTypes}
                   tableComparisonResults={tableComparisonResults}
                   reference={reference}

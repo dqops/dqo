@@ -1,6 +1,6 @@
 import { Tooltip } from '@material-tailwind/react';
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { ColumnComparisonModel, TableComparisonModel } from '../../../../api';
 import SvgIcon from '../../../SvgIcon';
 import ResultPanel from '../ResultPanel';
@@ -13,12 +13,6 @@ import Checkbox from '../../../Checkbox';
 interface ITableComparisonBody {
   item: ColumnComparisonModel;
   index: number;
-  isElemExtended: boolean[];
-  handleExtend: (index: number) => void;
-  onChangeColumn: (
-    obj: Partial<ColumnComparisonModel>,
-    columnIndex: number
-  ) => void;
   checkTypes: CheckTypes;
   columnOptions: Option[];
   tableComparisonResults: any;
@@ -29,15 +23,37 @@ interface ITableComparisonBody {
 export default function TableComparisonOverwiewBody({
   item,
   index,
-  isElemExtended,
-  handleExtend,
   columnOptions,
-  onChangeColumn,
   checkTypes,
   tableComparisonResults,
   reference,
   onChange
 }: ITableComparisonBody) {
+  const [isElemExtended, setIsElemExtended] = useState<Array<boolean>>([]);
+
+  const handleExtend = (index: number) => {
+    const newArr = [...isElemExtended];
+    newArr[index] = !isElemExtended[index];
+    setIsElemExtended(newArr);
+  };
+
+  const onChangeColumn = (
+    obj: Partial<ColumnComparisonModel>,
+    columnIndex: number
+  ) => {
+    const newColumns = reference?.columns?.map((item, index) =>
+      index === columnIndex
+        ? {
+            ...item,
+            ...obj
+          }
+        : item
+    );
+    onChange({
+      columns: newColumns
+    });
+  };
+
   return (
     <tbody key={index}>
       <tr key={index}>
