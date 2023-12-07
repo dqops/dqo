@@ -1,5 +1,4 @@
 import React, { ReactNode, useEffect, useState } from 'react';
-import Input from '../../../Input';
 import SvgIcon from '../../../SvgIcon';
 import {
   ColumnApiClient,
@@ -37,21 +36,13 @@ import { Tooltip } from '@material-tailwind/react';
 import {
   EditProfilingReferenceTableProps,
   TParameters,
-  TSeverityValues
+  TSeverityValues,
+  checkNames
 } from './TableComparisonConstans';
 import { calculateColor, onUpdate } from './TableComparisonUtils';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import TableLevelResults from './TableLevelResults';
 import SeverityInputBlock from './SeverityInputBlock';
-
-const checkNames = [
-  'Min',
-  'Max',
-  'Sum',
-  'Mean',
-  'Nulls count',
-  'Not nulls count'
-];
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
@@ -714,6 +705,7 @@ export const EditProfilingReferenceTable = ({
                           onChange={onChangeCompareRowCount}
                           reference={reference}
                           onUpdateChecksUI={onUpdateChecksUI}
+                          type="row"
                         />
                       ) : null}
                       {rowKey ? (
@@ -734,6 +726,7 @@ export const EditProfilingReferenceTable = ({
                           onChange={onChangeCompareColumnCount}
                           reference={reference}
                           onUpdateChecksUI={onUpdateChecksUI}
+                          type="column"
                         />
                       ) : null}
                       {columnKey ? (

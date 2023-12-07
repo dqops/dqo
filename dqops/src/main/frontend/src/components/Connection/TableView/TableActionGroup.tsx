@@ -28,7 +28,7 @@ interface ITableActionGroupProps {
   maxToCreateDataStream?: boolean;
   createDataStreamFunc?: () => void;
   statistics?: TableColumnsStatisticsModel;
-  selectedColumns?: string[]
+  selectedColumns?: string[];
 }
 
 const TableActionGroup = ({
@@ -79,41 +79,46 @@ const TableActionGroup = ({
   };
 
   const collectStatistics = async () => {
-      try {
-        setLoadingJob(true);
-        await JobApiClient.collectStatisticsOnTable(
-          undefined,
-          false,
-          undefined,
-          {
-            ...statistics?.collect_column_statistics_job_template,
-             columnNames: selectedColumns
-          });
-      } finally {
-        setLoadingJob(false);
-      }
+    try {
+      setLoadingJob(true);
+      await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
+        ...statistics?.collect_column_statistics_job_template,
+        columnNames: selectedColumns
+      });
+    } finally {
+      setLoadingJob(false);
+    }
   };
 
-  const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
-    (x) =>
-      x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
-      x.parameters?.collectStatisticsParameters
-        ?.statistics_collector_search_filters?.fullTableName ===
-        schema + '.' + table && 
-         x.parameters?.collectStatisticsParameters?.statistics_collector_search_filters?.connection === 
-        connection &&
-      (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-        x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-  ).length !==0 
+  const filteredCollectStatisticsJobs =
+    Object.values(job_dictionary_state).filter(
+      (x) =>
+        x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
+        x.parameters?.collectStatisticsParameters
+          ?.statistics_collector_search_filters?.fullTableName ===
+          schema + '.' + table &&
+        x.parameters?.collectStatisticsParameters
+          ?.statistics_collector_search_filters?.connection === connection &&
+        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
+          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+    ).length !== 0;
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {isSourceScreen && (
         <Button
           className="!h-10"
-          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+          color={
+            !(userProfile.can_manage_data_sources !== true)
+              ? 'primary'
+              : 'secondary'
+          }
+          variant={
+            !(userProfile.can_manage_data_sources !== true)
+              ? 'outlined'
+              : 'contained'
+          }
           label="Add Column"
           onClick={() => setIsAddColumnDialogOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
@@ -122,8 +127,16 @@ const TableActionGroup = ({
       {shouldDelete && (
         <Button
           className="!h-10"
-          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-          variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+          color={
+            !(userProfile.can_manage_data_sources !== true)
+              ? 'primary'
+              : 'secondary'
+          }
+          variant={
+            !(userProfile.can_manage_data_sources !== true)
+              ? 'outlined'
+              : 'contained'
+          }
           label="Delete Table"
           onClick={() => setIsOpen(true)}
           disabled={userProfile.can_manage_data_sources !== true}
@@ -132,7 +145,11 @@ const TableActionGroup = ({
       {createDataStream && (
         <Button
           label="Create Data Grouping"
-          color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          color={
+            !(userProfile.can_manage_data_sources !== true)
+              ? 'primary'
+              : 'secondary'
+          }
           onClick={createDataStreamFunc}
           disabled={userProfile.can_manage_data_sources !== true}
         />
@@ -155,18 +172,13 @@ const TableActionGroup = ({
           label={
             filteredCollectStatisticsJobs
               ? 'Collecting...'
-              : 
-              selectedColumns?.length!== 0 ? 
-              'Collect statistics on selected' : 
-              'Collect Statistics'
+              : selectedColumns?.length !== 0
+              ? 'Collect statistics on selected'
+              : 'Collect Statistics'
           }
-          color={
-            filteredCollectStatisticsJobs
-              ? 'secondary'
-              : 'primary'
-          }
+          color={filteredCollectStatisticsJobs ? 'secondary' : 'primary'}
           leftIcon={
-            filteredCollectStatisticsJobs? (
+            filteredCollectStatisticsJobs ? (
               <SvgIcon name="sync" className="w-4 h-4 animate-spin" />
             ) : (
               ''
@@ -174,15 +186,24 @@ const TableActionGroup = ({
           }
           onClick={collectStatistics}
           loading={loadingJob}
-          disabled={userProfile.can_collect_statistics !== true || filteredCollectStatisticsJobs}
+          disabled={
+            userProfile.can_collect_statistics !== true ||
+            filteredCollectStatisticsJobs
+          }
         />
       )}
       {addSaveButton && (
         <Button
-          color={isUpdated && !isDisabled && !(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
+          color={
+            isUpdated &&
+            !isDisabled &&
+            !(userProfile.can_manage_data_sources !== true)
+              ? 'primary'
+              : 'secondary'
+          }
           variant="contained"
           label="Save"
-          className="w-40 !h-10"
+          className="!h-10"
           onClick={onUpdate}
           loading={isUpdating}
           disabled={isDisabled || userProfile.can_manage_data_sources !== true}

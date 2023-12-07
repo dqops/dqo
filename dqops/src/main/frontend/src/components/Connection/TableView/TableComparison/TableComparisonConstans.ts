@@ -55,3 +55,12 @@ export const itemsToRender = [
     prop: 'compare_not_null_count'
   }
 ];
+
+export const checkNames = [
+  'Min',
+  'Max',
+  'Sum',
+  'Mean',
+  'Nulls count',
+  'Not nulls count'
+];

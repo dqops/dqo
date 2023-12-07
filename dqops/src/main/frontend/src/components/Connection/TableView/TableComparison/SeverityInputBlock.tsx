@@ -11,12 +11,14 @@ type TSeverityInputBlock = {
     disabled?: boolean,
     severity?: TSeverityValues
   ) => void;
+  type: 'row' | 'column';
 };
 
 export default function SeverityInputBlock({
   onChange,
   reference,
-  onUpdateChecksUI
+  onUpdateChecksUI,
+  type
 }: TSeverityInputBlock) {
   return (
     <div className="flex flex-col pt-0 mt-0 w-full">
@@ -24,12 +26,16 @@ export default function SeverityInputBlock({
         <Input
           className="max-w-30 !min-w-initial"
           type="number"
-          value={reference?.compare_column_count?.warning_difference_percent}
+          value={
+            type === 'column'
+              ? reference?.compare_column_count?.warning_difference_percent
+              : reference.compare_row_count?.warning_difference_percent
+          }
           onChange={(e) => {
             onChange({
               warning_difference_percent: Number(e.target.value)
             });
-            onUpdateChecksUI('column', undefined, {
+            onUpdateChecksUI(type, undefined, {
               warning: Number(e.target.value)
             });
           }}
@@ -40,12 +46,16 @@ export default function SeverityInputBlock({
         <Input
           className="max-w-30 !min-w-initial"
           type="number"
-          value={reference?.compare_column_count?.error_difference_percent}
+          value={
+            type === 'column'
+              ? reference?.compare_column_count?.error_difference_percent
+              : reference.compare_row_count?.error_difference_percent
+          }
           onChange={(e) => {
             onChange({
               error_difference_percent: Number(e.target.value)
             });
-            onUpdateChecksUI('column', undefined, {
+            onUpdateChecksUI(type, undefined, {
               error: Number(e.target.value)
             });
           }}
@@ -56,12 +66,16 @@ export default function SeverityInputBlock({
         <Input
           className="max-w-30 !min-w-initial"
           type="number"
-          value={reference?.compare_column_count?.fatal_difference_percent}
+          value={
+            type === 'column'
+              ? reference?.compare_column_count?.fatal_difference_percent
+              : reference.compare_row_count?.fatal_difference_percent
+          }
           onChange={(e) => {
             onChange({
               fatal_difference_percent: Number(e.target.value)
             });
-            onUpdateChecksUI('column', undefined, {
+            onUpdateChecksUI(type, undefined, {
               fatal: Number(e.target.value)
             });
           }}

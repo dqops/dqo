@@ -104,7 +104,7 @@ export default function TableComparisonOverwiewBody({
                   index
                 );
               }}
-              disabled={
+              isDisabled={
                 item.reference_column_name === undefined ||
                 item.reference_column_name.length === 0 ||
                 !columnOptions.find(
