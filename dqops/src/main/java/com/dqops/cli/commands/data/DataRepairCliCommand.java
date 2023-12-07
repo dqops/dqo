@@ -26,7 +26,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.data.RepairStoredDataQueueJobResult;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -43,7 +43,7 @@ import picocli.CommandLine;
 public class DataRepairCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
 
     public DataRepairCliCommand() {
     }
@@ -57,7 +57,7 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand, IConn
     @Autowired
     public DataRepairCliCommand(DqoJobQueue dqoJobQueue,
                                 DqoQueueJobFactory dqoQueueJobFactory,
-                                DqoCloudApiKeyPrincipalProvider principalProvider) {
+                                DqoUserPrincipalProvider principalProvider) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.principalProvider = principalProvider;
@@ -136,7 +136,7 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand, IConn
 
         RepairStoredDataQueueJob repairStoredDataJob = this.dqoQueueJobFactory.createRepairStoredDataJob();
         repairStoredDataJob.setRepairParameters(repairParameters);
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
         PushJobResult<RepairStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(repairStoredDataJob, principal);
         RepairStoredDataQueueJobResult jobResult = pushJobResult.getFinishedFuture().get();
         return 0;

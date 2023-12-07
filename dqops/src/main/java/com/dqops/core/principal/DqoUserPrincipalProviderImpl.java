@@ -31,7 +31,7 @@ import java.util.List;
  * This provider should be called by operations executed from the DQOps command line to obtain the principal or when DQOps is running in a single user mode.
  */
 @Component
-public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrincipalProvider {
+public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
     /**
@@ -39,7 +39,7 @@ public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrinci
      * @param dqoCloudApiKeyProvider DQOps Cloud API Key provider service.
      */
     @Autowired
-    public DqoCloudApiKeyPrincipalProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+    public DqoUserPrincipalProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
     }
 
@@ -49,7 +49,7 @@ public class DqoCloudApiKeyPrincipalProviderImpl implements DqoCloudApiKeyPrinci
      * @return User principal that has full admin rights when the instance is not authenticated to DQOps Cloud or limited to the role in the DQOps Cloud Api key.
      */
     @Override
-    public DqoUserPrincipal createUserPrincipal() {
+    public DqoUserPrincipal createUserPrincipalForAdministrator() {
         /******** Uncomment the following code and comment the rest to use a hardcoded principal with limited access rights for testing purposes */
     //    DqoUserRole testedRole = DqoUserRole.VIEWER;
     //    List<GrantedAuthority> testPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(testedRole);

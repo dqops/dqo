@@ -17,7 +17,7 @@
 package com.dqops.rest.server.authentication;
 
 import com.dqops.core.dqocloud.login.DqoUserTokenPayload;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,15 +33,15 @@ import java.util.ArrayList;
  */
 @Component
 public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationTokenFactory {
-    private final DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider;
+    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
 
     /**
      * Dependency injection constructor.
-     * @param dqoCloudApiKeyPrincipalProvider DQOps principal provider that creates a principal for a single user, having direct access to DQOps.
+     * @param dqoUserPrincipalProvider DQOps principal provider that creates a principal for a single user, having direct access to DQOps.
      */
     @Autowired
-    public DqoAuthenticationTokenFactoryImpl(DqoCloudApiKeyPrincipalProvider dqoCloudApiKeyPrincipalProvider) {
-        this.dqoCloudApiKeyPrincipalProvider = dqoCloudApiKeyPrincipalProvider;
+    public DqoAuthenticationTokenFactoryImpl(DqoUserPrincipalProvider dqoUserPrincipalProvider) {
+        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
     }
 
     /**
@@ -65,7 +65,7 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
      */
     @Override
     public Authentication createAuthenticatedWithDefaultDqoCloudApiKey() {
-        DqoUserPrincipal userPrincipal = this.dqoCloudApiKeyPrincipalProvider.createUserPrincipal();
+        DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
         UsernamePasswordAuthenticationToken localUserAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 userPrincipal, userPrincipal.getApiKeyPayload(), userPrincipal.getPrivileges());
         return localUserAuthenticationToken;

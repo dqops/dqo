@@ -22,8 +22,7 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
-import com.dqops.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
@@ -48,11 +47,11 @@ public class DataCliServiceImpl implements DataCliService {
 
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
 
     @Autowired
     public DataCliServiceImpl(DqoJobQueue dqoJobQueue, DqoQueueJobFactory dqoQueueJobFactory,
-                              DqoCloudApiKeyPrincipalProvider principalProvider) {
+                              DqoUserPrincipalProvider principalProvider) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.principalProvider = principalProvider;
@@ -70,7 +69,7 @@ public class DataCliServiceImpl implements DataCliService {
 
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deleteStoredDataQueueJobParameters);
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
         PushJobResult<DeleteStoredDataResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob, principal);
 
         DeleteStoredDataResult deleteStoredDataResult = null;

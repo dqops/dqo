@@ -13,18 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.metadata.storage.localfiles.userhome;
 
-import com.dqops.core.principal.DqoUserIdentity;
+package com.dqops.core.principal;
+
+import com.dqops.core.dqocloud.login.DqoUserRole;
 
 /**
- * Creates a user come context and loads the home model from the file system.
+ * Object mother for creating the user identity object for the test user.
  */
-public interface UserHomeContextFactory {
+public class DqoUserIdentityObjectMother {
     /**
-     * Opens a local home context, loads the files from the local file system.
-     * @param identity User identity that identifies the user for whom we are opening the user home.
-     * @return User home context with an active user home model that is backed by the local home file system.
+     * Creates an admin user identity.
+     * @return Admin user identity.
      */
-    UserHomeContext openLocalUserHome(DqoUserIdentity identity);
+    public static DqoUserIdentity createAdminIdentity() {
+        return new DqoUserIdentity("test", DqoUserRole.ADMIN, null);
+    }
 }

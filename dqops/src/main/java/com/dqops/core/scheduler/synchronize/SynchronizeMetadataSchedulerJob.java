@@ -21,7 +21,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.ParentDqoJobQueue;
 import com.dqops.core.jobqueue.PushJobResult;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJob;
 import com.dqops.core.synchronization.jobs.SynchronizeMultipleFoldersDqoQueueJobParameters;
@@ -56,7 +56,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     private DqoQueueJobFactory dqoQueueJobFactory;
     private ParentDqoJobQueue dqoJobQueue;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
     private static LocalDateTime lastExecutedAtHour;
     private static int jobRunCount;
     private static Random random = new Random();
@@ -74,7 +74,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     public SynchronizeMetadataSchedulerJob(DqoQueueJobFactory dqoQueueJobFactory,
                                            ParentDqoJobQueue dqoJobQueue,
                                            DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
-                                           DqoCloudApiKeyPrincipalProvider principalProvider) {
+                                           DqoUserPrincipalProvider principalProvider) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
@@ -89,7 +89,7 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         try {
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+            DqoUserPrincipal principal = this.principalProvider.createUserPrincipalForAdministrator();
             DqoCloudApiKeyPayload cloudApiKeyPayload = principal.getApiKeyPayload();
             if (cloudApiKeyPayload == null) {
                 return;

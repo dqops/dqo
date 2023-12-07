@@ -43,7 +43,9 @@ public class UserHomeContextFactoryImplTests extends BaseTest {
         UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties());
         YamlSerializer yamlSerializer = new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned(), userErrorLogger);
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.createNew();
-        UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock);
+
+        UserHomeContextCacheImpl userHomeContextCache = new UserHomeContextCacheImpl();
+        UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock, userHomeContextCache);
 
         UserHomeContext userHomeContext = sut.openLocalUserHome();
         Assertions.assertNotNull(userHomeContext);

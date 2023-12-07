@@ -149,4 +149,12 @@ public class DqoUserPrincipal {
     public String toString() {
         return this.name + " (" + accountRole + ")";
     }
+
+    /**
+     * Creates a user identity object that identifies the user.
+     * @return User identity object.
+     */
+    public DqoUserIdentity createIdentity() {
+        return new DqoUserIdentity(this.name, this.accountRole, null);
+    }
 }
