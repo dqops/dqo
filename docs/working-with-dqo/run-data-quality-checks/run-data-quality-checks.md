@@ -67,7 +67,7 @@ To configure the date or datetime colum:
 3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Date or datetime 
     column name for partition checks" input field.
 
-    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.jpg)
+    ![Partitioning column configuration](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/date-or-datetime-column-configuration-for-partion-checks.png)
 
 4. Click the Save button in the upper right corner.
 
@@ -85,7 +85,7 @@ To configure the event and/or ingestion timestamp columns:
 3. Select the **Data and Time Columns** tab and select a column from the drop-down list in the "Event timestamp column name 
     for timeliness checks" and/or "Ingestion timestamp column name for timeliness checks" input fields.
 
-    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/even-and-ingestion-columns-configuration-for-timeliness-checks.jpg)
+    ![Configure event and ingestion timestamp columns](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/event-and-ingestion-columns-configuration-for-timeliness-checks.png)
 
 4. Click the Save button in the upper right corner.
 
@@ -93,7 +93,7 @@ To configure the event and/or ingestion timestamp columns:
 ## Run data quality checks using the DQOps Shell
 
 Data quality checks are stored in YAML configuration files. YAMl configuration files are located in the `./sources` folder.
-The complete DQOps YAML schema can be found [here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
+The [complete DQOps YAML schema can be found here](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json).
 
 To add and run data quality checks using the DQOps Shell, follow the steps below. 
 

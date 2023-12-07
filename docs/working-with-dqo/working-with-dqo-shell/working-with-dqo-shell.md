@@ -36,22 +36,10 @@ used in starting DQOps from Docker.
 ## Shell welcome screen
 A welcome message will appear, and you can start entering commands in the DQOps Shell.
 
-```
-  ___     ___     ___
- |   \   / _ \   / _ \   _ __   ___
- | |) | | (_) | | (_) | | '_ \ (_-<
- |___/   \__\_\  \___/  | .__/ /__/
-                        |_|
- :: DQOps Data Quality Operations Center ::    
+![DQOps Shell welcome screen](https://dqops.com/docs/images/working-with-dqo/working-with-dqo-shell/dqops-shell-welcome-screen.png)
 
-Press CTRL and click the link to open it in the browser:
-- DQOps User Interface Console (http://localhost:8888)
-- DQOps API Reference (http://localhost:8888/swagger-ui/)
-dqo>
 
-```
-
-To view a list of commands in the DQOps shell run the following command
+To view a list of commands in the DQOps Shell, run the following command
 
 ```
 dqo> help
