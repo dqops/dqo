@@ -907,13 +907,6 @@ spec:
           height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
-        - dashboard_name: Checks no longer in use - summary charts
-          url: https://lookerstudio.google.com/embed/reporting/b0d9c982-827b-448b-8da6-68e97793d10e/page/c5B8C
-          width: 1400
-          height: 1100
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
-
 
 - folder_name: Aggregated results for all check types
   folders:
