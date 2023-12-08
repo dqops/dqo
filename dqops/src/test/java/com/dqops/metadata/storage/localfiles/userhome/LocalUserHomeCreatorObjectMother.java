@@ -20,6 +20,9 @@ import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalFactoryObjectMother;
 import com.dqops.core.configuration.*;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
+import com.dqops.core.principal.DqoDqoUserPrincipalProviderStub;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProviderImpl;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.serialization.YamlSerializerObjectMother;
@@ -45,10 +48,12 @@ public class LocalUserHomeCreatorObjectMother {
         DefaultSchedulesProviderImpl defaultSchedulesProvider = new DefaultSchedulesProviderImpl(defaultSchedulesConfigurationProperties,
                 userHomeContextFactory);
         DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties = DqoInstanceConfigurationPropertiesObjectMother.getDefault();
+        DqoUserPrincipal userPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+        DqoDqoUserPrincipalProviderStub principalProviderStub = new DqoDqoUserPrincipalProviderStub(userPrincipal);
         LocalUserHomeCreatorImpl localUserHomeCreator = new LocalUserHomeCreatorImpl(
                 homeLocationFindService, userHomeContextFactory, terminalFactory, noLoggingConfiguration, defaultUserConfiguration, defaultDockerUserhomeConfiguration,
                 dqoInstanceConfigurationProperties, YamlSerializerObjectMother.getDefault(), defaultSchedulesProvider,
-                new DefaultObservabilityCheckSettingsFactoryImpl());
+                new DefaultObservabilityCheckSettingsFactoryImpl(), principalProviderStub);
         return localUserHomeCreator;
     }
 

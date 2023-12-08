@@ -21,6 +21,7 @@ import com.dqops.core.filesystem.virtual.FolderName;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,12 +35,11 @@ import java.util.List;
 @SpringBootTest
 public class LocalFileStorageServiceImplTests extends BaseTest {
     private LocalFileStorageService sut;
-
-    @Autowired
     private LocalHomeTestUtilities localUserHomeTestUtilities;
 
     @BeforeEach
     void setUp() {
+        this.localUserHomeTestUtilities = BeanFactoryObjectMother.getBeanFactory().getBean(LocalHomeTestUtilities.class);
 		this.sut = LocalHomeStorageServiceObjectMother.createLocalUserHomeStorageServiceForTestableHome(true);
     }
 
