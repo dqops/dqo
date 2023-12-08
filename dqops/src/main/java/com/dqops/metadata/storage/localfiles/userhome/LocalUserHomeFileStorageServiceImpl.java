@@ -94,7 +94,7 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
                 return super.tryDeleteFolder(folderPath);
             }
             finally {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, folderPath.getDataDomain(), FolderSynchronizationStatus.changed);
             }
         }
         else {
@@ -123,7 +123,8 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
                 super.saveFile(filePath, fileContent);
             }
             finally {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope,
+                        filePath.getFolder().getDataDomain(), FolderSynchronizationStatus.changed);
             }
         }
         else {
@@ -139,7 +140,8 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
                 return super.deleteFile(filePath);
             }
             finally {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope,
+                        filePath.getFolder().getDataDomain(), FolderSynchronizationStatus.changed);
             }
         }
         else {

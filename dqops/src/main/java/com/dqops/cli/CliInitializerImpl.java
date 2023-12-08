@@ -200,7 +200,7 @@ public class CliInitializerImpl implements CliInitializer {
             this.parentDqoJobQueue.start();
 
             if (CliApplication.isRequiredWebServer()) {
-                this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesInBackground();
+                this.fileSynchronizationChangeDetectionService.detectNotSynchronizedChangesAllDomains();
 
                 if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
                         this.dqoSchedulerConfigurationProperties.getStart()) {

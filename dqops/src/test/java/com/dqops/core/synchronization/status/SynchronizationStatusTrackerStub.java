@@ -16,15 +16,15 @@
 package com.dqops.core.synchronization.status;
 
 import com.dqops.core.synchronization.contract.DqoRoot;
-import com.dqops.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
-import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
-import com.dqops.core.synchronization.status.SynchronizationStatusTracker;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Test stub for a synchronization status tracker. Does not publish notifications.
  */
 public class SynchronizationStatusTrackerStub implements SynchronizationStatusTracker {
-    private volatile CloudSynchronizationFoldersStatusModel currentFolderStatus = new CloudSynchronizationFoldersStatusModel();
+    private Map<String, CloudSynchronizationFoldersStatusModel> domainFolderStatuses = new LinkedHashMap<>();
 
     /**
      * Updates the folder synchronization status.
@@ -33,10 +33,16 @@ public class SynchronizationStatusTrackerStub implements SynchronizationStatusTr
      * @param newStatus  New synchronization status.
      */
     @Override
-    public void changeFolderSynchronizationStatus(DqoRoot folderRoot, FolderSynchronizationStatus newStatus) {
-        CloudSynchronizationFoldersStatusModel newFolderStatus = currentFolderStatus.clone();
+    public synchronized void changeFolderSynchronizationStatus(DqoRoot folderRoot, String dataDomain, FolderSynchronizationStatus newStatus) {
+        CloudSynchronizationFoldersStatusModel currentStatus = this.domainFolderStatuses.get(dataDomain);
+        if (currentStatus == null) {
+            currentStatus = new CloudSynchronizationFoldersStatusModel();
+            this.domainFolderStatuses.put(dataDomain, currentStatus);
+        }
+
+        CloudSynchronizationFoldersStatusModel newFolderStatus = currentStatus.clone();
         newFolderStatus.setFolderStatus(folderRoot, newStatus);
-        this.currentFolderStatus = newFolderStatus;
+        this.domainFolderStatuses.put(dataDomain, newFolderStatus);
     }
 
     /**
@@ -45,7 +51,13 @@ public class SynchronizationStatusTrackerStub implements SynchronizationStatusTr
      * @return Current folder synchronization status.
      */
     @Override
-    public CloudSynchronizationFoldersStatusModel getCurrentSynchronizationStatus() {
-        return this.currentFolderStatus;
+    public synchronized CloudSynchronizationFoldersStatusModel getCurrentSynchronizationStatus(String dataDomain) {
+        CloudSynchronizationFoldersStatusModel currentStatus = this.domainFolderStatuses.get(dataDomain);
+        if (currentStatus == null) {
+            currentStatus = new CloudSynchronizationFoldersStatusModel();
+            this.domainFolderStatuses.put(dataDomain, currentStatus);
+        }
+
+        return currentStatus;
     }
 }

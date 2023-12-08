@@ -297,7 +297,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                               UserDomainIdentity userIdentity) {
         boolean hasChanges = this.savePartitionInternal(loadedPartition, tableDataChanges, storageSettings, userIdentity);
         if (hasChanges) {
-            this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(), FolderSynchronizationStatus.changed);
+            this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(),
+                    userIdentity.getDataDomain(), FolderSynchronizationStatus.changed);
         }
     }
 

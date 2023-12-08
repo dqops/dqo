@@ -40,18 +40,18 @@ public class UserDomainIdentity {
      */
     public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN);
 
-    private final String name;
+    private final String userName;
     private final DqoUserRole domainRole;
     private final String dataDomain;
 
     /**
      * Creates a user identity object.
-     * @param name User name.
+     * @param userName User name.
      * @param domainRole Domain role.
      * @param dataDomain Data domain. Null for the default data domain.
      */
-    public UserDomainIdentity(String name, DqoUserRole domainRole, String dataDomain) {
-        this.name = name;
+    public UserDomainIdentity(String userName, DqoUserRole domainRole, String dataDomain) {
+        this.userName = userName;
         this.domainRole = domainRole;
         this.dataDomain = !Strings.isNullOrEmpty(dataDomain) ? dataDomain : DEFAULT_DATA_DOMAIN;
     }
@@ -69,8 +69,8 @@ public class UserDomainIdentity {
      * Return the username. Can be null when the user is not authenticated to DQOps Cloud.
      * @return User name.
      */
-    public String getName() {
-        return name;
+    public String getUserName() {
+        return userName;
     }
 
     /**
@@ -96,14 +96,14 @@ public class UserDomainIdentity {
 
         UserDomainIdentity that = (UserDomainIdentity) o;
 
-        if (!Objects.equals(name, that.name)) return false;
+        if (!Objects.equals(userName, that.userName)) return false;
         if (domainRole != that.domainRole) return false;
         return Objects.equals(dataDomain, that.dataDomain);
     }
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
+        int result = userName != null ? userName.hashCode() : 0;
         result = 31 * result + (domainRole != null ? domainRole.hashCode() : 0);
         result = 31 * result + (dataDomain != null ? dataDomain.hashCode() : 0);
         return result;

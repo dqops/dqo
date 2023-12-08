@@ -112,7 +112,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         Set<Path> synchronizedLocalChanges = new HashSet<>();
         FolderMetadata newLocalFolderIndex = null;
 
-        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.synchronizing);
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomain(), FolderSynchronizationStatus.synchronizing);
         try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userIdentity.getDataDomain())) {
             assert local.getCurrentFileIndex().isEmpty() || local.getCurrentFileIndex().get().isFrozen();
             currentLocalFolderIndex = local.getCurrentFileIndex()
@@ -138,7 +138,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 }
             }
         }
-        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.unchanged);
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomain(), FolderSynchronizationStatus.unchanged);
 
         Collection<FolderMetadata> emptyRemoteFolders =
                 (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload)
