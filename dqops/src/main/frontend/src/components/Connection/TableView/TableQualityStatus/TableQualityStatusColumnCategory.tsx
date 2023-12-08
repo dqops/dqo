@@ -181,11 +181,13 @@ export default function TableQualityStatusColumnCategory({
                 <div
                   className={clsx(
                     'h-12 w-43 flex',
-                    getColumnStatus(
-                      severityType,
-                      categoryDimension,
-                      (tableDataQualityStatus.columns ?? {})[customKey],
-                      firstLevelChecksKey
+                    getColor(
+                      getColumnStatus(
+                        severityType,
+                        categoryDimension,
+                        (tableDataQualityStatus.columns ?? {})[customKey],
+                        firstLevelChecksKey
+                      ).status
                     ),
                     severityType === 'current' ? '' : 'justify-end'
                   )}
