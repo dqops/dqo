@@ -27,7 +27,7 @@ interface ITableQualityStatusColumnCategoryProps {
   extendedChecks: Array<{ checkType: string; categoryDimension: string }>;
   setExtendedChecks: any;
   firstLevelChecks: Record<string, TFirstLevelCheck[]>;
-  renderSecondLevelTooltip: (data: any) => React.JSX.Element;
+  renderSecondLevelTooltip: (data: TFirstLevelCheck) => React.JSX.Element;
   renderTooltipContent: (
     lastExecutedAt: any,
     severity: any,
