@@ -166,7 +166,7 @@ import Input from '../Input';
             <SelectInput 
             className='w-1/3'
             options={["", ...Object.values(CheckTypes)].map((x) => ({label: x, value: x})).filter((_, index) => index !== 2)} 
-            label='CheckType (profiling, monitoring, partitioned)' 
+            label='Check Type (profiling, monitoring, partitioned)'
             value={params.checkType} 
             onChange={(value) => onChangeParams({checkType: String(value).length !== 0 ? value : undefined})}/>
 
