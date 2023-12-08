@@ -16,6 +16,7 @@
 package com.dqops.core.synchronization.listeners;
 
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +42,16 @@ public class SummaryFileSystemSynchronizationListener extends FileSystemSynchron
      * Called when the synchronization is about to begin. The synchronization is from the source to the target.
      *
      * @param dqoRoot          DQOps User home folder that will be synchronized.
+     * @param userDomainIdentity Identity of the user who started synchronization and the data domain that is synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
     @Override
-    public void onSynchronizationBegin(DqoRoot dqoRoot, SynchronizationRoot sourceFileSystem, SynchronizationRoot targetFileSystem) {
-        super.onSynchronizationBegin(dqoRoot, sourceFileSystem, targetFileSystem);
+    public void onSynchronizationBegin(DqoRoot dqoRoot,
+                                       UserDomainIdentity userDomainIdentity,
+                                       SynchronizationRoot sourceFileSystem,
+                                       SynchronizationRoot targetFileSystem) {
+        super.onSynchronizationBegin(dqoRoot, userDomainIdentity, sourceFileSystem, targetFileSystem);
 
         StringBuilder sb = new StringBuilder();
         sb.append(dqoRoot.toString());
@@ -58,12 +63,16 @@ public class SummaryFileSystemSynchronizationListener extends FileSystemSynchron
      * Called when the synchronization has finished. The synchronization is from the source to the target.
      *
      * @param dqoRoot          DQOps User home folder that will be synchronized.
+     * @param userDomainIdentity Identity of the user who started synchronization and the data domain that is synchronized.
      * @param sourceFileSystem Source file system.
      * @param targetFileSystem Target file system.
      */
     @Override
-    public void onSynchronizationFinished(DqoRoot dqoRoot, SynchronizationRoot sourceFileSystem, SynchronizationRoot targetFileSystem) {
-        super.onSynchronizationFinished(dqoRoot, sourceFileSystem, targetFileSystem);
+    public void onSynchronizationFinished(DqoRoot dqoRoot,
+                                          UserDomainIdentity userDomainIdentity,
+                                          SynchronizationRoot sourceFileSystem,
+                                          SynchronizationRoot targetFileSystem) {
+        super.onSynchronizationFinished(dqoRoot, userDomainIdentity, sourceFileSystem, targetFileSystem);
 
         StringBuilder sb = new StringBuilder();
         sb.append(dqoRoot.toString());
