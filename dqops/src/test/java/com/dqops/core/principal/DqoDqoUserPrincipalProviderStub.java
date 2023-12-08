@@ -40,4 +40,14 @@ public class DqoDqoUserPrincipalProviderStub implements DqoUserPrincipalProvider
     public DqoUserPrincipal createUserPrincipalForAdministrator() {
         return this.principal;
     }
+
+    /**
+     * Returns the principal of the local user who has direct access to the command line and runs operations on the DQOps shell.
+     *
+     * @return The principal of the local user who is using DQOps from the terminal.
+     */
+    @Override
+    public DqoUserPrincipal getLocalUserPrincipal() {
+        return this.principal;
+    }
 }

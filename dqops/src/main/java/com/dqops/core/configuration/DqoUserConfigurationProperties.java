@@ -15,7 +15,7 @@
  */
 package com.dqops.core.configuration;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +28,7 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoUserConfigurationProperties implements Cloneable {
     private String home;
-    private String defaultDataDomain = DqoUserIdentity.DEFAULT_DATA_DOMAIN;
+    private String defaultDataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
     private boolean hasLocalHome;
     private boolean initializeUserHome;
 

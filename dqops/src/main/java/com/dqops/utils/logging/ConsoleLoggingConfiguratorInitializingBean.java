@@ -139,7 +139,7 @@ public class ConsoleLoggingConfiguratorInitializingBean implements InitializingB
      */
     private ConsoleAppender<ILoggingEvent> createConsoleAppender() {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getIdentity());
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getDomainIdentity());
         DqoCloudApiKeyPayload apiKeyPayload = apiKey != null ? apiKey.getApiKeyPayload() : null;
 
         ConsoleAppender<ILoggingEvent> consoleAppender =

@@ -117,7 +117,7 @@ public class RulesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(fullRuleName, true);
 
@@ -167,7 +167,7 @@ public class RulesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         RuleDefinitionList userRuleDefinitionList = userHome.getRules();
@@ -213,7 +213,7 @@ public class RulesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         RuleDefinitionList userRuleDefinitionList = userHome.getRules();
         RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(fullRuleName, true);
@@ -276,7 +276,7 @@ public class RulesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         RuleDefinitionList userRuleDefinitionList = userHome.getRules();
@@ -329,7 +329,7 @@ public class RulesController {
         ruleDefinitionWrapperListDqoHome.sort(Comparator.comparing(rw -> rw.getRuleName()));
         Set<String> builtInRuleNames = ruleDefinitionWrapperListDqoHome.stream().map(rw -> rw.getRuleName()).collect(Collectors.toSet());
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         List<RuleDefinitionWrapper> ruleDefinitionWrapperListUserHome = new ArrayList<>(userHome.getRules().toList());
         ruleDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getRuleName()));

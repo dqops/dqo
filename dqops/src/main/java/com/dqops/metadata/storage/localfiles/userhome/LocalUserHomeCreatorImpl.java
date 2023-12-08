@@ -359,7 +359,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      */
     public void applyDefaultConfigurationWhenMissing() {
         DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipalForAdministrator.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec != null &&

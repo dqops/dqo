@@ -23,26 +23,23 @@ import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.locks.AcquiredExclusiveWriteLock;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
 import com.dqops.core.synchronization.status.SynchronizationStatusTracker;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.data.storage.parquet.DqoTablesawParquetReader;
-import com.dqops.data.storage.parquet.DqoTablesawParquetWriteOptions;
 import com.dqops.data.storage.parquet.DqoTablesawParquetWriter;
 import com.dqops.data.storage.parquet.HadoopConfigurationProvider;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
-import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableCompressUtility;
 import com.dqops.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
 import org.jetbrains.annotations.NotNull;
@@ -58,7 +55,6 @@ import tech.tablesaw.selection.Selection;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -124,7 +120,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId,
                                                 FileStorageSettings storageSettings,
                                                 String[] columnNames,
-                                                DqoUserIdentity userIdentity) {
+                                                UserDomainIdentity userIdentity) {
         Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings, userIdentity);
         File targetParquetFile = targetParquetFilePath.toFile();
 
@@ -188,7 +184,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @return Parquet file path.
      */
     @NotNull
-    protected Path makeParquetTargetFilePath(ParquetPartitionId partitionId, FileStorageSettings storageSettings, DqoUserIdentity userIdentity) {
+    protected Path makeParquetTargetFilePath(ParquetPartitionId partitionId, FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
         Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity);
         Path storeRootPath = localUserHomePath.resolve(configuredStoragePath);
@@ -218,7 +214,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             LocalDate end,
             FileStorageSettings storageSettings,
             String[] columnNames,
-            DqoUserIdentity userIdentity) {
+            UserDomainIdentity userIdentity) {
         if (start == null || end == null) {
             throw new IllegalArgumentException("Start and end dates indicating the range need to be specified");
         }
@@ -249,13 +245,13 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                                                                               FileStorageSettings storageSettings,
                                                                                               String[] columnNames,
                                                                                               int maxRecentMonthsToLoad,
-                                                                                              DqoUserIdentity userIdentity) {
+                                                                                              UserDomainIdentity userIdentity) {
         Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
 
         LocalDate startNonNull = startBoundary;
         if (startNonNull == null) {
             startNonNull = this.parquetPartitionMetadataService.getOldestStoredPartitionMonth(
-                    connectionName, tableName, storageSettings).orElse(null);
+                    connectionName, tableName, storageSettings, userIdentity).orElse(null);
         }
         if (startNonNull == null) {
             // No data stored for this table
@@ -298,7 +294,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     public void savePartition(LoadedMonthlyPartition loadedPartition,
                               TableDataChanges tableDataChanges,
                               FileStorageSettings storageSettings,
-                              DqoUserIdentity userIdentity) {
+                              UserDomainIdentity userIdentity) {
         boolean hasChanges = this.savePartitionInternal(loadedPartition, tableDataChanges, storageSettings, userIdentity);
         if (hasChanges) {
             this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(), FolderSynchronizationStatus.changed);
@@ -319,7 +315,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     private boolean savePartitionInternal(LoadedMonthlyPartition loadedPartition,
                                           TableDataChanges tableDataChanges,
                                           FileStorageSettings storageSettings,
-                                          DqoUserIdentity userIdentity) {
+                                          UserDomainIdentity userIdentity) {
         try {
             Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartition.getPartitionId(), storageSettings, userIdentity);
             File targetParquetFile = targetParquetFilePath.toFile();
@@ -474,7 +470,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     @Override
     public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
                                        FileStorageSettings storageSettings,
-                                       DqoUserIdentity userIdentity) {
+                                       UserDomainIdentity userIdentity) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomain())) {
             Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings, userIdentity);
             File targetParquetFile = targetParquetFilePath.toFile();
@@ -499,7 +495,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param userIdentity User identity that identifies the data domain.
      * @return True if deletion proceeded successfully. False otherwise.
      */
-    protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType, DqoUserIdentity userIdentity) {
+    protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType, UserDomainIdentity userIdentity) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType, userIdentity.getDataDomain())) {
             Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity)
                     .relativize(targetPartitionFilePath);

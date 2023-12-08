@@ -19,14 +19,14 @@ package com.dqops.core.principal;
 import com.dqops.core.dqocloud.login.DqoUserRole;
 
 /**
- * Object mother for creating the user identity object for the test user.
+ * Object mother for creating the user identity object for the test user, selecting the data domain.
  */
-public class DqoUserIdentityObjectMother {
+public class UserDomainIdentityObjectMother {
     /**
      * Creates an admin user identity.
      * @return Admin user identity.
      */
-    public static DqoUserIdentity createAdminIdentity() {
-        return new DqoUserIdentity("test", DqoUserRole.ADMIN, null);
+    public static UserDomainIdentity createAdminIdentity() {
+        return new UserDomainIdentity("test", DqoUserRole.ADMIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
     }
 }

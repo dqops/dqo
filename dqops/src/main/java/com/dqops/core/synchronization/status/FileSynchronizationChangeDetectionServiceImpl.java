@@ -80,7 +80,7 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      */
     @Override
     public boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         FileIndexName localIndexName = new FileIndexName(dqoRoot, FileLocation.LOCAL);
@@ -89,11 +89,11 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
             localFileIndexWrapper = userHome.getFileIndices().createAndAddNew(localIndexName);
         }
 
-        SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot, principal.getIdentity());
+        SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot, principal.getDomainIdentity());
         FolderMetadata lastSourceFolderIndex = localFileIndexWrapper.getSpec().getFolder();
         FileSystemSynchronizationOperations localFileSystemSynchronizationOperations = userHomeFolderFileSystem.getFileSystemService();
 
-        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, principal.getIdentity().getDataDomain())) {
+        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, principal.getDomainIdentity().getDataDomain())) {
             FolderMetadata mostCurrentFolderMetadata = localFileSystemSynchronizationOperations.listFilesInFolder(
                     userHomeFolderFileSystem.getFileSystemRoot(),
                     lastSourceFolderIndex.getRelativePath(), lastSourceFolderIndex);

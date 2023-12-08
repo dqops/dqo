@@ -15,7 +15,7 @@
  */
 package com.dqops.data.storage;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
@@ -38,7 +38,7 @@ public interface ParquetPartitionStorageService {
             ParquetPartitionId partitionId,
             FileStorageSettings storageSettings,
             String[] columnNames,
-            DqoUserIdentity userIdentity);
+            UserDomainIdentity userIdentity);
 
     /**
      * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>.
@@ -59,7 +59,7 @@ public interface ParquetPartitionStorageService {
             LocalDate end,
             FileStorageSettings storageSettings,
             String[] columnNames,
-            DqoUserIdentity userIdentity);
+            UserDomainIdentity userIdentity);
 
     /**
      * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>,
@@ -83,7 +83,7 @@ public interface ParquetPartitionStorageService {
             FileStorageSettings storageSettings,
             String[] columnNames,
             int maxRecentMonthsToLoad,
-            DqoUserIdentity userIdentity);
+            UserDomainIdentity userIdentity);
 
     /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
@@ -99,7 +99,7 @@ public interface ParquetPartitionStorageService {
     void savePartition(LoadedMonthlyPartition loadedPartition,
                        TableDataChanges tableDataChanges,
                        FileStorageSettings storageSettings,
-                       DqoUserIdentity userIdentity);
+                       UserDomainIdentity userIdentity);
 
     /**
      * Deletes a partition file.
@@ -110,5 +110,5 @@ public interface ParquetPartitionStorageService {
      */
     boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
                                 FileStorageSettings storageSettings,
-                                DqoUserIdentity userIdentity);
+                                UserDomainIdentity userIdentity);
 }

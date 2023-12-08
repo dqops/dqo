@@ -69,7 +69,7 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
      */
     public void openEditorFor(HierarchyId targetObjectId) {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         TableWrapper tableWrapper = userHome.findTableFor(targetObjectId);
@@ -198,7 +198,7 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
      */
     public void launchEditorForFile(String pathToTextFile) {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec == null) {

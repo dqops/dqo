@@ -114,7 +114,7 @@ public class CheckServiceImpl implements CheckService {
      */
     @Override
     public void disableChecks(BulkCheckDisableParameters parameters, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
@@ -228,7 +228,7 @@ public class CheckServiceImpl implements CheckService {
             patchCheckModel(check, parameters);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connectionList = userHome.getConnections();
 

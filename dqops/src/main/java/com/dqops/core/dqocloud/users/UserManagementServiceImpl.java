@@ -60,7 +60,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             List<DqoUserModel> cloudUserList = accountUsersApi.listAccountUsers();
 
@@ -93,7 +93,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel cloudUserModel = accountUsersApi.getAccountUser(email);
 
@@ -128,7 +128,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -161,7 +161,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -193,7 +193,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.deleteAccountUser(email);
         }
@@ -224,7 +224,7 @@ public class UserManagementServiceImpl implements UserManagementService {
                 userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
             }
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.changeAccountUserPassword(email, newPassword);
         }

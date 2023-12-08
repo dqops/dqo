@@ -17,7 +17,7 @@ package com.dqops.core.locks;
 
 import com.dqops.core.configuration.DqoCoreConfigurationProperties;
 import com.dqops.core.dqocloud.accesskey.DqoDomainRootPair;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -44,7 +44,7 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     public UserHomeLockManagerImpl(DqoCoreConfigurationProperties coreConfigurationProperties) {
         this.coreConfigurationProperties = coreConfigurationProperties;
         this.locks = new LinkedHashMap<>();
-        this.createLocksForDataDomain(DqoUserIdentity.DEFAULT_DATA_DOMAIN);
+        this.createLocksForDataDomain(UserDomainIdentity.DEFAULT_DATA_DOMAIN);
     }
 
     /**

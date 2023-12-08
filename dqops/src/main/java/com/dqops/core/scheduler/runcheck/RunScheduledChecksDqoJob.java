@@ -22,6 +22,7 @@ import com.dqops.core.jobqueue.ParentDqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.scheduler.JobSchedulerService;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -98,7 +99,8 @@ public class RunScheduledChecksDqoJob extends ParentDqoQueueJob<CheckExecutionSu
 
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
-        ExecutionContext executionContext = this.executionContextFactory.create(this.getPrincipal());
+        UserDomainIdentity userDomainIdentity = this.getPrincipal().getDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 checkRunReportingMode, true);

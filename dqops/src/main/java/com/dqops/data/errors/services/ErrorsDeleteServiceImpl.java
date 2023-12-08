@@ -15,7 +15,7 @@
  */
 package com.dqops.data.errors.services;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
@@ -51,7 +51,7 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
      * @return Data delete operation summary.
      */
     @Override
-    public DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, DqoUserIdentity userIdentity) {
+    public DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -98,7 +98,8 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
                             })
                     .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnection(),
-                            tableName
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 

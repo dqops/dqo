@@ -23,7 +23,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.search.StringPatternComparer;
@@ -154,7 +154,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
             tableNamePattern = "*";
         }
 
-        DqoUserIdentity userIdentity = this.getPrincipal().getIdentity();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDomainIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();

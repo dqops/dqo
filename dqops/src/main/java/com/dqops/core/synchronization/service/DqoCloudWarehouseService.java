@@ -15,7 +15,7 @@
  */
 package com.dqops.core.synchronization.service;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.fileexchange.TargetTableModifiedPartitions;
 
 /**
@@ -28,5 +28,5 @@ public interface DqoCloudWarehouseService {
      * @param userIdentity User identity that identifies the target data domain.
      * @param targetTableModifiedPartitions Target table modified partitions. Identifies the target table and lists all unique connections, tables, dates of the month to be refreshed.
      */
-    void refreshNativeTable(TargetTableModifiedPartitions targetTableModifiedPartitions, DqoUserIdentity userIdentity);
+    void refreshNativeTable(TargetTableModifiedPartitions targetTableModifiedPartitions, UserDomainIdentity userIdentity);
 }

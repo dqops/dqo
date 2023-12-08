@@ -20,7 +20,7 @@ import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.filesystem.virtual.utility.HomeFolderPathUtility;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
      * @return Returns a list of connection names that are currently stored for this storage type.
      */
     @Override
-    public List<String> listConnections(FileStorageSettings storageSettings, DqoUserIdentity userIdentity) {
+    public List<String> listConnections(FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
@@ -90,13 +90,13 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
      * @return Returns a list of physical table names that are currently stored for the connection. Null if connection not found.
      */
     @Override
-    public List<PhysicalTableName> listTablesForConnection(String connectionName, FileStorageSettings storageSettings, DqoUserIdentity userIdentity) {
+    public List<PhysicalTableName> listTablesForConnection(String connectionName, FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
         ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, null, null);
         String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Path homeRelativePartitionPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
             List<HomeFolderPath> connectionStoredFolders = this.localUserHomeFileStorageService.listFolders(
                     HomeFolderPathUtility.createFromFilesystemPath(homeRelativePartitionPath));
             if (connectionStoredFolders == null) {
@@ -123,9 +123,9 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     public Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
                                                              PhysicalTableName tableName,
                                                              FileStorageSettings storageSettings,
-                                                             DqoUserIdentity userIdentity) {
+                                                             UserDomainIdentity userIdentity) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
-            List<ParquetPartitionId> storedPartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
+            List<ParquetPartitionId> storedPartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings, userIdentity);
             if (storedPartitions == null) {
                 return Optional.empty();
             }
@@ -146,17 +146,17 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     @Override
     public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
                                                            FileStorageSettings storageSettings,
-                                                           DqoUserIdentity userIdentity) {
+                                                           UserDomainIdentity userIdentity) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
             if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CTM) {
-                List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings);
+                List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings, userIdentity);
                 if (tablesForConnection == null) {
                     return null;
                 }
 
                 List<ParquetPartitionId> result = new ArrayList<>();
                 for (PhysicalTableName tableName: tablesForConnection) {
-                    List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
+                    List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings, userIdentity);
                     if (tablePartitions == null) {
                         continue;
                     }
@@ -165,7 +165,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
                 return result;
             }
             else if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CM) {
-                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, null, storageSettings);
+                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, null, storageSettings, userIdentity);
                 return tablePartitions;
             } else {
                 throw new IllegalArgumentException("Partitioning pattern " + storageSettings.getPartitioningPattern() + "  not supported.");
@@ -185,7 +185,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
                                                            PhysicalTableName tableName,
                                                            FileStorageSettings storageSettings,
-                                                           DqoUserIdentity userIdentity) {
+                                                           UserDomainIdentity userIdentity) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
             Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 

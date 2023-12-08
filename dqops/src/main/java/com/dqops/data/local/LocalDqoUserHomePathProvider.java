@@ -15,7 +15,7 @@
  */
 package com.dqops.data.local;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 
 import java.nio.file.Path;
 
@@ -28,5 +28,5 @@ public interface LocalDqoUserHomePathProvider {
      * @param userIdentity User identity that identifies the target data domain.
      * @return Absolute path to the DQOps user home folder.
      */
-    Path getLocalUserHomePath(DqoUserIdentity userIdentity);
+    Path getLocalUserHomePath(UserDomainIdentity userIdentity);
 }

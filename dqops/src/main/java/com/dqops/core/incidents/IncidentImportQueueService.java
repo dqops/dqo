@@ -16,6 +16,8 @@
 
 package com.dqops.core.incidents;
 
+import com.dqops.core.principal.UserDomainIdentity;
+
 /**
  * Data quality incident import service. Works in the background and imports new data quality incidents.
  * It is used because we can run checks on multiple tables in parallel, but incidents are stored on a whole
@@ -27,19 +29,25 @@ public interface IncidentImportQueueService {
      * Imports incidents detected on a single table to a connection level incidents table.
      *
      * @param tableIncidentImportBatch Issues (failed data quality check results) detected on a single table that should be loaded to the incidents table.
+     * @param userDomainIdentity       User identity with the data domain name.
      */
-    void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch);
+    void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch,
+                              UserDomainIdentity userDomainIdentity);
 
     /**
      * Sets a new incident status on an incident.
      * @param incidentStatusChangeParameters Parameters of the incident whose status will be updated.
+     * @param userDomainIdentity       User identity with the data domain name.
      */
-    void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters);
+    void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters,
+                           UserDomainIdentity userDomainIdentity);
 
     /**
      * Sets a new incident issueUrl on an incident.
      *
      * @param incidentIssueUrlChangeParameters Parameters of the incident whose issueUrl will be updated.
+     * @param userDomainIdentity       User identity with the data domain name.
      */
-    void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters);
+    void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters,
+                             UserDomainIdentity userDomainIdentity);
 }

@@ -16,7 +16,7 @@
 package com.dqops.core.filesystem.virtual;
 
 import com.dqops.BaseTest;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,7 +27,7 @@ import java.nio.file.Path;
 public class HomeFilePathTests extends BaseTest {
     @Test
     void constructor_whenFolderGivenAndFileName_thenReturnsObject() {
-        HomeFolderPath folder = new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"));
+        HomeFolderPath folder = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"));
         HomeFilePath sut = new HomeFilePath(folder, "filename.txt");
 
         Assertions.assertSame(folder, sut.getFolder());
@@ -36,7 +36,7 @@ public class HomeFilePathTests extends BaseTest {
 
     @Test
     void toRelativePath_whenFileInRootFolder_thenReturnsPathWithFileNameOnly() {
-        HomeFilePath sut = new HomeFilePath(new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN), "filename.txt");
+        HomeFilePath sut = new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "filename.txt");
 
         Path path = sut.toRelativePath();
         Assertions.assertNotNull(path);
@@ -45,7 +45,7 @@ public class HomeFilePathTests extends BaseTest {
 
     @Test
     void toRelativePath_whenFileInSubSubFolder_thenReturnsPathCombinedWithFolderPath() {
-        HomeFolderPath folder = new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"), FolderName.fromObjectName("second&"));
+        HomeFolderPath folder = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"), FolderName.fromObjectName("second&"));
         HomeFilePath sut = new HomeFilePath(folder, "filename.txt");
 
         Path path = sut.toRelativePath();
@@ -55,7 +55,7 @@ public class HomeFilePathTests extends BaseTest {
 
     @Test
     void toRelativePath_whenFileInSubFolder_thenReturnsPathCombinedWithFolderPath() {
-        HomeFolderPath folder = new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"));
+        HomeFolderPath folder = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"));
         HomeFilePath sut = new HomeFilePath(folder, "filename.txt");
 
         Path path = sut.toRelativePath();
@@ -65,7 +65,7 @@ public class HomeFilePathTests extends BaseTest {
 
     @Test
     void toString_whenFileInRootFolder_thenReturnsPathWithFileNameOnly() {
-        HomeFilePath sut = new HomeFilePath(new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN), "filename.txt");
+        HomeFilePath sut = new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "filename.txt");
 
         String path = sut.toString();
         Assertions.assertNotNull(path);
@@ -74,7 +74,7 @@ public class HomeFilePathTests extends BaseTest {
 
     @Test
     void toString_whenFileInSubSubFolder_thenReturnsPathCombinedWithFolderPath() {
-        HomeFolderPath folder = new HomeFolderPath(DqoUserIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"), FolderName.fromObjectName("second&"));
+        HomeFolderPath folder = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"), FolderName.fromObjectName("second&"));
         HomeFilePath sut = new HomeFilePath(folder, "filename.txt");
 
         String path = sut.toString();
@@ -84,14 +84,14 @@ public class HomeFilePathTests extends BaseTest {
 
     @Test
     void fromFilePath_whenJustFileNameGiven_thenCreatesPathWithNoFolder() {
-        HomeFilePath homeFilePath = HomeFilePath.fromFilePath(DqoUserIdentity.DEFAULT_DATA_DOMAIN, "filename.txt");
+        HomeFilePath homeFilePath = HomeFilePath.fromFilePath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, "filename.txt");
         Assertions.assertEquals(0, homeFilePath.getFolder().size());
         Assertions.assertEquals("filename.txt", homeFilePath.getFileName());
     }
 
     @Test
     void fromFilePath_whenTwoFoldersOnPath_thenCreatesThoseFoldersAsParents() {
-        HomeFilePath homeFilePath = HomeFilePath.fromFilePath(DqoUserIdentity.DEFAULT_DATA_DOMAIN, "dir1/dir2/filename.txt");
+        HomeFilePath homeFilePath = HomeFilePath.fromFilePath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, "dir1/dir2/filename.txt");
         Assertions.assertEquals(2, homeFilePath.getFolder().size());
         Assertions.assertEquals("dir1", homeFilePath.getFolder().get(0).getFileSystemName());
         Assertions.assertEquals("dir2", homeFilePath.getFolder().get(1).getFileSystemName());

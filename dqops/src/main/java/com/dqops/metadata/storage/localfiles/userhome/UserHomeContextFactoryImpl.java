@@ -17,7 +17,7 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.core.filesystem.localfiles.LocalFileSystemFactory;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.YamlSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,13 +53,13 @@ public class UserHomeContextFactoryImpl implements UserHomeContextFactory {
 
     /**
      * Opens a local home context, loads the files from the local file system.
-     * @param identity User identity that identifies the user for whom we are opening the user home.
+     * @param userDomainIdentity User identity that identifies the user for whom we are opening the user home and the data domain for which we are opening the DQOps user home.
      * @return User home context with an active user home model that is backed by the local home file system.
      */
     @Override
-    public UserHomeContext openLocalUserHome(DqoUserIdentity identity) {
-        LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalUserHome();
-        UserHomeContext userHomeContext = new UserHomeContext(homeRoot, identity);
+    public UserHomeContext openLocalUserHome(UserDomainIdentity userDomainIdentity) {
+        LocalFolderTreeNode homeRoot = this.localFileSystemFactory.openLocalUserHome(userDomainIdentity);
+        UserHomeContext userHomeContext = new UserHomeContext(homeRoot, userDomainIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, this.yamlSerializer, this.jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
         userHomeContext.setUserModelCache(this.userHomeContextCache);

@@ -132,7 +132,7 @@ public class CliInitializerImpl implements CliInitializer {
     protected void tryLoginToDqoCloud(boolean headless) {
         try {
             DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getIdentity());
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipal.getDomainIdentity());
             if (apiKey != null) {
                 return; // api key is provided somehow (by an environment variable or in the local settings)
             }

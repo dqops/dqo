@@ -16,6 +16,8 @@
 
 package com.dqops.data.incidents.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
+
 /**
  * Incidents snapshot service. Creates snapshots connected to a persistent storage.
  */
@@ -24,9 +26,10 @@ public interface IncidentsSnapshotFactory {
      * Creates an empty snapshot that is connected to the incidents storage service that will load requested months on demand.
      *
      * @param connectionName Connection name.
+     * @param userIdentity   User identity that specifies the data domain.
      * @return Incidents snapshot connected to a storage service.
      */
-    IncidentsSnapshot createSnapshot(String connectionName);
+    IncidentsSnapshot createSnapshot(String connectionName, UserDomainIdentity userIdentity);
 
     /**
      * Creates an empty, read-only snapshot that is connected to the incidets storage service that will load requested months on demand.
@@ -34,7 +37,8 @@ public interface IncidentsSnapshotFactory {
      *
      * @param connectionName Connection name.
      * @param columnNames    Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity   User identity that specifies the data domain.
      * @return Incidents snapshot connected to a storage service.
      */
-    IncidentsSnapshot createReadOnlySnapshot(String connectionName, String[] columnNames);
+    IncidentsSnapshot createReadOnlySnapshot(String connectionName, String[] columnNames, UserDomainIdentity userIdentity);
 }

@@ -15,7 +15,7 @@
  */
 package com.dqops.data.checkresults.services;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
@@ -51,7 +51,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
      * @return Data delete operation summary.
      */
     @Override
-    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter, DqoUserIdentity userIdentity) {
+    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter, UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -98,7 +98,8 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
                             })
                     .map(tableName -> this.checkResultsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnection(),
-                            tableName
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 

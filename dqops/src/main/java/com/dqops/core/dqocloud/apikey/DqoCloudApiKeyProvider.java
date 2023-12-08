@@ -15,7 +15,7 @@
  */
 package com.dqops.core.dqocloud.apikey;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import org.apache.commons.codec.DecoderException;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ public interface DqoCloudApiKeyProvider {
      * @param userIdentity User identity, used to find the data domain name for which we need the DQOps Cloud synchronization key.
      * @return DQOps Cloud api key or null when the key was not yet configured.
      */
-    DqoCloudApiKey getApiKey(DqoUserIdentity userIdentity);
+    DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity);
 
     /**
      * Invalidates the cached api key.

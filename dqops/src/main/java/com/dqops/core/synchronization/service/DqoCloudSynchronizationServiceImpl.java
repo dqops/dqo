@@ -17,7 +17,7 @@ package com.dqops.core.synchronization.service;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.core.synchronization.fileexchange.*;
@@ -85,7 +85,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      */
     @Override
     public void synchronizeFolder(DqoRoot dqoRoot,
-                                  DqoUserIdentity userIdentity,
+                                  UserDomainIdentity userIdentity,
                                   FileSynchronizationDirection synchronizationDirection,
                                   boolean forceRefreshNativeTable,
                                   FileSystemSynchronizationListener synchronizationListener) {
@@ -183,7 +183,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeAll(DqoUserIdentity userIdentity,
+    public void synchronizeAll(UserDomainIdentity userIdentity,
                                FileSynchronizationDirection synchronizationDirection,
                                boolean forceRefreshNativeTable,
                                FileSystemSynchronizationListener synchronizationListener) {
@@ -209,7 +209,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeData(DqoUserIdentity userIdentity,
+    public void synchronizeData(UserDomainIdentity userIdentity,
                                 FileSynchronizationDirection synchronizationDirection,
                                 boolean forceRefreshNativeTable,
                                 FileSystemSynchronizationListener synchronizationListener) {

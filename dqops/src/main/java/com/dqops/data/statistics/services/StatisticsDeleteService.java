@@ -15,6 +15,7 @@
  */
 package com.dqops.data.statistics.services;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
 
@@ -22,11 +23,13 @@ import com.dqops.data.statistics.models.StatisticsResultsFragmentFilter;
  * Service that deletes outdated statistics results.
  */
 public interface StatisticsDeleteService {
-
     /**
      * Deletes the statistics results from a table, applying specific filters to get the fragment (if necessary).
+     * @param userIdentity User identity that specifies the data domain.
      * @param filter Filter for the statistics results fragment that is of interest.
      * @return Data delete operation summary.
      */
-    DeleteStoredDataResult deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter);
+    DeleteStoredDataResult deleteSelectedStatisticsResultsFragment(
+            StatisticsResultsFragmentFilter filter,
+            UserDomainIdentity userIdentity);
 }

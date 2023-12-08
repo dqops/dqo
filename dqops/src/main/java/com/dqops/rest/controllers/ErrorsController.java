@@ -101,7 +101,7 @@ public class ErrorsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -132,7 +132,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                checks, loadParams);
+                checks, loadParams, principal.getDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
@@ -175,7 +175,7 @@ public class ErrorsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -206,7 +206,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                monitoring, loadParams);
+                monitoring, loadParams, principal.getDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
@@ -249,7 +249,7 @@ public class ErrorsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -280,7 +280,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                Partitioned, loadParams);
+                Partitioned, loadParams, principal.getDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
@@ -323,7 +323,7 @@ public class ErrorsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -359,7 +359,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                checks, loadParams);
+                checks, loadParams, principal.getDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
@@ -404,7 +404,7 @@ public class ErrorsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -440,7 +440,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                monitoring, loadParams);
+                monitoring, loadParams, principal.getDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 
@@ -485,7 +485,7 @@ public class ErrorsController {
             @ApiParam(name = "tableComparison", value = "Table comparison name", required = false) @RequestParam(required = false) Optional<String> tableComparison,
             @ApiParam(name = "maxResultsPerCheck", value = "Maximum number of results per check, the default is " +
                     CheckResultsDetailedFilterParameters.DEFAULT_MAX_RESULTS_PER_CHECK, required = false) @RequestParam(required = false) Optional<Integer>  maxResultsPerCheck) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -521,7 +521,7 @@ public class ErrorsController {
         maxResultsPerCheck.ifPresent(loadParams::setMaxResultsPerCheck);
 
         ErrorsListModel[] errorsListModels = this.errorsDataService.readErrorsDetailed(
-                Partitioned, loadParams);
+                Partitioned, loadParams, principal.getDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(errorsListModels), HttpStatus.OK); // 200
     }
 }

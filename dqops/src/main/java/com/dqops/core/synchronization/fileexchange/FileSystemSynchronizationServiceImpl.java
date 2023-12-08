@@ -23,7 +23,7 @@ import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.locks.AcquiredExclusiveWriteLock;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.*;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
@@ -79,7 +79,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
     public SynchronizationResult synchronize(FileSystemChangeSet local,
                                              FileSystemChangeSet remote,
                                              DqoRoot dqoRoot,
-                                             DqoUserIdentity userIdentity,
+                                             UserDomainIdentity userIdentity,
                                              FileSynchronizationDirection synchronizationDirection,
                                              DqoCloudApiKey apiKey,
                                              FileSystemSynchronizationListener synchronizationListener) {

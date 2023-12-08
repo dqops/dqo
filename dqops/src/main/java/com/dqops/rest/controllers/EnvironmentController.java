@@ -141,7 +141,7 @@ public class EnvironmentController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<DqoUserProfileModel>> getUserProfile(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getIdentity());
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(principal.getDomainIdentity());
         if (apiKey == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }

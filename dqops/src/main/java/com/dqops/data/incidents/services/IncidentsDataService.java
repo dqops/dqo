@@ -17,6 +17,7 @@
 package com.dqops.data.incidents.services;
 
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.services.models.CheckResultEntryModel;
 import com.dqops.data.checkresults.services.models.CheckResultListFilterParameters;
 import com.dqops.data.checkresults.services.models.IncidentHistogramFilterParameters;
@@ -36,11 +37,11 @@ public interface IncidentsDataService {
      *
      * @param connectionName   Connection name.
      * @param filterParameters Incident filter parameters.
-     * @param principal        Calling user principal.
+     * @param userDomainIdentity Calling user identity with the data domain.
      * @return Collection of recent incidents.
      */
     Collection<IncidentModel> loadRecentIncidentsOnConnection(
-            String connectionName, IncidentListFilterParameters filterParameters, DqoUserPrincipal principal);
+            String connectionName, IncidentListFilterParameters filterParameters, UserDomainIdentity userDomainIdentity);
 
     /**
      * Loads one incident.
@@ -48,17 +49,17 @@ public interface IncidentsDataService {
      * @param year Year when the incident was first seen.
      * @param month Month of year when the incident was first seen.
      * @param incidentId Incident id.
-     * @param principal Calling user principal.
+     * @param userDomainIdentity Calling user identity with the data domain.
      * @return Incident model when the incident was found or null when the incident is not found.
      */
-    IncidentModel loadIncident(String connectionName, int year, int month, String incidentId, DqoUserPrincipal principal);
+    IncidentModel loadIncident(String connectionName, int year, int month, String incidentId, UserDomainIdentity userDomainIdentity);
 
     /**
      * Returns a list of all connections, also counting the number of recent open incidents.
-     * @param principal Calling user principal.
+     * @param userDomainIdentity Calling user identity with the data domain.
      * @return Collection of connection names, with a count of open incidents.
      */
-    Collection<IncidentsPerConnectionModel> findConnectionIncidentStats(DqoUserPrincipal principal);
+    Collection<IncidentsPerConnectionModel> findConnectionIncidentStats(UserDomainIdentity userDomainIdentity);
 
     /**
      * Loads all failed check results covered by a given incident.
@@ -67,7 +68,7 @@ public interface IncidentsDataService {
      * @param month            Month of year when the incident was first seen.
      * @param incidentId       The incident id.
      * @param filterParameters Filter parameters.
-     * @param principal        Calling user principal.
+     * @param userDomainIdentity Calling user identity with the data domain.
      * @return Array of check results for the incident.
      */
     CheckResultEntryModel[] loadCheckResultsForIncident(String connectionName,
@@ -75,7 +76,7 @@ public interface IncidentsDataService {
                                                         int month,
                                                         String incidentId,
                                                         CheckResultListFilterParameters filterParameters,
-                                                        DqoUserPrincipal principal);
+                                                        UserDomainIdentity userDomainIdentity);
 
     /**
      * Builds a histogram of data quality issue occurrences per day.
@@ -84,7 +85,7 @@ public interface IncidentsDataService {
      * @param month            Month of year when the incident was first seen.
      * @param incidentId       The incident id.
      * @param filterParameters Optional filter to limit the issues included in the histogram.
-     * @param principal        Calling user principal.
+     * @param userDomainIdentity Calling user identity with the data domain.
      * @return Daily histogram of days when a data quality issue failed.
      */
     IncidentIssueHistogramModel buildDailyIssuesHistogramForIncident(String connectionName,
@@ -92,5 +93,5 @@ public interface IncidentsDataService {
                                                                      int month,
                                                                      String incidentId,
                                                                      IncidentHistogramFilterParameters filterParameters,
-                                                                     DqoUserPrincipal principal);
+                                                                     UserDomainIdentity userDomainIdentity);
 }

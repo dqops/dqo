@@ -135,7 +135,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
         String authorizationToken = extractAuthenticationBearerToken(request);
         if (authorizationToken != null) {
             DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getIdentity());  // NOTE: this operation will support only the api key of the primary data domain
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getDomainIdentity());  // NOTE: this operation will support only the api key of the primary data domain
             if (apiKey != null && Objects.equals(authorizationToken, apiKey.getApiKeyToken())) {
                 Authentication singleUserAuthenticationToken = this.dqoAuthenticationTokenFactory.createAuthenticatedWithDefaultDqoCloudApiKey();
 
@@ -280,7 +280,7 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             }
 
             DqoUserPrincipal operatorUserPrincipal = dqoUserPrincipalProvider.createUserPrincipalForAdministrator();
-            if (this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getIdentity()) == null) {
+            if (this.dqoCloudApiKeyProvider.getApiKey(operatorUserPrincipal.getDomainIdentity()) == null) {
                 log.warn("DQOps Cloud pairing API Key missing, cannot use federated authentication");
                 exchange.getResponse().setStatusCode(HttpStatusCode.valueOf(403));
                 return exchange.getResponse().writeAndFlushWith(Mono.empty());

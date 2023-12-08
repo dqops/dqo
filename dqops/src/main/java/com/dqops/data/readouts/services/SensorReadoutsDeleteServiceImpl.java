@@ -15,7 +15,7 @@
  */
 package com.dqops.data.readouts.services;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
@@ -51,7 +51,8 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
      * @return Data delete operation summary.
      */
     @Override
-    public DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter, DqoUserIdentity userIdentity) {
+    public DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter,
+                                                                       UserDomainIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -98,7 +99,8 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
                     })
                     .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
                             filter.getTableSearchFilters().getConnection(),
-                            tableName
+                            tableName,
+                            userIdentity
                     ))
                     .collect(Collectors.toList());
 

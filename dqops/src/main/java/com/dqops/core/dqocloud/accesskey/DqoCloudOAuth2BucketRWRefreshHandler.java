@@ -15,7 +15,7 @@
  */
 package com.dqops.core.dqocloud.accesskey;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.OAuth2CredentialsWithRefresh;
@@ -27,7 +27,7 @@ import java.io.IOException;
  */
 public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWithRefresh.OAuth2RefreshHandler {
     private final DqoRoot rootType;
-    private final DqoUserIdentity userIdentity;
+    private final UserDomainIdentity userIdentity;
     private final DqoCloudAccessTokenCache accessTokenCache;
 
     /**
@@ -36,7 +36,7 @@ public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWi
      * @param userIdentity User identity that identifies the data domain.
      * @param accessTokenCache DQOps Cloud parent credentials provider - to get the access token.
      */
-    public DqoCloudOAuth2BucketRWRefreshHandler(DqoRoot rootType, DqoUserIdentity userIdentity, DqoCloudAccessTokenCache accessTokenCache) {
+    public DqoCloudOAuth2BucketRWRefreshHandler(DqoRoot rootType, UserDomainIdentity userIdentity, DqoCloudAccessTokenCache accessTokenCache) {
         this.rootType = rootType;
         this.userIdentity = userIdentity;
         this.accessTokenCache = accessTokenCache;
@@ -54,7 +54,7 @@ public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWi
      * Returns the user identity of the user, used mainly to identity the data domain.
      * @return Target data domain.
      */
-    public DqoUserIdentity getUserIdentity() {
+    public UserDomainIdentity getUserIdentity() {
         return userIdentity;
     }
 

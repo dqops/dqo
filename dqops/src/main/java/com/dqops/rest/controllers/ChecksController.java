@@ -117,7 +117,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         CheckDefinitionWrapper userCheckDefinitionWrapper = userHome.getChecks().getByObjectName(fullCheckName, true);
 
@@ -172,7 +172,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
@@ -218,7 +218,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
         CheckDefinitionWrapper existingUserCheckDefinitionWrapper = userCheckDefinitionList.getByObjectName(fullCheckName, true);
@@ -283,7 +283,7 @@ public class ChecksController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         CheckDefinitionList userCheckDefinitionList = userHome.getChecks();
@@ -336,7 +336,7 @@ public class ChecksController {
         checkDefinitionWrapperListDqoHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
         Set<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListUserHome = new ArrayList<>(userHome.getChecks().toList());
         checkDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getCheckName()));

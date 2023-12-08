@@ -24,8 +24,8 @@ import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindServiceImpl;
-import com.dqops.core.principal.DqoUserIdentity;
-import com.dqops.core.principal.DqoUserIdentityObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
@@ -132,7 +132,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String tableName = "tab";
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         Table table1 = prepareSimplePartitionTable(tableName, startDate, "");
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -177,7 +177,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String tableName = "tab";
         LocalDate month = LocalDate.of(2023, 1, 1);
         LocalDateTime startDate = month.atStartOfDay().plusDays(14);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         Table table = prepareSimplePartitionTable(tableName, startDate, tableName);
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
@@ -220,7 +220,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String id_prefix1 = "1";
         String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -286,7 +286,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String id_prefix1 = "1";
         String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -352,7 +352,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String id_prefix1 = "1";
         String id_prefix2 = "2";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -420,7 +420,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String tableName2 = "tab2";
         PhysicalTableName physicalTableName1 = new PhysicalTableName("sch", tableName1);
         PhysicalTableName physicalTableName2 = new PhysicalTableName("sch", tableName2);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month1 = LocalDate.of(2023, 1, 1);
         LocalDate month2 = LocalDate.of(2023, 2, 1);
@@ -541,7 +541,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
@@ -587,7 +587,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
@@ -634,7 +634,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
@@ -682,7 +682,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
@@ -729,7 +729,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
@@ -775,7 +775,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         String connectionName = "connection";
         String tableName = "tab";
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
-        DqoUserIdentity userIdentity = DqoUserIdentityObjectMother.createAdminIdentity();
+        UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         LocalDate month = LocalDate.of(2023, 1, 1);
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");

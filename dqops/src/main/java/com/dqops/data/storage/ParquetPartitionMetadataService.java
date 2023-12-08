@@ -15,7 +15,7 @@
  */
 package com.dqops.data.storage;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
@@ -34,7 +34,7 @@ public interface ParquetPartitionMetadataService {
      * @param userIdentity User identity that specifies the data domain.
      * @return Returns a list of connection names that are currently stored for this storage type.
      */
-    List<String> listConnections(FileStorageSettings storageSettings, DqoUserIdentity userIdentity);
+    List<String> listConnections(FileStorageSettings storageSettings, UserDomainIdentity userIdentity);
 
     /**
      * Lists all tables present in the directory dedicated to the connection under specific storage settings.
@@ -46,7 +46,7 @@ public interface ParquetPartitionMetadataService {
      */
     List<PhysicalTableName> listTablesForConnection(String connectionName,
                                                     FileStorageSettings storageSettings,
-                                                    DqoUserIdentity userIdentity);
+                                                    UserDomainIdentity userIdentity);
 
     /**
      * Get the month, furthest in the past, for which partition is stored, given the connection and table names, provided storage settings.
@@ -59,7 +59,7 @@ public interface ParquetPartitionMetadataService {
     Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
                                                       PhysicalTableName tableName,
                                                       FileStorageSettings storageSettings,
-                                                      DqoUserIdentity userIdentity);
+                                                      UserDomainIdentity userIdentity);
 
     /**
      * Gets ids of partitions that are currently stored for a given connection name, provided storage settings to know where to look.
@@ -70,7 +70,7 @@ public interface ParquetPartitionMetadataService {
      */
     List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
                                                     FileStorageSettings storageSettings,
-                                                    DqoUserIdentity userIdentity);
+                                                    UserDomainIdentity userIdentity);
 
     /**
      * Gets ids of partitions that are currently stored for a given connection and table names, provided storage settings to know where to look.
@@ -83,5 +83,5 @@ public interface ParquetPartitionMetadataService {
     List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
                                                     PhysicalTableName tableName,
                                                     FileStorageSettings storageSettings,
-                                                    DqoUserIdentity userIdentity);
+                                                    UserDomainIdentity userIdentity);
 }

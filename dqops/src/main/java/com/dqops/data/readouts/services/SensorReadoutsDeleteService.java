@@ -15,7 +15,7 @@
  */
 package com.dqops.data.readouts.services;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.readouts.models.SensorReadoutsFragmentFilter;
 
@@ -30,5 +30,5 @@ public interface SensorReadoutsDeleteService {
      * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
-    DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter, DqoUserIdentity userIdentity);
+    DeleteStoredDataResult deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter, UserDomainIdentity userIdentity);
 }

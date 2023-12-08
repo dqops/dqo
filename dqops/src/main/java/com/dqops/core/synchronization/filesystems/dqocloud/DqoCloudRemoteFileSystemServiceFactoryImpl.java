@@ -17,7 +17,7 @@ package com.dqops.core.synchronization.filesystems.dqocloud;
 
 import com.dqops.core.dqocloud.buckets.DqoCloudBucketAccessProvider;
 import com.dqops.core.dqocloud.buckets.DqoCloudRemoteBucket;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.core.synchronization.filesystems.gcp.GSFileSystemSynchronizationRoot;
@@ -55,7 +55,7 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
      * @return DQOps Cloud remote file system.
      */
     @Override
-    public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType, DqoUserIdentity userIdentity) {
+    public SynchronizationRoot createRemoteDqoCloudFSRW(DqoRoot rootType, UserDomainIdentity userIdentity) {
         DqoCloudRemoteBucket remoteBucketClient = this.dqoCloudBucketAccessProvider.getRemoteBucketClientRW(rootType, userIdentity);
         if (remoteBucketClient == null) {
             return null;
@@ -65,7 +65,8 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
                 Path.of(remoteBucketClient.getObjectPrefix()),
                 remoteBucketClient.getStorage(),
                 remoteBucketClient.getBucketName(),
-                rootType);
+                rootType,
+                userIdentity);
         return new SynchronizationRoot(gsFileSystemRoot, this.remoteFileSystemService);
     }
 }

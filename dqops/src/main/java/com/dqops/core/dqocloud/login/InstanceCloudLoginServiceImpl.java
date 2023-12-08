@@ -27,7 +27,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.secrets.signature.InstanceSignatureKeyProvider;
@@ -134,7 +134,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
                     this.grantingTicketPayloadSignedObject.getTarget().getExpiresAt().isAfter(keyLatestExpiresAt)) {
                 DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
 
-                DqoUserIdentity userIdentity = userPrincipalForAdministrator.getIdentity();
+                UserDomainIdentity userIdentity = userPrincipalForAdministrator.getDomainIdentity();
                 ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userIdentity);
                 RefreshTokenIssueApi refreshTokenIssueApi = new RefreshTokenIssueApi(authenticatedClient);
 
@@ -174,7 +174,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
 
         String ticketGrantingTicket = this.getTicketGrantingTicket();
         DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
-        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getIdentity());
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDomainIdentity());
         String dqoCloudUiUrlBase = this.dqoCloudConfigurationProperties.getUiBaseUrl();
 
         try {

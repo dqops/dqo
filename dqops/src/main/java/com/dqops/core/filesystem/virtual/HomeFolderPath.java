@@ -16,7 +16,7 @@
 package com.dqops.core.filesystem.virtual;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -118,7 +118,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      */
     public Path toRelativePath() {
         if (this.size() == 0) {
-            if (!Objects.equals(DqoUserIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
+            if (!Objects.equals(UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
                 return Path.of("./");
             } else {
                 return Path.of(BuiltInFolderNames.DATA_DOMAINS, FileNameSanitizer.encodeForFileSystem(this.dataDomain));
@@ -131,7 +131,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
         }
 
         Path relativePath = Path.of(this.get(0).getFileSystemName(), pathElements);
-        if (!Objects.equals(DqoUserIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
+        if (!Objects.equals(UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
             relativePath = Path.of(BuiltInFolderNames.DATA_DOMAINS, FileNameSanitizer.encodeForFileSystem(this.dataDomain)).resolve(relativePath);
         }
 

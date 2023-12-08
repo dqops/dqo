@@ -15,7 +15,7 @@
  */
 package com.dqops.data.errors.services;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.models.DeleteStoredDataResult;
 
@@ -30,5 +30,5 @@ public interface ErrorsDeleteService {
      * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
-    DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, DqoUserIdentity userIdentity);
+    DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, UserDomainIdentity userIdentity);
 }

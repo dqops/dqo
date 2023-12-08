@@ -15,7 +15,7 @@
  */
 package com.dqops.core.synchronization.filesystems.local;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 
@@ -29,5 +29,5 @@ public interface LocalSynchronizationFileSystemFactory {
      * @param userIdentity User identity that selects the synchronized data domain.
      * @return DQOps file system that can manage local files in a selected folder.
      */
-    SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, DqoUserIdentity userIdentity);
+    SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, UserDomainIdentity userIdentity);
 }

@@ -16,7 +16,7 @@
 package com.dqops.core.dqocloud.client;
 
 import com.dqops.cloud.rest.handler.ApiClient;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 
 /**
  * DQOps Cloud API client factory.
@@ -33,5 +33,5 @@ public interface DqoCloudApiClientFactory {
      * @param userIdentity Calling user identity, required to select the data domain.
      * @return Authenticated client.
      */
-    ApiClient createAuthenticatedClient(DqoUserIdentity userIdentity);
+    ApiClient createAuthenticatedClient(UserDomainIdentity userIdentity);
 }

@@ -15,7 +15,7 @@
  */
 package com.dqops.data.local;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 
 import java.nio.file.Path;
 
@@ -36,7 +36,7 @@ public class LocalDqoUserHomePathProviderStub implements LocalDqoUserHomePathPro
      * @return Absolute path to the DQOps user home folder.
      */
     @Override
-    public Path getLocalUserHomePath(DqoUserIdentity userIdentity) {
+    public Path getLocalUserHomePath(UserDomainIdentity userIdentity) {
         return this.localUserHomePath;
     }
 }

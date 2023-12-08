@@ -18,6 +18,8 @@ package com.dqops.services.check.mapping;
 import com.dqops.BaseTest;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -86,7 +88,8 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
                 new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl()),
                 specToModelCheckMappingService);
 
-        this.executionContext = executionContextFactory.create();
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        this.executionContext = executionContextFactory.create(adminIdentity);
 
         UserHome userHome = this.executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");

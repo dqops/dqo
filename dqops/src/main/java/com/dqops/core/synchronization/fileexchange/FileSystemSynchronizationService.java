@@ -16,7 +16,7 @@
 package com.dqops.core.synchronization.fileexchange;
 
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
 
@@ -39,7 +39,7 @@ public interface FileSystemSynchronizationService {
     SynchronizationResult synchronize(FileSystemChangeSet local,
                                       FileSystemChangeSet remote,
                                       DqoRoot dqoRoot,
-                                      DqoUserIdentity userIdentity,
+                                      UserDomainIdentity userIdentity,
                                       FileSynchronizationDirection synchronizationDirection,
                                       DqoCloudApiKey apiKey,
                                       FileSystemSynchronizationListener synchronizationListener);

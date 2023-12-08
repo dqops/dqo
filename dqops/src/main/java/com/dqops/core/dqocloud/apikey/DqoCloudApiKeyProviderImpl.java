@@ -16,7 +16,7 @@
 package com.dqops.core.dqocloud.apikey;
 
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.settings.LocalSettingsSpec;
@@ -30,7 +30,6 @@ import org.apache.parquet.Strings;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -77,7 +76,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
      * @return DQOps Cloud api key or null when the key was not yet configured.
      */
     @Override
-    public DqoCloudApiKey getApiKey(DqoUserIdentity userIdentity) {
+    public DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity) {
         try {
             synchronized (this.lock) {
                 DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKey.get(userIdentity.getDataDomain()) : null;
@@ -86,7 +85,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
                     return cachedApiKeyPerDomain;
                 }
 
-                DqoUserIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : DqoUserIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+                UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
                 UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
                 SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
                 LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
@@ -109,7 +108,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
                 DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
                 String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDomain();
                 if (Strings.isNullOrEmpty(apiKeyDomain)) {
-                    apiKeyDomain = DqoUserIdentity.DEFAULT_DATA_DOMAIN;
+                    apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
                 }
                 this.cachedApiKey.put(apiKeyDomain, dqoCloudApiKey);
                 return dqoCloudApiKey;

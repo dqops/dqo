@@ -24,6 +24,8 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.core.configuration.DqoIncidentsConfigurationProperties;
 import com.dqops.core.configuration.DqoIncidentsConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.JobCancellationToken;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactoryImpl;
 import com.dqops.data.checkresults.services.CheckResultsDataServiceImpl;
 import com.dqops.data.checkresults.services.models.ComparisonCheckResultModel;
@@ -76,6 +78,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
     private TableWrapper comparedTableWrapper;
     private CheckSearchFilters checkSearchFilters;
     private CheckResultsDataServiceImpl checkResultsDataService;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
@@ -88,9 +91,10 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         referenceSampleTable.getTableSpec().setTimestampColumns(TimestampColumnsSpec.createForPartitionByColumn("date"));
         comparedSampleTable.getTableSpec().setIncrementalTimeWindow(PartitionIncrementalTimeWindowSpecObjectMother.createLongTermTimeWindow());
         referenceSampleTable.getTableSpec().setIncrementalTimeWindow(PartitionIncrementalTimeWindowSpecObjectMother.createLongTermTimeWindow());
+        userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithEmptyTemporaryContext();
-        userHomeContext = userHomeContextFactory.openLocalUserHome();
+        userHomeContext = userHomeContextFactory.openLocalUserHome(userDomainIdentity);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, comparedSampleTable);
         UserHomeContextObjectMother.addSampleTable(userHomeContext, referenceSampleTable);
         userHome = userHomeContext.getUserHome();
@@ -152,7 +156,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
                 comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
-                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME, userDomainIdentity);
         Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
         ComparisonCheckResultModel rowCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("profile_row_count_match");
         Assertions.assertEquals(1, rowCountMatchResultsModel.getValidResults());
@@ -190,7 +194,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
                 comparedConnectionWrapper.getName(), comparedTableWrapper.getPhysicalTableName(),
-                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME);
+                tableCheckRootContainer.getCheckType(), tableCheckRootContainer.getCheckTimeScale(), COMPARISON_NAME, userDomainIdentity);
         Assertions.assertEquals(1, tableComparisonResultsModel.getTableComparisonResults().size());
         ComparisonCheckResultModel columnCountMatchResultsModel = tableComparisonResultsModel.getTableComparisonResults().get("profile_column_count_match");
         Assertions.assertEquals(1, columnCountMatchResultsModel.getValidResults());

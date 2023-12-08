@@ -21,7 +21,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudInvalidKeyException;
 import com.dqops.core.dqocloud.apikey.DqoCloudLicenseType;
 import com.dqops.core.dqocloud.dashboards.LookerStudioUrlService;
 import com.dqops.core.principal.DqoPermissionNames;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.dashboards.DashboardSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.dashboards.DashboardsFolderSpec;
@@ -99,7 +99,7 @@ public class DashboardsController {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
         DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList;
 
-        DqoUserIdentity userIdentity = principal.getIdentity();
+        UserDomainIdentity userIdentity = principal.getDomainIdentity();
         DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(userIdentity);
         if (cloudApiKey != null && cloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE) {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
@@ -126,12 +126,12 @@ public class DashboardsController {
      * @return Custom dashboard specification or null, when the dashboard was not found.
      */
     protected DashboardSpec findUserCustomDashboard(DqoUserPrincipal principal, String dashboardName, String... folders) {
-        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(principal.getIdentity());
+        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(principal.getDomainIdentity());
         if (cloudApiKey == null || cloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.FREE) {
             return null;
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
         if (userDashboardsList == null || userDashboardsList.size() == 0) {

@@ -17,7 +17,7 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.FileCheckDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialListImpl;
 import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListSpecWrapperImpl;
@@ -56,7 +56,7 @@ public class FileUserHomeImpl extends UserHomeImpl {
      * @param dashboards Custom dashboards.
      * @param userHomeContext User home context.
      */
-    public FileUserHomeImpl(DqoUserIdentity userIdentity,
+    public FileUserHomeImpl(UserDomainIdentity userIdentity,
                             FileConnectionListImpl sources,
                             FileSensorDefinitionListImpl sensors,
                             FileRuleDefinitionListImpl rules,

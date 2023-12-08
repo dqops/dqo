@@ -26,12 +26,11 @@ import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategories
 import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.table.profiling.TableComparisonProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -133,7 +132,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
      */
     @Override
     public SimilarChecksContainer findSimilarTableChecks() {
-        UserHomeImpl userHome = new UserHomeImpl(DqoUserIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(false);
@@ -180,7 +179,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
      */
     @Override
     public SimilarChecksContainer findSimilarColumnChecks() {
-        UserHomeImpl userHome = new UserHomeImpl(DqoUserIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
+        UserHomeImpl userHome = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("<target_connection>");
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("<target_schema>", "<target_table>"));
         TableSpec tableSpec = createTableSpec(true);

@@ -16,6 +16,7 @@
 package com.dqops.data.statistics.snapshot;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.data.statistics.factory.StatisticsColumnNames;
 import com.dqops.data.storage.FileStorageSettings;
@@ -35,32 +36,36 @@ public class StatisticsSnapshot extends TableDataSnapshot {
 
     /**
      * Default constructor that creates a snapshot.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param newResults Empty normalized table that will be appended with new statistics results (captured during the current sensor execution).
      */
-    public StatisticsSnapshot(String connectionName,
+    public StatisticsSnapshot(UserDomainIdentity userIdentity,
+                              String connectionName,
                               PhysicalTableName tableName,
                               ParquetPartitionStorageService storageService,
                               Table newResults) {
-        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), newResults);
+        super(userIdentity, connectionName, tableName, storageService, createStatisticsStorageSettings(), newResults);
     }
 
     /**
      * Creates a read-only statistics results snapshot limited to a set of columns.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
      * @param tableResultsSample Empty table with the expected schema (columns).
      */
-    public StatisticsSnapshot(String connectionName,
+    public StatisticsSnapshot(UserDomainIdentity userIdentity,
+                              String connectionName,
                               PhysicalTableName tableName,
                               ParquetPartitionStorageService storageService,
                               String[] columnNames,
                               Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), columnNames, tableResultsSample);
+        super(userIdentity, connectionName, tableName, storageService, createStatisticsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**

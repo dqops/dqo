@@ -15,15 +15,18 @@
  */
 package com.dqops.core.filesystem.localfiles;
 
+import com.dqops.core.principal.UserDomainIdentity;
+
 /**
  * Factory class for the local file system. Creates the virtual file system that uses the local file system to access the home folder.
  */
 public interface LocalFileSystemFactory {
     /**
      * Creates a local file system that is based on the real user home folder.
+     * @param userDomainIdentity User identity and the data domain for which the user home is opened.
      * @return Local file system (root node) for the user's home folder.
      */
-    LocalFolderTreeNode openLocalUserHome();
+    LocalFolderTreeNode openLocalUserHome(UserDomainIdentity userDomainIdentity);
 
     /**
      * Creates a local file system that is based on the real DQO_HOME home folder.

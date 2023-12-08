@@ -16,7 +16,7 @@
 package com.dqops.core.synchronization.filesystems.local;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
@@ -52,7 +52,7 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
      * @return DQOps file system that can manage local files in a selected folder.
      */
     @Override
-    public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, DqoUserIdentity userIdentity) {
+    public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, UserDomainIdentity userIdentity) {
         Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType, userIdentity);
         UserHomeFileSystemSynchronizationRoot userHomeFileSystemRoot = new UserHomeFileSystemSynchronizationRoot(absoluteLocalPathToFolder);
         return new SynchronizationRoot(userHomeFileSystemRoot, this.localFileSystemService);
@@ -64,7 +64,7 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
      * @param userIdentity User identity that identifies the data domain.
      * @return Absolute file system path to a requested folder.
      */
-    public Path getAbsoluteLocalPathToFolder(DqoRoot rootType, DqoUserIdentity userIdentity) {
+    public Path getAbsoluteLocalPathToFolder(DqoRoot rootType, UserDomainIdentity userIdentity) {
         Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity);
 
         switch (rootType) {

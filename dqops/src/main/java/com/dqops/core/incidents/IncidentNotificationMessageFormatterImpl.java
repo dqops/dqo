@@ -20,7 +20,7 @@ import java.time.format.DateTimeFormatter;
  * A creator for text field of incident notification message.
  */
 @Component
-public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotificationMessageTextCreator {
+public class IncidentNotificationMessageFormatterImpl implements IncidentNotificationMessageFormatter {
 
     private static final String KEY_VALUE_FORMAT = "%s" + ": %s";
     private static final String NEW_LINE = " \n";
@@ -33,8 +33,8 @@ public class IncidentNotificationMessageTextCreatorImpl implements IncidentNotif
      * @param defaultTimeZoneProvider Default time zone provider.
      */
     @Autowired
-    public IncidentNotificationMessageTextCreatorImpl(InstanceCloudLoginService instanceCloudLoginService,
-                                                      DefaultTimeZoneProvider defaultTimeZoneProvider) {
+    public IncidentNotificationMessageFormatterImpl(InstanceCloudLoginService instanceCloudLoginService,
+                                                    DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.instanceCloudLoginService = instanceCloudLoginService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }

@@ -3,7 +3,7 @@ package com.dqops.core.incidents;
 /**
  * A creator for text field of incident notification message.
  */
-public interface IncidentNotificationMessageTextCreator {
+public interface IncidentNotificationMessageFormatter {
 
     /**
      * Prepares string for text field of notificaiton message, which is built from multiple fields from it's parameters.

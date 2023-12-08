@@ -159,7 +159,7 @@ public class IncidentNotificationMessage {
      */
     public static IncidentNotificationMessage fromIncidentRow(
             IncidentNotificationMessageParameters messageParameters,
-            IncidentNotificationMessageTextCreator textCreator) {
+            IncidentNotificationMessageFormatter textCreator) {
 
         Row incidentRow = messageParameters.getIncidentRow();
 

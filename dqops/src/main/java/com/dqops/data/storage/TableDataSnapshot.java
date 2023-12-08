@@ -15,7 +15,7 @@
  */
 package com.dqops.data.storage;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.models.DeleteStoredDataResult;
 import com.dqops.data.models.DataDeleteResultPartition;
 import com.dqops.data.normalization.CommonColumnNames;
@@ -42,7 +42,7 @@ import java.util.stream.Collectors;
  * from parquet files. Contains also changes that should be applied (new rows, updated rows, deleted rows).
  */
 public class TableDataSnapshot {
-    private final DqoUserIdentity userIdentity;
+    private final UserDomainIdentity userIdentity;
     private final String connectionName;
     private final PhysicalTableName tableName;
     private final ParquetPartitionStorageService storageService;
@@ -63,7 +63,7 @@ public class TableDataSnapshot {
      * @param storageSettings Configuration of the storage settings (folder names, parquet file names, column names).
      * @param newResults Empty tableaw table with new or updated rows. Changes to this object will be persisted on save.
      */
-    public TableDataSnapshot(DqoUserIdentity userIdentity,
+    public TableDataSnapshot(UserDomainIdentity userIdentity,
                              String connectionName,
                              PhysicalTableName tableName,
                              ParquetPartitionStorageService storageService,
@@ -89,7 +89,7 @@ public class TableDataSnapshot {
      * @param storageSettings Configuration of the storage settings (folder names, parquet file names, column names).
      * @param columnNames Array of column names that will be loaded.
      */
-    public TableDataSnapshot(DqoUserIdentity userIdentity,
+    public TableDataSnapshot(UserDomainIdentity userIdentity,
                              String connectionName,
                              PhysicalTableName tableName,
                              ParquetPartitionStorageService storageService,
@@ -111,7 +111,7 @@ public class TableDataSnapshot {
      * Returns the user identity, also specifies the data domain.
      * @return User identity with the data domain.
      */
-    public DqoUserIdentity getUserIdentity() {
+    public UserDomainIdentity getUserIdentity() {
         return userIdentity;
     }
 

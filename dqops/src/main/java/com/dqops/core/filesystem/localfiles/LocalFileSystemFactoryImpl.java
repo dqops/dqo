@@ -17,6 +17,7 @@ package com.dqops.core.filesystem.localfiles;
 
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.dqohome.LocalDqoHomeFileStorageService;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import org.springframework.beans.factory.BeanFactory;
@@ -41,13 +42,14 @@ public class LocalFileSystemFactoryImpl implements LocalFileSystemFactory {
 
     /**
      * Creates a local file system that is based on the real user home folder.
+     * @param userDomainIdentity User identity and the data domain for which the user home is opened.
      * @return Local file system (root node) for the user's home folder.
      */
     @Override
-    public LocalFolderTreeNode openLocalUserHome() {
+    public LocalFolderTreeNode openLocalUserHome(UserDomainIdentity userDomainIdentity) {
         LocalUserHomeFileStorageService localUserHomeFileStorageService = this.beanFactory.getBean(LocalUserHomeFileStorageService.class);
         FileSystemContext fileSystemContext = new FileSystemContext(localUserHomeFileStorageService);
-        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath());
+        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(userDomainIdentity.getDataDomain()));
         return userHomeFolder;
     }
 
@@ -60,7 +62,7 @@ public class LocalFileSystemFactoryImpl implements LocalFileSystemFactory {
     public LocalFolderTreeNode openLocalDqoHome() {
         LocalDqoHomeFileStorageService localDqoHomeFileStorageService = this.beanFactory.getBean(LocalDqoHomeFileStorageService.class);
         FileSystemContext fileSystemContext = new FileSystemContext(localDqoHomeFileStorageService);
-        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath());
+        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         return userHomeFolder;
     }
 }

@@ -15,7 +15,7 @@
  */
 package com.dqops.core.dqocloud.accesskey;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 
 /**
@@ -29,7 +29,7 @@ public interface DqoCloudAccessTokenCache {
      * @param userIdentity Calling user identity, used to identify the data domain.
      * @return Up-to-date access token.
      */
-    DqoCloudCredentials getCredentials(DqoRoot dqoRoot, DqoUserIdentity userIdentity);
+    DqoCloudCredentials getCredentials(DqoRoot dqoRoot, UserDomainIdentity userIdentity);
 
     /**
      * Invalidates the cache. Called when all the keys should be abandoned, because the API key has changed.

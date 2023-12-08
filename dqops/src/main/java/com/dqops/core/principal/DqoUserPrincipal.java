@@ -151,10 +151,10 @@ public class DqoUserPrincipal {
     }
 
     /**
-     * Creates a user identity object that identifies the user.
-     * @return User identity object.
+     * Creates a user identity object that identifies the user and the current data domain. Returns also the role within the data domain.
+     * @return User identity and the active data domain name.
      */
-    public DqoUserIdentity getIdentity() {
-        return new DqoUserIdentity(this.name, this.accountRole, DqoUserIdentity.DEFAULT_DATA_DOMAIN);
+    public UserDomainIdentity getDomainIdentity() {
+        return new UserDomainIdentity(this.name, this.accountRole, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
     }
 }

@@ -21,7 +21,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.errors.snapshot.ErrorsSnapshot;
 import com.dqops.data.readouts.snapshot.SensorReadoutsSnapshot;
@@ -83,7 +83,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         RepairStoredDataQueueJobResult result = new RepairStoredDataQueueJobResult();
-        DqoUserIdentity userIdentity = this.getPrincipal().getIdentity();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDomainIdentity();
 
         if (this.repairParameters.isRepairErrors()) {
             // Load and ignore results to force automatic repair of corrupted data.
@@ -108,7 +108,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      * @param userIdentity        User identity that specifies the data domain.
      * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
      */
-    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, DqoUserIdentity userIdentity) {
+    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, UserDomainIdentity userIdentity) {
         SearchPattern connectionSearchPattern = SearchPattern.create(false, this.repairParameters.getConnectionName());
         if (connectionSearchPattern.isWildcardSearchPattern()) {
             List<String> connectionNamesList = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
@@ -129,16 +129,17 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
      * @param userIdentity User identity that specifies the data domain.
      * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
      */
-    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, String connectionName, DqoUserIdentity userIdentity) {
+    protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, String connectionName, UserDomainIdentity userIdentity) {
         List<ParquetPartitionId> partitionIds;
         if (this.repairParameters.getSchemaTableName() == null) {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
         } else {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
                     connectionName,
                     PhysicalTableName.fromSchemaTableFilter(this.repairParameters.getSchemaTableName()),
-                    fileStorageSettings);
+                    fileStorageSettings,
+                    userIdentity);
         }
 
         if (partitionIds == null) {

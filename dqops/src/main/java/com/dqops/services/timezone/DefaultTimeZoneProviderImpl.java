@@ -16,7 +16,7 @@
 package com.dqops.services.timezone;
 
 import com.dqops.core.configuration.DqoConfigurationProperties;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -76,7 +76,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
             }
         }
 
-        DqoUserIdentity userIdentity = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator().getIdentity();
+        UserDomainIdentity userIdentity = this.dqoUserPrincipalProvider.createUserPrincipalForAdministrator().getDomainIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory != null ? this.userHomeContextFactory.openLocalUserHome(userIdentity) : null;
         ZoneId defaultTimeZoneId = getDefaultTimeZoneId(userHomeContext);
 

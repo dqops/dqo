@@ -107,7 +107,7 @@ public class TableCliServiceImpl implements TableCliService {
     @Override
     public Table loadSchemaList(String connectionName, String schemaFilter) throws TableImportFailedException {
         DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -222,7 +222,7 @@ public class TableCliServiceImpl implements TableCliService {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
@@ -272,7 +272,7 @@ public class TableCliServiceImpl implements TableCliService {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -303,7 +303,7 @@ public class TableCliServiceImpl implements TableCliService {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
         DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();

@@ -18,11 +18,10 @@ package com.dqops.core.filesystem.virtual.utility;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderName;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.Objects;
 
 /**
@@ -42,7 +41,7 @@ public class HomeFolderPathUtility {
             );
         }
 
-        String dataDomain = DqoUserIdentity.DEFAULT_DATA_DOMAIN;
+        String dataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
         if (!homeRelativeFoldersList.isEmpty()) {
             if (Objects.equals(homeRelativeFoldersList.get(0).getObjectName(), BuiltInFolderNames.DATA_DOMAINS)) {
                 dataDomain = homeRelativeFoldersList.get(0).getObjectName();

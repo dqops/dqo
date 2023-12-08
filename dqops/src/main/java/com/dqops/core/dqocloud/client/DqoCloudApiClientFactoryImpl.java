@@ -19,8 +19,7 @@ import com.dqops.cloud.rest.handler.ApiClient;
 import com.dqops.core.configuration.DqoCloudConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
-import com.dqops.core.principal.DqoUserIdentity;
-import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -66,7 +65,7 @@ public class DqoCloudApiClientFactoryImpl implements DqoCloudApiClientFactory {
      * @return Authenticated client.
      */
     @Override
-    public ApiClient createAuthenticatedClient(DqoUserIdentity userIdentity) {
+    public ApiClient createAuthenticatedClient(UserDomainIdentity userIdentity) {
         ApiClient apiClient = new ApiClient(this.restTemplate);
         apiClient.setBasePath(this.dqoCloudConfigurationProperties.getRestApiBaseUrl());
         DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey(userIdentity);

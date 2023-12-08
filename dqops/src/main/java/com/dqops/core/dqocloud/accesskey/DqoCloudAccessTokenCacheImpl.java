@@ -16,7 +16,7 @@
 package com.dqops.core.dqocloud.accesskey;
 
 import com.dqops.cloud.rest.model.TenantAccessTokenModel;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import com.google.common.base.Supplier;
@@ -56,7 +56,7 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
      * @return Up-to-date access token.
      */
     @Override
-    public DqoCloudCredentials getCredentials(DqoRoot dqoRoot, DqoUserIdentity userIdentity) {
+    public DqoCloudCredentials getCredentials(DqoRoot dqoRoot, UserDomainIdentity userIdentity) {
         Supplier<DqoCloudCredentials> credentialsSupplier = null;
         DqoDomainRootPair domainRootPair = new DqoDomainRootPair(userIdentity.getDataDomain(), dqoRoot);
 

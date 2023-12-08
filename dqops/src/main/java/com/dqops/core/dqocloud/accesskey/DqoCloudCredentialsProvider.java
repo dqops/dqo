@@ -16,7 +16,7 @@
 package com.dqops.core.dqocloud.accesskey;
 
 import com.dqops.cloud.rest.model.TenantAccessTokenModel;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 
@@ -30,7 +30,7 @@ public interface DqoCloudCredentialsProvider {
      * @param userIdentity Calling user identity.
      * @return Downscoped access token.
      */
-    TenantAccessTokenModel issueTenantAccessToken(DqoRoot rootType, DqoUserIdentity userIdentity);
+    TenantAccessTokenModel issueTenantAccessToken(DqoRoot rootType, UserDomainIdentity userIdentity);
 
     /**
      * Creates an OAuth2 access token.

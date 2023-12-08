@@ -15,7 +15,7 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,7 +81,7 @@ public class UserHomeContextCacheImpl implements UserHomeContextCache {
         }
 
         DqoUserPrincipal localUserPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-        DqoUserIdentity operatorIdentity = localUserPrincipal.getIdentity();
+        UserDomainIdentity operatorIdentity = localUserPrincipal.getDomainIdentity();
         UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(operatorIdentity);
         this.cachedUserHomeContext = cachedUserHomeContext;
         this.cachedAt = Instant.now();

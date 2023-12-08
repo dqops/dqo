@@ -17,7 +17,7 @@ package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.cli.completion.completers.cache.CliCompletionCache;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
-import com.dqops.core.principal.DqoUserIdentity;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.userhome.UserHome;
 
 /**
@@ -25,7 +25,7 @@ import com.dqops.metadata.userhome.UserHome;
  */
 public class UserHomeContext {
     private final FolderTreeNode homeRoot;
-    private final DqoUserIdentity userIdentity;
+    private final UserDomainIdentity userIdentity;
     private UserHome userHome;
     private UserHomeContextCache userHomeContextCache;
 
@@ -34,7 +34,7 @@ public class UserHomeContext {
      * @param userIdentity User identity of the user who opened the user home context.
      * @param homeRoot User home root folder.
      */
-    public UserHomeContext(FolderTreeNode homeRoot, DqoUserIdentity userIdentity) {
+    public UserHomeContext(FolderTreeNode homeRoot, UserDomainIdentity userIdentity) {
         this.homeRoot = homeRoot;
         this.userIdentity = userIdentity;
     }
@@ -51,7 +51,7 @@ public class UserHomeContext {
      * Returns the user identity of the user who opened the user home. Also identifies the data domain.
      * @return User identity.
      */
-    public DqoUserIdentity getUserIdentity() {
+    public UserDomainIdentity getUserIdentity() {
         return userIdentity;
     }
 
