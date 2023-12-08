@@ -21,6 +21,7 @@ import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
 import com.dqops.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.services.CheckResultsDeleteService;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
@@ -167,6 +168,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }
 
         DeleteStoredDataResult result = new DeleteStoredDataResult();
+        DqoUserIdentity userIdentity = this.getPrincipal().getIdentity();
 
         if (this.deletionParameters.isDeleteErrors()) {
             DeleteStoredDataResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
@@ -177,7 +179,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
             result.concat(statisticsResult);
         }
         if (this.deletionParameters.isDeleteCheckResults()) {
-            DeleteStoredDataResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter());
+            DeleteStoredDataResult checkResultsResult = this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(this.getRuleResultsFragmentFilter(), userIdentity);
             result.concat(checkResultsResult);
         }
         if (this.deletionParameters.isDeleteSensorReadouts()) {

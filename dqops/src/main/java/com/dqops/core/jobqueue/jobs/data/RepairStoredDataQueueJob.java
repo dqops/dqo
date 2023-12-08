@@ -111,7 +111,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     protected void loadAndFixMonthlyPartitions(FileStorageSettings fileStorageSettings, DqoUserIdentity userIdentity) {
         SearchPattern connectionSearchPattern = SearchPattern.create(false, this.repairParameters.getConnectionName());
         if (connectionSearchPattern.isWildcardSearchPattern()) {
-            List<String> connectionNamesList = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+            List<String> connectionNamesList = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
             for (String connectionName : connectionNamesList) {
                 if (connectionSearchPattern.match(connectionName)) {
                     loadAndFixMonthlyPartitions(fileStorageSettings, connectionName, userIdentity);

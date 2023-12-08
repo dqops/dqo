@@ -15,6 +15,7 @@
  */
 package com.dqops.data.checkresults.services;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
@@ -46,10 +47,11 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
     /**
      * Deletes the results from a table, applying specific filters to get the fragment.
      * @param filter Filter for the result fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
     @Override
-    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter) {
+    public DeleteStoredDataResult deleteSelectedCheckResultsFragment(CheckResultsFragmentFilter filter, DqoUserIdentity userIdentity) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -66,7 +68,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
         DeleteStoredDataResult deleteStoredDataResult = new DeleteStoredDataResult();
 
         FileStorageSettings fileStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
-        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings);
+        List<String> connections = this.parquetPartitionMetadataService.listConnections(fileStorageSettings, userIdentity);
         if (connections == null) {
             // No connections present.
             return deleteStoredDataResult;
@@ -78,7 +80,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
 
         for (String connectionName: filteredConnections) {
             List<PhysicalTableName> tables = this.parquetPartitionMetadataService.listTablesForConnection(
-                    connectionName, fileStorageSettings);
+                    connectionName, fileStorageSettings, userIdentity);
 
             if (tables == null) {
                 // No tables present for this connection.

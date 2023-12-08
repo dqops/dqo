@@ -15,6 +15,7 @@
  */
 package com.dqops.data.errors.services;
 
+import com.dqops.core.principal.DqoUserIdentity;
 import com.dqops.data.errors.models.ErrorsFragmentFilter;
 import com.dqops.data.models.DeleteStoredDataResult;
 
@@ -26,7 +27,8 @@ public interface ErrorsDeleteService {
     /**
      * Deletes the errors from a table, applying specific filters to get the fragment (if necessary).
      * @param filter Filter for the errors fragment that is of interest.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Data delete operation summary.
      */
-    DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter);
+    DeleteStoredDataResult deleteSelectedErrorsFragment(ErrorsFragmentFilter filter, DqoUserIdentity userIdentity);
 }
