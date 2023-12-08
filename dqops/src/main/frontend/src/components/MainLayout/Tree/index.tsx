@@ -378,7 +378,7 @@ const Tree = () => {
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
         <div
           className={clsx(
-            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100 mb-0.5',
+            'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100  mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
             node.level === TREE_LEVEL.TABLE &&
               checkTypes === CheckTypes.PARTITIONED &&
