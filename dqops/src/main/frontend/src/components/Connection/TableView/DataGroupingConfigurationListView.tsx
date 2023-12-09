@@ -6,7 +6,7 @@ import ConfirmDialog from '../../CustomTree/ConfirmDialog';
 import RadioButton from '../../RadioButton';
 import SetDefaultDialog from './SetDefaultDialog';
 import SvgIcon from '../../SvgIcon';
-import { IconButton } from '@material-tailwind/react';
+import { IconButton, Tooltip } from '@material-tailwind/react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import clsx from 'clsx';
@@ -107,15 +107,24 @@ const DataGroupingConfigurationListView = ({
   return (
     <div className="px-8 py-4 text-sm">
       <table className="mb-4">
-        <thead className='relative'>
+        <thead className="relative">
           <tr className="flex py-2">
             <th>Data grouping configuration name</th>
-            {dataGroupingConfigurations.length!== 0 && <th className='absolute right-22.5'>Action</th>}
+            {dataGroupingConfigurations.length !== 0 && (
+              <th className="absolute right-22.5">Action</th>
+            )}
           </tr>
         </thead>
         <tbody>
           <div className="pr-2 py-2 relative flex items-center gap-2  ">
-          <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources !== true ? "pointer-events-none cursor-not-allowed" : "")}>
+            <div
+              className={clsx(
+                'w-5 h-5',
+                userProfile.can_manage_data_sources !== true
+                  ? 'pointer-events-none cursor-not-allowed'
+                  : ''
+              )}
+            >
               {' '}
               <RadioButton
                 checked={
@@ -126,7 +135,6 @@ const DataGroupingConfigurationListView = ({
                 onClick={() =>
                   elem ? setDefaultGroupingConfiguration(elem) : undefined
                 }
-                
               />
             </div>
             <div>Disable data grouping</div>
@@ -142,7 +150,14 @@ const DataGroupingConfigurationListView = ({
                 ) : (
                   <div className="w-5 h-5"></div>
                 )} */}
-                <div className={clsx("w-5 h-5" , userProfile.can_manage_data_sources !== true ? "pointer-events-none cursor-not-allowed" : "")}>
+                <div
+                  className={clsx(
+                    'w-5 h-5',
+                    userProfile.can_manage_data_sources !== true
+                      ? 'pointer-events-none cursor-not-allowed'
+                      : ''
+                  )}
+                >
                   <RadioButton
                     checked={
                       groupingConfiguration.default_data_grouping_configuration
@@ -155,7 +170,6 @@ const DataGroupingConfigurationListView = ({
                             groupingConfiguration.data_grouping_configuration_name
                           )
                     }
-                    
                   />
                 </div>
                 <span>
@@ -164,26 +178,40 @@ const DataGroupingConfigurationListView = ({
               </td>
 
               <td className="px-20 py-2 ">
-                <IconButton
-                  size="sm"
-                  className="group bg-teal-500 ml-3"
-                  onClick={() => 
-                    onEdit(groupingConfiguration)
+                <Tooltip
+                  content={
+                    userProfile.can_manage_data_sources !== true
+                      ? 'Info'
+                      : 'Modify'
                   }
-                  // disabled={userProfile.can_manage_data_sources !== true}
                 >
-                  <SvgIcon name={userProfile.can_manage_data_sources!== true ? "info" : "edit"} className="w-4" />                
-                </IconButton>
-                <IconButton
-                  size="sm"
-                  className="group bg-teal-500 ml-3"
-                  onClick={() => {
-                    openConfirmDeleteModal(groupingConfiguration);
-                  }}
-                  disabled={userProfile.can_manage_data_sources !== true}
-                >
-                  <SvgIcon name="delete" className="w-4" />
-                </IconButton>
+                  <IconButton
+                    size="sm"
+                    className="group bg-teal-500 ml-3"
+                    onClick={() => onEdit(groupingConfiguration)}
+                  >
+                    <SvgIcon
+                      name={
+                        userProfile.can_manage_data_sources !== true
+                          ? 'info'
+                          : 'edit'
+                      }
+                      className="w-4"
+                    />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip content="Delete">
+                  <IconButton
+                    size="sm"
+                    className="group bg-teal-500 ml-3"
+                    onClick={() => {
+                      openConfirmDeleteModal(groupingConfiguration);
+                    }}
+                    disabled={userProfile.can_manage_data_sources !== true}
+                  >
+                    <SvgIcon name="delete" className="w-4" />
+                  </IconButton>
+                </Tooltip>
               </td>
             </tr>
           ))}
