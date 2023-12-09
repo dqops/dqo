@@ -7,7 +7,7 @@ import {
 } from '@material-tailwind/react';
 import DatePicker from '../DatePicker';
 import Button from '../Button';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import moment from 'moment';
 import Checkbox from '../Checkbox';
 import { useSelector } from 'react-redux';
@@ -35,7 +35,6 @@ const DeleteStoredDataExtendedPopUp = ({
   open,
   onClose,
   onDelete,
-  nameOfCol,
   nodeId
 }: DeleteOnlyDataDialogProps) => {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -62,13 +61,6 @@ const DeleteStoredDataExtendedPopUp = ({
   );
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
-  const myArr: string[] = [];
-  useEffect(() => {
-    if (nameOfCol && nameOfCol?.length > 0) {
-      myArr.push(nameOfCol);
-    }
-  }, [myArr]);
-
   const toUTCString = (date: Date) => moment(date).utc().format('YYYY-MM-DD');
   const onConfirm = () => {
     if (mode === 'part') {
@@ -90,22 +82,27 @@ const DeleteStoredDataExtendedPopUp = ({
   };
 
   const isDisabled = useMemo(() => mode === 'all', [mode]);
-
-  const getAllSensors = async () => {
-    await SensorsApi.getAllSensors()
-      .then((res) => setAllSensors(res.data))
-      .catch((err) => console.error(err));
-  };
-
-  useEffect(() => {
-    getAllSensors();
-  }, []);
-
   const hierarchiArray = nodeId?.split('.');
 
+  const fetchData = useCallback(async () => {
+    try {
+      const [sensorsResponse, checksResponse] = await Promise.all([
+        SensorsApi.getAllSensors(),
+        ChecksApi.getCheckFolderTree()
+      ]);
+
+      setAllSensors(sensorsResponse.data);
+      setAllChecks(checksResponse.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  }, [open]);
+
   useEffect(() => {
-    ChecksApi.getCheckFolderTree().then((res) => setAllChecks(res.data));
-  }, []);
+    if (open === true) {
+      fetchData();
+    }
+  }, [fetchData]);
 
   const getCategories = (allChecks: CheckDefinitionFolderModel) => {
     const mainTableFolder =
@@ -118,17 +115,23 @@ const DeleteStoredDataExtendedPopUp = ({
         params.checkType as keyof CheckDefinitionFolderModel
       ].folders;
 
-    let categories = {};
+    let tableCategories = {};
+    let columnCategories = {};
     if (params.checkType !== CheckTypes.PROFILING) {
       if (params.timeGradient === 'monthly') {
-        categories = mainTableFolder?.monthly.folders ?? {};
+        tableCategories = mainTableFolder?.monthly.folders ?? {};
+        columnCategories = mainColumnFolder?.monthly.folders ?? {};
       } else {
-        categories = mainTableFolder?.monthly.folders ?? {};
+        tableCategories = mainTableFolder?.daily.folders ?? {};
+        columnCategories = mainColumnFolder?.daily.folders ?? {};
       }
     } else {
-      categories = mainTableFolder ?? {};
+      tableCategories = mainTableFolder ?? {};
+      columnCategories = mainColumnFolder ?? {};
     }
-    return categories;
+    return hierarchiArray?.[4]
+      ? columnCategories
+      : { ...columnCategories, ...tableCategories };
   };
 
   const getChecks = (
@@ -220,7 +223,9 @@ const DeleteStoredDataExtendedPopUp = ({
               value={params.checkType}
               onChange={(value) =>
                 onChangeParams({
-                  checkType: String(value).length !== 0 ? value : undefined
+                  checkType: String(value).length !== 0 ? value : undefined,
+                  checkCategory: undefined,
+                  checkName: undefined
                 })
               }
             />
@@ -235,7 +240,9 @@ const DeleteStoredDataExtendedPopUp = ({
               value={params.timeGradient}
               onChange={(value) =>
                 onChangeParams({
-                  timeGradient: String(value).length !== 0 ? value : undefined
+                  timeGradient: String(value).length !== 0 ? value : undefined,
+                  checkCategory: undefined,
+                  checkName: undefined
                 })
               }
               disabled={
@@ -324,7 +331,9 @@ const DeleteStoredDataExtendedPopUp = ({
                 })
               )}
               value={params.checkCategory}
-              onChange={(value) => onChangeParams({ checkCategory: value })}
+              onChange={(value) =>
+                onChangeParams({ checkCategory: value, checkName: undefined })
+              }
               disabled={filteredChecks !== 'part'}
             />
             <SelectInput
