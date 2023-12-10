@@ -36,33 +36,42 @@ public class UserDomainIdentity {
     public static final String DEFAULT_DATA_DOMAIN = "";
 
     /**
+     * The alternative name for the root domain if this DQOps instance was started with a --dqo.user.default-domain-name=other  parameter, mounting a different domain as the root domain.
+     */
+    public static final String ROOT_DOMAIN_ALTERNATE_NAME = "(default)";
+
+    /**
      * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
      */
-    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN);
+    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN, DEFAULT_DATA_DOMAIN);
 
     private final String userName;
     private final DqoUserRole domainRole;
-    private final String dataDomain;
+    private final String dataDomainFolder;
+    private final String dataDomainCloud;
 
     /**
      * Creates a user identity object.
      * @param userName User name.
      * @param domainRole Domain role.
-     * @param dataDomain Data domain. Null for the default data domain.
+     * @param dataDomainFolder The data domain folder name.
+     * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      */
-    public UserDomainIdentity(String userName, DqoUserRole domainRole, String dataDomain) {
+    public UserDomainIdentity(String userName, DqoUserRole domainRole, String dataDomainFolder, String dataDomainCloud) {
         this.userName = userName;
         this.domainRole = domainRole;
-        this.dataDomain = !Strings.isNullOrEmpty(dataDomain) ? dataDomain : DEFAULT_DATA_DOMAIN;
+        this.dataDomainFolder = !Strings.isNullOrEmpty(dataDomainFolder) ? dataDomainFolder : DEFAULT_DATA_DOMAIN;
+        this.dataDomainCloud = dataDomainCloud;
     }
 
     /**
      * Creates a default system user that is the administrator of a given data domain.
-     * @param dataDomain Data domain name.
+     * @param dataDomainFolder The data domain folder name.
+     * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      * @return System user identity for the given data domain.
      */
-    public static UserDomainIdentity createDataDomainAdminIdentity(String dataDomain) {
-        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomain);
+    public static UserDomainIdentity createDataDomainAdminIdentity(String dataDomainFolder, String dataDomainCloud) {
+        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud);
     }
 
     /**
@@ -82,11 +91,20 @@ public class UserDomainIdentity {
     }
 
     /**
-     * Return the active data domain name.
+     * Return the active data domain name, which is the local folder. This value could be "", which suggests the default data domain
+     * on DQOps cloud, but if the --dqo.user.default-data-domain=somethingelse is provided, the root DQOps user home folder is simply mounted to a different data domain.
      * @return Active data domain name.
      */
-    public String getDataDomain() {
-        return dataDomain;
+    public String getDataDomainFolder() {
+        return dataDomainFolder;
+    }
+
+    /**
+     * Returns the real data domain name on DQOps cloud that is mounted. This is the domain where the data is synchronized from/to.
+     * @return Real data domain name in DQOps cloud.
+     */
+    public String getDataDomainCloud() {
+        return dataDomainCloud;
     }
 
     @Override
@@ -98,14 +116,14 @@ public class UserDomainIdentity {
 
         if (!Objects.equals(userName, that.userName)) return false;
         if (domainRole != that.domainRole) return false;
-        return Objects.equals(dataDomain, that.dataDomain);
+        return Objects.equals(dataDomainFolder, that.dataDomainFolder);
     }
 
     @Override
     public int hashCode() {
         int result = userName != null ? userName.hashCode() : 0;
         result = 31 * result + (domainRole != null ? domainRole.hashCode() : 0);
-        result = 31 * result + (dataDomain != null ? dataDomain.hashCode() : 0);
+        result = 31 * result + (dataDomainFolder != null ? dataDomainFolder.hashCode() : 0);
         return result;
     }
 }

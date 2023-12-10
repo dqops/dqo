@@ -207,7 +207,7 @@ public class JobSchedulerServiceImpl implements JobSchedulerService {
 
             String scanMetadataCronSchedule = this.schedulerConfigurationProperties.getSynchronizeCronSchedule();
             DqoUserPrincipal userPrincipalForAdministrator = this.principalProvider.createUserPrincipalForAdministrator();
-            DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDomainIdentity());
+            DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(userPrincipalForAdministrator.getDataDomainIdentity());
             if (dqoCloudApiKey != null) {
                 DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
                 if (apiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||

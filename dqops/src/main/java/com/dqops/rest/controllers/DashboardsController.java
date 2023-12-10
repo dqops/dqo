@@ -99,7 +99,7 @@ public class DashboardsController {
         DashboardsFolderListSpec dashboardList = this.dashboardsProvider.getDashboardTree();
         DashboardsFolderListSpec combinedDefaultAndUserDashboards = dashboardList;
 
-        UserDomainIdentity userIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userIdentity = principal.getDataDomainIdentity();
         DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(userIdentity);
         if (cloudApiKey != null && cloudApiKey.getApiKeyPayload().getLicenseType() != DqoCloudLicenseType.FREE) {
             UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
@@ -114,7 +114,7 @@ public class DashboardsController {
                         .cachePublic()
                         .mustRevalidate())
                 .lastModified(combinedDefaultAndUserDashboards.getFileLastModified())
-                .eTag(userIdentity.getDataDomain() + "/" + combinedDefaultAndUserDashboards.getFileLastModified().toString())
+                .eTag(userIdentity.getDataDomainFolder() + "/" + combinedDefaultAndUserDashboards.getFileLastModified().toString())
                 .body(Flux.fromStream(combinedDefaultAndUserDashboards.stream())); // 200
     }
 
@@ -126,12 +126,12 @@ public class DashboardsController {
      * @return Custom dashboard specification or null, when the dashboard was not found.
      */
     protected DashboardSpec findUserCustomDashboard(DqoUserPrincipal principal, String dashboardName, String... folders) {
-        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(principal.getDomainIdentity());
+        DqoCloudApiKey cloudApiKey = this.cloudApiKeyProvider.getApiKey(principal.getDataDomainIdentity());
         if (cloudApiKey == null || cloudApiKey.getApiKeyPayload().getLicenseType() == DqoCloudLicenseType.FREE) {
             return null;
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         DashboardsFolderListSpec userDashboardsList = userHome.getDashboards().getSpec();
         if (userDashboardsList == null || userDashboardsList.size() == 0) {

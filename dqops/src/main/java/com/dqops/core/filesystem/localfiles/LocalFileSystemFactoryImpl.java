@@ -49,7 +49,7 @@ public class LocalFileSystemFactoryImpl implements LocalFileSystemFactory {
     public LocalFolderTreeNode openLocalUserHome(UserDomainIdentity userDomainIdentity) {
         LocalUserHomeFileStorageService localUserHomeFileStorageService = this.beanFactory.getBean(LocalUserHomeFileStorageService.class);
         FileSystemContext fileSystemContext = new FileSystemContext(localUserHomeFileStorageService);
-        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(userDomainIdentity.getDataDomain()));
+        LocalFolderTreeNode userHomeFolder = new LocalFolderTreeNode(fileSystemContext, new HomeFolderPath(userDomainIdentity.getDataDomainFolder()));
         return userHomeFolder;
     }
 

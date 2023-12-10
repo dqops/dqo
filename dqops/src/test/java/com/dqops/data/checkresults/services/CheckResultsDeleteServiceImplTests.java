@@ -140,7 +140,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
@@ -185,7 +185,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         UserDomainIdentity userIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
@@ -233,13 +233,13 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -299,13 +299,13 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -365,13 +365,13 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -433,13 +433,13 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName2, startDate2, "");
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName2,
@@ -549,7 +549,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -595,7 +595,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -642,7 +642,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -690,7 +690,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -737,7 +737,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -783,7 +783,7 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay());
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.checkResultsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,

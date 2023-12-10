@@ -18,6 +18,9 @@ package com.dqops.metadata.storage.localfiles.userhome;
 import com.dqops.BaseTest;
 import com.dqops.core.configuration.DqoConfigurationPropertiesObjectMother;
 import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import com.dqops.core.dqocloud.datadomains.CliCurrentDataDomainServiceImpl;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemFactory;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
@@ -41,16 +44,17 @@ public class UserHomeContextFactoryImplTests extends BaseTest {
         LocalFolderTreeNode localHomeFolder = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(true);
         LocalFileSystemFactory factoryMock = mock(LocalFileSystemFactory.class);
         DqoUserPrincipal dqoUserPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
-        DqoDqoUserPrincipalProviderStub dqoDqoUserPrincipalProviderStub = new DqoDqoUserPrincipalProviderStub(dqoUserPrincipal);
 
-        UserDomainIdentity userDomainIdentity = dqoUserPrincipal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = dqoUserPrincipal.getDataDomainIdentity();
         when(factoryMock.openLocalUserHome(userDomainIdentity)).thenReturn(localHomeFolder);
         UserErrorLoggerImpl userErrorLogger = new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties());
         YamlSerializer yamlSerializer = new YamlSerializerImpl(DqoConfigurationPropertiesObjectMother.getDefaultCloned(), userErrorLogger);
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.createNew();
 
-
-        UserHomeContextCacheImpl userHomeContextCache = new UserHomeContextCacheImpl(dqoDqoUserPrincipalProviderStub);
+        DqoUserConfigurationProperties defaultUserConfiguration = DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration();
+        UserHomeContextCacheImpl userHomeContextCache = new UserHomeContextCacheImpl(
+                new CliCurrentDataDomainServiceImpl(defaultUserConfiguration),
+                new UserDomainIdentityFactoryImpl(defaultUserConfiguration));
         UserHomeContextFactoryImpl sut = new UserHomeContextFactoryImpl(yamlSerializer, jsonSerializer, factoryMock, userHomeContextCache);
 
         UserHomeContext userHomeContext = sut.openLocalUserHome(userDomainIdentity);

@@ -73,10 +73,6 @@ public class DqoCloudApiKeyPayload {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Instant expiresAt;
 
-    @JsonProperty("dm")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String domain;
-
     @JsonProperty("reg")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String region;
@@ -84,6 +80,15 @@ public class DqoCloudApiKeyPayload {
     @JsonProperty("arl")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private DqoUserRole accountRole = DqoUserRole.ADMIN;
+
+    @JsonProperty("dd")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String defaultDomain;
+
+    @JsonProperty("drl")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private DqoUserRole domainRole;
+
 
     /**
      * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
@@ -261,22 +266,6 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
-     * Returns the domain name when the data for a tenant is stored in separate domains. The api key enables access to a single domain.
-     * @return Domain name or null when the default domain is used.
-     */
-    public String getDomain() {
-        return domain;
-    }
-
-    /**
-     * Sets the name of the data domain when the data for a separate domain is in use.
-     * @param domain Domain name or null when the default domain is used.
-     */
-    public void setDomain(String domain) {
-        this.domain = domain;
-    }
-
-    /**
      * Returns the region where the tenant's data is stored. It is a name of a GCP region.
      * @return GCP region where the tenant's data is stored.
      */
@@ -309,6 +298,38 @@ public class DqoCloudApiKeyPayload {
     }
 
     /**
+     * Returns the name of the default data domain.
+     * @return The default data domain.
+     */
+    public String getDefaultDomain() {
+        return defaultDomain;
+    }
+
+    /**
+     * Sets the name of the default data domain.
+     * @param defaultDomain The default data domain.
+     */
+    public void setDefaultDomain(String defaultDomain) {
+        this.defaultDomain = defaultDomain;
+    }
+
+    /**
+     * Returns the role assigned at a default data domain. Used only for ENTERPRISE accounts that are running as standalone agents, synchronizing a dedicated data domain.
+     * @return Data domain role.
+     */
+    public DqoUserRole getDomainRole() {
+        return domainRole;
+    }
+
+    /**
+     * Sets the role assigned at the default data domain.
+     * @param domainRole Domain role assigned at the default domain.
+     */
+    public void setDomainRole(DqoUserRole domainRole) {
+        this.domainRole = domainRole;
+    }
+
+    /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
      * @param name Undeclared (and ignored) property name.
      * @param value Property value.
@@ -319,16 +340,6 @@ public class DqoCloudApiKeyPayload {
             this.ignoredProperties = new LinkedHashMap<>();
         }
         this.ignoredProperties.put(name, value);
-    }
-
-    /**
-     * Create a user principal from the api key.
-     * @return User principal copied from the user.
-     */
-    public DqoUserPrincipal createUserPrincipal() {
-        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(this.subject, this.accountRole, grantedPrivileges,this);
-        return dqoUserPrincipal;
     }
 }
 

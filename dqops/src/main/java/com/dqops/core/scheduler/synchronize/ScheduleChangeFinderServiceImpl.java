@@ -62,7 +62,7 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
      */
     public UniqueSchedulesCollection loadCurrentSchedulesForDataQualityChecks() {
         DqoUserPrincipal userPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity()); // TODO: to support multiple data domains, we must iterate over data domains and scan them all
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity()); // TODO: to support multiple data domains, we must iterate over data domains and scan them all
         UserHome userHome = userHomeContext.getUserHome();
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHome);
 

@@ -83,7 +83,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
         RepairStoredDataQueueJobResult result = new RepairStoredDataQueueJobResult();
-        UserDomainIdentity userIdentity = this.getPrincipal().getDomainIdentity();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
 
         if (this.repairParameters.isRepairErrors()) {
             // Load and ignore results to force automatic repair of corrupted data.

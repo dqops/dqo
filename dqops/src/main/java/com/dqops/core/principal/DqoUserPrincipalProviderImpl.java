@@ -16,9 +16,11 @@
 
 package com.dqops.core.principal;
 
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKey;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import com.dqops.core.dqocloud.datadomains.CliCurrentDataDomainService;
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -35,15 +37,27 @@ import java.util.List;
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
-    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private final CliCurrentDataDomainService cliCurrentDataDomainService;
+    private final DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private final UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Dependency injection constructor.
      * @param dqoCloudApiKeyProvider DQOps Cloud API Key provider service.
+     * @param cliCurrentDataDomainService Service that returns the selected data domain that is used from command line.
+     * @param dqoUserConfigurationProperties User home configuration parameters, with the default data domain that is mounted.
+     * @param userDomainIdentityFactory User data domain identity factory.
      */
     @Autowired
-    public DqoUserPrincipalProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+    public DqoUserPrincipalProviderImpl(DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                        CliCurrentDataDomainService cliCurrentDataDomainService,
+                                        DqoUserConfigurationProperties dqoUserConfigurationProperties,
+                                        UserDomainIdentityFactory userDomainIdentityFactory) {
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.cliCurrentDataDomainService = cliCurrentDataDomainService;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
@@ -64,13 +78,18 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
         if (dqoCloudApiKey == null) {
             // user not authenticated to DQOps Cloud, so we use a default token
             List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
-            DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges);
+            DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
+                    UserDomainIdentity.DEFAULT_DATA_DOMAIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
             return dqoUserPrincipalLocal;
         }
 
         DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
-        DqoUserPrincipal userPrincipalFromApiKey = apiKeyPayload.createUserPrincipal();
-        return userPrincipalFromApiKey;
+        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(apiKeyPayload.getAccountRole());
+        String defaultDataDomainCloud = this.dqoUserConfigurationProperties.getDefaultDataDomain();
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
+                grantedPrivileges, apiKeyPayload, UserDomainIdentity.DEFAULT_DATA_DOMAIN, defaultDataDomainCloud);
+
+        return dqoUserPrincipal;
     }
 
     /**
@@ -80,6 +99,22 @@ public class DqoUserPrincipalProviderImpl implements DqoUserPrincipalProvider {
      */
     @Override
     public DqoUserPrincipal getLocalUserPrincipal() {
-        return createUserPrincipalForAdministrator();
+        DqoCloudApiKey dqoCloudApiKey = this.dqoCloudApiKeyProvider.getApiKey(null);
+        if (dqoCloudApiKey == null) {
+            // user not authenticated to DQOps Cloud, so we use a default token
+            List<GrantedAuthority> adminPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
+            DqoUserPrincipal dqoUserPrincipalLocal = new DqoUserPrincipal("", DqoUserRole.ADMIN, adminPrivileges,
+                    UserDomainIdentity.DEFAULT_DATA_DOMAIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
+            return dqoUserPrincipalLocal;
+        }
+
+        DqoCloudApiKeyPayload apiKeyPayload = dqoCloudApiKey.getApiKeyPayload();
+        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(apiKeyPayload.getAccountRole()); // NOTE: we don't know the role of the user at the data domain, so we take the account role.. only a super admin can use multiple domains locally
+        String currentDataDomainCloudName = this.cliCurrentDataDomainService.getCurrentDataDomain();
+        String currentDataDomainFolderName = this.userDomainIdentityFactory.mapDataDomainCloudNameToFolder(currentDataDomainCloudName);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(apiKeyPayload.getSubject(), apiKeyPayload.getAccountRole(),
+                grantedPrivileges, apiKeyPayload, currentDataDomainFolderName, currentDataDomainCloudName);
+
+        return dqoUserPrincipal;
     }
 }

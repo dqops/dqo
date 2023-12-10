@@ -89,7 +89,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -131,7 +131,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -173,7 +173,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -215,7 +215,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityDailyMonitoringColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -257,7 +257,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringTableChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -299,7 +299,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<CheckContainerModel>> getDefaultDataObservabilityMonthlyMonitoringColumnChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -346,7 +346,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
@@ -400,7 +400,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
@@ -453,7 +453,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
@@ -506,7 +506,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability daily monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
@@ -559,7 +559,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
@@ -612,7 +612,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Model with the changes to be applied to the default configuration of the data observability monthly monitoring checks configuration")
             @RequestBody CheckContainerModel checkContainerModel) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
@@ -661,7 +661,7 @@ public class DefaultsController {
     public ResponseEntity<Mono<MonitoringScheduleSpec>> getDefaultSchedule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -709,7 +709,7 @@ public class DefaultsController {
             @ApiParam("Spec with default schedules changes to be applied to the default configuration.")
             @RequestBody Optional<MonitoringScheduleSpec> newMonitoringScheduleSpec,
             @ApiParam("Check scheduling group (named schedule)") @PathVariable CheckRunScheduleGroup schedulingGroup) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -753,7 +753,7 @@ public class DefaultsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Mono<IncidentWebhookNotificationsSpec>> getDefaultWebhooks(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
@@ -795,7 +795,7 @@ public class DefaultsController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Spec with default notification webhooks changes to be applied to the default configuration")
             @RequestBody Optional<IncidentWebhookNotificationsSpec> newIncidentWebhookNotificationsSpec) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 

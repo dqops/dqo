@@ -112,8 +112,8 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         Set<Path> synchronizedLocalChanges = new HashSet<>();
         FolderMetadata newLocalFolderIndex = null;
 
-        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomain(), FolderSynchronizationStatus.synchronizing);
-        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userIdentity.getDataDomain())) {
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.synchronizing);
+        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userIdentity.getDataDomainFolder())) {
             assert local.getCurrentFileIndex().isEmpty() || local.getCurrentFileIndex().get().isFrozen();
             currentLocalFolderIndex = local.getCurrentFileIndex()
                     .orElseGet(() -> sourceFileSystemSynchronizationOperations.listFilesInFolder(
@@ -138,7 +138,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 }
             }
         }
-        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomain(), FolderSynchronizationStatus.unchanged);
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.unchanged);
 
         Collection<FolderMetadata> emptyRemoteFolders =
                 (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload)
@@ -146,7 +146,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         unsyncedTargetChanges = lastRemoteFolderIndex.findFileDifferences(currentTargetFolderIndex);
 
         if (unsyncedTargetChanges != null || emptyRemoteFolders != null) {
-            try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot, userIdentity.getDataDomain())) {
+            try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot, userIdentity.getDataDomainFolder())) {
                 // download changes from the remote file system
                 if (unsyncedTargetChanges != null && (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.download)) {
                     downloadRemoteToLocalAsync(dqoRoot, userIdentity, synchronizationListener, localFileSystem,

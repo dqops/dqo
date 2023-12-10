@@ -102,7 +102,7 @@ public class CloudSynchronizationCliServiceImpl implements CloudSynchronizationC
                                boolean runOnBackgroundQueue,
                                DqoUserPrincipal principal) {
         DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-        DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey(userPrincipal.getDomainIdentity());
+        DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey(userPrincipal.getDataDomainIdentity());
         if (apiKey == null) {
             // the api key is missing
 
@@ -135,7 +135,7 @@ public class CloudSynchronizationCliServiceImpl implements CloudSynchronizationC
             synchronizeRootFolderJob.waitForFinish();
         }
         else {
-            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, principal.getDomainIdentity(), synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, principal.getDataDomainIdentity(), synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         }
 
         this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQOps User Home and DQOps Cloud finished.\n");

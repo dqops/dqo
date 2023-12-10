@@ -57,37 +57,37 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
         AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(authenticatedClient);
         switch (rootType) {
             case data_sensor_readouts:
-                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken();
+                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case data_check_results:
-                return accessTokenIssueApi.issueBucketCheckResultsRWAccessToken();
+                return accessTokenIssueApi.issueBucketCheckResultsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case data_errors:
-                return accessTokenIssueApi.issueBucketErrorsRWAccessToken();
+                return accessTokenIssueApi.issueBucketErrorsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case data_statistics:
-                return accessTokenIssueApi.issueBucketStatisticsRWAccessToken();
+                return accessTokenIssueApi.issueBucketStatisticsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case data_incidents:
-                return accessTokenIssueApi.issueBucketIncidentsRWAccessToken();
+                return accessTokenIssueApi.issueBucketIncidentsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case sources:
-                return accessTokenIssueApi.issueBucketSourcesRWAccessToken();
+                return accessTokenIssueApi.issueBucketSourcesRWAccessToken(userIdentity.getDataDomainCloud());
 
             case sensors:
-                return accessTokenIssueApi.issueBucketSensorsRWAccessToken();
+                return accessTokenIssueApi.issueBucketSensorsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case rules:
-                return accessTokenIssueApi.issueBucketRulesRWAccessToken();
+                return accessTokenIssueApi.issueBucketRulesRWAccessToken(userIdentity.getDataDomainCloud());
 
             case checks:
-                return accessTokenIssueApi.issueBucketChecksRWAccessToken();
+                return accessTokenIssueApi.issueBucketChecksRWAccessToken(userIdentity.getDataDomainCloud());
 
             case settings:
-                return accessTokenIssueApi.issueBucketSettingsRWAccessToken();
+                return accessTokenIssueApi.issueBucketSettingsRWAccessToken(userIdentity.getDataDomainCloud());
 
             case credentials:
-                return accessTokenIssueApi.issueBucketCredentialsRWAccessToken();
+                return accessTokenIssueApi.issueBucketCredentialsRWAccessToken(userIdentity.getDataDomainCloud());
 
             default:
                 throw new RuntimeException("Unknown root: " + rootType);

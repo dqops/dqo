@@ -17,6 +17,7 @@
 package com.dqops.core.incidents;
 
 import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
@@ -59,21 +60,25 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private final Object connectionsLock = new Object();
     private final Map<DataDomainConnectionKey, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
     private final IncidentNotificationMessageFormatter incidentNotificationMessageFormatter;
+    private final UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Creates an incident import queue service.
      *
      * @param incidentsSnapshotFactory               Incident snapshot factory.
      * @param incidentNotificationService            Incident notification service. Sends notifications to webhooks.
-     * @param incidentNotificationMessageFormatter
+     * @param incidentNotificationMessageFormatter   Message formatter that creates formatted messages for Slack.
+     * @param userDomainIdentityFactory              User data domain identity factory.
      */
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
                                           IncidentNotificationService incidentNotificationService,
-                                          IncidentNotificationMessageFormatter incidentNotificationMessageFormatter) {
+                                          IncidentNotificationMessageFormatter incidentNotificationMessageFormatter,
+                                          UserDomainIdentityFactory userDomainIdentityFactory) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
         this.incidentNotificationMessageFormatter = incidentNotificationMessageFormatter;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
@@ -85,13 +90,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     public void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch,
                                      UserDomainIdentity userDomainIdentity) {
         String connectionName = tableIncidentImportBatch.getConnection().getConnectionName();
-        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomain(), connectionName);
+        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomainFolder(), connectionName);
 
         synchronized (this.connectionsLock) {
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                UserDomainIdentity domainIdentity = UserDomainIdentity.createDataDomainAdminIdentity(userDomainIdentity.getDataDomain());
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
                 connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
                         tableIncidentImportBatch, null, null);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
@@ -114,13 +119,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     public void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters,
                                   UserDomainIdentity userDomainIdentity) {
         String connectionName = incidentStatusChangeParameters.getConnectionName();
-        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomain(), connectionName);
+        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomainFolder(), connectionName);
 
         synchronized (this.connectionsLock) {
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                UserDomainIdentity domainIdentity = UserDomainIdentity.createDataDomainAdminIdentity(userDomainIdentity.getDataDomain());
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
                 connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
                         null, incidentStatusChangeParameters, null);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
@@ -143,13 +148,13 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     public void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters,
                                     UserDomainIdentity userDomainIdentity) {
         String connectionName = incidentIssueUrlChangeParameters.getConnectionName();
-        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomain(), connectionName);
+        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomainFolder(), connectionName);
 
         synchronized (this.connectionsLock) {
             ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                UserDomainIdentity domainIdentity = UserDomainIdentity.createDataDomainAdminIdentity(userDomainIdentity.getDataDomain());
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
                 connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
                         null, null, incidentIssueUrlChangeParameters);
                 connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);

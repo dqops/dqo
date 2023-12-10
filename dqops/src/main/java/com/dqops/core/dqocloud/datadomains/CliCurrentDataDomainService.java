@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package com.dqops.core.principal;
-
-import com.dqops.core.dqocloud.login.DqoUserRole;
+package com.dqops.core.dqocloud.datadomains;
 
 /**
- * Object mother for creating the user identity object for the test user, selecting the data domain.
+ * Service that tracks the current data domain that is used by the command-line commands.
  */
-public class UserDomainIdentityObjectMother {
+public interface CliCurrentDataDomainService {
     /**
-     * Creates an admin user identity.
-     * @return Admin user identity.
+     * Returns the name of the current data domain. It is the name of the data domain in DQOps cloud, despite the name of the default data domain that was mounted to the DQOps user home root folder.
+     *
+     * @return Current data domain.
      */
-    public static UserDomainIdentity createAdminIdentity() {
-        return new UserDomainIdentity("test", DqoUserRole.ADMIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
-    }
+    String getCurrentDataDomain();
+
+    /**
+     * Changes the current data domain.
+     *
+     * @param currentDataDomain New data domain.
+     */
+    void setCurrentDataDomain(String currentDataDomain);
 }

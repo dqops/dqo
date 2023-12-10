@@ -19,6 +19,7 @@ import com.dqops.core.principal.UserDomainIdentity;
 import lombok.EqualsAndHashCode;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  * Configuration POJO with the configuration for DQOps User Home. Properties are mapped to the "dqo.user." prefix.
@@ -26,11 +27,27 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "dqo.user")
 @EqualsAndHashCode(callSuper = false)
+@Lazy(false)
 public class DqoUserConfigurationProperties implements Cloneable {
     private String home;
     private String defaultDataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
     private boolean hasLocalHome;
     private boolean initializeUserHome;
+    private static DqoUserConfigurationProperties INSTANCE;
+
+    /**
+     * Returns the default data model that was mounted as the root data domain.
+     * @return Data domain from DQOps Cloud that was mounted as the default data domain at the root folder.
+     */
+    public static String getDataDomainMountedAtRoot() {
+        return INSTANCE.defaultDataDomain;
+    }
+
+    public DqoUserConfigurationProperties() {
+        if (INSTANCE == null) {
+            INSTANCE = this;
+        }
+    }
 
     /**
      * Returns the location of the dqo.io user home folder. The user home folder is the location of connections and the data model.
@@ -63,6 +80,10 @@ public class DqoUserConfigurationProperties implements Cloneable {
      * @param defaultDataDomain Default data domain.
      */
     public void setDefaultDataDomain(String defaultDataDomain) {
+        if (defaultDataDomain == null){
+            this.defaultDataDomain = "";
+            return;
+        }
         this.defaultDataDomain = defaultDataDomain;
     }
 

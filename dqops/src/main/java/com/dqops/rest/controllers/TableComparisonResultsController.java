@@ -86,7 +86,7 @@ public class TableComparisonResultsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -109,7 +109,7 @@ public class TableComparisonResultsController {
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
                 connectionName, physicalTableName, CheckType.profiling, null,
-                tableComparisonConfigurationName, principal.getDomainIdentity());
+                tableComparisonConfigurationName, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 
@@ -143,7 +143,7 @@ public class TableComparisonResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -166,7 +166,7 @@ public class TableComparisonResultsController {
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
                 connectionName, physicalTableName, CheckType.monitoring, timeScale,
-                tableComparisonConfigurationName, principal.getDomainIdentity());
+                tableComparisonConfigurationName, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 
@@ -200,7 +200,7 @@ public class TableComparisonResultsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
             @ApiParam("Table comparison configuration name") @PathVariable String tableComparisonConfigurationName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDomainIdentity());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         ConnectionList connections = userHome.getConnections();
@@ -223,7 +223,7 @@ public class TableComparisonResultsController {
 
         TableComparisonResultsModel tableComparisonResultsModel = this.checkResultsDataService.readMostRecentTableComparisonResults(
                 connectionName, physicalTableName, CheckType.partitioned, timeScale,
-                tableComparisonConfigurationName, principal.getDomainIdentity());
+                tableComparisonConfigurationName, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Mono.just(tableComparisonResultsModel), HttpStatus.OK); // 200
     }
 }

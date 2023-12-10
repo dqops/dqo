@@ -113,7 +113,7 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
     public ImportTablesResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
-        UserDomainIdentity userIdentity = this.getPrincipal().getDomainIdentity();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();

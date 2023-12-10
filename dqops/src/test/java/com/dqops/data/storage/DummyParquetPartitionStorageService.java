@@ -63,7 +63,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
 
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
-            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames, userIdentity);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
@@ -99,7 +99,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
 
         for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && currentMonthsCount > 0;
              currentMonth = currentMonth.minusMonths(1L)) {
-            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames, userIdentity);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);

@@ -79,7 +79,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     public DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity) {
         try {
             synchronized (this.lock) {
-                DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKey.get(userIdentity.getDataDomain()) : null;
+                DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKey.get(userIdentity.getDataDomainCloud()) : null;
 
                 if (cachedApiKeyPerDomain != null) {
                     return cachedApiKeyPerDomain;
@@ -106,7 +106,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
                 }
 
                 DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
-                String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDomain();
+                String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDefaultDomain();
                 if (Strings.isNullOrEmpty(apiKeyDomain)) {
                     apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
                 }

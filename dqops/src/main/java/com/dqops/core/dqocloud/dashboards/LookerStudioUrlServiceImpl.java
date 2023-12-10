@@ -81,9 +81,9 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
                 }
             }
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
-            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey();
+            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(userPrincipal.getDataDomainIdentity().getDataDomainCloud());
 
             synchronized (this.lock) {
                 DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);

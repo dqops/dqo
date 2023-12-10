@@ -60,7 +60,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             List<DqoUserModel> cloudUserList = accountUsersApi.listAccountUsers();
 
@@ -93,7 +93,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.VIEW);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel cloudUserModel = accountUsersApi.getAccountUser(email);
 
@@ -128,7 +128,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -161,7 +161,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel dqoUserModel = new DqoUserModel() {{
                 setEmail(userModel.getEmail());
@@ -193,7 +193,7 @@ public class UserManagementServiceImpl implements UserManagementService {
         try {
             userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.deleteAccountUser(email);
         }
@@ -220,11 +220,11 @@ public class UserManagementServiceImpl implements UserManagementService {
     @Override
     public void changePassword(DqoUserPrincipal userPrincipal, String email, String newPassword) {
         try {
-            if (!Objects.equals(userPrincipal.getName(), email)) {
+            if (!Objects.equals(userPrincipal.getDataDomainIdentity().getUserName(), email)) {
                 userPrincipal.throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT);
             }
 
-            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDomainIdentity());
+            ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient(userPrincipal.getDataDomainIdentity());
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.changeAccountUserPassword(email, newPassword);
         }

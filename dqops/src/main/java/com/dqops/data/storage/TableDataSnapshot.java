@@ -465,7 +465,7 @@ public class TableDataSnapshot {
             return null;
         }
 
-        ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, tableName, monthDate);
+        ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, monthDate);
         return this.loadedMonthlyPartitions.get(partitionId);
     }
 
@@ -502,7 +502,7 @@ public class TableDataSnapshot {
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
 
-            ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
             Table monthlyPartitionTable = loadedMonthlyPartition.getData();
             if (monthlyPartitionTable == null) {
@@ -625,7 +625,7 @@ public class TableDataSnapshot {
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
 
-            ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
             this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings, this.userIdentity);
         }

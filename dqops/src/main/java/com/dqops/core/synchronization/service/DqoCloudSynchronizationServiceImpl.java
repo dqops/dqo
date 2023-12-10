@@ -98,16 +98,16 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         if (localFileIndexWrapper == null) {
             localFileIndexWrapper = userHome.getFileIndices().createAndAddNew(localIndexName);
             localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
-            localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            localFileIndexWrapper.getSpec().setDomain(userIdentity.getDataDomainCloud());
         } else {
             if (localFileIndexWrapper.getSpec().getTenantId() == null) {
                 localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
-                localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+                localFileIndexWrapper.getSpec().setDomain(userIdentity.getDataDomainCloud());
             } else if (!Objects.equals(localFileIndexWrapper.getSpec().getTenantId(), apiKey.getApiKeyPayload().getTenantId()) ||
-                       !Objects.equals(localFileIndexWrapper.getSpec().getDomain(), apiKey.getApiKeyPayload().getDomain())) {
+                       !Objects.equals(localFileIndexWrapper.getSpec().getDomain(), userIdentity.getDataDomainCloud())) {
                 localFileIndexWrapper.setSpec(new FileIndexSpec());
                 localFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
-                localFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+                localFileIndexWrapper.getSpec().setDomain(userIdentity.getDataDomainCloud());
             }
         }
 
@@ -117,16 +117,16 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         if (remoteFileIndexWrapper == null) {
             remoteFileIndexWrapper = userHome.getFileIndices().createAndAddNew(remoteIndexName);
             remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
-            remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+            remoteFileIndexWrapper.getSpec().setDomain(userIdentity.getDataDomainCloud());
         } else {
             if (remoteFileIndexWrapper.getSpec().getTenantId() == null) {
                 remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
-                remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+                remoteFileIndexWrapper.getSpec().setDomain(userIdentity.getDataDomainCloud());
             } else if (!Objects.equals(remoteFileIndexWrapper.getSpec().getTenantId(), apiKey.getApiKeyPayload().getTenantId()) ||
-                    !Objects.equals(remoteFileIndexWrapper.getSpec().getDomain(), apiKey.getApiKeyPayload().getDomain())) {
+                    !Objects.equals(remoteFileIndexWrapper.getSpec().getDomain(), userIdentity.getDataDomainCloud())) {
                 remoteFileIndexWrapper.setSpec(new FileIndexSpec());
                 remoteFileIndexWrapper.getSpec().setTenantId(apiKey.getApiKeyPayload().getTenantId());
-                remoteFileIndexWrapper.getSpec().setDomain(apiKey.getApiKeyPayload().getDomain());
+                remoteFileIndexWrapper.getSpec().setDomain(userIdentity.getDataDomainCloud());
             }
         }
 

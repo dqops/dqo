@@ -112,14 +112,14 @@ public class SynchronizeMultipleFoldersDqoQueueJob extends ParentDqoQueueJob<Voi
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
-        UserDomainIdentity domainIdentity = this.getPrincipal().getDomainIdentity();
+        UserDomainIdentity domainIdentity = this.getPrincipal().getDataDomainIdentity();
 
         List<SynchronizeRootFolderParameters> jobParametersList = new ArrayList<>();
 
         SynchronizeMultipleFoldersDqoQueueJobParameters clonedParameters = this.parameters.clone();
         if (clonedParameters.isSynchronizeFolderWithLocalChanges()) {
             CloudSynchronizationFoldersStatusModel currentSynchronizationStatus =
-                    this.synchronizationStatusTracker.getCurrentSynchronizationStatus(domainIdentity.getDataDomain());
+                    this.synchronizationStatusTracker.getCurrentSynchronizationStatus(domainIdentity.getDataDomainFolder());
             clonedParameters.synchronizeFoldersWithLocalChanges(currentSynchronizationStatus);
         }
 

@@ -49,10 +49,10 @@ public class LocalDqoUserHomePathProviderImpl implements LocalDqoUserHomePathPro
     public Path getLocalUserHomePath(UserDomainIdentity userIdentity) {
         Path absolutePathToLocalUserHomeRoot = Path.of(this.dqoUserConfigurationProperties.getHome()).toAbsolutePath();
 
-        if (!Objects.equals(userIdentity.getDataDomain(), this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
+        if (!Objects.equals(userIdentity.getDataDomainFolder(), this.dqoUserConfigurationProperties.getDefaultDataDomain())) {
             absolutePathToLocalUserHomeRoot = absolutePathToLocalUserHomeRoot
                     .resolve(BuiltInFolderNames.DATA_DOMAINS)
-                    .resolve(userIdentity.getDataDomain());
+                    .resolve(userIdentity.getDataDomainFolder());
         }
 
         return absolutePathToLocalUserHomeRoot;

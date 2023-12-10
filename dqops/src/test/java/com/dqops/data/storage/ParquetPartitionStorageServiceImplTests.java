@@ -101,7 +101,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -133,7 +133,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -167,7 +167,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -186,7 +186,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -204,7 +204,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -227,7 +227,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 3, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -329,7 +329,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 2, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -359,7 +359,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -398,7 +398,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -441,7 +441,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -483,7 +483,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,
@@ -516,7 +516,7 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
         LocalDate month = LocalDate.of(2022, 1, 1);
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                this.userDomainIdentity.getDataDomain(),
+                this.userDomainIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 "connection",
                 tableName,

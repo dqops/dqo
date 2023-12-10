@@ -90,7 +90,7 @@ public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
         }
 
         try {
-            this.userManagementService.changePassword(userPrincipal, userPrincipal.getName(), password);
+            this.userManagementService.changePassword(userPrincipal, userPrincipal.getDataDomainIdentity().getUserName(), password);
         }
         catch (Exception ex) {
             terminalWriter.writeLine("Cannot change the password, error: " + ex.getMessage());

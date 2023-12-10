@@ -68,7 +68,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     @Override
     public List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters,
                                                        DqoUserPrincipal principal) {
-        UserDomainIdentity userDomainIdentity = principal.getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();

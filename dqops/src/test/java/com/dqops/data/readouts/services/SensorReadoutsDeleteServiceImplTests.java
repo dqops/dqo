@@ -138,7 +138,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -183,7 +183,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         PhysicalTableName physicalTableName = new PhysicalTableName("sch", tableName);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -231,13 +231,13 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -297,13 +297,13 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -363,13 +363,13 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName, startDate2, id_prefix2);
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -431,13 +431,13 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table2 = prepareSimplePartitionTable(tableName2, startDate2, "");
 
         ParquetPartitionId partitionId1 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName1,
                 month1);
         ParquetPartitionId partitionId2 = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName2,
@@ -547,7 +547,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -593,7 +593,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -640,7 +640,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -688,7 +688,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -735,7 +735,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,
@@ -781,7 +781,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         Table table = prepareComplexPartitionTable(tableName, month.atStartOfDay(), "");
 
         ParquetPartitionId partitionId = new ParquetPartitionId(
-                userIdentity.getDataDomain(),
+                userIdentity.getDataDomainFolder(),
                 this.sensorReadoutsStorageSettings.getTableType(),
                 connectionName,
                 physicalTableName,

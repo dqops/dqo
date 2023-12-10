@@ -75,7 +75,7 @@ public class DqoUserTokenPayload implements Cloneable {
      */
     @JsonProperty("dr")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private LinkedHashMap<String, DqoUserRole> domainRoles = new LinkedHashMap<>();
+    private LinkedHashMap<String, DqoUserRole> domainRoles;
 
     /**
      * User's role at the account level.
@@ -83,6 +83,13 @@ public class DqoUserTokenPayload implements Cloneable {
     @JsonProperty("arl")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private DqoUserRole accountRole;
+
+    /**
+     * Active (selected) data domain.
+     */
+    @JsonProperty("dd")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String activeDataDomain;
 
     /**
      * Creates and returns a copy of this object.
@@ -102,16 +109,6 @@ public class DqoUserTokenPayload implements Cloneable {
     }
 
     /**
-     * Create a user principal from the user token issued by DQOps Cloud.
-     * @return User principal copied from the user token issued by DQOps Cloud.
-     */
-    public DqoUserPrincipal createUserPrincipal() {
-        List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(this.accountRole);
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(this.user, this.accountRole, grantedPrivileges, this);
-        return dqoUserPrincipal;
-    }
-
-    /**
      * Creates a local DQOps instance authentication token from the DQOps Cloud API Key that identifies the instance and the main user.
      * @param cloudApiKey Cloud API key.
      * @return User token payload for a local authentication.
@@ -124,6 +121,7 @@ public class DqoUserTokenPayload implements Cloneable {
         dqoUserTokenPayload.setTenantId(cloudApiKey.getTenantId());
         dqoUserTokenPayload.setTenantGroup(cloudApiKey.getTenantGroup());
         dqoUserTokenPayload.setAccountRole(cloudApiKey.getAccountRole());
+        dqoUserTokenPayload.setActiveDataDomain(cloudApiKey.getDefaultDomain());
 
         return dqoUserTokenPayload;
     }

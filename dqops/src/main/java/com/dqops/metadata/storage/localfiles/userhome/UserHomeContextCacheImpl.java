@@ -15,9 +15,10 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
+import com.dqops.core.dqocloud.datadomains.CliCurrentDataDomainService;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentityFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -31,7 +32,8 @@ import java.time.temporal.ChronoUnit;
 @Component
 @Lazy(false)
 public class UserHomeContextCacheImpl implements UserHomeContextCache {
-    private final DqoUserPrincipalProvider dqoUserPrincipalProvider;
+    private final CliCurrentDataDomainService cliCurrentDataDomainService;
+    private final UserDomainIdentityFactory userDomainIdentityFactory;
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext cachedUserHomeContext;
     private Instant cachedAt;
@@ -43,11 +45,12 @@ public class UserHomeContextCacheImpl implements UserHomeContextCache {
 
     /**
      * Default injection constructor.
-     * @param dqoUserPrincipalProvider User principal provider.
      */
     @Autowired
-    public UserHomeContextCacheImpl(DqoUserPrincipalProvider dqoUserPrincipalProvider) {
-        this.dqoUserPrincipalProvider = dqoUserPrincipalProvider;
+    public UserHomeContextCacheImpl(CliCurrentDataDomainService cliCurrentDataDomainService,
+                                    UserDomainIdentityFactory userDomainIdentityFactory) {
+        this.cliCurrentDataDomainService = cliCurrentDataDomainService;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
@@ -80,9 +83,10 @@ public class UserHomeContextCacheImpl implements UserHomeContextCache {
             return this.cachedUserHomeContext;
         }
 
-        DqoUserPrincipal localUserPrincipal = this.dqoUserPrincipalProvider.getLocalUserPrincipal();
-        UserDomainIdentity operatorIdentity = localUserPrincipal.getDomainIdentity();
-        UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(operatorIdentity);
+        String currentRootMountedDataDomain = this.cliCurrentDataDomainService.getCurrentDataDomain();
+        UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(currentRootMountedDataDomain);
+
+        UserHomeContext cachedUserHomeContext = this.userHomeContextFactory.openLocalUserHome(dataDomainAdminIdentity);
         this.cachedUserHomeContext = cachedUserHomeContext;
         this.cachedAt = Instant.now();
 

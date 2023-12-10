@@ -99,7 +99,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(
 				userHome, columnSearchFilters);
@@ -162,7 +162,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ConnectionWrapper connection = userHome.getConnections().getByObjectName(connectionName, true);
@@ -202,7 +202,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -300,7 +300,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -348,7 +348,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();
@@ -397,7 +397,7 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		ColumnSearchFilters columnSearchFilters = new ColumnSearchFilters();

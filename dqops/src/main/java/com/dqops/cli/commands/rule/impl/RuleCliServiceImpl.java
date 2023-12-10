@@ -60,7 +60,7 @@ public class RuleCliServiceImpl implements RuleCliService {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
 		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDomainIdentity());
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();

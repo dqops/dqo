@@ -75,7 +75,7 @@ public class RunChecksQueueJob extends ParentDqoQueueJob<CheckExecutionSummary> 
     public CheckExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.getPrincipal().throwIfNotHavingPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
 
-        UserDomainIdentity userDomainIdentity = this.getPrincipal().getDomainIdentity();
+        UserDomainIdentity userDomainIdentity = this.getPrincipal().getDataDomainIdentity();
         ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecks(
                 executionContext,

@@ -168,7 +168,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataResult
         }
 
         DeleteStoredDataResult result = new DeleteStoredDataResult();
-        UserDomainIdentity userIdentity = this.getPrincipal().getDomainIdentity();
+        UserDomainIdentity userIdentity = this.getPrincipal().getDataDomainIdentity();
 
         if (this.deletionParameters.isDeleteErrors()) {
             DeleteStoredDataResult errorsResult = this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter(), userIdentity);

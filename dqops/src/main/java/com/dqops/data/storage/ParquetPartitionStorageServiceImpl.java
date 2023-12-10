@@ -124,7 +124,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings, userIdentity);
         File targetParquetFile = targetParquetFilePath.toFile();
 
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
             LoadedMonthlyPartition cachedParquetFile = this.localFileSystemCache.getParquetFile(targetParquetFilePath);
             if (cachedParquetFile != null) {
                 if (cachedParquetFile.getData() == null || columnNames == null) {
@@ -265,7 +265,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
         for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && maxRecentMonthsToLoad > 0;
              currentMonth = currentMonth.minusMonths(1L)) {
-            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomain(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames, userIdentity);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
@@ -298,7 +298,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         boolean hasChanges = this.savePartitionInternal(loadedPartition, tableDataChanges, storageSettings, userIdentity);
         if (hasChanges) {
             this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(),
-                    userIdentity.getDataDomain(), FolderSynchronizationStatus.changed);
+                    userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.changed);
         }
     }
 
@@ -359,7 +359,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 Table partitionDataOld;
                 Long beforeReadFileLastModifiedTimestamp = null;
 
-                try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomain())) {
+                try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
                     if (targetParquetFile.exists()) {
                         beforeReadFileLastModifiedTimestamp = targetParquetFile.lastModified();
                     } else {
@@ -421,7 +421,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
                 byte[] parquetFileContent = new DqoTablesawParquetWriter(hadoopConfiguration).writeToByteArray(dataToSave);
 
-                try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomain())) {
+                try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
                     Long currentLastModifiedTimestamp;
                     if (targetParquetFile.exists()) {
                         currentLastModifiedTimestamp = targetParquetFile.lastModified();
@@ -472,7 +472,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
                                        FileStorageSettings storageSettings,
                                        UserDomainIdentity userIdentity) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomain())) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
             Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings, userIdentity);
             File targetParquetFile = targetParquetFilePath.toFile();
 
@@ -497,7 +497,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @return True if deletion proceeded successfully. False otherwise.
      */
     protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType, UserDomainIdentity userIdentity) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType, userIdentity.getDataDomain())) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType, userIdentity.getDataDomainFolder())) {
             Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity)
                     .relativize(targetPartitionFilePath);
 
@@ -512,9 +512,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 );
             }
 
-            HomeFilePath homeFilePath = HomeFilePath.fromFilePath(userIdentity.getDataDomain(), homeRelativePath.toString());
+            HomeFilePath homeFilePath = HomeFilePath.fromFilePath(userIdentity.getDataDomainFolder(), homeRelativePath.toString());
             new HomeFilePath(
-                    new HomeFolderPath(userIdentity.getDataDomain(), homeRelativeFoldersList.toArray(FolderName[]::new)),
+                    new HomeFolderPath(userIdentity.getDataDomainFolder(), homeRelativeFoldersList.toArray(FolderName[]::new)),
                     homeRelativePath.getFileName().toString()
             );
 
@@ -528,7 +528,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             while (homeRelativeFoldersList.size() > 1) {
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.
-                HomeFolderPath homeFolderPath = new HomeFolderPath(userIdentity.getDataDomain(), homeRelativeFoldersList.toArray(FolderName[]::new));
+                HomeFolderPath homeFolderPath = new HomeFolderPath(userIdentity.getDataDomainFolder(), homeRelativeFoldersList.toArray(FolderName[]::new));
 
                 int filesInFolderCount = this.localUserHomeFileStorageService.listFiles(homeFolderPath).size();
                 int foldersInFolderCount = this.localUserHomeFileStorageService.listFolders(homeFolderPath).size();

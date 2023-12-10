@@ -31,7 +31,8 @@ public class DqoUserPrincipalObjectMother {
      */
     public static DqoUserPrincipal createStandaloneAdmin() {
         List<GrantedAuthority> privileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(DqoUserRole.ADMIN);
-        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal("test", DqoUserRole.ADMIN, privileges);
+        DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal("test", DqoUserRole.ADMIN, privileges,
+                UserDomainIdentity.DEFAULT_DATA_DOMAIN, UserDomainIdentity.DEFAULT_DATA_DOMAIN);
         return dqoUserPrincipal;
     }
 }

@@ -58,7 +58,7 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
     @Override
     public DqoCloudCredentials getCredentials(DqoRoot dqoRoot, UserDomainIdentity userIdentity) {
         Supplier<DqoCloudCredentials> credentialsSupplier = null;
-        DqoDomainRootPair domainRootPair = new DqoDomainRootPair(userIdentity.getDataDomain(), dqoRoot);
+        DqoDomainRootPair domainRootPair = new DqoDomainRootPair(userIdentity.getDataDomainCloud(), dqoRoot);
 
         synchronized (this.lock) {
             credentialsSupplier = this.rootCredentialSuppliers.get(domainRootPair);
