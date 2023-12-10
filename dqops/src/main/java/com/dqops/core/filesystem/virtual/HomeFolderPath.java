@@ -118,7 +118,7 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      */
     public Path toRelativePath() {
         if (this.size() == 0) {
-            if (!Objects.equals(UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
+            if (Objects.equals(UserDomainIdentity.DEFAULT_DATA_DOMAIN, this.dataDomain)) {
                 return Path.of("./");
             } else {
                 return Path.of(BuiltInFolderNames.DATA_DOMAINS, FileNameSanitizer.encodeForFileSystem(this.dataDomain));
