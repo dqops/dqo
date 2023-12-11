@@ -472,7 +472,7 @@ public class FolderTreeNodeTests extends BaseTest {
 
         List<FolderTreeNode> result = sut.findNestedSubFoldersWithFiles(".dqorule.yaml", false);
         Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("rules/rule1", result.get(0).getFolderPath().toString());
+        Assertions.assertEquals("[]/rules/rule1/", result.get(0).getFolderPath().toString());
     }
 
     @Test
@@ -488,8 +488,8 @@ public class FolderTreeNodeTests extends BaseTest {
         List<FolderTreeNode> result = sut.findNestedSubFoldersWithFiles(".dqorule.yaml", false);
         result.sort(Comparator.comparing(f -> f.getFolderPath().toString()));
         Assertions.assertEquals(2, result.size());
-        Assertions.assertEquals("rules/rule1", result.get(0).getFolderPath().toString());
-        Assertions.assertEquals("rules/rule2/rule21", result.get(1).getFolderPath().toString());
+        Assertions.assertEquals("[]/rules/rule1/", result.get(0).getFolderPath().toString());
+        Assertions.assertEquals("[]/rules/rule2/rule21/", result.get(1).getFolderPath().toString());
     }
 
     @Test
@@ -501,7 +501,7 @@ public class FolderTreeNodeTests extends BaseTest {
 
         List<FolderTreeNode> result = sut.findNestedSubFoldersWithFiles(".dqorule.yaml", true);
         Assertions.assertEquals(1, result.size());
-        Assertions.assertEquals("rules", result.get(0).getFolderPath().toString());
+        Assertions.assertEquals("[]/rules/", result.get(0).getFolderPath().toString());
     }
 
     @Test

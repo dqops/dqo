@@ -198,7 +198,8 @@ public class HomeFolderPathTests extends BaseTest {
         Assertions.assertNotNull(filePath);
         Assertions.assertNotSame(sut, filePath.getFolder());
         Assertions.assertEquals(sut, filePath.getFolder());
-        Assertions.assertEquals("domains/hr/filename.txt", filePath.getFileName());
+        Assertions.assertEquals("domains/hr/filename.txt", filePath.toRelativePath().toString().replace('\\', '/'));
+        Assertions.assertEquals("filename.txt", filePath.getFileName());
     }
 
     @Test
@@ -219,7 +220,7 @@ public class HomeFolderPathTests extends BaseTest {
     void toString_whenRootFolder_thenReturnsEmptyDot() {
         HomeFolderPath sut = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN);
 
-        Assertions.assertEquals(".", sut.toString());
+        Assertions.assertEquals("[]/", sut.toString());
     }
 
     @Test
@@ -228,7 +229,7 @@ public class HomeFolderPathTests extends BaseTest {
         FolderName second = FolderName.fromObjectName("second>");
         HomeFolderPath sut = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, first, second);
 
-        Assertions.assertEquals("first%26/second%3E", sut.toString());
+        Assertions.assertEquals("[]/first%26/second%3E/", sut.toString());
     }
 
     @Test
@@ -303,7 +304,7 @@ public class HomeFolderPathTests extends BaseTest {
     void extractSubFolderAt_whenFirstFolderSkipped_thenReturnsModifiedFolderPath() {
         HomeFolderPath sut = new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN, FolderName.fromObjectName("first"), FolderName.fromObjectName("second"), FolderName.fromObjectName("third"));
         HomeFolderPath subFolder = sut.extractSubFolderAt(1);
-        Assertions.assertEquals("second/third", subFolder.toString());
+        Assertions.assertEquals("[]/second/third/", subFolder.toString());
     }
 
     @Test

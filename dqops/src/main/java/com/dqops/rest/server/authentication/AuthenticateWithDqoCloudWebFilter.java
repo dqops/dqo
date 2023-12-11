@@ -171,8 +171,9 @@ public class AuthenticateWithDqoCloudWebFilter implements WebFilter {
             try {
                 SignedObject<DqoUserTokenPayload> decodedAuthenticationToken =
                         this.instanceCloudLoginService.verifyAuthenticationToken(authorizationToken);
+                DqoUserTokenPayload userTokenPayload = decodedAuthenticationToken.getTarget();
                 Authentication userTokenAuthentication = this.dqoAuthenticationTokenFactory.createAuthenticatedWithUserToken(
-                        decodedAuthenticationToken.getTarget(), activeDataDomainCloudName);
+                        userTokenPayload, userTokenPayload.getActiveDataDomain() != null ? userTokenPayload.getActiveDataDomain() : activeDataDomainCloudName);
 
                 if (log.isDebugEnabled()) {
                     log.debug("Processing request type " + request.getMethod().name() + ", path: " + requestPath + " authenticating with a bearer token for the user " + userTokenAuthentication.getName());

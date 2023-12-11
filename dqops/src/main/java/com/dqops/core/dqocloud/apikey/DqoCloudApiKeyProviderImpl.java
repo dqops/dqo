@@ -49,7 +49,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     private UserHomeContextFactory userHomeContextFactory;
     private SecretValueProvider secretValueProvider;
     private JsonSerializer jsonSerializer;
-    private Map<String, DqoCloudApiKey> cachedApiKey = new LinkedHashMap<>();
+    private final Map<String, DqoCloudApiKey> cachedApiKeysPerDomain = new LinkedHashMap<>();
     private final Object lock = new Object();
 
     /**
@@ -79,7 +79,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     public DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity) {
         try {
             synchronized (this.lock) {
-                DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKey.get(userIdentity.getDataDomainCloud()) : null;
+                DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKeysPerDomain.get(userIdentity.getDataDomainCloud()) : null;
 
                 if (cachedApiKeyPerDomain != null) {
                     return cachedApiKeyPerDomain;
@@ -110,11 +110,11 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
                 if (Strings.isNullOrEmpty(apiKeyDomain)) {
                     apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
                 }
-                this.cachedApiKey.put(apiKeyDomain, dqoCloudApiKey);
+                this.cachedApiKeysPerDomain.put(apiKeyDomain, dqoCloudApiKey);
                 return dqoCloudApiKey;
             }
         } catch (Exception e) {
-            throw new DqoCloudInvalidKeyException("API Key is invalid", e);
+            throw new DqoCloudInvalidKeyException("DQOps Cloud Pairing API Key is invalid, error: " + e.getMessage(), e);
         }
     }
 
@@ -124,7 +124,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     @Override
     public void invalidate() {
         synchronized (this.lock) {
-            this.cachedApiKey = null;
+            this.cachedApiKeysPerDomain.clear();
         }
     }
 

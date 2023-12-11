@@ -64,12 +64,12 @@ public class HomeFilePathTests extends BaseTest {
     }
 
     @Test
-    void toString_whenFileInRootFolder_thenReturnsPathWithFileNameOnly() {
+    void toString_whenFileInRootFolder_thenReturnsPathWithFileNameOnlyAndDataDomainName() {
         HomeFilePath sut = new HomeFilePath(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN), "filename.txt");
 
         String path = sut.toString();
         Assertions.assertNotNull(path);
-        Assertions.assertEquals("filename.txt", path);
+        Assertions.assertEquals("[]/filename.txt", path);
     }
 
     @Test
@@ -79,7 +79,17 @@ public class HomeFilePathTests extends BaseTest {
 
         String path = sut.toString();
         Assertions.assertNotNull(path);
-        Assertions.assertEquals("first/second%26/filename.txt", path);
+        Assertions.assertEquals("[]/first/second%26/filename.txt", path);
+    }
+
+    @Test
+    void toString_whenFileInSubSubFolderAndDifferentDataDomain_thenReturnsPathCombinedWithFolderPath() {
+        HomeFolderPath folder = new HomeFolderPath("sales", FolderName.fromObjectName("first"), FolderName.fromObjectName("second&"));
+        HomeFilePath sut = new HomeFilePath(folder, "filename.txt");
+
+        String path = sut.toString();
+        Assertions.assertNotNull(path);
+        Assertions.assertEquals("[sales]/first/second%26/filename.txt", path);
     }
 
     @Test

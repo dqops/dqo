@@ -258,7 +258,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
 
         DqoCloudApiKeyPayload apiKeyPayload = principal.getApiKeyPayload();
         if (apiKeyPayload != null) {
-            DqoUserTokenPayload userTokenFromApiKey = DqoUserTokenPayload.createFromCloudApiKey(apiKeyPayload);
+            DqoUserTokenPayload userTokenFromApiKey = DqoUserTokenPayload.createFromCloudApiKey(apiKeyPayload, principal.getDataDomainIdentity());
             return issueApiKey(userTokenFromApiKey); // local user login
         }
 

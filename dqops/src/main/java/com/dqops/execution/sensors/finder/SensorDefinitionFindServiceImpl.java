@@ -17,6 +17,7 @@ package com.dqops.execution.sensors.finder;
 
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.filesystem.virtual.HomeFilePath;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
@@ -43,12 +44,13 @@ public class SensorDefinitionFindServiceImpl implements SensorDefinitionFindServ
             ExecutionContext executionContext, String sensorName, ProviderType providerType) {
         UserHome userHome = executionContext.getUserHomeContext() != null ? executionContext.getUserHomeContext().getUserHome() : null;
         DqoHome dqoHome = executionContext.getDqoHomeContext().getDqoHome();
-
         String jinjaFileNameRelativeToHome = sensorName + "/" + providerType.name() + ".sql.jinja2";
-        String dataDomain = executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder();
+        String dataDomain = executionContext.getUserHomeContext() != null ?
+                executionContext.getUserHomeContext().getUserIdentity().getDataDomainFolder() : UserDomainIdentity.DEFAULT_DATA_DOMAIN;
         HomeFilePath jinjaFileHomePath = HomeFilePath.fromFilePath(dataDomain, jinjaFileNameRelativeToHome);
 
         if (userHome != null) {
+
             SensorDefinitionWrapper userSensorDefinitionWrapper = userHome.getSensors().getByObjectName(sensorName, true);
             if (userSensorDefinitionWrapper != null) {
                 ProviderSensorDefinitionWrapper userProviderSensorDefinitionWrapper =

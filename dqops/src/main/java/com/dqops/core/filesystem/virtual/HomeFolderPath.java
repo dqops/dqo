@@ -187,12 +187,14 @@ public class HomeFolderPath extends ArrayList<FolderName> {
      */
     @Override
     public String toString() {
+        String str = "[" + this.dataDomain + "]/";
+
         if (this.size() == 0) {
-            return ".";
+            return str;
         }
 
         String[] pathElements = toPhysicalPathElements();
-        return String.join("/", pathElements);
+        return str + String.join("/", pathElements) + "/";
     }
 
     /**
