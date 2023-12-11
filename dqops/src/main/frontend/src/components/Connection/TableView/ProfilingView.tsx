@@ -62,7 +62,7 @@ const tabs = [
   },
   {
     label: 'Table comparisons',
-    value: 'reference-comparisons'
+    value: 'table-comparisons'
   }
 ];
 
@@ -319,7 +319,7 @@ const ProfilingView = () => {
       )}
       {activeTab === 'table-quality-status' && <TableQualityStatus />}
       {activeTab === 'advanced' && <TableProfilingChecks />}
-      {activeTab === 'reference-comparisons' && (
+      {activeTab === 'table-comparisons' && (
         <TableReferenceComparisons
           checkTypes={checkTypes}
           checksUI={checksUI}
