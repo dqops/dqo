@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.spark.sensors.table.avaliability;
+package com.dqops.spark.sensors.table.availability;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
