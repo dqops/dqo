@@ -1,6 +1,6 @@
 # Review initial results and run monitoring checks
 
-After [adding your first connection, and initiated automatic monitoring](../add-data-source-connection/add-data-source-connection.md)
+After [adding your first connection, and initiating automatic monitoring](../add-data-source-connection/add-data-source-connection.md),
 we describe how to review the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks. 
 
 Once new tables are imported, DQOps automatically enables the following profiling and monitoring checks.
@@ -30,9 +30,9 @@ To learn more about each check, click on the links below.
 - [column type changed](../../checks/column/schema/column-type-changed.md) detects if the data type of the column has changed since the last time it was retrieved.
 
 
-All checks are scheduled to run daily at 12:00 p.m.
+All checks are scheduled to run daily at 12:00 a.m.
 
-For more general information about checks, see the [DQOps concepts](../../dqo-concepts/checks/index.md) section. 
+For more [general information about checks, see the DQOps concepts](../../dqo-concepts/checks/index.md) section. 
 
 ## Review basic statistics results
 
@@ -113,7 +113,7 @@ Now let's run monitoring checks.
 2. Click the **Run check** icon next to daily_row_count check. This check verifies that the number of rows in the table
     does not exceed the minimum accepted count set as the threshold level which is 1 in this case.
    
-    You can read more about threshold severity levels in [DQOps concepts section](../../dqo-concepts/checks/#severity-levels).
+    You can read more about [threshold severity levels in DQOps concepts section](../../dqo-concepts/checks/#severity-levels).
 
     ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check.png)
     

@@ -7,48 +7,75 @@ In DQOps there are two ways to enable and run data quality checks:
 
 To enable checks, you need to add a connection. You can learn [how to add connection here](../adding-data-source-connection/index.md).
 
-For more information about different categories of checks, see [DQOps concepts section](../../dqo-concepts/checks/index.md).
+For more information about [different categories of checks, see DQOps concepts section](../../dqo-concepts/checks/index.md).
 
 ## Run data quality checks using the user interface
 
-1. In DQOps user interface navigate to the check section Profiling, Monitoring Checks or Partition Checks at the top of the screen.
+1. In DQOps user interface navigate to the check section **Profiling**, **Monitoring checks** or **Partition checks** at the top of the screen.
+    To learn more about [different types of checks go to the concept section](../../../dqo-concepts/checks/#types-of-checks). 
 
-    ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section.jpg)
+    ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section2.png)
    
 2. On the tree view on the left, select a table or column of interest by expanding the connection.
+    This will open a **Check editor** screen when you can work with checks. Check out the Concept section to learn more about the [Check editor screen](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
-    ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest.jpg)
+    ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest2.png)
+   
+    The Check editor screen has tabs that allow you to switch between Profiling (only in Profiling section) or Daily
+    and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics
+    (only in Profiling section), or preview tables (only in Profiling section).
+
+    The table with data quality checks contains a list of checks divided into different data quality subcategories that you
+    can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../../dqo-concepts/checks/#categories-of-checks)
+
+    The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../../dqo-concepts/checks/#severity-levels)
+
 
 3. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
 
-    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check.jpg)
+    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/enable-check2.png)
 
-4. Set the threshold levels or leave default values. Set parameters if the check has any. Click the Save button in the upper right corner.
-    You can read more about threshold severity levels in [DQOps concepts section](../../dqo-concepts/checks/#severity-levels).
+4. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
+    
+    You can read more about [threshold severity levels in DQOps concepts section]((../../../dqo-concepts/checks/#severity-levels)).
 
-    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels.jpg)
+    ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels2.png)
 
-5. Run data quality check by clicking the Run Check icon
+5. Run data quality check by clicking the **Run Check** icon
 
-    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check.jpg)
+    ![Enable check](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/run-check2.png)
 
     A square should appear next to the name of the checks indicating the results of the run check:
-    - green for a valid result
-    - yellow for a warning
-    - orange for an error
-    - red for a fatal error
 
+    - Green for a valid result
+    - Yellow for a warning
+    - Orange for an error
+    - Red for a fatal error
+    - Black for execution error
+   
     You can view the details by placing the mouse cursor on the square.
 
-6. Click the "Results" icon to view more details of the results.
+    ![View quick check results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/view-quick-check-results.png)
 
-    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/check-results.jpg)
+    This check run resulted in a valid result. The daily_row_count sensor readout was 18 155, which was higher than the min_count error threshold 1 000.
 
-    A table will appear with more details about the run check.
+6. To view detailed check results, sensor readouts, and execution errors, click on the **Results** icon.
+
+    ![Checking results](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/detailed-check-results.png)
+
+    A table will appear with detailed information about the run check. You can filter the table by data group and month 
+    using the dropdowns. Additionally, you can switch between the table and chart view by clicking on the icons on the 
+    right of the month filter dropdown. To close the detailed results view, click on the **Results** icon again or use 
+    the X button on the right.
+
+    [Learn here how to delete data quality results](../delete-data-quality-results/delete-data-quality-results.md).
 
 7. Synchronize locally stored results with your DQOps Cloud account to be able to view the results on the dashboards.
 
-    To synchronize all the data click on Synchronize button in the upper right corner of the navigation menu.
+    To synchronize all the data click on the **Synchronize** button in the upper right corner of the navigation menu.
+
+    You can learn here how to [Review the results of data quality monitoring on dashboards.](../data-quality-dashboards/data-quality-dashboards.md)
+
 
 ### **Configure date or datetime column for partition checks**
 

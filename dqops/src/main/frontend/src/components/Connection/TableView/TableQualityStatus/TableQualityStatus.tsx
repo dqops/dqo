@@ -5,7 +5,6 @@ import { CheckTypes } from '../../../../shared/routes';
 import { TableCurrentDataQualityStatusModel } from '../../../../api';
 import RadioButton from '../../../RadioButton';
 import DatePicker from '../../../DatePicker';
-import moment from 'moment';
 import TableQualityStatusOverview from './TableQualityStatusOverview';
 import { TFirstLevelCheck } from './TableQualityStatusConstans';
 import TotalChecksExecuted from './TotalChecksExecuted';
@@ -39,16 +38,15 @@ export default function TableQualityStatus({ timeScale }: IProps) {
     'current'
   );
   const [month, setMonth] = useState<number | undefined>(1);
-  const [since, setSince] = useState<Date | undefined>(new Date());
+  const [since, setSince] = useState<Date | undefined>();
 
   const getTableDataQualityStatus = (month?: number, since?: Date) => {
-    console.log(Number(moment(since).utc()));
     CheckResultApi.getTableDataQualityStatus(
       connection,
       schema,
       table,
       month,
-      undefined,
+      since?.toISOString(),
       checkTypes === CheckTypes.PROFILING,
       checkTypes === CheckTypes.MONITORING,
       checkTypes === CheckTypes.PARTITIONED,

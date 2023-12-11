@@ -23,7 +23,7 @@ import {
   getFirstLevelActiveTab,
   getFirstLevelState
 } from '../../../redux/selectors';
-import { TableReferenceComparisons } from './TableReferenceComparisons';
+import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
 
 const initTabs = [
@@ -225,12 +225,14 @@ const MonitoringView = () => {
 
   return (
     <div className="flex-grow min-h-0 flex flex-col">
-      <TableActionGroup
-        shouldDelete={false}
-        onUpdate={onUpdate}
-        isUpdated={isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring}
-        isUpdating={isUpdating}
-      />
+      {tab !== 'daily_comparisons' && tab !== 'monthly_comparisons' && (
+        <TableActionGroup
+          shouldDelete={false}
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedDailyMonitoring || isUpdatedMonthlyMonitoring}
+          isUpdating={isUpdating}
+        />
+      )}
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
       </div>
