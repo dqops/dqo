@@ -148,7 +148,9 @@ const ResultBox = ({
                 {item.not_matching_data_groups ? (
                   item.not_matching_data_groups.map((x, index) => (
                     <span key={index}>
-                      {index === 0 && x === 'no grouping'
+                      {index === 0 &&
+                      x === 'no grouping' &&
+                      item.not_matching_data_groups?.length === 1
                         ? 'No mismatches detected'
                         : x}
                     </span>
