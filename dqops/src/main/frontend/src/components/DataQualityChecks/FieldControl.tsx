@@ -75,7 +75,6 @@ const FieldControl = ({
   };
 
   const isInvalid = !field.optional && !value && value !== 0 && !disabled;
-
   return (
     <div>
       {type === 'boolean' && (
@@ -122,7 +121,12 @@ const FieldControl = ({
         <NumberInput
           label={label}
           value={value}
-          onChange={(value) => handleChange({ integer_value: value })}
+          onChange={(value) =>
+            handleChange({
+              integer_value:
+                String(value).length === 0 ? undefined : Number(value)
+            })
+          }
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
@@ -136,7 +140,11 @@ const FieldControl = ({
         <NumberInput
           label={label}
           value={value}
-          onChange={(value) => handleChange({ long_value: value })}
+          onChange={(value) =>
+            handleChange({
+              long_value: String(value).length === 0 ? undefined : Number(value)
+            })
+          }
           tooltipText={tooltip}
           className={clsx(
             '!h-8 !text-xs !min-w-30 !max-w-30',
@@ -153,7 +161,8 @@ const FieldControl = ({
           value={String(value)}
           onChange={(value) =>
             handleChange({
-              double_value: Number(String(value))
+              double_value:
+                String(value).length === 0 ? undefined : Number(value)
             })
           }
           tooltipText={tooltip}
