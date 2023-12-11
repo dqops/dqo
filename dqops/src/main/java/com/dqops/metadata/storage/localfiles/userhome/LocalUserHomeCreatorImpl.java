@@ -26,6 +26,10 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -74,6 +78,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
     private YamlSerializer yamlSerializer;
     private DefaultSchedulesProvider defaultSchedulesProvider;
     private DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory;
+    private UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Default constructor called by the IoC container.
@@ -88,6 +93,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * @param yamlSerializer Yaml serializer.
      * @param defaultSchedulesProvider Default cron schedules provider.
      * @param defaultObservabilityCheckSettingsFactory Factory that creates the initial configuration of data observability checks.
+     * @param userDomainIdentityFactory User data domain identity factory.
      */
     @Autowired
     public LocalUserHomeCreatorImpl(HomeLocationFindService homeLocationFindService,
@@ -99,7 +105,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                                     DqoInstanceConfigurationProperties dqoInstanceConfigurationProperties,
                                     YamlSerializer yamlSerializer,
                                     DefaultSchedulesProvider defaultSchedulesProvider,
-                                    DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory) {
+                                    DefaultObservabilityCheckSettingsFactory defaultObservabilityCheckSettingsFactory,
+                                    UserDomainIdentityFactory userDomainIdentityFactory) {
         this.homeLocationFindService = homeLocationFindService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.terminalFactory = terminalFactory;
@@ -110,6 +117,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         this.yamlSerializer = yamlSerializer;
         this.defaultSchedulesProvider = defaultSchedulesProvider;
         this.defaultObservabilityCheckSettingsFactory = defaultObservabilityCheckSettingsFactory;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
@@ -352,7 +360,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
      * Applies missing default observability check configuration when it is not configured.
      */
     public void applyDefaultConfigurationWhenMissing() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserDomainIdentity rootDataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(this.userConfigurationProperties.getDefaultDataDomain());
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec != null &&

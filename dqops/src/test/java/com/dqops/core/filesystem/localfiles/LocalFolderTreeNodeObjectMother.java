@@ -17,6 +17,7 @@ package com.dqops.core.filesystem.localfiles;
 
 import com.dqops.core.filesystem.virtual.FileSystemContext;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.UserDomainIdentity;
 
 /**
  * Object mother that creates a local folder tree node using an empty, temporary user home for testing.
@@ -31,7 +32,7 @@ public final class LocalFolderTreeNodeObjectMother {
         LocalFileStorageServiceImpl localHomeStorageService =
                 LocalHomeStorageServiceObjectMother.createLocalUserHomeStorageServiceForTestableHome(recreateHomeDirectory);
 
-        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath());
+        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         return homeFolder;
     }
 
@@ -44,7 +45,7 @@ public final class LocalFolderTreeNodeObjectMother {
         LocalFileStorageServiceImpl localHomeStorageService =
                 LocalHomeStorageServiceObjectMother.createDefaultHomeStorageService(recreateHomeDirectory);
 
-        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath());
+        LocalFolderTreeNode homeFolder = new LocalFolderTreeNode(new FileSystemContext(localHomeStorageService), new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         return homeFolder;
     }
 }

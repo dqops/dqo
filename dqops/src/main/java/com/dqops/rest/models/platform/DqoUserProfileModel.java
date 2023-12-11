@@ -199,7 +199,7 @@ public class DqoUserProfileModel {
      */
     public static DqoUserProfileModel fromApiKeyAndPrincipal(DqoCloudApiKey dqoCloudApiKey, DqoUserPrincipal principal) {
         DqoUserProfileModel model = new DqoUserProfileModel() {{
-            setUser(principal.getName());
+            setUser(principal.getDataDomainIdentity().getUserName());
             setAccountRole(principal.getAccountRole());
             setCanManageAccount(principal.hasPrivilege(DqoPermissionGrantedAuthorities.MANAGE_ACCOUNT));
             setCanViewAnyObject(principal.hasPrivilege(DqoPermissionGrantedAuthorities.VIEW));

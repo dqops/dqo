@@ -23,6 +23,7 @@ import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
 import com.dqops.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.data.statistics.normalization.StatisticsResultsNormalizationService;
 import com.dqops.data.statistics.normalization.StatisticsResultsNormalizedResult;
@@ -146,7 +147,8 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         progressListener.onExecuteStatisticsCollectorsOnTableStart(new ExecuteStatisticsCollectorsOnTableStartEvent(connectionWrapper, tableSpec, collectors));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
-        StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
+        StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedStatisticsTable = statisticsSnapshot.getTableDataChanges().getNewOrChangedRows();
 
         Map<String, Integer> successfulCollectorsPerColumn = new HashMap<>();

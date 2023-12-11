@@ -29,9 +29,11 @@ import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringCh
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
@@ -94,7 +96,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
-        JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
+        JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
@@ -126,7 +128,7 @@ public class CheckServiceImplTests extends BaseTest {
     }
 
     private ExecutionContext createHierarchyTree() {
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        ExecutionContext executionContext = this.executionContextFactory.create(UserDomainIdentityObjectMother.createAdminIdentity());
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -275,6 +277,7 @@ public class CheckServiceImplTests extends BaseTest {
     void disableChecks_whenConnectionAndCheckGiven_disablesRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnection("conn");
@@ -295,9 +298,10 @@ public class CheckServiceImplTests extends BaseTest {
 
         BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
         bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
-        this.sut.disableChecks(bulkCheckDisableParameters);
+        this.sut.disableChecks(bulkCheckDisableParameters, adminPrincipal);
 
-        userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertTrue(checksEnabled.isEmpty());
 
@@ -328,6 +332,7 @@ public class CheckServiceImplTests extends BaseTest {
     void disableChecks_whenSpecificTablesGiven_disablesOnlyRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
             setConnection("conn");
@@ -351,9 +356,10 @@ public class CheckServiceImplTests extends BaseTest {
         Map<String, List<String>> selectedTables = new HashMap<>();
         selectedTables.put("tab1", null);
         bulkCheckDisableParameters.setSelectedTablesToColumns(selectedTables);
-        this.sut.disableChecks(bulkCheckDisableParameters);
+        this.sut.disableChecks(bulkCheckDisableParameters, adminPrincipal);
 
-        userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertEquals(1, checksEnabled.size());
 
@@ -413,7 +419,8 @@ public class CheckServiceImplTests extends BaseTest {
 
         this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
 
-        UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
+        UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);
         Assertions.assertFalse(checks.isEmpty());
@@ -468,7 +475,8 @@ public class CheckServiceImplTests extends BaseTest {
 
         this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
 
-        UserHome userHome = executionContextFactory.create().getUserHomeContext().getUserHome();
+        ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
+        UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);
         Assertions.assertEquals(3, checks.size());

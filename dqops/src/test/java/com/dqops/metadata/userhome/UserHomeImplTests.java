@@ -18,6 +18,7 @@ package com.dqops.metadata.userhome;
 import com.dqops.BaseTest;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.sources.*;
 import org.junit.jupiter.api.Assertions;
@@ -31,7 +32,7 @@ public class UserHomeImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-		this.sut = new UserHomeImpl();
+		this.sut = new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
     }
 
     @Test

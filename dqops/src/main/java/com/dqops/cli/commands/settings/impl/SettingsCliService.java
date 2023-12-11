@@ -18,9 +18,9 @@ package com.dqops.cli.commands.settings.impl;
 import com.dqops.cli.commands.CliOperationStatus;
 
 /**
- * Settings management service.
+ * Settings management service for CLI.
  */
-public interface SettingsService {
+public interface SettingsCliService {
 
 	/**
 	 * Sets a new editor name and path.

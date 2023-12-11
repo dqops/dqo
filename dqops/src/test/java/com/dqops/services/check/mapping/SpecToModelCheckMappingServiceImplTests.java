@@ -23,6 +23,7 @@ import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
@@ -66,7 +67,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void setUp() {
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
         TriggerFactory triggerFactory = new TriggerFactoryImpl(
-                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault()),
+                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration()),
                 defaultTimeZoneProvider);
         
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(

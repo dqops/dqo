@@ -23,6 +23,7 @@ import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.jobqueue.DqoJobQueue;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
@@ -39,7 +40,7 @@ import org.springframework.stereotype.Service;
  * Service called by "cloud sync" CLI commands to synchronize the data with DQOps Cloud.
  */
 @Service
-public class CloudSynchronizationServiceImpl implements CloudSynchronizationService {
+public class CloudSynchronizationCliServiceImpl implements CloudSynchronizationCliService {
     private DqoCloudSynchronizationService dqoCloudSynchronizationService;
     private FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider;
     private DqoCloudApiKeyProvider apiKeyProvider;
@@ -47,6 +48,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
     private TerminalFactory terminalFactory;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
+    private DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * Default injection constructor.
@@ -57,16 +59,18 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * @param terminalFactory Terminal factory.
      * @param dqoQueueJobFactory DQOps job factory used to create a new instance of a folder synchronization job.
      * @param dqoJobQueue DQOps job queue to execute a background synchronization.
+     * @param userPrincipalProvider Local user principal provider.
      */
     @Autowired
-    public CloudSynchronizationServiceImpl(
+    public CloudSynchronizationCliServiceImpl(
             DqoCloudSynchronizationService dqoCloudSynchronizationService,
             FileSystemSynchronizationListenerProvider systemSynchronizationListenerProvider,
             DqoCloudApiKeyProvider apiKeyProvider,
             CloudLoginService cloudLoginService,
             TerminalFactory terminalFactory,
             DqoQueueJobFactory dqoQueueJobFactory,
-            DqoJobQueue dqoJobQueue) {
+            DqoJobQueue dqoJobQueue,
+            DqoUserPrincipalProvider userPrincipalProvider) {
         this.dqoCloudSynchronizationService = dqoCloudSynchronizationService;
         this.systemSynchronizationListenerProvider = systemSynchronizationListenerProvider;
         this.apiKeyProvider = apiKeyProvider;
@@ -74,6 +78,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
         this.terminalFactory = terminalFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -96,7 +101,8 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
                                boolean headlessMode,
                                boolean runOnBackgroundQueue,
                                DqoUserPrincipal principal) {
-        DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey(userPrincipal.getDataDomainIdentity());
         if (apiKey == null) {
             // the api key is missing
 
@@ -129,7 +135,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             synchronizeRootFolderJob.waitForFinish();
         }
         else {
-            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, principal.getDataDomainIdentity(), synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         }
 
         this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQOps User Home and DQOps Cloud finished.\n");

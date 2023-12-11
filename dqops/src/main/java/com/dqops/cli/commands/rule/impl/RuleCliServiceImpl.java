@@ -18,6 +18,8 @@ package com.dqops.cli.commands.rule.impl;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.RuleFileExtension;
 import com.dqops.cli.edit.EditorLaunchService;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.basespecs.InstanceStatus;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -36,24 +38,29 @@ import static com.dqops.metadata.storage.localfiles.SpecFileNames.CUSTOM_RULE_SP
  * Service called from the "rule" cli commands to edit a template.
  */
 @Service
-public class RuleServiceImpl implements RuleService {
+public class RuleCliServiceImpl implements RuleCliService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final DqoHomeContextFactory dqoHomeContextFactory;
 	private final EditorLaunchService editorLaunchService;
+	private final DqoUserPrincipalProvider userPrincipalProvider;
 
 	@Autowired
-	public RuleServiceImpl(UserHomeContextFactory userHomeContextFactory, DqoHomeContextFactory dqoHomeContextFactory,
-						   EditorLaunchService editorLaunchService) {
+	public RuleCliServiceImpl(UserHomeContextFactory userHomeContextFactory,
+							  DqoHomeContextFactory dqoHomeContextFactory,
+							  EditorLaunchService editorLaunchService,
+							  DqoUserPrincipalProvider userPrincipalProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.dqoHomeContextFactory = dqoHomeContextFactory;
 		this.editorLaunchService = editorLaunchService;
+		this.userPrincipalProvider = userPrincipalProvider;
 	}
 
 	@Override
 	public CliOperationStatus editTemplate(String ruleName, RuleFileExtension ext) {
 		CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
 		UserHome userHome = userHomeContext.getUserHome();
 
 		DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();

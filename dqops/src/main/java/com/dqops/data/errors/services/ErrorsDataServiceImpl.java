@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.errors.services.models.ErrorEntryModel;
 import com.dqops.data.errors.services.models.ErrorsListModel;
@@ -68,17 +69,19 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity within the data domain.
      * @return Complete model of the errors.
      */
     @Override
     public ErrorsListModel[] readErrorsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                ErrorsDetailedFilterParameters loadParameters) {
+                                                ErrorsDetailedFilterParameters loadParameters,
+                                                UserDomainIdentity userDomainIdentity) {
         Map<Long, ErrorsListModel> errorMap = new LinkedHashMap<>();
         HierarchyId checksContainerHierarchyId = rootChecksContainerSpec.getHierarchyId();
         String connectionName = checksContainerHierarchyId.getConnectionName();
         PhysicalTableName physicalTableName = checksContainerHierarchyId.getPhysicalTableName();
 
-        Table errorsTable = loadRecentErrors(loadParameters, connectionName, physicalTableName);
+        Table errorsTable = loadRecentErrors(loadParameters, connectionName, physicalTableName, userDomainIdentity);
         if (errorsTable == null || errorsTable.isEmpty()) {
             return new ErrorsListModel[0]; // empty array
         }
@@ -305,13 +308,15 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
      * @param loadParameters Load parameters.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userDomainIdentity User identity within the data domain.
      * @return Table with errors for the most recent two months inside the specified range or null when no data found.
      */
     protected Table loadRecentErrors(ErrorsDetailedFilterParameters loadParameters,
                                      String connectionName,
-                                     PhysicalTableName physicalTableName) {
+                                     PhysicalTableName physicalTableName,
+                                     UserDomainIdentity userDomainIdentity) {
         ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createReadOnlySnapshot(connectionName,
-                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED);
+                physicalTableName, ErrorsColumnNames.COLUMN_NAMES_FOR_ERRORS_DETAILED, userDomainIdentity);
         int maxMonthsToLoad = DEFAULT_MAX_RECENT_LOADED_MONTHS;
 
         if (loadParameters.getStartMonth() != null && loadParameters.getEndMonth() != null) {

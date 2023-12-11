@@ -29,9 +29,12 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.jobqueue.*;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProviderStub;
+import com.dqops.core.principal.DqoDqoUserPrincipalProviderStub;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
@@ -75,10 +78,12 @@ public class CheckCliServiceImplTests extends BaseTest {
 
     private UserHomeContextFactory userHomeContextFactory;
     private HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     public void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
         ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(userHomeContextFactory, dqoHomeContextFactory);
@@ -87,7 +92,7 @@ public class CheckCliServiceImplTests extends BaseTest {
 
         SensorDefinitionFindService sensorDefinitionFindService = SensorDefinitionFindServiceObjectMother.getSensorDefinitionFindService();
         RuleDefinitionFindService ruleDefinitionFindService = RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService();
-        JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl());
+        JobDataMapAdapter jobDataMapAdapter = new JobDataMapAdapterImpl(new JsonSerializerImpl(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration());
         TriggerFactory triggerFactory = new TriggerFactoryImpl(jobDataMapAdapter, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(triggerFactory, DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider());
         SimilarCheckCacheImpl similarCheckCache = new SimilarCheckCacheImpl(reflectionService, sensorDefinitionFindService, ruleDefinitionFindService, dqoHomeContextFactory);
@@ -108,7 +113,7 @@ public class CheckCliServiceImplTests extends BaseTest {
                 parentDqoJobQueue,
                 userHomeContextFactory);
 
-        DqoCloudApiKeyPrincipalProviderStub principalProviderStub = new DqoCloudApiKeyPrincipalProviderStub(
+        DqoDqoUserPrincipalProviderStub principalProviderStub = new DqoDqoUserPrincipalProviderStub(
                 DqoUserPrincipalObjectMother.createStandaloneAdmin());
 
         this.sut = new CheckCliServiceImpl(
@@ -127,7 +132,7 @@ public class CheckCliServiceImplTests extends BaseTest {
     }
 
     private UserHome createHierarchyTree() {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -208,7 +213,8 @@ public class CheckCliServiceImplTests extends BaseTest {
 
         this.sut.updateAllChecksPatch(allChecksModelCliPatchParameters);
 
-        userHome = userHomeContextFactory.openLocalUserHome().getUserHome();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        userHome = userHomeContext.getUserHome();
         Collection<AbstractCheckSpec<?, ?, ?, ?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
         Assertions.assertNotNull(checks);
         Assertions.assertFalse(checks.isEmpty());

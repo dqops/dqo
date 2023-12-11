@@ -19,14 +19,14 @@ package com.dqops.core.principal;
 /**
  * Test stub for returning a user principal.
  */
-public class DqoCloudApiKeyPrincipalProviderStub implements DqoCloudApiKeyPrincipalProvider {
+public class DqoDqoUserPrincipalProviderStub implements DqoUserPrincipalProvider {
     private DqoUserPrincipal principal;
 
     /**
      * Creates a test stub instance that returns a hardcoded user principal.
      * @param principal User principal to return.
      */
-    public DqoCloudApiKeyPrincipalProviderStub(DqoUserPrincipal principal) {
+    public DqoDqoUserPrincipalProviderStub(DqoUserPrincipal principal) {
         this.principal = principal;
     }
 
@@ -37,7 +37,17 @@ public class DqoCloudApiKeyPrincipalProviderStub implements DqoCloudApiKeyPrinci
      * @return User principal that has full admin rights when the instance is not authenticated to DQO Cloud or limited to the role in the DQO Cloud Api key.
      */
     @Override
-    public DqoUserPrincipal createUserPrincipal() {
+    public DqoUserPrincipal createUserPrincipalForAdministrator() {
+        return this.principal;
+    }
+
+    /**
+     * Returns the principal of the local user who has direct access to the command line and runs operations on the DQOps shell.
+     *
+     * @return The principal of the local user who is using DQOps from the terminal.
+     */
+    @Override
+    public DqoUserPrincipal getLocalUserPrincipal() {
         return this.principal;
     }
 }

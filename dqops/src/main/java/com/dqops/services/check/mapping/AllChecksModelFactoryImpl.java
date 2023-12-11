@@ -21,6 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -67,7 +68,8 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
     @Override
     public List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters,
                                                        DqoUserPrincipal principal) {
-        ExecutionContext executionContext = this.executionContextFactory.create();
+        UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
+        ExecutionContext executionContext = this.executionContextFactory.create(userDomainIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         boolean canManageChecks = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);

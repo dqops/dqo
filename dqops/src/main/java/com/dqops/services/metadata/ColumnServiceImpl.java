@@ -114,8 +114,9 @@ public class ColumnServiceImpl implements ColumnService {
      */
     @Override
     public List<PushJobResult<DeleteStoredDataResult>> deleteColumns(
-            Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns, DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+            Map<String, Map<PhysicalTableName, Iterable<String>>> connectionToTableToColumns,
+            DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = new ArrayList<>();

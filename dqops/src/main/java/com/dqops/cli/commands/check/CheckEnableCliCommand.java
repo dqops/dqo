@@ -24,7 +24,7 @@ import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters
 import com.dqops.cli.completion.completedcommands.ITableNameCommand;
 import com.dqops.cli.completion.completers.*;
 import com.dqops.cli.output.OutputFormatService;
-import com.dqops.cli.terminal.FileWritter;
+import com.dqops.cli.terminal.FileWriter;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalTableWritter;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -53,7 +53,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     private CheckCliService checkService;
     private JsonSerializer jsonSerializer;
     private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
+    private FileWriter fileWriter;
 
     public CheckEnableCliCommand() {
     }
@@ -65,14 +65,14 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
                                  CheckCliService checkService,
                                  JsonSerializer jsonSerializer,
                                  OutputFormatService outputFormatService,
-                                 FileWritter fileWritter) {
+                                 FileWriter fileWriter) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
         this.jsonSerializer = jsonSerializer;
         this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
+        this.fileWriter = fileWriter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",

@@ -55,5 +55,11 @@ public enum DqoCloudLimit {
      * Parallel jobs limit.
      */
     @JsonProperty("jl")
-    JOBS_LIMIT
+    JOBS_LIMIT,
+
+    /**
+     * Data domains limit.
+     */
+    @JsonProperty("dl")
+    DATA_DOMAINS_LIMIT;
 }

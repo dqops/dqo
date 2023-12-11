@@ -23,6 +23,8 @@ import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
@@ -65,10 +67,12 @@ public class TableServiceImplTests extends BaseTest {
     private TableServiceImpl sut;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoJobQueue dqoJobQueue;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     public void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         this.dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
@@ -93,7 +97,7 @@ public class TableServiceImplTests extends BaseTest {
     }
 
     private UserHome createHierarchyTree() {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
@@ -147,7 +151,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTable(connectionName, tableName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -168,7 +172,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTable(connectionName, tableName, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -190,7 +194,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTables(connToTablesMap, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
@@ -212,7 +216,7 @@ public class TableServiceImplTests extends BaseTest {
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
         this.sut.deleteTables(connToTablesMap, principal);
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 

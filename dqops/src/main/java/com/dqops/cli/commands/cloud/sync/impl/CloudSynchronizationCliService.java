@@ -23,7 +23,7 @@ import com.dqops.core.synchronization.listeners.FileSystemSynchronizationReporti
 /**
  * Service called by "cloud sync" CLI commands to synchronize the data with DQOps Cloud.
  */
-public interface CloudSynchronizationService {
+public interface CloudSynchronizationCliService {
     /**
      * Synchronize a folder type to/from DQOps Cloud.
      * @param rootType      Root type.

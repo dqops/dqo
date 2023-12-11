@@ -17,6 +17,7 @@ package com.dqops.core.filesystem.localfiles;
 
 import com.dqops.core.filesystem.virtual.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.parquet.Strings;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -150,7 +151,7 @@ public class LocalFolderTreeNode extends FolderTreeNode {
         }
 
         Path directPath = Path.of(homePath);
-        if (this.getFolderPath().size() > 0) {
+        if (!this.getFolderPath().isEmpty() || !Strings.isNullOrEmpty(this.getFolderPath().getDataDomain())) {
             directPath = directPath.resolve(this.getFolderPath().toRelativePath());
         }
 

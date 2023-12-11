@@ -19,6 +19,7 @@ import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 
 import java.nio.file.Path;
 import java.util.Objects;
@@ -47,16 +48,17 @@ public class HomeFilePath implements Cloneable {
     /**
      * Creates a home file path given a path in the form: folder/subfolder/subsubfolder/filename.abc
      * All names in the filePath are considered as file system names that are encoded for file system safety.
+     * @param dataDomain Data domain name.
      * @param filePath File path to a file.
      * @return Home file path.
      */
-    public static HomeFilePath fromFilePath(String filePath) {
+    public static HomeFilePath fromFilePath(String dataDomain, String filePath) {
         String[] filePathComponents = StringUtils.split(filePath, '/');
         FolderName[] folderNames = new FolderName[filePathComponents.length - 1];
         for (int i = 0; i < filePathComponents.length - 1; i++) {
             folderNames[i] = FolderName.fromFileSystemName(filePathComponents[i]);
         }
-        HomeFolderPath folderPath = new HomeFolderPath(folderNames);
+        HomeFolderPath folderPath = new HomeFolderPath(dataDomain, folderNames);
         return new HomeFilePath(folderPath, filePathComponents[filePathComponents.length - 1]);
     }
 
@@ -97,12 +99,12 @@ public class HomeFilePath implements Cloneable {
      * @return Java I/O path that is relative to the home folder.
      */
     public Path toRelativePath() {
-        if (this.folder.size() == 0) {
-            return Path.of(this.fileName);
+        if (!this.folder.isEmpty() || !Strings.isNullOrEmpty(this.folder.getDataDomain())) {
+            Path folderPath = this.folder.toRelativePath();
+            return folderPath.resolve(this.fileName);
         }
 
-        Path folderPath = this.folder.toRelativePath();
-        return folderPath.resolve(this.fileName);
+        return Path.of(this.fileName);
     }
 
     /**
@@ -112,12 +114,7 @@ public class HomeFilePath implements Cloneable {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        if (this.folder.size() > 0) {
-            sb.append(this.folder);
-            if (sb.length() > 0) {
-                sb.append('/');
-            }
-        }
+        sb.append(this.folder.toString());
         sb.append(this.fileName);
         return sb.toString();
     }

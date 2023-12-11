@@ -17,7 +17,7 @@ package com.dqops.cli.terminal;
 
 import com.dqops.cli.commands.CliOperationStatus;
 
-public interface FileWritter {
+public interface FileWriter {
 	/**
 	 * Writes string content to a file
 	 * @param content String content.

@@ -20,6 +20,8 @@ import com.dqops.core.filesystem.localfiles.LocalFolderTreeNode;
 import com.dqops.core.filesystem.localfiles.LocalFolderTreeNodeObjectMother;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -40,7 +42,8 @@ public final class UserHomeContextObjectMother {
     public static UserHomeContext createInMemoryFileHomeContext() {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
-        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath()));
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN)), adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
         return userHomeContext;
@@ -54,7 +57,8 @@ public final class UserHomeContextObjectMother {
     public static UserHomeContext createInMemoryFileHomeContextForSampleTable(SampleTableMetadata sampleTableMetadata) {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
-        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath()));
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        UserHomeContext userHomeContext = new UserHomeContext(new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN)), adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
 
@@ -92,7 +96,8 @@ public final class UserHomeContextObjectMother {
         LocalFolderTreeNode homeFolder = LocalFolderTreeNodeObjectMother.createEmptyTemporaryUserHome(recreateTemporaryHomeFolder);
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
-        UserHomeContext userHomeContext = new UserHomeContext(homeFolder);
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        UserHomeContext userHomeContext = new UserHomeContext(homeFolder, adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
         return userHomeContext;
@@ -108,7 +113,8 @@ public final class UserHomeContextObjectMother {
         LocalFolderTreeNode homeFolder = LocalFolderTreeNodeObjectMother.createDefaultUserHome(recreateDefaultHomeFolder);
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
-        UserHomeContext userHomeContext = new UserHomeContext(homeFolder);
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        UserHomeContext userHomeContext = new UserHomeContext(homeFolder, adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
         return userHomeContext;
@@ -122,7 +128,8 @@ public final class UserHomeContextObjectMother {
     public static UserHomeContext createFileHomeContext(FolderTreeNode homeFolder) {
         YamlSerializer yamlSerializer = YamlSerializerObjectMother.getDefault();
         JsonSerializer jsonSerializer = JsonSerializerObjectMother.getDefault();
-        UserHomeContext userHomeContext = new UserHomeContext(homeFolder);
+        UserDomainIdentity adminIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        UserHomeContext userHomeContext = new UserHomeContext(homeFolder, adminIdentity);
         FileUserHomeImpl fileUserHomeModel = FileUserHomeImpl.create(userHomeContext, yamlSerializer, jsonSerializer);
         userHomeContext.setUserHome(fileUserHomeModel);
         return userHomeContext;

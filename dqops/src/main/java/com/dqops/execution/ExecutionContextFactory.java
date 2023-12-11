@@ -15,6 +15,7 @@
  */
 package com.dqops.execution;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 
 /**
@@ -23,9 +24,10 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 public interface ExecutionContextFactory {
     /**
      * Creates a new execution context by opening the user home context and the dqo system home context.
+     * @param userDomainIdentity Calling user identity, with the name of the data domain whose user home is opened.
      * @return Check execution context.
      */
-    ExecutionContext create();
+    ExecutionContext create(UserDomainIdentity userDomainIdentity);
 
     /**
      * Creates a new execution context by using a given user context.

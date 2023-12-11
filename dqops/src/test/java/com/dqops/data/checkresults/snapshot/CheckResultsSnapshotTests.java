@@ -22,6 +22,8 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
@@ -52,11 +54,13 @@ public class CheckResultsSnapshotTests extends BaseTest {
     private ParquetPartitionStorageService parquetStorageService;
     private PhysicalTableName tableName;
     private DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
         dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
@@ -74,7 +78,7 @@ public class CheckResultsSnapshotTests extends BaseTest {
                 fileSystemCache);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
-		this.sut = new CheckResultsSnapshot("conn", tableName, this.parquetStorageService, newRows);
+		this.sut = new CheckResultsSnapshot(this.userDomainIdentity, "conn", tableName, this.parquetStorageService, newRows);
     }
 
     void saveThreeMonthsData() {
@@ -95,7 +99,7 @@ public class CheckResultsSnapshotTests extends BaseTest {
         normalizedResults.getActualValueColumn().set(row3.getRowNumber(), 30.5);
         normalizedResults.getTimePeriodColumn().set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55));
 
-        CheckResultsSnapshot tempSut = new CheckResultsSnapshot("conn", tableName, this.parquetStorageService, sourceTable);
+        CheckResultsSnapshot tempSut = new CheckResultsSnapshot(this.userDomainIdentity, "conn", tableName, this.parquetStorageService, sourceTable);
         tempSut.save();
     }
 
