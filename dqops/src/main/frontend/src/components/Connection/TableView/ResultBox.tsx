@@ -67,7 +67,10 @@ const ResultBox = ({
                 onChange={(e) => {
                   onChangeCompare(
                     {
-                      warning_difference_percent: Number(e.target.value)
+                      warning_difference_percent:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
                     },
                     checkName
                   );
@@ -86,7 +89,10 @@ const ResultBox = ({
                 onChange={(e) => {
                   onChangeCompare(
                     {
-                      error_difference_percent: Number(e.target.value)
+                      error_difference_percent:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
                     },
                     checkName
                   );
@@ -105,7 +111,10 @@ const ResultBox = ({
                 onChange={(e) => {
                   onChangeCompare(
                     {
-                      fatal_difference_percent: Number(e.target.value)
+                      fatal_difference_percent:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
                     },
                     checkName
                   );

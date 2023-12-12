@@ -36,10 +36,16 @@ export default function SeverityInputBlock({
           }
           onChange={(e) => {
             onChange({
-              warning_difference_percent: Number(e.target.value)
+              warning_difference_percent:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
             onUpdateChecksUI(checksUI, type, undefined, {
-              warning: Number(e.target.value)
+              warning:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
           }}
         />
@@ -56,10 +62,16 @@ export default function SeverityInputBlock({
           }
           onChange={(e) => {
             onChange({
-              error_difference_percent: Number(e.target.value)
+              error_difference_percent:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
             onUpdateChecksUI(checksUI, type, undefined, {
-              error: Number(e.target.value)
+              error:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
           }}
         />
@@ -76,10 +88,16 @@ export default function SeverityInputBlock({
           }
           onChange={(e) => {
             onChange({
-              fatal_difference_percent: Number(e.target.value)
+              fatal_difference_percent:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
             onUpdateChecksUI(checksUI, type, undefined, {
-              fatal: Number(e.target.value)
+              fatal:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
           }}
         />
