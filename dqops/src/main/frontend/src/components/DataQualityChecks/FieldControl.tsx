@@ -158,7 +158,7 @@ const FieldControl = ({
       {type === ParameterDefinitionSpecDataTypeEnum.double && (
         <FloatingPointInput
           label={label}
-          value={String(value)}
+          value={value}
           onChange={(value) =>
             handleChange({
               double_value:
