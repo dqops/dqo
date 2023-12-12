@@ -1,1 +1,15 @@
 {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+SELECT
+    SUM(
+        CASE
+            WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
+                THEN 0
+            ELSE 1
+        END
+    ) AS actual_value
+    {{- lib.render_data_grouping_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
