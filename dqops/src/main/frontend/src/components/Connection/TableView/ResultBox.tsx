@@ -28,6 +28,7 @@ const ResultBox = ({
   checkName,
   index
 }: data) => {
+  console.log(item);
   const onChangeCompare = (
     obj: Partial<CompareThresholdsModel>,
     checkName?: CheckName
@@ -155,7 +156,13 @@ const ResultBox = ({
               >
                 {item.not_matching_data_groups ? (
                   item.not_matching_data_groups.map((x, index) => (
-                    <span key={index}>{x}</span>
+                    <span key={index}>
+                      {index === 0 &&
+                      x === 'no grouping' &&
+                      item.not_matching_data_groups?.length === 1
+                        ? 'No mismatches detected'
+                        : x}
+                    </span>
                   ))
                 ) : (
                   <span>No mismatches detected</span>
