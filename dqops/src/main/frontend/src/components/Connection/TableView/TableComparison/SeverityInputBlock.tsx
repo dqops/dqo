@@ -28,7 +28,6 @@ export default function SeverityInputBlock({
       <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
         <Input
           className="max-w-30 !min-w-initial"
-          type="number"
           value={
             type === 'column'
               ? reference?.compare_column_count?.warning_difference_percent
@@ -36,10 +35,16 @@ export default function SeverityInputBlock({
           }
           onChange={(e) => {
             onChange({
-              warning_difference_percent: Number(e.target.value)
+              warning_difference_percent:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
             onUpdateChecksUI(checksUI, type, undefined, {
-              warning: Number(e.target.value)
+              warning:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
           }}
         />
@@ -48,7 +53,6 @@ export default function SeverityInputBlock({
       <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
         <Input
           className="max-w-30 !min-w-initial"
-          type="number"
           value={
             type === 'column'
               ? reference?.compare_column_count?.error_difference_percent
@@ -56,10 +60,16 @@ export default function SeverityInputBlock({
           }
           onChange={(e) => {
             onChange({
-              error_difference_percent: Number(e.target.value)
+              error_difference_percent:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
             onUpdateChecksUI(checksUI, type, undefined, {
-              error: Number(e.target.value)
+              error:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
           }}
         />
@@ -68,7 +78,6 @@ export default function SeverityInputBlock({
       <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
         <Input
           className="max-w-30 !min-w-initial"
-          type="number"
           value={
             type === 'column'
               ? reference?.compare_column_count?.fatal_difference_percent
@@ -76,10 +85,16 @@ export default function SeverityInputBlock({
           }
           onChange={(e) => {
             onChange({
-              fatal_difference_percent: Number(e.target.value)
+              fatal_difference_percent:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
             onUpdateChecksUI(checksUI, type, undefined, {
-              fatal: Number(e.target.value)
+              fatal:
+                String(e.target.value).length === 0
+                  ? undefined
+                  : Number(e.target.value)
             });
           }}
         />
