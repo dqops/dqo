@@ -46,20 +46,19 @@ export const calculateColor = (
   let colorVar = getComparisonResults(nameOfCol, tableComparisonResults)[
     newNameOfCheck
   ];
+
   if (
     type &&
     tableComparisonResults &&
     tableComparisonResults.table_comparison_results
   ) {
-    if (type === 'row_count') {
-      colorVar =
-        Object.values(tableComparisonResults.table_comparison_results)?.at(0) ??
-        {};
-    } else if (type === 'column_count') {
-      colorVar =
-        Object.values(tableComparisonResults.table_comparison_results)?.at(1) ??
-        {};
-    }
+    Object.keys(tableComparisonResults.table_comparison_results).map(
+      (key: string) => {
+        if (key.includes(type)) {
+          colorVar = tableComparisonResults.table_comparison_results[key];
+        }
+      }
+    );
   }
 
   if (colorVar?.fatals && Number(colorVar.fatals) !== 0) {
