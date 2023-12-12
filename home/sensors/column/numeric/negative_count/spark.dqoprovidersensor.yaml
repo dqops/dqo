@@ -1,4 +1,3 @@
-
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ProviderSensorYaml-schema.json
 apiVersion: dqo/v1
 kind: provider_sensor

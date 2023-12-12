@@ -241,6 +241,7 @@ public class CheckModel implements Cloneable {
     public SimilarCheckSensorRuleKey createSimilarCheckMatchKey() {
         return new SimilarCheckSensorRuleKey(
                 this.sensorName,
+                this.sensorParametersSpec != null ? this.sensorParametersSpec.getClass() : null,
                 this.rule.getWarning() != null ? this.rule.getWarning().getRuleName() : null,
                 this.rule.getError() != null ? this.rule.getError().getRuleName() : null,
                 this.rule.getFatal() != null ? this.rule.getFatal().getRuleName() : null);

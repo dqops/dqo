@@ -6,4 +6,3 @@ spec:
   java_class_name: com.dqops.execution.sqltemplates.rendering.JinjaSqlTemplateSensorRunner
   supports_grouping: false
   supports_partitioned_checks: false
-

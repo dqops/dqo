@@ -23,6 +23,7 @@ import java.util.Objects;
  */
 public class SimilarCheckSensorRuleKey {
     private String sensorName;
+    private Class<?> sensorParametersClass;
     private String warningRuleName;
     private String errorRuleName;
     private String fatalRuleName;
@@ -30,12 +31,14 @@ public class SimilarCheckSensorRuleKey {
     /**
      * Creates a check sensor and rule names object.
      * @param sensorName Sensor name.
+     * @param sensorParametersClass Sensor parameters class, used to identify alternative versions of sensor parameters (for the mean sensor).
      * @param warningRuleName Rule name for the warning rule.
      * @param errorRuleName Rule name for the error rule.
      * @param fatalRuleName Rule name for the fatal rule.
      */
-    public SimilarCheckSensorRuleKey(String sensorName, String warningRuleName, String errorRuleName, String fatalRuleName) {
+    public SimilarCheckSensorRuleKey(String sensorName, Class<?> sensorParametersClass, String warningRuleName, String errorRuleName, String fatalRuleName) {
         this.sensorName = sensorName;
+        this.sensorParametersClass = sensorParametersClass;
         this.warningRuleName = warningRuleName;
         this.errorRuleName = errorRuleName;
         this.fatalRuleName = fatalRuleName;
@@ -47,6 +50,14 @@ public class SimilarCheckSensorRuleKey {
      */
     public String getSensorName() {
         return sensorName;
+    }
+
+    /**
+     * The class type that implements the sensor parameters.
+     * @return Sensor parameters class.
+     */
+    public Class<?> getSensorParametersClass() {
+        return sensorParametersClass;
     }
 
     /**
@@ -81,6 +92,7 @@ public class SimilarCheckSensorRuleKey {
         SimilarCheckSensorRuleKey that = (SimilarCheckSensorRuleKey) o;
 
         if (!Objects.equals(sensorName, that.sensorName)) return false;
+        if (!Objects.equals(sensorParametersClass, that.sensorParametersClass)) return false;
         if (!Objects.equals(warningRuleName, that.warningRuleName))
             return false;
         if (!Objects.equals(errorRuleName, that.errorRuleName))
@@ -91,6 +103,7 @@ public class SimilarCheckSensorRuleKey {
     @Override
     public int hashCode() {
         int result = sensorName != null ? sensorName.hashCode() : 0;
+        result = 31 * result + (sensorParametersClass != null ? sensorParametersClass.hashCode() : 0);
         result = 31 * result + (warningRuleName != null ? warningRuleName.hashCode() : 0);
         result = 31 * result + (errorRuleName != null ? errorRuleName.hashCode() : 0);
         result = 31 * result + (fatalRuleName != null ? fatalRuleName.hashCode() : 0);
