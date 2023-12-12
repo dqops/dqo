@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.apikey;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "show", header = "Show API key", description = "Display the current API key used for accessing external services.")
 public class SettingsApiKeyShowCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -42,10 +42,10 @@ public class SettingsApiKeyShowCliCommand extends BaseCommand implements IComman
 	}
 
 	@Autowired
-	public SettingsApiKeyShowCliCommand(SettingsService settingsService,
-									   TerminalReader terminalReader,
-									   TerminalWriter terminalWriter) {
-		this.settingsService = settingsService;
+	public SettingsApiKeyShowCliCommand(SettingsCliService settingsCliService,
+                                        TerminalReader terminalReader,
+                                        TerminalWriter terminalWriter) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 	}
@@ -57,7 +57,7 @@ public class SettingsApiKeyShowCliCommand extends BaseCommand implements IComman
 	 */
 	@Override
 	public Integer call() throws Exception {
-		CliOperationStatus cliOperationStatus = this.settingsService.showApiKey();
+		CliOperationStatus cliOperationStatus = this.settingsCliService.showApiKey();
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

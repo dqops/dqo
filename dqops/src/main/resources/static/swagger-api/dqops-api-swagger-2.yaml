@@ -14756,7 +14756,7 @@ definitions:
           \ on the parent table."
       parameters:
         description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
+        $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
@@ -14817,7 +14817,7 @@ definitions:
           \ on the parent table."
       parameters:
         description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnUniquenessDistinctCountSensorParametersSpec"
+        $ref: "#/definitions/ColumnUniquenessDistinctPercentSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"

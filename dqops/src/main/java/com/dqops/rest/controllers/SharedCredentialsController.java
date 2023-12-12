@@ -83,7 +83,7 @@ public class SharedCredentialsController {
     @Secured({DqoPermissionNames.VIEW})
     public ResponseEntity<Flux<SharedCredentialListModel>> getAllSharedCredentials(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         List<SharedCredentialWrapper> sharedCredentialWrappers = userHome.getCredentials().toList();
@@ -126,7 +126,7 @@ public class SharedCredentialsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SharedCredentialWrapper sharedCredentialWrapper = userHome.getCredentials().getByObjectName(credentialName, true);
 
@@ -175,7 +175,7 @@ public class SharedCredentialsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SharedCredentialWrapper sharedCredentialWrapper = userHome.getCredentials().getByObjectName(credentialName, true);
 
@@ -226,7 +226,7 @@ public class SharedCredentialsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SharedCredentialList credentialList = userHome.getCredentials();
         SharedCredentialWrapper existingSharedCredential = credentialList.getByObjectName(sharedCredentialModel.getCredentialName(), true);
@@ -297,7 +297,7 @@ public class SharedCredentialsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         SharedCredentialList sharedCredentialList = userHome.getCredentials();
         SharedCredentialWrapper sharedCredentialWrapper = sharedCredentialList.getByObjectName(credentialName, true);
@@ -360,7 +360,7 @@ public class SharedCredentialsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         SharedCredentialList sharedCredentialList = userHome.getCredentials();

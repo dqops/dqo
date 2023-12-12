@@ -51,7 +51,7 @@ public class RuleDefinitionFindServiceImplTests extends BaseTest {
         Assertions.assertNotNull(result.getRuleDefinitionSpec());
         Assertions.assertEquals(HomeType.DQO_HOME, result.getHome());
         Assertions.assertNotNull(result.getRulePythonFilePath());
-        Assertions.assertEquals("rules/comparison/min_value.py", result.getRulePythonFilePath().toString());
+        Assertions.assertEquals("[]/rules/comparison/min_value.py", result.getRulePythonFilePath().toString());
     }
 
     @Test
@@ -81,6 +81,6 @@ public class RuleDefinitionFindServiceImplTests extends BaseTest {
         Assertions.assertNotNull(result.getRuleDefinitionSpec());
         Assertions.assertSame(userRuleDef.getSpec(), result.getRuleDefinitionSpec());
         Assertions.assertEquals(HomeType.USER_HOME, result.getHome());
-        Assertions.assertEquals("rules/comparison/min_value.py", result.getRulePythonFilePath().toString());
+        Assertions.assertEquals("[]/rules/comparison/min_value.py", result.getRulePythonFilePath().toString());
     }
 }

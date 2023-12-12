@@ -18,6 +18,7 @@ package com.dqops.cli.commands.data;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.checkresults.factory.CheckResultsTableFactory;
 import com.dqops.data.checkresults.models.CheckResultsFragmentFilter;
@@ -74,7 +75,8 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
      * Performs one iteration of the performance test: create parquet file, delete file.
      */
     private void runOneIteration(LocalDate monthDate, Table newRows) {
-        CheckResultsSnapshot snapshot = this.checkResultsSnapshotFactory.createSnapshot("perftestdelete", new PhysicalTableName("perfschema", "perftest"));
+        UserDomainIdentity userIdentity = UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+        CheckResultsSnapshot snapshot = this.checkResultsSnapshotFactory.createSnapshot("perftestdelete", new PhysicalTableName("perfschema", "perftest"), userIdentity);
         LoadedMonthlyPartition monthPartition = snapshot.getMonthPartition(monthDate, false);
         Table targetTable = snapshot.getTableDataChanges().getNewOrChangedRows();
         targetTable.append(newRows);
@@ -88,7 +90,7 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
         deleteFilter.setTableSearchFilters(tableSearchFilters);
         deleteFilter.setDateStart(monthDate);
         deleteFilter.setDateEnd(monthDate.plusMonths(1));
-        this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(deleteFilter);
+        this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(deleteFilter, userIdentity);
     }
 
     private void generateRows(LocalDate monthDate, Table targetTable) {

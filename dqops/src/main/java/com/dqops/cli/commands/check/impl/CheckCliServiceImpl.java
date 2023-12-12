@@ -16,7 +16,7 @@
 package com.dqops.cli.commands.check.impl;
 
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
@@ -43,7 +43,7 @@ import java.util.*;
 public class CheckCliServiceImpl implements CheckCliService {
     private final CheckService checkService;
     private final AllChecksModelFactory allChecksModelFactory;
-    private final DqoCloudApiKeyPrincipalProvider apiKeyPrincipalProvider;
+    private final DqoUserPrincipalProvider apiKeyPrincipalProvider;
 
     /**
      * Default injection constructor.
@@ -52,7 +52,7 @@ public class CheckCliServiceImpl implements CheckCliService {
     @Autowired
     public CheckCliServiceImpl(CheckService checkService,
                                AllChecksModelFactory allChecksModelFactory,
-                               DqoCloudApiKeyPrincipalProvider apiKeyPrincipalProvider) {
+                               DqoUserPrincipalProvider apiKeyPrincipalProvider) {
         this.checkService = checkService;
         this.allChecksModelFactory = allChecksModelFactory;
         this.apiKeyPrincipalProvider = apiKeyPrincipalProvider;
@@ -71,7 +71,7 @@ public class CheckCliServiceImpl implements CheckCliService {
                                            TimeWindowFilterParameters timeWindowFilterParameters,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
-        DqoUserPrincipal principal = this.apiKeyPrincipalProvider.createUserPrincipal();
+        DqoUserPrincipal principal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         return this.checkService.runChecks(checkSearchFilters, timeWindowFilterParameters, checkExecutionProgressListener, dummyRun, principal);
     }
 
@@ -82,9 +82,10 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public void disableChecks(CheckSearchFilters filters) {
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         BulkCheckDisableParameters parameters = new BulkCheckDisableParameters();
         parameters.setCheckSearchFilters(filters);
-        this.checkService.disableChecks(parameters);
+        this.checkService.disableChecks(parameters, userPrincipal);
     }
 
     /**
@@ -94,7 +95,7 @@ public class CheckCliServiceImpl implements CheckCliService {
      */
     @Override
     public List<AllChecksModel> updateAllChecksPatch(AllChecksModelCliPatchParameters parameters) {
-        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.createUserPrincipal();
+        DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         CheckModel sampleModel = this.getSampleCheckModelForUpdates(parameters.getCheckSearchFilters(), userPrincipal);
         prepareSampleCheckModelForUpdates(sampleModel);
         patchCheckModel(sampleModel, parameters);

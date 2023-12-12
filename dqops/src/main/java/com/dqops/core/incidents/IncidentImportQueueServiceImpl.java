@@ -16,6 +16,8 @@
 
 package com.dqops.core.incidents;
 
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.data.checkresults.factory.CheckResultsColumnNames;
 import com.dqops.data.incidents.factory.IncidentStatus;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
@@ -56,39 +58,48 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
     private IncidentsSnapshotFactory incidentsSnapshotFactory;
     private IncidentNotificationService incidentNotificationService;
     private final Object connectionsLock = new Object();
-    private final Map<String, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
-    private final IncidentNotificationMessageTextCreator incidentNotificationMessageTextCreator;
+    private final Map<DataDomainConnectionKey, ConnectionIncidentTableUpdater> connectionIncidentLoaders = new LinkedHashMap<>();
+    private final IncidentNotificationMessageFormatter incidentNotificationMessageFormatter;
+    private final UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Creates an incident import queue service.
      *
      * @param incidentsSnapshotFactory               Incident snapshot factory.
      * @param incidentNotificationService            Incident notification service. Sends notifications to webhooks.
-     * @param incidentNotificationMessageTextCreator
+     * @param incidentNotificationMessageFormatter   Message formatter that creates formatted messages for Slack.
+     * @param userDomainIdentityFactory              User data domain identity factory.
      */
     @Autowired
     public IncidentImportQueueServiceImpl(IncidentsSnapshotFactory incidentsSnapshotFactory,
                                           IncidentNotificationService incidentNotificationService,
-                                          IncidentNotificationMessageTextCreator incidentNotificationMessageTextCreator) {
+                                          IncidentNotificationMessageFormatter incidentNotificationMessageFormatter,
+                                          UserDomainIdentityFactory userDomainIdentityFactory) {
         this.incidentsSnapshotFactory = incidentsSnapshotFactory;
         this.incidentNotificationService = incidentNotificationService;
-        this.incidentNotificationMessageTextCreator = incidentNotificationMessageTextCreator;
+        this.incidentNotificationMessageFormatter = incidentNotificationMessageFormatter;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
      * Imports incidents detected on a single table to a connection level incidents table.
      * @param tableIncidentImportBatch Issues (failed data quality check results) detected on a single table that should be loaded to the incidents table.
+     * @param userDomainIdentity User and data domain identity that identifies the data domain.
      */
     @Override
-    public void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch) {
+    public void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch,
+                                     UserDomainIdentity userDomainIdentity) {
         String connectionName = tableIncidentImportBatch.getConnection().getConnectionName();
+        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomainFolder(), connectionName);
 
         synchronized (this.connectionsLock) {
-            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
+            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, tableIncidentImportBatch, null, null);
-                connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
+                        tableIncidentImportBatch, null, null);
+                connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
             }
             else {
@@ -102,17 +113,22 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
      * Sets a new incident status on an incident.
      *
      * @param incidentStatusChangeParameters Parameters of the incident whose status will be updated.
+     * @param userDomainIdentity             User identity that also specifies the data domain.
      */
     @Override
-    public void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters) {
+    public void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters,
+                                  UserDomainIdentity userDomainIdentity) {
         String connectionName = incidentStatusChangeParameters.getConnectionName();
+        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomainFolder(), connectionName);
 
         synchronized (this.connectionsLock) {
-            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
+            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, null, incidentStatusChangeParameters, null);
-                connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
+                        null, incidentStatusChangeParameters, null);
+                connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
             }
             else {
@@ -126,17 +142,22 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
      * Sets a new incident issueUrl on an incident.
      *
      * @param incidentIssueUrlChangeParameters Parameters of the incident whose issueUrl will be updated.
+     * @param userDomainIdentity               User identity that also specifies the data domain.
      */
     @Override
-    public void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+    public void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters,
+                                    UserDomainIdentity userDomainIdentity) {
         String connectionName = incidentIssueUrlChangeParameters.getConnectionName();
+        DataDomainConnectionKey loaderKey = new DataDomainConnectionKey(userDomainIdentity.getDataDomainFolder(), connectionName);
 
         synchronized (this.connectionsLock) {
-            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(connectionName);
+            ConnectionIncidentTableUpdater connectionIncidentTableUpdater = this.connectionIncidentLoaders.get(loaderKey);
             if (connectionIncidentTableUpdater == null) {
                 // create and start a new connection incident loader
-                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(connectionName, null, null, incidentIssueUrlChangeParameters);
-                connectionIncidentLoaders.put(connectionName, connectionIncidentTableUpdater);
+                UserDomainIdentity domainIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(userDomainIdentity.getDataDomainCloud());
+                connectionIncidentTableUpdater = new ConnectionIncidentTableUpdater(domainIdentity, connectionName,
+                        null, null, incidentIssueUrlChangeParameters);
+                connectionIncidentLoaders.put(loaderKey, connectionIncidentTableUpdater);
                 connectionIncidentTableUpdater.start();
             }
             else {
@@ -154,6 +175,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
         private final Queue<IncidentStatusChangeParameters> statusChangeQueue = new LinkedList<>();
         private final Queue<IncidentIssueUrlChangeParameters> issueUrlChangeQueue = new LinkedList<>();
         private final Object loaderLock = new Object();
+        private UserDomainIdentity domainIdentity;
         private String connectionName;
         private IncidentsSnapshot incidentsSnapshot;
         private Map<Long, IntArrayList> existingIncidentByHashRowIndexes;
@@ -163,15 +185,18 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
 
         /**
          * Creates an incident loader queue for a named connection.
+         * @param domainIdentity Domain admin identity, identifies the data domain.
          * @param connectionName Target connection name.
          * @param tableIncidentImportBatch Optional table incident import batch to be queued.
          * @param incidentStatusChangeParameters Optional incident status change parameter to be queued.
          * @param incidentIssueUrlChangeParameters Optional incident issueUrl change parameter to be queued.
          */
-        public ConnectionIncidentTableUpdater(String connectionName,
+        public ConnectionIncidentTableUpdater(UserDomainIdentity domainIdentity,
+                                              String connectionName,
                                               TableIncidentImportBatch tableIncidentImportBatch,
                                               IncidentStatusChangeParameters incidentStatusChangeParameters,
                                               IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+            this.domainIdentity = domainIdentity;
             this.connectionName = connectionName;
             if (tableIncidentImportBatch != null) {
                 this.tableIncidentsQueue.add(tableIncidentImportBatch);
@@ -257,8 +282,10 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             List<IncidentNotificationMessage> newIncidentsNotificationMessages = importBatch(nextTableImportBatch);
                             if (newIncidentsNotificationMessages != null) {
                                 // sending notifications
-                                incidentNotificationService.sendNotifications(newIncidentsNotificationMessages,
-                                        nextTableImportBatch.getConnection().getIncidentGrouping());
+                                incidentNotificationService.sendNotifications(
+                                        newIncidentsNotificationMessages,
+                                        nextTableImportBatch.getConnection().getIncidentGrouping(),
+                                        this.domainIdentity);
                             }
                         }
 
@@ -267,8 +294,10 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             if (changedIncidentsNotificationMessage != null) {
                                 // sending notifications
                                 ArrayList<IncidentNotificationMessage> statusChangeNotificationMessages = Lists.newArrayList(changedIncidentsNotificationMessage);
-                                incidentNotificationService.sendNotifications(statusChangeNotificationMessages,
-                                        incidentStatusChangeParameters.getIncidentGrouping());
+                                incidentNotificationService.sendNotifications(
+                                        statusChangeNotificationMessages,
+                                        incidentStatusChangeParameters.getIncidentGrouping(),
+                                        this.domainIdentity);
                             }
                         }
 
@@ -322,7 +351,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
             }
 
             if (this.incidentsSnapshot == null) {
-                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName); // load previous snapshots
+                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName, this.domainIdentity); // load previous snapshots
                 this.allNewIncidentRows = this.incidentsSnapshot.getTableDataChanges().getNewOrChangedRows();
             }
 
@@ -498,7 +527,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                                 .build();
 
                         return IncidentNotificationMessage
-                                .fromIncidentRow(messageParameters, incidentNotificationMessageTextCreator);
+                                .fromIncidentRow(messageParameters, incidentNotificationMessageFormatter);
                     })
                     .collect(Collectors.toList());
 
@@ -540,7 +569,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          */
         public IncidentNotificationMessage changeIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters) {
             if (this.incidentsSnapshot == null) {
-                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName); // load previous snapshots
+                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName, this.domainIdentity); // load previous snapshots
                 this.allNewIncidentRows = this.incidentsSnapshot.getTableDataChanges().getNewOrChangedRows();
             }
 
@@ -573,7 +602,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             .connectionName(incidentStatusChangeParameters.getConnectionName())
                             .build();
                     return IncidentNotificationMessage
-                            .fromIncidentRow(messageParameters, incidentNotificationMessageTextCreator);
+                            .fromIncidentRow(messageParameters, incidentNotificationMessageFormatter);
                 }
             } else if (this.allExistingIncidentRows != null) {
                 Selection existingRowsIncidentIdSelection = this.allExistingIncidentRows.textColumn(IncidentsColumnNames.ID_COLUMN_NAME)
@@ -609,7 +638,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
                             .connectionName(incidentStatusChangeParameters.getConnectionName())
                             .build();
                     return IncidentNotificationMessage
-                            .fromIncidentRow(messageParameters, incidentNotificationMessageTextCreator);
+                            .fromIncidentRow(messageParameters, incidentNotificationMessageFormatter);
                 }
             }
 
@@ -622,7 +651,7 @@ public class IncidentImportQueueServiceImpl implements IncidentImportQueueServic
          */
         public void changeIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
             if (this.incidentsSnapshot == null) {
-                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName); // load previous snapshots
+                this.incidentsSnapshot = incidentsSnapshotFactory.createSnapshot(this.connectionName, this.domainIdentity); // load previous snapshots
                 this.allNewIncidentRows = this.incidentsSnapshot.getTableDataChanges().getNewOrChangedRows();
             }
 

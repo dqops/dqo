@@ -20,16 +20,16 @@ import java.time.ZoneOffset;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class IncidentNotificationMessageTextCreatorImplTest extends BaseTest {
+class IncidentNotificationMessageFormatterImplTest extends BaseTest {
 
-    private IncidentNotificationMessageTextCreatorImpl sut;
+    private IncidentNotificationMessageFormatterImpl sut;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     @BeforeEach
     void setUp() {
         this.defaultTimeZoneProvider = new DefaultTimeZoneProviderStub();
 
-        this.sut = new IncidentNotificationMessageTextCreatorImpl(
+        this.sut = new IncidentNotificationMessageFormatterImpl(
                 InstanceCloudLoginServiceObjectMother.getDefault(),
                 defaultTimeZoneProvider);
     }

@@ -42,7 +42,7 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 	private TerminalTableWritter terminalTableWritter;
-	private FileWritter fileWritter;
+	private FileWriter fileWriter;
 
 	public ConnectionTableListCliCommand() {
 	}
@@ -52,12 +52,12 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
                                          TerminalReader terminalReader,
                                          TerminalWriter terminalWriter,
                                          TerminalTableWritter terminalTableWritter,
-                                         FileWritter fileWritter) {
+                                         FileWriter fileWriter) {
 		this.connectionCliService = connectionCliService;
 		this.terminalWriter = terminalWriter;
 		this.terminalReader = terminalReader;
 		this.terminalTableWritter = terminalTableWritter;
-		this.fileWritter = fileWritter;
+		this.fileWriter = fileWriter;
 	}
 
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false, completionCandidates = ConnectionNameCompleter.class)
@@ -101,14 +101,14 @@ public class ConnectionTableListCliCommand extends BaseCommand implements IComma
 					tableBuilder.addInnerBorder(BorderStyle.oldschool);
 					tableBuilder.addHeaderBorder(BorderStyle.oldschool);
 					String renderedTable = tableBuilder.build().render(this.terminalWriter.getTerminalWidth() - 1);
-					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(renderedTable);
+					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(renderedTable);
 					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
 				} else {
 					this.terminalTableWritter.writeTable(cliOperationStatus.getTable(), true);
 				}
 			} else {
 				if (this.isWriteToFile()) {
-					CliOperationStatus cliOperationStatus2 = this.fileWritter.writeStringToFile(cliOperationStatus.getMessage());
+					CliOperationStatus cliOperationStatus2 = this.fileWriter.writeStringToFile(cliOperationStatus.getMessage());
 					this.terminalWriter.writeLine(cliOperationStatus2.getMessage());
 				}
 				else {

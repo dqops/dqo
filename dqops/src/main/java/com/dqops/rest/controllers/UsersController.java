@@ -310,7 +310,7 @@ public class UsersController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("New Password") @RequestBody String password) {
         try {
-            this.userManagementService.changePassword(principal, principal.getName(), password);
+            this.userManagementService.changePassword(principal, principal.getDataDomainIdentity().getUserName(), password);
         }
         catch (DqoCloudInvalidKeyException ex) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.FORBIDDEN);

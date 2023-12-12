@@ -5,7 +5,10 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { ROUTES, CheckTypes } from '../../../../shared/routes';
-import { ITableParameters } from './TableQualityStatusConstans';
+import {
+  ITableParameters,
+  TFirstLevelCheck
+} from './TableQualityStatusConstans';
 import TableQualityStatusColumnCategory from './TableQualityStatusColumnCategory';
 import TableQualityStatusCategory from './TableQualityStatusCategory';
 
@@ -83,9 +86,13 @@ export default function TableQualityStatusOverview({
     );
   };
 
-  const renderSecondLevelTooltip = (data: any) => {
+  const renderSecondLevelTooltip = (data: TFirstLevelCheck) => {
     return (
       <div>
+        <div className="flex gap-x-2">
+          <div className="w-42">Data quality check:</div>
+          <div>{data.checkName}</div>
+        </div>
         <div className="flex gap-x-2">
           <div className="w-42">Last executed at:</div>
           <div>{moment(data.lastExecutedAt).format('YYYY-MM-DD HH:mm:ss')}</div>

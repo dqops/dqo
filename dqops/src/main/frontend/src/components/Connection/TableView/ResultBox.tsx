@@ -28,6 +28,7 @@ const ResultBox = ({
   checkName,
   index
 }: data) => {
+  console.log(item);
   const onChangeCompare = (
     obj: Partial<CompareThresholdsModel>,
     checkName?: CheckName
@@ -67,7 +68,10 @@ const ResultBox = ({
                 onChange={(e) => {
                   onChangeCompare(
                     {
-                      warning_difference_percent: Number(e.target.value)
+                      warning_difference_percent:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
                     },
                     checkName
                   );
@@ -86,7 +90,10 @@ const ResultBox = ({
                 onChange={(e) => {
                   onChangeCompare(
                     {
-                      error_difference_percent: Number(e.target.value)
+                      error_difference_percent:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
                     },
                     checkName
                   );
@@ -105,7 +112,10 @@ const ResultBox = ({
                 onChange={(e) => {
                   onChangeCompare(
                     {
-                      fatal_difference_percent: Number(e.target.value)
+                      fatal_difference_percent:
+                        String(e.target.value).length === 0
+                          ? undefined
+                          : Number(e.target.value)
                     },
                     checkName
                   );
@@ -146,7 +156,13 @@ const ResultBox = ({
               >
                 {item.not_matching_data_groups ? (
                   item.not_matching_data_groups.map((x, index) => (
-                    <span key={index}>{x}</span>
+                    <span key={index}>
+                      {index === 0 &&
+                      x === 'no grouping' &&
+                      item.not_matching_data_groups?.length === 1
+                        ? 'No mismatches detected'
+                        : x}
+                    </span>
                   ))
                 ) : (
                   <span>No mismatches detected</span>

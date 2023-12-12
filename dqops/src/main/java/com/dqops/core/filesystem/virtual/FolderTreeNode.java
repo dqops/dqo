@@ -16,6 +16,7 @@
 package com.dqops.core.filesystem.virtual;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -73,7 +74,7 @@ public class FolderTreeNode implements Cloneable {
      * @return Folder tree node (empty)
      */
     public static FolderTreeNode createRootFolderNode() {
-        FolderTreeNode folderTreeNode = new FolderTreeNode(new HomeFolderPath());
+        FolderTreeNode folderTreeNode = new FolderTreeNode(new HomeFolderPath(UserDomainIdentity.DEFAULT_DATA_DOMAIN));
         folderTreeNode.loadOnce();
         return folderTreeNode;
     }

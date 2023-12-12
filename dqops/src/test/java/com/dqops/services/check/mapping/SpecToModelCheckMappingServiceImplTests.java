@@ -23,6 +23,7 @@ import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import com.dqops.core.scheduler.quartz.*;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
@@ -40,6 +41,7 @@ import com.dqops.services.check.mapping.models.CheckContainerModel;
 import com.dqops.services.check.mapping.models.CheckModel;
 import com.dqops.services.check.mapping.basicmodels.CheckContainerListModel;
 import com.dqops.services.check.mapping.basicmodels.CheckListModel;
+import com.dqops.services.check.mapping.models.QualityCategoryModel;
 import com.dqops.services.check.mapping.utils.CheckContainerListModelUtility;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -66,7 +68,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
     void setUp() {
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
         TriggerFactory triggerFactory = new TriggerFactoryImpl(
-                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault()),
+                new JobDataMapAdapterImpl(JsonSerializerObjectMother.getDefault(), DqoUserConfigurationPropertiesObjectMother.createDefaultUserConfiguration()),
                 defaultTimeZoneProvider);
         
         SchedulesUtilityService schedulesUtilityService = new SchedulesUtilityServiceImpl(
@@ -121,6 +123,28 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
         Assertions.assertNotNull(uiModel);
         Assertions.assertEquals(13, uiModel.getCategories().size());
+    }
+
+    @Test
+    void createUiModel_whenEmptyColumnChecksModelGivenAndGeneratingForOnlyOneCheck_thenCreatesUiModel() {
+        ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
+        checkSearchFilters.setCheckCategory("strings");
+        checkSearchFilters.setCheckName("profile_string_max_length");
+        CheckContainerModel uiModel = this.sut.createModel(columnCheckCategoriesSpec, checkSearchFilters,
+                this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery, true);
+
+        Assertions.assertNotNull(uiModel);
+        Assertions.assertEquals(1, uiModel.getCategories().size());
+        QualityCategoryModel categoryModel = uiModel.getCategories().get(0);
+        Assertions.assertEquals("strings", categoryModel.getCategory());
+        Assertions.assertEquals(1, categoryModel.getChecks().size());
+        CheckModel checkModel = categoryModel.getChecks().get(0);
+        Assertions.assertEquals("profile_string_max_length", checkModel.getCheckName());
+        Assertions.assertNotNull(checkModel.getRule().getWarning());
+        Assertions.assertNotNull(checkModel.getRule().getError());
+        Assertions.assertNotNull(checkModel.getRule().getFatal());
+        Assertions.assertEquals(1, checkModel.getRule().getError().getRuleParameters().size());
     }
 
     private Map.Entry<Iterable<String>, Iterable<String>> extractCheckNamesFromUIModels(

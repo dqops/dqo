@@ -16,6 +16,7 @@
 package com.dqops.data.readouts.snapshot;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.storage.FileStorageSettings;
@@ -41,32 +42,36 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
 
     /**
      * Creates a sensor readout snapshot.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param newResults Empty normalized table that will be appended with new sensor readouts (captured during the current sensor execution).
      */
-    public SensorReadoutsSnapshot(String connectionName,
+    public SensorReadoutsSnapshot(UserDomainIdentity userIdentity,
+                                  String connectionName,
                                   PhysicalTableName tableName,
                                   ParquetPartitionStorageService storageService,
                                   Table newResults) {
-        super(connectionName, tableName, storageService, createSensorReadoutsStorageSettings(), newResults);
+        super(userIdentity, connectionName, tableName, storageService, createSensorReadoutsStorageSettings(), newResults);
     }
 
     /**
      * Creates a read-only sensor readout snapshot limited to a set of columns.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
      * @param tableResultsSample Empty table with the expected schema (columns).
      */
-    public SensorReadoutsSnapshot(String connectionName,
+    public SensorReadoutsSnapshot(UserDomainIdentity userIdentity,
+                                  String connectionName,
                                   PhysicalTableName tableName,
                                   ParquetPartitionStorageService storageService,
                                   String[] columnNames,
                                   Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createSensorReadoutsStorageSettings(), columnNames, tableResultsSample);
+        super(userIdentity, connectionName, tableName, storageService, createSensorReadoutsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**

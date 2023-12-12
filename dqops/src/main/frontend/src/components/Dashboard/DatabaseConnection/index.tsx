@@ -36,6 +36,7 @@ import MySQLLogo from '../../SvgIcon/svg/mysql.svg';
 import OracleConnection from './OracleConnection';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
+import SparkConnection from './SparkConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -57,7 +58,9 @@ const DatabaseConnection = ({
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
   const [nameError, setNameError] = useState('');
-  const [sharedCredentials, setSharedCredentials] = useState<SharedCredentialListModel[]>([])
+  const [sharedCredentials, setSharedCredentials] = useState<
+    SharedCredentialListModel[]
+  >([]);
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -100,7 +103,7 @@ const DatabaseConnection = ({
     }
 
     setIsTesting(true);
-    let testRes : ConnectionTestModel | null = null;
+    let testRes: ConnectionTestModel | null = null;
     try {
       testRes = (await DataSourcesApi.testConnection(true, database)).data;
       setIsTesting(false);
@@ -112,8 +115,10 @@ const DatabaseConnection = ({
         ConnectionTestModelConnectionTestResultEnum.SUCCESS
       ) {
         await onConfirmSave();
-      } else if (testRes?.connectionTestResult ===
-        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS) {
+      } else if (
+        testRes?.connectionTestResult ===
+        ConnectionTestModelConnectionTestResultEnum.CONNECTION_ALREADY_EXISTS
+      ) {
         setMessage(testRes?.errorMessage);
       }
     }
@@ -155,19 +160,22 @@ const DatabaseConnection = ({
         return 'MySQL Connection Settings';
       case ConnectionModelProviderTypeEnum.oracle:
         return 'Oracle Database Connection Settings';
+      case ConnectionModelProviderTypeEnum.spark:
+        return 'Spark Database Connection Settings';
       default:
         return 'Database Connection Settings';
     }
   };
 
   const getSharedCredentials = async () => {
-    await SharedCredentailsApi.getAllSharedCredentials()
-      .then((res) => setSharedCredentials(res.data))
-  }
+    await SharedCredentailsApi.getAllSharedCredentials().then((res) =>
+      setSharedCredentials(res.data)
+    );
+  };
 
   useEffect(() => {
-    getSharedCredentials()
-  },[])
+    getSharedCredentials();
+  }, []);
 
   const components = {
     [ConnectionModelProviderTypeEnum.bigquery]: (
@@ -181,63 +189,63 @@ const DatabaseConnection = ({
       <SnowflakeConnection
         snowflake={database.snowflake}
         onChange={(snowflake) => onChange({ ...database, snowflake })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
         redshift={database.redshift}
         onChange={(redshift) => onChange({ ...database, redshift })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
         sqlserver={database.sqlserver}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.presto]: (
       <PrestoConnection
         presto={database.presto}
         onChange={(presto) => onChange({ ...database, presto })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
         trino={database.trino}
         onChange={(trino) => onChange({ ...database, trino })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
         mysql={database.mysql}
         onChange={(mysql) => onChange({ ...database, mysql })}
-        sharedCredentials = {sharedCredentials}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
-          oracle={database.oracle}
-          onChange={(oracle) => onChange({ ...database, oracle })}
-          sharedCredentials = {sharedCredentials}
+        oracle={database.oracle}
+        onChange={(oracle) => onChange({ ...database, oracle })}
+        sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.spark]: (
-      <OracleConnection   // TODO: use spark connector
-          oracle={database.oracle}
-          onChange={(oracle) => onChange({ ...database, oracle })}
-          sharedCredentials = {sharedCredentials}
+      <SparkConnection // TODO: use spark connector
+        spark={database.spark}
+        onChange={(spark) => onChange({ ...database, spark })}
+        sharedCredentials={sharedCredentials}
       />
     )
   };
@@ -291,7 +299,7 @@ const DatabaseConnection = ({
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
           label="Connection Name"
-          className='mb-4'
+          className="mb-4"
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
@@ -299,14 +307,19 @@ const DatabaseConnection = ({
           error={!!nameError}
           helperText={nameError}
         />
-          <Input
+        <Input
           label="Parallel jobs limit"
           value={database.parallel_jobs_limit}
-          onChange={(e) =>{
-           if (!isNaN(Number(e.target.value))) {
-              onChange({ ...database, parallel_jobs_limit: String(e.target.value).length === 0 
-                ? undefined : Number(e.target.value)})
-            } 
+          onChange={(e) => {
+            if (!isNaN(Number(e.target.value))) {
+              onChange({
+                ...database,
+                parallel_jobs_limit:
+                  String(e.target.value).length === 0
+                    ? undefined
+                    : Number(e.target.value)
+              });
+            }
           }}
         />
         <div className="mt-6">

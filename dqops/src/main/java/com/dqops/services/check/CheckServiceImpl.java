@@ -110,10 +110,11 @@ public class CheckServiceImpl implements CheckService {
      * Disable existing checks matching the provided filters.
      *
      * @param parameters Bulk check disable parameters.
+     * @param principal User principal.
      */
     @Override
-    public void disableChecks(BulkCheckDisableParameters parameters) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public void disableChecks(BulkCheckDisableParameters parameters, DqoUserPrincipal principal) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, parameters.getCheckSearchFilters());
@@ -227,7 +228,7 @@ public class CheckServiceImpl implements CheckService {
             patchCheckModel(check, parameters);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connectionList = userHome.getConnections();
 

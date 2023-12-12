@@ -18,6 +18,8 @@ package com.dqops.rest.controllers;
 import com.dqops.BaseTest;
 import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
@@ -51,6 +53,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
+    private UserDomainIdentity userDomainIdentity;
     private final static String DATASTREAM_NAME_1 = "date_level3";
     private final static String DATASTREAM_NAME_2 = "value_level5";
 
@@ -58,7 +61,8 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         this.sut = new DataGroupingConfigurationsController(this.userHomeContextFactory);
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
                 SampleCsvFileNames.continuous_days_one_row_per_day,
                 ProviderType.bigquery);

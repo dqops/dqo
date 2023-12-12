@@ -22,6 +22,8 @@ import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
 import com.dqops.connectors.ProviderType;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.normalization.CommonTableNormalizationServiceImpl;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.data.readouts.normalization.SensorReadoutsNormalizationServiceImpl;
@@ -109,7 +111,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
         SensorReadoutsSnapshotFactory dummySensorReadoutStorageService = SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService();
-		sensorReadoutsSnapshot = dummySensorReadoutStorageService.createSnapshot("conn", tableSpec.getPhysicalTableName());
+        UserDomainIdentity userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+        sensorReadoutsSnapshot = dummySensorReadoutStorageService.createSnapshot("conn", tableSpec.getPhysicalTableName(), userDomainIdentity);
     }
 
     @Test

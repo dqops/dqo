@@ -17,6 +17,7 @@ package com.dqops.core.synchronization.service;
 
 import com.dqops.BaseIntegrationTest;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
 import com.dqops.core.synchronization.listeners.FileSystemSynchronizationListener;
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrationTest {
+public class DqoCloudSynchronizationCliServiceIntegrationTests extends BaseIntegrationTest {
     private DqoCloudSynchronizationService sut;
     private FileSystemSynchronizationListener listener;
 
@@ -45,18 +46,19 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
     @Test
     void synchronizeFolder_whenSourcesAddedAndSyncOnNewUserCome_thenSendsAndDownloadsBackTheSource() {
         UserHomeContext firstUserHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(true);
+        UserDomainIdentity userDomainIdentity = firstUserHomeContext.getUserIdentity();
         ConnectionWrapper initialConnWrapper = firstUserHomeContext.getUserHome().getConnections().createAndAddNew("src1");
         PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
         initialConnWrapper.getSpec().setPostgresql(postgresql);
         postgresql.setDatabase("DB1");
         firstUserHomeContext.flush();
 
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, userDomainIdentity, FileSynchronizationDirection.full, false, this.listener);
 
         // clean
         UserHomeContext cleanUserHome = UserHomeContextObjectMother.createDefaultHomeContext(true);
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);  // this should download
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);  // this should detect no changes...
+        this.sut.synchronizeFolder(DqoRoot.sources, userDomainIdentity, FileSynchronizationDirection.full, false, this.listener);  // this should download
+        this.sut.synchronizeFolder(DqoRoot.sources, userDomainIdentity, FileSynchronizationDirection.full, false, this.listener);  // this should detect no changes...
 
         UserHomeContext restoredUserHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(false);
         ConnectionWrapper secondConnWrapper = restoredUserHomeContext.getUserHome().getConnections().getByObjectName("src1", true);
@@ -65,10 +67,10 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
 
         secondConnWrapper.markForDeletion();
         restoredUserHomeContext.flush();
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, userDomainIdentity, FileSynchronizationDirection.full, false, this.listener);
 
         UserHomeContext userHomeAfterDelete = UserHomeContextObjectMother.createDefaultHomeContext(true);
-        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, false, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, userDomainIdentity, FileSynchronizationDirection.full, false, this.listener);
         ConnectionWrapper connectionWrapperAfterDelete = userHomeAfterDelete.getUserHome().getConnections().getByObjectName("src1", true);
         Assertions.assertNull(connectionWrapperAfterDelete);
     }

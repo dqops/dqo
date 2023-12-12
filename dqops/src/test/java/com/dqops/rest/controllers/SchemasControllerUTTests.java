@@ -27,6 +27,8 @@ import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
 import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
@@ -68,6 +70,7 @@ import java.util.stream.Stream;
 public class SchemasControllerUTTests extends BaseTest {
     private SchemasController sut;
     private UserHomeContextFactory userHomeContextFactory;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
@@ -77,6 +80,7 @@ public class SchemasControllerUTTests extends BaseTest {
         ExecutionContextFactory executionContextFactory = new ExecutionContextFactoryImpl(userHomeContextFactory, dqoHomeContextFactory);
         HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
         ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         SpecToModelCheckMappingServiceImpl specToUiCheckMappingService = SpecToModelCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl(), new RuleDefinitionFindServiceImpl());
@@ -97,7 +101,7 @@ public class SchemasControllerUTTests extends BaseTest {
     }
 
     private UserHomeContext createHierarchyTree() {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
         TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(

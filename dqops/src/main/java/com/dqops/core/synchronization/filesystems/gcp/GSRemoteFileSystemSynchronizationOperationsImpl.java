@@ -151,7 +151,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
         Mono<FileMetadata> fileMetadataMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
-                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType(), gsFileSystemRoot.getUserIdentity())
+                                .getAccessToken().getTokenValue())
                         .add(HttpHeaderNames.CONTENT_LENGTH, 0)
                 )
                 .head()
@@ -437,7 +438,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Mono<FileMetadata> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
                         .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
-                                .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                                .getCredentials(gsFileSystemRoot.getRootType(), gsFileSystemRoot.getUserIdentity()).getAccessToken().getTokenValue())
                         .add(HttpHeaderNames.CONTENT_LENGTH, 0)
                 )
                 .delete()
@@ -517,7 +518,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
         Mono<DownloadFileResponse> downloadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
                         .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
-                                .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                                .getCredentials(gsFileSystemRoot.getRootType(), gsFileSystemRoot.getUserIdentity()).getAccessToken().getTokenValue())
                 )
                 .get()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
@@ -576,7 +577,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         Mono<FileMetadata> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                             .headers(httpHeaders -> httpHeaders
                                     .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
-                                            .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                                            .getCredentials(gsFileSystemRoot.getRootType(), gsFileSystemRoot.getUserIdentity())
+                                            .getAccessToken().getTokenValue())
                                     .add(HttpHeaderNames.CONTENT_TYPE, contentType)
                                     .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
                                     .add("x-goog-hash", "md5=" + fileMetadata.getMd5()))

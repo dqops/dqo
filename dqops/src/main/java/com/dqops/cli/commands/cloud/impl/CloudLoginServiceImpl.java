@@ -24,6 +24,8 @@ import com.dqops.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.dqops.core.dqocloud.client.DqoCloudApiClientFactory;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -55,6 +57,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
     private DqoCloudApiClientFactory dqoCloudApiClientFactory;
     private DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
     private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * Injection constructor.
@@ -65,6 +68,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * @param dqoCloudApiClientFactory DQOps Cloud API client factory.
      * @param dqoCloudAccessTokenCache DQOps Cloud access key cache which must be invalidated when the api key changes.
      * @param dqoCloudApiKeyProvider DQOps Cloud API key provider (cache) that must be invalidated.
+     * @param userPrincipalProvider User principal provider for the local user.
      */
     @Autowired
     public CloudLoginServiceImpl(UserHomeContextFactory userHomeContextFactory,
@@ -73,7 +77,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
                                  DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
                                  DqoCloudApiClientFactory dqoCloudApiClientFactory,
                                  DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
-                                 DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
+                                 DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                 DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.openBrowserService = openBrowserService;
         this.terminalFactory = terminalFactory;
@@ -81,6 +86,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
         this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
         this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -150,7 +156,8 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * @param apiKey API key to store.
      */
     public void saveApiKeyInUserSettings(String apiKey) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec == null) {

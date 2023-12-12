@@ -32,6 +32,8 @@ import com.dqops.core.jobqueue.DqoJobQueueObjectMother;
 import com.dqops.core.jobqueue.DqoQueueJobFactory;
 import com.dqops.core.jobqueue.DqoQueueJobFactoryImpl;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.data.statistics.services.StatisticsDataServiceImpl;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.execution.ExecutionContextFactoryImpl;
@@ -88,10 +90,12 @@ public class TablesControllerUTTests extends BaseTest {
     private UserHomeContextFactory userHomeContextFactory;
     private UserHomeContext userHomeContext;
     private SampleTableMetadata sampleTable;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
 
         DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
         DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefaultJobQueue();
@@ -113,7 +117,7 @@ public class TablesControllerUTTests extends BaseTest {
         StatisticsDataServiceImpl statisticsDataService = new StatisticsDataServiceImpl(null, null); // TODO: configure dependencies if we want to unit test statistics
 
         this.sut = new TablesController(tableService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, statisticsDataService);
-        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
 

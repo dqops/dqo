@@ -15,6 +15,7 @@
  */
 package com.dqops.core.incidents;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
@@ -70,10 +71,13 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
      *
      * @param newMessages      List of new data quality incidents that will be sent as a payload.
      * @param incidentGrouping Incident grouping that identifies the notification target (where to send the notifications).
+     * @param userIdentity     User identity that specifies the data domain where the webhooks are defined.
      */
     @Override
-    public void sendNotifications(List<IncidentNotificationMessage> newMessages, ConnectionIncidentGroupingSpec incidentGrouping) {
-        IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping);
+    public void sendNotifications(List<IncidentNotificationMessage> newMessages,
+                                  ConnectionIncidentGroupingSpec incidentGrouping,
+                                  UserDomainIdentity userIdentity) {
+        IncidentWebhookNotificationsSpec webhooksSpec = prepareWebhooks(incidentGrouping, userIdentity);
         Mono<Void> finishedSendMono = sendAllNotifications(newMessages, webhooksSpec);
         finishedSendMono.subscribe(); // starts a background task (fire-and-forget), running on reactor
     }
@@ -127,10 +131,12 @@ public class IncidentNotificationServiceImpl implements IncidentNotificationServ
     /**
      * Returns a combined list of web hooks, combining the default notification channels with the notification settings on a connection.
      * @param incidentGrouping Incident grouping and notification settings from a connection.
+     * @param userIdentity User identity that also specifies the data domain where the webhooks are defined.
      * @return Effective notification settings with webhooks that could be the default values.
      */
-    protected IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping){
-        ExecutionContext executionContext = executionContextFactory.create();
+    protected IncidentWebhookNotificationsSpec prepareWebhooks(ConnectionIncidentGroupingSpec incidentGrouping,
+                                                               UserDomainIdentity userIdentity){
+        ExecutionContext executionContext = executionContextFactory.create(userIdentity);
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
         DefaultIncidentWebhookNotificationsWrapper defaultWebhooksWrapper = userHome.getDefaultNotificationWebhook();

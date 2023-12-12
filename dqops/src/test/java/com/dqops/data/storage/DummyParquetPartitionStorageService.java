@@ -15,6 +15,7 @@
  */
 package com.dqops.data.storage;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 
@@ -36,7 +37,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      * @return Returns a dataset table with the content of the partition. The table (data) is null if the parquet file was not found.
      */
     @Override
-    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
+    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames, UserDomainIdentity userIdentity) {
         return new LoadedMonthlyPartition(partitionId, 0L, null);
     }
 
@@ -54,7 +55,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      */
     @Override
     public Map<ParquetPartitionId, LoadedMonthlyPartition> loadPartitionsForMonthsRange(
-            String connectionName, PhysicalTableName tableName, LocalDate start, LocalDate end, FileStorageSettings storageSettings, String[] columnNames) {
+            String connectionName, PhysicalTableName tableName, LocalDate start, LocalDate end, FileStorageSettings storageSettings, String[] columnNames, UserDomainIdentity userIdentity) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
 
@@ -62,8 +63,8 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
 
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {
-            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
-            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
+            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames, userIdentity);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
             }
@@ -87,7 +88,9 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
-    public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(String connectionName, PhysicalTableName tableName, LocalDate startBoundary, LocalDate endBoundary, FileStorageSettings storageSettings, String[] columnNames, int maxRecentMonthsToLoad) {
+    public Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(
+            String connectionName, PhysicalTableName tableName, LocalDate startBoundary, LocalDate endBoundary,
+            FileStorageSettings storageSettings, String[] columnNames, int maxRecentMonthsToLoad, UserDomainIdentity userIdentity) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startBoundary);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endBoundary);
 
@@ -96,8 +99,8 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
 
         for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && currentMonthsCount > 0;
              currentMonth = currentMonth.minusMonths(1L)) {
-            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
-            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
+            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames, userIdentity);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
                 --currentMonthsCount;
@@ -118,7 +121,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      * @param storageSettings  Storage settings to identify the target folder, file names and column names used for matching.
      */
     @Override
-    public void savePartition(LoadedMonthlyPartition loadedPartition, TableDataChanges tableDataChanges, FileStorageSettings storageSettings) {
+    public void savePartition(LoadedMonthlyPartition loadedPartition, TableDataChanges tableDataChanges, FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         // do nothing
     }
 
@@ -130,7 +133,7 @@ public class DummyParquetPartitionStorageService implements ParquetPartitionStor
      * @return True when the file was removed, false otherwise.
      */
     @Override
-    public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId, FileStorageSettings storageSettings) {
+    public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId, FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         return false;
     }
 }

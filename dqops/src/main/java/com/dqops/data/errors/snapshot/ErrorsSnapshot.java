@@ -16,6 +16,7 @@
 package com.dqops.data.errors.snapshot;
 
 import com.dqops.core.filesystem.BuiltInFolderNames;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.data.errors.factory.ErrorsColumnNames;
 import com.dqops.data.storage.FileStorageSettings;
@@ -34,32 +35,36 @@ public class ErrorsSnapshot extends TableDataSnapshot {
 
     /**
      * Default constructor that creates an error's snapshot.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param newResults Empty normalized table that will be appended with new errors (captured during the current sensor execution).
      */
-    public ErrorsSnapshot(String connectionName,
+    public ErrorsSnapshot(UserDomainIdentity userIdentity,
+                          String connectionName,
                           PhysicalTableName tableName,
                           ParquetPartitionStorageService storageService,
                           Table newResults) {
-        super(connectionName, tableName, storageService, createErrorsStorageSettings(), newResults);
+        super(userIdentity, connectionName, tableName, storageService, createErrorsStorageSettings(), newResults);
     }
 
     /**
      * Creates a read-only errors snapshot limited to a set of columns.
+     * @param userIdentity User identity that specifies the data domain.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
      * @param tableResultsSample Empty table with the expected schema (columns).
      */
-    public ErrorsSnapshot(String connectionName,
+    public ErrorsSnapshot(UserDomainIdentity userIdentity,
+                          String connectionName,
                           PhysicalTableName tableName,
                           ParquetPartitionStorageService storageService,
                           String[] columnNames,
                           Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createErrorsStorageSettings(), columnNames, tableResultsSample);
+        super(userIdentity, connectionName, tableName, storageService, createErrorsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**

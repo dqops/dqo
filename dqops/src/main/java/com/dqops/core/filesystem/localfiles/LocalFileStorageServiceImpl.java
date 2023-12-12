@@ -311,7 +311,7 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
     @Override
     public List<HomeFilePath> listFiles(HomeFolderPath folderPath) {
         Path relativeFolderPath = folderPath.toRelativePath();
-        Path absolutePath = this.homePath.resolve(relativeFolderPath).toAbsolutePath();
+        Path absolutePath = this.homePath.resolve(relativeFolderPath).toAbsolutePath().normalize();
         List<HomeFilePath> listOfFiles = this.localFileSystemCache.getListOfFiles(absolutePath, key -> this.listFilesDirect(folderPath, key));
         return listOfFiles;
     }

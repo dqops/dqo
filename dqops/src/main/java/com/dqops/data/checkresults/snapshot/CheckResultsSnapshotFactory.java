@@ -15,6 +15,7 @@
  */
 package com.dqops.data.checkresults.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.sources.PhysicalTableName;
 
 /**
@@ -25,9 +26,10 @@ public interface CheckResultsSnapshotFactory {
      * Creates an empty snapshot that is connected to the check results storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Check result snapshot connected to a storage service.
      */
-    CheckResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName);
+    CheckResultsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity);
 
     /**
      * Creates an empty, read-only snapshot that is connected to the check results storage service that will load requested months on demand.
@@ -35,7 +37,8 @@ public interface CheckResultsSnapshotFactory {
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
      * @param columnNames Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Check result snapshot connected to a storage service.
      */
-    CheckResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames);
+    CheckResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames, UserDomainIdentity userIdentity);
 }

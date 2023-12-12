@@ -15,11 +15,14 @@
  */
 package com.dqops.core.filesystem.virtual.utility;
 
+import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.virtual.FolderName;
 import com.dqops.core.filesystem.virtual.HomeFolderPath;
+import com.dqops.core.principal.UserDomainIdentity;
 
 import java.nio.file.Path;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Utility class for interactions with {@link HomeFolderPath}.
@@ -31,13 +34,22 @@ public class HomeFolderPathUtility {
      * @return {@link HomeFolderPath} equivalent of the {@code homeRelativePath}
      */
     public static HomeFolderPath createFromFilesystemPath(Path homeRelativePath) {
-        LinkedList<FolderName> homeRelativeFoldersList = new LinkedList<>();
+        ArrayList<FolderName> homeRelativeFoldersList = new ArrayList<>();
         for (Path fileSystemName : homeRelativePath) {
             homeRelativeFoldersList.add(
                     FolderName.fromFileSystemName(fileSystemName.toString())
             );
         }
 
-        return new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new));
+        String dataDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+        if (!homeRelativeFoldersList.isEmpty()) {
+            if (Objects.equals(homeRelativeFoldersList.get(0).getObjectName(), BuiltInFolderNames.DATA_DOMAINS)) {
+                dataDomain = homeRelativeFoldersList.get(0).getObjectName();
+                homeRelativeFoldersList.remove(1);
+                homeRelativeFoldersList.remove(0);
+            }
+        }
+
+        return new HomeFolderPath(dataDomain, homeRelativeFoldersList.toArray(FolderName[]::new));
     }
 }

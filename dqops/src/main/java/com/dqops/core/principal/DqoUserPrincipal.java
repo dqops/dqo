@@ -34,16 +34,17 @@ public class DqoUserPrincipal {
      */
     public static final String UNAUTHENTICATED_PRINCIPAL_NAME = "";
 
-    private final String name;
     private final DqoUserRole accountRole;
+    private final UserDomainIdentity dataDomainIdentity;
     private DqoCloudApiKeyPayload apiKeyPayload;
     private DqoUserTokenPayload userTokenPayload;
     private Collection<GrantedAuthority> privileges;
 
-    public DqoUserPrincipal() {
-        this.name = UNAUTHENTICATED_PRINCIPAL_NAME;
+
+    public DqoUserPrincipal(String dataDomainFolder, String dataDomainCloud) {
         this.accountRole = DqoUserRole.NONE;
         this.privileges = Collections.unmodifiableList(new ArrayList<>());
+        this.dataDomainIdentity = new UserDomainIdentity(UNAUTHENTICATED_PRINCIPAL_NAME, DqoUserRole.NONE, dataDomainFolder, dataDomainCloud);
     }
 
     /**
@@ -51,11 +52,13 @@ public class DqoUserPrincipal {
      * @param name User's email (principal name).
      * @param accountRole Account role.
      * @param privileges Collection of privileges (permissions) granted to the principal.
+     * @param dataDomainFolder The data domain folder name.
+     * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      */
-    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges) {
-        this.name = name;
+    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, String dataDomainFolder, String dataDomainCloud) {
         this.accountRole = accountRole;
         this.privileges = privileges;
+        this.dataDomainIdentity = new UserDomainIdentity(name, accountRole, dataDomainFolder, dataDomainCloud);
     }
 
     /**
@@ -64,9 +67,12 @@ public class DqoUserPrincipal {
      * @param accountRole Account level role.
      * @param privileges Collection of privileges (permissions) granted to the principal.
      * @param apiKeyPayload Source DQOps Cloud Api key payload.
+     * @param dataDomainFolder The data domain folder name.
+     * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      */
-    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoCloudApiKeyPayload apiKeyPayload) {
-        this(name, accountRole, privileges);
+    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges,
+                            DqoCloudApiKeyPayload apiKeyPayload, String dataDomainFolder, String dataDomainCloud) {
+        this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud);
         this.apiKeyPayload = apiKeyPayload;
     }
 
@@ -76,18 +82,13 @@ public class DqoUserPrincipal {
      * @param accountRole Account level role.
      * @param privileges Collection of privileges (permissions) granted to the principal.
      * @param userTokenPayload Source DQOps Cloud user's identity token payload.
+     * @param dataDomainFolder The data domain folder name.
+     * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
      */
-    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoUserTokenPayload userTokenPayload) {
-        this(name, accountRole, privileges);
+    public DqoUserPrincipal(String name, DqoUserRole accountRole, Collection<GrantedAuthority> privileges, DqoUserTokenPayload userTokenPayload,
+                            String dataDomainFolder, String dataDomainCloud) {
+        this(name, accountRole, privileges, dataDomainFolder, dataDomainCloud);
         this.userTokenPayload = userTokenPayload;
-    }
-
-    /**
-     * Returns the email that identifies the user. It is the email used to log in to DQOps cloud.
-     * @return User email.
-     */
-    public String getName() {
-        return name;
     }
 
     /**
@@ -147,6 +148,14 @@ public class DqoUserPrincipal {
      */
     @Override
     public String toString() {
-        return this.name + " (" + accountRole + ")";
+        return this.dataDomainIdentity.getUserName() + " (" + accountRole + ")";
+    }
+
+    /**
+     * Creates a user identity object that identifies the user and the current data domain. Returns also the role within the data domain.
+     * @return User identity and the active data domain name.
+     */
+    public UserDomainIdentity getDataDomainIdentity() {
+        return this.dataDomainIdentity;
     }
 }
