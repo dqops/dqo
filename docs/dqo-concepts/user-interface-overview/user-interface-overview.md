@@ -153,7 +153,7 @@ Below the quick links, there are tabs that allow you to switch between Profiling
 and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics 
 (only in Profiling section), or preview tables (only in Profiling section).
 
-Under the tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
+Under tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
 section, there is additional information about the date partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
