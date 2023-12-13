@@ -5,7 +5,7 @@
 {%- endmacro -%}
 
 {%- macro render_regex(regex) -%}
-     {{ make_text_constant(regex) }}
+    {{ make_text_constant(regex) }}
 {%- endmacro -%}
 
 SELECT
@@ -13,7 +13,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
         ELSE 100.0 * SUM(
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
+                WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ render_regex(parameters.regex) }}
                     THEN 1
                 ELSE 0
             END

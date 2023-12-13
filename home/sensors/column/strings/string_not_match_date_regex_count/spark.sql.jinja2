@@ -1,13 +1,13 @@
 {% import '/dialects/spark.sql.jinja2' as lib with context -%}
 {% macro render_date_formats(date_formats) %}
-    {%- if date_formats == 'YYYY-MM-DD'-%}
-        'yyyy-mm-dd'
+    {%- if date_formats == 'YYYY-MM-DD' -%}
+        'yyyy-MM-dd'
     {%- elif date_formats == 'MM/DD/YYYY' -%}
-        'mm/dd/yyyy'
+        'MM/dd/yyyy'
     {%- elif date_formats == 'DD/MM/YYYY' -%}
-        'dd/mm/yyyy'
-    {%- elif date_formats == 'YYYY/MM/DD'-%}
-        'yyyy/mm/dd'
+        'dd/MM/yyyy'
+    {%- elif date_formats == 'YYYY/MM/DD' -%}
+        'yyyy/MM/dd'
     {%- endif -%}
 {% endmacro -%}
 
