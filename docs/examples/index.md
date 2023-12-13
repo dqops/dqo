@@ -11,7 +11,7 @@ To use the examples you need:
 
 - [Installed DQOps](../getting-started/installation/installation.md).
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../data-sources/bigquery.md#using-google-application-credentials-authentication).
 
 After installing Google Cloud CLI, log in to your GCP account, by running:
 
@@ -29,7 +29,7 @@ The example directory contains two configuration files: `connection.dqoconnectio
 configuration, and `*.dqotable.yaml` file, which stores the columns and tables metadata and checks configuration.
 
 While it is not necessary to manually add the connection in our examples, you can find information on how to do it in the
-[Working with DQOps section](../working-with-dqo/adding-data-source-connection/index.md).
+[Working with DQOps section](../data-sources/index.md).
 
 ## Running the use cases
 
@@ -88,7 +88,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view on the left you can find the tables that you have imported. Here is more about [adding connection and importing tables](../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view on the left you can find the tables that you have imported. Here is more about [adding connection and importing tables](../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.

@@ -4,7 +4,7 @@ After [installation and starting DQOps](../installation/installation.md), we des
 using the user interface.
 
 For a full description of how to add a data source connection to other providers or add connection using the command-line shell,
-see [Working with DQOps section](../../working-with-dqo/adding-data-source-connection/index.md).
+see [Working with DQOps section](../../data-sources/index.md).
 You can find more information about [navigating the DQOps user interface here](../../dqo-concepts/user-interface-overview/user-interface-overview.md). 
 
 ## Prerequisite credentials
@@ -13,7 +13,7 @@ To add a connection to a BigQuery data source to DQOps you need the following:
 
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
 - A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../../../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../../data-sources/bigquery.md#using-google-application-credentials-authentication).
 
 We have chosen to use BigQuery data source for this getting started guide, because public BigQuery datasets are freely available
 and you can query them within the GCP FREE tier monthly limit.

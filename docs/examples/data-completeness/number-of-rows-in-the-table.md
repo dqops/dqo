@@ -59,7 +59,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 3. Select the **Daily checks** tab.
 
@@ -316,5 +316,5 @@ Results returned by the sensor:
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [row_count check used in this example, go to the check details section](../../checks/table/volume/row-count.md).
 - You might be interested in another completeness check that [evaluates that the number of nulls in a column does not exceed the maximum accepted count](../data-completeness/number-of-null-values.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).

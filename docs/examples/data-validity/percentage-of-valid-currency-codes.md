@@ -72,7 +72,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
@@ -267,5 +267,5 @@ Results returned by the sensor:
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [string_valid_currency_code_percent check used in this example, go to the check details section](../../checks/column/strings/string-valid-currency-code-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid latitude and longitude values are above the set threshold](../data-validity/percentage-of-valid-latitude-and-longitude.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

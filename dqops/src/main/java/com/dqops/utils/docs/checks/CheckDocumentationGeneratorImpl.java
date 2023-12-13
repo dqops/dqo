@@ -47,15 +47,15 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
     public DocumentationFolder renderCheckDocumentation(Path projectRootPath) {
         DocumentationFolder checksFolder = new DocumentationFolder();
         checksFolder.setFolderName("checks");
-        checksFolder.setLinkName("Checks");
+        checksFolder.setLinkName("Data quality checks");
         checksFolder.setDirectPath(projectRootPath.resolve("../docs/checks").toAbsolutePath().normalize());
 
         List<CheckCategoryDocumentationModel> checkCategoryDocumentationModels = Stream.concat(this.checkDocumentationModelFactory.makeDocumentationForTableChecks().stream(),
                 this.checkDocumentationModelFactory.makeDocumentationForColumnChecks().stream()).collect(Collectors.toList());
 
         MainPageCheckDocumentationModel mainPageCheckDocumentationModel = new MainPageCheckDocumentationModel();
-        mainPageCheckDocumentationModel.setHeader("Checks");
-        mainPageCheckDocumentationModel.setHelpText("This is a list of the checks in DQOps broken down by category and a brief description of what they do.");
+        mainPageCheckDocumentationModel.setHeader("Data quality checks");
+        mainPageCheckDocumentationModel.setHelpText("This is a list of data quality checks supported by DQOps, broken down by a category and a brief description of what they do.");
         mainPageCheckDocumentationModel.setCheckTargets(checkCategoryDocumentationModels.stream()
                 .map(CheckCategoryDocumentationModel::getTarget)
                 .distinct()
@@ -126,11 +126,11 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         if (checkCategory.isPresent()) {
             header = header + "/" + checkCategory.get();
             indexPageCheckDocumentationModel.setHelpText(String.format(
-                    "This is a list of %s %s checks in DQOps and a brief description of what they do.",
+                    "This is a list of %s %s data quality checks supported by DQOps and a brief description of what they do.",
                     checkCategory.get(), checkTarget));
         } else {
             indexPageCheckDocumentationModel.setHelpText(String.format(
-                    "This is a list of %s checks in DQOps broken down by category and a brief description of what they do.",
+                    "This is a list of %s data quality checks supported by DQOps, broken down by a category and a brief description of what they do.",
                     checkTarget));
         }
         indexPageCheckDocumentationModel.setHeader(header);

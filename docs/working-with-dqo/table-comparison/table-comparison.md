@@ -1,7 +1,7 @@
 # Create and run table comparisons 
 
 Table comparison enables you to identify differences between two tables. It is useful when you want to compare datasets
-and validate successful data replication or migration. You can compare tables between any [supported data sources](../../working-with-dqo/adding-data-source-connection/index.md).
+and validate successful data replication or migration. You can compare tables between any [supported data sources](../../data-sources/index.md).
 
 Using Table comparison you can monitor tables using the following comparison checks:
 
