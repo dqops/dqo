@@ -58,7 +58,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-valid-latitude-and-longitude-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -76,27 +76,29 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 
 4. Run the enabled check using the **Run check** button.
+    Run checks on latitude and longitude columns. 
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
+    You can also run all the checks for an entire connection. Click on the three dots icon next to the name of the 
+    connection in the tree view and click on **Run checks**. 
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
-
-    ![Check details](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-details.png)
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source.
+    The Execution errors category displays any error that occurred during the check's execution.
 
     Review the results which should be similar to the one below.
-   
-    The actual value in this example is 99, which is above the minimum threshold level set in the warning (99.0%).
+
+    ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results1.png)
+
+    The actual value in this example is 99.24% for both longitude and latitude checks, which is above the minimum
+    threshold level set in the warning (99.0%).
     The check gives a valid result (notice the green square to the left of the check name).
 
-    ![Valid-latitude-and-longitude-percent check results](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -105,9 +107,26 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
  
-    Below you can see the results displayed on the Issues count per table dashboard showing results by severity level, table stage, table priority, issues per connection and issues per schema.
+    Below you can see the results displayed on the **Highest issue severity per check and day table** dashboard which is located in the
+    Highest issue severity per day group of dashboards. This dashboard allows for reviewing and filtering a summary 
+    number of issues that arise from data quality checks per day, grouped by [check category](../../checks/#categories-of-checks).
 
-    ![Valid-latitude-and-longitude-percent check results on Issues count per table dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-issues-count-per-table-dashboard.png)
+    This dashboard helps evaluate the areas with the highest number of data quality issues that should be addressed.
+    It also allows to review how the issue severity changed per day of the month.
+
+    This dashboard allow filtering data by:
+    
+    * current and previous month,
+    * connection,
+    * schema,
+    * data group,
+    * data quality dimension,
+    * check category,
+    * check name,
+    * table,
+    * column.
+
+    ![Valid-latitude-and-longitude-percent check results on Highest issue severity per check and day dashboard](https://dqops.com/docs/images/examples/daily-valid-latitude-and-longitude-percent-checks-results-on-dashboard1.png)
 
 ## Change a schedule at the connection level
 

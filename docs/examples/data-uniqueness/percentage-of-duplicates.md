@@ -96,7 +96,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
-    Below you can see the results displayed on the Highest issue severity per column and day dashboard located in Highest issue severity group.
+    Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in Highest issue severity group.
     This dashboard allows for reviewing and filtering a summary number of issues that arise from data quality checks per day. 
     This dashboard help evaluate the areas with the highest number of data quality issues that should be addressed.
     It also allows to review how the issue severity changed per day of the month.

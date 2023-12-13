@@ -128,7 +128,7 @@ We aim to verify if the table meets size requirements and is not too small:
 4. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the Largest tables by number of rows dashboard located in the Volume group. 
+    Below you can see the results displayed on the **Largest tables by number of rows** dashboard located in the Volume group. 
     This dashboard displays tables monitored with [row_count](../../checks/table/volume/row-count.md) check and allows 
     review the number of rows in these tables.
 
