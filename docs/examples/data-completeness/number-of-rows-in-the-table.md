@@ -81,9 +81,9 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
     The Execution errors category displays any error
     that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-warning1.png)
-
     Review the results which should be similar to the one below.
+
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-warning1.png)
 
     The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
     The check gives a valid result (notice the green square to the left of the check name).
@@ -187,8 +187,6 @@ In this example, we have set minimum count threshold level for the check:
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
-
 ```yaml hl_lines="7-16"
 apiVersion: dqo/v1
 kind: table
@@ -202,6 +200,15 @@ spec:
         daily_row_count:
           warning:
             min_count: 1
+  columns:
+    edition:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    report_type:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
 ```
 
 
@@ -289,7 +296,7 @@ ORDER BY time_period, time_period_utc
 ```
 
 You can also see the results returned by the sensor. The actual value of rows in this example is 18155, which is above the minimum
-threshold level set in the warning (692).
+threshold level set in the warning (1).
 
 ```
 **************************************************
