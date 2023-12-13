@@ -59,6 +59,12 @@ public class SparkColumnStringsExpectedStringsInUseCountSensorParametersSpecInte
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<String> values = new ArrayList<>();
+        values.add("e55e");
+        values.add("a111a");
+        values.add("d44d");
+        values.add("c33c");
+        values.add("b22b");
+        values.add("missing");
         this.sut.setExpectedValues(values);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
@@ -69,7 +75,7 @@ public class SparkColumnStringsExpectedStringsInUseCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals("", resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test

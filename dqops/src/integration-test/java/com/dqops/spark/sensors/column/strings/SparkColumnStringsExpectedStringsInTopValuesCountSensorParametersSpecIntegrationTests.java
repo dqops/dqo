@@ -66,7 +66,7 @@ public class SparkColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("{alias}.\"id\" < 5");
+        this.sut.setFilter("{alias}.id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
@@ -86,7 +86,7 @@ public class SparkColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("{alias}.\"id\" < 5");
+        this.sut.setFilter("{alias}.id < 5");
 
         DataGroupingConfigurationSpec dataGroupingConfiguration = this.sampleTableMetadata.getTableSpec().getDefaultDataGroupingConfiguration();
         dataGroupingConfiguration.setLevel1(new DataGroupingDimensionSpec() {{
@@ -113,7 +113,7 @@ public class SparkColumnStringsExpectedStringsInTopValuesCountSensorParametersSp
         values.add("d44d");
         this.sut.setExpectedValues(values);
         this.sut.setTop(2L);
-        this.sut.setFilter("{alias}.\"id\" < 5");
+        this.sut.setFilter("{alias}.id < 5");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
