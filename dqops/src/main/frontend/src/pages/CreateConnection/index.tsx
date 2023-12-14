@@ -4,10 +4,7 @@ import DatabaseConnection from '../../components/Dashboard/DatabaseConnection';
 import SelectDatabase from '../../components/Dashboard/SelectDatabase';
 import MainLayout from '../../components/MainLayout';
 import ImportSchemas from '../../components/ImportSchemas';
-import {
-  ConnectionModel,
-  ConnectionModelProviderTypeEnum
-} from '../../api';
+import { ConnectionModel, ConnectionModelProviderTypeEnum } from '../../api';
 
 const CreateConnection = () => {
   const [step, setStep] = useState(0);
@@ -54,6 +51,7 @@ const CreateConnection = () => {
           database={database}
           onChange={setDatabase}
           nameOfDatabase={nameofDB.length !== 0 ? nameofDB : ''}
+          onBack={() => setStep(0)}
         />
       )}
       {step === 2 && (

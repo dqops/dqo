@@ -43,12 +43,14 @@ interface IDatabaseConnectionProps {
   database: ConnectionModel;
   onChange: (db: ConnectionModel) => void;
   nameOfDatabase?: string;
+  onBack: () => void;
 }
 
 const DatabaseConnection = ({
   database,
   onChange,
-  nameOfDatabase
+  nameOfDatabase,
+  onBack
 }: IDatabaseConnectionProps) => {
   const { addConnection } = useTree();
   const [isTesting, setIsTesting] = useState(false);
@@ -277,6 +279,17 @@ const DatabaseConnection = ({
 
   return (
     <div>
+      <div className="mb-4">
+        {' '}
+        <Button
+          label="Back"
+          color="primary"
+          variant="text"
+          className="px-0"
+          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
+          onClick={onBack}
+        />
+      </div>
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
