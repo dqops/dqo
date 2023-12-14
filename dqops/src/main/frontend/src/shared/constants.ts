@@ -214,12 +214,6 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Amazon Aurora'
   },
   {
-    type: ConnectionModelProviderTypeEnum.redshift,
-    name: 'Redshift',
-    iconName: 'redshift',
-    displayName: 'Amazon Redshift'
-  },
-  {
     type: ConnectionModelProviderTypeEnum.mysql,
     name: 'Amazon RDS for mySQL',
     iconName: 'amazonrds',
@@ -332,6 +326,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Postgresql',
     iconName: 'postgresql',
     displayName: 'PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.redshift,
+    name: 'Redshift',
+    iconName: 'redshift',
+    displayName: 'Amazon Redshift'
   },
   {
     type: ConnectionModelProviderTypeEnum.spark,
