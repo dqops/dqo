@@ -1,5 +1,6 @@
 import {
   ConnectionModelProviderTypeEnum,
+  TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
 } from '../api';
 
@@ -15,12 +16,21 @@ interface IDatabaseOption {
   displayName: string;
 }
 
+export type TParameters = {
+  name?: string;
+  refConnection?: string;
+  refSchema?: string;
+  refTable?: string;
+  dataGroupingArray?: TableComparisonGroupingColumnPairModel[];
+};
+
 enum CheckTypes {
   MONITORING = 'monitoring',
   SOURCES = 'sources',
   PROFILING = 'profiling',
   PARTITIONED = 'partitioned'
 }
+
 export const CONNECTION_LEVEL_TABS: {
   [key in CheckTypes]: PageTab[];
 } = {

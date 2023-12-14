@@ -10,6 +10,7 @@ import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
+import { EditProfilingReferenceTable2 } from './EditProfilingReferenceTable2';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
@@ -201,7 +202,7 @@ export const TableReferenceComparisons = ({
   return (
     <>
       {isEditing ? (
-        <EditProfilingReferenceTable
+        <EditProfilingReferenceTable2
           checkTypes={checkTypes}
           timePartitioned={timePartitioned}
           onBack={onBack}

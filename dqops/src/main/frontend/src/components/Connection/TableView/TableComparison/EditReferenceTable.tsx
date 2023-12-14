@@ -41,6 +41,7 @@ import {
   getTableMonthlyPartitionedChecks,
   getTableProfilingChecksModel
 } from '../../../../redux/actions/table.actions';
+import { getRequiredColumnsIndexes } from './TableComparisonUtils';
 
 type TParameters = {
   name?: string;
@@ -514,62 +515,6 @@ const EditReferenceTable = ({
     setIsUpdated(true);
   };
 
-  const getRequiredColumnsIndexes = (
-    dataGrouping: TableComparisonGroupingColumnPairModel[]
-  ) => {
-    const referenceGrouping = dataGrouping.map(
-      (x) => x?.reference_table_column_name
-    );
-    const comparedGrouping = dataGrouping.map(
-      (x) => x?.compared_table_column_name
-    );
-
-    const maxLeghtToCheck = Math.max(
-      referenceGrouping.length,
-      comparedGrouping.length
-    );
-
-    const referenceMissingIndexes = [];
-    const comparedMissingIndexes = [];
-
-    let check = false;
-    for (let i = maxLeghtToCheck - 1; i >= 0; i--) {
-      if (check === false) {
-        if (referenceGrouping?.[i] && comparedGrouping?.[i]) {
-          check = true;
-        } else if (
-          referenceGrouping?.[i] &&
-          (comparedGrouping?.[i] === undefined ||
-            comparedGrouping?.[i]?.length === 0)
-        ) {
-          check = true;
-          comparedMissingIndexes.push(i);
-        } else if (
-          comparedGrouping?.[i] &&
-          (referenceGrouping?.[i] === undefined ||
-            referenceGrouping?.[i]?.length === 0)
-        ) {
-          check = true;
-          referenceMissingIndexes.push(i);
-        }
-      } else {
-        if (
-          comparedGrouping?.[i] === undefined ||
-          comparedGrouping?.[i]?.length === 0
-        ) {
-          comparedMissingIndexes.push(i);
-        }
-        if (
-          referenceGrouping?.[i] === undefined ||
-          referenceGrouping?.[i]?.length === 0
-        ) {
-          referenceMissingIndexes.push(i);
-        }
-      }
-    }
-    return { referenceMissingIndexes, comparedMissingIndexes };
-  };
-
   const saveRun = () => {
     onUpdate();
     if (onRunChecksRowCount) {
@@ -1025,8 +970,6 @@ const EditReferenceTable = ({
               className="flex-1"
               title="Data grouping on reference table"
               placeholder='"Select column on reference table"'
-              refConnection={refConnection}
-              refSchema={refSchema}
               refTable={refTable}
               columnOptions={[
                 { label: '', value: '' },

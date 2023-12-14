@@ -1,4 +1,7 @@
-import { QualityCategoryModel } from '../../../../api';
+import {
+  QualityCategoryModel,
+  TableComparisonGroupingColumnPairModel
+} from '../../../../api';
 import { CheckTypes } from '../../../../shared/routes';
 
 export type EditProfilingReferenceTableProps = {
@@ -14,13 +17,6 @@ export type EditProfilingReferenceTableProps = {
   canUserCompareTables?: boolean;
   checksUI: any;
   onUpdateChecks: () => void;
-};
-
-export type TParameters = {
-  name?: string;
-  refConnection?: string;
-  refSchema?: string;
-  refTable?: string;
 };
 
 export type TSeverityValues = Partial<{

@@ -41,9 +41,10 @@ import { calculateColor, onUpdate } from './TableComparisonUtils';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import TableLevelResults from './TableLevelResults';
 import SeverityInputBlock from './SeverityInputBlock';
+import EditReferenceTable2 from './EditReferenceTable2';
 import { TParameters } from '../../../../shared/constants';
 
-export const EditProfilingReferenceTable = ({
+export const EditProfilingReferenceTable2 = ({
   checkTypes,
   timePartitioned,
   onBack,
@@ -514,42 +515,42 @@ export const EditProfilingReferenceTable = ({
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
-        <EditReferenceTable
-          onUpdateParent={() =>
-            onUpdate(
-              connection,
-              schema,
-              table,
-              checkTypes,
-              timePartitioned,
-              reference,
-              handleChange,
-              checksUI
-            )
-          }
+        <EditReferenceTable2
+          //   onUpdateParent={() =>
+          //     onUpdate(
+          //       connection,
+          //       schema,
+          //       table,
+          //       checkTypes,
+          //       timePartitioned,
+          //       reference,
+          //       handleChange,
+          //       checksUI
+          //     )
+          //   }
           onBack={onBack}
-          onChange={onChange}
+          //   onChange={onChange}
           selectedReference={selectedReference}
-          isUpdatedParent={isUpdated}
+          //   isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
-          onRunChecksRowCount={onRunChecks}
-          disabled={disabled || loading}
-          isCreating={isCreating}
-          goToRefTable={() => goToRefTable(reference)}
-          onChangeUpdatedParent={onChangeUpdatedParent}
-          combinedFunc={(name: string) => {
-            onChangeSelectedReference(name), getNewTableComparison();
-          }}
-          cleanDataTemplate={reference?.compare_table_clean_data_job_template}
-          onChangeIsDataDeleted={onChangeIsDataDeleted}
-          isDataDeleted={isDataDeleted}
-          listOfExistingReferences={listOfExistingReferences}
-          canUserCompareTables={canUserCompareTables}
+          //   onRunChecksRowCount={onRunChecks}
+          //   disabled={disabled || loading}
+          //   isCreating={isCreating}
+          //   goToRefTable={() => goToRefTable(reference)}
+          //   onChangeUpdatedParent={onChangeUpdatedParent}
+          //   combinedFunc={(name: string) => {
+          //     onChangeSelectedReference(name), getNewTableComparison();
+          //   }}
+          //   cleanDataTemplate={reference?.compare_table_clean_data_job_template}
+          //   onChangeIsDataDeleted={onChangeIsDataDeleted}
+          //   isDataDeleted={isDataDeleted}
+          existingTableComparisonConfigurations={listOfExistingReferences}
+          //   canUserCompareTables={canUserCompareTables}
           columnOptions={{
             comparedColumnsOptions: comparedColumnOptions ?? [],
             referencedColumnsOptions: columnOptions
           }}
-          onChangeParameters={onChangeParameters}
+          //   onChangeParameters={onChangeParameters}
         />
       </div>
       {reference &&
