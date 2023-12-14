@@ -11,6 +11,45 @@ The platform analyzes more than 340 measures of behaviors, social and economic f
 Data is based on public-use data sets, such as the U.S. Census and the Centers for Disease Control and Prevention’s Behavioral Risk Factor Surveillance System (BRFSS),
 the world’s largest, annual population-based telephone survey of over 400,000 people.
 
+We want to verify that the upper_ci column is always greater or equal to the lower_ci column.
+The check result should tell us if we have any rows not matching an SQL expression `upper_ci >=lower_ci` evaluated on each row.
+
+The SQL query that can calculate the percentage of rows that passed the check should look like the one below:
+
+```sql hl_lines="5-5"
+SELECT
+     SUM(
+          CASE
+              WHEN 
+                   upper_ci >= lower_ci
+              THEN 1
+              ELSE 0
+          END) * 100.0 / COUNT(*)  AS actual_value
+FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
+```
+
+We want to verify that the percent of rows passed a custom SQL condition (expression) matches the expected threshold.
+
+
+**SOLUTION**
+
+We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
+[sql_condition_passed_percent](../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check.
+Our goal is to verify if the percentage of rows passed a custom SQL condition does not fall below the set thresholds.
+
+In this example, we will set three minimum percentage thresholds levels for the check:
+
+- warning: 100.0%
+- error: 99.0%
+- fatal: 95.0%
+
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+
+**VALUE**
+
+If the percentage of data falls below 100.0%, a warning alert will be triggered.
+
+
 ### Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.
@@ -27,43 +66,6 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 | 77    | **76**   | **77**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
 | 78    | **78**   | **79**   | U.S. Census Bureau, American Community Survey PUMS | 2015-2019   |
 
-We want to verify that the upper_ci column is always greater or equal to the lower_ci column.
-The check result should tell us if we have any rows not matching an SQL expression `upper_ci >=lower_ci` evaluated on each row.
-
-The SQL query that can calculate the percentage of rows that passed the check should be like:
-```sql hl_lines="5-5"
-SELECT
-     SUM(
-          CASE
-              WHEN 
-                   upper_ci >= lower_ci
-              THEN 1
-              ELSE 0
-          END) * 100.0 / COUNT(*)  AS actual_value
-FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
-```
-
-We want to verify that the percent of rows passed a custom SQL condition (expression) matches the expected threshold,
-for example at least 95% passed the data quality check or a data quality issue is raised.
-
-
-**SOLUTION**
-
-We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
-[sql_condition_passed_percent](../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check.
-Our goal is to verify if the percentage of rows passed a custom SQL condition does not fall below the setup thresholds.
-
-In this example, we will set three minimum percentage thresholds levels for the check:
-
-- warning: 100.0%
-- error: 99.0%
-- fatal: 95.0%
-
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
-
-**VALUE**
-
-If the percentage of data falls below 100.0%, a warning alert will be triggered.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
@@ -71,7 +73,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-sql-condition-passed-percent-on-table-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -85,14 +87,20 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This tab displays a list of data quality checks in the check editor. The daily_sql_condition_passed_percent_on_table check
+    has additional parameter sql_condition that allows you to input a SQL condition (expression) that returns true or false.
+    The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.
+    
+    The condition in our example is `upper_ci >=lower_ci`
+
+    Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -102,14 +110,13 @@ To execute the check prepared in the example using the [user interface](../../dq
     The Sensor readouts category displays the values obtained by the sensors from the data source.
     The Execution errors category displays any error that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-details.png)
-
     Review the results which should be similar to the one below.
-   
-    The actual value in this example is 92, which is below the minimum threshold level set in the warning (100.0%).
+
+    ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results1.png)
+
+    The actual value in this example is 92.6%, which is below the minimum threshold level set in the fatal error (95.0%).
     The check gives a fatal error (notice the red square to the left of the check name).
 
-    ![SQL-condition-passed-percent check results](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -118,9 +125,24 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the Current table status per data quality dimension dashboard showing results by connection, schema, dimension and data group.
+    Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
+    This dashboard summarizes results from most recently executed checks categorized to Validity dimension.
 
-    ![SQL-condition-passed-percent results on Current table status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-table-status-per-data-quality-dimension-dashboard.png)
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 3 months)
+    * connection,
+    * schema,
+    * data group,
+    * check category,
+    * check name,
+    * stages,
+    * priorities,
+    * table,
+    * column,
+    * issue severity.
+    
+    ![SQL-condition-passed-percent results on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-sql-condition-passed-percent-on-table-checks-results-on-current-validity-issues-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -179,15 +201,6 @@ spec:
     daily:
       sql:
         daily_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: upper_ci >=lower_ci
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
           parameters:
             sql_condition: upper_ci >=lower_ci
           warning:

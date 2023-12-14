@@ -164,6 +164,8 @@ This dashboard allows filtering data by:
 * connection,
 * schema,
 * data group,
+* stage,
+* priority,
 * data quality dimension,
 * check category,
 * check name,
@@ -176,7 +178,7 @@ This dashboard allows filtering data by:
 
 ### **Check results**
 
-**Check results** dashboards allows to review the details of the executed checks results.
+**Check results** dashboards allow to review the details of the executed checks results.
 
 **History of data quality check results** is a representative of this group. This dashboard displays all executed
 checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
@@ -205,7 +207,7 @@ This dashboard allows filtering data by:
 **Data Quality Dimensions** group contains dashboards dedicated for different data quality dimension such as availability,
 completeness, or timeliness. 
 
-**Availability**, **completeness** and **validity** dimensions has at least two dashboards. One dedicated to reviewing current issues and the
+**Availability**, **Completeness**, Timeliness, and **Validity** dimensions has at least two dashboards. One dedicated to reviewing current issues and the
 other to history of issues. 
 
 **Timeliness** dimensions has specialized dashboards for evaluating:
@@ -230,14 +232,13 @@ This dashboard allows filtering data by:
 * connection,
 * schema,
 * data group,
-* data quality dimension,
 * check category,
 * check name,
 * stages,
 * priorities,
 * table,
 * column,
-* issue severity
+* issue severity.
 
 
 ![Current completeness issues on columns](https://dqops.com/docs/images/concepts/data-quality-dashboards/current-completeness-issues-on-columns.png)

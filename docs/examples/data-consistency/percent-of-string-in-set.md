@@ -109,7 +109,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     Review the results which should be similar to the one below.
 
-    The actual value in this example is 40, which is below the minimum threshold level set in the warning (99).
+    The actual value in this example is 40%, which is below the minimum threshold level set in the warning (99%).
     The check gives a fatal result (notice the red square to the left of the check name).
 
     ![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results.png)

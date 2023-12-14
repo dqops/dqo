@@ -10,18 +10,7 @@ spec:
       sql:
         daily_sql_condition_passed_percent_on_table:
           parameters:
-            sql_condition: upper_ci >= lower_ci or upper_ci is NULL or lower_ci is
-              NULL
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: upper_ci >= lower_ci or upper_ci is NULL or lower_ci is
-              NULL
+            sql_condition: upper_ci >=lower_ci
           warning:
             min_percent: 100.0
           error:

@@ -86,7 +86,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     ![Duplicate-percent check results](https://dqops.com/docs/images/examples/daily-duplicate-percent-checks-results1.png)
 
-    The actual value in this example is 0, which is below the maximum threshold level set in the warning (1.0%).
+    The actual value in this example is 0%, which is below the maximum threshold level set in the warning (1.0%).
     The check gives a valid result (notice the green square to the left of the check name).
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
