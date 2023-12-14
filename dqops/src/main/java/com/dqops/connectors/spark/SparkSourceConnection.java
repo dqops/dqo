@@ -31,7 +31,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
 import java.sql.Statement;
 import java.util.*;
@@ -110,6 +112,11 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         return hikariConfig;
     }
 
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
     @Override
     public List<SourceSchemaModel> listSchemas() {
         StringBuilder sqlBuilder = new StringBuilder();
@@ -127,6 +134,12 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         return results;
     }
 
+    /**
+     * Lists tables inside a schema. Views are also returned.
+     *
+     * @param schemaName Schema name.
+     * @return List of tables in the given schema.
+     */
     @Override
     public List<SourceTableModel> listTables(String schemaName) {
 
@@ -148,6 +161,12 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         return results;
     }
 
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     */
     @Override
     public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
         try {
@@ -171,5 +190,89 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Retrieves the metadata (column information) for a given list of tables from a given schema.
+     *
+     * @param schemaName Schema name.
+     * @param tableNames Table names.
+     * @return List of table specifications with the column list.
+     */
+    @Override
+    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames) {
+        assert !Strings.isNullOrEmpty(schemaName);
+
+        try {
+            List<TableSpec> tableSpecs = new ArrayList<>();
+
+            for (String tableName : tableNames) {
+                String sql = "DESCRIBE " + tableName;
+                tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+                Column<?>[] columns = tableResult.columnArray();
+                for (Column<?> column : columns) {
+                    column.setName(column.name().toLowerCase(Locale.ROOT));
+                }
+
+                String physicalTableName = String.format("%s.%s", schemaName, tableName);
+
+                HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
+                TableSpec tableSpec = tablesByTableName.get(physicalTableName);
+                if (tableSpec == null) {
+                    tableSpec = new TableSpec();
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
+                    tablesByTableName.put(physicalTableName, tableSpec);
+                    tableSpecs.add(tableSpec);
+                }
+
+                for (Row colRow : tableResult) {
+                    String columnName = colRow.getString("col_name");
+                    String dataType = colRow.getString("data_type");
+                    boolean isNullable = true; //  todo: the following statement returns this information, but it has to be parsed: SHOW TABLE EXTENDED like 'table_name_here'
+
+                    ColumnSpec columnSpec = new ColumnSpec();
+                    ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+
+                    // todo: lengths and precisions if applicable
+//                if (tableResult.containsColumn("character_maximum_length") &&
+//                        !colRow.isMissing("character_maximum_length")) {
+//                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_maximum_length")));
+//                }
+//                else if (tableResult.containsColumn("character_octet_length") &&
+//                        !colRow.isMissing("character_octet_length")) {
+//                    columnType.setLength(NumericTypeConverter.toInt(colRow.getObject("character_octet_length")));
+//                }
+//
+//                if (tableResult.containsColumn("numeric_precision") &&
+//                        !colRow.isMissing("numeric_precision")) {
+//                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_precision")));
+//                }
+//
+//                if (tableResult.containsColumn("numeric_scale") &&
+//                        !colRow.isMissing("numeric_scale")) {
+//                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("numeric_scale")));
+//                }
+//
+//                if (tableResult.containsColumn("datetime_precision") &&
+//                        !colRow.isMissing("datetime_precision")) {
+//                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("datetime_precision")));
+//                }
+//
+//                if (tableResult.containsColumn("interval_precision") &&
+//                        !colRow.isMissing("interval_precision")) {
+//                    columnType.setPrecision(NumericTypeConverter.toInt(colRow.getObject("interval_precision")));
+//                }
+
+                    columnType.setNullable(isNullable);
+                    columnSpec.setTypeSnapshot(columnType);
+                    tableSpec.getColumns().put(columnName, columnSpec);
+                }
+
+            }
+
+            return tableSpecs;
+        }
+        catch (Exception ex) {
+            throw new ConnectionQueryException(ex);
+        }
+    }
 
 }
