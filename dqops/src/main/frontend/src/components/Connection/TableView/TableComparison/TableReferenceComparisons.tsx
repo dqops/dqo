@@ -111,6 +111,7 @@ export const TableReferenceComparisons = ({
   const onBack = (stayOnSamePage?: boolean | undefined) => {
     if (stayOnSamePage === false) {
       setIsEditing(true);
+      setIsCreting(false);
     } else {
       let url = '';
       if (checkTypes === CheckTypes.PROFILING) {
@@ -198,6 +199,7 @@ export const TableReferenceComparisons = ({
       tableComparisonConfigurationName
     ).then(() => setIsComparisonDeleted(!isComparisonDeleted));
   };
+  console.log(isCreating);
 
   return (
     <>

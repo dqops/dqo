@@ -27,6 +27,7 @@ type TEditReferenceTable = {
   editConfigurationParameters: TParameters;
   onChangeParameters: (obj: Partial<TParameters>) => void;
   onUpdateChecks: () => void;
+  setConfigurationToEditing: (name: string) => void;
 };
 
 export default function EditReferenceTable2({
@@ -37,7 +38,8 @@ export default function EditReferenceTable2({
   columnOptions,
   editConfigurationParameters,
   onChangeParameters,
-  onUpdateChecks
+  onUpdateChecks,
+  setConfigurationToEditing
 }: TEditReferenceTable) {
   const {
     checkTypes,
@@ -115,6 +117,7 @@ export default function EditReferenceTable2({
             existingTableComparisonConfigurations={
               existingTableComparisonConfigurations
             }
+            setConfigurationToEditing={setConfigurationToEditing}
           />
         )}
       </div>

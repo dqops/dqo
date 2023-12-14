@@ -525,9 +525,9 @@ export const EditProfilingReferenceTable2 = ({
           //   isCreating={isCreating}
           //   goToRefTable={() => goToRefTable(reference)}
           //   onChangeUpdatedParent={onChangeUpdatedParent}
-          //   combinedFunc={(name: string) => {
-          //     onChangeSelectedReference(name), getNewTableComparison();
-          //   }}
+          setConfigurationToEditing={(name: string) => {
+            onChangeSelectedReference(name), getNewTableComparison();
+          }}
           //   cleanDataTemplate={reference?.compare_table_clean_data_job_template}
           //   onChangeIsDataDeleted={onChangeIsDataDeleted}
           //   isDataDeleted={isDataDeleted}
