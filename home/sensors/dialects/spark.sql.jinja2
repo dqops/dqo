@@ -1,4 +1,3 @@
-{% set macro_project_name =  connection.bigquery.source_project_id -%}
 {% set macro_schema_name = target_table.schema_name -%}
 {% set macro_table_name = target_table.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}

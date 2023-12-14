@@ -152,7 +152,7 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
 
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
-            String tableName = tablesRows.getString(rowIndex, "table_name");
+            String tableName = tablesRows.getString(rowIndex, "tablename");
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
             SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
             results.add(schemaModel);
@@ -212,14 +212,12 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
                     column.setName(column.name().toLowerCase(Locale.ROOT));
                 }
 
-                String physicalTableName = String.format("%s.%s", schemaName, tableName);
-
                 HashMap<String, TableSpec> tablesByTableName = new HashMap<>();
-                TableSpec tableSpec = tablesByTableName.get(physicalTableName);
+                TableSpec tableSpec = tablesByTableName.get(tableName);
                 if (tableSpec == null) {
                     tableSpec = new TableSpec();
-                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
-                    tablesByTableName.put(physicalTableName, tableSpec);
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+                    tablesByTableName.put(tableName, tableSpec);
                     tableSpecs.add(tableSpec);
                 }
 
