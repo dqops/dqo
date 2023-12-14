@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
@@ -198,7 +198,7 @@ public class ColumnListModel {
             {{
                 setConnection(connectionName);
                 setFullTableName(physicalTableName.toTableSearchFilter());
-                setColumnNames(new ArrayList<>() {{ add(columnName); }});
+                setColumnNames(List.of(columnName));
 
                 setDateStart(null);
                 setDateEnd(null);

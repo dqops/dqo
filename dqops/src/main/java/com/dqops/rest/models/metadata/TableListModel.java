@@ -335,7 +335,7 @@ public class TableListModel {
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setFullTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
 
                 setDateStart(null);
