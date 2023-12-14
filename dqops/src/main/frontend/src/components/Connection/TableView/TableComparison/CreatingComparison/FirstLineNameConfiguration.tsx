@@ -22,7 +22,7 @@ type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
   onChangeName: (name: string) => void;
   isButtonEnabled: boolean;
-  onBack: () => void;
+  onBack: (stayOnSamePage?: boolean | undefined) => void;
   timePartitioned?: 'daily' | 'monthly';
   existingTableComparisonConfigurations: (string | undefined)[];
 };
@@ -200,7 +200,7 @@ export default function FirstLineNameConfiguration({
             }
           });
       }
-      onBack();
+      onBack(false);
       setComparisonAlreadyExist(false);
     }
   };

@@ -19,11 +19,13 @@ type TEditReferenceTable = {
   selectedReference?: string;
   timePartitioned?: 'daily' | 'monthly';
   existingTableComparisonConfigurations: (string | undefined)[];
-  onBack: () => void;
+  onBack: (stayOnSamePage?: boolean | undefined) => void;
   columnOptions: {
     comparedColumnsOptions: Option[];
     referencedColumnsOptions: Option[];
   };
+  editConfigurationParameters: TParameters;
+  onChangeParameters: (obj: Partial<TParameters>) => void;
 };
 
 export default function EditReferenceTable2({
@@ -31,7 +33,9 @@ export default function EditReferenceTable2({
   timePartitioned,
   existingTableComparisonConfigurations,
   onBack,
-  columnOptions
+  columnOptions,
+  editConfigurationParameters,
+  onChangeParameters
 }: TEditReferenceTable) {
   const {
     checkTypes,
@@ -49,17 +53,8 @@ export default function EditReferenceTable2({
   const [editConnectionSchemaTable, setEditConnectionSchemaTable] =
     useState(false);
   const [editColumnGrouping, setEditColumnGrouping] = useState(false);
-  const [editConfigurationParameters, setEditConfigurationParameters] =
-    useState<TParameters>({});
   const [comparisonAlreadyExist, setComparisonAlreadyExist] = useState(false);
   const [isUpdated, setIsUpdated] = useState(false);
-
-  const onChangeParameters = (obj: Partial<TParameters>) => {
-    setEditConfigurationParameters((prevState) => ({
-      ...prevState,
-      ...obj
-    }));
-  };
 
   const onChangeName = (name: string) => {
     onChangeParameters({ name: name });
@@ -94,53 +89,65 @@ export default function EditReferenceTable2({
     }
   }, [selectedReference]);
 
-  console.log(editConfigurationParameters);
   return (
-    <div>
-      {selectedReference ? (
-        <EditingViewFirstLine
-          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
-          editConfigurationParameters={editConfigurationParameters}
-        />
-      ) : (
-        <FirstLineNameConfiguration
-          editConfigurationParameters={editConfigurationParameters}
-          onChangeName={onChangeName}
-          isButtonEnabled={true}
-          onBack={onBack}
-          timePartitioned={timePartitioned}
-          existingTableComparisonConfigurations={
-            existingTableComparisonConfigurations
-          }
-        />
-      )}
-      {selectedReference && editConnectionSchemaTable === false ? (
-        <SelectConnectionSchemaTableOverlook
-          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
-          editConfigurationParameters={editConfigurationParameters}
-        />
-      ) : (
-        <SelectConnectionSchemaTable
-          editConfigurationParameters={editConfigurationParameters}
-          onChangeParameters={onChangeParameters}
-          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
-        />
-      )}
-      {selectedReference && editColumnGrouping === false ? (
-        <SelectColumnGroupingOverlook
-          onChangeEditColumnGrouping={onChangeEditColumnGrouping}
-          dataGroupingArray={
-            editConfigurationParameters.dataGroupingArray ?? []
-          }
-        />
-      ) : (
-        <SelectColumnGrouping
-          onChangeEditColumnGrouping={onChangeEditColumnGrouping}
-          columnOptions={columnOptions}
-          editConfigurationParameters={editConfigurationParameters}
-          onChangeParameters={onChangeParameters}
-        />
-      )}
+    <div className="w-full ">
+      <div className="w-full">
+        {selectedReference ? (
+          <EditingViewFirstLine
+            onChangeEditConnectionSchemaTable={
+              onChangeEditConnectionSchemaTable
+            }
+            editConfigurationParameters={editConfigurationParameters}
+            onBack={onBack}
+          />
+        ) : (
+          <FirstLineNameConfiguration
+            editConfigurationParameters={editConfigurationParameters}
+            onChangeName={onChangeName}
+            isButtonEnabled={true}
+            onBack={onBack}
+            timePartitioned={timePartitioned}
+            existingTableComparisonConfigurations={
+              existingTableComparisonConfigurations
+            }
+          />
+        )}
+      </div>
+      <div className="pt-4">
+        {selectedReference && editConnectionSchemaTable === false ? (
+          <SelectConnectionSchemaTableOverlook
+            onChangeEditConnectionSchemaTable={
+              onChangeEditConnectionSchemaTable
+            }
+            editConfigurationParameters={editConfigurationParameters}
+          />
+        ) : (
+          <SelectConnectionSchemaTable
+            editConfigurationParameters={editConfigurationParameters}
+            onChangeParameters={onChangeParameters}
+            onChangeEditConnectionSchemaTable={
+              onChangeEditConnectionSchemaTable
+            }
+          />
+        )}
+      </div>
+      <div className="py-4">
+        {selectedReference && editColumnGrouping === false ? (
+          <SelectColumnGroupingOverlook
+            onChangeEditColumnGrouping={onChangeEditColumnGrouping}
+            dataGroupingArray={
+              editConfigurationParameters.dataGroupingArray ?? []
+            }
+          />
+        ) : (
+          <SelectColumnGrouping
+            onChangeEditColumnGrouping={onChangeEditColumnGrouping}
+            columnOptions={columnOptions}
+            editConfigurationParameters={editConfigurationParameters}
+            onChangeParameters={onChangeParameters}
+          />
+        )}
+      </div>
     </div>
   );
 }

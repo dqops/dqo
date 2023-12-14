@@ -15,7 +15,7 @@ import { IRootState } from '../../../../../redux/reducers';
 type TEditingViewFirstLine = {
   editConfigurationParameters: TParameters;
   onChangeEditConnectionSchemaTable: (open: boolean) => void;
-  onBack?: any;
+  onBack: () => void;
   disabled?: boolean;
   onUpdate?: any;
   compareTables?: any;
@@ -95,8 +95,13 @@ export default function EditingViewFirstLine({
 
   return (
     <div>
-      <div>
-        <span className="font-bold">{editConfigurationParameters.name}</span>
+      <div className="flex items-center justify-between my-4">
+        <div className="flex items-center justify-center gap-x-5">
+          <div className="font-bold text-center">
+            Table comparison configuration name:{' '}
+          </div>
+          <span className="font-bold">{editConfigurationParameters.name}</span>
+        </div>
         <div className="flex justify-center items-center gap-x-2">
           <SvgIcon
             name="sync"

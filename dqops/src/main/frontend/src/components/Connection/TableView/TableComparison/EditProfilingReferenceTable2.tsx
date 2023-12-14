@@ -264,92 +264,66 @@ export const EditProfilingReferenceTable2 = ({
     }
   }, [selectedReference]);
 
-  useEffect(() => {
-    if (
-      reference !== undefined &&
-      isCreating === false &&
-      connectionExist === true &&
-      schemaExist === true &&
-      tableExist === true &&
-      reference.reference_connection?.length !== 0 &&
-      reference.reference_table?.schema_name?.length !== 0 &&
-      reference.reference_table?.table_name?.length !== 0
-    ) {
-      ColumnApiClient.getColumns(
-        reference.reference_connection ?? '',
-        reference.reference_table?.schema_name ?? '',
-        reference.reference_table?.table_name ?? ''
-      )?.then((columnRes) => {
-        if (
-          columnRes &&
-          columnRes.data.length !== 0 &&
-          Array.isArray(columnRes.data)
-        ) {
-          setColumnOptions(
-            columnRes.data.map((item) => ({
-              label: item.column_name ?? '',
-              value: item.column_name ?? ''
-            }))
-          );
-        }
-      });
-    } else if (
-      parameters.refConnection &&
-      parameters.refSchema &&
-      parameters.refTable &&
-      ((connectionExist === true &&
-        schemaExist === true &&
-        tableExist === true) ||
-        isCreating === true)
-    ) {
-      ColumnApiClient.getColumns(
-        parameters.refConnection,
-        parameters.refSchema,
-        parameters.refTable
-      )?.then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
-      });
-    }
-  }, [
-    selectedReference,
-    tableExist,
-    schemaExist,
-    connectionExist,
-    reference?.reference_connection,
-    reference?.reference_table,
-    parameters.refTable
-  ]);
-
-  const goToRefTable = (reference: TableComparisonModel | undefined) => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? '',
-      'detail'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      CheckTypes.SOURCES,
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? ''
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url: url,
-        value,
-        label: reference?.reference_table?.table_name ?? '',
-        state: {}
-      })
-    );
-
-    history.push(url);
-  };
+  //   useEffect(() => {
+  //     if (
+  //       reference !== undefined &&
+  //       isCreating === false &&
+  //       connectionExist === true &&
+  //       schemaExist === true &&
+  //       tableExist === true &&
+  //       reference.reference_connection?.length !== 0 &&
+  //       reference.reference_table?.schema_name?.length !== 0 &&
+  //       reference.reference_table?.table_name?.length !== 0
+  //     ) {
+  //       ColumnApiClient.getColumns(
+  //         reference.reference_connection ?? '',
+  //         reference.reference_table?.schema_name ?? '',
+  //         reference.reference_table?.table_name ?? ''
+  //       )?.then((columnRes) => {
+  //         if (
+  //           columnRes &&
+  //           columnRes.data.length !== 0 &&
+  //           Array.isArray(columnRes.data)
+  //         ) {
+  //           setColumnOptions(
+  //             columnRes.data.map((item) => ({
+  //               label: item.column_name ?? '',
+  //               value: item.column_name ?? ''
+  //             }))
+  //           );
+  //         }
+  //       });
+  //     } else if (
+  //       parameters.refConnection &&
+  //       parameters.refSchema &&
+  //       parameters.refTable &&
+  //       ((connectionExist === true &&
+  //         schemaExist === true &&
+  //         tableExist === true) ||
+  //         isCreating === true)
+  //     ) {
+  //       ColumnApiClient.getColumns(
+  //         parameters.refConnection,
+  //         parameters.refSchema,
+  //         parameters.refTable
+  //       )?.then((columnRes) => {
+  //         setColumnOptions(
+  //           columnRes.data.map((item) => ({
+  //             label: item.column_name ?? '',
+  //             value: item.column_name ?? ''
+  //           }))
+  //         );
+  //       });
+  //     }
+  //   }, [
+  //     selectedReference,
+  //     tableExist,
+  //     schemaExist,
+  //     connectionExist,
+  //     reference?.reference_connection,
+  //     reference?.reference_table,
+  //     parameters.refTable
+  //   ]);
 
   const onChange = (obj: Partial<TableComparisonModel>): void => {
     setReference({
@@ -447,6 +421,7 @@ export const EditProfilingReferenceTable2 = ({
       console.error(err);
     }
   };
+
   const disabled =
     job &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
@@ -475,26 +450,36 @@ export const EditProfilingReferenceTable2 = ({
   ).find((key) => key.includes('row'));
 
   useEffect(() => {
-    if (reference?.columns) {
+    ColumnApiClient.getColumns(connection, schema, table)?.then((columnRes) => {
       setComparedColumnOptions(
-        reference?.columns.map((x) => ({
-          label: x.compared_column_name ?? '',
-          value: x.compared_column_name ?? ''
+        columnRes.data.map((item) => ({
+          label: item.column_name ?? '',
+          value: item.column_name ?? ''
         }))
       );
-    } else {
-      ColumnApiClient.getColumns(connection, schema, table)?.then(
-        (columnRes) => {
-          setComparedColumnOptions(
-            columnRes.data.map((item) => ({
-              label: item.column_name ?? '',
-              value: item.column_name ?? ''
-            }))
-          );
-        }
-      );
+    });
+  }, [connection, schema, table]);
+
+  useEffect(() => {
+    if (
+      parameters.refConnection &&
+      parameters.refSchema &&
+      parameters.refTable
+    ) {
+      ColumnApiClient.getColumns(
+        parameters.refConnection ?? '',
+        parameters.refSchema ?? '',
+        parameters.refTable ?? ''
+      )?.then((columnRes) => {
+        setColumnOptions(
+          columnRes.data.map((item) => ({
+            label: item.column_name ?? '',
+            value: item.column_name ?? ''
+          }))
+        );
+      });
     }
-  }, [reference?.columns, connection, schema, table]);
+  }, [parameters.refTable]);
 
   const renderWarningTooltip = (): ReactNode => {
     return (
@@ -533,6 +518,8 @@ export const EditProfilingReferenceTable2 = ({
           selectedReference={selectedReference}
           //   isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
+          editConfigurationParameters={parameters}
+          onChangeParameters={onChangeParameters}
           //   onRunChecksRowCount={onRunChecks}
           //   disabled={disabled || loading}
           //   isCreating={isCreating}

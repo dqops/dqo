@@ -44,43 +44,41 @@ export default function SelectConnectionSchemaTable({
   }, []);
 
   useEffect(() => {
-    SchemaApiClient.getSchemas(
-      editConfigurationParameters.refConnection ?? ''
-    ).then((res) => {
-      if (res !== undefined) {
-        setSchemaOptions(
-          res.data.map((item) => ({
-            label: item.schema_name ?? '',
-            value: item.schema_name ?? ''
-          }))
-        );
-      }
-    });
+    if (editConfigurationParameters?.refConnection) {
+      SchemaApiClient.getSchemas(
+        editConfigurationParameters.refConnection ?? ''
+      ).then((res) => {
+        if (res !== undefined) {
+          setSchemaOptions(
+            res.data.map((item) => ({
+              label: item.schema_name ?? '',
+              value: item.schema_name ?? ''
+            }))
+          );
+        }
+      });
+    }
   }, [editConfigurationParameters.refConnection]);
 
   useEffect(() => {
-    // if (
-    //   refConnection &&
-    //   refConnection.length !== 0 &&
-    //   refSchema &&
-    //   refSchema.length !== 0 &&
-    //   connectionExist === true &&
-    //   schemaExist === true
-    // ) {
-    TableApiClient.getTables(
-      editConfigurationParameters.refConnection ?? '',
-      editConfigurationParameters.refSchema ?? ''
-    ).then((res) => {
-      if (res !== undefined) {
-        setTableOptions(
-          res.data.map((item) => ({
-            label: item.target?.table_name ?? '',
-            value: item.target?.table_name ?? ''
-          }))
-        );
-      }
-    });
-    // }
+    if (
+      editConfigurationParameters.refConnection &&
+      editConfigurationParameters.refSchema
+    ) {
+      TableApiClient.getTables(
+        editConfigurationParameters.refConnection ?? '',
+        editConfigurationParameters.refSchema ?? ''
+      ).then((res) => {
+        if (res !== undefined) {
+          setTableOptions(
+            res.data.map((item) => ({
+              label: item.target?.table_name ?? '',
+              value: item.target?.table_name ?? ''
+            }))
+          );
+        }
+      });
+    }
   }, [
     editConfigurationParameters.refConnection,
     editConfigurationParameters.refSchema
@@ -90,7 +88,7 @@ export default function SelectConnectionSchemaTable({
     <SectionWrapper
       title="Reference table (the source of truth)"
       className="py-8 mb-10 flex w-full items-center justify-between"
-      // svgIcon={isCreating ? false : true}
+      svgIcon={true}
       onClick={() => onChangeEditConnectionSchemaTable(false)}
     >
       <div className="flex flex-col gap-2 w-1/3 mb-3 mr-4">
@@ -99,11 +97,11 @@ export default function SelectConnectionSchemaTable({
           className="flex-1"
           options={connectionOptions}
           value={editConfigurationParameters.refConnection}
-          onChange={() =>
+          onChange={(selectedOption) => {
             onChangeParameters({
-              refConnection: editConfigurationParameters.refConnection
-            })
-          }
+              refConnection: selectedOption
+            });
+          }}
           // triggerClassName={connectionExist ? '' : 'border border-red-500'}
         />
       </div>
@@ -113,9 +111,9 @@ export default function SelectConnectionSchemaTable({
           className="flex-1"
           options={schemaOptions}
           value={editConfigurationParameters.refSchema}
-          onChange={() =>
+          onChange={(selectedOption) =>
             onChangeParameters({
-              refSchema: editConfigurationParameters.refSchema
+              refSchema: selectedOption
             })
           }
           // triggerClassName={schemaExist ? '' : 'border border-red-500'}
@@ -127,9 +125,9 @@ export default function SelectConnectionSchemaTable({
           className="flex-1"
           options={tableOptions}
           value={editConfigurationParameters.refTable}
-          onChange={() =>
+          onChange={(selectedOption) =>
             onChangeParameters({
-              refTable: editConfigurationParameters.refTable
+              refTable: selectedOption
             })
           }
           // triggerClassName={tableExist ? '' : 'border border-red-500'}

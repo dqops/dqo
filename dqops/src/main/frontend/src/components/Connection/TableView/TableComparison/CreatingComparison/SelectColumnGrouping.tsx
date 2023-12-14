@@ -215,6 +215,7 @@ export default function SelectColumnGrouping({
             editConfigurationParameters.dataGroupingArray ?? []
           ).referenceMissingIndexes
         }
+        refTable={editConfigurationParameters.refTable}
         responseList={(
           editConfigurationParameters.dataGroupingArray ?? []
         )?.map((item) => item?.reference_table_column_name ?? '')}
