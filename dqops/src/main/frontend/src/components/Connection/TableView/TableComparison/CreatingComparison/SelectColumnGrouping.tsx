@@ -4,8 +4,7 @@ import { SelectGroupColumnsTable } from '../../SelectGroupColumnsTable';
 import { getRequiredColumnsIndexes } from '../TableComparisonUtils';
 import {
   DqoSettingsModel,
-  TableColumnsStatisticsModel,
-  TableComparisonGroupingColumnPairModel
+  TableColumnsStatisticsModel
 } from '../../../../../api';
 import {
   ColumnApiClient,
@@ -16,11 +15,7 @@ import { Option } from '../../../../Select';
 import { TParameters } from '../../../../../shared/constants';
 
 type TSelectDataGrouping = {
-  onChangeDataGrouping: (
-    reference: boolean,
-    index: number,
-    columnName: string
-  ) => void;
+  onChangeParameters: (obj: Partial<TParameters>) => void;
   onChangeEditColumnGrouping: (open: boolean) => void;
   columnOptions: {
     comparedColumnsOptions: Option[];
@@ -30,7 +25,7 @@ type TSelectDataGrouping = {
 };
 
 export default function SelectColumnGrouping({
-  onChangeDataGrouping,
+  onChangeParameters,
   onChangeEditColumnGrouping,
   columnOptions,
   editConfigurationParameters
@@ -46,7 +41,6 @@ export default function SelectColumnGrouping({
   } = useParams();
   const [profileSettings, setProfileSettings] = useState<DqoSettingsModel>();
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
-
   const [listOfWarnings, setListOfWarnings] = useState<Array<boolean>>(
     Array(8).fill(false)
   );
@@ -127,6 +121,28 @@ export default function SelectColumnGrouping({
     }
   };
 
+  const onChangeDataGroupingArray = (
+    reference: boolean,
+    index: number,
+    columnName: string
+  ) => {
+    const data = [...(editConfigurationParameters.dataGroupingArray ?? [])];
+    if (reference === true) {
+      if (data[index]) {
+        data[index].reference_table_column_name = columnName;
+      } else {
+        data[index] = { reference_table_column_name: columnName };
+      }
+    } else {
+      if (data[index]) {
+        data[index].compared_table_column_name = columnName;
+      } else {
+        data[index] = { compared_table_column_name: columnName };
+      }
+    }
+    onChangeParameters({ dataGroupingArray: data });
+  };
+
   useEffect(() => {
     fetchProfileSettings();
     getColumnsStatistics();
@@ -162,7 +178,7 @@ export default function SelectColumnGrouping({
         className="flex-1"
         title="Data grouping on compared table"
         placeholder="Select column on compared table"
-        onChangeDataGroupingArray={onChangeDataGrouping}
+        onChangeDataGroupingArray={onChangeDataGroupingArray}
         columnOptions={[
           { label: '', value: '' },
           ...columnOptions.comparedColumnsOptions
@@ -193,7 +209,7 @@ export default function SelectColumnGrouping({
           { label: '', value: '' },
           ...columnOptions.referencedColumnsOptions
         ]}
-        onChangeDataGroupingArray={onChangeDataGrouping}
+        onChangeDataGroupingArray={onChangeDataGroupingArray}
         requiredColumnsIndexes={
           getRequiredColumnsIndexes(
             editConfigurationParameters.dataGroupingArray ?? []

@@ -1,16 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import FirstLineNameConfiguration from './CreatingComparison/FirstLineNameConfiguration';
 import EditingViewFirstLine from './EditingComparison/EditingViewFirstLine';
 import { useParams } from 'react-router-dom';
-import {
-  getTableProfilingChecksModel,
-  getTableDailyPartitionedChecks,
-  getTableMonthlyPartitionedChecks,
-  getTableDailyMonitoringChecks,
-  getTableMonthlyMonitoringChecks
-} from '../../../../redux/actions/table.actions';
 import { CheckTypes } from '../../../../shared/routes';
-import { TableComparisonsApi } from '../../../../services/apiClient';
 import { useSelector } from 'react-redux';
 import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
@@ -20,6 +12,8 @@ import { TParameters } from '../../../../shared/constants';
 import { Option } from '../../../Select';
 import SelectColumnGrouping from './CreatingComparison/SelectColumnGrouping';
 import { TableComparisonGroupingColumnPairModel } from '../../../../api';
+import SelectColumnGroupingOverlook from './EditingComparison/SelectColumnGroupingOverlook';
+import { TableComparisonsApi } from '../../../../services/apiClient';
 
 type TEditReferenceTable = {
   selectedReference?: string;
@@ -75,212 +69,77 @@ export default function EditReferenceTable2({
     setEditColumnGrouping(open);
   };
 
-  const onCreate = async () => {
-    if (
-      existingTableComparisonConfigurations.includes(
-        editConfigurationParameters.toString()
-      )
-    ) {
-      setComparisonAlreadyExist(true);
-    } else {
-      const requestBody = {
-        table_comparison_configuration_name: editConfigurationParameters.name,
-        compared_connection: connection,
-        compared_table: {
-          schema_name: schema,
-          table_name: table
-        },
-        reference_connection: editConfigurationParameters.refConnection,
-        reference_table: {
-          schema_name: editConfigurationParameters.refSchema,
-          table_name: editConfigurationParameters.refTable
-        },
-        grouping_columns: editConfigurationParameters.dataGroupingArray ?? []
-      };
-      if (checkTypes === CheckTypes.PROFILING) {
-        await TableComparisonsApi.createTableComparisonProfiling(
-          connection,
-          schema,
-          table,
-          requestBody
-        )
-          .then(() => {
-            dispatch(
-              getTableProfilingChecksModel(
-                checkTypes,
-                firstLevelActiveTab,
-                connection,
-                schema,
-                table
-              )
-            );
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              setComparisonAlreadyExist(true);
-            }
-          });
-      } else if (
-        checkTypes === CheckTypes.PARTITIONED &&
-        timePartitioned === 'daily'
-      ) {
-        await TableComparisonsApi.createTableComparisonPartitionedDaily(
-          connection,
-          schema,
-          table
-        )
-          .then(() => {
-            dispatch(
-              getTableDailyPartitionedChecks(
-                checkTypes,
-                firstLevelActiveTab,
-                connection,
-                schema,
-                table
-              )
-            );
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              setComparisonAlreadyExist(true);
-            }
-          });
-      } else if (
-        checkTypes === CheckTypes.PARTITIONED &&
-        timePartitioned === 'monthly'
-      ) {
-        await TableComparisonsApi.createTableComparisonPartitionedMonthly(
-          connection,
-          schema,
-          table,
-          requestBody
-        )
-          .then(() => {
-            dispatch(
-              getTableMonthlyPartitionedChecks(
-                checkTypes,
-                firstLevelActiveTab,
-                connection,
-                schema,
-                table
-              )
-            );
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              setComparisonAlreadyExist(true);
-            }
-          });
-      } else if (
-        checkTypes === CheckTypes.MONITORING &&
-        timePartitioned === 'daily'
-      ) {
-        await TableComparisonsApi.createTableComparisonMonitoringDaily(
-          connection,
-          schema,
-          table,
-          requestBody
-        )
-          .then(() => {
-            dispatch(
-              getTableDailyMonitoringChecks(
-                checkTypes,
-                firstLevelActiveTab,
-                connection,
-                schema,
-                table
-              )
-            );
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              setComparisonAlreadyExist(true);
-            }
-          });
-      } else if (
-        checkTypes === CheckTypes.MONITORING &&
-        timePartitioned === 'monthly'
-      ) {
-        await TableComparisonsApi.createTableComparisonMonitoringMonthly(
-          connection,
-          schema,
-          table,
-          requestBody
-        )
-          .then(() => {
-            dispatch(
-              getTableMonthlyMonitoringChecks(
-                checkTypes,
-                firstLevelActiveTab,
-                connection,
-                schema,
-                table
-              )
-            );
-          })
-          .catch((error) => {
-            if (error.response.status === 409) {
-              console.log(error);
-              setComparisonAlreadyExist(true);
-            }
-          });
-      }
-      onBack();
-      setComparisonAlreadyExist(false);
-    }
+  const onChangeEditConnectionSchemaTable = (open: boolean) => {
+    setEditConnectionSchemaTable(open);
   };
 
-  const onChangeDataGroupingArray = (
-    reference: boolean,
-    index: number,
-    columnName: string
-  ) => {
-    const data = [...(editConfigurationParameters.dataGroupingArray ?? [])];
-    if (reference === true) {
-      if (data[index]) {
-        data[index].reference_table_column_name = columnName;
-      } else {
-        data[index] = { reference_table_column_name: columnName };
-      }
-    } else {
-      if (data[index]) {
-        data[index].compared_table_column_name = columnName;
-      } else {
-        data[index] = { compared_table_column_name: columnName };
-      }
+  useEffect(() => {
+    if (selectedReference) {
+      TableComparisonsApi.getTableComparisonConfiguration(
+        connection,
+        schema,
+        table,
+        selectedReference
+      ).then((res) => {
+        if (res && res?.data) {
+          onChangeParameters({
+            name: res.data?.table_comparison_configuration_name ?? '',
+            refConnection: res.data?.reference_connection ?? '',
+            refSchema: res.data?.reference_table?.schema_name ?? '',
+            refTable: res.data?.reference_table?.table_name ?? '',
+            dataGroupingArray: res.data.grouping_columns ?? []
+          });
+        }
+      });
     }
-    onChangeParameters({ dataGroupingArray: data });
-    setIsUpdated(true);
-  };
+  }, [selectedReference]);
 
+  console.log(editConfigurationParameters);
   return (
     <div>
       {selectedReference ? (
-        <EditingViewFirstLine />
-      ) : (
-        <FirstLineNameConfiguration
-          name={editConfigurationParameters.name}
-          onChangeName={onChangeName}
-          isButtonEnabled={true}
-          onSave={onCreate}
-          onBack={onBack}
-          comparisonAlreadyExist={comparisonAlreadyExist}
-        />
-      )}
-      {selectedReference || editConnectionSchemaTable ? (
-        <SelectConnectionSchemaTableOverlook />
-      ) : (
-        <SelectConnectionSchemaTable />
-      )}
-      {selectedReference || editColumnGrouping ? (
-        <SelectColumnGrouping
-          onChangeDataGrouping={onChangeDataGroupingArray}
-          onChangeEditColumnGrouping={onChangeEditColumnGrouping}
-          columnOptions={columnOptions}
+        <EditingViewFirstLine
+          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
           editConfigurationParameters={editConfigurationParameters}
         />
       ) : (
-        <SelectConnectionSchemaTableOverlook />
+        <FirstLineNameConfiguration
+          editConfigurationParameters={editConfigurationParameters}
+          onChangeName={onChangeName}
+          isButtonEnabled={true}
+          onBack={onBack}
+          timePartitioned={timePartitioned}
+          existingTableComparisonConfigurations={
+            existingTableComparisonConfigurations
+          }
+        />
+      )}
+      {selectedReference && editConnectionSchemaTable === false ? (
+        <SelectConnectionSchemaTableOverlook
+          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
+          editConfigurationParameters={editConfigurationParameters}
+        />
+      ) : (
+        <SelectConnectionSchemaTable
+          editConfigurationParameters={editConfigurationParameters}
+          onChangeParameters={onChangeParameters}
+          onChangeEditConnectionSchemaTable={onChangeEditConnectionSchemaTable}
+        />
+      )}
+      {selectedReference && editColumnGrouping === false ? (
+        <SelectColumnGroupingOverlook
+          onChangeEditColumnGrouping={onChangeEditColumnGrouping}
+          dataGroupingArray={
+            editConfigurationParameters.dataGroupingArray ?? []
+          }
+        />
+      ) : (
+        <SelectColumnGrouping
+          onChangeEditColumnGrouping={onChangeEditColumnGrouping}
+          columnOptions={columnOptions}
+          editConfigurationParameters={editConfigurationParameters}
+          onChangeParameters={onChangeParameters}
+        />
       )}
     </div>
   );
