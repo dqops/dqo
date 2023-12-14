@@ -144,10 +144,16 @@ export default function SelectColumnGrouping({
   };
 
   useEffect(() => {
-    fetchProfileSettings();
-    getColumnsStatistics();
-    getReferenceTableStatistics();
-  }, []);
+    if (editConfigurationParameters.refTable) {
+      fetchProfileSettings();
+      getColumnsStatistics();
+      getReferenceTableStatistics();
+    }
+  }, [
+    editConfigurationParameters.refTable,
+    editConfigurationParameters.refSchema,
+    editConfigurationParameters.refConnection
+  ]);
 
   return (
     <div className="flex gap-4">

@@ -26,6 +26,7 @@ type TEditReferenceTable = {
   };
   editConfigurationParameters: TParameters;
   onChangeParameters: (obj: Partial<TParameters>) => void;
+  onUpdateChecks: () => void;
 };
 
 export default function EditReferenceTable2({
@@ -35,7 +36,8 @@ export default function EditReferenceTable2({
   onBack,
   columnOptions,
   editConfigurationParameters,
-  onChangeParameters
+  onChangeParameters,
+  onUpdateChecks
 }: TEditReferenceTable) {
   const {
     checkTypes,
@@ -99,6 +101,9 @@ export default function EditReferenceTable2({
             }
             editConfigurationParameters={editConfigurationParameters}
             onBack={onBack}
+            onUpdateChecks={onUpdateChecks}
+            selectedReference={selectedReference}
+            timePartitioned={timePartitioned}
           />
         ) : (
           <FirstLineNameConfiguration

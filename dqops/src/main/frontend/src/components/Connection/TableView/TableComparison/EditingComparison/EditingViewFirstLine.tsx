@@ -4,7 +4,10 @@ import { TParameters } from '../../../../../shared/constants';
 import SvgIcon from '../../../../SvgIcon';
 import Button from '../../../../Button';
 import clsx from 'clsx';
-import { JobApiClient } from '../../../../../services/apiClient';
+import {
+  JobApiClient,
+  TableComparisonsApi
+} from '../../../../../services/apiClient';
 import { getFirstLevelActiveTab } from '../../../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -12,26 +15,31 @@ import { setCurrentJobId } from '../../../../../redux/actions/source.actions';
 import { CheckTypes } from '../../../../../shared/routes';
 import { useActionDispatch } from '../../../../../hooks/useActionDispatch';
 import { IRootState } from '../../../../../redux/reducers';
+import { TableComparisonConfigurationModelCheckTypeEnum } from '../../../../../api';
 type TEditingViewFirstLine = {
   editConfigurationParameters: TParameters;
   onChangeEditConnectionSchemaTable: (open: boolean) => void;
-  onBack: () => void;
+  selectedReference: string;
+  timePartitioned?: 'daily' | 'monthly';
+  onBack: (stayOnSamePage?: boolean | undefined) => void;
   disabled?: boolean;
-  onUpdate?: any;
   compareTables?: any;
   isButtonEnabled?: any;
   cleanDataTemplate?: any;
+  onUpdateChecks: () => void;
 };
 
 export default function EditingViewFirstLine({
+  selectedReference,
   editConfigurationParameters,
   onChangeEditConnectionSchemaTable,
   onBack,
   disabled,
-  onUpdate,
   compareTables,
   isButtonEnabled,
-  cleanDataTemplate
+  cleanDataTemplate,
+  onUpdateChecks,
+  timePartitioned
 }: TEditingViewFirstLine) {
   const {
     checkTypes,
@@ -92,6 +100,48 @@ export default function EditingViewFirstLine({
   //     setDeletingData(false);
   //   }
   // }, [job?.status]);
+  console.log(connection, schema, table, selectedReference, {
+    table_comparison_configuration_name: selectedReference,
+    compared_connection: connection,
+    compared_table: {
+      schema_name: schema,
+      table_name: table
+    },
+    reference_connection: editConfigurationParameters.refConnection,
+    reference_table: {
+      schema_name: editConfigurationParameters.refSchema,
+      table_name: editConfigurationParameters.refTable
+    },
+    grouping_columns: editConfigurationParameters.dataGroupingArray,
+    check_type: checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
+    time_scale: timePartitioned
+  });
+  const onUpdate = async () => {
+    await TableComparisonsApi.updateTableComparisonConfiguration(
+      connection,
+      schema,
+      table,
+      selectedReference,
+      {
+        table_comparison_configuration_name: selectedReference,
+        compared_connection: connection,
+        compared_table: {
+          schema_name: schema,
+          table_name: table
+        },
+        reference_connection: editConfigurationParameters.refConnection,
+        reference_table: {
+          schema_name: editConfigurationParameters.refSchema,
+          table_name: editConfigurationParameters.refTable
+        },
+        grouping_columns: editConfigurationParameters.dataGroupingArray,
+        check_type:
+          checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
+        time_scale: timePartitioned
+      }
+    );
+    onUpdateChecks();
+  };
 
   return (
     <div>
@@ -136,7 +186,7 @@ export default function EditingViewFirstLine({
             label="Save"
             color="primary"
             className="w-40"
-            disabled={!isButtonEnabled}
+            disabled={false}
           />
           <Button
             label="Back"

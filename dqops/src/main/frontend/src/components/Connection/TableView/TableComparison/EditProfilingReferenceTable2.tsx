@@ -501,18 +501,18 @@ export const EditProfilingReferenceTable2 = ({
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable2
-          //   onUpdateParent={() =>
-          //     onUpdate(
-          //       connection,
-          //       schema,
-          //       table,
-          //       checkTypes,
-          //       timePartitioned,
-          //       reference,
-          //       handleChange,
-          //       checksUI
-          //     )
-          //   }
+          onUpdateChecks={() =>
+            onUpdate(
+              connection,
+              schema,
+              table,
+              checkTypes,
+              timePartitioned,
+              reference,
+              handleChange,
+              checksUI
+            )
+          }
           onBack={onBack}
           //   onChange={onChange}
           selectedReference={selectedReference}
