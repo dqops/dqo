@@ -59,6 +59,10 @@ const tabs = [
   {
     label: 'Oracle',
     value: ProviderSensorModelProviderTypeEnum.oracle
+  },
+  {
+    label: 'Spark',
+    value: ProviderSensorModelProviderTypeEnum.spark
   }
 ];
 
