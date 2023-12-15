@@ -47,6 +47,7 @@ nav:
       - Redshift: "data-sources/redshift.md"
       - SQL Server: "data-sources/sql-server.md"
       - Snowflake: "data-sources/snowflake.md"
+      - Spark: "data-sources/spark.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
