@@ -6,6 +6,7 @@ import {
   TableComparisonGroupingColumnPairModel
 } from '../../../../api';
 import { TableComparisonsApi } from '../../../../services/apiClient';
+import { TParameters } from '../../../../shared/constants';
 import { CheckTypes } from '../../../../shared/routes';
 
 export const getComparisonResults = (
@@ -199,3 +200,26 @@ export const getRequiredColumnsIndexes = (
   }
   return { referenceMissingIndexes, comparedMissingIndexes };
 };
+
+export const getIsButtonEnabled = (parameters : TParameters) : boolean => {
+  const isDataGroupingCorrect = parameters.dataGroupingArray?.every(x =>
+    x.compared_table_column_name !== undefined &&
+    x.reference_table_column_name !== undefined &&
+    x.reference_table_column_name.length > 0 &&
+    x.compared_table_column_name.length > 0
+  );
+
+  const isDataGroupingEmpty = parameters.dataGroupingArray?.every(x =>
+    (x.compared_table_column_name === undefined || x.compared_table_column_name.length === 0) &&
+    (x.reference_table_column_name === undefined || x.reference_table_column_name.length === 0)
+  );
+
+  return !!(
+    parameters.refConnection &&
+    parameters.refSchema &&
+    parameters.refTable &&
+    parameters.name &&
+    (isDataGroupingCorrect || isDataGroupingEmpty || !parameters.dataGroupingArray || parameters.dataGroupingArray.length === 0)
+  );
+}
+

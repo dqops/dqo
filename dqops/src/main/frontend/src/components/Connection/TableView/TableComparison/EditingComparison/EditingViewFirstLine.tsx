@@ -16,6 +16,7 @@ import { CheckTypes } from '../../../../../shared/routes';
 import { useActionDispatch } from '../../../../../hooks/useActionDispatch';
 import { IRootState } from '../../../../../redux/reducers';
 import { TableComparisonConfigurationModelCheckTypeEnum } from '../../../../../api';
+import { getIsButtonEnabled } from '../TableComparisonUtils';
 type TEditingViewFirstLine = {
   editConfigurationParameters: TParameters;
   onChangeEditConnectionSchemaTable: (open: boolean) => void;
@@ -23,10 +24,13 @@ type TEditingViewFirstLine = {
   timePartitioned?: 'daily' | 'monthly';
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   disabled?: boolean;
-  compareTables?: any;
   isButtonEnabled?: any;
   cleanDataTemplate?: any;
   onUpdateChecks: () => void;
+  onChangeIsUpdated: (isUpdated: boolean) => void;
+  isUpdated: boolean;
+  onRunChecks: () => Promise<void>;
+  deleteData?: () => Promise<void>;
 };
 
 export default function EditingViewFirstLine({
@@ -35,11 +39,14 @@ export default function EditingViewFirstLine({
   onChangeEditConnectionSchemaTable,
   onBack,
   disabled,
-  compareTables,
   isButtonEnabled,
   cleanDataTemplate,
   onUpdateChecks,
-  timePartitioned
+  timePartitioned,
+  isUpdated,
+  onChangeIsUpdated,
+  deleteData,
+  onRunChecks
 }: TEditingViewFirstLine) {
   const {
     checkTypes,
@@ -61,30 +68,32 @@ export default function EditingViewFirstLine({
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const dispatch = useActionDispatch();
 
-  const deleteData = async (params: { [key: string]: string | boolean }) => {
-    setDeleteDataDialogOpened(false);
-    try {
-      const res = await JobApiClient.deleteStoredData(
-        undefined,
-        false,
-        undefined,
-        {
-          ...(cleanDataTemplate || {}),
-          ...params
-        }
-      );
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          res.data?.jobId?.jobId ?? 0
-        )
-      );
-      setJobId(res.data?.jobId?.jobId);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const deleteData = async (params: { [key: string]: string | boolean }) => {
+  //   setDeleteDataDialogOpened(false);
+  //   try {
+  //     const res = await JobApiClient.deleteStoredData(
+  //       undefined,
+  //       false,
+  //       undefined,
+  //       {
+  //         ...(cleanDataTemplate || {}),
+  //         ...params
+  //       }
+  //     );
+  //     dispatch(
+  //       setCurrentJobId(
+  //         checkTypes,
+  //         firstLevelActiveTab,
+  //         res.data?.jobId?.jobId ?? 0
+  //       )
+  //     );
+  //     setJobId(res.data?.jobId?.jobId);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const compareTables = () => {};
 
   //   const disabledDeleting =
   //   job &&
@@ -117,6 +126,7 @@ export default function EditingViewFirstLine({
   //   time_scale: timePartitioned
   // });
   const onUpdate = async () => {
+    console.log(editConfigurationParameters.dataGroupingArray);
     await TableComparisonsApi.updateTableComparisonConfiguration(
       connection,
       schema,
@@ -140,6 +150,7 @@ export default function EditingViewFirstLine({
         time_scale: timePartitioned
       }
     );
+    onChangeIsUpdated(false);
     onUpdateChecks();
   };
 
@@ -186,7 +197,10 @@ export default function EditingViewFirstLine({
             label="Save"
             color="primary"
             className="w-40"
-            disabled={false}
+            disabled={
+              isUpdated === false ||
+              getIsButtonEnabled(editConfigurationParameters) === false
+            }
           />
           <Button
             label="Back"
@@ -198,11 +212,11 @@ export default function EditingViewFirstLine({
           />
         </div>
       </div>
-      <DeleteOnlyDataDialog
+      {/* <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={deleteData}
-      />
+      /> */}
     </div>
   );
 }

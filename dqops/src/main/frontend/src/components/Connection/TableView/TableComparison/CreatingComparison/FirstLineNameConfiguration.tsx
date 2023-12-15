@@ -16,6 +16,7 @@ import { useSelector } from 'react-redux';
 import { useActionDispatch } from '../../../../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../../../../redux/selectors';
 import { TableComparisonsApi } from '../../../../../services/apiClient';
+import { getIsButtonEnabled } from '../TableComparisonUtils';
 
 type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
@@ -205,13 +206,6 @@ export default function FirstLineNameConfiguration({
     }
   };
 
-  
-  const isDataGroupingCorrect = editConfigurationParameters.dataGroupingArray?.every(x => x.compared_table_column_name !== undefined 
-    && x.reference_table_column_name !== undefined && x.reference_table_column_name.length > 0 && x.compared_table_column_name.length > 0);
-
-  const isButtonEnabled = (editConfigurationParameters.refConnection && editConfigurationParameters.refSchema 
-    && editConfigurationParameters.refTable && editConfigurationParameters.name && isDataGroupingCorrect)
-
   return (
     <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8 w-full">
       <div className="flex items-center justify-center gap-x-5">
@@ -240,7 +234,7 @@ export default function FirstLineNameConfiguration({
           label="Save"
           color="primary"
           className="w-40"
-          disabled={!isButtonEnabled}
+          disabled={!getIsButtonEnabled(editConfigurationParameters)}
         />
         <Button
           label="Back"

@@ -28,6 +28,10 @@ type TEditReferenceTable = {
   onChangeParameters: (obj: Partial<TParameters>) => void;
   onUpdateChecks: () => void;
   setConfigurationToEditing: (name: string) => void;
+  onChangeIsUpdated: (isUpdated: boolean) => void;
+  isUpdated: boolean;
+  onRunChecks: () => Promise<void>;
+  deleteData?: () => Promise<void>;
 };
 
 export default function EditReferenceTable2({
@@ -39,7 +43,11 @@ export default function EditReferenceTable2({
   editConfigurationParameters,
   onChangeParameters,
   onUpdateChecks,
-  setConfigurationToEditing
+  setConfigurationToEditing,
+  isUpdated,
+  onChangeIsUpdated,
+  onRunChecks,
+  deleteData
 }: TEditReferenceTable) {
   const {
     checkTypes,
@@ -58,7 +66,6 @@ export default function EditReferenceTable2({
     useState(false);
   const [editColumnGrouping, setEditColumnGrouping] = useState(false);
   const [comparisonAlreadyExist, setComparisonAlreadyExist] = useState(false);
-  const [isUpdated, setIsUpdated] = useState(false);
 
   const onChangeName = (name: string) => {
     onChangeParameters({ name: name });
@@ -71,27 +78,6 @@ export default function EditReferenceTable2({
   const onChangeEditConnectionSchemaTable = (open: boolean) => {
     setEditConnectionSchemaTable(open);
   };
-
-  useEffect(() => {
-    if (selectedReference) {
-      TableComparisonsApi.getTableComparisonConfiguration(
-        connection,
-        schema,
-        table,
-        selectedReference
-      ).then((res) => {
-        if (res && res?.data) {
-          onChangeParameters({
-            name: res.data?.table_comparison_configuration_name ?? '',
-            refConnection: res.data?.reference_connection ?? '',
-            refSchema: res.data?.reference_table?.schema_name ?? '',
-            refTable: res.data?.reference_table?.table_name ?? '',
-            dataGroupingArray: res.data.grouping_columns ?? []
-          });
-        }
-      });
-    }
-  }, [selectedReference]);
 
   return (
     <div className="w-full ">
@@ -106,6 +92,10 @@ export default function EditReferenceTable2({
             onUpdateChecks={onUpdateChecks}
             selectedReference={selectedReference}
             timePartitioned={timePartitioned}
+            isUpdated={isUpdated}
+            onChangeIsUpdated={onChangeIsUpdated}
+            onRunChecks={onRunChecks}
+            deleteData={deleteData}
           />
         ) : (
           <FirstLineNameConfiguration
@@ -131,7 +121,9 @@ export default function EditReferenceTable2({
         ) : (
           <SelectConnectionSchemaTable
             editConfigurationParameters={editConfigurationParameters}
-            onChangeParameters={onChangeParameters}
+            onChangeParameters={(obj: Partial<TParameters>) => {
+              onChangeParameters(obj), onChangeIsUpdated(true);
+            }}
             onChangeEditConnectionSchemaTable={
               onChangeEditConnectionSchemaTable
             }
@@ -151,7 +143,9 @@ export default function EditReferenceTable2({
             onChangeEditColumnGrouping={onChangeEditColumnGrouping}
             columnOptions={columnOptions}
             editConfigurationParameters={editConfigurationParameters}
-            onChangeParameters={onChangeParameters}
+            onChangeParameters={(obj: Partial<TParameters>) => {
+              onChangeParameters(obj), onChangeIsUpdated(true);
+            }}
           />
         )}
       </div>

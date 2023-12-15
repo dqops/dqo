@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import SvgIcon from '../../../SvgIcon';
 import {
   ColumnApiClient,
@@ -43,6 +43,8 @@ import TableLevelResults from './TableLevelResults';
 import SeverityInputBlock from './SeverityInputBlock';
 import EditReferenceTable2 from './EditReferenceTable2';
 import { TParameters } from '../../../../shared/constants';
+import Loader from '../../../Loader';
+import TableRow from './TableLevelRowResults';
 
 export const EditProfilingReferenceTable2 = ({
   checkTypes,
@@ -80,7 +82,7 @@ export const EditProfilingReferenceTable2 = ({
   );
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
   const [jobId, setJobId] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
@@ -99,20 +101,20 @@ export const EditProfilingReferenceTable2 = ({
     }));
   };
 
-  const { tableExist, schemaExist, connectionExist } =
-    useConnectionSchemaTableExists(
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? ''
-    );
+  // const { tableExist, schemaExist, connectionExist } =
+  //   useConnectionSchemaTableExists(
+  //     reference?.reference_connection ?? '',
+  //     reference?.reference_table?.schema_name ?? '',
+  //     reference?.reference_table?.table_name ?? ''
+  //   );
 
   const onChangeIsDataDeleted = (arg: boolean): void => {
     setIsDataDeleted(arg);
   };
 
-  const onChangeUpdatedParent = (variable: boolean): void => {
-    setIsUpdated(variable);
-  };
+  // const onChangeUpdatedParent = (variable: boolean): void => {
+  //   setIsUpdated(variable);
+  // };
 
   const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
@@ -211,6 +213,7 @@ export const EditProfilingReferenceTable2 = ({
         selectedCheck.rule.fatal.configured = true;
       }
     }
+    // setIsUpdated(true);
   };
 
   useEffect(() => {
@@ -330,7 +333,6 @@ export const EditProfilingReferenceTable2 = ({
       ...(reference || {}),
       ...obj
     });
-    setIsUpdated(true);
   };
 
   const onChangeCompareRowCount = (obj: Partial<CompareThresholdsModel>) => {
@@ -340,6 +342,7 @@ export const EditProfilingReferenceTable2 = ({
         ...obj
       }
     });
+    // setIsUpdated(true);
   };
 
   const onChangeCompareColumnCount = (obj: Partial<CompareThresholdsModel>) => {
@@ -349,6 +352,7 @@ export const EditProfilingReferenceTable2 = ({
         ...obj
       }
     });
+    // setIsUpdated(true);
   };
 
   useEffect(() => {
@@ -395,7 +399,6 @@ export const EditProfilingReferenceTable2 = ({
 
   const onRunChecks = async () => {
     try {
-      setLoading(true);
       const res = await JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: categoryCheck
           ? categoryCheck?.run_checks_job_template
@@ -422,6 +425,31 @@ export const EditProfilingReferenceTable2 = ({
     }
   };
 
+  const deleteData = async (params: { [key: string]: string | boolean }) => {
+    // setDeleteDataDialogOpened(false);
+    // try {
+    //   const res = await JobApiClient.deleteStoredData(
+    //     undefined,
+    //     false,
+    //     undefined,
+    //     {
+    //       ...(cleanDataTemplate || {}),
+    //       ...params
+    //     }
+    //   );
+    //   dispatch(
+    //     setCurrentJobId(
+    //       checkTypes,
+    //       firstLevelActiveTab,
+    //       res.data?.jobId?.jobId ?? 0
+    //     )
+    //   );
+    //   setJobId(res.data?.jobId?.jobId);
+    // } catch (err) {
+    //   console.error(err);
+    // }
+  };
+
   const disabled =
     job &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
@@ -432,7 +460,6 @@ export const EditProfilingReferenceTable2 = ({
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
-      setLoading(false);
       getResultsData();
     }
   }, [job?.status]);
@@ -450,14 +477,25 @@ export const EditProfilingReferenceTable2 = ({
   ).find((key) => key.includes('row'));
 
   useEffect(() => {
-    ColumnApiClient.getColumns(connection, schema, table)?.then((columnRes) => {
-      setComparedColumnOptions(
-        columnRes.data.map((item) => ({
-          label: item.column_name ?? '',
-          value: item.column_name ?? ''
-        }))
-      );
-    });
+    const fetchColumns = async () => {
+      try {
+        const columnRes = await ColumnApiClient.getColumns(
+          connection,
+          schema,
+          table
+        );
+        setComparedColumnOptions(
+          columnRes.data.map((item) => ({
+            label: item.column_name ?? '',
+            value: item.column_name ?? ''
+          }))
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchColumns();
   }, [connection, schema, table]);
 
   useEffect(() => {
@@ -466,36 +504,84 @@ export const EditProfilingReferenceTable2 = ({
       parameters.refSchema &&
       parameters.refTable
     ) {
-      ColumnApiClient.getColumns(
-        parameters.refConnection ?? '',
-        parameters.refSchema ?? '',
-        parameters.refTable ?? ''
-      )?.then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
-      });
+      const fetchReferenceColumns = async () => {
+        try {
+          const columnRes = await ColumnApiClient.getColumns(
+            parameters.refConnection ?? '',
+            parameters.refSchema ?? '',
+            parameters.refTable ?? ''
+          );
+          setColumnOptions(
+            columnRes.data.map((item) => ({
+              label: item.column_name ?? '',
+              value: item.column_name ?? ''
+            }))
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchReferenceColumns();
     }
   }, [parameters.refTable]);
 
-  const renderWarningTooltip = (): ReactNode => {
+  useEffect(() => {
+    if (selectedReference) {
+      const fetchTableComparisonConfiguration = async () => {
+        try {
+          setLoading(true);
+          const res = await TableComparisonsApi.getTableComparisonConfiguration(
+            connection,
+            schema,
+            table,
+            selectedReference
+          );
+          if (res && res.data) {
+            onChangeParameters({
+              name: res.data?.table_comparison_configuration_name ?? '',
+              refConnection: res.data?.reference_connection ?? '',
+              refSchema: res.data?.reference_table?.schema_name ?? '',
+              refTable: res.data?.reference_table?.table_name ?? '',
+              dataGroupingArray: res.data.grouping_columns ?? []
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchTableComparisonConfiguration();
+    }
+  }, [selectedReference]);
+
+  const memoizedReference = useMemo(() => {
+    return {
+      grouping_columns: parameters.dataGroupingArray,
+      reference_connection: parameters.refConnection,
+      reference_table: {
+        table_name: parameters.refTable,
+        schema_name: parameters.refSchema
+      }
+    };
+  }, [parameters]);
+
+  useEffect(() => {
+    setReference((prevState) => ({
+      ...prevState,
+      ...memoizedReference
+    }));
+  }, [memoizedReference]);
+
+  if (loading === true) {
     return (
-      <Tooltip
-        content="Previous comparison results are present, delete the results before comparing the tables again"
-        className="pr-6 max-w-80 py-4 px-4 bg-gray-800"
-      >
-        <div>
-          <SvgIcon
-            name="warning"
-            className="w-5 h-5 absolute bottom-[10px] left-[6px]"
-          />
-        </div>
-      </Tooltip>
+      <div className="flex justify-center h-100">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
     );
-  };
+  }
 
   return (
     <div className="text-sm">
@@ -513,14 +599,17 @@ export const EditProfilingReferenceTable2 = ({
               checksUI
             )
           }
+          // deleteData={deleteData}
           onBack={onBack}
           //   onChange={onChange}
+          onChangeIsUpdated={(isUpdated: boolean) => setIsUpdated(isUpdated)}
+          isUpdated={isUpdated}
           selectedReference={selectedReference}
           //   isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
           editConfigurationParameters={parameters}
           onChangeParameters={onChangeParameters}
-          //   onRunChecksRowCount={onRunChecks}
+          onRunChecks={onRunChecks}
           //   disabled={disabled || loading}
           //   isCreating={isCreating}
           //   goToRefTable={() => goToRefTable(reference)}
@@ -561,80 +650,21 @@ export const EditProfilingReferenceTable2 = ({
                   </th>
                 </tr>
               </thead>
-              <tr className="mt-10 mb-10">
-                <th
-                  className="text-left pr-4 py-1.5 flex items-center gap-x-2 font-normal"
-                  onClick={() =>
-                    settableLevelComparisonExtended((prevState) => !prevState)
-                  }
-                >
-                  {tableLevelComparisonExtended ? (
-                    <SvgIcon name="chevron-down" className="w-5 h-5" />
-                  ) : (
-                    <SvgIcon name="chevron-right" className="w-5 h-5" />
-                  )}{' '}
-                  {table}
-                </th>
-                <th className="text-left px-4 py-1.5"></th>
-                <th
-                  className={clsx(
-                    'text-center px-0 py-4 pr-2 w-1/12 relative',
-                    calculateColor(
-                      '',
-                      '',
-                      'row_count',
-                      checkTypes,
-                      tableComparisonResults
-                    )
-                  )}
-                >
-                  <Checkbox
-                    checked={showRowCount}
-                    onChange={(checked) => {
-                      onUpdateChecksUI(checksUI, 'row', checked);
-                    }}
-                  />{' '}
-                  {calculateColor(
-                    '',
-                    '',
-                    'row_count',
-                    checkTypes,
-                    tableComparisonResults
-                  ).length !== 0 &&
-                    !showRowCount && <>{renderWarningTooltip()}</>}
-                </th>
-                <th
-                  className={clsx(
-                    'text-center px-0 py-4 pr-2 w-1/12 relative',
-                    reference.supports_compare_column_count === true
-                      ? calculateColor(
-                          '',
-                          '',
-                          'column_count',
-                          checkTypes,
-                          tableComparisonResults
-                        )
-                      : ''
-                  )}
-                >
-                  {reference.supports_compare_column_count === true ? (
-                    <Checkbox
-                      checked={showColumnCount}
-                      onChange={(checked) => {
-                        onUpdateChecksUI(checksUI, 'column', checked);
-                      }}
-                    />
-                  ) : null}
-                  {calculateColor(
-                    '',
-                    '',
-                    'column_count',
-                    checkTypes,
-                    tableComparisonResults
-                  ).length !== 0 &&
-                    !showColumnCount && <>{renderWarningTooltip()}</>}
-                </th>
-              </tr>
+              <TableRow
+                table={table}
+                tableLevelComparisonExtended={tableLevelComparisonExtended}
+                settableLevelComparisonExtended={
+                  settableLevelComparisonExtended
+                }
+                showRowCount={showRowCount}
+                onUpdateChecksUI={onUpdateChecksUI}
+                checksUI={checksUI}
+                setIsUpdated={setIsUpdated}
+                tableComparisonResults={tableComparisonResults}
+                showColumnCount={showColumnCount}
+                reference={reference}
+                checkTypes={checkTypes}
+              />
               <tr>
                 <th></th>
                 <th></th>
@@ -703,7 +733,9 @@ export const EditProfilingReferenceTable2 = ({
                   checkTypes={checkTypes}
                   tableComparisonResults={tableComparisonResults}
                   reference={reference}
-                  onChange={onChange}
+                  onChange={(obj: Partial<TableComparisonModel>) => {
+                    onChange(obj), setIsUpdated(true);
+                  }}
                 />
               ))}
             </table>
