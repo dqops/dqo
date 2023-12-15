@@ -6,18 +6,19 @@ Verifies that the percentage of string values from a set in a column does not fa
 
 We will be testing [Student Performance](https://www.kaggle.com/datasets/whenamancodes/student-performance) dataset. 
 This data approach student achievement in secondary education of two Portuguese schools. 
-The data attributes include student grades, demographic, social and school related features and it was collected by using school reports and questionnaires. 
-Two datasets are provided regarding the performance in two distinct subjects: Mathematics (mat) and Portuguese language (por). 
-In [Cortez and Silva, 2008], the two datasets were modeled under binary/five-level classification and regression tasks. 
-Important note: the target attribute G3 has a strong correlation with attributes G2 and G1.
+The data attributes include student grades, demographic, social and school related features, and it was collected using school reports and questionnaires. 
+Two datasets are provided regarding the student's performance in mathematics. 
 
-We are verifying if values in the tested column `Fjob` are one of accepted values.  
+In the `Fjob` column, which contains information about the student's father's job, we want to track the number of rows 
+with values outside specified set.
 
 **SOLUTION**
 
 We will verify the data using profiling [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
-Our data quality check will compare the values in the tested column to a set of accepted values. We're accepting only `services`, `at_home`, `teacher`.
-The SQL query that will be executed will use an IN SQL clause:
+Our data quality check will compare the values in the tested column to a set of accepted values. We accept only
+`services`, `at_home`,and  `teacher` values.
+
+The SQL query that will be executed use will use the following IN SQL clause:
 
 ```sql
 SELECT
@@ -41,13 +42,13 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percent of string from a set values fall below 99, a warning alert will be triggered.
+If the percent of string from a set values fall below 99%, a warning alert will be triggered.
 
 ## Data structure
 
 The following is a fragment of the [Student Performance](https://www.kaggle.com/datasets/whenamancodes/student-performance).
 Some columns were omitted for clarity.  
-The `Fjob` column of interest contains father job's values.
+The `Fjob` column of interest contains information about student's father job.
 
 | Medu | Fedu | Mjob     | Fjob         | reason     | guardian | traveltime | studytime |
 |:-----|:-----|:---------|:-------------|:-----------|:---------|:-----------|:----------|
@@ -74,7 +75,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-in-set-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -90,12 +91,15 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
+    The **daily_string_value_in_set_percent** check has an additional parameter to select the **expected_values** that must
+    be present in a string column. In our example, these values are `services`, `at_home` and `teacher`.
+
 
 4. Run the enabled check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-in-set-percent-run-check.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-string-in-set-percent-run-check1.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -105,14 +109,12 @@ To execute the check prepared in the example using the [user interface](../../dq
     The Sensor readouts category displays the values obtained by the sensors from the data source.
     The Execution errors category displays any error that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-details.png)
-
     Review the results which should be similar to the one below.
+
+    ![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results1.png)
 
     The actual value in this example is 40%, which is below the minimum threshold level set in the warning (99%).
     The check gives a fatal result (notice the red square to the left of the check name).
-
-    ![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results.png)
 
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
@@ -122,16 +124,32 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the Issues count per check dashboard showing results by check category, check, failed tests and one day details.
+    Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard
+    displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
 
-    ![String-in-set-percent check results on Issues count per check dashboard](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results-on-issues-count-per-check-dashboard.png)
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 6 months)
+    * connection,
+    * schema,
+    * data group,
+    * data quality dimension,
+    * check category,
+    * stages,
+    * priorities,
+    * table,
+    * column,
+    * check name,
+    * issue severity.
+
+    ![String-in-set-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results-on-current-results-dashboard.png)
 
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
+After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
 ![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 
@@ -273,42 +291,6 @@ Results returned by the sensor:
 |40.806045340050375|2023-05-23T09:49:20.472Z|2023-05-23T09:49:20.472Z|
 +------------------+------------------------+------------------------+
 **************************************************
-```
-
-As you can see, the result of the check is quite low - only 40% of rows had valid values.
-We will extend the list of accepted values adding also `other`, `health` to achieve a valid result. 
-
-```
-**************************************************
-Executing SQL on connection string_in_set (bigquery)
-SQL to be executed on the connection:
-SELECT
-    CASE
-        WHEN COUNT(*) = 0 THEN 100.0
-        ELSE 100.0 * SUM(
-            CASE
-                WHEN analyzed_table.`Fjob` IN ('services', 'at_home', 'teacher', 'health', 'other')
-                    THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*)
-    END AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-FROM `dqo-ai-testing`.`kaggle_student_performance`.`maths` AS analyzed_table
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc
-**************************************************
-
-**************************************************
-Finished executing a sensor for a check string_in_set_percent on the table kaggle_student_performance.maths using a sensor definition column/strings/string_in_set_percent, sensor result count: 1
-
-Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|100.0       |2023-05-23T09:58:42.010Z|2023-05-23T09:58:42.010Z|
-+------------+------------------------+------------------------+
 ```
 
 ## Next steps

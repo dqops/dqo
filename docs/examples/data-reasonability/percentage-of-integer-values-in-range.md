@@ -29,7 +29,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of valid values falls below 5.0%, an error alert will be triggered.
+If the percentage of valid values falls below 5.0%, an error alert will be triggered. 
 
 ## Data structure
 
@@ -55,11 +55,11 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-values-in-range-numeric-percent-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-values-in-range-numeric-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
-   The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -71,12 +71,15 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
+    The **[values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md)** column check
+    has an additional parameters to select the **min_values** and **max_values** range.
+
 
 4. Run the enabled check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -86,14 +89,13 @@ To execute the check prepared in the example using the [user interface](../../dq
     The Sensor readouts category displays the values obtained by the sensors from the data source.
     The Execution errors category displays any error that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-details.png)
-
     Review the results which should be similar to the one below.
-   
+
+    ![Values-in-range-numeric-percent check results](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results1.png)
+    
     The actual value in this example is 92%, which is below the minimum threshold level set in the error (95.0%).
     The check raises an error issue (notice the orange square to the left of the check name).
 
-    ![Values-in-range-numeric-percent check results](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -102,16 +104,32 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the Current column status per check category dashboard showing results by connection, schema, check category and data group.
-
-    ![Values-in-range-numeric-percent check results on Current column status per check category dashboard](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results-current-column-status-per-check-category-dashboard.png)
+    Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard
+    displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
+    
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 6 months)
+    * connection,
+    * schema,
+    * data group,
+    * data quality dimension,
+    * check category,
+    * stages,
+    * priorities,
+    * table,
+    * column,
+    * check name,
+    * issue severity.
+   
+    ![Values-in-range-numeric-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-values-in-range-numeric-percent-checks-results-on-currrent-results-dashboard.png)
 
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
+After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
 ![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 

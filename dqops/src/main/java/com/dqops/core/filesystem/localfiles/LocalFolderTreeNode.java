@@ -68,8 +68,8 @@ public class LocalFolderTreeNode extends FolderTreeNode {
     public void loadChildFilesAndFolders() {
         super.loadChildFilesAndFolders();
 
-        List<HomeFolderPath> subFolders = this.context.getStorageService().listFolders(this.getFolderPath());
-        List<HomeFilePath> files = this.context.getStorageService().listFiles(this.getFolderPath());
+        List<HomeFolderPath> subFolders = this.context.getStorageService().listFolders(this.getFolderPath(), true);
+        List<HomeFilePath> files = this.context.getStorageService().listFiles(this.getFolderPath(), true);
 
         if (subFolders != null && subFolders.size() > 0) {
             Set<String> existingSubFolders = this.getSubFolders().stream().map(f -> f.getFolderName().getObjectName()).collect(Collectors.toSet());
@@ -122,7 +122,7 @@ public class LocalFolderTreeNode extends FolderTreeNode {
     public void flush() {
         super.flush();
         if (this.isDeleteOnFlush()) {
-			this.context.getStorageService().tryDeleteFolder(this.getFolderPath());
+			this.context.getStorageService().tryDeleteFolder(this.getFolderPath(), true);
         }
     }
 

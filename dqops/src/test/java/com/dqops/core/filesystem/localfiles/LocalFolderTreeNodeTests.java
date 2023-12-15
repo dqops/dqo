@@ -108,11 +108,11 @@ public class LocalFolderTreeNodeTests extends BaseTest {
         this.sut.flush();
         sut.deleteChildFile("newfile.txt");
         sut.setDeleteOnFlush(true);
-        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
 
         this.sut.flush();
 
-        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
     }
 
     @Test
@@ -123,14 +123,14 @@ public class LocalFolderTreeNodeTests extends BaseTest {
         Assertions.assertNotNull(sut.getChildFolder("subfolder"));
         subfolder.deleteChildFile("newfile.txt");
         subfolder.setDeleteOnFlush(true);
-        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
         Assertions.assertSame(subfolder, sut.getChildFolder("subfolder"));
         Assertions.assertEquals(10, sut.getSubFolders().size());
 
 		sut.flush();
 
-        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(subfolder.getFolderPath()));
-        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath()));
+        Assertions.assertFalse(this.sut.getContext().getStorageService().folderExists(subfolder.getFolderPath(), true));
+        Assertions.assertTrue(this.sut.getContext().getStorageService().folderExists(sut.getFolderPath(), true));
         Assertions.assertEquals(9, sut.getSubFolders().size());
     }
 }

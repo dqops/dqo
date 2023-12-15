@@ -92,10 +92,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Checks if a file exist.
      *
      * @param filePath File path relative to the home root.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return True when the file is present, false when the file is missing.
      */
     @Override
-    public boolean fileExists(HomeFilePath filePath) {
+    public boolean fileExists(HomeFilePath filePath, boolean useLocking) {
         Path relativeFilePath = filePath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
 
@@ -106,10 +107,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Checks if a folder exists.
      *
      * @param folderPath Folder path relative to the home root.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return True when the folder is present, false when the folder is missing.
      */
     @Override
-    public boolean folderExists(HomeFolderPath folderPath) {
+    public boolean folderExists(HomeFolderPath folderPath, boolean useLocking) {
         Path relativeFilePath = folderPath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
 
@@ -120,10 +122,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Tries to delete a folder.
      *
      * @param folderPath Relative folder path.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return True when the folder was deleted, false when there were some issues (folder in use) or the folder does not exist.
      */
     @Override
-    public boolean tryDeleteFolder(HomeFolderPath folderPath) {
+    public boolean tryDeleteFolder(HomeFolderPath folderPath, boolean useLocking) {
         Path relativeFilePath = folderPath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
 
@@ -145,10 +148,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Reads a file given the file name components.
      *
      * @param filePath File path relative to the home root.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return File content or null when the file was not found.
      */
     @Override
-    public FileContent readFile(HomeFilePath filePath) {
+    public FileContent readFile(HomeFilePath filePath, boolean useLocking) {
         Path relativeFilePath = filePath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
         FileContent fileContent = this.localFileSystemCache.loadFileContent(absolutePath, key -> this.readFileDirect(absolutePath));
@@ -207,9 +211,10 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      *
      * @param filePath    Relative file path inside the home folder.
      * @param fileContent File content.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      */
     @Override
-    public void saveFile(HomeFilePath filePath, FileContent fileContent) {
+    public void saveFile(HomeFilePath filePath, FileContent fileContent, boolean useLocking) {
         try {
             Path relativeFilePath = filePath.toRelativePath();
             Path absoluteFilePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
@@ -242,10 +247,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Deletes a file given the path.
      *
      * @param filePath Relative file path inside the home folder.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return True when the file was present and was deleted, false when the file was missing.
      */
     @Override
-    public boolean deleteFile(HomeFilePath filePath) {
+    public boolean deleteFile(HomeFilePath filePath, boolean useLocking) {
         try {
             Path relativeFilePath = filePath.toRelativePath();
             Path absolutePath = this.homePath.resolve(relativeFilePath).toAbsolutePath();
@@ -261,10 +267,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Lists direct subfolders inside a given folder.
      *
      * @param folderPath Path elements to the folder whose content will be listed.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return List of folder paths that are relative to the user home folder.
      */
     @Override
-    public List<HomeFolderPath> listFolders(HomeFolderPath folderPath) {
+    public List<HomeFolderPath> listFolders(HomeFolderPath folderPath, boolean useLocking) {
         Path relativeFolderPath = folderPath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFolderPath).toAbsolutePath();
 
@@ -306,10 +313,11 @@ public class LocalFileStorageServiceImpl implements LocalFileStorageService {
      * Lists direct files inside a given folder.
      *
      * @param folderPath Path to the folder that will be listed.
+     * @param useLocking Use locking. Pass false when a lock was already acquired in an outer scope. The default file storage does not use locking and ignores this parameters.
      * @return List of file paths that are relative to the user home folder.
      */
     @Override
-    public List<HomeFilePath> listFiles(HomeFolderPath folderPath) {
+    public List<HomeFilePath> listFiles(HomeFolderPath folderPath, boolean useLocking) {
         Path relativeFolderPath = folderPath.toRelativePath();
         Path absolutePath = this.homePath.resolve(relativeFolderPath).toAbsolutePath().normalize();
         List<HomeFilePath> listOfFiles = this.localFileSystemCache.getListOfFiles(absolutePath, key -> this.listFilesDirect(folderPath, key));

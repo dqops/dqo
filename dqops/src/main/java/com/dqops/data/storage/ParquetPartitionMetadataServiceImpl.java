@@ -67,7 +67,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
         Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 
         List<HomeFolderPath> storageStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                HomeFolderPathUtility.createFromFilesystemPath(homeRelativeStoragePath));
+                HomeFolderPathUtility.createFromFilesystemPath(homeRelativeStoragePath), true);
         if (storageStoredFolders == null) {
             return new ArrayList<>();
         }
@@ -95,7 +95,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
         Path homeRelativePartitionPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
         List<HomeFolderPath> connectionStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                HomeFolderPathUtility.createFromFilesystemPath(homeRelativePartitionPath));
+                HomeFolderPathUtility.createFromFilesystemPath(homeRelativePartitionPath), true);
         if (connectionStoredFolders == null) {
             return null;
         }
@@ -185,7 +185,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
         Path tablePartitionsPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
         List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
+                HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath), true);
         if (tableStoredFolders == null) {
             return null;
         }

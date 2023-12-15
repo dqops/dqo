@@ -121,7 +121,7 @@ These dashboards allow filtering data by:
 
 ### **Data quality issues count**
 
-**Data quality issues** dashboards allows evaluation of the number issues and its severity level per table, or per check category. 
+**Data quality issues** dashboards allow evaluation of the number issues and its severity level per table, or per check category. 
 Another two types of dashboards in this subgroup allows reviewing the total number of failed checks (warning, error, fatal)
 per day of the month, or per table and day of the month.
 
