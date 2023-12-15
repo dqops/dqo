@@ -78,41 +78,46 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
     @Override
     public DqoCloudApiKey getApiKey(UserDomainIdentity userIdentity) {
         try {
+            DqoCloudApiKey cachedApiKeyPerDomain;
             synchronized (this.lock) {
-                DqoCloudApiKey cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKeysPerDomain.get(userIdentity.getDataDomainCloud()) : null;
+                cachedApiKeyPerDomain = userIdentity != null ? this.cachedApiKeysPerDomain.get(userIdentity.getDataDomainCloud()) : null;
 
                 if (cachedApiKeyPerDomain != null) {
                     return cachedApiKeyPerDomain;
                 }
-
-                UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
-                UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
-                SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
-                LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
-                String apiKey = null;
-
-                if (localSettingsSpec != null) {
-                    SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
-                    LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
-                    apiKey = settings.getApiKey();
-                }
-
-                if (Strings.isNullOrEmpty(apiKey)) {
-                    apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
-                }
-
-                if (Strings.isNullOrEmpty(apiKey)) {
-                    return null;
-                }
-
-                DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
-                String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDefaultDomain();
-                if (Strings.isNullOrEmpty(apiKeyDomain)) {
-                    apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
-                }
-                this.cachedApiKeysPerDomain.put(apiKeyDomain, dqoCloudApiKey);
-                return dqoCloudApiKey;
             }
+
+            UserDomainIdentity userIdentityForRootHome = userIdentity != null ? userIdentity : UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY;
+            UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userIdentityForRootHome);
+            SettingsWrapper settingsWrapper = userHomeContext.getUserHome().getSettings();
+            LocalSettingsSpec localSettingsSpec = settingsWrapper.getSpec();
+            String apiKey = null;
+
+            if (localSettingsSpec != null) {
+                SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(userHomeContext.getUserHome());
+                LocalSettingsSpec settings = localSettingsSpec.expandAndTrim(this.secretValueProvider, secretValueLookupContext);
+                apiKey = settings.getApiKey();
+            }
+
+            if (Strings.isNullOrEmpty(apiKey)) {
+                apiKey = this.dqoCloudConfigurationProperties.getApiKey(); // take the api keys from configuration, it could be pulled from a secret manager or environment variables
+            }
+
+            if (Strings.isNullOrEmpty(apiKey)) {
+                return null;
+            }
+
+            DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
+            String apiKeyDomain = dqoCloudApiKey.getApiKeyPayload().getDefaultDomain();
+            if (Strings.isNullOrEmpty(apiKeyDomain)) {
+                apiKeyDomain = UserDomainIdentity.DEFAULT_DATA_DOMAIN;
+            }
+
+            synchronized (this.lock) {
+                this.cachedApiKeysPerDomain.put(apiKeyDomain, dqoCloudApiKey);
+            }
+
+            return dqoCloudApiKey;
         } catch (Exception e) {
             throw new DqoCloudInvalidKeyException("DQOps Cloud Pairing API Key is invalid, error: " + e.getMessage(), e);
         }
