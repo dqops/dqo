@@ -63,7 +63,7 @@ public class BigQueryTableAvailabilitySensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -76,13 +76,31 @@ public class BigQueryTableAvailabilitySensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForMonitoringCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecuted_thenReturnsError() {
+
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile("123213dsauewrfbu32", ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
+                sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
