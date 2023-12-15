@@ -71,7 +71,7 @@ nav:
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
-          - Percentage of false values: "examples/data-reasonability/percentage-of-false-values.md"
+          - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
       - Availability:
           - Table availability: "examples/stability/table-availability.md"
       - Data quality monitoring:

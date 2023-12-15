@@ -51,7 +51,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-max-length-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-max-length-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -72,7 +72,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-max-length-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-string-max-length-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -82,14 +82,13 @@ To execute the check prepared in the example using the [user interface](../../dq
     The Sensor readouts category displays the values obtained by the sensors from the data source.
     The Execution errors category displays any error that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-string-max-length-checks-details.png)
-
     Review the results which should be similar to the one below.
-   
+
+    ![String-max-length check results](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results1.png)
+
     The actual value in this example is 31, which is above the maximum threshold level set in the error field (30).
     The check result in an error issue (notice the orange square to the left of the check name).
 
-    ![String-max-length check results](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -98,16 +97,31 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
      go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-     Below you can see the results displayed on the KPIs per table and day dashboard showing results by connections, schemas, data group, columns and KPIs per table and day of the month.
+     Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in the Highest issue severity per day group.
+     This dashboard allows for reviewing and filtering a summary number of issues that arise
+     from data quality checks per column and day. This dashboard helps evaluate the areas with the highest number of data 
+     quality issues that should be addressed. It also allows to review how the issue severity changed per day of the month.
 
-     ![String-max-length check results on KPIs per table and day dashboard](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results-on-KPIs-per-table-and-day-dashboard.png)
+     These dashboards allow filtering data by:
+    
+     * current and previous month,
+     * connection,
+     * schema,
+     * data group,
+     * data quality dimension,
+     * check category,
+     * check name,
+     * table,
+     * column.
+
+    ![String-max-length check results on Highest issue severity per column and day dashboard](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results-on-highest-issue-severuty-dashboard.png)
 
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
+After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
 ![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 

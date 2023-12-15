@@ -51,7 +51,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-table-availability-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-table-availability-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -72,7 +72,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-table-availability-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -82,14 +82,13 @@ To execute the check prepared in the example using the [user interface](../../dq
     The Sensor readouts category displays the values obtained by the sensors from the data source.
     The Execution errors category displays any error that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-table-availability-checks-details.png)
-
     Review the results which should be similar to the one below.
-   
-    The actual value in this example is 1.
-    The check gives a warning result (notice the yellow square to the left of the check name).
 
-    ![Table-availability check results](https://dqops.com/docs/images/examples/daily-table-availability-checks-results.png)
+    ![Table-availability check results](https://dqops.com/docs/images/examples/daily-table-availability-checks-results1.png)
+  
+    The actual value in this example is 0.
+    The check gives a valid result (notice the green square to the left of the check name).
+
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -98,14 +97,23 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-    Below you can see the results displayed on the Current table status per check category dashboard showing results by connection, schema, check category and data group.
+    Below you can see the results displayed on the **Current table availability** dashboard located in the Data Quality Dimension/Availability group. 
+    This dashboard summarizes results from [table_availability](../../checks/table/availability/table-availability.md) checks.
+    Because we did not detect any issues there is no data on the tables. You can view the Correct results by clicking on
+    the checkbox **Only availability issues** and show also correct results. 
 
-    ![Table-availability check results on the Current table status per check category dashboard](https://dqops.com/docs/images/examples/daily-table-availability-checks-results-on-current-table-status-per-check-category-dashboard.png)
+    This dashboard allows filtering data by:
+    
+    * Current and previous month,
+    * connection,
+    * schema,
+    * data group,
+    * stages,
+    * priorities,
+    * issue severity level,
+    * table
 
-    Also, you can see results on the Table availability dashboard showing affected tables and connections, 
-    and a list of checks where the check result was > 0 which means that the table was corrupted or did not exist on a particular day.
-
-    ![Table-availability check results on the Table availability dashboard](https://dqops.com/docs/images/examples/table-availability-check-result-on-table-availability-dashboard.png)
+    ![Table-availability check results on the Table availability dashboard](https://dqops.com/docs/images/examples/table-availability-check-result-on-table-availability-dashboard1.png)
 
 
 ## YAML configuration file
@@ -154,6 +162,7 @@ spec:
         column_type: STRING
         nullable: true
 ```
+
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
 A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
@@ -165,17 +174,16 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The number of failures is 1 and the check gives warning result.
+The number of failures is 0 and the check gives a valid result.
 
 ```
-Finished executing rules (thresholds) for a check daily_table_availability on the table america_health_rankings.ahr, verified rules count: 1
-
-Rule evaluation results:
-+------------------------------------+------------+--------------+----------------+--------------------+-------------+---------------+---------------+---------------------------+-------------------+------------------+--------+------------------+-----------------------+----------+------------------+-------------------+------------------------+------------------------+----------+--------------+-----------------+-------------------------------------+------------------------------------+------------------------+-----------+--------+-------------------+--------------+--------------+-----------------+-----------------+-------------------+
-|id                                  |actual_value|expected_value|time_period     |time_period_utc     |time_gradient|data_group_hash|data_group_name|data_grouping_configuration|connection_hash    |connection_name   |provider|table_hash        |schema_name            |table_name|table_name_pattern|check_hash         |check_name              |check_display_name      |check_type|check_category|quality_dimension|sensor_name                          |time_series_id                      |executed_at             |duration_ms|severity|incident_hash      |include_in_kpi|include_in_sla|fatal_upper_bound|error_upper_bound|warning_upper_bound|
-+------------------------------------+------------+--------------+----------------+--------------------+-------------+---------------+---------------+---------------------------+-------------------+------------------+--------+------------------+-----------------------+----------+------------------+-------------------+------------------------+------------------------+----------+--------------+-----------------+-------------------------------------+------------------------------------+------------------------+-----------+--------+-------------------+--------------+--------------+-----------------+-----------------+-------------------+
-|e2b1a9b0-023f-2baf-5e0f-a8d9427e379f|1.0         |0.0           |2023-09-04T00:00|2023-09-04T00:00:00Z|day          |0              |no grouping    |default                    |3492051126176682112|table_availability|bigquery|615130806917224725|america_health_rankings|ahr       |ahr               |5460786772265777882|daily_table_availability|daily_table_availability|monitoring|availability  |Availability     |table/availability/table_availability|4bc89ca3-0b0d-bada-0889-6235b4b35915|2023-09-04T12:41:15.179Z|910        |1       |3531467509473078844|true          |false         |10.0             |5.0              |0.0                |
-+------------------------------------+------------+--------------+----------------+--------------------+-------------+---------------+---------------+---------------------------+-------------------+------------------+--------+------------------+-----------------------+----------+------------------+-------------------+------------------------+------------------------+----------+--------------+-----------------+-------------------------------------+------------------------------------+------------------------+-----------+--------+-------------------+--------------+--------------+-----------------+-----------------+-------------------+
+Check evaluation summary per table:
++------------------+---------------------------+------+------------+------------+--------+------+-----------+--------------+
+|Connection        |Table                      |Checks|Sensor      |Valid       |Warnings|Errors|Fatal      |Execution     |
+|                  |                           |      |results     |results     |        |      |errors     |errors        |
++------------------+---------------------------+------+------------+------------+--------+------+-----------+--------------+
+|table_availability|america_health_rankings.ahr|1     |1           |1           |0       |0     |0          |0             |
++------------------+---------------------------+------+------------+------------+--------+------+-----------+--------------+
 ```
 
 For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the
@@ -213,19 +221,19 @@ ORDER BY time_period
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value of the check is 1.0.
+You can also see the results returned by the sensor. The actual value of the check is 0.0.
 
 ```
 **************************************************
 Finished executing a sensor for a check daily_table_availability on the table america_health_rankings.ahr using a sensor definition table/availability/table_availability, sensor result count: 1
 
 Results returned by the sensor:
-+------------+-----------+--------------------+
-|actual_value|time_period|time_period_utc     |
-+------------+-----------+--------------------+
-|1.0         |2023-09-04 |2023-09-04T00:00:00Z|
-+------------+-----------+--------------------+
-**************************************************
++------------+----------------+--------------------+
+|actual_value|time_period     |time_period_utc     |
++------------+----------------+--------------------+
+|0.0         |2023-12-15T00:00|2023-12-15T00:00:00Z|
++------------+----------------+--------------------+
+
 ```
 
 ## Next steps

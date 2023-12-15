@@ -104,7 +104,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-    Below you can see the results displayed on the Current data quality checks results dashboard located in the Check results group. This dashboard 
+    Below you can see the results displayed on the **Current data quality checks results** dashboard located in the Check results group. This dashboard 
     displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
 
     This dashboard allows filtering data by:

@@ -1,4 +1,4 @@
-# Percentage of false values
+# Percentage of false boolean values
 
 This example shows how to detect that the percentage of false boolean values remains above a set threshold.
 
@@ -60,7 +60,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-false-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -81,7 +81,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-false-percent-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
@@ -91,14 +91,12 @@ To execute the check prepared in the example using the [user interface](../../dq
     The Sensor readouts category displays the values obtained by the sensors from the data source.
     The Execution errors category displays any error that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-false-percent-check-details.png)
-
     Review the results which should be similar to the one below.
+
+    ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results1.png)
 
     The actual value in this example is 99%, which is above the minimum threshold level set in the warning (99%).
     The check gives a valid result (notice the green square to the left of the check name).
-
-    ![False-percent check results](https://dqops.com/docs/images/examples/daily-false-percent-check-results.png)
 
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
@@ -108,16 +106,33 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the KPIs per check category - summary dashboard showing results by KPI, KPI per category, Datetime KPI, Pii KPI and Standard KPI.
+    Below you can see the results displayed on the **Current column status** dashboard located in the Current status group. 
 
-    ![False-percent check results on KPIs per check category - summary dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-KPIs-per-check-category-summary-dashboard.png)
+    This dashboard allows data engineers and data owners to quickly evaluate the data quality of monitored
+    columns. The dashboards display a color-coded status that indicates the severity level detected by run
+    checks. When the status is green, it means that the monitored column has no data quality issues. However, if the status
+    is yellow, orange, or red, it indicates that there were some issues detected. The dashboard also displays the number
+    of detected issues per severity threshold, making it easier to identify and address tables and columns with issues.
+    
+    This dashboard allow filtering data by:
+    
+    * time frame,
+    * connection,
+    * schema,
+    * data quality dimension,
+    * check category,
+    * data group,
+    * table,
+    * column.
+
+    ![False-percent check results on the Current column status dashboard](https://dqops.com/docs/images/examples/daily-false-percent-check-results-on-current-column-status-dashboard.png)
 
 ## Change a schedule at the connection level
 
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
+After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
 ![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 
