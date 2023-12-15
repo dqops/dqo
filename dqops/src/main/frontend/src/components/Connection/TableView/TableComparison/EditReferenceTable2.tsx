@@ -111,7 +111,6 @@ export default function EditReferenceTable2({
           <FirstLineNameConfiguration
             editConfigurationParameters={editConfigurationParameters}
             onChangeName={onChangeName}
-            isButtonEnabled={true}
             onBack={onBack}
             timePartitioned={timePartitioned}
             existingTableComparisonConfigurations={

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Button from '../../../../Button';
-import clsx from 'clsx';
 import SvgIcon from '../../../../SvgIcon';
 import Input from '../../../../Input';
 import { useParams } from 'react-router-dom';
@@ -21,7 +20,6 @@ import { TableComparisonsApi } from '../../../../../services/apiClient';
 type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
   onChangeName: (name: string) => void;
-  isButtonEnabled: boolean;
   onBack: (stayOnSamePage?: boolean | undefined) => void;
   timePartitioned?: 'daily' | 'monthly';
   existingTableComparisonConfigurations: (string | undefined)[];
@@ -31,7 +29,6 @@ type TFirstLevelConfiguretion = {
 export default function FirstLineNameConfiguration({
   editConfigurationParameters,
   onChangeName,
-  isButtonEnabled,
   onBack,
   timePartitioned,
   existingTableComparisonConfigurations,
@@ -207,6 +204,13 @@ export default function FirstLineNameConfiguration({
       setComparisonAlreadyExist(false);
     }
   };
+
+  
+  const isDataGroupingCorrect = editConfigurationParameters.dataGroupingArray?.every(x => x.compared_table_column_name !== undefined 
+    && x.reference_table_column_name !== undefined && x.reference_table_column_name.length > 0 && x.compared_table_column_name.length > 0);
+
+  const isButtonEnabled = (editConfigurationParameters.refConnection && editConfigurationParameters.refSchema 
+    && editConfigurationParameters.refTable && editConfigurationParameters.name && isDataGroupingCorrect)
 
   return (
     <div className="flex items-center justify-between border-b border-gray-300 mb-4 py-4 px-8 w-full">

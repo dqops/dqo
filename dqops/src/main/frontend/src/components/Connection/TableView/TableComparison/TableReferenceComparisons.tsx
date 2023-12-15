@@ -199,7 +199,6 @@ export const TableReferenceComparisons = ({
       tableComparisonConfigurationName
     ).then(() => setIsComparisonDeleted(!isComparisonDeleted));
   };
-  console.log(isCreating);
 
   return (
     <>

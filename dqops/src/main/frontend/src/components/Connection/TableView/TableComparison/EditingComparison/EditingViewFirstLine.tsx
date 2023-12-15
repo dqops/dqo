@@ -100,22 +100,22 @@ export default function EditingViewFirstLine({
   //     setDeletingData(false);
   //   }
   // }, [job?.status]);
-  console.log(connection, schema, table, selectedReference, {
-    table_comparison_configuration_name: selectedReference,
-    compared_connection: connection,
-    compared_table: {
-      schema_name: schema,
-      table_name: table
-    },
-    reference_connection: editConfigurationParameters.refConnection,
-    reference_table: {
-      schema_name: editConfigurationParameters.refSchema,
-      table_name: editConfigurationParameters.refTable
-    },
-    grouping_columns: editConfigurationParameters.dataGroupingArray,
-    check_type: checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
-    time_scale: timePartitioned
-  });
+  // console.log(connection, schema, table, selectedReference, {
+  //   table_comparison_configuration_name: selectedReference,
+  //   compared_connection: connection,
+  //   compared_table: {
+  //     schema_name: schema,
+  //     table_name: table
+  //   },
+  //   reference_connection: editConfigurationParameters.refConnection,
+  //   reference_table: {
+  //     schema_name: editConfigurationParameters.refSchema,
+  //     table_name: editConfigurationParameters.refTable
+  //   },
+  //   grouping_columns: editConfigurationParameters.dataGroupingArray,
+  //   check_type: checkTypes as TableComparisonConfigurationModelCheckTypeEnum,
+  //   time_scale: timePartitioned
+  // });
   const onUpdate = async () => {
     await TableComparisonsApi.updateTableComparisonConfiguration(
       connection,
