@@ -859,28 +859,28 @@ spec:
         - dashboard_name: Executed daily checks per table
           url: https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2070
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: all
         - dashboard_name: Executed daily checks per column
           url: https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2070
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: all
         - dashboard_name: Executed daily checks per data grouping
           url: https://lookerstudio.google.com/embed/reporting/93ab5017-f7a6-4ee4-8c51-6d0a24880cf6/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2070
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: all
         - dashboard_name: Executed daily checks per check
           url: https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
           width: 1400
-          height: 1600
+          height: 2070
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: all
