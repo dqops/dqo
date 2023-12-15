@@ -61,7 +61,7 @@ public class LocalFileTreeNode extends FileTreeNode {
     public FileContent getContent() {
         if (super.getContent() == null) {
             LocalFileStorageService storageService = this.context.getStorageService();
-            FileContent fileContent = storageService.readFile(this.getFilePath());
+            FileContent fileContent = storageService.readFile(this.getFilePath(), true);
 			this.setContent(fileContent);
 			this.setStatus(FileTreeNodeStatus.LOADED_NOT_MODIFIED);
         }
@@ -79,11 +79,11 @@ public class LocalFileTreeNode extends FileTreeNode {
                 break;
             case NEW:
             case MODIFIED:
-				this.context.getStorageService().saveFile(this.getFilePath(), this.getContent());
+				this.context.getStorageService().saveFile(this.getFilePath(), this.getContent(), true);
 				this.setStatus(FileTreeNodeStatus.LOADED_NOT_MODIFIED);
                 break;
             case TO_BE_DELETED:
-				this.context.getStorageService().deleteFile(this.getFilePath());
+				this.context.getStorageService().deleteFile(this.getFilePath(), true);
 				this.setContent(null);
 				this.setStatus(FileTreeNodeStatus.DELETED);
                 break;

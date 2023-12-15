@@ -24,14 +24,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class AcquiredExclusiveWriteLock implements Closeable {
     private final ReentrantReadWriteLock.WriteLock writeLock;
+    private final ThreadLocksCounter threadLocksCounter;
     private boolean released;
 
     /**
      * Creates an exclusive read lock that is already in a "locked" status.
      * @param writeLock Exclusive write lock on the deepest level (the child only).
+     * @param threadLocksCounter Threads lock counter.
      */
-    public AcquiredExclusiveWriteLock(ReentrantReadWriteLock.WriteLock writeLock) {
+    public AcquiredExclusiveWriteLock(
+            ReentrantReadWriteLock.WriteLock writeLock,
+            ThreadLocksCounter threadLocksCounter) {
         this.writeLock = writeLock;
+        this.threadLocksCounter = threadLocksCounter;
     }
 
     /**
@@ -43,6 +48,7 @@ public class AcquiredExclusiveWriteLock implements Closeable {
             return;
         }
 
+        this.threadLocksCounter.decrementWriteLock();
         this.writeLock.unlock();
         this.released = true;
     }
