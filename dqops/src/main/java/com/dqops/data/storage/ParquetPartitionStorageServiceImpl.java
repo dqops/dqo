@@ -472,7 +472,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
                                        FileStorageSettings storageSettings,
                                        UserDomainIdentity userIdentity) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
+        try {
             Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings, userIdentity);
             File targetParquetFile = targetParquetFilePath.toFile();
 
@@ -518,7 +518,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     homeRelativePath.getFileName().toString()
             );
 
-            if (!this.localUserHomeFileStorageService.deleteFile(homeFilePath)) {
+            if (!this.localUserHomeFileStorageService.deleteFile(homeFilePath, false)) {
                 // Deleting .parquet file failed.
                 return false;
             }
@@ -530,14 +530,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.
                 HomeFolderPath homeFolderPath = new HomeFolderPath(userIdentity.getDataDomainFolder(), homeRelativeFoldersList.toArray(FolderName[]::new));
 
-                int filesInFolderCount = this.localUserHomeFileStorageService.listFiles(homeFolderPath).size();
-                int foldersInFolderCount = this.localUserHomeFileStorageService.listFolders(homeFolderPath).size();
+                int filesInFolderCount = this.localUserHomeFileStorageService.listFiles(homeFolderPath, false).size();
+                int foldersInFolderCount = this.localUserHomeFileStorageService.listFolders(homeFolderPath, false).size();
                 if (filesInFolderCount + foldersInFolderCount != 0) {
                     // Folder is not empty
                     break;
                 }
 
-                if (!this.localUserHomeFileStorageService.tryDeleteFolder(homeFolderPath)) {
+                if (!this.localUserHomeFileStorageService.tryDeleteFolder(homeFolderPath, false)) {
                     // Deleting the folder failed
                     // TODO: Add a warn log message.
                     break;

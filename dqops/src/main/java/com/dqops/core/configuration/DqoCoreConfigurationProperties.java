@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoCoreConfigurationProperties implements Cloneable {
     private boolean printStackTrace;
     private long lockWaitTimeoutSeconds = 15 * 60;
+    private boolean logMultipleLocking = true;
 
     /**
      * Prints the stack trace.
@@ -59,6 +60,22 @@ public class DqoCoreConfigurationProperties implements Cloneable {
      */
     public void setLockWaitTimeoutSeconds(long lockWaitTimeoutSeconds) {
         this.lockWaitTimeoutSeconds = lockWaitTimeoutSeconds;
+    }
+
+    /**
+     * Returns true if the system will count reader/writer locks obtained for each thread and will report when a thread requests another lock while already having some other locks.
+     * @return True when the system should detect multiple locking.
+     */
+    public boolean isLogMultipleLocking() {
+        return logMultipleLocking;
+    }
+
+    /**
+     * Enables detection of obtaining multiple locks per thread.
+     * @param logMultipleLocking True when multiple lock detection is enabled.
+     */
+    public void setLogMultipleLocking(boolean logMultipleLocking) {
+        this.logMultipleLocking = logMultipleLocking;
     }
 
     /**

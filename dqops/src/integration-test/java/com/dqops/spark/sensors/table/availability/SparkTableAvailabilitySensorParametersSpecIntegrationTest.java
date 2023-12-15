@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.mysql.sensors.table.availability;
+package com.dqops.spark.sensors.table.availability;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
@@ -24,12 +24,12 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.mysql.BaseMysqlIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.table.availability.TableAvailabilitySensorParametersSpec;
+import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class MysqlTableAvailabilitySensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+public class SparkTableAvailabilitySensorParametersSpecIntegrationTest extends BaseSparkIntegrationTest {
     private TableAvailabilitySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableAvailabilityCheckSpec checkSpec;
@@ -45,7 +45,7 @@ public class MysqlTableAvailabilitySensorParametersSpecIntegrationTest extends B
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.mysql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.spark);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableAvailabilitySensorParametersSpec();
@@ -94,7 +94,7 @@ public class MysqlTableAvailabilitySensorParametersSpecIntegrationTest extends B
     @Test
     void runSensor_whenSensorExecutedOnNonExistingTable_thenReturnsFailedValue() {
 
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", ProviderType.mysql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", ProviderType.spark);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(

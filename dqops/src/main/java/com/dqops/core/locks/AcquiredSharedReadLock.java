@@ -23,14 +23,19 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class AcquiredSharedReadLock implements Closeable {
     private boolean released;
-    private ReentrantReadWriteLock.ReadLock readLock;
+    private final ReentrantReadWriteLock.ReadLock readLock;
+    private final ThreadLocksCounter threadLocksCounter;
 
     /**
      * Creates a shared read lock that is already in a "locked" status.
      * @param readLock Read lock that was locked.
+     * @param threadLocksCounter Active locks counter.
      */
-    public AcquiredSharedReadLock(ReentrantReadWriteLock.ReadLock readLock) {
+    public AcquiredSharedReadLock(
+            ReentrantReadWriteLock.ReadLock readLock,
+            ThreadLocksCounter threadLocksCounter) {
         this.readLock = readLock;
+        this.threadLocksCounter = threadLocksCounter;
     }
 
     /**
@@ -42,6 +47,7 @@ public class AcquiredSharedReadLock implements Closeable {
             return;
         }
 
+        this.threadLocksCounter.decrementReadLock();
         this.readLock.unlock();
         this.released = true;
     }

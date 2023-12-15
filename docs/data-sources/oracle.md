@@ -13,7 +13,7 @@ You need an Oracle account.
 
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select SQL Server database type.
+2. Select Oracle database type.
 
     ![Selecting Oracle database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-oracle.png)
 

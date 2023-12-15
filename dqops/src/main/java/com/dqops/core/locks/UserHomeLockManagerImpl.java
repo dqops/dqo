@@ -34,15 +34,21 @@ import java.util.Map;
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class UserHomeLockManagerImpl implements UserHomeLockManager {
     private final DqoCoreConfigurationProperties coreConfigurationProperties;
+    private final ThreadLocksCounter threadLocksCounter;
     private final Map<DqoDomainRootPair, ReaderWriterLockHolder> locks;
+    private final Object dictionaryLock = new Object();
 
     /**
      * Creates an instance of the lock manager.
      * @param coreConfigurationProperties Configuration properties with the lock wait timeout setting.
+     * @param threadLocksCounter Threads lock counter.
      */
     @Autowired
-    public UserHomeLockManagerImpl(DqoCoreConfigurationProperties coreConfigurationProperties) {
+    public UserHomeLockManagerImpl(
+            DqoCoreConfigurationProperties coreConfigurationProperties,
+            ThreadLocksCounter threadLocksCounter) {
         this.coreConfigurationProperties = coreConfigurationProperties;
+        this.threadLocksCounter = threadLocksCounter;
         this.locks = new LinkedHashMap<>();
         this.createLocksForDataDomain(UserDomainIdentity.DEFAULT_DATA_DOMAIN);
     }
@@ -54,18 +60,20 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     public void createLocksForDataDomain(String dataDomain) {
         long lockWaitTimeoutSeconds = this.coreConfigurationProperties.getLockWaitTimeoutSeconds();
 
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.sources), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.sensors), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.rules), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.checks), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.settings), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.credentials), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_sensor_readouts), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_check_results), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_statistics), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_errors), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_incidents), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-        this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot._indexes), new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+        synchronized (this.dictionaryLock) {
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.sources), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.sensors), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.rules), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.checks), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.settings), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.credentials), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_sensor_readouts), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_check_results), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_statistics), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_errors), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot.data_incidents), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+            this.locks.put(new DqoDomainRootPair(dataDomain, DqoRoot._indexes), new ReaderWriterLockHolder(lockWaitTimeoutSeconds, this.threadLocksCounter));
+        }
     }
 
     /**
@@ -79,10 +87,15 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     @Override
     public AcquiredSharedReadLock lockSharedRead(DqoRoot scope, String dataDomain) {
         DqoDomainRootPair lockKey = new DqoDomainRootPair(dataDomain, scope);
-        ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(lockKey);
-        if (readerWriterLockHolder == null) {
-            throw new UnsupportedOperationException("Locking for DQOps Root " + scope + " is not supported.");
+        ReaderWriterLockHolder readerWriterLockHolder;
+
+        synchronized (this.dictionaryLock) {
+            readerWriterLockHolder = this.locks.get(lockKey);
+            if (readerWriterLockHolder == null) {
+                throw new UnsupportedOperationException("Locking for DQOps Root " + scope + " is not supported.");
+            }
         }
+
         return readerWriterLockHolder.lockSharedRead();
     }
 
@@ -97,10 +110,15 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
     @Override
     public AcquiredExclusiveWriteLock lockExclusiveWrite(DqoRoot scope, String dataDomain) {
         DqoDomainRootPair lockKey = new DqoDomainRootPair(dataDomain, scope);
-        ReaderWriterLockHolder readerWriterLockHolder = this.locks.get(lockKey);
-        if (readerWriterLockHolder == null) {
-            throw new UnsupportedOperationException("Locking for DQOps Root " + scope + " is not supported.");
+        ReaderWriterLockHolder readerWriterLockHolder;
+
+        synchronized (this.dictionaryLock) {
+            readerWriterLockHolder = this.locks.get(lockKey);
+            if (readerWriterLockHolder == null) {
+                throw new UnsupportedOperationException("Locking for DQOps Root " + scope + " is not supported.");
+            }
         }
+
         return readerWriterLockHolder.lockExclusiveWrite();
     }
 }
