@@ -93,10 +93,9 @@ public class BigQueryTableAvailabilitySensorParametersSpecIntegrationTest extend
     }
 
     @Test
-    void runSensor_whenSensorExecuted_thenReturnsError() {
+    void runSensor_whenSensorExecutedOnNonExistingTable_thenReturnsFailedValue() {
 
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile("123213dsauewrfbu32", ProviderType.bigquery);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataWithNonExistingTable("schema", "table", ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
