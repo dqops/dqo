@@ -29,6 +29,7 @@ import com.dqops.core.incidents.IncidentImportQueueService;
 import com.dqops.core.incidents.TableIncidentImportBatch;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobCancelledException;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshot;
 import com.dqops.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import com.dqops.data.errors.normalization.ErrorsNormalizationService;
@@ -189,16 +190,17 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
+        UserDomainIdentity userDomainIdentity = userHome.getUserIdentity();
 
-        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
-        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        CheckResultsSnapshot checkResultsSnapshot = this.checkResultsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allRuleEvaluationResultsTable = checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
-        ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
+        ErrorsSnapshot errorsSnapshot = this.errorsSnapshotFactory.createSnapshot(connectionName, physicalTableName, userDomainIdentity);
         Table allErrorsTable = errorsSnapshot.getTableDataChanges().getNewOrChangedRows();
         jobCancellationToken.throwIfCancelled();
 
@@ -241,7 +243,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     checkResultsSnapshot.getTableDataChanges().getNewOrChangedRows(),
                     connectionWrapper.getSpec(),
                     tableSpec);
-            this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch);
+            this.incidentImportQueueService.importTableIncidents(tableIncidentImportBatch, userDomainIdentity);
         }
 
         return checkExecutionSummary;

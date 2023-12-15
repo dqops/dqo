@@ -16,6 +16,8 @@
 
 package com.dqops.core.incidents;
 
+import com.dqops.core.principal.UserDomainIdentity;
+
 /**
  * Stubbed (fake) incident import queue service.
  */
@@ -27,7 +29,8 @@ public class IncidentImportQueueServiceStub implements IncidentImportQueueServic
      * @param tableIncidentImportBatch Issues (failed data quality check results) detected on a single table that should be loaded to the incidents table.
      */
     @Override
-    public void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch) {
+    public void importTableIncidents(TableIncidentImportBatch tableIncidentImportBatch,
+                                     UserDomainIdentity userDomainIdentity) {
 
     }
 
@@ -37,7 +40,8 @@ public class IncidentImportQueueServiceStub implements IncidentImportQueueServic
      * @param incidentStatusChangeParameters Parameters of the incident whose status will be updated.
      */
     @Override
-    public void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters) {
+    public void setIncidentStatus(IncidentStatusChangeParameters incidentStatusChangeParameters,
+                                  UserDomainIdentity userDomainIdentity) {
 
     }
 
@@ -47,7 +51,8 @@ public class IncidentImportQueueServiceStub implements IncidentImportQueueServic
      * @param incidentIssueUrlChangeParameters Parameters of the incident whose issueUrl will be updated.
      */
     @Override
-    public void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters) {
+    public void setIncidentIssueUrl(IncidentIssueUrlChangeParameters incidentIssueUrlChangeParameters,
+                                    UserDomainIdentity userDomainIdentity) {
 
     }
 }

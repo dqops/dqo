@@ -83,7 +83,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
@@ -100,16 +100,16 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source.
+    The Execution errors category displays any error that occurred during the check's execution.
 
     ![Check details](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-details.png)
 
     Review the results which should be similar to the one below.
 
-    The actual value in this example is 40, which is below the minimum threshold level set in the warning (99).
+    The actual value in this example is 40%, which is below the minimum threshold level set in the warning (99%).
     The check gives a fatal result (notice the red square to the left of the check name).
 
     ![String-in-set-percent check results](https://dqops.com/docs/images/examples/daily-string-in-set-percent-check-results.png)
@@ -316,5 +316,5 @@ Results returned by the sensor:
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [string_value_in_set_percent check used in this example, go to the check details section](../../checks/column/strings/string-value-in-set-percent.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

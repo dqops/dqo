@@ -14,7 +14,7 @@ The navigation bar allows you to select the specific sections that you want to f
 
 ![Navigation bar sections](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/navigation-bar1.png)
 
-- The **Data Sources** section allows you to [add new connections](../../working-with-dqo/adding-data-source-connection/index.md), import schemas and 
+- The **Data Sources** section allows you to [add new connections](../../data-sources/index.md), import schemas and 
     tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
     [set the date and time columns for partition checks](../run-data-quality-checks/run-data-quality-checks.md/#configure-date-or-datetime-column-for-partition-checks), 
     and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
@@ -153,7 +153,7 @@ Below the quick links, there are tabs that allow you to switch between Profiling
 and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics 
 (only in Profiling section), or preview tables (only in Profiling section).
 
-Under the tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
+Under tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
 section, there is additional information about the date partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you

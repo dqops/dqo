@@ -91,7 +91,7 @@ public class JinjaTemplateRenderServiceImpl implements JinjaTemplateRenderServic
         inputDto.setTemplateLastModified(sensorFindResult.getSqlTemplateLastModified());
         inputDto.setHomeType(sensorFindResult.getHome());
         String relativePathToTemplate = sensorFindResult.getTemplateFilePath() != null ?
-                sensorFindResult.getTemplateFilePath().toString().replace('\\', '/')
+                sensorFindResult.getTemplateFilePath().toRelativePath().toString().replace('\\', '/')
                 : null;
         inputDto.setTemplateHomePath(relativePathToTemplate);
         Path userHomePhysicalPath = executionContext.getUserHomeContext().getHomeRoot().getPhysicalAbsolutePath();

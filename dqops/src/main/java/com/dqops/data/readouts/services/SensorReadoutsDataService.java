@@ -16,6 +16,7 @@
 package com.dqops.data.readouts.services;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.readouts.services.models.SensorReadoutsListModel;
 
 /**
@@ -27,8 +28,10 @@ public interface SensorReadoutsDataService {
      *
      * @param rootChecksContainerSpec Root checks container.
      * @param loadParameters          Load parameters.
+     * @param userDomainIdentity      User identity with the data domain.
      * @return Complete model of the sensor readouts.
      */
     SensorReadoutsListModel[] readSensorReadoutsDetailed(AbstractRootChecksContainerSpec rootChecksContainerSpec,
-                                                         SensorReadoutsDetailedFilterParameters loadParameters);
+                                                         SensorReadoutsDetailedFilterParameters loadParameters,
+                                                         UserDomainIdentity userDomainIdentity);
 }

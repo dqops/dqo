@@ -31,6 +31,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Column list model that returns the basic fields from a column specification, excluding nested nodes like a list of activated checks.
  */
@@ -194,9 +196,9 @@ public class ColumnListModel {
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setFullTableName(physicalTableName.toTableSearchFilter());
-                setColumnName(columnName);
+                setColumnNames(List.of(columnName));
 
                 setDateStart(null);
                 setDateEnd(null);

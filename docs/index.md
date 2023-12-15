@@ -25,7 +25,7 @@ Try our [tutorial](./getting-started/index.md) to learn how to start monitoring 
 
 ## Supported providers
 
-You can use DQOps with the most popular databases. [Learn here how to connect a data source to DQOps](./working-with-dqo/adding-data-source-connection/index.md).
+You can use DQOps with the most popular databases. [Learn here how to connect a data source to DQOps](./data-sources/index.md).
 
 ![Google BigQuery](https://dqops.com/docs/images/connections/google-bigquery.png)
 &nbsp; &nbsp; &nbsp; ![Snowflake](https://dqops.com/docs/images/connections/snowflake.png)

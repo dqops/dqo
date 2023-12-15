@@ -57,7 +57,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-ip4-address-count-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-invalid-ip4-address-count-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -66,7 +66,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
@@ -78,24 +78,23 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
-
-    ![Check details](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-details.png)
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source.
+    The Execution errors category displays any error that occurred during the check's execution.
 
     Review the results which should be similar to the one below.
+
+    ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results1.png)
    
     The actual value in this example is 5, which is above the maximum threshold level set in the warning (0).
     The check gives a warning (notice the yellow square to the left of the check name).
 
-    ![String-invalid-ip4-address-count check results](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -104,9 +103,24 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-    Below you can see the results displayed on the Issue severity status per table and day dashboard showing results by connection, schema, columns and data group.
+    Below you can see the results displayed on the **Current validity issues on columns** dashboard located in Data Quality Dimension/Validity group.
+    This dashboard summarizes results from most recently executed checks categorized to Validity dimension.
 
-    ![String-invalid-ip4-address-count check on Issue severity status per table and day dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results-on-issue-severity-status-per-table-and-day-dashboard.png)
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 3 months)
+    * connection,
+    * schema,
+    * data group,
+    * check category,
+    * check name,
+    * stages,
+    * priorities,
+    * table,
+    * column,
+    * issue severity.
+
+    ![String-invalid-ip4-address-count check on Current validity issues on columns dashboard](https://dqops.com/docs/images/examples/daily-string-invalid-ip4-address-count-checks-results-on-validity-dashboard.png)
 
 ## Change a schedule at the connection level
 

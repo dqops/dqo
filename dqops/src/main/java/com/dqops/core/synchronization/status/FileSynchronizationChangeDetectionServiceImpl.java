@@ -15,10 +15,14 @@
  */
 package com.dqops.core.synchronization.status;
 
+import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.metadata.FileDifference;
 import com.dqops.core.filesystem.metadata.FolderMetadata;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.contract.FileSystemSynchronizationOperations;
 import com.dqops.core.synchronization.contract.SynchronizationRoot;
@@ -47,6 +51,9 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     private LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory;
     private UserHomeLockManager userHomeLockManager;
     private SynchronizationStatusTracker synchronizationStatusTracker;
+    private DqoUserPrincipalProvider principalProvider;
+    private DqoUserConfigurationProperties dqoUserConfigurationProperties;
+    private UserDomainIdentityFactory userDomainIdentityFactory;
 
     /**
      * Creates a local file change detection service.
@@ -54,27 +61,37 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      * @param localSynchronizationFileSystemFactory Local file system factory, used to read local files to detect changes.
      * @param userHomeLockManager User home lock manager, used to acquire a shared read lock.
      * @param synchronizationStatusTracker Synchronization status tracker, notified about detected changes.
+     * @param principalProvider Principal provider.
+     * @param dqoUserConfigurationProperties Default configuration parameters.
+     * @param userDomainIdentityFactory User data domain identity factory.
      */
     @Autowired
     public FileSynchronizationChangeDetectionServiceImpl(
             UserHomeContextFactory userHomeContextFactory,
             LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory,
             UserHomeLockManager userHomeLockManager,
-            SynchronizationStatusTracker synchronizationStatusTracker) {
+            SynchronizationStatusTracker synchronizationStatusTracker,
+            DqoUserPrincipalProvider principalProvider,
+            DqoUserConfigurationProperties dqoUserConfigurationProperties,
+            UserDomainIdentityFactory userDomainIdentityFactory) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.localSynchronizationFileSystemFactory = localSynchronizationFileSystemFactory;
         this.userHomeLockManager = userHomeLockManager;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
+        this.principalProvider = principalProvider;
+        this.dqoUserConfigurationProperties = dqoUserConfigurationProperties;
+        this.userDomainIdentityFactory = userDomainIdentityFactory;
     }
 
     /**
      * Detects if there are any not synchronized changes in a given DQOps User home folder.
      * @param dqoRoot User home folder to be analyzed.
+     * @param userDomainIdentity User identity that identifies the data domain.
      * @return True when there are local not synchronized changes, false otherwise.
      */
     @Override
-    public boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+    public boolean detectNotSynchronizedChangesInFolder(DqoRoot dqoRoot, UserDomainIdentity userDomainIdentity) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userDomainIdentity);
         UserHome userHome = userHomeContext.getUserHome();
 
         FileIndexName localIndexName = new FileIndexName(dqoRoot, FileLocation.LOCAL);
@@ -83,11 +100,11 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
             localFileIndexWrapper = userHome.getFileIndices().createAndAddNew(localIndexName);
         }
 
-        SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot);
+        SynchronizationRoot userHomeFolderFileSystem = this.localSynchronizationFileSystemFactory.createUserHomeFolderFileSystem(dqoRoot, userDomainIdentity);
         FolderMetadata lastSourceFolderIndex = localFileIndexWrapper.getSpec().getFolder();
         FileSystemSynchronizationOperations localFileSystemSynchronizationOperations = userHomeFolderFileSystem.getFileSystemService();
 
-        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot)) {
+        try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot, userDomainIdentity.getDataDomainFolder())) {
             FolderMetadata mostCurrentFolderMetadata = localFileSystemSynchronizationOperations.listFilesInFolder(
                     userHomeFolderFileSystem.getFileSystemRoot(),
                     lastSourceFolderIndex.getRelativePath(), lastSourceFolderIndex);
@@ -103,14 +120,15 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
 
     /**
      * Detects changes in a folder. Optionally publishes a folder change status to "changed" if a change is detected.
+     * @param userDomainIdentity User identity that identifies the data domain.
      * @param dqoRoot Folder to be analyzed.
      */
     @Override
-    public void detectAndPublishLocalFolderStatus(DqoRoot dqoRoot) {
+    public void detectAndPublishLocalFolderStatus(DqoRoot dqoRoot, UserDomainIdentity userDomainIdentity) {
         try {
-            boolean hasLocalChanges = detectNotSynchronizedChangesInFolder(dqoRoot);
+            boolean hasLocalChanges = detectNotSynchronizedChangesInFolder(dqoRoot, userDomainIdentity);
             if (hasLocalChanges) {
-                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.changed);
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, userDomainIdentity.getDataDomainFolder(), FolderSynchronizationStatus.changed);
             }
         }
         catch (BeanCreationNotAllowedException ex) {
@@ -125,19 +143,32 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
      * Starts a background job that checks all folders and tries to detect local changes that were not yet synchronized to DQOps Cloud.
      */
     @Override
-    public void detectNotSynchronizedChangesInBackground() {
+    public void detectNotSynchronizedChangesAllDomains() {
+        this.detectNotSynchronizedChangesInDomain(this.dqoUserConfigurationProperties.getDefaultDataDomain());
+
+        // TODO: iterate over all data domains and schedule tasks
+    }
+
+    /**
+     * Detect changes in the local user home for the given data domain.
+     * @param domainName Data domain name.
+     */
+    @Override
+    public void detectNotSynchronizedChangesInDomain(String domainName) {
+        UserDomainIdentity dataDomainAdminIdentity = this.userDomainIdentityFactory.createDataDomainAdminIdentity(domainName);
+
         Schedulers.boundedElastic().schedule(() -> {
-            detectAndPublishLocalFolderStatus(DqoRoot.sources);
-            detectAndPublishLocalFolderStatus(DqoRoot.sensors);
-            detectAndPublishLocalFolderStatus(DqoRoot.rules);
-            detectAndPublishLocalFolderStatus(DqoRoot.checks);
-            detectAndPublishLocalFolderStatus(DqoRoot.settings);
-            detectAndPublishLocalFolderStatus(DqoRoot.credentials);
-            detectAndPublishLocalFolderStatus(DqoRoot.data_sensor_readouts);
-            detectAndPublishLocalFolderStatus(DqoRoot.data_check_results);
-            detectAndPublishLocalFolderStatus(DqoRoot.data_errors);
-            detectAndPublishLocalFolderStatus(DqoRoot.data_statistics);
-            detectAndPublishLocalFolderStatus(DqoRoot.data_incidents);
+            detectAndPublishLocalFolderStatus(DqoRoot.sources, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.sensors, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.rules, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.checks, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.settings, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.credentials, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.data_sensor_readouts, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.data_check_results, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.data_errors, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.data_statistics, dataDomainAdminIdentity);
+            detectAndPublishLocalFolderStatus(DqoRoot.data_incidents, dataDomainAdminIdentity);
         });
     }
 }

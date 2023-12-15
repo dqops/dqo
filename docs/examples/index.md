@@ -11,7 +11,7 @@ To use the examples you need:
 
 - [Installed DQOps](../getting-started/installation/installation.md).
 - A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
-- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../working-with-dqo/adding-data-source-connection/bigquery/#using-google-application-credentials-authentication).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](../data-sources/bigquery.md#using-google-application-credentials-authentication).
 
 After installing Google Cloud CLI, log in to your GCP account, by running:
 
@@ -29,7 +29,7 @@ The example directory contains two configuration files: `connection.dqoconnectio
 configuration, and `*.dqotable.yaml` file, which stores the columns and tables metadata and checks configuration.
 
 While it is not necessary to manually add the connection in our examples, you can find information on how to do it in the
-[Working with DQOps section](../working-with-dqo/adding-data-source-connection/index.md).
+[Working with DQOps section](../data-sources/index.md).
 
 ## Running the use cases
 
@@ -79,38 +79,50 @@ To run the examples, follow the steps below.
 You can execute the checks using the [user interface](../dqo-concepts/user-interface-overview/user-interface-overview.md).
 Simply, open the DQOps User Interface Console (http://localhost:8888).
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks1.png)
 
-1. Go to the **Profiling** section.
+1. Go to the **Monitoring checks** section.
 
-    The Profiling section enables the configuration of advanced profiling data quality checks that are designed for the initial evaluation of your data source.
+    The **Monitoring checks** section enables the configuration of monitoring data quality checks that are designed for monitoring data quality.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view on the left you can find the tables that you have imported. Here is more about [adding connection and importing tables](../data-sources/index.md).
 
 
-3. Select the **Profiling Checks** tab.
+3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor). On **Profiling** section, there is also a second tab [Basic data statistics](../working-with-dqo/basic-data-statistics/basic-data-statistics.md) that allows you to collect summary information about your tables and columns.
+    This tab displays a list of data quality checks in the Check editor. The table with data quality checks contains a list of checks divided into different data quality subcategories that you
+    can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/#categories-of-checks)
+
+    The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../checks/#severity-levels)
+    
+    Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check.png)
+    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check1.png)
 
+    The results of the run check are shown as a color square
 
-5. Access the results by clicking the **Results** button and review it.
+    - Green for a valid result
+    - Yellow for a warning
+    - Orange for an error
+    - Red for a fatal error
+    - Black for execution error.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+5. Access the detailed results by clicking the **Results** button and review it.
+
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**. 
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source. The Execution errors category displays any error
     that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details.png)
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details1.png)
 
 6. Review the results
 

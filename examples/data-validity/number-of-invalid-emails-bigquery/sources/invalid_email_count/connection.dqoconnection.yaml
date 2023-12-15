@@ -5,10 +5,15 @@ spec:
   provider_type: bigquery
   bigquery:
     source_project_id: dqo-ai-testing
+    jobs_create_project: create_jobs_in_source_project
     authentication_mode: google_application_credentials
     quota_project_id: ""
   schedules:
     profiling:
+      cron_expression: 0 12 * * *
+    monitoring_daily:
+      cron_expression: 0 12 * * *
+    monitoring_monthly:
       cron_expression: 0 12 * * *
     partitioned_daily:
       cron_expression: 0 12 * * *

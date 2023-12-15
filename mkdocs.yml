@@ -38,6 +38,15 @@ nav:
       - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
       - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"
       - Install DQOps from release package: "working-with-dqo/installation/install-dqo-from-release-package.md"
+  - Data sources:
+      - "data-sources/index.md"
+      - BigQuery: "data-sources/bigquery.md"
+      - MySQL: "data-sources/mysql.md"
+      - Oracle: "data-sources/oracle.md"
+      - PostgreSQL: "data-sources/postgresql.md"
+      - Redshift: "data-sources/redshift.md"
+      - SQL Server: "data-sources/sql-server.md"
+      - Snowflake: "data-sources/snowflake.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
@@ -68,15 +77,6 @@ nav:
       - Data quality monitoring:
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
-      - Adding connections:
-          - "working-with-dqo/adding-data-source-connection/index.md"
-          - BigQuery: "working-with-dqo/adding-data-source-connection/bigquery.md"
-          - Snowflake: "working-with-dqo/adding-data-source-connection/snowflake.md"
-          - Redshift: "working-with-dqo/adding-data-source-connection/redshift.md"
-          - PostgreSQL: "working-with-dqo/adding-data-source-connection/postgresql.md"
-          - SQL Server: "working-with-dqo/adding-data-source-connection/sql-server.md"
-          - MySQL: "working-with-dqo/adding-data-source-connection/mysql.md"
-          - Oracle: "working-with-dqo/adding-data-source-connection/oracle.md"
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
       - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
       - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"
@@ -184,7 +184,7 @@ nav:
       - users: 'client/operations/users.md'
 ########## END INCLUDE PYTHON CLIENT REFERENCE
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
-  - Checks:
+  - Data quality checks:
     - 'checks/index.md'
     - table:
       - 'checks/table/index.md'

@@ -23,7 +23,7 @@ DQOps publishes the package on the official repository Python Package Index (PyP
 
 Start the observation of the data quality at every step of the existing data pipelines.
 Might your technology stack is based on a database that is supported in DQOps. 
-[Check the complete list of the built databases connectors](../../working-with-dqo/adding-data-source-connection/index.md).
+[Check the complete list of the built databases connectors](../../data-sources/index.md).
 
 For an immediate checks setup DQOps platform implements dozens of sensors. 
 Just activate a few of them choosing from the list.

@@ -17,6 +17,8 @@ package com.dqops.cli.commands.table.impl;
 
 import com.dqops.cli.edit.EditorLaunchService;
 import com.dqops.cli.terminal.TerminalWriter;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableWrapper;
@@ -34,20 +36,24 @@ public class TableEditServiceImpl implements TableEditService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final EditorLaunchService editorLaunchService;
     private final TerminalWriter terminalWriter;
+    private final DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
      * @param editorLaunchService Editor launcher.
      * @param terminalWriter Terminal writer.
+     * @param userPrincipalProvider User principal provider.
      */
     @Autowired
     public TableEditServiceImpl(UserHomeContextFactory userHomeContextFactory,
-								EditorLaunchService editorLaunchService,
-								TerminalWriter terminalWriter) {
+                                EditorLaunchService editorLaunchService,
+                                TerminalWriter terminalWriter,
+                                DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.editorLaunchService = editorLaunchService;
         this.terminalWriter = terminalWriter;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -57,7 +63,8 @@ public class TableEditServiceImpl implements TableEditService {
      * @return Error code: 0 when the table was found, -1 when the connection or table was not found.
      */
     public int launchEditorForTable(String connectionName, String fullTableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         if (connectionWrapper == null) {

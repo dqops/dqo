@@ -10,11 +10,7 @@ spec:
       volume:
         daily_row_count:
           warning:
-            min_count: 692
-          error:
-            min_count: 381
-          fatal:
-            min_count: 150
+            min_count: 1
   columns:
     edition:
       type_snapshot:

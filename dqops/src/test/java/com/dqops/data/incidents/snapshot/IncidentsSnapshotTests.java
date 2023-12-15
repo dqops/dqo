@@ -24,6 +24,8 @@ import com.dqops.core.filesystem.cache.LocalFileSystemCache;
 import com.dqops.core.filesystem.cache.LocalFileSystemCacheObjectMother;
 import com.dqops.core.locks.UserHomeLockManager;
 import com.dqops.core.locks.UserHomeLockManagerObjectMother;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
 import com.dqops.core.synchronization.status.SynchronizationStatusTrackerStub;
 import com.dqops.data.incidents.factory.IncidentsColumnNames;
 import com.dqops.data.incidents.factory.IncidentsTableFactoryImpl;
@@ -62,11 +64,13 @@ public class IncidentsSnapshotTests extends BaseTest {
     private ParquetPartitionStorageServiceImpl parquetStorageService;
     private DqoUserConfigurationProperties dqoUserConfigurationProperties;
     private IncidentsTableFactoryImpl incidentsTableFactory;
+    private UserDomainIdentity userDomainIdentity;
 
     @BeforeEach
     void setUp() {
 		dqoConfigurationProperties = DqoConfigurationPropertiesObjectMother.getDefaultCloned();
         dqoUserConfigurationProperties = DqoUserConfigurationPropertiesObjectMother.createConfigurationWithTemporaryUserHome(true);
+        userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         LocalFileSystemCache fileSystemCache = LocalFileSystemCacheObjectMother.createNewCache();
@@ -83,7 +87,7 @@ public class IncidentsSnapshotTests extends BaseTest {
                 new SynchronizationStatusTrackerStub(),
                 fileSystemCache);
         Table newRows = IncidentsTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
-		this.sut = new IncidentsSnapshot("conn", this.parquetStorageService, newRows);
+		this.sut = new IncidentsSnapshot(userDomainIdentity, "conn", this.parquetStorageService, newRows);
         this.incidentsTableFactory = new IncidentsTableFactoryImpl();
     }
 
@@ -107,7 +111,7 @@ public class IncidentsSnapshotTests extends BaseTest {
         sourceTable.instantColumn(IncidentsColumnNames.FIRST_SEEN_COLUMN_NAME).
                 set(row3.getRowNumber(), LocalDateTime.of(2022, 3, 10, 14, 30, 55).toInstant(ZoneOffset.UTC));
 
-        IncidentsSnapshot tempSut = new IncidentsSnapshot("conn", this.parquetStorageService, sourceTable);
+        IncidentsSnapshot tempSut = new IncidentsSnapshot(this.userDomainIdentity, "conn", this.parquetStorageService, sourceTable);
         tempSut.save();
     }
 

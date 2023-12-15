@@ -15,6 +15,8 @@
  */
 package com.dqops.metadata.userhome;
 
+import com.dqops.core.principal.UserDomainIdentity;
+
 /**
  * User home object mother.
  */
@@ -24,6 +26,6 @@ public class UserHomeObjectMother {
      * @return Bare, empty user home.
      */
     public static UserHomeImpl createBareUserHome() {
-        return new UserHomeImpl();
+        return new UserHomeImpl(UserDomainIdentity.LOCAL_INSTANCE_ADMIN_IDENTITY);
     }
 }

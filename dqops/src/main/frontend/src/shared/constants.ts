@@ -1,15 +1,25 @@
-
-import { TimeWindowFilterParameters } from '../api';
+import {
+  ConnectionModelProviderTypeEnum,
+  TimeWindowFilterParameters
+} from '../api';
 
 export type PageTab = {
   label: string;
   value: string;
 };
+
+interface IDatabaseOption {
+  type: ConnectionModelProviderTypeEnum;
+  name: string;
+  iconName: string;
+  displayName: string;
+}
+
 enum CheckTypes {
   MONITORING = 'monitoring',
   SOURCES = 'sources',
   PROFILING = 'profiling',
-  PARTITIONED = 'partitioned',
+  PARTITIONED = 'partitioned'
 }
 export const CONNECTION_LEVEL_TABS: {
   [key in CheckTypes]: PageTab[];
@@ -105,7 +115,7 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'statistics',
       value: 'statistics'
-    }, 
+    },
     {
       label: 'advanced',
       value: 'advanced'
@@ -113,7 +123,7 @@ export const TABLE_LEVEL_TABS: {
     {
       label: 'table-comparison',
       value: 'table-comparison'
-    },
+    }
   ],
   [CheckTypes.PARTITIONED]: [
     {
@@ -166,7 +176,7 @@ export const COLUMN_LEVEL_TABS: {
     {
       label: 'table-comparison',
       value: 'table-comparison'
-    },
+    }
   ],
   [CheckTypes.PARTITIONED]: [
     {
@@ -189,6 +199,159 @@ export const COLUMN_LEVEL_TABS: {
     }
   ]
 };
+
+export const databaseOptions: IDatabaseOption[] = [
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'AlloyDB',
+    iconName: 'alloydb',
+    displayName: 'AlloyDB for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Amazon Aurora',
+    iconName: 'amazonrds',
+    displayName: 'Amazon Aurora'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Amazon RDS for mySQL',
+    iconName: 'amazonrds',
+    displayName: 'Amazon RDS for mySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Amazon RDS for PostgreSQL',
+    iconName: 'amazonrds',
+    displayName: 'Amazon RDS for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Amazon RDS for SQL Server',
+    iconName: 'amazonrds',
+    displayName: 'Amazon RDS for SQL Server'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Azure Database for MySQL',
+    iconName: 'azuredatabaseformysql',
+    displayName: 'Azure Database for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Azure Database for PostgreSQL',
+    iconName: 'azuredatabaseforpostgresql',
+    displayName: 'Azure Database for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Azure SQL Database',
+    iconName: 'azuresqldatabase',
+    displayName: 'Azure SQL Database'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Azure SQL Managed Instance',
+    iconName: 'azuresqlmanagedinstance',
+    displayName: 'Azure SQL Managed Instance'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Azure Synapse Analytics',
+    iconName: 'azuresynapseanalytics',
+    displayName: 'Azure Synapse Analytics'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.bigquery,
+    name: 'BigQuery',
+    iconName: 'big-query',
+    displayName: 'Bigquery'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Cloud SQL for MySQL',
+    iconName: 'cloudsqlformysql',
+    displayName: 'Cloud SQL for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Cloud SQL for PostgreSQL',
+    iconName: 'cloudsqlforpostgresql',
+    displayName: 'Cloud SQL for PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'Cloud SQL for SQL Server',
+    iconName: 'cloudsqlforsqlserver',
+    displayName: 'Cloud SQL for SQL Server'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'CockroachDB',
+    iconName: 'cockroachdb',
+    displayName: 'CockroachDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'MariaDB',
+    iconName: 'mariadb',
+    displayName: 'MariaDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.sqlserver,
+    name: 'SQL Server',
+    iconName: 'sqlserver',
+    displayName: 'Microsoft SQL Server'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'MySQL',
+    iconName: 'mysql',
+    displayName: 'MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.oracle,
+    name: 'Oracle',
+    iconName: 'oracle',
+    displayName: 'Oracle Database'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.mysql,
+    name: 'Percona Server for MySQL',
+    iconName: 'perconaserverformysql',
+    displayName: 'Percona Server for MySQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'Postgresql',
+    iconName: 'postgresql',
+    displayName: 'PostgreSQL'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.redshift,
+    name: 'Redshift',
+    iconName: 'redshift',
+    displayName: 'Amazon Redshift'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.spark,
+    name: 'Spark',
+    iconName: 'spark',
+    displayName: 'Spark'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.snowflake,
+    name: 'Snowflake',
+    iconName: 'snowflake',
+    displayName: 'Snowflake'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.postgresql,
+    name: 'YugabyteDB',
+    iconName: 'yugabytedb',
+    displayName: 'YugabyteDB'
+  }
+];
 
 export const RUN_CHECK_TIME_WINDOW_FILTERS: {
   [key in string]: TimeWindowFilterParameters | null;
@@ -283,4 +446,3 @@ export const dateToString = (k: string) => {
   const a = k.replace(/T/g, ' ');
   return a;
 };
-

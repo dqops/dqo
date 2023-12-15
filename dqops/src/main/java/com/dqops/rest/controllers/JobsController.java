@@ -574,13 +574,13 @@ public class JobsController {
                     sequenceNumber, this.dqoQueueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
             Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
                     error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(
-                            new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(), sequenceNumber)));
+                            new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)));
             return new ResponseEntity<>(returnEmptyWhenError, HttpStatus.OK); // 200
         }
         catch (Exception ex) {
             log.error("Failed to retrieve recent jobs, error: " + ex.getMessage(), ex);
             return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(
-                    new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(), sequenceNumber)), HttpStatus.OK);
+                    new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(principal.getDataDomainIdentity().getDataDomainFolder()), sequenceNumber)), HttpStatus.OK);
         }
     }
 

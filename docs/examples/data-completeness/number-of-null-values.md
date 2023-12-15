@@ -54,7 +54,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-null-count-checks2.png)
 
 1. Go to the **Monitoring** section.
     
@@ -63,7 +63,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md). 
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md). 
 
 
 3. Select the **Daily checks** tab.
@@ -75,24 +75,22 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-null-count-run-checks2.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
- 
-    ![Check details](https://dqops.com/docs/images/examples/daily-null-count-check-details.png)
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source.
+    The Execution errors category displays any error that occurred during the check's execution.
 
     Review the results which should be similar to the one below.
-   
+
+    ![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results1.png)
+
     The actual value of null values in this example is 8, which is above the maximum threshold level set in the warning (5).
     The check gives a warning result (notice the yellow square to the left of the check name).
-
-    ![Null-count check results](https://dqops.com/docs/images/examples/daily-null-count-check-results.png)
 
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
@@ -102,9 +100,26 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
-    Below you can see the results displayed on the Issue severity status per column and day dashboard showing results by schemas, connections, data group, tables and highest issue severity per column and day of month.
+    Below you can see the results displayed on the **Current completeness issues on columns** dashboard located in Data Quality Dimensions/Completeness group.
+    This dashboard displays results from most recently executed null checks on columns ([null_count](../../checks/column/nulls/nulls-count.md), [null_percent](../../checks/column/nulls/nulls-percent.md),
+    [not_nulls_count](../../checks/column/nulls/not-nulls-count.md) and [not_nulls_percent](../../checks/column/nulls/not-nulls-percent.md)).
 
-    ![Null-count check results on Issue severity status per column and day dashboard](https://dqops.com/docs/images/examples/daily-null-count-check-results-on-issue-severity-status-per-column-and-day-dashboard.png)
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 3 months)
+    * connection,
+    * schema,
+    * data group,
+    * data quality dimension,
+    * check category,
+    * check name,
+    * stages,
+    * priorities,
+    * table,
+    * column,
+    * issue severity
+
+    ![Null-count check results on current completeness issues on columns dashboard](https://dqops.com/docs/images/examples/current-completeness-issues-on-columns-dashboard.png)
 
 ## Change a schedule at the connection level
 
@@ -259,6 +274,6 @@ Results returned by the sensor:
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [nulls_cont check used in this example, go to the check details section](../../checks/column/nulls/nulls-count.md).
 - You might be interested in another completeness check that [evaluates that the number of rows in a table does not exceed the minimum accepted count](../data-completeness/number-of-rows-in-the-table.md).  
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
  

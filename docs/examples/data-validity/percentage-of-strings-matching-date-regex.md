@@ -17,7 +17,7 @@ The `source_date` column contains non-standard date format. We want to verify th
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
 [string_match_date_regex_percent](../../checks/column/strings/string-match-date-regex-percent.md) column check.
-Our goal is to verify if the percentage of values matches the indicated by the user date format on `source_date` column does not fall below the setup thresholds.
+Our goal is to verify if the percentage of values matches the indicated by the user date format on `source_date` column does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
 
@@ -34,7 +34,7 @@ If the percentage of data falls below 99.0%, a warning alert will be triggered.
 ## Data structure
 
 The following is a fragment of the `bigquery-public-data.america_health_rankings.ahr` dataset. Some columns were omitted for clarity.  
-The `source_date` column of interest contains non-standard date format, in this case this is `YYYY-MM-DD`.
+The `source_date` column of interest contains non-standard date format.
 
 | value | lower_ci | upper_ci | source                                             | source_date   |
 |:------|:---------|:---------|:---------------------------------------------------|:--------------|
@@ -55,7 +55,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-match-date-regex-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -64,36 +64,39 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This tab displays a list of data quality checks in the check editor. The daily_string_match_date_regex_percent check
+    has additional parameter that allows you to select different date format which will be tested. Let's leave the default date format 
+    YYYY-MM-DD.
+    
+    Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
 4. Run the enabled check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
-
-    ![Check details](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results.png)
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source.
+    The Execution errors category displays any error that occurred during the check's execution.
 
     Review the results which should be similar to the one below.
-   
-    The actual value in this example is 0, which is below the minimum threshold level set in the warning (99.0%).
+
+    ![String-match-date-regex-percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results1.png)
+
+    The actual value in this example is 0%, which is below the minimum threshold level set in the warning (99.0%).
     The check gives a fatal error (notice the red square to the left of the check name).
 
-    ![String-match-date-regex-percent check results](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -102,9 +105,27 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
-    Below you can see the results displayed on the Current column status per data quality dimension dashboard showing results by connection, schema, dimension and data group.
+    Below you can see the results displayed on the **KPIs per column and day** dashboard located in Data Quality KPIs group.
+    This dashboard show high-level data quality KPIs, aggregated on a macro scale that can be shared at a
+    corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../checks/index.md)
+    for each connection, schema, data grouping, etc.
 
-    ![String-match-date-regex-percent results on Current column status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results-on-current-column-status-per-data-quality-dimension-dashboard.png)
+    With this dashboard, senior management can review a summary of data quality KPIs or evaluate the KPIs per column.
+    
+    This dashboard allows filtering data by:
+    
+    * current and previous month,
+    * connection,
+    * schema,
+    * data group,
+    * stage,
+    * priority
+    * data quality dimension,
+    * check category,
+    * check name,
+    * column and day of the month.
+
+    ![String-match-date-regex-percent results on Current column status per data quality dimension dashboard](https://dqops.com/docs/images/examples/daily-string-match-date-regex-percent-checks-results-on-kpis-dashboard.png)
 
 ## Change a schedule at the connection level
 

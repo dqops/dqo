@@ -55,11 +55,11 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
     The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
     Here you can see that the default check warning threshold is 1 which allows you to validate whether your table is empty or not.
 
-    
+    ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks-warning1.png)
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 3. Select the **Daily checks** tab.
 
@@ -70,25 +70,24 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/row-count-run-check-warning1.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source. 
+    The Execution errors category displays any error
     that occurred during the check's execution.
 
-    ![Check details](https://dqops.com/docs/images/examples/daily-row-count-check-details.png)
-
     Review the results which should be similar to the one below.
+
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-warning1.png)
 
     The actual value of rows in this example is 18155, which is above the minimum threshold level set in the warning (1).
     The check gives a valid result (notice the green square to the left of the check name).
     Now you can be sure that you table is not empty.
-
-    ![Row-count check result](https://dqops.com/docs/images/examples/daily-row-count-check-result.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
@@ -96,81 +95,55 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    Below you can see the results displayed on the Empty or too small tables dashboard showing results by check name, severity, table stage, table, connection and schema.
-
-    ![Row-count results on Empty or too small tables dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-result-on-empty-or-too-small-tables-dashboard.png)
-
-### **YAML configuration file**
-
-The YAML configuration file stores both the table details and checks configurations.
-
-In this example, we have set minimum count threshold level for the check:
-
-- warning: 1
-
-The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
-
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
-
-```yaml hl_lines="7-16"
-apiVersion: dqo/v1
-kind: table
-spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  monitoring_checks:
-    daily:
-      volume:
-        daily_row_count:
-          warning:
-            min_count: 1
-```
-
 ### **Validation that the table meets the size requirements**
 
-After you ensure that your table isn’t empty, you can to ensure it meets size requirements.
-To do that, you can set the higher threshold to verify that the table has an expected size:
+Next, after you are sure that your table is not empty, you can set higher thresholds to ensure that the table meets size requirements.
+We aim to verify if the table meets size requirements and is not too small:
 
-- warning: 692
-- error: 381
-- fatal: 150
-
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
-
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-row-count-checks.png)
-
-1. Go to the **Monitoring** section.
-
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    - warning: 692
+    - error: 381
+    - fatal: 150
 
 
-2. Select the table or column mentioned in the example description from the **tree view** on the left.
+1. Set the new threshold levels 
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    - warning: 692
+    - error: 381
+    - fatal: 150
 
+    ![Changing the threshold levels](https://dqops.com/docs/images/examples/row-count-changing-the-threshold-levels.png)
 
-3. Select the **Daily checks** tab.
+2. Run the enabled check again using the **Run check** button.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor). 
+3. Access the results by clicking the **Results** button.
 
+    ![Check details](https://dqops.com/docs/images/examples/row-count-check-details-new-tresholds.png)
 
-4. Run the enabled check using the **Run check** button.
+    The new results will replace the previous one. 
 
-    You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
-
-    ![Run check](https://dqops.com/docs/images/examples/daily-row-count-run-checks.png)
-
-5. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
+3. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-6. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
-    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
- 
-    Below you can see the results displayed on the Issues count per table dashboard showing results by severity level, table stage, table priority, issues per connection, issues per schema, issues per quality dimension, issues per check category.
+4. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+    go to the Data Quality Dashboards section and select the dashboard from the tree view on the left.
 
-    ![Row-count results on Issues count per table dashboard](https://dqops.com/docs/images/examples/daily-row-count-check-results-on-issues-count-per-table-dashboard.png)
+    Below you can see the results displayed on the **Largest tables by number of rows** dashboard located in the Volume group. 
+    This dashboard displays tables monitored with [row_count](../../checks/table/volume/row-count.md) check and allows 
+    review the number of rows in these tables.
+
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 3 months)
+    * row count
+    * connection,
+    * schema,
+    * data group,
+    * stages,
+    * table.
+
+    ![Row-count results on largest tables by number of rows dashboard](https://dqops.com/docs/images/examples/row-count-check-results-on-largest-tables-by-number-of-rows-dashboard.png)
+
 
 ## Change a schedule at the connection level
 
@@ -207,6 +180,37 @@ You might also want to check the [Running checks with a scheduler](../data-quali
 ## YAML configuration file
 
 The YAML configuration file stores both the table details and checks configurations.
+
+In this example, we have set minimum count threshold level for the check:
+
+- warning: 1
+
+The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_row_count` check is configured.
+
+```yaml hl_lines="7-16"
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count:
+          warning:
+            min_count: 1
+  columns:
+    edition:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+    report_type:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+```
+
 
 In this example, we have set three minimum count thresholds levels for the check:
 
@@ -257,7 +261,7 @@ check run
 ```
 
 Review the results which should be similar to the one below.
-The number of rows is above 692 and the check gives valid result.
+The number of rows is above 1 and the check gives valid result.
 
 ```
 Check evaluation summary per table:
@@ -292,7 +296,7 @@ ORDER BY time_period, time_period_utc
 ```
 
 You can also see the results returned by the sensor. The actual value of rows in this example is 18155, which is above the minimum
-threshold level set in the warning (692).
+threshold level set in the warning (1).
 
 ```
 **************************************************
@@ -312,5 +316,5 @@ Results returned by the sensor:
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
 - For details on the [row_count check used in this example, go to the check details section](../../checks/table/volume/row-count.md).
 - You might be interested in another completeness check that [evaluates that the number of nulls in a column does not exceed the maximum accepted count](../data-completeness/number-of-null-values.md).
-- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../working-with-dqo/adding-data-source-connection/index.md).
+- Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - With DQOps, you can easily customize when the checks are run at the level of the entire connection, table, or individual check. [Learn more about how to set schedules here](../../working-with-dqo/schedules/index.md).

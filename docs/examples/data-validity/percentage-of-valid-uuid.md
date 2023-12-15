@@ -23,7 +23,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the percentage of valid UUID values fall below 99, a warning alert will be triggered.
+If the percentage of valid UUID values fall below 99%, a warning alert will be triggered.
 
 ## Data structure
 
@@ -58,7 +58,7 @@ A detailed explanation of [how to run the example is described here](../../#runn
 
 To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-valid-uuid-percent-checks.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-valid-uuid-percent-checks1.png)
 
 1. Go to the **Monitoring** section.
 
@@ -67,7 +67,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../working-with-dqo/adding-data-source-connection/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
@@ -79,24 +79,23 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-    ![Run check](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-run-checks.png)
+    ![Run check](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-run-checks1.png)
 
 
 5. Access the results by clicking the **Results** button.
 
-    Within the Results window, you will see three categories: **Sensor readouts**, **Check results**, and **Execution errors**. The Sensor readouts category
-    displays the values obtained by the sensors from the data source. The Check results category shows the severity level
-    that result from the verification of sensor readouts by set rule thresholds. The Execution errors category displays any error
-    that occurred during the check's execution.
-
-    ![Check details](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-details.png)
+    Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
+    The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
+    The Sensor readouts category displays the values obtained by the sensors from the data source.
+    The Execution errors category displays any error that occurred during the check's execution.
 
     Review the results which should be similar to the one below.
-   
-    The actual value in this example is 75, which is below the minimum threshold level set in the warning (100.0%).
+
+    ![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result1.png)
+
+    The actual value in this example is 75%, which is below the minimum threshold level set in the warning (100.0%).
     The check gives a fatal error (notice the red square to the left of the check name).
 
-    ![String-valid-uuid-percent check results](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result.png)
 
 6. Synchronize the results with your DQOps cloud account using the **Synchronize** button located in the upper right corner of the user interface.
 
@@ -105,9 +104,25 @@ To execute the check prepared in the example using the [user interface](../../dq
 7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
 
-    Below you can see the results displayed on the Issue severity status per check and day dashboard showing results by connections, schemas, tables, columns and highest issue severity per check and day of month.
+    Below you can see the results displayed on the Current data quality checks results dashboard located in the Check results group. This dashboard 
+    displays all executed checks run on tables and columns and allows reviewing their set parameters, as well as actual and expected values.
 
-    ![String-valid-uuid-percent check results on Issue severity status per check and day dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-issue-severity-status-per-check-and-day-dashboard.png)
+    This dashboard allows filtering data by:
+    
+    * time window (from last 7 days to last 6 months)
+    * connection,
+    * schema,
+    * data group,
+    * data quality dimension,
+    * check category,
+    * stages,
+    * priorities,
+    * table,
+    * column,
+    * check name,
+    * issue severity.
+
+    ![String-valid-uuid-percent check results on Current data quality checks results dashboard](https://dqops.com/docs/images/examples/daily-string-valid-uuid-percent-checks-result-on-current-results-dashboard.png)
 
 ## YAML configuration file
 
@@ -205,8 +220,8 @@ ORDER BY time_period, time_period_utc
 **************************************************
 ```
 
-You can also see the results returned by the sensor. The actual value in this example is 75, which is below the minimum 
-threshold level set in the warning (99).
+You can also see the results returned by the sensor. The actual value in this example is 75%, which is below the minimum 
+threshold level set in the warning (99%).
 
 ```
 **************************************************

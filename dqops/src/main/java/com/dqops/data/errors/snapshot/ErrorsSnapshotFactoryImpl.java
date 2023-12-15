@@ -15,6 +15,7 @@
  */
 package com.dqops.data.errors.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.errors.factory.ErrorsTableFactory;
 import com.dqops.data.storage.ParquetPartitionStorageService;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -47,12 +48,13 @@ public class ErrorsSnapshotFactoryImpl implements ErrorsSnapshotFactory {
      * Creates an empty snapshot that is connected to the errors storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Errors snapshot connected to a storage service.
      */
     @Override
-    public ErrorsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
+    public ErrorsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity) {
         Table newErrorsTable = this.errorsTableFactory.createEmptyErrorsTable("new_errors_results");
-        return new ErrorsSnapshot(connectionName, physicalTableName, this.storageService, newErrorsTable);
+        return new ErrorsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, newErrorsTable);
     }
 
     /**
@@ -62,11 +64,12 @@ public class ErrorsSnapshotFactoryImpl implements ErrorsSnapshotFactory {
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity      User identity that specifies the data domain.
      * @return Errors snapshot connected to a storage service.
      */
     @Override
-    public ErrorsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+    public ErrorsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames, UserDomainIdentity userIdentity) {
         Table templateTable = this.errorsTableFactory.createEmptyErrorsTable("template_errors_results");
-        return new ErrorsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateTable);
+        return new ErrorsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, columnNames, templateTable);
     }
 }

@@ -18,7 +18,7 @@ package com.dqops.cli.commands.settings.timezone;
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.apikey.DqoCloudApiKeyProvider;
@@ -36,7 +36,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "set", header = "Set the default time zone", description = "Set the default time zone used by the DQOps.")
 public class SettingsTimeZoneSetCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 	private DqoCloudApiKeyProvider apiKeyProvider;
@@ -45,11 +45,11 @@ public class SettingsTimeZoneSetCliCommand extends BaseCommand implements IComma
 	}
 
 	@Autowired
-	public SettingsTimeZoneSetCliCommand(SettingsService settingsService,
-										 TerminalReader terminalReader,
-										 TerminalWriter terminalWriter,
-										 DqoCloudApiKeyProvider apiKeyProvider) {
-		this.settingsService = settingsService;
+	public SettingsTimeZoneSetCliCommand(SettingsCliService settingsCliService,
+                                         TerminalReader terminalReader,
+                                         TerminalWriter terminalWriter,
+                                         DqoCloudApiKeyProvider apiKeyProvider) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.apiKeyProvider = apiKeyProvider;
@@ -78,7 +78,7 @@ public class SettingsTimeZoneSetCliCommand extends BaseCommand implements IComma
 			this.timeZone = this.terminalReader.prompt("Time zone", null, false);
 		}
 
-		CliOperationStatus cliOperationStatus = this.settingsService.setTimeZone(timeZone);
+		CliOperationStatus cliOperationStatus = this.settingsCliService.setTimeZone(timeZone);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

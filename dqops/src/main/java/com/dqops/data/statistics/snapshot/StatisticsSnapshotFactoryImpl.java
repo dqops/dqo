@@ -15,6 +15,7 @@
  */
 package com.dqops.data.statistics.snapshot;
 
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.data.statistics.factory.StatisticsResultsTableFactory;
 import com.dqops.data.storage.ParquetPartitionStorageService;
 import com.dqops.metadata.sources.PhysicalTableName;
@@ -47,12 +48,13 @@ public class StatisticsSnapshotFactoryImpl implements StatisticsSnapshotFactory 
      * Creates an empty snapshot that is connected to the profiling result storage service that will load requested months on demand.
      * @param connectionName Connection name.
      * @param physicalTableName Physical table name.
+     * @param userIdentity User identity that specifies the data domain.
      * @return Profiling results snapshot connected to a storage service.
      */
     @Override
-    public StatisticsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName) {
+    public StatisticsSnapshot createSnapshot(String connectionName, PhysicalTableName physicalTableName, UserDomainIdentity userIdentity) {
         Table newStatisticsTable = this.statisticsResultsTableFactory.createEmptyStatisticsTable("new_statistics");
-        return new StatisticsSnapshot(connectionName, physicalTableName, this.storageService, newStatisticsTable);
+        return new StatisticsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, newStatisticsTable);
     }
 
     /**
@@ -62,11 +64,12 @@ public class StatisticsSnapshotFactoryImpl implements StatisticsSnapshotFactory 
      * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param columnNames       Array of column names to load from parquet files. Other columns will not be loaded.
+     * @param userIdentity      User identity that specifies the data domain.
      * @return Statistics results snapshot connected to a storage service.
      */
     @Override
-    public StatisticsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
+    public StatisticsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames, UserDomainIdentity userIdentity) {
         Table templateStatisticsTable = this.statisticsResultsTableFactory.createEmptyStatisticsTable("template_statistics");
-        return new StatisticsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateStatisticsTable);
+        return new StatisticsSnapshot(userIdentity, connectionName, physicalTableName, this.storageService, columnNames, templateStatisticsTable);
     }
 }

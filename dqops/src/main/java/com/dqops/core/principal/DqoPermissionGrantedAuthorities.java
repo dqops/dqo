@@ -69,6 +69,10 @@ public final class DqoPermissionGrantedAuthorities {
      * @return List of all effective roles.
      */
     public static List<GrantedAuthority> getPrivilegesForRole(DqoUserRole role) {
+        if (role == null) {
+            return NONE_ROLE_AUTHORITIES;
+        }
+
         switch (role) {
             case ADMIN:
                 return ADMIN_ROLE_AUTHORITIES;

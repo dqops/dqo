@@ -20,7 +20,7 @@ import com.dqops.cli.commands.CliOperationStatus;
 import com.dqops.cli.commands.ICommand;
 import com.dqops.cli.commands.settings.impl.EditorFinderService;
 import com.dqops.cli.commands.settings.impl.EditorInformation;
-import com.dqops.cli.commands.settings.impl.SettingsService;
+import com.dqops.cli.commands.settings.impl.SettingsCliService;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ import static java.lang.Integer.parseInt;
 @CommandLine.Command(name = "init", header = "Initialize settings file in UserHome directory",
 		description = "Settings file in your UserHome directory. This file stores configuration options for the DQOps.")
 public class SettingsInitCliCommand extends BaseCommand implements ICommand {
-	private SettingsService settingsService;
+	private SettingsCliService settingsCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 	private EditorFinderService editorFinderService;
@@ -50,11 +50,11 @@ public class SettingsInitCliCommand extends BaseCommand implements ICommand {
 	}
 
 	@Autowired
-	public SettingsInitCliCommand(SettingsService settingsService,
-								  TerminalReader terminalReader,
-								  TerminalWriter terminalWriter,
-								  EditorFinderService editorFinderService) {
-		this.settingsService = settingsService;
+	public SettingsInitCliCommand(SettingsCliService settingsCliService,
+                                  TerminalReader terminalReader,
+                                  TerminalWriter terminalWriter,
+                                  EditorFinderService editorFinderService) {
+		this.settingsCliService = settingsCliService;
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 		this.editorFinderService = editorFinderService;
@@ -98,7 +98,7 @@ public class SettingsInitCliCommand extends BaseCommand implements ICommand {
 			editor = editors.get(index - 1);
 		}
 
-		CliOperationStatus cliOperationStatus = this.settingsService.initSettings(editor.name, editor.path);
+		CliOperationStatus cliOperationStatus = this.settingsCliService.initSettings(editor.name, editor.path);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

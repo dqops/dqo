@@ -27,31 +27,45 @@ public enum DqoUserRole {
      * Administrator (owner) of the account who can manage users and perform all actions.
      */
     @JsonProperty("admin")
-    ADMIN,
+    ADMIN(1),
 
     /**
      * Editor who can configure and run data quality checks.
      */
     @JsonProperty("editor")
-    EDITOR,
+    EDITOR(2),
 
     /**
      * The user can run data quality checks, but cannot make changes.
      */
     @JsonProperty("operator")
-    OPERATOR,
+    OPERATOR(3),
 
     /**
      * Just a read-only viewer.
      */
     @JsonProperty("viewer")
-    VIEWER,
+    VIEWER(4),
 
     /**
      * No access rights role.
      */
     @JsonProperty("none")
-    NONE;
+    NONE(5);
+
+    private int priority;
+
+    DqoUserRole(int priority) {
+        this.priority = priority;
+    }
+
+    /**
+     * Role priority (role strength). Smaller value means a role with more permissions.
+     * @return Role priority. 1 is the most powerful role (ADMIN).
+     */
+    public int getPriority() {
+        return priority;
+    }
 
     /**
      * Converts an account role from a client generated from DQOps Cloud Swagger.
@@ -108,5 +122,27 @@ public enum DqoUserRole {
             default:
                 throw new IllegalArgumentException("Account role " + this + " not supported");
         }
+    }
+
+    /**
+     * Returns the most powerful role out of two roles to compare. Usually one is the account level role and the second is the data domain level role.
+     * @param r1 First role to compare.
+     * @param r2 Second role to compare.
+     * @return One of the roles, that gives more permissions.
+     */
+    public static DqoUserRole strongest(DqoUserRole r1, DqoUserRole r2) {
+        if (r1 == null) {
+            return r2;
+        }
+
+        if (r2 == null) {
+            return r1;
+        }
+
+        if (r1.priority <= r2.priority) {
+            return r1;
+        }
+
+        return r2;
     }
 }

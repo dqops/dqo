@@ -17,12 +17,11 @@ package com.dqops.cli.commands.cloud;
 
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.cloud.impl.CloudLoginService;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalReader;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.users.UserManagementService;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.parquet.Strings;
@@ -44,7 +43,7 @@ import java.util.Objects;
 @Slf4j
 public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
     private UserManagementService userManagementService;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
     private TerminalFactory terminalFactory;
 
     public CloudPasswordCliCommand() {
@@ -52,7 +51,7 @@ public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
 
     @Autowired
     public CloudPasswordCliCommand(UserManagementService userManagementService,
-                                   DqoCloudApiKeyPrincipalProvider principalProvider,
+                                   DqoUserPrincipalProvider principalProvider,
                                    TerminalFactory terminalFactory) {
         this.userManagementService = userManagementService;
         this.principalProvider = principalProvider;
@@ -67,7 +66,7 @@ public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
      */
     @Override
     public Integer call() throws Exception {
-        DqoUserPrincipal userPrincipal = this.principalProvider.createUserPrincipal();
+        DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
         TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
         if (userPrincipal.getApiKeyPayload() == null) {
@@ -91,7 +90,7 @@ public class CloudPasswordCliCommand extends BaseCommand implements ICommand {
         }
 
         try {
-            this.userManagementService.changePassword(userPrincipal, userPrincipal.getName(), password);
+            this.userManagementService.changePassword(userPrincipal, userPrincipal.getDataDomainIdentity().getUserName(), password);
         }
         catch (Exception ex) {
             terminalWriter.writeLine("Cannot change the password, error: " + ex.getMessage());

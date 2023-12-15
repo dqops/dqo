@@ -147,7 +147,7 @@ public class SchemaModel {
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
-                setConnectionName(connectionName);
+                setConnection(connectionName);
                 setFullTableName(schemaName + ".*");
 
                 setDateStart(null);

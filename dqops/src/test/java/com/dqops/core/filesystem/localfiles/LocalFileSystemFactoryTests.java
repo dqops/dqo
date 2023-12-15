@@ -16,26 +16,36 @@
 package com.dqops.core.filesystem.localfiles;
 
 import com.dqops.BaseTest;
+import com.dqops.core.principal.UserDomainIdentity;
+import com.dqops.core.principal.UserDomainIdentityObjectMother;
+import com.dqops.utils.BeanFactoryObjectMother;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public class LocalFileSystemFactoryTests extends BaseTest {
-    @Autowired
     private LocalFileSystemFactory sut;
+    private UserDomainIdentity userDomainIdentity;
+
+    @BeforeEach
+    void setUp() {
+        this.sut = BeanFactoryObjectMother.getBeanFactory().getBean(LocalFileSystemFactory.class);
+        this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
+    }
 
     @Test
     void openLocalUserHome_whenCalled_thenCreatesFileSystemForLocalHome() {
-        LocalFolderTreeNode localFolderTreeNode = this.sut.openLocalUserHome();
+        LocalFolderTreeNode localFolderTreeNode = this.sut.openLocalUserHome(this.userDomainIdentity);
         Assertions.assertNotNull(localFolderTreeNode);
     }
 
     @Test
     void openLocalUserHome_whenCalledTwice_thenReturnsNewInstancesWithNewContext() {
-        LocalFolderTreeNode first = this.sut.openLocalUserHome();
-        LocalFolderTreeNode second = this.sut.openLocalUserHome();
+        LocalFolderTreeNode first = this.sut.openLocalUserHome(this.userDomainIdentity);
+        LocalFolderTreeNode second = this.sut.openLocalUserHome(this.userDomainIdentity);
         Assertions.assertNotNull(first);
         Assertions.assertNotNull(second);
         Assertions.assertNotSame(first, second);

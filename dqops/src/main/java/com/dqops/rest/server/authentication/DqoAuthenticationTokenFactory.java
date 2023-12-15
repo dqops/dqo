@@ -43,7 +43,8 @@ public interface DqoAuthenticationTokenFactory {
     /**
      * Creates an authentication principal from a DQOps Cloud issued user token. User tokens are issued for multi-user accounts.
      * @param userTokenPayload User token payload.
+     * @param dataDomain Data domain name.
      * @return Authenticated user principal, based on the user token.
      */
-    Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload);
+    Authentication createAuthenticatedWithUserToken(DqoUserTokenPayload userTokenPayload, String dataDomain);
 }

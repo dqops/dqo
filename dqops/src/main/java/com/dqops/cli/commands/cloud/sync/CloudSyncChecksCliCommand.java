@@ -17,12 +17,12 @@ package com.dqops.cli.commands.cloud.sync;
 
 import com.dqops.cli.commands.BaseCommand;
 import com.dqops.cli.commands.ICommand;
-import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationService;
+import com.dqops.cli.commands.cloud.sync.impl.CloudSynchronizationCliService;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.dqocloud.accesskey.DqoCloudCredentialsException;
 import com.dqops.core.jobqueue.exceptions.DqoQueueJobExecutionException;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.fileexchange.FileSynchronizationDirection;
@@ -41,18 +41,18 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "checks", header = "Synchronize local \"checks\" folder with custom check definitions with DQOps Cloud",
         description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"checks\" folder.")
 public class CloudSyncChecksCliCommand extends BaseCommand implements ICommand {
-    private CloudSynchronizationService cloudSynchronizationService;
+    private CloudSynchronizationCliService cloudSynchronizationCliService;
     private TerminalFactory terminalFactory;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
 
     public CloudSyncChecksCliCommand() {
     }
 
     @Autowired
-    public CloudSyncChecksCliCommand(CloudSynchronizationService cloudSynchronizationService,
+    public CloudSyncChecksCliCommand(CloudSynchronizationCliService cloudSynchronizationCliService,
                                      TerminalFactory terminalFactory,
-                                     DqoCloudApiKeyPrincipalProvider principalProvider) {
-        this.cloudSynchronizationService = cloudSynchronizationService;
+                                     DqoUserPrincipalProvider principalProvider) {
+        this.cloudSynchronizationCliService = cloudSynchronizationCliService;
         this.terminalFactory = terminalFactory;
         this.principalProvider = principalProvider;
     }
@@ -104,8 +104,8 @@ public class CloudSyncChecksCliCommand extends BaseCommand implements ICommand {
     @Override
     public Integer call() throws Exception {
         try {
-            DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
-            return this.cloudSynchronizationService.synchronizeRoot(
+            DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
+            return this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.checks, this.mode, this.direction, false, this.isHeadless(), true, principal);
         }
         catch (DqoQueueJobExecutionException cex) {

@@ -18,6 +18,8 @@ package com.dqops.cli.edit;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.core.filesystem.virtual.FileTreeNode;
 import com.dqops.core.filesystem.virtual.FolderTreeNode;
+import com.dqops.core.principal.DqoUserPrincipal;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
@@ -44,17 +46,21 @@ import java.util.NoSuchElementException;
 public class EditorLaunchServiceImpl implements EditorLaunchService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalFactory terminalFactory;
+    private final DqoUserPrincipalProvider userPrincipalProvider;
 
     /**
      * User home context factory.
      * @param userHomeContextFactory User home context factory.
      * @param terminalFactory Terminal factory.
+     * @param userPrincipalProvider User principal provider.
      */
     @Autowired
     public EditorLaunchServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                                   TerminalFactory terminalFactory) {
+                                   TerminalFactory terminalFactory,
+                                   DqoUserPrincipalProvider userPrincipalProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.terminalFactory = terminalFactory;
+        this.userPrincipalProvider = userPrincipalProvider;
     }
 
     /**
@@ -62,7 +68,8 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
      * @param targetObjectId Target object id.
      */
     public void openEditorFor(HierarchyId targetObjectId) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         TableWrapper tableWrapper = userHome.findTableFor(targetObjectId);
@@ -190,7 +197,9 @@ public class EditorLaunchServiceImpl implements EditorLaunchService {
      * @param pathToTextFile Path to the text file that will be edited (it could be .yaml, .py)
      */
     public void launchEditorForFile(String pathToTextFile) {
-        UserHome userHome = userHomeContextFactory.openLocalUserHome().getUserHome();
+        DqoUserPrincipal userPrincipal = this.userPrincipalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
+        UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
         if (localSettingsSpec == null) {
             defaultOpenFile(pathToTextFile);

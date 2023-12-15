@@ -18,6 +18,7 @@ tags:
 - name: "AccessTokenIssue"
 - name: "AccountUsers"
 - name: "ApiKeyRequest"
+- name: "DataDomains"
 - name: "LookerStudioKeyRequest"
 - name: "RefreshTokenIssue"
 - name: "TenantDataWarehouse"
@@ -48,7 +49,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with rule results"
       operationId: "issueBucketCheckResultsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -64,7 +70,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom check definitions"
       operationId: "issueBucketChecksRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -80,7 +91,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with credentials (.credentials folder)"
       operationId: "issueBucketCredentialsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -96,7 +112,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with error samples"
       operationId: "issueBucketErrorSamplesRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -112,7 +133,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with errors"
       operationId: "issueBucketErrorsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -128,7 +154,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with incidents"
       operationId: "issueBucketIncidentsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -144,7 +175,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom rule definitions"
       operationId: "issueBucketRulesRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -160,7 +196,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with sensor readouts"
       operationId: "issueBucketSensorReadoutsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -176,7 +217,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with custom sensor definitions"
       operationId: "issueBucketSensorsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -192,7 +238,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with settings"
       operationId: "issueBucketSettingsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -208,7 +259,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with sources and the data quality check configuration"
       operationId: "issueBucketSourcesRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -224,7 +280,12 @@ paths:
       description: "Issues a Google Storage access token for accessing the tenant's\
         \ folder with statistics"
       operationId: "issueBucketStatisticsRWAccessToken"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -323,17 +384,80 @@ paths:
           description: "successful operation"
           schema:
             type: "string"
+  /api/v1/datadomains:
+    get:
+      tags:
+      - "DataDomains"
+      summary: "getDataDomainsList"
+      description: "Returns a list of data domains. Only a user with an ADMIN role\
+        \ can call this operation."
+      operationId: "getDataDomainsList"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/DataDomainModel"
+      security:
+      - api_key: []
+  /api/v1/datadomains/{dataDomain}:
+    post:
+      tags:
+      - "DataDomains"
+      summary: "createDataDomain"
+      description: "Adds a new data domain. Only accounts onan ENTERPRISE license\
+        \ can add new data domains."
+      operationId: "createDataDomain"
+      parameters:
+      - name: "dataDomain"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/DataDomainModel"
+      security:
+      - api_key: []
+    delete:
+      tags:
+      - "DataDomains"
+      summary: "deleteDataDomain"
+      description: "Deletes a data domain. Only a user with an ADMIN right for an\
+        \ ENTERPRISE edition can perform this operation. A deleted data domain cannot\
+        \ be recreated under the same name."
+      operationId: "deleteDataDomain"
+      parameters:
+      - name: "dataDomain"
+        in: "path"
+        description: "Data domain name"
+        required: true
+        type: "string"
+      responses:
+        default:
+          description: "successful operation"
+      security:
+      - api_key: []
   /api/v1/lookerstudiokey/issue:
     get:
       tags:
       - "LookerStudioKeyRequest"
       summary: "issueLookerStudioApiKey"
-      description: "Issues an API key for accessing DQO data quality dashboards from\
-        \ Looker Studio"
+      description: "Issues an API key for accessing DQOps data quality dashboards\
+        \ from Looker Studio"
       operationId: "issueLookerStudioApiKey"
       produces:
       - "text/plain"
-      parameters: []
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -346,8 +470,8 @@ paths:
       tags:
       - "RefreshTokenIssue"
       summary: "issueLoginTicketGrantingTicketToken"
-      description: "Issues a ticket granting ticket that authorizes DQO Cloud to issue\
-        \ a DQO instance refresh token for a user that logs into DQO Cloud."
+      description: "Issues a ticket granting ticket that authorizes DQOps Cloud to\
+        \ issue a DQOps instance refresh token for a user that logs into DQOps Cloud."
       operationId: "issueLoginTicketGrantingTicketToken"
       produces:
       - "text/plain"
@@ -524,6 +648,22 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
 definitions:
+  DataDomainModel:
+    type: "object"
+    properties:
+      dataDomainName:
+        type: "string"
+        description: "Data domain name (technical name)"
+      displayName:
+        type: "string"
+        description: "Data domain display name, returns (default) for the default\
+          \ data domain that is identified by an empty string"
+      createdAt:
+        type: "string"
+        format: "date-time"
+        description: "The data domain creation timestamp."
+    description: "DQOps Cloud data domain model that describes a data domain that\
+      \ was created in an ENTERPRISE DQOps Cloud account."
   DqoUserModel:
     type: "object"
     properties:
@@ -543,10 +683,15 @@ definitions:
         type: "string"
         description: "Write-only property used to update the password. This field\
           \ does not return the current password."
-    description: "DQO Cloud user model that describes a user in multi-user SaaS deployments."
+    description: "DQOps Cloud user model that describes a user in multi-user SaaS\
+      \ deployments."
   RefreshTableRequest:
     type: "object"
     properties:
+      dataDomain:
+        type: "string"
+        description: "Data domain name for ENTERPRISE accounts that support multiple\
+          \ data domain."
       table:
         type: "string"
         description: "Target table to be refreshed."
@@ -625,7 +770,7 @@ definitions:
       billingProjectId:
         type: "string"
         description: "GCP project id holding the data of the tenant."
-    description: "Model returned by the DQO Cloud with an AccessToken for accessing\
+    description: "Model returned by the DQOps Cloud with an AccessToken for accessing\
       \ a folder within the landing zone of the tenant's data quality data warehouse."
   TenantQueryAccessTokenModel:
     type: "object"

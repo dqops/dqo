@@ -23,25 +23,23 @@ import com.dqops.core.filesystem.virtual.HomeFolderPath;
 import com.dqops.core.locks.AcquiredExclusiveWriteLock;
 import com.dqops.core.locks.AcquiredSharedReadLock;
 import com.dqops.core.locks.UserHomeLockManager;
+import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.synchronization.contract.DqoRoot;
 import com.dqops.core.synchronization.status.FolderSynchronizationStatus;
 import com.dqops.core.synchronization.status.SynchronizationStatusTracker;
 import com.dqops.data.local.LocalDqoUserHomePathProvider;
 import com.dqops.data.normalization.CommonColumnNames;
 import com.dqops.data.storage.parquet.DqoTablesawParquetReader;
-import com.dqops.data.storage.parquet.DqoTablesawParquetWriteOptions;
 import com.dqops.data.storage.parquet.DqoTablesawParquetWriter;
 import com.dqops.data.storage.parquet.HadoopConfigurationProvider;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import com.dqops.utils.datetime.LocalDateTimeTruncateUtility;
 import com.dqops.utils.exceptions.DqoRuntimeException;
-import com.dqops.utils.tables.TableColumnUtility;
 import com.dqops.utils.tables.TableCompressUtility;
 import com.dqops.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
 import org.jetbrains.annotations.NotNull;
@@ -57,7 +55,6 @@ import tech.tablesaw.selection.Selection;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.time.*;
 import java.time.temporal.ChronoUnit;
@@ -116,14 +113,18 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param partitionId Partition id.
      * @param storageSettings Storage settings that identify the target table type that is loaded.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param userIdentity    User identity, specifies the data domain.
      * @return Returns a dataset table with the content of the partition. The table (data) is null if the parquet file was not found.
      */
     @Override
-    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
-        Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings);
+    public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId,
+                                                FileStorageSettings storageSettings,
+                                                String[] columnNames,
+                                                UserDomainIdentity userIdentity) {
+        Path targetParquetFilePath = makeParquetTargetFilePath(partitionId, storageSettings, userIdentity);
         File targetParquetFile = targetParquetFilePath.toFile();
 
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
             LoadedMonthlyPartition cachedParquetFile = this.localFileSystemCache.getParquetFile(targetParquetFilePath);
             if (cachedParquetFile != null) {
                 if (cachedParquetFile.getData() == null || columnNames == null) {
@@ -159,7 +160,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         catch (RuntimeIOException ex) {
             if (ex.getCause() instanceof ChecksumException) {
                 // Corrupted partition file -> remove the file
-                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType(), userIdentity);
                 return new LoadedMonthlyPartition(partitionId, 0L, null);
             }
             throw new DataStorageIOException(ex.getMessage(), ex);
@@ -168,7 +169,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             if (ex.getCause() instanceof RuntimeException && ex.getCause().getMessage() != null &&
                     ex.getCause().getMessage().contains("is not a Parquet file")) {
                 // Corrupted partition file -> remove the file
-                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType(), userIdentity);
                 return new LoadedMonthlyPartition(partitionId, 0L, null);
             }
             throw new DataStorageIOException(ex.getMessage(), ex);
@@ -179,12 +180,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * Makes a path to the parquet file.
      * @param partitionId Partition id.
      * @param storageSettings Storage settings.
+     * @param userIdentity User identity, also identifies the data domain.
      * @return Parquet file path.
      */
     @NotNull
-    protected Path makeParquetTargetFilePath(ParquetPartitionId partitionId, FileStorageSettings storageSettings) {
+    protected Path makeParquetTargetFilePath(ParquetPartitionId partitionId, FileStorageSettings storageSettings, UserDomainIdentity userIdentity) {
         Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-        Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
+        Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity);
+        Path storeRootPath = localUserHomePath.resolve(configuredStoragePath);
         String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
         Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName()).toAbsolutePath().normalize();
@@ -200,6 +203,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param end End date, the whole month of the given date is loaded.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param userIdentity User identity, specifies the data domain.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
@@ -209,12 +213,13 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             LocalDate start,
             LocalDate end,
             FileStorageSettings storageSettings,
-            String[] columnNames) {
+            String[] columnNames,
+            UserDomainIdentity userIdentity) {
         if (start == null || end == null) {
             throw new IllegalArgumentException("Start and end dates indicating the range need to be specified");
         }
 
-        return loadRecentPartitionsForMonthsRange(connectionName, tableName, start, end, storageSettings, columnNames, Integer.MAX_VALUE);
+        return loadRecentPartitionsForMonthsRange(connectionName, tableName, start, end, storageSettings, columnNames, Integer.MAX_VALUE, userIdentity);
     }
 
     /**
@@ -229,6 +234,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @param maxRecentMonthsToLoad     Limit of partitions loaded, with the preference of the most recent ones.
+     * @param userIdentity    User identity that also identifies the data domain.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
      */
     @Override
@@ -238,13 +244,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                                                                                               LocalDate endBoundary,
                                                                                               FileStorageSettings storageSettings,
                                                                                               String[] columnNames,
-                                                                                              int maxRecentMonthsToLoad) {
+                                                                                              int maxRecentMonthsToLoad,
+                                                                                              UserDomainIdentity userIdentity) {
         Map<ParquetPartitionId, LoadedMonthlyPartition> resultPartitions = new LinkedHashMap<>();
 
         LocalDate startNonNull = startBoundary;
         if (startNonNull == null) {
             startNonNull = this.parquetPartitionMetadataService.getOldestStoredPartitionMonth(
-                    connectionName, tableName, storageSettings).orElse(null);
+                    connectionName, tableName, storageSettings, userIdentity).orElse(null);
         }
         if (startNonNull == null) {
             // No data stored for this table
@@ -258,8 +265,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
         for (LocalDate currentMonth = endMonth; !currentMonth.isBefore(startMonth) && maxRecentMonthsToLoad > 0;
              currentMonth = currentMonth.minusMonths(1L)) {
-            ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, currentMonth);
-            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames);
+            ParquetPartitionId partitionId = new ParquetPartitionId(userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
+            LoadedMonthlyPartition currentMonthPartition = loadPartition(partitionId, storageSettings, columnNames, userIdentity);
             if (currentMonthPartition != null) {
                 resultPartitions.put(partitionId, currentMonthPartition);
 
@@ -281,14 +288,17 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param loadedPartition Loaded partition, identifies the partition id. The loaded partition may contain no data.
      * @param tableDataChanges Table data changes to be applied.
      * @param storageSettings Storage settings to identify the target folder, file names and column names used for matching.
+     * @param userIdentity User identity that also identifies the data domain.
      */
     @Override
     public void savePartition(LoadedMonthlyPartition loadedPartition,
                               TableDataChanges tableDataChanges,
-                              FileStorageSettings storageSettings) {
-        boolean hasChanges = this.savePartitionInternal(loadedPartition, tableDataChanges, storageSettings);
+                              FileStorageSettings storageSettings,
+                              UserDomainIdentity userIdentity) {
+        boolean hasChanges = this.savePartitionInternal(loadedPartition, tableDataChanges, storageSettings, userIdentity);
         if (hasChanges) {
-            this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(), FolderSynchronizationStatus.changed);
+            this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(),
+                    userIdentity.getDataDomainFolder(), FolderSynchronizationStatus.changed);
         }
     }
 
@@ -300,12 +310,15 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param loadedPartition Loaded partition, identifies the partition id. The loaded partition may contain no data.
      * @param tableDataChanges Table data changes to be applied.
      * @param storageSettings Storage settings to identify the target folder, file names and column names used for matching.
+     * @param userIdentity User identity that also specifies the data domain.
+     * @return True when the file was saved, false when it was empty and as removed.
      */
     private boolean savePartitionInternal(LoadedMonthlyPartition loadedPartition,
                                           TableDataChanges tableDataChanges,
-                                          FileStorageSettings storageSettings) {
+                                          FileStorageSettings storageSettings,
+                                          UserDomainIdentity userIdentity) {
         try {
-            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartition.getPartitionId(), storageSettings);
+            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartition.getPartitionId(), storageSettings, userIdentity);
             File targetParquetFile = targetParquetFilePath.toFile();
 
             Table newOrChangedDataPartitionMonth = null;
@@ -346,7 +359,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 Table partitionDataOld;
                 Long beforeReadFileLastModifiedTimestamp = null;
 
-                try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+                try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
                     if (targetParquetFile.exists()) {
                         beforeReadFileLastModifiedTimestamp = targetParquetFile.lastModified();
                     } else {
@@ -393,7 +406,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 if (dataToSave == null || dataToSave.isEmpty()) {
                     // ensure the partition data is deleted
                     if (targetParquetFile.exists()) {
-                        boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                        boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType(), userIdentity);
 
                         if (success) {
                             return true;
@@ -408,7 +421,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
                 byte[] parquetFileContent = new DqoTablesawParquetWriter(hadoopConfiguration).writeToByteArray(dataToSave);
 
-                try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
+                try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
                     Long currentLastModifiedTimestamp;
                     if (targetParquetFile.exists()) {
                         currentLastModifiedTimestamp = targetParquetFile.lastModified();
@@ -452,19 +465,22 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * Deletes a partition file.
      * @param loadedPartitionId Partition id to delete.
      * @param storageSettings Storage settings.
+     * @param userIdentity User identity that also specifies the data domain.
      * @return True when the file was removed, false otherwise.
      */
+    @Override
     public boolean deletePartitionFile(ParquetPartitionId loadedPartitionId,
-                                       FileStorageSettings storageSettings) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
-            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings);
+                                       FileStorageSettings storageSettings,
+                                       UserDomainIdentity userIdentity) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType(), userIdentity.getDataDomainFolder())) {
+            Path targetParquetFilePath = makeParquetTargetFilePath(loadedPartitionId, storageSettings, userIdentity);
             File targetParquetFile = targetParquetFilePath.toFile();
 
             if (!targetParquetFile.exists()) {
                 return false;
             }
 
-            boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+            boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType(), userIdentity);
             return success;
         }
         catch (Exception ex) {
@@ -477,11 +493,12 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * If there are no other files or folders in this folder, deletes the folders in a cascading pattern until it reaches the root .data folder.
      * @param targetPartitionFilePath Path to the .parquet file with the partition.
      * @param tableType Table type to delete (RuleResults, SensorReadouts, etc.)
+     * @param userIdentity User identity that identifies the data domain.
      * @return True if deletion proceeded successfully. False otherwise.
      */
-    protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType) {
-        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType)) {
-            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath()
+    protected boolean deleteParquetPartitionFile(Path targetPartitionFilePath, DqoRoot tableType, UserDomainIdentity userIdentity) {
+        try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(tableType, userIdentity.getDataDomainFolder())) {
+            Path homeRelativePath = this.localDqoUserHomePathProvider.getLocalUserHomePath(userIdentity)
                     .relativize(targetPartitionFilePath);
 
             if (Files.isDirectory(targetPartitionFilePath)) {
@@ -495,8 +512,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 );
             }
 
-            HomeFilePath homeFilePath = HomeFilePath.fromFilePath(homeRelativePath.toString()); new HomeFilePath(
-                    new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new)),
+            HomeFilePath homeFilePath = HomeFilePath.fromFilePath(userIdentity.getDataDomainFolder(), homeRelativePath.toString());
+            new HomeFilePath(
+                    new HomeFolderPath(userIdentity.getDataDomainFolder(), homeRelativeFoldersList.toArray(FolderName[]::new)),
                     homeRelativePath.getFileName().toString()
             );
 
@@ -510,7 +528,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             while (homeRelativeFoldersList.size() > 1) {
                 // Delete all remaining folders, if empty, to the extent allowed by the lock.
-                HomeFolderPath homeFolderPath = new HomeFolderPath(homeRelativeFoldersList.toArray(FolderName[]::new));
+                HomeFolderPath homeFolderPath = new HomeFolderPath(userIdentity.getDataDomainFolder(), homeRelativeFoldersList.toArray(FolderName[]::new));
 
                 int filesInFolderCount = this.localUserHomeFileStorageService.listFiles(homeFolderPath).size();
                 int foldersInFolderCount = this.localUserHomeFileStorageService.listFolders(homeFolderPath).size();

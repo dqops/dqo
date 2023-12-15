@@ -29,7 +29,7 @@ import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import com.dqops.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
-import com.dqops.core.principal.DqoCloudApiKeyPrincipalProvider;
+import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -70,7 +70,7 @@ public class TableCliServiceImpl implements TableCliService {
     private final OutputFormatService outputFormatService;
     private final DqoJobQueue dqoJobQueue;
     private final DqoQueueJobFactory dqoQueueJobFactory;
-    private DqoCloudApiKeyPrincipalProvider principalProvider;
+    private DqoUserPrincipalProvider principalProvider;
 
     @Autowired
     public TableCliServiceImpl(TableService tableService,
@@ -83,7 +83,7 @@ public class TableCliServiceImpl implements TableCliService {
                                OutputFormatService outputFormatService,
                                DqoJobQueue dqoJobQueue,
                                DqoQueueJobFactory dqoQueueJobFactory,
-                               DqoCloudApiKeyPrincipalProvider principalProvider) {
+                               DqoUserPrincipalProvider principalProvider) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
@@ -106,7 +106,8 @@ public class TableCliServiceImpl implements TableCliService {
      */
     @Override
     public Table loadSchemaList(String connectionName, String schemaFilter) throws TableImportFailedException {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -165,7 +166,7 @@ public class TableCliServiceImpl implements TableCliService {
                 connectionName, schemaName, tableName);
         importSchemaJob.setImportParameters(importParameters);
 
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
         PushJobResult<ImportSchemaQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(importSchemaJob, principal);
 
         try {
@@ -220,7 +221,8 @@ public class TableCliServiceImpl implements TableCliService {
     public CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
@@ -269,7 +271,8 @@ public class TableCliServiceImpl implements TableCliService {
     public CliOperationStatus addTable(String connectionName, String schemaName, String tableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         ConnectionList connections = userHome.getConnections();
 
@@ -299,7 +302,8 @@ public class TableCliServiceImpl implements TableCliService {
     public CliOperationStatus removeTable(String connectionName, String fullTableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        DqoUserPrincipal userPrincipal = this.principalProvider.getLocalUserPrincipal();
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(userPrincipal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
@@ -331,8 +335,7 @@ public class TableCliServiceImpl implements TableCliService {
                 .collect(Collectors.toList());
         connToTablesMap.put(connectionName, tableNames);
 
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
-        List<PushJobResult<DeleteStoredDataResult>> backgroundJobs =this.tableService.deleteTables(connToTablesMap, principal);
+        List<PushJobResult<DeleteStoredDataResult>> backgroundJobs = this.tableService.deleteTables(connToTablesMap, userPrincipal);
 
         try {
             for (PushJobResult<DeleteStoredDataResult> job: backgroundJobs) {
@@ -364,7 +367,7 @@ public class TableCliServiceImpl implements TableCliService {
     public CliOperationStatus updateTable(String connectionName, String schemaName, String tableName, String newTableName) {
         CliOperationStatus cliOperationStatus = new CliOperationStatus();
 
-        DqoUserPrincipal principal = this.principalProvider.createUserPrincipal();
+        DqoUserPrincipal principal = this.principalProvider.getLocalUserPrincipal();
         CliOperationStatus deleteStatus = removeTable(connectionName, schemaName + "." + tableName);
         if (!deleteStatus.isSuccess()) {
             cliOperationStatus.setFailedMessage(deleteStatus.getMessage());
