@@ -29,8 +29,8 @@ type TEditingViewFirstLine = {
   onUpdateChecks: () => void;
   onChangeIsUpdated: (isUpdated: boolean) => void;
   isUpdated: boolean;
-  onRunChecks: () => Promise<void>;
-  deleteData?: () => Promise<void>;
+  compareTables: () => Promise<void>;
+  deleteData: (params: { [key: string]: string | boolean }) => Promise<void>;
 };
 
 export default function EditingViewFirstLine({
@@ -46,7 +46,7 @@ export default function EditingViewFirstLine({
   isUpdated,
   onChangeIsUpdated,
   deleteData,
-  onRunChecks
+  compareTables
 }: TEditingViewFirstLine) {
   const {
     checkTypes,
@@ -92,8 +92,6 @@ export default function EditingViewFirstLine({
   //     console.error(err);
   //   }
   // };
-
-  const compareTables = () => {};
 
   //   const disabledDeleting =
   //   job &&
@@ -164,13 +162,6 @@ export default function EditingViewFirstLine({
           <span className="font-bold">{editConfigurationParameters.name}</span>
         </div>
         <div className="flex justify-center items-center gap-x-2">
-          <SvgIcon
-            name="sync"
-            className={clsx(
-              'w-4 h-4 mr-3',
-              disabled ? 'animate-spin' : 'hidden'
-            )}
-          />
           <Button
             color="primary"
             variant="contained"
@@ -212,11 +203,13 @@ export default function EditingViewFirstLine({
           />
         </div>
       </div>
-      {/* <DeleteOnlyDataDialog
+      <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}
-        onDelete={deleteData}
-      /> */}
+        onDelete={(params: { [key: string]: string | boolean }) => {
+          deleteData(params), setDeleteDataDialogOpened(false);
+        }}
+      />
     </div>
   );
 }

@@ -30,8 +30,9 @@ type TEditReferenceTable = {
   setConfigurationToEditing: (name: string) => void;
   onChangeIsUpdated: (isUpdated: boolean) => void;
   isUpdated: boolean;
-  onRunChecks: () => Promise<void>;
-  deleteData?: () => Promise<void>;
+  compareTables: () => Promise<void>;
+  deleteData: (params: { [key: string]: string | boolean }) => Promise<void>;
+  disabled: boolean | undefined;
 };
 
 export default function EditReferenceTable2({
@@ -46,8 +47,9 @@ export default function EditReferenceTable2({
   setConfigurationToEditing,
   isUpdated,
   onChangeIsUpdated,
-  onRunChecks,
-  deleteData
+  compareTables,
+  deleteData,
+  disabled
 }: TEditReferenceTable) {
   const {
     checkTypes,
@@ -94,8 +96,9 @@ export default function EditReferenceTable2({
             timePartitioned={timePartitioned}
             isUpdated={isUpdated}
             onChangeIsUpdated={onChangeIsUpdated}
-            onRunChecks={onRunChecks}
+            compareTables={compareTables}
             deleteData={deleteData}
+            disabled={disabled}
           />
         ) : (
           <FirstLineNameConfiguration

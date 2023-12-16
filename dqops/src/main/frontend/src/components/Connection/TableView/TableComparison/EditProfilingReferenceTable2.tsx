@@ -397,7 +397,7 @@ export const EditProfilingReferenceTable2 = ({
     }
   };
 
-  const onRunChecks = async () => {
+  const compareTables = async () => {
     try {
       const res = await JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: categoryCheck
@@ -426,28 +426,27 @@ export const EditProfilingReferenceTable2 = ({
   };
 
   const deleteData = async (params: { [key: string]: string | boolean }) => {
-    // setDeleteDataDialogOpened(false);
-    // try {
-    //   const res = await JobApiClient.deleteStoredData(
-    //     undefined,
-    //     false,
-    //     undefined,
-    //     {
-    //       ...(cleanDataTemplate || {}),
-    //       ...params
-    //     }
-    //   );
-    //   dispatch(
-    //     setCurrentJobId(
-    //       checkTypes,
-    //       firstLevelActiveTab,
-    //       res.data?.jobId?.jobId ?? 0
-    //     )
-    //   );
-    //   setJobId(res.data?.jobId?.jobId);
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    try {
+      const res = await JobApiClient.deleteStoredData(
+        undefined,
+        false,
+        undefined,
+        {
+          ...(reference?.compare_table_clean_data_job_template || {}),
+          ...params
+        }
+      );
+      dispatch(
+        setCurrentJobId(
+          checkTypes,
+          firstLevelActiveTab,
+          res.data?.jobId?.jobId ?? 0
+        )
+      );
+      setJobId(res.data?.jobId?.jobId);
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const disabled =
@@ -460,6 +459,7 @@ export const EditProfilingReferenceTable2 = ({
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
+      console.log('13');
       getResultsData();
     }
   }, [job?.status]);
@@ -599,7 +599,7 @@ export const EditProfilingReferenceTable2 = ({
               checksUI
             )
           }
-          // deleteData={deleteData}
+          deleteData={deleteData}
           onBack={onBack}
           //   onChange={onChange}
           onChangeIsUpdated={(isUpdated: boolean) => setIsUpdated(isUpdated)}
@@ -609,8 +609,8 @@ export const EditProfilingReferenceTable2 = ({
           timePartitioned={timePartitioned}
           editConfigurationParameters={parameters}
           onChangeParameters={onChangeParameters}
-          onRunChecks={onRunChecks}
-          //   disabled={disabled || loading}
+          compareTables={compareTables}
+          disabled={disabled}
           //   isCreating={isCreating}
           //   goToRefTable={() => goToRefTable(reference)}
           //   onChangeUpdatedParent={onChangeUpdatedParent}

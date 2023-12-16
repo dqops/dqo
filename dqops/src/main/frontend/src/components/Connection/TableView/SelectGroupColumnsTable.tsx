@@ -71,7 +71,7 @@ export const SelectGroupColumnsTable = ({
                               responseList[index]?.length === 0
                           )
                         ? 'my-0.5'
-                        : 'my-0.5 text-red-500'
+                        : 'my-0.5'
                     )}
                     value={responseList[index] ?? ''}
                     onChange={(value: string) => {
@@ -93,7 +93,7 @@ export const SelectGroupColumnsTable = ({
                 {warningMessageList?.[index] === true ? (
                   <Tooltip content={message}>
                     <td
-                      className="bg-red-500 block mx-5 mt-3"
+                      className=" block mx-5 mt-3"
                       style={{
                         height: '20px',
                         width: '20px',
