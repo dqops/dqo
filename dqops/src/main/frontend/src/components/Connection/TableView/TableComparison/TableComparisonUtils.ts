@@ -229,3 +229,7 @@ export const getIsButtonEnabled = (parameters: TParameters): boolean => {
       parameters.dataGroupingArray.length === 0)
   );
 };
+
+export const validate404Status = (status: number): boolean => {
+  return status === 200 || status === 404;
+};

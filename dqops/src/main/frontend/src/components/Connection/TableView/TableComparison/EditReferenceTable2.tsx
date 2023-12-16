@@ -81,6 +81,16 @@ export default function EditReferenceTable2({
     setEditConnectionSchemaTable(open);
   };
 
+  useEffect(() => {
+    if (
+      editConfigurationParameters.refConnection === undefined ||
+      editConfigurationParameters.refSchema === undefined ||
+      editConfigurationParameters.refTable === undefined
+    ) {
+      setEditConnectionSchemaTable(true);
+    }
+  }, [editConfigurationParameters]);
+  console.log(editConfigurationParameters);
   return (
     <div className="w-full ">
       <div className="w-full">

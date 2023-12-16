@@ -19,10 +19,7 @@ import {
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
 import Checkbox from '../../../Checkbox';
 import { Option } from '../../../Select';
-import {
-  addFirstLevelTab,
-  setCurrentJobId
-} from '../../../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import { useSelector } from 'react-redux';
@@ -37,7 +34,11 @@ import {
   TSeverityValues,
   checkNames
 } from './TableComparisonConstans';
-import { calculateColor, onUpdate } from './TableComparisonUtils';
+import {
+  calculateColor,
+  onUpdate,
+  validate404Status
+} from './TableComparisonUtils';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import TableLevelResults from './TableLevelResults';
 import SeverityInputBlock from './SeverityInputBlock';
@@ -412,13 +413,6 @@ export const EditProfilingReferenceTable2 = ({
               checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
             }
       });
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          res.data?.jobId?.jobId ?? 0
-        )
-      );
       setJobId(res.data?.jobId?.jobId);
     } catch (err) {
       console.error(err);
@@ -435,13 +429,6 @@ export const EditProfilingReferenceTable2 = ({
           ...(reference?.compare_table_clean_data_job_template || {}),
           ...params
         }
-      );
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          res.data?.jobId?.jobId ?? 0
-        )
       );
       setJobId(res.data?.jobId?.jobId);
     } catch (err) {
@@ -482,7 +469,8 @@ export const EditProfilingReferenceTable2 = ({
         const columnRes = await ColumnApiClient.getColumns(
           connection,
           schema,
-          table
+          table,
+          { validateStatus: validate404Status }
         );
         setComparedColumnOptions(
           columnRes.data.map((item) => ({
@@ -509,7 +497,8 @@ export const EditProfilingReferenceTable2 = ({
           const columnRes = await ColumnApiClient.getColumns(
             parameters.refConnection ?? '',
             parameters.refSchema ?? '',
-            parameters.refTable ?? ''
+            parameters.refTable ?? '',
+            { validateStatus: validate404Status }
           );
           setColumnOptions(
             columnRes.data.map((item) => ({

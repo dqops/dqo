@@ -17,6 +17,7 @@ import { useActionDispatch } from '../../../../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../../../../redux/selectors';
 import { TableComparisonsApi } from '../../../../../services/apiClient';
 import { getIsButtonEnabled } from '../TableComparisonUtils';
+import clsx from 'clsx';
 
 type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
@@ -213,11 +214,13 @@ export default function FirstLineNameConfiguration({
           Table comparison configuration name:{' '}
         </div>
         <Input
-          className={
-            editConfigurationParameters.name?.length === 0
-              ? 'min-w-80 border border-red-500'
-              : 'min-w-80'
-          }
+          className={clsx(
+            'flex-1',
+            editConfigurationParameters.name &&
+              editConfigurationParameters?.name?.length > 0
+              ? ''
+              : 'border border-red-500'
+          )}
           value={editConfigurationParameters.name}
           onChange={(e) => onChangeName(e.target.value)}
           placeholder="Table comparison configuration name"

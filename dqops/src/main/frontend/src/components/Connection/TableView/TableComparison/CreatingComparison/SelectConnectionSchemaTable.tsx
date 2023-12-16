@@ -10,6 +10,7 @@ import {
 } from '../../../../../services/apiClient';
 import { table } from 'console';
 import useConnectionSchemaTableExists from '../../../../../hooks/useConnectionSchemaTableExists';
+import clsx from 'clsx';
 
 type TSelectConnectionSchemaTable = {
   editConfigurationParameters: TParameters;
@@ -94,7 +95,13 @@ export default function SelectConnectionSchemaTable({
       <div className="flex flex-col gap-2 w-1/3 mb-3 mr-4">
         <div>Connection</div>
         <Select
-          className="flex-1"
+          className={clsx(
+            'flex-1',
+            editConfigurationParameters.refConnection &&
+              editConfigurationParameters?.refConnection?.length > 0
+              ? ''
+              : 'border border-red-500'
+          )}
           options={connectionOptions}
           value={editConfigurationParameters.refConnection}
           onChange={(selectedOption) => {
@@ -108,7 +115,13 @@ export default function SelectConnectionSchemaTable({
       <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
         <div> Schema</div>
         <Select
-          className="flex-1"
+          className={clsx(
+            'flex-1',
+            editConfigurationParameters.refSchema &&
+              editConfigurationParameters?.refSchema?.length > 0
+              ? ''
+              : 'border border-red-500'
+          )}
           options={schemaOptions}
           value={editConfigurationParameters.refSchema}
           onChange={(selectedOption) =>
@@ -122,7 +135,13 @@ export default function SelectConnectionSchemaTable({
       <div className="flex flex-col gap-2 w-1/3 mb-3">
         <div>Table</div>
         <Select
-          className="flex-1"
+          className={clsx(
+            'flex-1',
+            editConfigurationParameters.refTable &&
+              editConfigurationParameters?.refTable?.length > 0
+              ? ''
+              : 'border border-red-500'
+          )}
           options={tableOptions}
           value={editConfigurationParameters.refTable}
           onChange={(selectedOption) =>
