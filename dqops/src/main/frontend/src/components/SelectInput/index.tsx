@@ -102,16 +102,20 @@ const SelectInput = ({
           className={clsx(
             'cursor-pointer text-gray-900 h-9 pr-8 rounded flex items-center text-sm border overflow-hidden',
             triggerClassName,
-            disabled ? 'bg-gray-300 cursor-not-allowed' : '',
-            error ? 'border-red-500' : 'border-gray-300'
+            disabled ? 'bg-gray-50 cursor-not-allowed' : '',
+            error ? 'border-red-500' : 'border-gray-50'
           )}
           onClick={() => (!disabled ? toggleMenu() : {})}
         >
           <input
-            className="h-full pl-4 focus:outline-none w-full"
+            className={clsx(
+              'h-full pl-4 focus:outline-none w-full',
+              disabled ? 'bg-gray-50 cursor-not-allowed' : ''
+            )}
             value={value || ''}
             onChange={handleChange}
             placeholder={placeholder}
+            disabled={disabled}
           />
           <SvgIcon
             name="chevron-down"

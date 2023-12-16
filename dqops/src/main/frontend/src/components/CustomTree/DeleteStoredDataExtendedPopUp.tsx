@@ -107,17 +107,22 @@ const DeleteStoredDataExtendedPopUp = ({
   const getCategories = (allChecks: CheckDefinitionFolderModel) => {
     const mainTableFolder =
       allChecks.folders?.table?.folders?.[
-        params.checkType as keyof CheckDefinitionFolderModel
+        (params.checkType ??
+          CheckTypes.PROFILING) as keyof CheckDefinitionFolderModel
       ].folders;
 
     const mainColumnFolder =
       allChecks.folders?.column?.folders?.[
-        params.checkType as keyof CheckDefinitionFolderModel
+        (params.checkType ??
+          CheckTypes.PROFILING) as keyof CheckDefinitionFolderModel
       ].folders;
 
     let tableCategories = {};
     let columnCategories = {};
-    if (params.checkType !== CheckTypes.PROFILING) {
+    if (
+      params.checkType === CheckTypes.MONITORING ||
+      params.checkType === CheckTypes.PARTITIONED
+    ) {
       if (params.timeGradient === 'monthly') {
         tableCategories = mainTableFolder?.monthly.folders ?? {};
         columnCategories = mainColumnFolder?.monthly.folders ?? {};
@@ -324,28 +329,39 @@ const DeleteStoredDataExtendedPopUp = ({
             />
             <SelectInput
               label="Check category"
-              options={Object.keys(getCategories(allChecks ?? {}))?.map(
-                (item: any) => ({
-                  label: item,
-                  value: item
-                })
-              )}
-              value={params.checkCategory}
+              options={[
+                '',
+                ...Object.keys(getCategories(allChecks ?? {}))
+              ]?.map((item: any) => ({
+                label: item,
+                value: item
+              }))}
+              value={
+                filteredChecks === 'part' ? params.checkCategory : undefined
+              }
               onChange={(value) =>
-                onChangeParams({ checkCategory: value, checkName: undefined })
+                onChangeParams({
+                  checkCategory: String(value).length !== 0 ? value : undefined,
+                  checkName: undefined
+                })
               }
               disabled={filteredChecks !== 'part'}
             />
             <SelectInput
               label="Check name"
-              options={(getChecks(getCategories(allChecks ?? {})) ?? [])?.map(
-                (item: any) => ({
-                  label: item.check_name,
-                  value: item.check_name
+              options={[
+                '',
+                ...(getChecks(getCategories(allChecks ?? {})) ?? [])
+              ]?.map((item: any) => ({
+                label: item.check_name,
+                value: item.check_name
+              }))}
+              value={filteredChecks === 'part' ? params.checkName : undefined}
+              onChange={(value) =>
+                onChangeParams({
+                  checkName: String(value).length !== 0 ? value : undefined
                 })
-              )}
-              value={params.checkName}
-              onChange={(value) => onChangeParams({ checkName: value })}
+              }
               disabled={filteredChecks !== 'part'}
             />
           </div>
@@ -372,12 +388,16 @@ const DeleteStoredDataExtendedPopUp = ({
             />
             <SelectInput
               label="Sensor name"
-              options={allSensors?.map((x: any) => ({
+              options={['', ...allSensors]?.map((x: any) => ({
                 label: x.full_sensor_name,
                 value: x.full_sensor_name ?? ''
               }))}
-              value={params.sensorName}
-              onChange={(value) => onChangeParams({ sensorName: value })}
+              value={filteredSensors === 'part' ? params.sensorName : undefined}
+              onChange={(value) =>
+                onChangeParams({
+                  sensorName: String(value).length !== 0 ? value : undefined
+                })
+              }
               disabled={filteredSensors !== 'part'}
             />
           </div>
@@ -391,7 +411,7 @@ const DeleteStoredDataExtendedPopUp = ({
           </div>
         </div>
       </DialogBody>
-      <DialogFooter className="flex gap-6 items-center mt-10">
+      <DialogFooter className="flex gap-6 items-center absolute bottom-5 right-5">
         <Button
           color="primary"
           variant="outlined"
