@@ -280,16 +280,10 @@ const DatabaseConnection = ({
 
   return (
     <div>
-      <div className="mb-4">
+      <div className="mb-4 flex items-center text-teal-500" onClick={onBack}>
         {' '}
-        <Button
-          label="Back"
-          color="primary"
-          variant="text"
-          className="px-0"
-          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-          onClick={onBack}
-        />
+        <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+        Back
       </div>
       <div className="flex justify-between mb-4">
         <div>
