@@ -107,17 +107,22 @@ const DeleteStoredDataExtendedPopUp = ({
   const getCategories = (allChecks: CheckDefinitionFolderModel) => {
     const mainTableFolder =
       allChecks.folders?.table?.folders?.[
-        params.checkType as keyof CheckDefinitionFolderModel
+        (params.checkType ??
+          CheckTypes.PROFILING) as keyof CheckDefinitionFolderModel
       ].folders;
 
     const mainColumnFolder =
       allChecks.folders?.column?.folders?.[
-        params.checkType as keyof CheckDefinitionFolderModel
+        (params.checkType ??
+          CheckTypes.PROFILING) as keyof CheckDefinitionFolderModel
       ].folders;
 
     let tableCategories = {};
     let columnCategories = {};
-    if (params.checkType !== CheckTypes.PROFILING) {
+    if (
+      (params.checkType === CheckTypes.MONITORING || params,
+      checkTypes === CheckTypes.PARTITIONED)
+    ) {
       if (params.timeGradient === 'monthly') {
         tableCategories = mainTableFolder?.monthly.folders ?? {};
         columnCategories = mainColumnFolder?.monthly.folders ?? {};
