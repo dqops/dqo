@@ -115,7 +115,7 @@ const iconsMap: any = {
   'user-circle': UserCircleSvg,
   users: UsersSvg,
   'x-circle': XCircleSvg,
-  'big-query': BigQuerySvg,
+  bigquery: BigQuerySvg,
   'bigquery-big': BigQueryBigSvg,
   snowflake: SnowflakeSvg,
   info: InfoSvg,

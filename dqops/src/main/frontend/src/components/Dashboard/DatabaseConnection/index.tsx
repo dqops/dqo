@@ -37,6 +37,7 @@ import OracleConnection from './OracleConnection';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
 import SparkConnection from './SparkConnection';
+import clsx from 'clsx';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -244,7 +245,7 @@ const DatabaseConnection = ({
       />
     ),
     [ConnectionModelProviderTypeEnum.spark]: (
-      <SparkConnection // TODO: use spark connector
+      <SparkConnection
         spark={database.spark}
         onChange={(spark) => onChange({ ...database, spark })}
         sharedCredentials={sharedCredentials}
@@ -279,16 +280,13 @@ const DatabaseConnection = ({
 
   return (
     <div>
-      <div className="mb-4">
+      <div
+        className="mb-4 flex items-center text-teal-500 cursor-pointer"
+        onClick={onBack}
+      >
         {' '}
-        <Button
-          label="Back"
-          color="primary"
-          variant="text"
-          className="px-0"
-          leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
-          onClick={onBack}
-        />
+        <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
+        Back
       </div>
       <div className="flex justify-between mb-4">
         <div>
@@ -302,7 +300,10 @@ const DatabaseConnection = ({
         {nameOfDatabase ? (
           <SvgIcon
             name={nameOfDatabase.toLowerCase().replace(/\s/g, '')}
-            className="mb-3 w-20 text-blue-500"
+            className={clsx(
+              'mb-3 w-20 text-blue-500',
+              nameOfDatabase === 'Spark' && 'w-35'
+            )}
           />
         ) : (
           <img src={dbImage} className="h-16" alt="db logo" />
