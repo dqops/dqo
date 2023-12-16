@@ -264,7 +264,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.bigquery,
     name: 'BigQuery',
-    iconName: 'big-query',
+    iconName: 'bigquery',
     displayName: 'Bigquery'
   },
   {
