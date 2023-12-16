@@ -120,8 +120,8 @@ const DeleteStoredDataExtendedPopUp = ({
     let tableCategories = {};
     let columnCategories = {};
     if (
-      (params.checkType === CheckTypes.MONITORING || params,
-      checkTypes === CheckTypes.PARTITIONED)
+      params.checkType === CheckTypes.MONITORING ||
+      params.checkType === CheckTypes.PARTITIONED
     ) {
       if (params.timeGradient === 'monthly') {
         tableCategories = mainTableFolder?.monthly.folders ?? {};
@@ -329,28 +329,37 @@ const DeleteStoredDataExtendedPopUp = ({
             />
             <SelectInput
               label="Check category"
-              options={Object.keys(getCategories(allChecks ?? {}))?.map(
-                (item: any) => ({
-                  label: item,
-                  value: item
-                })
-              )}
+              options={[
+                '',
+                ...Object.keys(getCategories(allChecks ?? {}))
+              ]?.map((item: any) => ({
+                label: item,
+                value: item
+              }))}
               value={params.checkCategory}
               onChange={(value) =>
-                onChangeParams({ checkCategory: value, checkName: undefined })
+                onChangeParams({
+                  checkCategory: String(value).length !== 0 ? value : undefined,
+                  checkName: undefined
+                })
               }
               disabled={filteredChecks !== 'part'}
             />
             <SelectInput
               label="Check name"
-              options={(getChecks(getCategories(allChecks ?? {})) ?? [])?.map(
-                (item: any) => ({
-                  label: item.check_name,
-                  value: item.check_name
-                })
-              )}
+              options={[
+                '',
+                ...(getChecks(getCategories(allChecks ?? {})) ?? [])
+              ]?.map((item: any) => ({
+                label: item.check_name,
+                value: item.check_name
+              }))}
               value={params.checkName}
-              onChange={(value) => onChangeParams({ checkName: value })}
+              onChange={(value) =>
+                onChangeParams({
+                  checkName: String(value).length !== 0 ? value : undefined
+                })
+              }
               disabled={filteredChecks !== 'part'}
             />
           </div>
@@ -377,12 +386,16 @@ const DeleteStoredDataExtendedPopUp = ({
             />
             <SelectInput
               label="Sensor name"
-              options={allSensors?.map((x: any) => ({
+              options={['', ...allSensors]?.map((x: any) => ({
                 label: x.full_sensor_name,
                 value: x.full_sensor_name ?? ''
               }))}
               value={params.sensorName}
-              onChange={(value) => onChangeParams({ sensorName: value })}
+              onChange={(value) =>
+                onChangeParams({
+                  sensorName: String(value).length !== 0 ? value : undefined
+                })
+              }
               disabled={filteredSensors !== 'part'}
             />
           </div>
@@ -396,7 +409,7 @@ const DeleteStoredDataExtendedPopUp = ({
           </div>
         </div>
       </DialogBody>
-      <DialogFooter className="flex gap-6 items-center mt-10">
+      <DialogFooter className="flex gap-6 items-center absolute bottom-5 right-5">
         <Button
           color="primary"
           variant="outlined"
