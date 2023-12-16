@@ -53,12 +53,12 @@ const tabs = [
     value: 'preview'
   },
   {
-    label: 'Table quality status',
-    value: 'table-quality-status'
-  },
-  {
     label: 'Profiling checks',
     value: 'advanced'
+  },
+  {
+    label: 'Table quality status',
+    value: 'table-quality-status'
   },
   {
     label: 'Table comparisons',
