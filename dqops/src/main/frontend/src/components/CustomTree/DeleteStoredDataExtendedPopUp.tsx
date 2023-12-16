@@ -336,7 +336,9 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: item,
                 value: item
               }))}
-              value={params.checkCategory}
+              value={
+                filteredChecks === 'part' ? params.checkCategory : undefined
+              }
               onChange={(value) =>
                 onChangeParams({
                   checkCategory: String(value).length !== 0 ? value : undefined,
@@ -354,7 +356,7 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: item.check_name,
                 value: item.check_name
               }))}
-              value={params.checkName}
+              value={filteredChecks === 'part' ? params.checkName : undefined}
               onChange={(value) =>
                 onChangeParams({
                   checkName: String(value).length !== 0 ? value : undefined
@@ -390,7 +392,7 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: x.full_sensor_name,
                 value: x.full_sensor_name ?? ''
               }))}
-              value={params.sensorName}
+              value={filteredChecks === 'part' ? params.sensorName : undefined}
               onChange={(value) =>
                 onChangeParams({
                   sensorName: String(value).length !== 0 ? value : undefined

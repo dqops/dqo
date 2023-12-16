@@ -108,10 +108,14 @@ const SelectInput = ({
           onClick={() => (!disabled ? toggleMenu() : {})}
         >
           <input
-            className="h-full pl-4 focus:outline-none w-full"
+            className={clsx(
+              'h-full pl-4 focus:outline-none w-full',
+              disabled ? 'bg-gray-300 cursor-not-allowed' : ''
+            )}
             value={value || ''}
             onChange={handleChange}
             placeholder={placeholder}
+            disabled={disabled}
           />
           <SvgIcon
             name="chevron-down"
