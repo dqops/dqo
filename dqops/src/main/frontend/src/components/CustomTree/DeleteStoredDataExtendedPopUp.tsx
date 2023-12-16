@@ -392,7 +392,7 @@ const DeleteStoredDataExtendedPopUp = ({
                 label: x.full_sensor_name,
                 value: x.full_sensor_name ?? ''
               }))}
-              value={filteredChecks === 'part' ? params.sensorName : undefined}
+              value={filteredSensors === 'part' ? params.sensorName : undefined}
               onChange={(value) =>
                 onChangeParams({
                   sensorName: String(value).length !== 0 ? value : undefined
