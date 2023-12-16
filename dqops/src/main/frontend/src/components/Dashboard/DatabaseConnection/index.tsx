@@ -280,7 +280,10 @@ const DatabaseConnection = ({
 
   return (
     <div>
-      <div className="mb-4 flex items-center text-teal-500" onClick={onBack}>
+      <div
+        className="mb-4 flex items-center text-teal-500 cursor-pointer"
+        onClick={onBack}
+      >
         {' '}
         <SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />
         Back
