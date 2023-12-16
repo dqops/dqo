@@ -392,11 +392,7 @@ const Tree = () => {
           <div
             className="flex space-x-2 py-1 flex-1 w-full text-[13px]"
             onClick={() => {
-              !(node.parsingYamlError && node.parsingYamlError.length > 0) &&
-              !(
-                node.level === TREE_LEVEL.DATABASE &&
-                checkTypes !== CheckTypes.SOURCES
-              )
+              !(node.parsingYamlError && node.parsingYamlError.length > 0)
                 ? handleNodeClick(node)
                 : undefined;
             }}
