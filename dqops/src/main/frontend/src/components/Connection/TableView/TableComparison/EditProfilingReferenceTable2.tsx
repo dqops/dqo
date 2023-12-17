@@ -42,11 +42,9 @@ export const EditProfilingReferenceTable2 = ({
   onBack,
   selectedReference,
   categoryCheck,
-  isCreating,
   getNewTableComparison,
   onChangeSelectedReference,
   listOfExistingReferences,
-  canUserCompareTables,
   checksUI,
   onUpdateChecks
 }: EditProfilingReferenceTableProps) => {

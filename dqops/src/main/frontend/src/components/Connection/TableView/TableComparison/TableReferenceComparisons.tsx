@@ -6,7 +6,6 @@ import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
-import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
@@ -215,7 +214,6 @@ export const TableReferenceComparisons = ({
                 )
               : undefined
           }
-          isCreating={isCreating}
           getNewTableComparison={getNewTableComparison}
           onChangeSelectedReference={onChangeSelectedReference}
           listOfExistingReferences={references.map(

@@ -4,29 +4,9 @@ import EditingViewFirstLine from './EditingComparison/EditingViewFirstLine';
 import SelectConnectionSchemaTableOverlook from './EditingComparison/SelectConnectionSchemaTableOverlook';
 import SelectConnectionSchemaTable from './CreatingComparison/SelectConnectionSchemaTable';
 import { TParameters } from '../../../../shared/constants';
-import { Option } from '../../../Select';
 import SelectColumnGrouping from './CreatingComparison/SelectColumnGrouping';
 import SelectColumnGroupingOverlook from './EditingComparison/SelectColumnGroupingOverlook';
-
-type TEditReferenceTable = {
-  selectedReference?: string;
-  timePartitioned?: 'daily' | 'monthly';
-  existingTableComparisonConfigurations: (string | undefined)[];
-  onBack: (stayOnSamePage?: boolean | undefined) => void;
-  columnOptions: {
-    comparedColumnsOptions: Option[];
-    referencedColumnsOptions: Option[];
-  };
-  editConfigurationParameters: TParameters;
-  onChangeParameters: (obj: Partial<TParameters>) => void;
-  onUpdateChecks: () => void;
-  setConfigurationToEditing: (name: string) => void;
-  onChangeIsUpdated: (isUpdated: boolean) => void;
-  isUpdated: boolean;
-  compareTables: () => Promise<void>;
-  deleteData: (params: { [key: string]: string | boolean }) => Promise<void>;
-  disabled: boolean | undefined;
-};
+import { TEditReferenceTable } from './TableComparisonConstans';
 
 export default function EditReferenceTable2({
   selectedReference,
