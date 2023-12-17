@@ -404,7 +404,7 @@ export const EditProfilingReferenceTable2 = ({
     ) {
       getResultsData();
     }
-  }, [job?.status]);
+  }, [job?.status, selectedReference]);
 
   const columnKey = Object.keys(
     tableComparisonResults?.table_comparison_results ?? []
