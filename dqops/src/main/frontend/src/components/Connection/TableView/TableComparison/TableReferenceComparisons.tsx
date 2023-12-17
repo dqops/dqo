@@ -6,10 +6,10 @@ import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../../../shared/routes';
 import { ProfilingReferenceTableList } from './ProfilingReferenceTableList';
-import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 import qs from 'query-string';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
+import { EditProfilingReferenceTable } from './EditProfilingReferenceTable';
 
 type TableReferenceComparisonsProps = {
   checkTypes: CheckTypes;
@@ -110,6 +110,7 @@ export const TableReferenceComparisons = ({
   const onBack = (stayOnSamePage?: boolean | undefined) => {
     if (stayOnSamePage === false) {
       setIsEditing(true);
+      setIsCreting(false);
     } else {
       let url = '';
       if (checkTypes === CheckTypes.PROFILING) {
@@ -213,7 +214,6 @@ export const TableReferenceComparisons = ({
                 )
               : undefined
           }
-          isCreating={isCreating}
           getNewTableComparison={getNewTableComparison}
           onChangeSelectedReference={onChangeSelectedReference}
           listOfExistingReferences={references.map(

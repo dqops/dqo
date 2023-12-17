@@ -1,5 +1,7 @@
 import { QualityCategoryModel } from '../../../../api';
+import { TParameters } from '../../../../shared/constants';
 import { CheckTypes } from '../../../../shared/routes';
+import { Option } from '../../../Select';
 
 export type EditProfilingReferenceTableProps = {
   onBack: (stayOnSamePage?: boolean | undefined) => void;
@@ -7,7 +9,6 @@ export type EditProfilingReferenceTableProps = {
   checkTypes: CheckTypes;
   timePartitioned?: 'daily' | 'monthly';
   categoryCheck?: QualityCategoryModel;
-  isCreating?: boolean;
   getNewTableComparison: () => void;
   onChangeSelectedReference: (arg: string) => void;
   listOfExistingReferences: Array<string | undefined>;
@@ -16,11 +17,24 @@ export type EditProfilingReferenceTableProps = {
   onUpdateChecks: () => void;
 };
 
-export type TParameters = {
-  name?: string;
-  refConnection?: string;
-  refSchema?: string;
-  refTable?: string;
+export type TEditReferenceTable = {
+  selectedReference?: string;
+  timePartitioned?: 'daily' | 'monthly';
+  existingTableComparisonConfigurations: (string | undefined)[];
+  onBack: (stayOnSamePage?: boolean | undefined) => void;
+  columnOptions: {
+    comparedColumnsOptions: Option[];
+    referencedColumnsOptions: Option[];
+  };
+  editConfigurationParameters: TParameters;
+  onChangeParameters: (obj: Partial<TParameters>) => void;
+  onUpdateChecks: () => void;
+  setConfigurationToEditing: (name: string) => void;
+  onChangeIsUpdated: (isUpdated: boolean) => void;
+  isUpdated: boolean;
+  compareTables: () => Promise<void>;
+  deleteData: (params: { [key: string]: string | boolean }) => Promise<void>;
+  disabled: boolean | undefined;
 };
 
 export type TSeverityValues = Partial<{

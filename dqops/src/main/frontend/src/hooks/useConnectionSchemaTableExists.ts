@@ -41,8 +41,8 @@ function useConnectionSchemaTableExists(
           if (schemaResponse.status === 200) {
             if (schemaResponse.data.find((x) => x.schema_name === schema)) {
               setSchemaExist(true);
-            }else{
-              setSchemaExist(false)
+            } else {
+              setSchemaExist(false);
             }
           }
         }
@@ -58,7 +58,7 @@ function useConnectionSchemaTableExists(
         setConnectionExist(false);
       }
     };
-    if(connection && connection.length!==0){
+    if (connection && connection.length !== 0) {
       fetchData();
     }
   }, [connection, schema, table]);
