@@ -210,7 +210,7 @@ export default function SelectColumnGrouping({
       <SelectGroupColumnsTable
         className="flex-1"
         title="Data grouping on reference table"
-        placeholder='"Select column on reference table"'
+        placeholder="Select column on reference table"
         columnOptions={[
           { label: '', value: '' },
           ...columnOptions.referencedColumnsOptions
