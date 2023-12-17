@@ -157,15 +157,11 @@ const ResultBox = ({
                 {item.not_matching_data_groups ? (
                   item.not_matching_data_groups.map((x, index) => (
                     <span key={index}>
-                      {index === 0 &&
-                      x === 'no grouping' &&
-                      item.not_matching_data_groups?.length === 1
-                        ? 'No mismatches detected'
-                        : x}
+                      {x.replace(/./, (c) => c.toUpperCase())}
                     </span>
                   ))
                 ) : (
-                  <span>No mismatches detected</span>
+                  <span>Whole table</span>
                 )}
               </section>
             </a>

@@ -80,7 +80,6 @@ export const EditProfilingReferenceTable2 = ({
     useState(false);
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [parameters, setParameters] = useState<TParameters>({});
 
   const onChangeParameters = (obj: Partial<TParameters>) => {
@@ -146,11 +145,9 @@ export const EditProfilingReferenceTable2 = ({
         }
       });
     } else {
-      console.log('else');
       onChange({ compare_column_count: reference?.default_compare_thresholds });
     }
     //cCompareThreshholdsModel in java fatal returns null
-    console.log('checks');
   };
 
   const handleChange = async (value: CheckContainerModel) => {
@@ -321,35 +318,44 @@ export const EditProfilingReferenceTable2 = ({
   }, [showColumnCount, showRowCount]);
 
   const getResultsData = async () => {
-    if (isCreating === false) {
-      if (checkTypes === 'profiling') {
-        await TableComparisonResultsApi.getTableComparisonProfilingResults(
-          connection,
-          schema,
-          table,
-          selectedReference ?? ''
-        ).then((res) => setTableComparisonResults(res.data));
-      } else if (checkTypes === 'monitoring') {
-        await TableComparisonResultsApi.getTableComparisonMonitoringResults(
-          connection,
-          schema,
-          table,
-          timePartitioned === 'daily' ? 'daily' : 'monthly',
-          selectedReference ?? ''
-        ).then((res) => setTableComparisonResults(res.data));
-      } else if (checkTypes === 'partitioned') {
-        await TableComparisonResultsApi.getTableComparisonPartitionedResults(
-          connection,
-          schema,
-          table,
-          timePartitioned === 'daily' ? 'daily' : 'monthly',
-          selectedReference ?? ''
-        ).then((res) => setTableComparisonResults(res.data));
-      }
+    if (checkTypes === 'profiling') {
+      await TableComparisonResultsApi.getTableComparisonProfilingResults(
+        connection,
+        schema,
+        table,
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+    } else if (checkTypes === 'monitoring') {
+      await TableComparisonResultsApi.getTableComparisonMonitoringResults(
+        connection,
+        schema,
+        table,
+        timePartitioned === 'daily' ? 'daily' : 'monthly',
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+    } else if (checkTypes === 'partitioned') {
+      await TableComparisonResultsApi.getTableComparisonPartitionedResults(
+        connection,
+        schema,
+        table,
+        timePartitioned === 'daily' ? 'daily' : 'monthly',
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
     }
   };
 
   const compareTables = async () => {
+    onUpdate(
+      connection,
+      schema,
+      table,
+      checkTypes,
+      timePartitioned,
+      reference,
+      handleChange,
+      checksUI
+    );
+    setIsUpdated(false);
     try {
       const res = await JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: categoryCheck
@@ -390,21 +396,17 @@ export const EditProfilingReferenceTable2 = ({
   const disabled =
     job &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
-    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed;
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.cancelled;
 
   useEffect(() => {
     if (
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
-      console.log('13');
       getResultsData();
     }
   }, [job?.status]);
-
-  useEffect(() => {
-    getResultsData();
-  }, [isDataDeleted]);
 
   const columnKey = Object.keys(
     tableComparisonResults?.table_comparison_results ?? []

@@ -19,12 +19,12 @@ interface TableRowProps {
     disabled?: boolean,
     severity?: TSeverityValues
   ) => void;
-  checksUI: any; // Replace any with your actual data type
+  checksUI: any;
   setIsUpdated: React.Dispatch<React.SetStateAction<boolean>>;
-  tableComparisonResults: any; // Replace any with your actual data type
+  tableComparisonResults: any;
   showColumnCount: boolean;
-  reference: any; // Replace any with your actual data type
-  checkTypes: any; // Replace any with your actual data type
+  reference: any;
+  checkTypes: any;
 }
 
 const TableRow: React.FC<TableRowProps> = ({
