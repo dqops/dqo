@@ -104,6 +104,16 @@ public class CheckResultsDataServiceImpl implements CheckResultsDataService {
                 (ruleResultsTable != null ? errorsTable.append(ruleResultsTable) : errorsTable) :
                 ruleResultsTable;
 
+        if (!Strings.isNullOrEmpty(loadParameters.getCheckName())) {
+            TextColumn checkNameColumn = combinedTable.textColumn(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
+            combinedTable = combinedTable.where(checkNameColumn.isEqualTo(loadParameters.getCheckName()));
+        }
+
+        if (!Strings.isNullOrEmpty(loadParameters.getCategory())) {
+            TextColumn categoryColumn = combinedTable.textColumn(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
+            combinedTable = combinedTable.where(categoryColumn.isEqualTo(loadParameters.getCategory()));
+        }
+
         if (combinedTable == null) {
             return new CheckResultsOverviewDataModel[0]; // empty array
         }

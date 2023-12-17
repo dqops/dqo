@@ -4031,6 +4031,18 @@
           "required" : true,
           "type" : "string",
           "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -4942,6 +4954,18 @@
           "required" : true,
           "type" : "string",
           "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -5686,6 +5710,18 @@
           "in" : "path",
           "description" : "Column name",
           "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "required" : false,
           "type" : "string"
         } ],
         "responses" : {
@@ -7455,6 +7491,18 @@
           "required" : true,
           "type" : "string",
           "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -8355,6 +8403,18 @@
           "required" : true,
           "type" : "string",
           "enum" : [ "daily", "monthly" ]
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "required" : false,
+          "type" : "string"
         } ],
         "responses" : {
           "200" : {
@@ -9205,6 +9265,18 @@
           "in" : "path",
           "description" : "Table name",
           "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "required" : false,
           "type" : "string"
         } ],
         "responses" : {

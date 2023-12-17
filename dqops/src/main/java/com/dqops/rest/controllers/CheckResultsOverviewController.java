@@ -37,6 +37,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.util.Optional;
+
 /**
  * Controller that returns the overview of the recent results and errors on tables and columns.
  */
@@ -65,6 +67,9 @@ public class CheckResultsOverviewController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
+     * @param principal      Principal that identifies the calling user.
+     * @param category       Optional check category filter.
+     * @param checkName      Optional check name filter.
      * @return Overview of the most recent check results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/overview", produces = "application/json")
@@ -85,7 +90,11 @@ public class CheckResultsOverviewController {
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName) {
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam(name = "category", value = "Optional check category", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -108,8 +117,12 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
 
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setCategory(category.orElse(null));
+        checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
-                checks, new CheckResultsOverviewParameters(), principal.getDataDomainIdentity());
+                checks, checkResultsOverviewParameters, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -119,6 +132,9 @@ public class CheckResultsOverviewController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
+     * @param principal      Principal that identifies the calling user.
+     * @param category       Optional check category filter.
+     * @param checkName      Optional check name filter.
      * @return Overview of the most recent monitoring results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/overview", produces = "application/json")
@@ -140,7 +156,11 @@ public class CheckResultsOverviewController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(name = "category", value = "Optional check category", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -163,8 +183,12 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
 
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setCategory(category.orElse(null));
+        checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
-                checkRootContainer, new CheckResultsOverviewParameters(), principal.getDataDomainIdentity());
+                checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -174,6 +198,9 @@ public class CheckResultsOverviewController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
+     * @param principal      Principal that identifies the calling user.
+     * @param category       Optional check category filter.
+     * @param checkName      Optional check name filter.
      * @return Overview of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/overview", produces = "application/json")
@@ -195,7 +222,11 @@ public class CheckResultsOverviewController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(name = "category", value = "Optional check category", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -218,8 +249,12 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
 
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setCategory(category.orElse(null));
+        checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
-                checkRootContainer, new CheckResultsOverviewParameters(), principal.getDataDomainIdentity());
+                checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -229,6 +264,9 @@ public class CheckResultsOverviewController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
+     * @param principal      Principal that identifies the calling user.
+     * @param category       Optional check category filter.
+     * @param checkName      Optional check name filter.
      * @return Overview of the most recent check results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/overview", produces = "application/json")
@@ -250,7 +288,11 @@ public class CheckResultsOverviewController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Column name") @PathVariable String columnName) {
+            @ApiParam("Column name") @PathVariable String columnName,
+            @ApiParam(name = "category", value = "Optional check category", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -278,8 +320,12 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setCategory(category.orElse(null));
+        checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
-                checks, new CheckResultsOverviewParameters(), principal.getDataDomainIdentity());
+                checks, checkResultsOverviewParameters, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -290,6 +336,9 @@ public class CheckResultsOverviewController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
+     * @param principal      Principal that identifies the calling user.
+     * @param category       Optional check category filter.
+     * @param checkName      Optional check name filter.
      * @return Overview of the most recent monitoring results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/overview", produces = "application/json")
@@ -312,7 +361,11 @@ public class CheckResultsOverviewController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(name = "category", value = "Optional check category", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -340,8 +393,12 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setCategory(category.orElse(null));
+        checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
-                checkRootContainer, new CheckResultsOverviewParameters(), principal.getDataDomainIdentity());
+                checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 
@@ -352,6 +409,9 @@ public class CheckResultsOverviewController {
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
+     * @param principal      Principal that identifies the calling user.
+     * @param category       Optional check category filter.
+     * @param checkName      Optional check name filter.
      * @return Overview of the most recent partitioned checks results.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/overview", produces = "application/json")
@@ -374,7 +434,11 @@ public class CheckResultsOverviewController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale) {
+            @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
+            @ApiParam(name = "category", value = "Optional check category", required = false)
+            @RequestParam(required = false) Optional<String> category,
+            @ApiParam(name = "checkName", value = "Optional check name", required = false)
+            @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -402,8 +466,12 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
+        CheckResultsOverviewParameters checkResultsOverviewParameters = new CheckResultsOverviewParameters();
+        checkResultsOverviewParameters.setCategory(category.orElse(null));
+        checkResultsOverviewParameters.setCheckName(checkName.orElse(null));
+
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
-                checkRootContainer, new CheckResultsOverviewParameters(), principal.getDataDomainIdentity());
+                checkRootContainer, checkResultsOverviewParameters, principal.getDataDomainIdentity());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
 }
