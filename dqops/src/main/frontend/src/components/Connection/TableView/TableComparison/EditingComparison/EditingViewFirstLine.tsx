@@ -9,6 +9,8 @@ import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../../../shared/routes';
 import { TableComparisonConfigurationModelCheckTypeEnum } from '../../../../../api';
 import { getIsButtonEnabled } from '../TableComparisonUtils';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../../../../redux/reducers';
 type TEditingViewFirstLine = {
   editConfigurationParameters: TParameters;
   selectedReference: string;
@@ -46,6 +48,7 @@ export default function EditingViewFirstLine({
     table: string;
   } = useParams();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const onUpdate = async () => {
     await TableComparisonsApi.updateTableComparisonConfiguration(
       connection,
@@ -87,7 +90,7 @@ export default function EditingViewFirstLine({
           <Button
             color="primary"
             variant="contained"
-            disabled={disabled}
+            disabled={disabled || userProfile.can_manage_data_sources !== true}
             label="Delete results"
             onClick={() => setDeleteDataDialogOpened(true)}
           />
@@ -103,7 +106,7 @@ export default function EditingViewFirstLine({
             color="primary"
             variant="contained"
             onClick={compareTables}
-            disabled={disabled}
+            disabled={disabled || userProfile.can_run_checks !== true}
           />
           <Button
             onClick={onUpdate}
@@ -112,7 +115,8 @@ export default function EditingViewFirstLine({
             className="w-40"
             disabled={
               isUpdated === false ||
-              getIsButtonEnabled(editConfigurationParameters) === false
+              getIsButtonEnabled(editConfigurationParameters) === false ||
+              userProfile.can_manage_data_sources !== true
             }
           />
           <Button

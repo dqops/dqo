@@ -18,6 +18,7 @@ import { getFirstLevelActiveTab } from '../../../../../redux/selectors';
 import { TableComparisonsApi } from '../../../../../services/apiClient';
 import { getIsButtonEnabled } from '../TableComparisonUtils';
 import clsx from 'clsx';
+import { IRootState } from '../../../../../redux/reducers';
 
 type TFirstLevelConfiguretion = {
   editConfigurationParameters: TParameters;
@@ -52,6 +53,7 @@ export default function FirstLineNameConfiguration({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [comparisonAlreadyExist, setComparisonAlreadyExist] = useState(false);
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const onCreate = async () => {
     if (
@@ -240,7 +242,10 @@ export default function FirstLineNameConfiguration({
           label="Save"
           color="primary"
           className="w-40"
-          disabled={!getIsButtonEnabled(editConfigurationParameters)}
+          disabled={
+            !getIsButtonEnabled(editConfigurationParameters) ||
+            userProfile.can_manage_data_sources !== true
+          }
         />
         <Button
           label="Back"
