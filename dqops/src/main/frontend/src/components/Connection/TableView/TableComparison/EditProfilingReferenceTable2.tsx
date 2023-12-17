@@ -1,13 +1,12 @@
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
-import SvgIcon from '../../../SvgIcon';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ColumnApiClient,
   TableComparisonResultsApi,
   JobApiClient,
   TableComparisonsApi
 } from '../../../../services/apiClient';
-import { CheckTypes, ROUTES } from '../../../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../../shared/routes';
+import { useParams } from 'react-router-dom';
 import {
   CompareThresholdsModel,
   TableComparisonModel,
@@ -17,28 +16,18 @@ import {
   CheckContainerModel
 } from '../../../../api';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
-import Checkbox from '../../../Checkbox';
 import { Option } from '../../../Select';
-import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
-import clsx from 'clsx';
-import EditReferenceTable from './EditReferenceTable';
-import useConnectionSchemaTableExists from '../../../../hooks/useConnectionSchemaTableExists';
 import { setUpdatedChecksModel } from '../../../../redux/actions/table.actions';
-import { Tooltip } from '@material-tailwind/react';
 import {
   EditProfilingReferenceTableProps,
   TSeverityValues,
   checkNames
 } from './TableComparisonConstans';
-import {
-  calculateColor,
-  onUpdate,
-  validate404Status
-} from './TableComparisonUtils';
+import { onUpdate, validate404Status } from './TableComparisonUtils';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import TableLevelResults from './TableLevelResults';
 import SeverityInputBlock from './SeverityInputBlock';
@@ -89,7 +78,6 @@ export const EditProfilingReferenceTable2 = ({
     useState<TableComparisonResultsModel>();
   const [tableLevelComparisonExtended, settableLevelComparisonExtended] =
     useState(false);
-  const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [isDataDeleted, setIsDataDeleted] = useState(false);
@@ -101,22 +89,6 @@ export const EditProfilingReferenceTable2 = ({
       ...obj
     }));
   };
-
-  // const { tableExist, schemaExist, connectionExist } =
-  //   useConnectionSchemaTableExists(
-  //     reference?.reference_connection ?? '',
-  //     reference?.reference_table?.schema_name ?? '',
-  //     reference?.reference_table?.table_name ?? ''
-  //   );
-
-  const onChangeIsDataDeleted = (arg: boolean): void => {
-    setIsDataDeleted(arg);
-  };
-
-  // const onChangeUpdatedParent = (variable: boolean): void => {
-  //   setIsUpdated(variable);
-  // };
-
   const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
     if (!checksUI) {
@@ -134,18 +106,12 @@ export const EditProfilingReferenceTable2 = ({
       return;
     }
 
-    const rowCountElem = comparisonCategory.checks.find(
-      (c: any) =>
-        c.check_name === 'profile_row_count_match' ||
-        c.check_name === 'daily_row_count_match' ||
-        c.check_name === 'monthly_row_count_match'
+    const rowCountElem = comparisonCategory.checks.find((c: any) =>
+      c.check_name.includes('row_count_match')
     );
 
-    const columnCountElem = comparisonCategory.checks.find(
-      (c: any) =>
-        c.check_name === 'profile_column_count_match' ||
-        c.check_name === 'daily_column_count_match' ||
-        c.check_name === 'monthly_column_count_match'
+    const columnCountElem = comparisonCategory.checks.find((c: any) =>
+      c.check_name.includes('column_count_match')
     );
 
     if (rowCountElem) {
@@ -154,6 +120,37 @@ export const EditProfilingReferenceTable2 = ({
     if (columnCountElem) {
       setShowColumnCount(!!columnCountElem.configured);
     }
+    if (rowCountElem.configured === true) {
+      onChange({
+        compare_row_count: {
+          warning_difference_percent:
+            rowCountElem.rule.warning.rule_parameters[0].double_value,
+          error_difference_percent:
+            rowCountElem.rule.error.rule_parameters[0].double_value,
+          fatal_difference_percent:
+            rowCountElem.rule.fatal.rule_parameters[0].double_value
+        }
+      });
+    } else {
+      onChange({ compare_row_count: reference?.default_compare_thresholds });
+    }
+    if (columnCountElem.configured === true) {
+      onChange({
+        compare_column_count: {
+          warning_difference_percent:
+            columnCountElem.rule.warning.rule_parameters[0].double_value,
+          error_difference_percent:
+            columnCountElem.rule.error.rule_parameters[0].double_value,
+          fatal_difference_percent:
+            columnCountElem.rule.fatal.rule_parameters[0].double_value
+        }
+      });
+    } else {
+      console.log('else');
+      onChange({ compare_column_count: reference?.default_compare_thresholds });
+    }
+    //cCompareThreshholdsModel in java fatal returns null
+    console.log('checks');
   };
 
   const handleChange = async (value: CheckContainerModel) => {
@@ -197,24 +194,36 @@ export const EditProfilingReferenceTable2 = ({
         setShowColumnCount(disabled);
       }
     }
+    selectedCheck.rule.warning.configured = true;
+    selectedCheck.rule.error.configured = true;
     if (severity) {
       if (severity.warning) {
+        selectedCheck.rule.warning.configured = true;
         selectedCheck.rule.warning.rule_parameters[0].double_value =
           severity.warning;
-        selectedCheck.rule.warning.configured = true;
       }
       if (severity.error) {
+        selectedCheck.rule.error.configured = true;
         selectedCheck.rule.error.rule_parameters[0].double_value =
           severity.error;
-        selectedCheck.rule.error.configured = true;
       }
       if (severity.fatal) {
+        selectedCheck.rule.fatal.configured = true;
         selectedCheck.rule.fatal.rule_parameters[0].double_value =
           severity.fatal;
-        selectedCheck.rule.fatal.configured = true;
       }
     }
-    // setIsUpdated(true);
+    if (reference?.compare_row_count === undefined) {
+      onChange({
+        compare_row_count: reference?.default_compare_thresholds
+      });
+    }
+    if (reference?.compare_column_count === undefined) {
+      onChange({
+        compare_column_count: reference?.default_compare_thresholds
+      });
+    }
+    setIsUpdated(true);
   };
 
   useEffect(() => {
@@ -268,67 +277,6 @@ export const EditProfilingReferenceTable2 = ({
     }
   }, [selectedReference]);
 
-  //   useEffect(() => {
-  //     if (
-  //       reference !== undefined &&
-  //       isCreating === false &&
-  //       connectionExist === true &&
-  //       schemaExist === true &&
-  //       tableExist === true &&
-  //       reference.reference_connection?.length !== 0 &&
-  //       reference.reference_table?.schema_name?.length !== 0 &&
-  //       reference.reference_table?.table_name?.length !== 0
-  //     ) {
-  //       ColumnApiClient.getColumns(
-  //         reference.reference_connection ?? '',
-  //         reference.reference_table?.schema_name ?? '',
-  //         reference.reference_table?.table_name ?? ''
-  //       )?.then((columnRes) => {
-  //         if (
-  //           columnRes &&
-  //           columnRes.data.length !== 0 &&
-  //           Array.isArray(columnRes.data)
-  //         ) {
-  //           setColumnOptions(
-  //             columnRes.data.map((item) => ({
-  //               label: item.column_name ?? '',
-  //               value: item.column_name ?? ''
-  //             }))
-  //           );
-  //         }
-  //       });
-  //     } else if (
-  //       parameters.refConnection &&
-  //       parameters.refSchema &&
-  //       parameters.refTable &&
-  //       ((connectionExist === true &&
-  //         schemaExist === true &&
-  //         tableExist === true) ||
-  //         isCreating === true)
-  //     ) {
-  //       ColumnApiClient.getColumns(
-  //         parameters.refConnection,
-  //         parameters.refSchema,
-  //         parameters.refTable
-  //       )?.then((columnRes) => {
-  //         setColumnOptions(
-  //           columnRes.data.map((item) => ({
-  //             label: item.column_name ?? '',
-  //             value: item.column_name ?? ''
-  //           }))
-  //         );
-  //       });
-  //     }
-  //   }, [
-  //     selectedReference,
-  //     tableExist,
-  //     schemaExist,
-  //     connectionExist,
-  //     reference?.reference_connection,
-  //     reference?.reference_table,
-  //     parameters.refTable
-  //   ]);
-
   const onChange = (obj: Partial<TableComparisonModel>): void => {
     setReference({
       ...(reference || {}),
@@ -343,7 +291,6 @@ export const EditProfilingReferenceTable2 = ({
         ...obj
       }
     });
-    // setIsUpdated(true);
   };
 
   const onChangeCompareColumnCount = (obj: Partial<CompareThresholdsModel>) => {
@@ -353,21 +300,25 @@ export const EditProfilingReferenceTable2 = ({
         ...obj
       }
     });
-    // setIsUpdated(true);
   };
 
   useEffect(() => {
-    if (showRowCount) {
-      onChange({
-        compare_row_count: reference?.default_compare_thresholds
-      });
+    const updatedReference: TableComparisonModel = {};
+
+    if (showRowCount && reference?.compare_row_count === undefined) {
+      updatedReference.compare_row_count =
+        reference?.default_compare_thresholds;
     }
-    if (showColumnCount) {
-      onChange({
-        compare_column_count: reference?.default_compare_thresholds
-      });
+
+    if (showColumnCount && reference?.compare_column_count === undefined) {
+      updatedReference.compare_column_count =
+        reference?.default_compare_thresholds;
     }
-  }, [showRowCount, showColumnCount]);
+
+    if (Object.keys(updatedReference).length > 0) {
+      onChange(updatedReference);
+    }
+  }, [showColumnCount, showRowCount]);
 
   const getResultsData = async () => {
     if (isCreating === false) {
@@ -590,32 +541,22 @@ export const EditProfilingReferenceTable2 = ({
           }
           deleteData={deleteData}
           onBack={onBack}
-          //   onChange={onChange}
           onChangeIsUpdated={(isUpdated: boolean) => setIsUpdated(isUpdated)}
           isUpdated={isUpdated}
           selectedReference={selectedReference}
-          //   isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
           editConfigurationParameters={parameters}
           onChangeParameters={onChangeParameters}
           compareTables={compareTables}
           disabled={disabled}
-          //   isCreating={isCreating}
-          //   goToRefTable={() => goToRefTable(reference)}
-          //   onChangeUpdatedParent={onChangeUpdatedParent}
           setConfigurationToEditing={(name: string) => {
             onChangeSelectedReference(name), getNewTableComparison();
           }}
-          //   cleanDataTemplate={reference?.compare_table_clean_data_job_template}
-          //   onChangeIsDataDeleted={onChangeIsDataDeleted}
-          //   isDataDeleted={isDataDeleted}
           existingTableComparisonConfigurations={listOfExistingReferences}
-          //   canUserCompareTables={canUserCompareTables}
           columnOptions={{
             comparedColumnsOptions: comparedColumnOptions ?? [],
             referencedColumnsOptions: columnOptions
           }}
-          //   onChangeParameters={onChangeParameters}
         />
       </div>
       {reference &&

@@ -1,19 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import FirstLineNameConfiguration from './CreatingComparison/FirstLineNameConfiguration';
 import EditingViewFirstLine from './EditingComparison/EditingViewFirstLine';
-import { useParams } from 'react-router-dom';
-import { CheckTypes } from '../../../../shared/routes';
-import { useSelector } from 'react-redux';
-import { getFirstLevelActiveTab } from '../../../../redux/selectors';
-import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import SelectConnectionSchemaTableOverlook from './EditingComparison/SelectConnectionSchemaTableOverlook';
 import SelectConnectionSchemaTable from './CreatingComparison/SelectConnectionSchemaTable';
 import { TParameters } from '../../../../shared/constants';
 import { Option } from '../../../Select';
 import SelectColumnGrouping from './CreatingComparison/SelectColumnGrouping';
-import { TableComparisonGroupingColumnPairModel } from '../../../../api';
 import SelectColumnGroupingOverlook from './EditingComparison/SelectColumnGroupingOverlook';
-import { TableComparisonsApi } from '../../../../services/apiClient';
 
 type TEditReferenceTable = {
   selectedReference?: string;
@@ -51,23 +44,9 @@ export default function EditReferenceTable2({
   deleteData,
   disabled
 }: TEditReferenceTable) {
-  const {
-    checkTypes,
-    connection,
-    schema,
-    table
-  }: {
-    checkTypes: CheckTypes;
-    connection: string;
-    schema: string;
-    table: string;
-  } = useParams();
-  const dispatch = useActionDispatch();
-  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [editConnectionSchemaTable, setEditConnectionSchemaTable] =
     useState(false);
   const [editColumnGrouping, setEditColumnGrouping] = useState(false);
-  const [comparisonAlreadyExist, setComparisonAlreadyExist] = useState(false);
 
   const onChangeName = (name: string) => {
     onChangeParameters({ name: name });
@@ -81,24 +60,11 @@ export default function EditReferenceTable2({
     setEditConnectionSchemaTable(open);
   };
 
-  useEffect(() => {
-    if (
-      editConfigurationParameters.refConnection === undefined ||
-      editConfigurationParameters.refSchema === undefined ||
-      editConfigurationParameters.refTable === undefined
-    ) {
-      setEditConnectionSchemaTable(true);
-    }
-  }, [editConfigurationParameters]);
-  console.log(editConfigurationParameters);
   return (
     <div className="w-full ">
       <div className="w-full">
         {selectedReference ? (
           <EditingViewFirstLine
-            onChangeEditConnectionSchemaTable={
-              onChangeEditConnectionSchemaTable
-            }
             editConfigurationParameters={editConfigurationParameters}
             onBack={onBack}
             onUpdateChecks={onUpdateChecks}

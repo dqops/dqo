@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import SectionWrapper from '../../../../Dashboard/SectionWrapper';
 import { TParameters } from '../../../../../shared/constants';
 import Select, { Option } from '../../../../Select';
 import {
   ConnectionApiClient,
   SchemaApiClient,
-  TableApiClient,
-  TableComparisonsApi
+  TableApiClient
 } from '../../../../../services/apiClient';
-import { table } from 'console';
-import useConnectionSchemaTableExists from '../../../../../hooks/useConnectionSchemaTableExists';
 import clsx from 'clsx';
 
 type TSelectConnectionSchemaTable = {
@@ -27,12 +24,6 @@ export default function SelectConnectionSchemaTable({
   const [schemaOptions, setSchemaOptions] = useState<Option[]>([]);
   const [tableOptions, setTableOptions] = useState<Option[]>([]);
 
-  // const { tableExist, schemaExist, connectionExist } =
-  //   useConnectionSchemaTableExists(
-  //     editConfigurationParameters.refConnection ?? '',
-  //     editConfigurationParameters.refSchema ?? '',
-  //     editConfigurationParameters.refTable ?? ''
-  //   );
   useEffect(() => {
     ConnectionApiClient.getAllConnections().then((res) => {
       setConnectionOptions(
@@ -85,6 +76,30 @@ export default function SelectConnectionSchemaTable({
     editConfigurationParameters.refSchema
   ]);
 
+  const isConnectionValid = useMemo(
+    () =>
+      connectionOptions.some(
+        (x) => x.value === editConfigurationParameters.refConnection
+      ),
+    [connectionOptions, editConfigurationParameters.refConnection]
+  );
+
+  const isSchemaValid = useMemo(
+    () =>
+      schemaOptions.some(
+        (x) => x.value === editConfigurationParameters.refSchema
+      ),
+    [schemaOptions, editConfigurationParameters.refSchema]
+  );
+
+  const isTableValid = useMemo(
+    () =>
+      tableOptions.some(
+        (x) => x.value === editConfigurationParameters.refTable
+      ),
+    [tableOptions, editConfigurationParameters.refTable]
+  );
+
   return (
     <SectionWrapper
       title="Reference table (the source of truth)"
@@ -97,10 +112,7 @@ export default function SelectConnectionSchemaTable({
         <Select
           className={clsx(
             'flex-1',
-            editConfigurationParameters.refConnection &&
-              editConfigurationParameters?.refConnection?.length > 0
-              ? ''
-              : 'border border-red-500'
+            isConnectionValid ? '' : 'border border-red-500'
           )}
           options={connectionOptions}
           value={editConfigurationParameters.refConnection}
@@ -109,7 +121,6 @@ export default function SelectConnectionSchemaTable({
               refConnection: selectedOption
             });
           }}
-          // triggerClassName={connectionExist ? '' : 'border border-red-500'}
         />
       </div>
       <div className="flex flex-col gap-2  w-1/3 mb-3 mr-4">
@@ -117,10 +128,7 @@ export default function SelectConnectionSchemaTable({
         <Select
           className={clsx(
             'flex-1',
-            editConfigurationParameters.refSchema &&
-              editConfigurationParameters?.refSchema?.length > 0
-              ? ''
-              : 'border border-red-500'
+            isSchemaValid ? '' : 'border border-red-500'
           )}
           options={schemaOptions}
           value={editConfigurationParameters.refSchema}
@@ -129,7 +137,6 @@ export default function SelectConnectionSchemaTable({
               refSchema: selectedOption
             })
           }
-          // triggerClassName={schemaExist ? '' : 'border border-red-500'}
         />
       </div>
       <div className="flex flex-col gap-2 w-1/3 mb-3">
@@ -137,10 +144,7 @@ export default function SelectConnectionSchemaTable({
         <Select
           className={clsx(
             'flex-1',
-            editConfigurationParameters.refTable &&
-              editConfigurationParameters?.refTable?.length > 0
-              ? ''
-              : 'border border-red-500'
+            isTableValid ? '' : 'border border-red-500'
           )}
           options={tableOptions}
           value={editConfigurationParameters.refTable}
@@ -149,7 +153,6 @@ export default function SelectConnectionSchemaTable({
               refTable: selectedOption
             })
           }
-          // triggerClassName={tableExist ? '' : 'border border-red-500'}
         />
       </div>
     </SectionWrapper>
