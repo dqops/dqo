@@ -26,6 +26,7 @@ type TFirstLevelConfiguretion = {
   timePartitioned?: 'daily' | 'monthly';
   existingTableComparisonConfigurations: (string | undefined)[];
   setConfigurationToEditing: (name: string) => void;
+  onChangeIsUpdated: (isUpdated: boolean) => void;
 };
 
 export default function FirstLineNameConfiguration({
@@ -34,7 +35,8 @@ export default function FirstLineNameConfiguration({
   onBack,
   timePartitioned,
   existingTableComparisonConfigurations,
-  setConfigurationToEditing
+  setConfigurationToEditing,
+  onChangeIsUpdated
 }: TFirstLevelConfiguretion) {
   const {
     checkTypes,
@@ -204,6 +206,7 @@ export default function FirstLineNameConfiguration({
       onBack(false);
       setConfigurationToEditing(editConfigurationParameters.name ?? '');
       setComparisonAlreadyExist(false);
+      onChangeIsUpdated(false);
     }
   };
 

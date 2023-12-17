@@ -120,6 +120,7 @@ export default function EditReferenceTable2({
               existingTableComparisonConfigurations
             }
             setConfigurationToEditing={setConfigurationToEditing}
+            onChangeIsUpdated={onChangeIsUpdated}
           />
         )}
       </div>

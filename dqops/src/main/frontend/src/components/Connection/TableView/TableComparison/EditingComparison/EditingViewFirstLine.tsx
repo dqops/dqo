@@ -151,6 +151,7 @@ export default function EditingViewFirstLine({
     onChangeIsUpdated(false);
     onUpdateChecks();
   };
+  console.log(isUpdated, getIsButtonEnabled(editConfigurationParameters));
 
   return (
     <div>
@@ -209,6 +210,9 @@ export default function EditingViewFirstLine({
         onDelete={(params: { [key: string]: string | boolean }) => {
           deleteData(params), setDeleteDataDialogOpened(false);
         }}
+        hierarchiArray={(connection + '.' + schema + '.' + table).split('.')}
+        selectedReference={selectedReference}
+        checkTypes={checkTypes}
       />
     </div>
   );
