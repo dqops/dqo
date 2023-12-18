@@ -80,6 +80,7 @@ const TablePartitionedChecksUIFilterView = () => {
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
+          isFiltered = {true}
         />
       </div>
     </ConnectionLayout>
