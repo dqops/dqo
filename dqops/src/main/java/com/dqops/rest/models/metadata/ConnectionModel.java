@@ -18,6 +18,7 @@ package com.dqops.rest.models.metadata;
 import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -133,6 +134,12 @@ public class ConnectionModel {
     private SparkParametersSpec spark;
 
     /**
+     * Databricks connection parameters.
+     */
+    @JsonPropertyDescription("Databricks connection parameters.")
+    private DatabricksParametersSpec databricks;
+
+    /**
      * Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this connection.
      */
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
@@ -226,6 +233,7 @@ public class ConnectionModel {
             setMysql(connectionSpec.getMysql());
             setOracle(connectionSpec.getOracle());
             setSpark(connectionSpec.getSpark());
+            setDatabricks(connectionSpec.getDatabricks());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);
@@ -289,6 +297,7 @@ public class ConnectionModel {
         targetConnectionSpec.setMysql(this.getMysql());
         targetConnectionSpec.setOracle(this.getOracle());
         targetConnectionSpec.setSpark(this.getSpark());
+        targetConnectionSpec.setDatabricks(this.getDatabricks());
     }
 
     public static class ConnectionModelSampleFactory implements SampleValueFactory<ConnectionModel> {

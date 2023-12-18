@@ -37,6 +37,7 @@ import OracleConnection from './OracleConnection';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
 import SparkConnection from './SparkConnection';
+import DatabricksConnection from './DatabricksConnection';
 import clsx from 'clsx';
 
 interface IDatabaseConnectionProps {
@@ -248,6 +249,13 @@ const DatabaseConnection = ({
       <SparkConnection
         spark={database.spark}
         onChange={(spark) => onChange({ ...database, spark })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.databricks]: (
+      <DatabricksConnection
+      databricks={database.databricks}
+        onChange={(databricks) => onChange({ ...database, databricks })}
         sharedCredentials={sharedCredentials}
       />
     )
