@@ -207,6 +207,12 @@ public class PrestoConnectionProvider extends AbstractSqlConnectionProvider {
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
         StringBuilder formattedConstant = new StringBuilder();
+
+        if (constant instanceof Boolean) {
+            Boolean asBoolean = (Boolean)constant;
+            return asBoolean ? "true" : "false";
+        }
+
         if (StringCheckUtility.equalsAny(columnType.getColumnType(), "DATE", "TIME", "TIMESTAMP")) {
             formattedConstant.append( columnType.getColumnType().toLowerCase());
             formattedConstant.append(" ");
@@ -215,4 +221,5 @@ public class PrestoConnectionProvider extends AbstractSqlConnectionProvider {
         formattedConstant.append(super.formatConstant(constant, columnType));
         return formattedConstant.toString();
     }
+
 }
