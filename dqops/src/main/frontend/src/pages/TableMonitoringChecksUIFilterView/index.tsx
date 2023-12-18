@@ -79,6 +79,7 @@ const TableMonitoringChecksUIFilterView = () => {
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
           loading={loading}
+          isFiltered = {true}
         />
       </div>
     </ConnectionLayout>
