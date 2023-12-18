@@ -38,30 +38,6 @@ const ScheduleDetail = ({ isDefault }: { isDefault?: boolean }) => {
           }
         ];
       }
-      case CheckTypes.SOURCES: {
-        return [
-          {
-            label: 'Profiling',
-            value: CheckRunMonitoringScheduleGroup.profiling
-          },
-          {
-            label: 'Monitoring Daily',
-            value: CheckRunMonitoringScheduleGroup.monitoring_daily
-          },
-          {
-            label: 'Monitoring Monthly',
-            value: CheckRunMonitoringScheduleGroup.monitoring_monthly
-          },
-          {
-            label: 'Partition Daily',
-            value: CheckRunMonitoringScheduleGroup.partitioned_daily
-          },
-          {
-            label: 'Partition Monthly',
-            value: CheckRunMonitoringScheduleGroup.partitioned_monthly
-          }
-        ];
-      }
       case CheckTypes.PARTITIONED: {
         return [
           {
@@ -83,6 +59,30 @@ const ScheduleDetail = ({ isDefault }: { isDefault?: boolean }) => {
           {
             label: 'Monitoring Monthly',
             value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+          }
+        ];
+      }
+      default: {
+        return [
+          {
+            label: 'Profiling',
+            value: CheckRunMonitoringScheduleGroup.profiling
+          },
+          {
+            label: 'Monitoring Daily',
+            value: CheckRunMonitoringScheduleGroup.monitoring_daily
+          },
+          {
+            label: 'Monitoring Monthly',
+            value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+          },
+          {
+            label: 'Partition Daily',
+            value: CheckRunMonitoringScheduleGroup.partitioned_daily
+          },
+          {
+            label: 'Partition Monthly',
+            value: CheckRunMonitoringScheduleGroup.partitioned_monthly
           }
         ];
       }
