@@ -130,7 +130,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     
     Below you can see the results displayed on the **KPIs per table - summary** dashboard located in the Data quality KPIs group.
     This dashboard shows high-level data quality KPIs, aggregated on a macro scale that can be shared at a
-    corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../checks/index.md)
+    corporate level. DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../../dqo-concepts/checks/index.md)
     for each connection, schema, data grouping, etc. With this dashboard, senior management can review a summary of 
     KPIs per table
 
