@@ -455,9 +455,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.facebook.presto</groupId>
+			<groupId>io.prestosql</groupId>
 			<artifactId>presto-jdbc</artifactId>
-			<version>0.284</version>
+			<version>350</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
