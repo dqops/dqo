@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-package com.dqops.connectors.spark;
+package com.dqops.connectors.databricks;
 
-import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
-import com.dqops.utils.string.StringCheckUtility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -27,14 +24,14 @@ import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
 /**
- * Provider dialect settings that are specific to Spark.
+ * Provider dialect settings that are specific to Databricks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @Component
-public class SparkProviderDialectSettings extends ProviderDialectSettings {
-    public SparkProviderDialectSettings() {
+public class DatabricksProviderDialectSettings extends ProviderDialectSettings {
+    public DatabricksProviderDialectSettings() {
         super("`", "`", "`", true);
     }
 

@@ -518,6 +518,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<dependency>
+			<groupId>com.databricks</groupId>
+			<artifactId>databricks-jdbc</artifactId>
+			<version>2.6.25</version>
+			<scope>runtime</scope>
+		</dependency>
 
 		<!-- test dependencies -->
 		<dependency>
