@@ -211,12 +211,74 @@ spec:
 
 ## Grouping similar tables
 DQOps supports another scenario, when the data warehouse has similar tables (even with the same schema), that contain
-data from different data sources. The data quality sensor readouts (measures) and the data quality check results (measures
-evaluated by the rule engine) could be grouped, allowing to measure the data quality KPIs for all tables coming from the same
-source, for example from the same country.
+data from different data sources. 
+The data quality results captured from those tables could be tagged by the name of the data source, external vendor, or department.
+
+When the results are tagged, the values are stored in the sensor readout and rule result tables, keeping the data group names.
+The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps always have a filter
+for **data group**, allowing to deep-dive into data quality issues related to that source, or the data suppliers.
+
+Tagging data quality results becomes even more important when combined with [data quality KPIs](../data-quality-kpis/data-quality-kpis.md),
+because a separate data quality KPI score can be calculated for each data supplier, vendor, department, or any other data area.
+
+The tags are defined under the *level_1*, ..., *level_9* nodes as show below. 
+
+``` { .yaml .annotate linenums="1" hl_lines="11-12" }
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  default_grouping_name: by_supplier
+  groupings:
+    by_supplier:
+      level_1:
+        source: tag # (1)!
+        tag: US # (2)!
+      level_2:
+        source: tag
+        tag: "Supplier, Inc."
+  columns:
+    unique_key:
+      type_snapshot:
+        column_type: INT64
+        nullable: true
+```
+
+1.  The **source** value must be "tag".
+
+2.  The **tag** node contains a constant value.
 
 
-## Operating on multiple groups of data
+DQOps also supports mixing dynamic dimensions (using a column value added to the GROUP BY clause), and static tags.
+
+``` { .yaml .annotate linenums="1" hl_lines="11 14" }
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  default_grouping_name: by_supplier
+  groupings:
+    by_supplier:
+      level_1:
+        source: tag
+        tag: US
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    state:
+      type_snapshot:
+        column_type: STRING
+        nullable: false
+```
+
+
+## Data grouping as time series
+
 DQOps treats all data quality sensor readouts (metrics) and all data quality check results (rule evaluation results)
 as time series. Suppose that a table contains data from two countries and each group of data is identified by
 the value of the _country_ column value. The user enabled a **daily_row_count** check on the table.
@@ -232,53 +294,9 @@ group of data (the country in this example) as a separate data quality incident.
 The data quality dashboards in DQOps have a configuration parameter to select the data grouping for which we want to
 find the most recent data quality issues or calculate the data quality KPI.
 The [data quality KPI](../data-quality-kpis/data-quality-kpis.md) scores that is calculated for each data source (data grouping)
-simplify the root cause analysis by linking the data quality incident to a data source, a data group,
+simplify the root cause analysis by linking the data quality issue to a data source, a data group,
 an external data supplier, a data provider, or simply a separate data pipeline that has loaded invalid data.
 
-
-## Identifying data sources
-
-There are two ways to identify the data source in DQOps:
-
-- **Separate tables for each data source**. This is a simple case that can be solved by adding a tag with the name 
-of the data source. A [data quality KPI](../data-quality-kpis/data-quality-kpis.md) can be calculated from multiple 
-tables at once.
-
-Here is an example of data grouping configuration in the YAML file using a tag named 'UK':
-
-``` yaml hl_lines="7-11"
-apiVersion: dqo/v1
-kind: table
-spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  groupings:
-    by_country:
-      level_1:
-        source: tag
-        tag: UK
-```
-
-- **Multiple data sources aggregated into a single table**. Data from multiple sources can be aggregated in a single 
-table. If there is a column that identifies the data source, it can be used to assign the generated alerts and sensor 
-readouts to the correct data group. 
-
-Here is another example of the YAML file that uses a 'country' column to identify separate data groups by country.
-
-``` yaml  hl_lines="7-11"
-apiVersion: dqo/v1
-kind: table
-spec:
-  incremental_time_window:
-    daily_partitioning_recent_days: 7
-    monthly_partitioning_recent_months: 1
-  groupings:
-    by_country:
-      level_1:
-        source: column_value
-        column: country
-```
 
 ## Configuring data grouping in UI
 
