@@ -54,7 +54,9 @@ const ColumnProfilingChecksUIFilterView = () => {
       connectionName,
       schemaName,
       tableName,
-      columnName
+      columnName,
+      category,
+      checkName
     ).then((res) => {
       setCheckResultsOverview(res.data);
     });
