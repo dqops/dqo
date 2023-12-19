@@ -1,6 +1,6 @@
 # Checks/table/availability
 
-**This is a list of availability table checks in DQOps and a brief description of what they do.**
+**This is a list of availability table data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

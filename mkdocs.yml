@@ -314,6 +314,11 @@ nav:
         - min in range: 'checks/column/numeric/min-in-range.md'
         - mean in range: 'checks/column/numeric/mean-in-range.md'
         - percentile in range: 'checks/column/numeric/percentile-in-range.md'
+        - median in range: 'checks/column/numeric/median-in-range.md'
+        - percentile 10 in range: 'checks/column/numeric/percentile-10-in-range.md'
+        - percentile 25 in range: 'checks/column/numeric/percentile-25-in-range.md'
+        - percentile 75 in range: 'checks/column/numeric/percentile-75-in-range.md'
+        - percentile 90 in range: 'checks/column/numeric/percentile-90-in-range.md'
         - sample stddev in range: 'checks/column/numeric/sample-stddev-in-range.md'
         - population stddev in range: 'checks/column/numeric/population-stddev-in-range.md'
         - sample variance in range: 'checks/column/numeric/sample-variance-in-range.md'
@@ -394,6 +399,8 @@ nav:
         - change distinct percent since 7 days: 'checks/column/uniqueness/change-distinct-percent-since-7-days.md'
         - change distinct percent since 30 days: 'checks/column/uniqueness/change-distinct-percent-since-30-days.md'
         - change distinct percent since yesterday: 'checks/column/uniqueness/change-distinct-percent-since-yesterday.md'
+        - anomaly stationary distinct count 30 days: 'checks/column/uniqueness/anomaly-stationary-distinct-count-30-days.md'
+        - anomaly stationary distinct count: 'checks/column/uniqueness/anomaly-stationary-distinct-count.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY

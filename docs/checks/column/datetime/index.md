@@ -1,6 +1,6 @@
 # Checks/column/datetime
 
-**This is a list of datetime column checks in DQOps and a brief description of what they do.**
+**This is a list of datetime column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

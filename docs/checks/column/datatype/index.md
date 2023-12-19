@@ -1,6 +1,6 @@
 # Checks/column/datatype
 
-**This is a list of datatype column checks in DQOps and a brief description of what they do.**
+**This is a list of datatype column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

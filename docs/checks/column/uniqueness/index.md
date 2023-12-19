@@ -1,6 +1,6 @@
 # Checks/column/uniqueness
 
-**This is a list of uniqueness column checks in DQOps and a brief description of what they do.**
+**This is a list of uniqueness column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 
@@ -64,9 +64,7 @@ Counts the number or percent of duplicate or unique values in a column.
 |[profile_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#profile-anomaly-stationary-distinct-percent-30-days)|profiling|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
 |[daily_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-anomaly-stationary-distinct-percent-30-days)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
 |[monthly_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-anomaly-stationary-distinct-percent-30-days)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[daily_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
 |[daily_partition_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#daily-partition-anomaly-stationary-distinct-percent-30-days)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
-|[monthly_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
 |[monthly_partition_anomaly_stationary_distinct_percent_30_days](./column/uniqueness/anomaly-stationary-distinct-percent-30-days/#monthly-partition-anomaly-stationary-distinct-percent-30-days)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
 
 
@@ -75,9 +73,7 @@ Counts the number or percent of duplicate or unique values in a column.
 |[profile_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#profile-anomaly-stationary-distinct-percent)|profiling|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
 |[daily_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-anomaly-stationary-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
 |[monthly_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-anomaly-stationary-distinct-percent)|monitoring|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[daily_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
 |[daily_partition_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#daily-partition-anomaly-stationary-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
-|[monthly_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
 |[monthly_partition_anomaly_stationary_distinct_percent](./column/uniqueness/anomaly-stationary-distinct-percent/#monthly-partition-anomaly-stationary-distinct-percent)|partitioned|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
 
 
@@ -151,6 +147,18 @@ Counts the number or percent of duplicate or unique values in a column.
 |[monthly_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-change-distinct-percent-since-yesterday)|monitoring|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
 |[daily_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#daily-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
 |[monthly_partition_change_distinct_percent_since_yesterday](./column/uniqueness/change-distinct-percent-since-yesterday/#monthly-partition-change-distinct-percent-since-yesterday)|partitioned|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[daily_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-count-30-days/#daily-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+|[monthly_partition_anomaly_stationary_distinct_count_30_days](./column/uniqueness/anomaly-stationary-distinct-count-30-days/#monthly-partition-anomaly-stationary-distinct-count-30-days)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[daily_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-count/#daily-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
+|[monthly_partition_anomaly_stationary_distinct_count](./column/uniqueness/anomaly-stationary-distinct-count/#monthly-partition-anomaly-stationary-distinct-count)|partitioned|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|
 
 
 

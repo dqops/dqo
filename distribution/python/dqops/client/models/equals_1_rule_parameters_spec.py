@@ -1,46 +1,31 @@
-from typing import Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-from ..types import UNSET, Unset
-
-T = TypeVar("T", bound="EqualsInteger1RuleParametersSpec")
+T = TypeVar("T", bound="Equals1RuleParametersSpec")
 
 
 @_attrs_define
-class EqualsInteger1RuleParametersSpec:
-    """
-    Attributes:
-        expected_value (Union[Unset, int]): Expected value for the actual_value returned by the sensor. It must be an
-            integer value.
-    """
+class Equals1RuleParametersSpec:
+    """ """
 
-    expected_value: Union[Unset, int] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        expected_value = self.expected_value
-
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if expected_value is not UNSET:
-            field_dict["expected_value"] = expected_value
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        expected_value = d.pop("expected_value", UNSET)
+        equals_1_rule_parameters_spec = cls()
 
-        equals_integer_1_rule_parameters_spec = cls(
-            expected_value=expected_value,
-        )
-
-        equals_integer_1_rule_parameters_spec.additional_properties = d
-        return equals_integer_1_rule_parameters_spec
+        equals_1_rule_parameters_spec.additional_properties = d
+        return equals_1_rule_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

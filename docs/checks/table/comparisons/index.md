@@ -1,6 +1,6 @@
 # Checks/table/comparisons
 
-**This is a list of comparisons table checks in DQOps and a brief description of what they do.**
+**This is a list of comparisons table data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

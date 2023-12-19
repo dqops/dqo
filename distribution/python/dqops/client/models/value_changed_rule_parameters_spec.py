@@ -3,11 +3,11 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="ValueChangedParametersSpec")
+T = TypeVar("T", bound="ValueChangedRuleParametersSpec")
 
 
 @_attrs_define
-class ValueChangedParametersSpec:
+class ValueChangedRuleParametersSpec:
     """ """
 
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -22,10 +22,10 @@ class ValueChangedParametersSpec:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        value_changed_parameters_spec = cls()
+        value_changed_rule_parameters_spec = cls()
 
-        value_changed_parameters_spec.additional_properties = d
-        return value_changed_parameters_spec
+        value_changed_rule_parameters_spec.additional_properties = d
+        return value_changed_rule_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:

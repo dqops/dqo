@@ -10,9 +10,7 @@ if TYPE_CHECKING:
         ColumnColumnExistsSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.equals_integer_1_rule_parameters_spec import (
-        EqualsInteger1RuleParametersSpec,
-    )
+    from ..models.equals_1_rule_parameters_spec import Equals1RuleParametersSpec
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
@@ -45,9 +43,9 @@ class ColumnSchemaColumnExistsCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnColumnExistsSensorParametersSpec]):
-        warning (Union[Unset, EqualsInteger1RuleParametersSpec]):
-        error (Union[Unset, EqualsInteger1RuleParametersSpec]):
-        fatal (Union[Unset, EqualsInteger1RuleParametersSpec]):
+        warning (Union[Unset, Equals1RuleParametersSpec]):
+        error (Union[Unset, Equals1RuleParametersSpec]):
+        fatal (Union[Unset, Equals1RuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -59,9 +57,9 @@ class ColumnSchemaColumnExistsCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnColumnExistsSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "EqualsInteger1RuleParametersSpec"] = UNSET
-    error: Union[Unset, "EqualsInteger1RuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "EqualsInteger1RuleParametersSpec"] = UNSET
+    warning: Union[Unset, "Equals1RuleParametersSpec"] = UNSET
+    error: Union[Unset, "Equals1RuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "Equals1RuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -135,9 +133,7 @@ class ColumnSchemaColumnExistsCheckSpec:
             ColumnColumnExistsSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.equals_integer_1_rule_parameters_spec import (
-            EqualsInteger1RuleParametersSpec,
-        )
+        from ..models.equals_1_rule_parameters_spec import Equals1RuleParametersSpec
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
@@ -175,25 +171,25 @@ class ColumnSchemaColumnExistsCheckSpec:
             parameters = ColumnColumnExistsSensorParametersSpec.from_dict(_parameters)
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, EqualsInteger1RuleParametersSpec]
+        warning: Union[Unset, Equals1RuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = EqualsInteger1RuleParametersSpec.from_dict(_warning)
+            warning = Equals1RuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, EqualsInteger1RuleParametersSpec]
+        error: Union[Unset, Equals1RuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = EqualsInteger1RuleParametersSpec.from_dict(_error)
+            error = Equals1RuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, EqualsInteger1RuleParametersSpec]
+        fatal: Union[Unset, Equals1RuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = EqualsInteger1RuleParametersSpec.from_dict(_fatal)
+            fatal = Equals1RuleParametersSpec.from_dict(_fatal)
 
         column_schema_column_exists_check_spec = cls(
             schedule_override=schedule_override,

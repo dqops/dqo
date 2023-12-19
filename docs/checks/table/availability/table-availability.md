@@ -292,6 +292,47 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period
         ORDER BY time_period
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -617,6 +658,47 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period
         ORDER BY time_period
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -936,6 +1018,47 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
                 FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan

@@ -1,6 +1,6 @@
 # Checks/column/nulls
 
-**This is a list of nulls column checks in DQOps and a brief description of what they do.**
+**This is a list of nulls column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

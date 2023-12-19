@@ -1309,7 +1309,7 @@ from .dqo_user_role import DqoUserRole
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
-from .equals_integer_1_rule_parameters_spec import EqualsInteger1RuleParametersSpec
+from .equals_1_rule_parameters_spec import Equals1RuleParametersSpec
 from .equals_integer_rule_parameters_spec import EqualsIntegerRuleParametersSpec
 from .error_entry_model import ErrorEntryModel
 from .errors_list_model import ErrorsListModel
@@ -1819,7 +1819,7 @@ from .time_window_filter_parameters import TimeWindowFilterParameters
 from .timestamp_columns_spec import TimestampColumnsSpec
 from .trino_parameters_spec import TrinoParametersSpec
 from .trino_parameters_spec_properties import TrinoParametersSpecProperties
-from .value_changed_parameters_spec import ValueChangedParametersSpec
+from .value_changed_rule_parameters_spec import ValueChangedRuleParametersSpec
 
 __all__ = (
     "AllChecksPatchParameters",
@@ -2359,7 +2359,7 @@ __all__ = (
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
-    "EqualsInteger1RuleParametersSpec",
+    "Equals1RuleParametersSpec",
     "EqualsIntegerRuleParametersSpec",
     "ErrorEntryModel",
     "ErrorsListModel",
@@ -2651,5 +2651,5 @@ __all__ = (
     "TimeWindowFilterParameters",
     "TrinoParametersSpec",
     "TrinoParametersSpecProperties",
-    "ValueChangedParametersSpec",
+    "ValueChangedRuleParametersSpec",
 )

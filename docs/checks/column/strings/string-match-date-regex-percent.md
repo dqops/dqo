@@ -456,6 +456,65 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+           {%- if date_formats == 'YYYY-MM-DD'-%}
+                   'yyyy-mm-dd'
+               {%- elif date_formats == 'MM/DD/YYYY' -%}
+                   'mm/dd/yyyy'
+               {%- elif date_formats == 'DD/MM/YYYY' -%}
+                   'dd/mm/yyyy'
+               {%- elif date_formats == 'YYYY/MM/DD'-%}
+                   'yyyy/mm/dd'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'Month DD,YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -941,6 +1000,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {% macro render_date_formats(date_formats) %}
+               {%- if date_formats == 'YYYY-MM-DD'-%}
+                       'yyyy-mm-dd'
+                   {%- elif date_formats == 'MM/DD/YYYY' -%}
+                       'mm/dd/yyyy'
+                   {%- elif date_formats == 'DD/MM/YYYY' -%}
+                       'dd/mm/yyyy'
+                   {%- elif date_formats == 'YYYY/MM/DD'-%}
+                       'yyyy/mm/dd'
+                {%- elif date_formats == 'Month D, YYYY'-%}
+                    'Month DD,YYYY'
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1469,6 +1587,65 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+           {%- if date_formats == 'YYYY-MM-DD'-%}
+                   'yyyy-mm-dd'
+               {%- elif date_formats == 'MM/DD/YYYY' -%}
+                   'mm/dd/yyyy'
+               {%- elif date_formats == 'DD/MM/YYYY' -%}
+                   'dd/mm/yyyy'
+               {%- elif date_formats == 'YYYY/MM/DD'-%}
+                   'yyyy/mm/dd'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'Month DD,YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -1955,6 +2132,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {% macro render_date_formats(date_formats) %}
+               {%- if date_formats == 'YYYY-MM-DD'-%}
+                       'yyyy-mm-dd'
+                   {%- elif date_formats == 'MM/DD/YYYY' -%}
+                       'mm/dd/yyyy'
+                   {%- elif date_formats == 'DD/MM/YYYY' -%}
+                       'dd/mm/yyyy'
+                   {%- elif date_formats == 'YYYY/MM/DD'-%}
+                       'yyyy/mm/dd'
+                {%- elif date_formats == 'Month D, YYYY'-%}
+                    'Month DD,YYYY'
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2483,6 +2719,65 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+           {%- if date_formats == 'YYYY-MM-DD'-%}
+                   'yyyy-mm-dd'
+               {%- elif date_formats == 'MM/DD/YYYY' -%}
+                   'mm/dd/yyyy'
+               {%- elif date_formats == 'DD/MM/YYYY' -%}
+                   'dd/mm/yyyy'
+               {%- elif date_formats == 'YYYY/MM/DD'-%}
+                   'yyyy/mm/dd'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'Month DD,YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -2969,6 +3264,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {% macro render_date_formats(date_formats) %}
+               {%- if date_formats == 'YYYY-MM-DD'-%}
+                       'yyyy-mm-dd'
+                   {%- elif date_formats == 'MM/DD/YYYY' -%}
+                       'mm/dd/yyyy'
+                   {%- elif date_formats == 'DD/MM/YYYY' -%}
+                       'dd/mm/yyyy'
+                   {%- elif date_formats == 'YYYY/MM/DD'-%}
+                       'yyyy/mm/dd'
+                {%- elif date_formats == 'Month D, YYYY'-%}
+                    'Month DD,YYYY'
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3503,6 +3857,65 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+           {%- if date_formats == 'YYYY-MM-DD'-%}
+                   'yyyy-mm-dd'
+               {%- elif date_formats == 'MM/DD/YYYY' -%}
+                   'mm/dd/yyyy'
+               {%- elif date_formats == 'DD/MM/YYYY' -%}
+                   'dd/mm/yyyy'
+               {%- elif date_formats == 'YYYY/MM/DD'-%}
+                   'yyyy/mm/dd'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'Month DD,YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -3999,6 +4412,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {% macro render_date_formats(date_formats) %}
+               {%- if date_formats == 'YYYY-MM-DD'-%}
+                       'yyyy-mm-dd'
+                   {%- elif date_formats == 'MM/DD/YYYY' -%}
+                       'mm/dd/yyyy'
+                   {%- elif date_formats == 'DD/MM/YYYY' -%}
+                       'dd/mm/yyyy'
+                   {%- elif date_formats == 'YYYY/MM/DD'-%}
+                       'yyyy/mm/dd'
+                {%- elif date_formats == 'Month D, YYYY'-%}
+                    'Month DD,YYYY'
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4531,6 +5003,65 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {% macro render_date_formats(date_formats) %}
+           {%- if date_formats == 'YYYY-MM-DD'-%}
+                   'yyyy-mm-dd'
+               {%- elif date_formats == 'MM/DD/YYYY' -%}
+                   'mm/dd/yyyy'
+               {%- elif date_formats == 'DD/MM/YYYY' -%}
+                   'dd/mm/yyyy'
+               {%- elif date_formats == 'YYYY/MM/DD'-%}
+                   'yyyy/mm/dd'
+            {%- elif date_formats == 'Month D, YYYY'-%}
+                'Month DD,YYYY'
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -5027,6 +5558,65 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {% macro render_date_formats(date_formats) %}
+               {%- if date_formats == 'YYYY-MM-DD'-%}
+                       'yyyy-mm-dd'
+                   {%- elif date_formats == 'MM/DD/YYYY' -%}
+                       'mm/dd/yyyy'
+                   {%- elif date_formats == 'DD/MM/YYYY' -%}
+                       'dd/mm/yyyy'
+                   {%- elif date_formats == 'YYYY/MM/DD'-%}
+                       'yyyy/mm/dd'
+                {%- elif date_formats == 'Month D, YYYY'-%}
+                    'Month DD,YYYY'
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN TO_DATE (analyzed_table.`target_column`,'yyyy-mm-dd') IS NOT NULL
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
