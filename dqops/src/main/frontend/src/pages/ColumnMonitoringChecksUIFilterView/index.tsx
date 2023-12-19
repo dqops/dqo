@@ -32,7 +32,7 @@ const ColumnMonitoringChecksUIFilterView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnMonitoringChecksOverview(connectionName, schemaName, tableName, columnName, timePartitioned).then((res) => {
+    CheckResultOverviewApi.getColumnMonitoringChecksOverview(connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };

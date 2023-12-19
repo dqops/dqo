@@ -33,7 +33,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connectionName, schemaName, tableName, columnName, timePartitioned).then((res) => {
+    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
