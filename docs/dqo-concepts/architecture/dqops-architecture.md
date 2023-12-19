@@ -15,9 +15,11 @@ DQOps achieves its principal idea by separating the platform into four core comp
     * an embedded web server hosting the user interface and the REST API for integration with external tools
     * command-line shell interface for running commands
   
+
 - `DQOPs user home` - Local folder storing the configuration of enabled data quality checks and a local copy of all
   data quality results, enabling offline and hybrid deployment models.
   The data model is described in the [Data storage](../data-storage/data-storage.md) documentation.
+
  
 - `DQOps Cloud` - DQOps hosted cloud backend for exposing data quality dashboards which has the following components:
     * **Data Quality Data Lake** - Storage buckets with a copy of data quality check configuration and a copy of
@@ -28,6 +30,7 @@ DQOps achieves its principal idea by separating the platform into four core comp
       are designed using Looker Studio. They are accessing the Data Quality Data Warehouse using a dedicated
       DQOps Looker Studio Community Connector. 
 
+
 - `Python client` - DQOps python client provides typed access to all [operations](../../client/operations/index.md) supported by DQOps user interface, enabling
   complex automation of all operations. The client supports:
     * running data quality checks from external tools
@@ -35,6 +38,13 @@ DQOps achieves its principal idea by separating the platform into four core comp
     * managing data quality results
     * detecting the data quality status of monitored tables
     * changing the configuration of data quality checks
+
+
+- `Looker Studio Dashboards` - a set of data quality dashboards that are using a Looker Studio Community Connector for DQOps.
+  The dashboards are accessing the **Data Quality Data Warehouse**.
+
+
+![Data quality platform components](https://dqops.com/docs/images/concepts/dqops_components_min.png)
 
 
 ## DQOps local deployment as a Python package

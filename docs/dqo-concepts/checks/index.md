@@ -7,6 +7,31 @@ The data quality sensor reads the value from the data source at a given point in
 a set of conditions (thresholds) that the sensor readout must meet. When the conditions are not met, the check detects 
 an issue with your data, and it creates an [incident that can be viewed, filtered, and managed](../../working-with-dqo/incidents-and-notifications/incidents.md).
 
+The components involved in running a data quality check are shown below.
+The example below shows how DQOps performs the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count-)
+data quality check that verifies if the number of rows in the monitored table is greater than the expected minimum row count.
+
+![Data quality check components](https://dqops.com/docs/images/concepts/data_quality_check_structure_min.png)
+
+The data quality check is evaluated on a monitored table (or column) in three phases.
+
+- The placeholders for the table name (and column name) **[sensor](../sensors/sensors.md) template** are
+  filled in a templated SQL query (called a data quality sensor) 
+
+
+- The generated SQL query is execute SQL query on the data source, capturing the data quality measure.
+  All data quality sensors in DQOps are expected to return a result column named *actual_value* as a
+  data measure that will be evaluated with data quality rules.
+
+
+- The data quality metric (called *sensor readout* in DQOps) is passed to a [data quality rule](../rules/rules.md) that is
+  a Python function that will decide if the measure (sensor readout) should be accepted, or the data quality
+  check should fail and generate a data quality issue at one of three severity levels: warning, error, fatal.
+  
+  The data quality measure (sensor readout) is passed up to tree data quality rules, because data quality rules
+  for warning, error and fatal severity levels use different parameters (thresholds).  
+
+
 ## Types of checks
 
 In DQOps, checks are divided into 3 types:
