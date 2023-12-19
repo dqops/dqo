@@ -20056,15 +20056,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         }
       }
     },
@@ -24858,15 +24858,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning when the column was not found.",
-          "$ref" : "#/definitions/EqualsInteger1RuleParametersSpec"
+          "$ref" : "#/definitions/Equals1RuleParametersSpec"
         },
         "error" : {
           "description" : "Alerting threshold that raises a data quality error when the column was not found.",
-          "$ref" : "#/definitions/EqualsInteger1RuleParametersSpec"
+          "$ref" : "#/definitions/Equals1RuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a data quality fatal issue when the column was not found.",
-          "$ref" : "#/definitions/EqualsInteger1RuleParametersSpec"
+          "$ref" : "#/definitions/Equals1RuleParametersSpec"
         }
       }
     },
@@ -24974,15 +24974,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         }
       }
     },
@@ -30754,15 +30754,8 @@
       },
       "description" : "Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time."
     },
-    "EqualsInteger1RuleParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "expected_value" : {
-          "type" : "integer",
-          "format" : "int64",
-          "description" : "Expected value for the actual_value returned by the sensor. It must be an integer value."
-        }
-      }
+    "Equals1RuleParametersSpec" : {
+      "type" : "object"
     },
     "EqualsIntegerRuleParametersSpec" : {
       "type" : "object",
@@ -35154,15 +35147,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         }
       }
     },
@@ -35279,15 +35272,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         }
       }
     },
@@ -35335,15 +35328,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         }
       }
     },
@@ -35391,15 +35384,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/ValueChangedParametersSpec"
+          "$ref" : "#/definitions/ValueChangedRuleParametersSpec"
         }
       }
     },
@@ -36459,7 +36452,7 @@
         }
       }
     },
-    "ValueChangedParametersSpec" : {
+    "ValueChangedRuleParametersSpec" : {
       "type" : "object"
     }
   }

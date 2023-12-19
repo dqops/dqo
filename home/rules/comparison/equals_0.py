@@ -19,8 +19,7 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-
-class ValueChangedRuleParametersSpec:
+class Equals0RuleParametersSpec:
     pass
 
 
@@ -33,13 +32,13 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    max_periods_with_readouts: int
+    min_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: ValueChangedRuleParametersSpec
+    parameters: Equals0RuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -63,16 +62,11 @@ class RuleExecutionResult:
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
     if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+        return RuleExecutionResult()
 
-    if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult(True, None, None, None)
-
-    filtered = [(readouts.sensor_readout if hasattr(readouts, 'sensor_readout') else None) for readouts in rule_parameters.previous_readouts if readouts is not None]
-
-    expected_value = filtered[-1] if len(filtered) > 0 else None
+    expected_value = 0
     lower_bound = expected_value
     upper_bound = expected_value
-    passed = len(filtered) == 0 or (filtered[-1] == rule_parameters.actual_value)
+    passed = rule_parameters.actual_value == expected_value
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

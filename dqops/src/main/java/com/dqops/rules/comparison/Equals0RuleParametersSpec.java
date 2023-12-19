@@ -19,24 +19,27 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.Objects;
-
 /**
- * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+ * Data quality rule that verifies that a data quality check readout equals 0. It is used in data quality checks that have an expected value "0".
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ValueChangedParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<ValueChangedParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class Equals0RuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<Equals0RuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
+
+    /**
+     * Creates the default object that expects 0.
+     */
+    public Equals0RuleParametersSpec() {
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -55,6 +58,6 @@ public class ValueChangedParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/value_changed";
+        return "comparison/equals_0";
     }
 }

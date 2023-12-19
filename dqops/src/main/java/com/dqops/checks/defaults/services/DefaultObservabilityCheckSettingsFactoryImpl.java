@@ -22,10 +22,7 @@ import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeC
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
-import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.schema.ColumnSchemaMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
-import com.dqops.checks.column.profiling.ColumnSchemaProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
@@ -39,10 +36,6 @@ import com.dqops.checks.table.checkspecs.schema.*;
 import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
-import com.dqops.checks.table.monitoring.availability.TableAvailabilityMonthlyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.schema.TableSchemaMonthlyMonitoringChecksSpec;
-import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
-import com.dqops.checks.table.profiling.TableAvailabilityProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
@@ -50,10 +43,7 @@ import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecks
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
-import com.dqops.rules.comparison.EqualsInteger1RuleParametersSpec;
-import com.dqops.rules.comparison.MaxFailuresRule0ParametersSpec;
-import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
-import com.dqops.rules.comparison.ValueChangedParametersSpec;
+import com.dqops.rules.comparison.*;
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
 import org.springframework.stereotype.Component;
@@ -104,7 +94,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         ColumnDatatypeDailyMonitoringChecksSpec columnDatatype = new ColumnDatatypeDailyMonitoringChecksSpec();
         columnDatatype.setDailyStringDatatypeChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
+            setWarning(new ValueChangedRuleParametersSpec());
         }});
         defaultSettings.getColumn().setDatatype(columnDatatype);
 
@@ -119,25 +109,25 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         TableSchemaDailyMonitoringChecksSpec tableSchema = new TableSchemaDailyMonitoringChecksSpec();
         tableSchema.setDailyColumnCountChanged(new TableSchemaColumnCountChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
+            setWarning(new ValueChangedRuleParametersSpec());
         }});
         tableSchema.setDailyColumnListChanged(new TableSchemaColumnListChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
+            setWarning(new ValueChangedRuleParametersSpec());
         }});
         tableSchema.setDailyColumnListOrOrderChanged(new TableSchemaColumnListOrOrderChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
+            setWarning(new ValueChangedRuleParametersSpec());
         }});
         tableSchema.setDailyColumnTypesChanged(new TableSchemaColumnTypesChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
+            setWarning(new ValueChangedRuleParametersSpec());
         }});
         defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnSchemaDailyMonitoringChecksSpec columnSchema = new ColumnSchemaDailyMonitoringChecksSpec();
         columnSchema.setDailyColumnExists(new ColumnSchemaColumnExistsCheckSpec() {{
-            setWarning(new EqualsInteger1RuleParametersSpec());
+            setWarning(new Equals1RuleParametersSpec());
         }});
         columnSchema.setDailyColumnTypeChanged(new ColumnSchemaTypeChangedCheckSpec() {{
-            setWarning(new ValueChangedParametersSpec());
+            setWarning(new ValueChangedRuleParametersSpec());
         }});
         defaultSettings.getColumn().setSchema(columnSchema);
 

@@ -922,8 +922,7 @@ check that will compare the sum of values per day and raise a warning if the cha
                     anomaly_percent: 1.0
               schema:
                 daily_column_exists:
-                  warning:
-                    expected_value: 1
+                  warning: {}
                 daily_column_type_changed:
                   warning: {}
     ```
