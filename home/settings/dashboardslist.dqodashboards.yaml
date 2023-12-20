@@ -9,14 +9,14 @@ spec:
         - dashboard_name: Table profiling status
           url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
         - dashboard_name: Column profiling status
           url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
           width: 1400
-          height: 2000
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -33,7 +33,7 @@ spec:
         - dashboard_name: Profiling issues count per check
           url: https://lookerstudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
           width: 1400
-          height: 1870
+          height: 2200
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: profiling
@@ -287,14 +287,14 @@ spec:
         - dashboard_name: Current table status
           url: https://lookerstudio.google.com/embed/reporting/b4c33286-a5d1-4948-a8f3-70b20612380e/page/c5B8C
           width: 1400
-          height: 1600
+          height: 1700
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
         - dashboard_name: Current column status
           url: https://lookerstudio.google.com/embed/reporting/2e72e940-3f39-4a82-ba31-6994a03dc005/page/c5B8C
           width: 1400
-          height: 2000
+          height: 2100
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
@@ -303,28 +303,28 @@ spec:
         - dashboard_name: Highest issue severity per table and day
           url: https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
         - dashboard_name: Highest issue severity per column and day
           url: https://lookerstudio.google.com/embed/reporting/c98eff4f-ff14-45f1-bc05-a7abfd557cb5/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
         - dashboard_name: Highest issue severity per data grouping and day
           url: https://lookerstudio.google.com/embed/reporting/2e4db3eb-8367-4865-a9e8-a62938822da4/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
         - dashboard_name: Highest issue severity per check and day
           url: https://lookerstudio.google.com/embed/reporting/76a9b94b-7456-490c-b6b5-cdb22dc84828/page/c5B8C
           width: 1400
-          height: 2500
+          height: 2600
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
             ds0.p_check_type: monitoring
