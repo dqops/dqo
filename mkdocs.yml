@@ -75,6 +75,8 @@ nav:
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
       - Availability:
           - Table availability: "examples/stability/table-availability.md"
+      - Schema:
+          - Table schema detection: "examples/schema/schema-detection.md"
       - Data quality monitoring:
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
