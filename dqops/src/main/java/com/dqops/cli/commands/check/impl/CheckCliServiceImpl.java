@@ -111,7 +111,7 @@ public class CheckCliServiceImpl implements CheckCliService {
     }
 
     protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> patches = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         Optional<CheckModel> sampleCheckModelFromTables = patches.stream()
                 .map(AllChecksModel::getTableChecksModel)
                 .flatMap(allTableChecksModel -> allTableChecksModel.getSchemaTableChecksModels().stream())

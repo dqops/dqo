@@ -106,9 +106,7 @@ public class SchemaServiceImpl implements SchemaService {
                                                  String checkCategory,
                                                  String checkName,
                                                  DqoUserPrincipal principal) {
-        if (Strings.isNullOrEmpty(connectionName)
-                || Strings.isNullOrEmpty(schemaName)
-                || checkType == null) {
+        if (Strings.isNullOrEmpty(connectionName) || checkType == null) {
             // Connection name, schema name and check type have to be provided.
             return null;
         }
@@ -119,23 +117,21 @@ public class SchemaServiceImpl implements SchemaService {
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setConnection(connectionName);
-        checkSearchFilters.setFullTableName(schemaName + ".*");
         checkSearchFilters.setCheckType(checkType);
         checkSearchFilters.setTimeScale(checkTimeScale);
         // Filtering by checkTarget has to be done apart from these filters.
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        AllChecksModel allChecksModel = this.allChecksModelFactory.createTemplatedCheckModelsAvailableOnConnection(
+                connectionName, schemaName, checkSearchFilters, principal);
 
-        Stream<CheckContainerModel> columnCheckContainers = allChecksModels.stream()
-                .map(AllChecksModel::getColumnChecksModel)
-                .flatMap(model -> model.getTableColumnChecksModels().stream())
+        Stream<CheckContainerModel> columnCheckContainers = allChecksModel.getColumnChecksModel()
+                .getTableColumnChecksModels().stream()
                 .flatMap(model -> model.getColumnChecksModels().stream())
                 .flatMap(model -> model.getCheckContainers().values().stream());
-        Stream<CheckContainerModel> tableCheckContainers = allChecksModels.stream()
-                .map(AllChecksModel::getTableChecksModel)
-                .flatMap(model -> model.getSchemaTableChecksModels().stream())
+        Stream<CheckContainerModel> tableCheckContainers = allChecksModel.getTableChecksModel()
+                .getSchemaTableChecksModels().stream()
                 .flatMap(model -> model.getTableChecksModels().stream())
                 .flatMap(model -> model.getCheckContainers().values().stream());
 

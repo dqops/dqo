@@ -179,7 +179,7 @@ public class CheckServiceImpl implements CheckService {
             return new ArrayList<>();
         }
 
-        List<AllChecksModel> patches = this.allChecksModelFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters(), principal);
+        List<AllChecksModel> patches = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(parameters.getCheckSearchFilters(), principal);
         if (parameters.getSelectedTablesToColumns() != null) {
             for (AllChecksModel patch: patches) {
                 AllChecksModelUtility.pruneToConcreteTargets(parameters.getSelectedTablesToColumns(), patch);

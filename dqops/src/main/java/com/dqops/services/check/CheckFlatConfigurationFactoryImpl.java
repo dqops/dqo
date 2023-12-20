@@ -16,26 +16,11 @@
 
 package com.dqops.services.check;
 
-import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckTarget;
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.CheckType;
 import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.execution.ExecutionContext;
-import com.dqops.execution.ExecutionContextFactory;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.metadata.search.ConnectionSearchFilters;
-import com.dqops.metadata.search.HierarchyNodeTreeSearcher;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.metadata.sources.TableWrapper;
-import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
-import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import com.dqops.metadata.userhome.UserHome;
-import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
-import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
 import com.dqops.services.check.mapping.models.*;
 import com.dqops.services.check.mapping.models.column.AllColumnChecksModel;
 import com.dqops.services.check.mapping.models.column.ColumnChecksModel;
@@ -44,12 +29,10 @@ import com.dqops.services.check.mapping.models.table.AllTableChecksModel;
 import com.dqops.services.check.mapping.models.table.SchemaTableChecksModel;
 import com.dqops.services.check.mapping.models.table.TableChecksModel;
 import com.dqops.services.check.models.CheckConfigurationModel;
-import com.dqops.utils.reflection.FieldInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -139,7 +122,7 @@ public class CheckFlatConfigurationFactoryImpl implements CheckFlatConfiguration
      */
     @Override
     public List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {
-        return this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal).stream()
+        return this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal).stream()
                 .flatMap(allChecksModel -> this.fromAllChecksModel(allChecksModel).stream())
                 .collect(Collectors.toList());
     }

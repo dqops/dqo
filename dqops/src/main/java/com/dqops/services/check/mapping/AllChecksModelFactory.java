@@ -31,6 +31,20 @@ public interface AllChecksModelFactory {
      * @param principal User principal.
      * @return List of {@link AllChecksModel}s (by connections) fitting the filters.
      */
-    List<AllChecksModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters,
-                                                DqoUserPrincipal principal);
+    List<AllChecksModel> findAllConfiguredAndPossibleChecks(CheckSearchFilters checkSearchFilters,
+                                                            DqoUserPrincipal principal);
+
+    /**
+     * Generate one fake table and one fake column, capture all available checks that are supported on the connection.
+     * @param connectionName Connection name.
+     * @param schemaName Schema name.
+     * @param checkSearchFilters Additional check search filter to limit the list of possible checks.
+     * @param principal Calling user principal.
+     * @return Model of all possible checks, including both table and column level checks.
+     */
+    AllChecksModel createTemplatedCheckModelsAvailableOnConnection(
+            String connectionName,
+            String schemaName,
+            CheckSearchFilters checkSearchFilters,
+            DqoUserPrincipal principal);
 }

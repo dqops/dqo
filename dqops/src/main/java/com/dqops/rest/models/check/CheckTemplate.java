@@ -57,9 +57,14 @@ public class CheckTemplate {
     @JsonPropertyDescription("Full sensor name.")
     private String sensorName;
 
+    @JsonPropertyDescription("Template of the check model with the sensor parameters and rule parameters")
+    private CheckModel checkModel;
+
+    @Deprecated
     @JsonPropertyDescription("List of sensor parameter fields definitions.")
     private List<ParameterDefinitionSpec> sensorParametersDefinitions = new ArrayList<>();
 
+    @Deprecated
     @JsonPropertyDescription("List of threshold (alerting) rule's parameters definitions (for a single rule, regardless of severity).")
     private List<ParameterDefinitionSpec> ruleParametersDefinitions;
 
@@ -82,6 +87,7 @@ public class CheckTemplate {
         checkTemplate.setSensorName(checkModel.getSensorName());
         checkTemplate.setCheckTarget(checkTarget);
         checkTemplate.setCheckCategory(checkCategory);
+        checkTemplate.setCheckModel(checkModel);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(
                 uiCheckContainerTypeModel.getCheckType(), uiCheckContainerTypeModel.getCheckTimeScale());

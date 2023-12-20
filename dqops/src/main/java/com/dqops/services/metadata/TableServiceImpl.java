@@ -129,7 +129,7 @@ public class TableServiceImpl implements TableService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 

@@ -398,7 +398,7 @@ public class CheckServiceImplTests extends BaseTest {
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())
@@ -444,7 +444,7 @@ public class CheckServiceImplTests extends BaseTest {
         allChecksPatchParameters.setCheckSearchFilters(checkSearchFilters);
 
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
-        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModel = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         CheckModel checkModel = allChecksModel.stream()
                 .map(AllChecksModel::getColumnChecksModel)
                 .flatMap(uiAllColumnChecksModel -> uiAllColumnChecksModel.getTableColumnChecksModels().stream())

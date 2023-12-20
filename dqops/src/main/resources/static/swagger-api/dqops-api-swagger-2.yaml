@@ -13481,6 +13481,10 @@ definitions:
       sensor_name:
         type: "string"
         description: "Full sensor name."
+      check_model:
+        description: "Template of the check model with the sensor parameters and rule\
+          \ parameters"
+        $ref: "#/definitions/CheckModel"
       sensor_parameters_definitions:
         type: "array"
         description: "List of sensor parameter fields definitions."

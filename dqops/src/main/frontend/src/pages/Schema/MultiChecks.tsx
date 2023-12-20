@@ -58,7 +58,8 @@ export const MultiChecks = () => {
     []
   );
   const [open, setOpen] = useState(false);
-  const [selectedCheck, setSelectedCheck] = useState<CheckConfigurationModel>();
+  const [selectedCheck, setSelectedCheck] = useState<CheckConfigurationModel>();  // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckConfigurationModel. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckConfigurationModel is a current configuration of the check on one table or one column (current configuration)
+                                                                                  // TODO: change it to ChangeTemplate, and change the selected  check template (that will be edited) when user changes a check in the combo box for selecting a check
 
   useEffect(() => {
     const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
@@ -94,6 +95,8 @@ export const MultiChecks = () => {
           value: item ?? ''
         }))
       );
+
+      // TODO: we need to store the array of CheckTemplate, because we will need instances to put as selected
     };
 
     if (checkTypes === CheckTypes.PROFILING) {
@@ -165,6 +168,10 @@ export const MultiChecks = () => {
   };
 
   const bulkEnableChecks = () => {
+    // TODO: this code has two bugs, one is here
+    // TODO: before enabling checks, we need to take the current CheckTemplate (for the check selected in the combo box of checks), open the editor and wait until the user edits the configuration... but the user can cancel the editor, 
+    // TODO: only after the checkModel (inside the selected CheckTemplate) is edited, we can bulk enable the check, also passing the new configuration of sensor and rule parameters
+
     ConnectionApiClient.bulkEnableConnectionChecks(
       connection,
       checkName ?? '',
@@ -177,6 +184,7 @@ export const MultiChecks = () => {
           checkName,
           checkCategory
         },
+        // TODO: pass the CheckModel here, with the configuration of the sensor parameters and rule parameters, the model that should be edited and copied here should be from the selectedCheck (which shoudl be changed to CheckTemplate). CheckTemplate class has  a "checkModel" object which is the same model used on the main check editor screen.
         selected_tables_to_columns: {
           ...(checkTarget === 'table'
             ? {
@@ -326,14 +334,14 @@ export const MultiChecks = () => {
               <Select
                 options={setNewArray(
                   sortObjects(
-                    removeDuplicateOptions(
+                    removeDuplicateOptions(  // TODO: remove this deduplication, should not be required
                       finalOptions.filter((x) => x.value === checkCategory)
                     )
                   )
                 )}
                 label="Check name"
                 value={checkName}
-                onChange={setCheckName}
+                onChange={setCheckName} // TODO: we cannot just change the check, we need to call a function that will take the selected check from array of CheckTemplate and store it as the selectedCheck (We are selecting the check template)
               />
             </div>
           </div>
@@ -493,7 +501,7 @@ export const MultiChecks = () => {
         </div>
       </div>
 
-      <UpdateCheckModel
+      <UpdateCheckModel   // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckConfigurationModel. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckConfigurationModel is a current configuration of the check on one table or one column (current configuration)
         open={open}
         onClose={() => setOpen(false)}
         check={selectedCheck}
