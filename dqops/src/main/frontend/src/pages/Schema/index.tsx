@@ -44,10 +44,10 @@ const SchemaPage = () => {
       },
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
-            // {
-            //   label: 'Multiple checks edit',
-            //   value: 'multiple_checks'
-            // }
+            {
+              label: 'Multiple checks edit',
+              value: 'multiple_checks'
+            }
           ]
         : [])
     ],
