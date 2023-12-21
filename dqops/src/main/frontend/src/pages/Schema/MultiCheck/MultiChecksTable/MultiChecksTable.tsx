@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckTemplate } from '../../../../api';
+import { CheckModel, CheckTemplate } from '../../../../api';
 import Button from '../../../../components/Button';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
@@ -10,12 +10,14 @@ type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
   checks: CheckTemplate[] | undefined;
   filterParameters: IFilterTemplate;
+  selectedCheckModel: CheckModel;
 };
 
 export default function MultiChecksTable({
   checkTarget,
   checks,
-  filterParameters
+  filterParameters,
+  selectedCheckModel
 }: TMultiChecksTable) {
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
@@ -38,56 +40,38 @@ export default function MultiChecksTable({
       setSelectedData([...selectedData, check]);
     }
   };
-  // const onChangeSelectedData = (check: CheckTemplate) => {
-  //   setSelectedData(
-  //     selectedData.map((item) =>
-  //       check.check_name === item.check_name ? check : item
-  //     )
-  //   );
-  // };
-
+  console.log(selectedCheckModel);
   return (
     <div className="border border-gray-300 rounded-lg p-4 my-4">
-      <div className="flex justify-end gap-4">
-        <Button
-          className="text-sm py-2.5"
-          label="Select All"
-          color="primary"
-          onClick={selectAll}
-        />
-        <Button
-          className="text-sm py-2.5"
-          label="Unselect All"
-          color="secondary"
-          onClick={deselectAll}
-        />
-        <Button
-          className="text-sm py-2.5"
-          label="Update selected"
-          disabled={!selectedData.length}
-          color="primary"
-          onClick={() => setAction('bulkEnabled')}
-        />
-        <Button
-          className="text-sm py-2.5"
-          label="Update all"
-          color="primary"
-          onClick={() => setAction('bulkEnabled')}
-        />
-        <Button
-          className="text-sm py-2.5"
-          label="Disable selected"
-          color="primary"
-          disabled={!selectedData.length}
-          onClick={() => setAction('bulkDisabled')}
-        />
-        <Button
-          className="text-sm py-2.5"
-          label="Disable all"
-          variant="outlined"
-          color="primary"
-          onClick={() => setAction('bulkEnabled')}
-        />
+      <div className="flex justify-between gap-4">
+        <div className="flex gap-x-4">
+          <Button
+            className="text-sm py-2.5"
+            label="Select All"
+            color="primary"
+            onClick={selectAll}
+          />
+          <Button
+            className="text-sm py-2.5"
+            label="Unselect All"
+            color={!selectedData.length ? 'secondary' : 'primary'}
+            onClick={deselectAll}
+          />
+        </div>
+        <div className="flex gap-x-4">
+          <Button
+            className="text-sm py-2.5"
+            label={!selectedData.length ? 'Update all' : 'Update selected'}
+            color="primary"
+            onClick={() => setAction('bulkEnabled')}
+          />
+          <Button
+            className="text-sm py-2.5"
+            label={!selectedData.length ? 'Disable all' : 'Disable selected'}
+            color="primary"
+            onClick={() => setAction('bulkDisabled')}
+          />
+        </div>
       </div>
       <table className="w-full mt-8">
         <thead>
@@ -105,23 +89,26 @@ export default function MultiChecksTable({
             <th className="px-4 py-2 text-left">Fatal threshold</th>
           </tr>
         </thead>
-        <tbody>
-          {checks?.map((check, index) => (
-            <MultiChecksTableItem
-              checkTarget={filterParameters.checkTarget}
-              check={check}
-              key={index}
-              checked={selectedData.includes(check)}
-              onChangeSelection={onChangeSelection}
-            />
-          ))}
-        </tbody>
+        {filterParameters.checkCategory && filterParameters.checkName && (
+          <tbody>
+            {checks?.map((check, index) => (
+              <MultiChecksTableItem
+                checkTarget={filterParameters.checkTarget}
+                check={check}
+                key={index}
+                checked={selectedData.includes(check)}
+                onChangeSelection={onChangeSelection}
+              />
+            ))}
+          </tbody>
+        )}
       </table>
       <UpdateCheckModel // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckTemplate. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckTemplate is a current configuration of the check on one table or one column (current configuration)
         open={action !== undefined}
         action={action ?? 'bulkEnabled'}
         onClose={() => setAction(undefined)}
         checks={checks}
+        selectedCheck={selectedCheck}
         // onSubmit={onChangeSelectedData}
       />
     </div>

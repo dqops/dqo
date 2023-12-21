@@ -11,20 +11,19 @@ interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
   checkTypes: CheckTypes;
-  checkTemplateList: CheckTemplate[];
-  onChangeCheckTemplateList: (obj: CheckTemplate[]) => void;
+  onChangeSelectedCheck: (obj: CheckTemplate) => void;
 }
 export default function MultiChecksFilter({
   filterParameters,
   onChangeFilterParameters,
-  checkTemplateList,
   checkTypes,
-  onChangeCheckTemplateList
+  onChangeSelectedCheck
 }: IMultiChecksFilter) {
   const [checkCategoryOptions, setCheckCategoryOptions] = useState<Option[]>(
     []
   );
   const [checkNameOptions, setCheckNameOptions] = useState<Option[]>([]);
+  const [checks, setChecks] = useState<CheckTemplate[]>([]);
 
   const sortObjects = (array: Option[]): Option[] => {
     const sortedArray = array.sort((a, b) =>
@@ -35,7 +34,7 @@ export default function MultiChecksFilter({
 
   useEffect(() => {
     const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
-      onChangeCheckTemplateList(res.data);
+      setChecks(res.data);
       const categories = Array.from(
         new Set(res.data.map((x) => x.check_category))
       );
@@ -75,24 +74,35 @@ export default function MultiChecksFilter({
     checkTypes,
     filterParameters.checkTarget
   ]);
+  const onChangeCheckOptions = () => {
+    const checksCopy = checks
+      .filter((x) => x.check_category === filterParameters.checkCategory)
+      .map((x) => x.check_name);
+
+    setCheckNameOptions(
+      checksCopy.map((item) => ({
+        label: item ?? '',
+        value: item ?? ''
+      }))
+    );
+  };
 
   useEffect(() => {
-    const onChangeCheckOptions = () => {
-      const checks = checkTemplateList
-        .filter((x) => x.check_category === filterParameters.checkCategory)
-        .map((x) => x.check_name);
-
-      setCheckNameOptions(
-        checks.map((item) => ({
-          label: item ?? '',
-          value: item ?? ''
-        }))
-      );
-    };
     if (filterParameters.checkCategory) {
       onChangeCheckOptions();
     }
   }, [filterParameters.checkCategory]);
+
+  useEffect(() => {
+    if (filterParameters.checkName && filterParameters.checkName) {
+      const selectedCheck = checks.find(
+        (x) =>
+          x.check_category === filterParameters.checkCategory &&
+          x.check_name === filterParameters.checkName
+      );
+      onChangeSelectedCheck(selectedCheck ?? {});
+    }
+  }, [filterParameters.checkName]);
 
   return (
     <div className="flex w-full">
@@ -119,9 +129,10 @@ export default function MultiChecksFilter({
             label="Check category"
             options={sortObjects(checkCategoryOptions)}
             value={filterParameters.checkCategory}
-            onChange={(value) =>
-              onChangeFilterParameters({ checkCategory: value })
-            }
+            onChange={(value) => {
+              onChangeFilterParameters({ checkCategory: value });
+              onChangeCheckOptions();
+            }}
           ></Select>
         </div>
       </div>

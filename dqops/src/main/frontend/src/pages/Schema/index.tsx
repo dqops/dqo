@@ -31,25 +31,23 @@ const SchemaPage = () => {
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const history = useHistory();
 
   const tabs = useMemo(
     () => [
-      {
-        label: 'Tables',
-        value: 'tables'
-      },
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
             {
-              label: 'Multiple checks edit',
+              label: 'Data quality checks',
               value: 'multiple_checks'
             }
           ]
-        : [])
+        : []),
+      {
+        label: 'Tables',
+        value: 'tables'
+      }
     ],
     [checkTypes]
   );
@@ -91,8 +89,16 @@ const SchemaPage = () => {
         <div className="flex gap-4 items-center">
           <Button
             className="!h-10"
-            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'primary'
+                : 'secondary'
+            }
+            variant={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'outlined'
+                : 'contained'
+            }
             label="Import more tables"
             onClick={onImportMoreTables}
             disabled={userProfile.can_manage_data_sources !== true}
@@ -101,8 +107,16 @@ const SchemaPage = () => {
           {isSourceScreen && (
             <Button
               className="!h-10"
-              color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-              variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+              color={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'primary'
+                  : 'secondary'
+              }
+              variant={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'outlined'
+                  : 'contained'
+              }
               label="Add Table"
               onClick={() => setAddTableDialogOpen(true)}
               disabled={userProfile.can_manage_data_sources !== true}

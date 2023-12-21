@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../../components/Button';
-import { CheckTemplate, FieldModel } from '../../api';
+import { CheckModel, CheckTemplate, FieldModel } from '../../api';
 import SensorParameters from '../../components/DataQualityChecks/SensorParameters';
 import Checkbox from '../../components/Checkbox';
 import CheckRuleItem from '../../components/DataQualityChecks/CheckRuleItem';
@@ -13,6 +13,7 @@ interface UpdateCheckModelProps {
   // onSubmit: (value: CheckConfigurationModel) => void;
   checks?: CheckTemplate[];
   action: 'bulkEnabled' | 'bulkDisabled';
+  selectedCheck: CheckTemplate | undefined;
 }
 
 export const UpdateCheckModel = ({
@@ -20,13 +21,14 @@ export const UpdateCheckModel = ({
   onClose,
   // onSubmit,
   checks,
-  action
+  action,
+  selectedCheck
 }: UpdateCheckModelProps) => {
-  // const [updatedCheck, setUpdatedCheck] = useState<CheckConfigurationModel>();
+  const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
 
-  // useEffect(() => {
-  //   setUpdatedCheck(check);
-  // }, [check]);
+  useEffect(() => {
+    setUpdatedCheck(selectedCheck);
+  }, [selectedCheck]);
 
   // const handleSubmit = () => {
   //   if (updatedCheck) {
@@ -35,12 +37,12 @@ export const UpdateCheckModel = ({
   //   }
   // };
 
-  // const handleChange = (obj: any) => {
-  //   setUpdatedCheck((prev) => ({
-  //     ...prev,
-  //     ...obj
-  //   }));
-  // };
+  const handleChange = (obj: Partial<CheckModel>) => {
+    setUpdatedCheck((prev) => ({
+      ...prev,
+      ...obj
+    }));
+  };
   // const bulkEnableChecks = () => {
   // TODO: this code has two bugs, one is here
   // TODO: before enabling checks, we need to take the current CheckTemplate (for the check selected in the combo box of checks), open the editor and wait until the user edits the configuration... but the user can cancel the editor,
@@ -106,18 +108,19 @@ export const UpdateCheckModel = ({
   //     }
   //   );
   // };
+  console.log(checks, updatedCheck);
+  console.log(updatedCheck);
 
   return (
     <Dialog open={open} handler={onClose} className="min-w-150 max-w-150">
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
-          {/* <h1 className="text-center mb-4 text-gray-700 text-2xl">
+          <h1 className="text-center mb-4 text-gray-700 text-2xl">
             Update Check: {updatedCheck?.check_name}
           </h1>
         </div>
         <div className="relative z-10 border rounded text-gray-700 border-gray-300 px-4 py-4">
           <p className="text-gray-700 text-lg mb-4">Sensor parameters</p>
-
           <SensorParameters
             parameters={updatedCheck?.sensor_parameters || []}
             onChange={(parameters: FieldModel[]) =>
@@ -126,40 +129,46 @@ export const UpdateCheckModel = ({
             onUpdate={() => undefined}
           />
         </div>
-
         <div className="grid grid-cols-3 my-4">
           <div className="bg-yellow-100 border border-gray-300 py-2">
             <CheckRuleItem
-              parameters={updatedCheck?.warning}
+              parameters={updatedCheck?.rule?.warning}
               onChange={(warning) =>
                 handleChange({
-                  warning
+                  rule: {
+                    ...updatedCheck?.rule,
+                    warning: warning
+                  }
                 })
               }
               type="warning"
               onUpdate={() => {}}
             />
           </div>
-
           <div className="bg-orange-100 border border-gray-300 py-2">
             <CheckRuleItem
-              parameters={updatedCheck?.error}
+              parameters={updatedCheck?.rule?.error}
               onChange={(error) =>
                 handleChange({
-                  error
+                  rule: {
+                    ...updatedCheck?.rule,
+                    error: error
+                  }
                 })
               }
               type="error"
               onUpdate={() => {}}
             />
           </div>
-
           <div className="bg-red-100 border border-gray-300 py-2">
             <CheckRuleItem
-              parameters={updatedCheck?.fatal}
+              parameters={updatedCheck?.rule?.fatal}
               onChange={(fatal) =>
                 handleChange({
-                  fatal
+                  rule: {
+                    ...updatedCheck?.rule,
+                    fatal
+                  }
                 })
               }
               type="fatal"
@@ -172,7 +181,7 @@ export const UpdateCheckModel = ({
             label="Override existing configurations"
             checked={true}
             onChange={() => {}}
-          /> */}
+          />
         </div>
       </DialogBody>
       <DialogFooter className="flex justify-center space-x-6 px-8 pb-8">

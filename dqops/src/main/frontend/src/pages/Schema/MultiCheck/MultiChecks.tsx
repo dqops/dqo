@@ -27,6 +27,7 @@ export const MultiChecks = () => {
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
   const [checks, setChecks] = useState<CheckTemplate[]>([]);
+  const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   const [filterParameters, setFilterParameters] = useState<IFilterTemplate>({
     connection,
     schema,
@@ -59,8 +60,7 @@ export const MultiChecks = () => {
           filterParameters={filterParameters}
           onChangeFilterParameters={onChangeFilterParameters}
           checkTypes={checkTypes}
-          checkTemplateList={checks}
-          onChangeCheckTemplateList={(obj: CheckTemplate[]) => setChecks(obj)}
+          onChangeSelectedCheck={(obj: CheckTemplate) => setSelectedCheck(obj)}
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
@@ -73,6 +73,7 @@ export const MultiChecks = () => {
           checkTarget={filterParameters.checkTarget}
           checks={checks}
           filterParameters={filterParameters}
+          selectedCheckModel={selectedCheck.check_model ?? {}}
         />
       </div>
     </div>
