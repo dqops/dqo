@@ -9,11 +9,11 @@ import { TableApiClient } from '../../services/apiClient';
 import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import { SchemaTables } from './SchemaTables';
-import { MultiChecks } from './MultiChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { MultiChecks } from './MultiCheck/MultiChecks';
 
 const SchemaPage = () => {
   const {
