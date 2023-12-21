@@ -4,12 +4,13 @@ import Button from '../../../components/Button';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { IFilterTemplate } from '../../../shared/constants';
+import { CheckTemplate } from '../../../api';
 
 interface IMultiChecksSearch {
   checkTypes: CheckTypes;
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
-  onChangeChecks: any;
+  onChangeChecks: (checks: CheckTemplate[]) => void;
 }
 
 export default function MultiChecksSearch({

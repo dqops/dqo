@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckConfigurationModel, CheckTemplate } from '../../../../api';
+import { CheckTemplate } from '../../../../api';
 import Button from '../../../../components/Button';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
@@ -8,7 +8,7 @@ import { IFilterTemplate } from '../../../../shared/constants';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
-  checks: CheckConfigurationModel[] | undefined;
+  checks: CheckTemplate[] | undefined;
   filterParameters: IFilterTemplate;
 };
 
@@ -17,11 +17,9 @@ export default function MultiChecksTable({
   checks,
   filterParameters
 }: TMultiChecksTable) {
-  const [selectedData, setSelectedData] = useState<CheckConfigurationModel[]>(
-    []
-  );
+  const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
-  const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>(); // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckConfigurationModel. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckConfigurationModel is a current configuration of the check on one table or one column (current configuration)
+  const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>(); // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckTemplate. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckTemplate is a current configuration of the check on one table or one column (current configuration)
   // TODO: change it to ChangeTemplate, and change the selected  check template (that will be edited) when user changes a check in the combo box for selecting a check
 
   const selectAll = () => {
@@ -32,7 +30,7 @@ export default function MultiChecksTable({
     setSelectedData([]);
   };
 
-  const onChangeSelection = (check: CheckConfigurationModel) => {
+  const onChangeSelection = (check: CheckTemplate) => {
     if (selectedData.find((item) => isEqual(item, check))) {
       setSelectedData(selectedData.filter((item) => !isEqual(item, check)));
     } else {
@@ -40,7 +38,7 @@ export default function MultiChecksTable({
       setSelectedData([...selectedData, check]);
     }
   };
-  // const onChangeSelectedData = (check: CheckConfigurationModel) => {
+  // const onChangeSelectedData = (check: CheckTemplate) => {
   //   setSelectedData(
   //     selectedData.map((item) =>
   //       check.check_name === item.check_name ? check : item
@@ -94,7 +92,9 @@ export default function MultiChecksTable({
       <table className="w-full mt-8">
         <thead>
           <tr>
-            <th className="px-4 py-2 text-left"></th>
+            <th></th>
+            <th className="px-4 py-2 text-left">Check Name</th>
+            <th className="px-4 py-2 text-left">Check Category</th>
             <th className="px-4 py-2 text-left">Table</th>
             {checkTarget === 'column' && (
               <th className="px-4 py-2 text-left">Column</th>
@@ -117,11 +117,11 @@ export default function MultiChecksTable({
           ))}
         </tbody>
       </table>
-      <UpdateCheckModel // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckConfigurationModel. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckConfigurationModel is a current configuration of the check on one table or one column (current configuration)
+      <UpdateCheckModel // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckTemplate. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckTemplate is a current configuration of the check on one table or one column (current configuration)
         open={action !== undefined}
         action={action ?? 'bulkEnabled'}
         onClose={() => setAction(undefined)}
-        check={selectedCheck}
+        checks={checks}
         // onSubmit={onChangeSelectedData}
       />
     </div>

@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../../components/Button';
-import { CheckConfigurationModel, FieldModel } from '../../api';
+import { CheckTemplate, FieldModel } from '../../api';
 import SensorParameters from '../../components/DataQualityChecks/SensorParameters';
 import Checkbox from '../../components/Checkbox';
 import CheckRuleItem from '../../components/DataQualityChecks/CheckRuleItem';
+import { ConnectionApiClient } from '../../services/apiClient';
 
 interface UpdateCheckModelProps {
   open: boolean;
   onClose: () => void;
   // onSubmit: (value: CheckConfigurationModel) => void;
-  check?: CheckConfigurationModel;
+  checks?: CheckTemplate[];
   action: 'bulkEnabled' | 'bulkDisabled';
 }
 
@@ -18,14 +19,14 @@ export const UpdateCheckModel = ({
   open,
   onClose,
   // onSubmit,
-  check,
+  checks,
   action
 }: UpdateCheckModelProps) => {
-  const [updatedCheck, setUpdatedCheck] = useState<CheckConfigurationModel>();
+  // const [updatedCheck, setUpdatedCheck] = useState<CheckConfigurationModel>();
 
-  useEffect(() => {
-    setUpdatedCheck(check);
-  }, [check]);
+  // useEffect(() => {
+  //   setUpdatedCheck(check);
+  // }, [check]);
 
   // const handleSubmit = () => {
   //   if (updatedCheck) {
@@ -34,12 +35,12 @@ export const UpdateCheckModel = ({
   //   }
   // };
 
-  const handleChange = (obj: any) => {
-    setUpdatedCheck((prev) => ({
-      ...prev,
-      ...obj
-    }));
-  };
+  // const handleChange = (obj: any) => {
+  //   setUpdatedCheck((prev) => ({
+  //     ...prev,
+  //     ...obj
+  //   }));
+  // };
   // const bulkEnableChecks = () => {
   // TODO: this code has two bugs, one is here
   // TODO: before enabling checks, we need to take the current CheckTemplate (for the check selected in the combo box of checks), open the editor and wait until the user edits the configuration... but the user can cancel the editor,
@@ -110,7 +111,7 @@ export const UpdateCheckModel = ({
     <Dialog open={open} handler={onClose} className="min-w-150 max-w-150">
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
-          <h1 className="text-center mb-4 text-gray-700 text-2xl">
+          {/* <h1 className="text-center mb-4 text-gray-700 text-2xl">
             Update Check: {updatedCheck?.check_name}
           </h1>
         </div>
@@ -171,7 +172,7 @@ export const UpdateCheckModel = ({
             label="Override existing configurations"
             checked={true}
             onChange={() => {}}
-          />
+          /> */}
         </div>
       </DialogBody>
       <DialogFooter className="flex justify-center space-x-6 px-8 pb-8">

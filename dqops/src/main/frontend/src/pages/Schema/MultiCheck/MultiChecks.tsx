@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
-import { CheckConfigurationModel, CheckTemplate } from '../../../api';
+import { CheckTemplate } from '../../../api';
 import Tabs from '../../../components/Tabs';
 import MultiChecksTable from './MultiChecksTable/MultiChecksTable';
 import MultiChecksSearch from './MultiChecksSearch';
@@ -26,11 +26,7 @@ export const MultiChecks = () => {
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
-  const [checks, setChecks] = useState<CheckConfigurationModel[]>();
-  const [checkTemplateList, setCheckTemplateList] = useState<CheckTemplate[]>(
-    []
-  );
-
+  const [checks, setChecks] = useState<CheckTemplate[]>([]);
   const [filterParameters, setFilterParameters] = useState<IFilterTemplate>({
     connection,
     schema,
@@ -63,19 +59,15 @@ export const MultiChecks = () => {
           filterParameters={filterParameters}
           onChangeFilterParameters={onChangeFilterParameters}
           checkTypes={checkTypes}
-          checkTemplateList={checkTemplateList}
-          onChangeCheckTemplateList={(obj: CheckTemplate[]) =>
-            setCheckTemplateList(obj)
-          }
+          checkTemplateList={checks}
+          onChangeCheckTemplateList={(obj: CheckTemplate[]) => setChecks(obj)}
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
           checkTypes={checkTypes}
           filterParameters={filterParameters}
           onChangeFilterParameters={onChangeFilterParameters}
-          onChangeChecks={(checks: CheckConfigurationModel[]) =>
-            setChecks(checks)
-          }
+          onChangeChecks={(checks: CheckTemplate[]) => setChecks(checks)}
         />
         <MultiChecksTable
           checkTarget={filterParameters.checkTarget}

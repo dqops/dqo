@@ -27,6 +27,8 @@ export default function MultiChecksTableItem({
           />
         </div>
       </td>
+      <td className="px-4 py-2 text-left">{check.check_name}</td>
+      <td className="px-4 py-2 text-left">{check.category_name}</td>
       <td className="px-4 py-2 text-left">{check.table_name}</td>
       {checkTarget === 'column' && (
         <td className="px-4 py-2 text-left">{check.column_name}</td>

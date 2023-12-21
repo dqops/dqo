@@ -131,7 +131,8 @@ export default function MultiChecksFilter({
             options={checkNameOptions}
             label="Check name"
             value={filterParameters.checkName}
-            onChange={(value) => onChangeFilterParameters({ checkName: value })} // TODO: we cannot just change the check, we need to call a function that will take the selected check from array of CheckTemplate and store it as the selectedCheck (We are selecting the check template)
+            onChange={(value) => onChangeFilterParameters({ checkName: value })}
+            // TODO: we cannot just change the check, we need to call a function that will take the selected check from array of CheckTemplate and store it as the selectedCheck (We are selecting the check template)
           />
         </div>
       </div>
