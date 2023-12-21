@@ -40,7 +40,6 @@ export default function MultiChecksTable({
       setSelectedData([...selectedData, check]);
     }
   };
-  console.log(selectedCheckModel);
   return (
     <div className="border border-gray-300 rounded-lg p-4 my-4">
       <div className="flex justify-between gap-4">
@@ -108,7 +107,9 @@ export default function MultiChecksTable({
         action={action ?? 'bulkEnabled'}
         onClose={() => setAction(undefined)}
         checks={checks}
-        selectedCheck={selectedCheck}
+        selectedCheckModel={selectedCheckModel}
+        filterParameters={filterParameters}
+        selectedData={selectedData}
         // onSubmit={onChangeSelectedData}
       />
     </div>
