@@ -37,7 +37,9 @@ import OracleConnection from './OracleConnection';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
 import SparkConnection from './SparkConnection';
+import SparkLogo from '../../SvgIcon/svg/spark.svg';
 import DatabricksConnection from './DatabricksConnection';
+import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
 import clsx from 'clsx';
 
 interface IDatabaseConnectionProps {
@@ -166,6 +168,8 @@ const DatabaseConnection = ({
         return 'Oracle Database Connection Settings';
       case ConnectionModelProviderTypeEnum.spark:
         return 'Spark Database Connection Settings';
+      case ConnectionModelProviderTypeEnum.databricks:
+        return 'Databricks Database Connection Settings';
       default:
         return 'Database Connection Settings';
     }
@@ -281,6 +285,10 @@ const DatabaseConnection = ({
         return MySQLLogo;
       case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
+      case ConnectionModelProviderTypeEnum.spark:
+        return SparkLogo;
+      case ConnectionModelProviderTypeEnum.databricks:
+        return DatabricksLogo;
       default:
         return '';
     }
