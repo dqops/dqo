@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Option } from '../../../components/Select';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
-import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckConfigurationModel, CheckTemplate } from '../../../api';
 import Tabs from '../../../components/Tabs';
-import { AxiosResponse } from 'axios';
 import MultiChecksTable from './MultiChecksTable/MultiChecksTable';
 import MultiChecksSearch from './MultiChecksSearch';
 import MultiChecksFilter from './MultiChecksFilter';
@@ -29,12 +26,7 @@ export const MultiChecks = () => {
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
-  const [checkCategoryOptions, setCheckCategoryOptions] = useState<Option[]>(
-    []
-  );
-  const [checkNameOptions, setCheckNameOptions] = useState<Option[]>([]);
   const [checks, setChecks] = useState<CheckConfigurationModel[]>();
-  const [activeTab, setActiveTab] = useState<'daily' | 'monthly'>('daily');
   const [checkTemplateList, setCheckTemplateList] = useState<CheckTemplate[]>(
     []
   );
@@ -53,75 +45,28 @@ export const MultiChecks = () => {
     }));
   };
 
-  useEffect(() => {
-    const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
-      setCheckTemplateList(res.data);
-      const categories = Array.from(
-        new Set(res.data.map((x) => x.check_category))
-      );
-      setCheckCategoryOptions(
-        categories.map((item) => ({
-          label: item ?? '',
-          value: item ?? ''
-        }))
-      );
-      // TODO: we need to store the array of CheckTemplate, because we will need instances to put as selected
-    };
-
-    if (checkTypes === CheckTypes.PROFILING) {
-      SchemaApiClient.getSchemaProfilingChecksTemplates(
-        connection,
-        schema,
-        filterParameters.checkTarget
-      ).then(processResult);
-    } else if (checkTypes === CheckTypes.MONITORING) {
-      SchemaApiClient.getSchemaMonitoringChecksTemplates(
-        connection,
-        schema,
-        activeTab,
-        filterParameters.checkTarget
-      ).then(processResult);
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
-      SchemaApiClient.getSchemaPartitionedChecksTemplates(
-        connection,
-        schema,
-        activeTab,
-        filterParameters.checkTarget
-      ).then(processResult);
-    }
-  }, [connection, schema, checkTypes, filterParameters.checkTarget]);
-
-  useEffect(() => {
-    const onChangeCheckOptions = () => {
-      const checks = checkTemplateList
-        .filter((x) => x.check_category === filterParameters.checkCategory)
-        .map((x) => x.check_name);
-
-      setCheckNameOptions(
-        checks.map((item) => ({
-          label: item ?? '',
-          value: item ?? ''
-        }))
-      );
-    };
-    if (filterParameters.checkCategory) {
-      onChangeCheckOptions();
-    }
-  }, [filterParameters.checkCategory]);
-
   return (
     <div className="text-sm py-4">
       {checkTypes !== CheckTypes.PROFILING && (
         <div className="border-b border-gray-300 pb-0 mb-4">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+          <Tabs
+            tabs={tabs}
+            activeTab={filterParameters.activeTab}
+            onChange={(value: any) =>
+              onChangeFilterParameters({ activeTab: value })
+            }
+          />
         </div>
       )}
       <div className="px-8">
         <MultiChecksFilter
           filterParameters={filterParameters}
           onChangeFilterParameters={onChangeFilterParameters}
-          checkCategoryOptions={checkCategoryOptions}
-          checkNameOptions={checkNameOptions}
+          checkTypes={checkTypes}
+          checkTemplateList={checkTemplateList}
+          onChangeCheckTemplateList={(obj: CheckTemplate[]) =>
+            setCheckTemplateList(obj)
+          }
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
