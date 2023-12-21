@@ -302,6 +302,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'CockroachDB'
   },
   {
+    type: ConnectionModelProviderTypeEnum.databricks,
+    name: 'Databricks',
+    iconName: 'databricks',
+    displayName: 'Databricks'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.mysql,
     name: 'MariaDB',
     iconName: 'mariadb',

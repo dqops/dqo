@@ -41,10 +41,6 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--spark-schema"}, description = "Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private String schema;
-
     @CommandLine.Option(names = {"--spark-user"}, description = "Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
@@ -93,32 +89,6 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
     public void setPort(String port) {
         setDirtyIf(!Objects.equals(this.port, port));
         this.port = port;
-    }
-
-    /**
-     * Returns a schema name. Spark's database and schema terms are interchangeable.
-     * @return Schema name.
-     */
-    public String getSchema() {
-        return schema;
-    }
-
-    /**
-     * Sets a schema name.
-     * @param schema Schema name.
-     */
-    public void setSchema(String schema) {
-        setDirtyIf(!Objects.equals(this.schema, schema));
-        this.schema = schema;
-    }
-
-    /**
-     * Returns a database name. Spark's database and schema terms are interchangeable.
-     * @return Database name.
-     */
-    @JsonIgnore
-    public String getDatabase() {
-        return schema;
     }
 
     /**
@@ -218,13 +188,21 @@ public class SparkParametersSpec extends BaseProviderParametersSpec
         SparkParametersSpec cloned = this.deepClone();
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
-        cloned.schema = secretValueProvider.expandValue(cloned.schema, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
+    }
+
+    /**
+     * Returns a database name.
+     * @return Database name.
+     */
+    @Override
+    public String getDatabase(){
+        return "spark_catalog";
     }
 
 }
