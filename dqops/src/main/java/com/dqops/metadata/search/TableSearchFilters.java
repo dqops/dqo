@@ -17,8 +17,8 @@ package com.dqops.metadata.search;
 
 import com.dqops.metadata.search.pattern.SearchPattern;
 import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.utils.docs.SampleStringsRegistry;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

@@ -18,6 +18,7 @@ package com.dqops.utils.docs;
 
 import com.dqops.metadata.fields.DisplayHint;
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.reflection.ObjectDataType;

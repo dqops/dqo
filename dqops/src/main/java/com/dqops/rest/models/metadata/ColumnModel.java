@@ -17,6 +17,8 @@ package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -62,5 +64,20 @@ public class ColumnModel {
     private String yamlParsingError;
 
     public ColumnModel() {
+    }
+
+    public static class ColumnModelSampleFactory implements SampleValueFactory<ColumnModel> {
+        @Override
+        public ColumnModel createSample() {
+            ColumnSpec columnSpec = new ColumnSpec.ColumnSpecSampleFactory().createSample();
+            return new ColumnModel() {{
+                setConnectionName(SampleStringsRegistry.getConnectionName());
+                setTable(PhysicalTableName.fromSchemaTableFilter(SampleStringsRegistry.getSchemaTableName()));
+                setColumnName(SampleStringsRegistry.getColumnName());
+                setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
+                setSpec(columnSpec);
+                setCanEdit(true);
+            }};
+        }
     }
 }

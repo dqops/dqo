@@ -18,15 +18,14 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.DocumentationReflectionService;
 import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
-import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.TypeModel;
-import com.dqops.utils.docs.client.ComponentReflectionService;
-import com.dqops.utils.docs.client.ComponentReflectionServiceImpl;
+import com.dqops.utils.docs.generators.GeneratorUtility;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.docs.client.OpenApiUtils;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.ControllerModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
+import com.dqops.utils.docs.client.operations.examples.PathParameterFillerUtility;
 import com.dqops.utils.reflection.ObjectDataType;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.string.StringCaseFormat;
@@ -42,7 +41,6 @@ import io.swagger.v3.oas.models.parameters.RequestBody;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -192,6 +190,10 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             returnParameterModel.setTypeModel(returnParameterTypeModel);
 
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
+
+            String sampleReturnValue = GeneratorUtility.getSampleFromTypeModel(returnParameterTypeModel, true);
+            sampleReturnValue = sampleReturnValue.replace(System.lineSeparator(), "\n\t");
+            operationsOperationDocumentationModel.setReturnValueSample(sampleReturnValue);
         }
 
         return operationsOperationDocumentationModel;

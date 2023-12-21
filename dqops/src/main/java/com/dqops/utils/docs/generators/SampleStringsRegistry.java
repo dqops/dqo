@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.utils.docs;
+package com.dqops.utils.docs.generators;
 
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.google.common.base.CaseFormat;
@@ -52,6 +52,10 @@ public class SampleStringsRegistry {
 
     public static String getCheckName() {
         return "sample_check";
+    }
+
+    public static String getCollectorName() {
+        return "sample_collector";
     }
 
     public static String getCategoryName() {
@@ -155,6 +159,8 @@ public class SampleStringsRegistry {
 
         if (parameterNameLower.contains("email")) {
             return getEmail();
+        } else if (parameterNameLower.contains("collector")) {
+            return getCollectorName();
         } else if (parameterNameLower.contains("credential")) {
             return getCredential();
         } else if (parameterNameLower.contains("incident_id")) {

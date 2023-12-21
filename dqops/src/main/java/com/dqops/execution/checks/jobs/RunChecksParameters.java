@@ -19,7 +19,7 @@ import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.checks.progress.SilentCheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

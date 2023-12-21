@@ -23,7 +23,7 @@ import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsCountSensorParametersSpec;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
