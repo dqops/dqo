@@ -1,60 +1,25 @@
 import React from 'react';
-import { CheckTypes } from '../../../shared/routes';
 import RadioButton from '../../../components/RadioButton';
 import Select, { Option } from '../../../components/Select';
-
-interface IFilterTemplate {
-  connection: string;
-  schema: string;
-  activeTab: 'daily' | 'monthly';
-  tableNamePattern?: string | undefined;
-  columnNamePattern?: string | undefined;
-  columnDataType?: string | undefined;
-  checkTarget?: 'table' | 'column' | undefined;
-  checkCategory?: string | undefined;
-  checkName?: string | undefined;
-}
+import { IFilterTemplate } from '../../../shared/constants';
 
 interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
   checkCategoryOptions: Option[];
-  finalOptions: Option[];
+  checkNameOptions: Option[];
 }
 export default function MultiChecksFilter({
   filterParameters,
   onChangeFilterParameters,
   checkCategoryOptions,
-  finalOptions
+  checkNameOptions
 }: IMultiChecksFilter) {
   const sortObjects = (array: Option[]): Option[] => {
     const sortedArray = array.sort((a, b) =>
       (a.label.toString() ?? '').localeCompare(b.label.toString() ?? '')
     );
     return sortedArray;
-  };
-
-  const removeDuplicateOptions = (options: Option[]): Option[] => {
-    const uniqueOptions: Option[] = [];
-    const uniqueValues = new Set<string | number>();
-
-    for (const option of options) {
-      if (!uniqueValues.has(option.label as string)) {
-        uniqueValues.add(option.label as string);
-        uniqueOptions.push(option);
-      }
-    }
-
-    return uniqueOptions;
-  };
-
-  const setNewArray = (oldArray: Option[]): Option[] => {
-    const newArray: Option[] = oldArray.map((option) => ({
-      ...option,
-      value: option.label ?? ''
-    }));
-
-    return newArray;
   };
 
   return (
@@ -91,16 +56,7 @@ export default function MultiChecksFilter({
       <div className="flex w-1/4 px-10">
         <div className="max-w-120 w-120">
           <Select
-            options={setNewArray(
-              sortObjects(
-                removeDuplicateOptions(
-                  // TODO: remove this deduplication, should not be required
-                  finalOptions.filter(
-                    (x) => x.value === filterParameters.checkCategory
-                  )
-                )
-              )
-            )}
+            options={checkNameOptions}
             label="Check name"
             value={filterParameters.checkName}
             onChange={(value) => onChangeFilterParameters({ checkName: value })} // TODO: we cannot just change the check, we need to call a function that will take the selected check from array of CheckTemplate and store it as the selectedCheck (We are selecting the check template)

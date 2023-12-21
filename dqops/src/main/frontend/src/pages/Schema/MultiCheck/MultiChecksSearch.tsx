@@ -3,18 +3,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
-
-interface IFilterTemplate {
-  connection: string;
-  schema: string;
-  activeTab: 'daily' | 'monthly';
-  tableNamePattern?: string | undefined;
-  columnNamePattern?: string | undefined;
-  columnDataType?: string | undefined;
-  checkTarget?: 'table' | 'column' | undefined;
-  checkCategory?: string | undefined;
-  checkName?: string | undefined;
-}
+import { IFilterTemplate } from '../../../shared/constants';
 
 interface IMultiChecksSearch {
   checkTypes: CheckTypes;

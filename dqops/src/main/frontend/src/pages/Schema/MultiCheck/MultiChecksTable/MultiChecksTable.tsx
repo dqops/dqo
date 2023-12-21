@@ -1,30 +1,17 @@
 import React, { useState } from 'react';
 import { CheckConfigurationModel, CheckTemplate } from '../../../../api';
-import Checkbox from '../../../../components/Checkbox';
-import DisplaySensorParameters from '../../DisplaySensorParameters';
-import FieldValue from '../../FieldValue';
 import Button from '../../../../components/Button';
 import { ConnectionApiClient } from '../../../../services/apiClient';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
+import MultiChecksTableItem from './MultiChecksTableItem';
+import { IFilterTemplate } from '../../../../shared/constants';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
   checks: CheckConfigurationModel[] | undefined;
   filterParameters: IFilterTemplate;
 };
-
-interface IFilterTemplate {
-  connection: string;
-  schema: string;
-  activeTab: 'daily' | 'monthly';
-  tableNamePattern?: string | undefined;
-  columnNamePattern?: string | undefined;
-  columnDataType?: string | undefined;
-  checkTarget?: 'table' | 'column' | undefined;
-  checkCategory?: string | undefined;
-  checkName?: string | undefined;
-}
 
 export default function MultiChecksTable({
   checkTarget,
@@ -187,46 +174,13 @@ export default function MultiChecksTable({
         </thead>
         <tbody>
           {checks?.map((check, index) => (
-            <tr key={index}>
-              <td className="px-4 py-2 text-left">
-                <div className="flex">
-                  <Checkbox
-                    onChange={() => onChangeSelection(check)}
-                    checked={selectedData.includes(check)}
-                  />
-                </div>
-              </td>
-              <td className="px-4 py-2 text-left">{check.table_name}</td>
-              {checkTarget === 'column' && (
-                <td className="px-4 py-2 text-left">{check.column_name}</td>
-              )}
-              <td className="px-4 py-2 text-left">
-                <DisplaySensorParameters
-                  parameters={check.sensor_parameters || []}
-                />
-              </td>
-              <td className="px-4 py-2 text-left truncate">
-                {check.warning?.rule_parameters?.map((item, index) => (
-                  <div key={index}>
-                    <FieldValue field={item} />
-                  </div>
-                ))}
-              </td>
-              <td className="px-4 py-2 text-left truncate">
-                {check.error?.rule_parameters?.map((item, index) => (
-                  <div key={index}>
-                    <FieldValue field={item} />
-                  </div>
-                ))}
-              </td>
-              <td className="px-4 py-2 text-left truncate">
-                {check.fatal?.rule_parameters?.map((item, index) => (
-                  <div key={index}>
-                    <FieldValue field={item} />
-                  </div>
-                ))}
-              </td>
-            </tr>
+            <MultiChecksTableItem
+              checkTarget={filterParameters.checkTarget}
+              check={check}
+              key={index}
+              checked={selectedData.includes(check)}
+              onChangeSelection={onChangeSelection}
+            />
           ))}
         </tbody>
       </table>
