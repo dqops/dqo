@@ -64,7 +64,7 @@ public class DatabricksColumnNumericSampleStddevSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.0493466280289, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class DatabricksColumnNumericSampleStddevSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.0493466280289, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class DatabricksColumnNumericSampleStddevSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.0493466280289, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class DatabricksColumnNumericSampleStddevSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(109.04934662802891, resultTable.column(0).get(0));
+        Assertions.assertEquals(109.0493466280289, resultTable.column(0).get(0));
     }
 }
