@@ -6,7 +6,6 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -37,12 +36,12 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     private String host;
 
     @CommandLine.Option(names = {"--databricks-port"}, description = "Databricks port number")
-    @JsonPropertyDescription("Databricks port number. The default port is 10000. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.")
+    @JsonPropertyDescription("Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--databricks-schema"}, description = "Databricks schema name.")
-    @JsonPropertyDescription("Databricks schema name. Supports also a ${DATABRICKS_SCHEMA} configuration with a custom environment variable.")
-    private String schema;
+    @CommandLine.Option(names = {"--databricks-catalog"}, description = "Databricks catalog name.")
+    @JsonPropertyDescription("Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.")
+    private String catalog;
 
     @CommandLine.Option(names = {"--databricks-user"}, description = "Databricks user name.")
     @JsonPropertyDescription("Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.")
@@ -103,30 +102,22 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a schema name. Databricks's database and schema terms are interchangeable.
-     * @return Schema name.
+     * Returns a catalog name.
+     * @return Catalog name.
      */
-    public String getSchema() {
-        return schema;
+    public String getCatalog() {
+        return catalog;
     }
 
     /**
-     * Sets a schema name.
-     * @param schema Schema name.
+     * Sets a catalog name.
+     * @param catalog Catalog name.
      */
-    public void setSchema(String schema) {
-        setDirtyIf(!Objects.equals(this.schema, schema));
-        this.schema = schema;
+    public void setCatalog(String catalog) {
+        setDirtyIf(!Objects.equals(this.catalog, catalog));
+        this.catalog = catalog;
     }
 
-    /**
-     * Returns a database name. Databricks's database and schema terms are interchangeable.
-     * @return Database name.
-     */
-    @JsonIgnore
-    public String getDatabase() {
-        return schema;
-    }
 
     /**
      * Returns the user that is used to log in to the data source (JDBC user or similar).
@@ -259,7 +250,7 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
         DatabricksParametersSpec cloned = this.deepClone();
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
-        cloned.schema = secretValueProvider.expandValue(cloned.schema, lookupContext);
+        cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
@@ -268,6 +259,15 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;
+    }
+
+    /**
+     * Returns a database name.
+     * @return Database name.
+     */
+    @Override
+    public String getDatabase(){
+        return catalog;
     }
 
 }

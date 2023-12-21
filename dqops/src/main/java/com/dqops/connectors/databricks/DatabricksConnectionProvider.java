@@ -129,12 +129,12 @@ public class DatabricksConnectionProvider extends AbstractSqlConnectionProvider 
             databricksSpec.setPort(terminalReader.prompt("Databricks port number (--databricks-port)", "${DATABRICKS_PORT}", false));
         }
 
-        if (Strings.isNullOrEmpty(databricksSpec.getSchema())) {
+        if (Strings.isNullOrEmpty(databricksSpec.getCatalog())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--databricks-schema");
+                throw new CliRequiredParameterMissingException("--databricks-catalog");
             }
 
-            databricksSpec.setSchema(terminalReader.prompt("Databricks schema name (--databricks-schema)", "${DATABRICKS_SCHEMA}", false));
+            databricksSpec.setCatalog(terminalReader.prompt("Databricks catalog name (--databricks-catalog)", "${DATABRICKS_CATALOG}", false));
         }
 
         if (Strings.isNullOrEmpty(databricksSpec.getUser())) {

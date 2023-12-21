@@ -87,10 +87,6 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String schema = this.getSecretValueProvider().expandValue(databricksParametersSpec.getSchema(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(schema)) {
-            jdbcConnectionBuilder.append(schema);
-        }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
         hikariConfig.setJdbcUrl(jdbcUrl);
@@ -100,12 +96,19 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(databricksParametersSpec.getProperties());
         }
 
-        if(databricksParametersSpec.getHttpPath() != null){
-            dataSourceProperties.put("HttpPath", databricksParametersSpec.getHttpPath());
+        String catalog = this.getSecretValueProvider().expandValue(databricksParametersSpec.getCatalog(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(catalog)){
+            dataSourceProperties.put("ConnCatalog", catalog);
         }
 
-        if(databricksParametersSpec.getHttpPath() != null){
-            dataSourceProperties.put("PWD", databricksParametersSpec.getAccessToken());
+        String httpPath = this.getSecretValueProvider().expandValue(databricksParametersSpec.getHttpPath(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(httpPath)) {
+            dataSourceProperties.put("HttpPath", httpPath);
+        }
+
+        String accessToken = this.getSecretValueProvider().expandValue(databricksParametersSpec.getAccessToken(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(accessToken)) {
+            dataSourceProperties.put("PWD", accessToken);
         }
 
         String userName = this.getSecretValueProvider().expandValue(databricksParametersSpec.getUser(), secretValueLookupContext);
@@ -131,13 +134,13 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public List<SourceSchemaModel> listSchemas() {
         StringBuilder sqlBuilder = new StringBuilder();
-        sqlBuilder.append("SHOW DATABASES");
+        sqlBuilder.append("SHOW SCHEMAS");
         String listSchemataSql = sqlBuilder.toString();
         Table schemaRows = this.executeQuery(listSchemataSql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         List<SourceSchemaModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < schemaRows.rowCount(); rowIndex++) {
-            String namespace = schemaRows.getString(rowIndex, "namespace");
+            String namespace = schemaRows.getString(rowIndex, "databaseName");
             SourceSchemaModel schemaModel = new SourceSchemaModel(namespace);
             results.add(schemaModel);
         }
@@ -163,7 +166,7 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
 
         List<SourceTableModel> results = new ArrayList<>();
         for (int rowIndex = 0; rowIndex < tablesRows.rowCount() ; rowIndex++) {
-            String tableName = tablesRows.getString(rowIndex, "tablename");
+            String tableName = tablesRows.getString(rowIndex, "tableName");
             PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
             SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
             results.add(schemaModel);
@@ -216,7 +219,7 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
             List<TableSpec> tableSpecs = new ArrayList<>();
 
             for (String tableName : tableNames) {
-                String sql = "DESCRIBE " + tableName;
+                String sql = String.format("DESCRIBE %s.%s", schemaName, tableName);
                 Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
