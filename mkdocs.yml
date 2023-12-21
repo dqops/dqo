@@ -52,9 +52,13 @@ nav:
       - "examples/index.md"
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
+      - Data availability:
+          - Table availability: "examples/data-availability/table-availability.md"
       - Data completeness:
           - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
           - Number of null values: "examples/data-completeness/number-of-null-values.md"
+      - Data consistency:
+          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
@@ -67,14 +71,10 @@ nav:
           - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
-      - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
-      - Availability:
-          - Table availability: "examples/stability/table-availability.md"
       - Schema:
           - Table schema detection: "examples/schema/schema-detection.md"
       - Data quality monitoring:
