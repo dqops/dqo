@@ -192,7 +192,8 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
 
             String sampleReturnValue = GeneratorUtility.getSampleFromTypeModel(returnParameterTypeModel, true);
-            operationsOperationDocumentationModel.setOperationDescription(sampleReturnValue);
+            sampleReturnValue = sampleReturnValue.replace(System.lineSeparator(), "\n\t");
+            operationsOperationDocumentationModel.setReturnValueSample(sampleReturnValue);
         }
 
         return operationsOperationDocumentationModel;
