@@ -118,12 +118,17 @@ public class CheckFlatConfigurationFactoryImpl implements CheckFlatConfiguration
      *
      * @param checkSearchFilters Check search filters.
      * @param principal User principal.
+     * @param limit The limit of results.
      * @return List of self-contained check configuration models that fit the filters.
      */
     @Override
-    public List<CheckConfigurationModel> findAllCheckConfigurations(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {
+    public List<CheckConfigurationModel> findAllCheckConfigurations(
+            CheckSearchFilters checkSearchFilters,
+            DqoUserPrincipal principal,
+            int limit) {
         return this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal).stream()
                 .flatMap(allChecksModel -> this.fromAllChecksModel(allChecksModel).stream())
+                .limit(limit)
                 .collect(Collectors.toList());
     }
 

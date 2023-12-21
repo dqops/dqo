@@ -1277,6 +1277,12 @@ paths:
         description: "Check configured"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit of results, the default value is 1000"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Configuration of data quality monitoring checks on a schema\
@@ -1365,6 +1371,12 @@ paths:
         description: "Check configured"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit of results, the default value is 1000"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Configuration of data quality partitioned checks on a schema\
@@ -1445,6 +1457,12 @@ paths:
         description: "Check configured"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit of results, the default value is 1000"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "List of profiling checks configurations on a schema returned"
@@ -1992,6 +2010,12 @@ paths:
         description: "Check configured"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit of results, the default value is 1000"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Configuration of data quality monitoring checks on a schema\
@@ -2072,6 +2096,12 @@ paths:
         description: "Check configured"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit of results, the default value is 1000"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Configuration of data quality partitioned checks on a schema\
@@ -2144,6 +2174,12 @@ paths:
         description: "Check configured"
         required: false
         type: "boolean"
+      - name: "limit"
+        in: "query"
+        description: "Limit of results, the default value is 1000"
+        required: false
+        type: "integer"
+        format: "int32"
       responses:
         200:
           description: "Configuration of data quality profiling checks on a schema\

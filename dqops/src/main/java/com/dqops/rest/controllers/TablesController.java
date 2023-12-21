@@ -1478,6 +1478,7 @@ public class TablesController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results.
      * @return UI friendly data quality profiling check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/profiling/model", produces = "application/json")
@@ -1509,7 +1510,9 @@ public class TablesController {
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
             Optional<Boolean> checkEnabled,
             @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkConfigured) {
+            Optional<Boolean> checkConfigured,
+            @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
+            Optional<Integer> limit) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         
@@ -1528,6 +1531,7 @@ public class TablesController {
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
                 checkConfigured.orElse(null),
+                limit.orElse(1000),
                 principal
         );
 
@@ -1546,6 +1550,7 @@ public class TablesController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results.
      * @return UI friendly data quality monitoring check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/monitoring/{timeScale}/model", produces = "application/json")
@@ -1578,7 +1583,9 @@ public class TablesController {
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
             Optional<Boolean> checkEnabled,
             @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkConfigured) {
+            Optional<Boolean> checkConfigured,
+            @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
+            Optional<Integer> limit) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1597,6 +1604,7 @@ public class TablesController {
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
                 checkConfigured.orElse(null),
+                limit.orElse(1000),
                 principal
         );
 
@@ -1615,6 +1623,7 @@ public class TablesController {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results.
      * @return UI friendly data quality partitioned check configuration list on a requested schema.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnchecks/partitioned/{timeScale}/model", produces = "application/json")
@@ -1647,7 +1656,9 @@ public class TablesController {
             @ApiParam(value = "Check enabled", required = false) @RequestParam(required = false)
             Optional<Boolean> checkEnabled,
             @ApiParam(value = "Check configured", required = false) @RequestParam(required = false)
-            Optional<Boolean> checkConfigured) {
+            Optional<Boolean> checkConfigured,
+            @ApiParam(value = "Limit of results, the default value is 1000", required = false) @RequestParam(required = false)
+            Optional<Integer> limit) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1666,6 +1677,7 @@ public class TablesController {
                 checkName.orElse(null),
                 checkEnabled.orElse(null),
                 checkConfigured.orElse(null),
+                limit.orElse(1000),
                 principal
         );
 

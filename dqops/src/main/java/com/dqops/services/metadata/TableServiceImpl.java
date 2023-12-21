@@ -169,6 +169,7 @@ public class TableServiceImpl implements TableService {
                                                                        String checkName,
                                                                        Boolean checkEnabled,
                                                                        Boolean checkConfigured,
+                                                                       int limit,
                                                                        DqoUserPrincipal principal) {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
@@ -183,7 +184,7 @@ public class TableServiceImpl implements TableService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal, limit);
     }
 
     /**

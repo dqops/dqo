@@ -78,6 +78,7 @@ public interface TableService {
      * @param checkName         (Optional) Filter on check name.
      * @param checkEnabled      (Optional) Filter on check enabled status.
      * @param checkConfigured   (Optional) Filter on check configured status.
+     * @param limit             The limit of results.
      * @param principal         User principal.
      * @return UI friendly data quality profiling check configuration list on a requested table.
      */
@@ -92,6 +93,7 @@ public interface TableService {
             String checkName,
             Boolean checkEnabled,
             Boolean checkConfigured,
+            int limit,
             DqoUserPrincipal principal);
 
     /**

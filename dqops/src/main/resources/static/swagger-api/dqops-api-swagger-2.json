@@ -1557,6 +1557,13 @@
           "description" : "Check configured",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limit of results, the default value is 1000",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -1658,6 +1665,13 @@
           "description" : "Check configured",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limit of results, the default value is 1000",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -1752,6 +1766,13 @@
           "description" : "Check configured",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limit of results, the default value is 1000",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -2428,6 +2449,13 @@
           "description" : "Check configured",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limit of results, the default value is 1000",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -2522,6 +2550,13 @@
           "description" : "Check configured",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limit of results, the default value is 1000",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
@@ -2609,6 +2644,13 @@
           "description" : "Check configured",
           "required" : false,
           "type" : "boolean"
+        }, {
+          "name" : "limit",
+          "in" : "query",
+          "description" : "Limit of results, the default value is 1000",
+          "required" : false,
+          "type" : "integer",
+          "format" : "int32"
         } ],
         "responses" : {
           "200" : {
