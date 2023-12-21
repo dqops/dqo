@@ -40,5 +40,5 @@ public interface CheckFlatConfigurationFactory {
      * @param principal User principal.
      * @return List of self-contained check configuration models that fit the filters.
      */
-    List<CheckConfigurationModel> fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal);
+    List<CheckConfigurationModel> findAllCheckConfigurations(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal);
 }

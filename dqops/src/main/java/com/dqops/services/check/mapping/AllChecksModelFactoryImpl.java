@@ -217,16 +217,23 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
+        boolean findAlsoNotConfiguredChecks = checkSearchFilters.getCheckConfigured() != null && !checkSearchFilters.getCheckConfigured();
 
         Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.profiling) {
-                AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false);
+                AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false, findAlsoNotConfiguredChecks);
+                if (checkContainer == null) {
+                    continue;
+                }
                 checkContainers.put(new CheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
-                    AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale, false);
+                    AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale, false, findAlsoNotConfiguredChecks);
+                    if (checkContainer == null) {
+                        continue;
+                    }
                     checkContainers.put(new CheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }
@@ -322,16 +329,24 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
+        boolean findAlsoNotConfiguredChecks = checkSearchFilters.getCheckConfigured() != null && !checkSearchFilters.getCheckConfigured();
+
 
         Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.profiling) {
-                AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null, false);
+                AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null, false, findAlsoNotConfiguredChecks);
+                if (checkContainer == null) {
+                    continue;
+                }
                 checkContainers.put(new CheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
-                    AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, timeScale, false);
+                    AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, timeScale, false, findAlsoNotConfiguredChecks);
+                    if (checkContainer == null) {
+                        continue;
+                    }
                     checkContainers.put(new CheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }

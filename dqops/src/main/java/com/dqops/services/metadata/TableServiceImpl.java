@@ -183,7 +183,7 @@ public class TableServiceImpl implements TableService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal);
     }
 
     /**

@@ -164,13 +164,21 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
         CheckType checkType = checkCategoriesSpec.getCheckType();
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
+        boolean includeAlsoEmptyCategories = runChecksTemplate == null || runChecksTemplate.getCheckConfigured() == null || !runChecksTemplate.getCheckConfigured();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
                 continue;
             }
 
-            Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            Object categoryFieldValue = includeAlsoEmptyCategories ?
+                    categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec) :
+                    categoryFieldInfo.getFieldValue(checkCategoriesSpec);
+
+            if (categoryFieldValue == null) {
+                continue;
+            }
+
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap = (AbstractComparisonCheckCategorySpecMap<?>)categoryFieldValue;
                 Type actualTypeArgument = ((ParameterizedType) categoryFieldInfo.getClazz().getGenericSuperclass()).getActualTypeArguments()[0];

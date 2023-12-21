@@ -205,7 +205,7 @@ public class SchemaServiceImpl implements SchemaService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal);
     }
 
     /**
