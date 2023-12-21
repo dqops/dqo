@@ -18,6 +18,7 @@ package com.dqops.utils.docs.client.operations;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.utils.docs.DocumentationReflectionService;
 import com.dqops.utils.docs.DocumentationReflectionServiceImpl;
+import com.dqops.utils.docs.generators.GeneratorUtility;
 import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.docs.client.OpenApiUtils;
 import com.dqops.utils.docs.client.apimodel.ComponentModel;
@@ -190,7 +191,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
 
-            String sampleReturnValue = PathParameterFillerUtility.getSampleFromTypeModel(returnParameterTypeModel, true);
+            String sampleReturnValue = GeneratorUtility.getSampleFromTypeModel(returnParameterTypeModel, true);
             operationsOperationDocumentationModel.setOperationDescription(sampleReturnValue);
         }
 

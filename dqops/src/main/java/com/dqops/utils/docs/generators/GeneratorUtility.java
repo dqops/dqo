@@ -25,14 +25,37 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Stream;
 
 public class GeneratorUtility {
     private static JsonSerializer jsonSerializer = new JsonSerializerImpl();
 
-    public static <T> T generateSample() {
-        SampleValueFactory
+    public static <T> T generateSample(Class<T> clazz) {
+        try {
+            SampleValueFactory<T> sampleValueFactory = getSampleValueFactoryFromClass(clazz);
+            return sampleValueFactory.createSample();
+        } catch (IllegalArgumentException e) {
+            // No factory for class.
+            System.out.println(e.getMessage() + ". Attempting to generate a default sample.");
+        }
+
+        Constructor<?>[] constructors = clazz.getConstructors();
+        if (constructors.length == 0) {
+            throw new IllegalArgumentException("No constructor for " + clazz.getName());
+        }
+
+        Optional<Constructor<?>> defaultConstructorOptional = Arrays.stream(constructors)
+                .filter(constructor -> constructor.getParameterCount() == 0)
+                .findFirst();
+        if (defaultConstructorOptional.isEmpty()) {
+            throw new IllegalArgumentException("No parameterless constructor for " + clazz.getName());
+        }
+
+        try {
+            Constructor<T> defaultConstructor = (Constructor<T>) defaultConstructorOptional.get();
+            return defaultConstructor.newInstance();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error generating sample using a default constructor for class " + clazz.getName(), e);
+        }
     }
 
     protected static <T> SampleValueFactory<T> getSampleValueFactoryFromClass(Class<T> clazz) {
@@ -45,15 +68,21 @@ public class GeneratorUtility {
 
         Class<? extends SampleValueFactory> sampleValueFactory = (Class<? extends SampleValueFactory>) sampleValueFactoryOptional.get();
 
-        Constructor<? extends SampleValueFactory> sampleValueFactoryConstructor = (Constructor<? extends SampleValueFactory>) sampleValueFactory.getConstructors()[0];
+        Constructor<?>[] sampleValueFactoryConstructors = sampleValueFactory.getConstructors();
+        Constructor<? extends SampleValueFactory> sampleValueFactoryConstructor = (Constructor<? extends SampleValueFactory>) sampleValueFactoryConstructors[0];
         try {
-            SampleValueFactory<T> t = sampleValueFactoryConstructor.newInstance();
-            return t;
+            return (SampleValueFactory<T>) sampleValueFactoryConstructor.newInstance();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Get sample string from {@link TypeModel} in a JSON form, assuming it doesn't have a complex nested structure.
+     * @param typeModel TypeModel for which to generate a sample. Object, flat list or flat map.
+     * @param prettyPrint PrettyPrint flag passed to {@link JsonSerializer}.
+     * @return JSON string containing the sample.
+     */
     public static String getSampleFromTypeModel(TypeModel typeModel, boolean prettyPrint) {
         switch (typeModel.getDataType()) {
             case enum_type:
@@ -63,26 +92,12 @@ public class GeneratorUtility {
                     case map_type:
                         return "{}";
                     case list_type:
-                        return "[]";
+                        TypeModel genericTypeModel = typeModel.getGenericKeyType();
+                        assert genericTypeModel.getObjectDataType() == ObjectDataType.object_type;
+                        List<?> l = SampleListUtility.generateList(genericTypeModel.getClazz(), 3);
+                        return prettyPrint ? jsonSerializer.serializePrettyPrint(l) : jsonSerializer.serialize(l);
                     case object_type:
-                        Optional<Class<?>> sampleValueFactoryOptional = Arrays.stream(typeModel.getClazz().getClasses())
-                                .filter(SampleValueFactory.class::isAssignableFrom)
-                                .findFirst();
-                        if (sampleValueFactoryOptional.isEmpty()) {
-                            throw new IllegalArgumentException("No factory for " + typeModel.getClassNameUsedOnTheField());
-                        }
-
-                        Class<? extends SampleValueFactory> sampleValueFactory = (Class<? extends SampleValueFactory>) sampleValueFactoryOptional.get();
-
-                        Constructor<? extends SampleValueFactory> s = (Constructor<? extends SampleValueFactory>) sampleValueFactory.getConstructors()[0];
-                        Object sample;
-                        try {
-                            SampleValueFactory<?> t = s.newInstance();
-                            sample = t.createSample();
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
-
+                        Object sample = generateSample(typeModel.getClazz());
                         return prettyPrint ? jsonSerializer.serializePrettyPrint(sample) : jsonSerializer.serialize(sample);
                 }
             case string_list_type:

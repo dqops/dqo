@@ -25,6 +25,7 @@ import com.github.jknack.handlebars.io.FileTemplateLoader;
 import io.swagger.models.auth.In;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;

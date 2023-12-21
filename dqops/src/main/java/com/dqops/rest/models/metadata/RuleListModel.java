@@ -15,6 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -69,5 +71,18 @@ public class RuleListModel {
     private String yamlParsingError;
 
     public RuleListModel() {
+    }
+
+    public static class RuleListModelSampleFactory implements SampleValueFactory<RuleListModel> {
+        @Override
+        public RuleListModel createSample() {
+            return new RuleListModel() {{
+                setRuleName(SampleStringsRegistry.getRuleName());
+                setFullRuleName(SampleStringsRegistry.getFullRuleName());
+                setCustom(false);
+                setBuiltIn(true);
+                setCanEdit(true);
+            }};
+        }
     }
 }

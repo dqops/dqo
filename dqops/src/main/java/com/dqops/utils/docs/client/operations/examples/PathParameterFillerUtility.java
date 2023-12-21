@@ -16,19 +16,16 @@
 
 package com.dqops.utils.docs.client.operations.examples;
 
-import com.dqops.utils.docs.generators.SampleLongsRegistry;
-import com.dqops.utils.docs.generators.SampleStringsRegistry;
-import com.dqops.utils.docs.generators.SampleValueFactory;
-import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.docs.client.operations.OperationParameterDocumentationModel;
 import com.dqops.utils.docs.client.operations.OperationParameterType;
-import com.dqops.utils.reflection.ObjectDataType;
-import com.dqops.utils.serialization.JsonSerializer;
-import com.dqops.utils.serialization.JsonSerializerImpl;
+import com.dqops.utils.docs.generators.GeneratorUtility;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.google.common.base.CaseFormat;
 
-import java.lang.reflect.Constructor;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -70,7 +67,7 @@ public class PathParameterFillerUtility {
             case long_type:
                 return Long.toString(SampleLongsRegistry.getMatchingLongForParameter(parameterName));
             default:
-                return getSampleFromTypeModel(parameterType, false);
+                return GeneratorUtility.getSampleFromTypeModel(parameterType, false);
         }
     }
 }

@@ -54,6 +54,10 @@ public class SampleStringsRegistry {
         return "sample_check";
     }
 
+    public static String getCollectorName() {
+        return "sample_collector";
+    }
+
     public static String getCategoryName() {
         return "sample_category";
     }
@@ -155,6 +159,8 @@ public class SampleStringsRegistry {
 
         if (parameterNameLower.contains("email")) {
             return getEmail();
+        } else if (parameterNameLower.contains("collector")) {
+            return getCollectorName();
         } else if (parameterNameLower.contains("credential")) {
             return getCredential();
         } else if (parameterNameLower.contains("incident_id")) {
