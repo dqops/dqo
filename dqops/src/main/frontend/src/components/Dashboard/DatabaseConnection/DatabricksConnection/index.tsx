@@ -68,13 +68,6 @@ const DatabricksConnection = ({
       />
       <FieldTypeInput
         data={sharedCredentials}
-        label="Options"
-        className="mb-4"
-        value={databricks?.options}
-        onChange={(value) => handleChange({ options: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
         label="HttpPath"
         className="mb-4"
         value={databricks?.http_path}
@@ -86,6 +79,13 @@ const DatabricksConnection = ({
         className="mb-4"
         value={databricks?.access_token}
         onChange={(value) => handleChange({ access_token: value })}
+      />
+      <FieldTypeInput
+        data={sharedCredentials}
+        label="Options"
+        className="mb-4"
+        value={databricks?.options}
+        onChange={(value) => handleChange({ options: value })}
       />
       <JdbcPropertiesView
         properties={databricks?.properties}

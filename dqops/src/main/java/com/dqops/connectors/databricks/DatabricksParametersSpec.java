@@ -51,10 +51,6 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.")
     private String password;
 
-    @CommandLine.Option(names = {"--databricks-options"}, description = "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
     @CommandLine.Option(names = {"--databricks-http-path"}, description = "Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>")
     @JsonPropertyDescription("Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.")
     private String httpPath;
@@ -62,6 +58,10 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @CommandLine.Option(names = {"--databricks-access-token"}, description = "Databricks access token for the warehouse.")
     @JsonPropertyDescription("Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.")
     private String accessToken;
+
+    @CommandLine.Option(names = {"--databricks-options"}, description = "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
+    @JsonPropertyDescription("Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.")
+    private String options;
 
     @CommandLine.Option(names = {"-D"}, description = "Databricks additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)

@@ -74,7 +74,7 @@ dqo> connection add
 Fill in the data you will be asked for.
 
 ```
-Connection name (--name): connection1
+Connection name (--name): spark-connection
 Database provider type (--provider):
  [ 1] bigquery
  [ 2] snowflake
@@ -91,22 +91,22 @@ Spark host name (--spark-host) [${SPARK_HOST}]: localhost
 Spark port number (--spark-port) [${SPARK_PORT}]: 10000
 Spark user name (--spark-user) [${SPARK_USER}]: 
 Spark user password (--spark-password) [${SPARK_PASSWORD}]: 
-Connection connection1 was successfully added.
-Run 'table import -c=connection1' to import tables.
+Connection spark-connection was successfully added.
+Run 'table import -c=spark-connection' to import tables.
 ```
 
 You can also run the command with parameters to add a connection in just a single step.
 
 ```
-dqo> connection add --name=connection1
+dqo> connection add --name=spark-connection
 --provider=spark
 --spark-host=localhost
---spark-port=1521
+--spark-port=10000
 --spark-user=test
 --spark-password=xxx
 ```
 
-After adding connection run `table import -c=connection1` to select schemas and import tables.
+After adding connection run `table import -c=spark-connection` to select schemas and import tables.
 
 DQOps will ask you to select the schema from which the tables will be imported.
 
@@ -135,7 +135,7 @@ spec:
   provider_type: spark
   spark:
     host: localhost
-    port: 1521
+    port: 10000
     user: testing
     password: xxx
   incident_grouping:
