@@ -34,6 +34,9 @@ You can use DQOps with the most popular databases. [Learn here how to connect a 
 &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](https://dqops.com/docs/images/connections/microsoft-sql-server.png)
 &nbsp; &nbsp; &nbsp; ![MySQL](https://dqops.com/docs/images/connections/mysql.png)
 &nbsp; &nbsp; &nbsp; ![Oracle](https://dqops.com/docs/images/connections/oracle2.png)
+&nbsp; &nbsp; &nbsp; ![Spark](https://dqops.com/docs/images/connections/spark.png)
+&nbsp; &nbsp; &nbsp; ![Databricks](https://dqops.com/docs/images/connections/databricks.png)
+
 
 ## DQOps user interface
 
