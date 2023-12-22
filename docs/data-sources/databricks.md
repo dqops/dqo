@@ -15,11 +15,11 @@ It is recommended to use an access token to connect an instance, so a permission
 
 2. Select Databricks database type.
 
-    ![Selecting Databricks database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-databricks.png)
+    ![Selecting Databricks database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-databricks2.png)
 
 3. Add connection settings.
 
-    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-databricks.png)
+    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-databricks1.png)
 
     | Databricks connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
     |--------------------------------|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -27,7 +27,7 @@ It is recommended to use an access token to connect an instance, so a permission
     | Parallel jobs limit            |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                 |
     | Host                           | host                                     | Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.                                                                                                                                |
     | Port                           | port                                     | Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.                                                                                                     |
-    | Catalog                        | catalog                                  | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          
+    | Catalog                        | catalog                                  | Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.                                                                                                                          |                                                                                                                           
     | User name                      | user                                     | Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.                                                                                                                                |
     | Password                       | password                                 | Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.                                                                                                                    |
     | Http Path                      | http_path                                | Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.                                                |
