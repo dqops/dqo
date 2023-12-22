@@ -29,7 +29,10 @@ export default function MultiChecksSearch({
         filterParameters.columnDataType,
         filterParameters.checkTarget,
         filterParameters.checkCategory,
-        filterParameters.checkName
+        filterParameters.checkName,
+        undefined,
+        true,
+        undefined
       ).then((res) => {
         onChangeChecks(res.data);
       });
@@ -46,7 +49,10 @@ export default function MultiChecksSearch({
         filterParameters.columnDataType,
         filterParameters.checkTarget,
         filterParameters.checkCategory,
-        filterParameters.checkName
+        filterParameters.checkName,
+        undefined,
+        true,
+        undefined
       ).then((res) => {
         onChangeChecks(res.data);
       });
@@ -63,7 +69,10 @@ export default function MultiChecksSearch({
         filterParameters.columnDataType,
         filterParameters.checkTarget,
         filterParameters.checkCategory,
-        filterParameters.checkName
+        filterParameters.checkName,
+        undefined,
+        true,
+        undefined
       ).then((res) => {
         onChangeChecks(res.data);
       });

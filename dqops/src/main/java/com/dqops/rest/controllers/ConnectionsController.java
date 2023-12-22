@@ -38,7 +38,7 @@ import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.services.check.CheckService;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import com.dqops.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -831,15 +831,15 @@ public class ConnectionsController {
     }
 
     /**
-     * Enables a named check on this connection in the locations specified by filter.
+     * Activates a named check on this connection in the locations specified by filter.
      * Allows for configuring the rules for particular alert levels.
      * @param connectionName        Connection name.
      * @param checkName             Check name.
      * @param updatePatchParameters Check search filters and template model with the configurations.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkenable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkEnableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter", response = Void.class,
+    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkactivate", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "bulkActivateConnectionChecks", notes = "Activates all named check on this connection in the locations specified by filter", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -851,7 +851,7 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> bulkEnableConnectionChecks(
+    public ResponseEntity<Mono<Void>> bulkActivateConnectionChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
@@ -872,20 +872,20 @@ public class ConnectionsController {
 
         updatePatchParameters.getCheckSearchFilters().setConnection(connectionName);
         updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
-        checkService.updateAllChecksPatch(updatePatchParameters, principal);
+        checkService.activateOrUpdateAllChecks(updatePatchParameters, principal);
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
     /**
-     * Disables a named check on this connection in the locations specified by filter.
+     * Deactivates (deletes) a named check on this connection in the locations specified by filter.
      * @param connectionName        Connection name.
      * @param checkName             Check name.
-     * @param bulkDisableParameters Check search filters and table/column selectors.
+     * @param bulkDeactivateParameters Check search filters and table/column selectors.
      * @return Empty response.
      */
-    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkdisable", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "bulkDisableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter", response = Void.class,
+    @PutMapping(value = "/{connectionName}/checks/{checkName}/bulkdeactivate", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "bulkDeactivateConnectionChecks", notes = "Deactivates (deletes) all named check on this connection in the locations specified by filter", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -897,12 +897,12 @@ public class ConnectionsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.OPERATE})
-    public ResponseEntity<Mono<Void>> bulkDisableConnectionChecks(
+    public ResponseEntity<Mono<Void>> bulkDeactivateConnectionChecks(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Check name") @PathVariable String checkName,
             @ApiParam("Check search filters and table/column selectors.")
-            @RequestBody BulkCheckDisableParameters bulkDisableParameters) {
+            @RequestBody BulkCheckDeactivateParameters bulkDeactivateParameters) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -912,10 +912,10 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
         }
 
-        bulkDisableParameters.getCheckSearchFilters().setConnection(connectionName);
-        bulkDisableParameters.getCheckSearchFilters().setCheckName(checkName);
+        bulkDeactivateParameters.getCheckSearchFilters().setConnection(connectionName);
+        bulkDeactivateParameters.getCheckSearchFilters().setCheckName(checkName);
 
-        checkService.disableChecks(bulkDisableParameters, principal);
+        checkService.deleteChecks(bulkDeactivateParameters, principal);
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 

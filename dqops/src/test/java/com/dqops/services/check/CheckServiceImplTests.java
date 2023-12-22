@@ -59,7 +59,7 @@ import com.dqops.services.check.mapping.*;
 import com.dqops.services.check.mapping.models.*;
 import com.dqops.services.check.matching.SimilarCheckCacheImpl;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
 import com.dqops.utils.reflection.ClassInfo;
@@ -296,9 +296,9 @@ public class CheckServiceImplTests extends BaseTest {
         Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
         Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
 
-        BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
-        bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
-        this.sut.disableChecks(bulkCheckDisableParameters, adminPrincipal);
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
+        this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
         ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
@@ -351,12 +351,12 @@ public class CheckServiceImplTests extends BaseTest {
         Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
         Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
 
-        BulkCheckDisableParameters bulkCheckDisableParameters = new BulkCheckDisableParameters();
-        bulkCheckDisableParameters.setCheckSearchFilters(checkSearchFilters);
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
         Map<String, List<String>> selectedTables = new HashMap<>();
         selectedTables.put("tab1", null);
-        bulkCheckDisableParameters.setSelectedTablesToColumns(selectedTables);
-        this.sut.disableChecks(bulkCheckDisableParameters, adminPrincipal);
+        bulkCheckDeactivateParameters.setSelectedTablesToColumns(selectedTables);
+        this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
         ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
@@ -417,7 +417,7 @@ public class CheckServiceImplTests extends BaseTest {
         CheckModel checkModelTemplate = patchCheckModelTemplate(checkSpec, checkModel);
         allChecksPatchParameters.setCheckModelPatch(checkModelTemplate);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
+        this.sut.activateOrUpdateAllChecks(allChecksPatchParameters, principal);
 
         ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
         UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
@@ -473,7 +473,7 @@ public class CheckServiceImplTests extends BaseTest {
         selectedTablesToColumns.put("tab2", selectedColumns2);
         allChecksPatchParameters.setSelectedTablesToColumns(selectedTablesToColumns);
 
-        this.sut.updateAllChecksPatch(allChecksPatchParameters, principal);
+        this.sut.activateOrUpdateAllChecks(allChecksPatchParameters, principal);
 
         ExecutionContext executionContextSecond = executionContextFactory.create(principal.getDataDomainIdentity());
         UserHome userHome = executionContextSecond.getUserHomeContext().getUserHome();
