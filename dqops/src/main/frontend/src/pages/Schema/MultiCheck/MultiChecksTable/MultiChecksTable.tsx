@@ -41,20 +41,28 @@ export default function MultiChecksTable({
   return (
     <div className="border border-gray-300 rounded-lg p-4 my-4">
       <div className="flex justify-between gap-4">
-        <div className="flex gap-x-4">
-          <RadioButton
-            className="text-sm py-2.5"
-            label="Select all"
-            checked={selectedData === checks}
-            onClick={selectAll}
-          />
-          <RadioButton
-            className="text-sm py-2.5"
-            label="Unselect all"
-            checked={selectedData.length === 0}
-            onClick={deselectAll}
-          />
-        </div>
+        {filterParameters.checkName &&
+        filterParameters.checkCategory &&
+        checks &&
+        checks.length > 0 ? (
+          <div className="flex gap-x-4">
+            <RadioButton
+              className="text-sm py-2.5"
+              label="Select all"
+              checked={selectedData === checks}
+              onClick={selectAll}
+            />
+            <RadioButton
+              className="text-sm py-2.5"
+              label="Unselect all"
+              checked={selectedData.length === 0}
+              onClick={deselectAll}
+            />
+          </div>
+        ) : (
+          <div />
+        )}
+
         <div className="flex gap-x-4">
           <Button
             className="text-sm py-2.5"
@@ -70,36 +78,39 @@ export default function MultiChecksTable({
           />
         </div>
       </div>
-      <table className="w-full mt-8">
-        <thead>
-          <tr>
-            <th></th>
-            <th className="px-4 py-2 text-left">Check Name</th>
-            <th className="px-4 py-2 text-left">Check Category</th>
-            <th className="px-4 py-2 text-left">Table</th>
-            {checkTarget === 'column' && (
-              <th className="px-4 py-2 text-left">Column</th>
-            )}
-            <th className="px-4 py-2 text-left">Sensor parameters</th>
-            <th className="px-4 py-2 text-left">Warning threshold</th>
-            <th className="px-4 py-2 text-left">Error threshold</th>
-            <th className="px-4 py-2 text-left">Fatal threshold</th>
-          </tr>
-        </thead>
-        {filterParameters.checkCategory && filterParameters.checkName && (
-          <tbody>
-            {checks?.map((check, index) => (
-              <MultiChecksTableItem
-                checkTarget={filterParameters.checkTarget}
-                check={check}
-                key={index}
-                checked={selectedData.includes(check)}
-                onChangeSelection={onChangeSelection}
-              />
-            ))}
-          </tbody>
+      {filterParameters.checkName &&
+        filterParameters.checkCategory &&
+        checks &&
+        checks.length > 0 && (
+          <table className="w-full mt-8">
+            <thead>
+              <tr>
+                <th></th>
+                <th className="px-4 py-2 text-left">Check Name</th>
+                <th className="px-4 py-2 text-left">Check Category</th>
+                <th className="px-4 py-2 text-left">Table</th>
+                {checkTarget === 'column' && (
+                  <th className="px-4 py-2 text-left">Column</th>
+                )}
+                <th className="px-4 py-2 text-left">Sensor parameters</th>
+                <th className="px-4 py-2 text-left">Warning threshold</th>
+                <th className="px-4 py-2 text-left">Error threshold</th>
+                <th className="px-4 py-2 text-left">Fatal threshold</th>
+              </tr>
+            </thead>
+            <tbody>
+              {checks?.map((check, index) => (
+                <MultiChecksTableItem
+                  checkTarget={filterParameters.checkTarget}
+                  check={check}
+                  key={index}
+                  checked={selectedData.includes(check)}
+                  onChangeSelection={onChangeSelection}
+                />
+              ))}
+            </tbody>
+          </table>
         )}
-      </table>
       <UpdateCheckModel
         open={action !== undefined}
         action={action ?? 'bulkEnabled'}

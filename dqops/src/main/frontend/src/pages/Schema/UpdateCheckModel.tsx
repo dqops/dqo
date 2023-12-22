@@ -212,6 +212,7 @@ export const UpdateCheckModel = ({
           </div>
         )}
       </DialogBody>
+
       <DialogFooter className="flex justify-center space-x-6 px-8 pb-8">
         <Button
           color="primary"

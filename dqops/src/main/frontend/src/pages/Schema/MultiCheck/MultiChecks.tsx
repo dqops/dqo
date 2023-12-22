@@ -70,12 +70,14 @@ export const MultiChecks = () => {
           onChangeFilterParameters={onChangeFilterParameters}
           onChangeChecks={(checks: CheckTemplate[]) => setChecks(checks)}
         />
-        <MultiChecksTable
-          checkTarget={filterParameters.checkTarget}
-          checks={checks}
-          filterParameters={filterParameters}
-          selectedCheckModel={selectedCheck.check_model ?? {}}
-        />
+        {filterParameters.checkName && filterParameters.checkCategory && (
+          <MultiChecksTable
+            checkTarget={filterParameters.checkTarget}
+            checks={checks}
+            filterParameters={filterParameters}
+            selectedCheckModel={selectedCheck.check_model ?? {}}
+          />
+        )}
       </div>
     </div>
   );
