@@ -45,9 +45,6 @@ export const UpdateCheckModel = ({
     }));
   };
   const bulkEnableChecks = () => {
-    //TODO: this code has two bugs, one is here
-    //TODO: before enabling checks, we need to take the current CheckTemplate (for the check selected in the combo box of checks), open the editor and wait until the user edits the configuration... but the user can cancel the editor,
-    //TODO: only after the checkModel (inside the selected CheckTemplate) is edited, we can bulk enable the check, also passing the new configuration of sensor and rule parameters
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
@@ -68,7 +65,6 @@ export const UpdateCheckModel = ({
           timeScale: filterParameters.activeTab
         },
         check_model_patch: updatedCheck,
-        // TODO: pass the CheckModel here, with the configuration of the sensor parameters and rule parameters, the model that should be edited and copied here should be from the selectedCheck (which shoudl be changed to CheckTemplate). CheckTemplate class has  a "checkModel" object which is the same model used on the main check editor screen.
         selected_tables_to_columns,
         override_conflicts: overideConflicts
       }
@@ -99,8 +95,6 @@ export const UpdateCheckModel = ({
       }
     );
   };
-  // console.log(checks, updatedCheck);
-  // console.log(updatedCheck);
 
   const bulkChecks = (): void => {
     action === 'bulkEnabled' ? bulkEnableChecks() : bulkDisableChecks();

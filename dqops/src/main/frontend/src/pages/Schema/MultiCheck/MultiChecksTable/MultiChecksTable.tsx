@@ -22,8 +22,6 @@ export default function MultiChecksTable({
 }: TMultiChecksTable) {
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
-  //const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>(); // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckTemplate. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckTemplate is a current configuration of the check on one table or one column (current configuration)
-  // TODO: change it to ChangeTemplate, and change the selected  check template (that will be edited) when user changes a check in the combo box for selecting a check
 
   const selectAll = () => {
     setSelectedData(checks || []);
@@ -37,7 +35,6 @@ export default function MultiChecksTable({
     if (selectedData.find((item) => isEqual(item, check))) {
       setSelectedData(selectedData.filter((item) => !isEqual(item, check)));
     } else {
-      // setSelectedCheck(check);
       setSelectedData([...selectedData, check]);
     }
   };
@@ -103,14 +100,13 @@ export default function MultiChecksTable({
           </tbody>
         )}
       </table>
-      <UpdateCheckModel // TODO: this component is fundamentally wrong, it should be editing a CheckTemplate (a clone of the check template), not a CheckTemplate. CheckTemplate is a template of parameters to apply on all checks (for bulk), while the CheckTemplate is a current configuration of the check on one table or one column (current configuration)
+      <UpdateCheckModel
         open={action !== undefined}
         action={action ?? 'bulkEnabled'}
         onClose={() => setAction(undefined)}
         selectedCheckModel={selectedCheckModel}
         filterParameters={filterParameters}
         selectedData={selectedData}
-        // onSubmit={onChangeSelectedData}
       />
     </div>
   );
