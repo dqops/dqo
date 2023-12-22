@@ -4,6 +4,7 @@ import Button from '../../components/Button';
 import {
   CheckConfigurationModel,
   CheckModel,
+  CheckSearchFiltersCheckTypeEnum,
   CheckTemplate,
   FieldModel
 } from '../../api';
@@ -61,7 +62,10 @@ export const UpdateCheckModel = ({
           checkTarget: filterParameters.checkTarget,
           columnDataType: filterParameters.columnDataType,
           checkName: filterParameters.checkName,
-          checkCategory: filterParameters.checkCategory
+          checkCategory: filterParameters.checkCategory,
+          checkType:
+            filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
+          timeScale: filterParameters.activeTab
         },
         check_model_patch: updatedCheck,
         // TODO: pass the CheckModel here, with the configuration of the sensor parameters and rule parameters, the model that should be edited and copied here should be from the selectedCheck (which shoudl be changed to CheckTemplate). CheckTemplate class has  a "checkModel" object which is the same model used on the main check editor screen.
@@ -86,7 +90,10 @@ export const UpdateCheckModel = ({
           checkTarget: filterParameters.checkTarget,
           columnDataType: filterParameters.columnDataType,
           checkName: filterParameters.checkName,
-          checkCategory: filterParameters.checkCategory
+          checkCategory: filterParameters.checkCategory,
+          checkType:
+            filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
+          timeScale: filterParameters.activeTab
         },
         selected_tables_to_columns
       }
@@ -139,7 +146,8 @@ export const UpdateCheckModel = ({
           </h1>
         </div>
         {updatedCheck?.sensor_parameters &&
-          updatedCheck.sensor_parameters.length > 0 && (
+          updatedCheck.sensor_parameters.length > 0 &&
+          action === 'bulkEnabled' && (
             <div className="relative z-10 border rounded text-gray-700 border-gray-300 px-4 py-4  w-50">
               <p className="text-gray-700 text-lg mb-4">Sensor parameters</p>
               <SensorParameters
@@ -151,60 +159,64 @@ export const UpdateCheckModel = ({
               />
             </div>
           )}
-        <div className="grid grid-cols-3 my-4">
-          <div className="bg-yellow-100 border border-gray-300 py-2">
-            <CheckRuleItem
-              parameters={updatedCheck?.rule?.warning}
-              onChange={(warning) =>
-                handleChange({
-                  rule: {
-                    ...updatedCheck?.rule,
-                    warning: warning
-                  }
-                })
-              }
-              type="warning"
-              onUpdate={() => {}}
+        {action === 'bulkEnabled' && (
+          <div className="grid grid-cols-3 my-4">
+            <div className="bg-yellow-100 border border-gray-300 py-2">
+              <CheckRuleItem
+                parameters={updatedCheck?.rule?.warning}
+                onChange={(warning) =>
+                  handleChange({
+                    rule: {
+                      ...updatedCheck?.rule,
+                      warning: warning
+                    }
+                  })
+                }
+                type="warning"
+                onUpdate={() => {}}
+              />
+            </div>
+            <div className="bg-orange-100 border border-gray-300 py-2">
+              <CheckRuleItem
+                parameters={updatedCheck?.rule?.error}
+                onChange={(error) =>
+                  handleChange({
+                    rule: {
+                      ...updatedCheck?.rule,
+                      error: error
+                    }
+                  })
+                }
+                type="error"
+                onUpdate={() => {}}
+              />
+            </div>
+            <div className="bg-red-100 border border-gray-300 py-2">
+              <CheckRuleItem
+                parameters={updatedCheck?.rule?.fatal}
+                onChange={(fatal) =>
+                  handleChange({
+                    rule: {
+                      ...updatedCheck?.rule,
+                      fatal
+                    }
+                  })
+                }
+                type="fatal"
+                onUpdate={() => {}}
+              />
+            </div>
+          </div>
+        )}
+        {action === 'bulkEnabled' && (
+          <div className="text-gray-700">
+            <Checkbox
+              label="Override existing configurations"
+              checked={overideConflicts}
+              onChange={() => setOverrideConflicts((prev) => !prev)}
             />
           </div>
-          <div className="bg-orange-100 border border-gray-300 py-2">
-            <CheckRuleItem
-              parameters={updatedCheck?.rule?.error}
-              onChange={(error) =>
-                handleChange({
-                  rule: {
-                    ...updatedCheck?.rule,
-                    error: error
-                  }
-                })
-              }
-              type="error"
-              onUpdate={() => {}}
-            />
-          </div>
-          <div className="bg-red-100 border border-gray-300 py-2">
-            <CheckRuleItem
-              parameters={updatedCheck?.rule?.fatal}
-              onChange={(fatal) =>
-                handleChange({
-                  rule: {
-                    ...updatedCheck?.rule,
-                    fatal
-                  }
-                })
-              }
-              type="fatal"
-              onUpdate={() => {}}
-            />
-          </div>
-        </div>
-        <div className="text-gray-700">
-          <Checkbox
-            label="Override existing configurations"
-            checked={overideConflicts}
-            onChange={() => setOverrideConflicts((prev) => !prev)}
-          />
-        </div>
+        )}
       </DialogBody>
       <DialogFooter className="flex justify-center space-x-6 px-8 pb-8">
         <Button

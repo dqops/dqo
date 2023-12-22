@@ -32,7 +32,8 @@ export const MultiChecks = () => {
     connection,
     schema,
     activeTab: 'daily',
-    checkTarget: 'table'
+    checkTarget: 'table',
+    checkTypes: checkTypes
   });
 
   const onChangeFilterParameters = (obj: Partial<IFilterTemplate>) => {

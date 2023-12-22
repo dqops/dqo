@@ -33,7 +33,10 @@ export default function MultiChecksSearch({
       ).then((res) => {
         onChangeChecks(res.data);
       });
-    } else if (checkTypes === CheckTypes.MONITORING) {
+    } else if (
+      checkTypes === CheckTypes.MONITORING &&
+      filterParameters.activeTab
+    ) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
         filterParameters.connection,
         filterParameters.schema,
@@ -47,7 +50,10 @@ export default function MultiChecksSearch({
       ).then((res) => {
         onChangeChecks(res.data);
       });
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
+    } else if (
+      checkTypes === CheckTypes.PARTITIONED &&
+      filterParameters.activeTab
+    ) {
       SchemaApiClient.getSchemaPartitionedChecksModel(
         filterParameters.connection,
         filterParameters.schema,

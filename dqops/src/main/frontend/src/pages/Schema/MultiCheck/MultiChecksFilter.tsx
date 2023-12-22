@@ -53,14 +53,20 @@ export default function MultiChecksFilter({
         filterParameters.schema,
         filterParameters.checkTarget
       ).then(processResult);
-    } else if (checkTypes === CheckTypes.MONITORING) {
+    } else if (
+      checkTypes === CheckTypes.MONITORING &&
+      filterParameters.activeTab
+    ) {
       SchemaApiClient.getSchemaMonitoringChecksTemplates(
         filterParameters.connection,
         filterParameters.schema,
         filterParameters.activeTab,
         filterParameters.checkTarget
       ).then(processResult);
-    } else if (checkTypes === CheckTypes.PARTITIONED) {
+    } else if (
+      checkTypes === CheckTypes.PARTITIONED &&
+      filterParameters.activeTab
+    ) {
       SchemaApiClient.getSchemaPartitionedChecksTemplates(
         filterParameters.connection,
         filterParameters.schema,
