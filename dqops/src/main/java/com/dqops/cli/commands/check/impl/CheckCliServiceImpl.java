@@ -28,7 +28,7 @@ import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.CheckService;
 import com.dqops.services.check.mapping.AllChecksModelFactory;
 import com.dqops.services.check.mapping.models.*;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 import com.dqops.services.check.models.AllChecksPatchParameters;
 import com.dqops.utils.conversion.StringTypeCaster;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +83,9 @@ public class CheckCliServiceImpl implements CheckCliService {
     @Override
     public void disableChecks(CheckSearchFilters filters) {
         DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
-        BulkCheckDisableParameters parameters = new BulkCheckDisableParameters();
+        BulkCheckDeactivateParameters parameters = new BulkCheckDeactivateParameters();
         parameters.setCheckSearchFilters(filters);
-        this.checkService.disableChecks(parameters, userPrincipal);
+        this.checkService.deleteChecks(parameters, userPrincipal);
     }
 
     /**
@@ -107,7 +107,7 @@ public class CheckCliServiceImpl implements CheckCliService {
             setCheckModelPatch(sampleModel);
         }};
 
-        return this.checkService.updateAllChecksPatch(allChecksPatchParameters, userPrincipal);
+        return this.checkService.activateOrUpdateAllChecks(allChecksPatchParameters, userPrincipal);
     }
 
     protected CheckModel getSampleCheckModelForUpdates(CheckSearchFilters checkSearchFilters, DqoUserPrincipal principal) {

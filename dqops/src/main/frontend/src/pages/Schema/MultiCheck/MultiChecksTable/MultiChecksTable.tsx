@@ -65,13 +65,13 @@ export default function MultiChecksTable({
         <div className="flex gap-x-4">
           <Button
             className="text-sm py-2.5"
-            label={!selectedData.length ? 'Update all' : 'Update selected'}
+            label={!selectedData.length ? 'Activate for all maching filter' : 'Update for selected'}
             color="primary"
             onClick={() => setAction('bulkEnabled')}
           />
           <Button
             className="text-sm py-2.5"
-            label={!selectedData.length ? 'Disable all' : 'Disable selected'}
+            label={!selectedData.length ? 'Deactivate for all maching filter' : 'Deactivate selected'}
             color="primary"
             onClick={() => setAction('bulkDisabled')}
           />

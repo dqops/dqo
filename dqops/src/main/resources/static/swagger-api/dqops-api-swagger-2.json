@@ -633,69 +633,12 @@
         } ]
       }
     },
-    "/api/connections/{connectionName}/checks/{checkName}/bulkdisable" : {
+    "/api/connections/{connectionName}/checks/{checkName}/bulkactivate" : {
       "put" : {
         "tags" : [ "Connections" ],
-        "summary" : "bulkDisableConnectionChecks",
-        "description" : "Disables a named check on this connection in the locations specified by filter",
-        "operationId" : "bulkDisableConnectionChecks",
-        "consumes" : [ "application/json" ],
-        "produces" : [ "application/json" ],
-        "parameters" : [ {
-          "name" : "connectionName",
-          "in" : "path",
-          "description" : "Connection name",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "name" : "checkName",
-          "in" : "path",
-          "description" : "Check name",
-          "required" : true,
-          "type" : "string"
-        }, {
-          "in" : "body",
-          "name" : "body",
-          "description" : "Check search filters and table/column selectors.",
-          "required" : false,
-          "schema" : {
-            "$ref" : "#/definitions/BulkCheckDisableParameters"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "successful operation",
-            "schema" : {
-              "$ref" : "#/definitions/MonoVoid"
-            }
-          },
-          "204" : {
-            "description" : "Checks disabled"
-          },
-          "400" : {
-            "description" : "Bad request, adjust before retrying"
-          },
-          "404" : {
-            "description" : "Connection not found"
-          },
-          "500" : {
-            "description" : "Internal Server Error",
-            "schema" : {
-              "$ref" : "#/definitions/SpringErrorPayload"
-            }
-          }
-        },
-        "security" : [ {
-          "authorization_bearer_api_key" : [ ]
-        } ]
-      }
-    },
-    "/api/connections/{connectionName}/checks/{checkName}/bulkenable" : {
-      "put" : {
-        "tags" : [ "Connections" ],
-        "summary" : "bulkEnableConnectionChecks",
-        "description" : "Enables a named check on this connection in the locations specified by filter",
-        "operationId" : "bulkEnableConnectionChecks",
+        "summary" : "bulkActivateConnectionChecks",
+        "description" : "Activates all named check on this connection in the locations specified by filter",
+        "operationId" : "bulkActivateConnectionChecks",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
         "parameters" : [ {
@@ -728,6 +671,63 @@
           },
           "204" : {
             "description" : "Checks enabled in bulk"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Connection not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/connections/{connectionName}/checks/{checkName}/bulkdeactivate" : {
+      "put" : {
+        "tags" : [ "Connections" ],
+        "summary" : "bulkDeactivateConnectionChecks",
+        "description" : "Deactivates (deletes) all named check on this connection in the locations specified by filter",
+        "operationId" : "bulkDeactivateConnectionChecks",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "connectionName",
+          "in" : "path",
+          "description" : "Connection name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "name" : "checkName",
+          "in" : "path",
+          "description" : "Check name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Check search filters and table/column selectors.",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/BulkCheckDeactivateParameters"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Checks disabled"
           },
           "400" : {
             "description" : "Bad request, adjust before retrying"
@@ -14855,7 +14855,7 @@
         }
       }
     },
-    "BulkCheckDisableParameters" : {
+    "BulkCheckDeactivateParameters" : {
       "type" : "object",
       "properties" : {
         "check_search_filters" : {
@@ -14873,7 +14873,7 @@
           }
         }
       },
-      "description" : "Parameter object for disabling all checks that fit the filters."
+      "description" : "Parameter object for deactivating all checks that fit the filters."
     },
     "ChangePercent1DayRule10ParametersSpec" : {
       "type" : "object",
@@ -29786,7 +29786,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required). Accepts: bigquery, snowflake, etc.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -29827,6 +29827,10 @@
         "spark" : {
           "description" : "Spark connection parameters.",
           "$ref" : "#/definitions/SparkParametersSpec"
+        },
+        "databricks" : {
+          "description" : "Databricks connection parameters.",
+          "$ref" : "#/definitions/DatabricksParametersSpec"
         },
         "run_checks_job_template" : {
           "description" : "Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.",
@@ -29881,7 +29885,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Database provider type (required).",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
         },
         "bigquery" : {
           "description" : "BigQuery connection parameters. Specify parameters in the bigquery section.",
@@ -29922,6 +29926,10 @@
         "spark" : {
           "description" : "Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).",
           "$ref" : "#/definitions/SparkParametersSpec"
+        },
+        "databricks" : {
+          "description" : "Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).",
+          "$ref" : "#/definitions/DatabricksParametersSpec"
         },
         "parallel_jobs_limit" : {
           "type" : "integer",
@@ -30291,6 +30299,52 @@
         "name" : {
           "type" : "string",
           "description" : "Data grouping dimension name."
+        }
+      }
+    },
+    "DatabricksParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "host" : {
+          "type" : "string",
+          "description" : "Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable."
+        },
+        "port" : {
+          "type" : "string",
+          "description" : "Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable."
+        },
+        "catalog" : {
+          "type" : "string",
+          "description" : "Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable."
+        },
+        "user" : {
+          "type" : "string",
+          "description" : "Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable."
+        },
+        "password" : {
+          "type" : "string",
+          "description" : "Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable."
+        },
+        "http_path" : {
+          "type" : "string",
+          "description" : "Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable."
+        },
+        "access_token" : {
+          "type" : "string",
+          "description" : "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable."
+        },
+        "options" : {
+          "type" : "string",
+          "description" : "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable."
+        },
+        "properties" : {
+          "type" : "object",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "database" : {
+          "type" : "string"
         }
       }
     },
@@ -31969,7 +32023,7 @@
         "provider_type" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
         },
         "custom" : {
           "type" : "boolean",
@@ -31992,7 +32046,7 @@
         "providerType" : {
           "type" : "string",
           "description" : "Provider type.",
-          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark" ]
+          "enum" : [ "bigquery", "snowflake", "postgresql", "redshift", "sqlserver", "presto", "trino", "mysql", "oracle", "spark", "databricks" ]
         },
         "providerSensorDefinitionSpec" : {
           "description" : "Provider specific sensor definition specification",
@@ -32890,10 +32944,6 @@
           "type" : "string",
           "description" : "Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable."
         },
-        "schema" : {
-          "type" : "string",
-          "description" : "Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
-        },
         "user" : {
           "type" : "string",
           "description" : "Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
@@ -32911,6 +32961,9 @@
           "additionalProperties" : {
             "type" : "string"
           }
+        },
+        "database" : {
+          "type" : "string"
         }
       }
     },

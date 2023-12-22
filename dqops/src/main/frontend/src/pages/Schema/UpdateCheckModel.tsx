@@ -11,6 +11,7 @@ import Checkbox from '../../components/Checkbox';
 import { ConnectionApiClient } from '../../services/apiClient';
 import { IFilterTemplate } from '../../shared/constants';
 import UpdateCheckRuleSensor from './MultiCheck/UpdateCheckRuleSensor';
+import { CheckTypes } from '../../shared/routes';
 
 interface UpdateCheckModelProps {
   open: boolean;
@@ -42,25 +43,28 @@ export const UpdateCheckModel = ({
       ...obj
     }));
   };
-  const bulkEnableChecks = () => {
+  const bulkActivateChecks = () => {
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
         : { ...mapTableColumns };
-    ConnectionApiClient.bulkEnableConnectionChecks(
+    ConnectionApiClient.bulkActivateConnectionChecks(
       filterParameters.connection,
       filterParameters.checkName ?? '',
       {
         check_search_filters: {
           connection: filterParameters.connection,
-          fullTableName: filterParameters.schema,
+          fullTableName: filterParameters.schema + '.*',
           checkTarget: filterParameters.checkTarget,
           columnDataType: filterParameters.columnDataType,
           checkName: filterParameters.checkName,
           checkCategory: filterParameters.checkCategory,
           checkType:
             filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
-          timeScale: filterParameters.activeTab
+          timeScale:
+            filterParameters.checkTypes !== CheckTypes.PROFILING
+              ? filterParameters.activeTab
+              : undefined
         },
         check_model_patch: updatedCheck,
         selected_tables_to_columns,
@@ -69,25 +73,28 @@ export const UpdateCheckModel = ({
     );
   };
 
-  const bulkDisableChecks = () => {
+  const bulkDeactivateChecks = () => {
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
         : { ...mapTableColumns };
-    ConnectionApiClient.bulkDisableConnectionChecks(
+    ConnectionApiClient.bulkDeactivateConnectionChecks(
       filterParameters.connection,
       filterParameters.checkName ?? '',
       {
         check_search_filters: {
           connection: filterParameters.connection,
-          fullTableName: filterParameters.schema,
+          fullTableName: filterParameters.schema + '.*',
           checkTarget: filterParameters.checkTarget,
           columnDataType: filterParameters.columnDataType,
           checkName: filterParameters.checkName,
           checkCategory: filterParameters.checkCategory,
           checkType:
             filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
-          timeScale: filterParameters.activeTab
+          timeScale:
+            filterParameters.checkTypes !== CheckTypes.PROFILING
+              ? filterParameters.activeTab
+              : undefined
         },
         selected_tables_to_columns
       }
@@ -95,7 +102,7 @@ export const UpdateCheckModel = ({
   };
 
   const bulkChecks = (): void => {
-    action === 'bulkEnabled' ? bulkEnableChecks() : bulkDisableChecks();
+    action === 'bulkEnabled' ? bulkActivateChecks() : bulkDeactivateChecks();
     onClose();
   };
 
@@ -133,7 +140,9 @@ export const UpdateCheckModel = ({
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
-            {action === 'bulkEnabled' ? 'Update check:' : 'Disable check: '}{' '}
+            {action === 'bulkEnabled'
+              ? 'Activate Check:'
+              : 'Deactivate Check: '}{' '}
             {updatedCheck?.check_name}
           </h1>
         </div>
@@ -168,8 +177,8 @@ export const UpdateCheckModel = ({
           onClick={bulkChecks}
           label={
             action === 'bulkEnabled'
-              ? 'Update all selected checks'
-              : 'Disable all selected checks'
+              ? 'Activate all selected checks'
+              : 'Deactivate all selected checks'
           }
         />
       </DialogFooter>

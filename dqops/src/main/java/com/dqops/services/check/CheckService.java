@@ -22,7 +22,7 @@ import com.dqops.execution.sensors.TimeWindowFilterParameters;
 import com.dqops.metadata.search.CheckSearchFilters;
 import com.dqops.services.check.mapping.models.AllChecksModel;
 import com.dqops.services.check.models.AllChecksPatchParameters;
-import com.dqops.services.check.models.BulkCheckDisableParameters;
+import com.dqops.services.check.models.BulkCheckDeactivateParameters;
 
 import java.util.List;
 
@@ -46,12 +46,20 @@ public interface CheckService {
                                     DqoUserPrincipal principal);
 
     /**
+     * Deletes existing checks matching the provided filters.
+     *
+     * @param parameters Bulk check disable parameters.
+     * @param principal User principal who called the operation.
+     */
+    void deleteChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal);
+
+    /**
      * Disable existing checks matching the provided filters.
      *
      * @param parameters Bulk check disable parameters.
      * @param principal User principal who called the operation.
      */
-    void disableChecks(BulkCheckDisableParameters parameters, DqoUserPrincipal principal);
+    void disableChecks(BulkCheckDeactivateParameters parameters, DqoUserPrincipal principal);
 
     /**
      * Update checks configuration based on provided parameters.
@@ -59,5 +67,5 @@ public interface CheckService {
      * @param principal  User principal.
      * @return List of patches (by connections) of the updated configuration of all checks.
      */
-    List<AllChecksModel> updateAllChecksPatch(AllChecksPatchParameters parameters, DqoUserPrincipal principal);
+    List<AllChecksModel> activateOrUpdateAllChecks(AllChecksPatchParameters parameters, DqoUserPrincipal principal);
 }

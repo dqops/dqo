@@ -79,6 +79,7 @@ nav:
       - Schema:
           - Table schema detection: "examples/schema/schema-detection.md"
       - Data quality monitoring:
+          - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"

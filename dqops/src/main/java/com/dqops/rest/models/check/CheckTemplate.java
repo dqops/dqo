@@ -87,7 +87,9 @@ public class CheckTemplate {
         checkTemplate.setSensorName(checkModel.getSensorName());
         checkTemplate.setCheckTarget(checkTarget);
         checkTemplate.setCheckCategory(checkCategory);
-        checkTemplate.setCheckModel(checkModel);
+        CheckModel configuredCheckModel = checkModel.cloneForUpdate();
+        configuredCheckModel.setConfigured(true);
+        checkTemplate.setCheckModel(configuredCheckModel);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(
                 uiCheckContainerTypeModel.getCheckType(), uiCheckContainerTypeModel.getCheckTimeScale());
