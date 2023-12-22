@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../../components/Button';
 import {
@@ -16,7 +16,6 @@ import { IFilterTemplate } from '../../shared/constants';
 interface UpdateCheckModelProps {
   open: boolean;
   onClose: () => void;
-  checks?: CheckTemplate[];
   action: 'bulkEnabled' | 'bulkDisabled';
   selectedCheckModel: CheckModel | undefined;
   filterParameters: IFilterTemplate;
@@ -26,8 +25,6 @@ interface UpdateCheckModelProps {
 export const UpdateCheckModel = ({
   open,
   onClose,
-  // onSubmit,
-  checks,
   action,
   selectedCheckModel,
   filterParameters,
@@ -39,13 +36,6 @@ export const UpdateCheckModel = ({
   useEffect(() => {
     setUpdatedCheck(selectedCheckModel);
   }, [selectedCheckModel]);
-
-  // const handleSubmit = () => {
-  //   if (updatedCheck) {
-  //     onSubmit(updatedCheck);
-  //     onClose();
-  //   }
-  // };
 
   const handleChange = (obj: Partial<CheckModel>) => {
     setUpdatedCheck((prev) => ({
@@ -73,6 +63,7 @@ export const UpdateCheckModel = ({
           checkName: filterParameters.checkName,
           checkCategory: filterParameters.checkCategory
         },
+        check_model_patch: updatedCheck,
         // TODO: pass the CheckModel here, with the configuration of the sensor parameters and rule parameters, the model that should be edited and copied here should be from the selectedCheck (which shoudl be changed to CheckTemplate). CheckTemplate class has  a "checkModel" object which is the same model used on the main check editor screen.
         selected_tables_to_columns,
         override_conflicts: overideConflicts
@@ -149,7 +140,7 @@ export const UpdateCheckModel = ({
         </div>
         {updatedCheck?.sensor_parameters &&
           updatedCheck.sensor_parameters.length > 0 && (
-            <div className="relative z-10 border rounded text-gray-700 border-gray-300 px-4 py-4">
+            <div className="relative z-10 border rounded text-gray-700 border-gray-300 px-4 py-4  w-50">
               <p className="text-gray-700 text-lg mb-4">Sensor parameters</p>
               <SensorParameters
                 parameters={updatedCheck?.sensor_parameters || []}
