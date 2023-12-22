@@ -28567,6 +28567,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "spark"
+        - "databricks"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28598,6 +28599,9 @@ definitions:
       spark:
         description: "Spark connection parameters."
         $ref: "#/definitions/SparkParametersSpec"
+      databricks:
+        description: "Databricks connection parameters."
+        $ref: "#/definitions/DatabricksParametersSpec"
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this connection."
@@ -28666,6 +28670,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "spark"
+        - "databricks"
       bigquery:
         description: "BigQuery connection parameters. Specify parameters in the bigquery\
           \ section."
@@ -28706,6 +28711,10 @@ definitions:
         description: "Spark connection parameters. Specify parameters in the spark\
           \ section or set the url (which is the Spark JDBC url)."
         $ref: "#/definitions/SparkParametersSpec"
+      databricks:
+        description: "Databricks connection parameters. Specify parameters in the\
+          \ databricks section or set the url (which is the Databricks JDBC url)."
+        $ref: "#/definitions/DatabricksParametersSpec"
       parallel_jobs_limit:
         type: "integer"
         format: "int32"
@@ -29063,6 +29072,50 @@ definitions:
       name:
         type: "string"
         description: "Data grouping dimension name."
+  DatabricksParametersSpec:
+    type: "object"
+    properties:
+      host:
+        type: "string"
+        description: "Databricks host name. Supports also a ${DATABRICKS_HOST} configuration\
+          \ with a custom environment variable."
+      port:
+        type: "string"
+        description: "Databricks port number. The default port is 443. Supports also\
+          \ a ${DATABRICKS_PORT} configuration with a custom environment variable."
+      catalog:
+        type: "string"
+        description: "Databricks catalog name. Supports also a ${DATABRICKS_CATALOG}\
+          \ configuration with a custom environment variable."
+      user:
+        type: "string"
+        description: "Databricks user name. Supports also a ${DATABRICKS_USER} configuration\
+          \ with a custom environment variable."
+      password:
+        type: "string"
+        description: "Databricks database password. Supports also a ${DATABRICKS_PASSWORD}\
+          \ configuration with a custom environment variable."
+      http_path:
+        type: "string"
+        description: "Databricks http path to the warehouse. For example: /sql/1.0/warehouses/<warehouse\
+          \ instance id>. Supports also a ${DATABRICKS_HTTP_PATH} configuration with\
+          \ a custom environment variable."
+      access_token:
+        type: "string"
+        description: "Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN}\
+          \ configuration with a custom environment variable."
+      options:
+        type: "string"
+        description: "Databricks connection 'options' initialization parameter. For\
+          \ example setting this to -c statement_timeout=5min would set the statement\
+          \ timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS}\
+          \ configuration with a custom environment variable."
+      properties:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      database:
+        type: "string"
   DatatypeEqualsRuleParametersSpec:
     type: "object"
     properties:
@@ -30600,6 +30653,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "spark"
+        - "databricks"
       custom:
         type: "boolean"
         description: "This connection specific template is a custom sensor template\
@@ -30630,6 +30684,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "spark"
+        - "databricks"
       providerSensorDefinitionSpec:
         description: "Provider specific sensor definition specification"
         $ref: "#/definitions/ProviderSensorDefinitionSpec"
@@ -31497,10 +31552,6 @@ definitions:
         type: "string"
         description: "Spark port number. The default port is 10000. Supports also\
           \ a ${SPARK_PORT} configuration with a custom environment variable."
-      schema:
-        type: "string"
-        description: "Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
-          \ format to use dynamic substitution."
       user:
         type: "string"
         description: "Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
@@ -31519,6 +31570,8 @@ definitions:
         type: "object"
         additionalProperties:
           type: "string"
+      database:
+        type: "string"
   SpringErrorPayload:
     type: "object"
     properties:
