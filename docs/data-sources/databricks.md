@@ -78,7 +78,7 @@ dqo> connection add
 Fill in the data you will be asked for.
 
 ```
-Connection name (--name): databricks-connection
+Connection name (--name): connection1
 Database provider type (--provider):
  [ 1] bigquery
  [ 2] snowflake
@@ -99,14 +99,14 @@ Databricks user name (--databricks-user) [${DATABRICKS_USER}]:
 Databricks user password (--databricks-password) [${DATABRICKS_PASSWORD}]: 
 Databricks http path (--databricks-http-path) [${DATABRICKS_HTTP_PATH}]: /sql/1.0/warehouses/<warehouse_id>
 Databricks access token (--databricks-access-token) [${DATABRICKS_ACCESS_TOKEN}]: <access_token>
-Connection databricks-connection was successfully added.
-Run 'table import -c=databricks-connection' to import tables.
+Connection connection1 was successfully added.
+Run 'table import -c=connection1' to import tables.
 ```
 
 You can also run the command with parameters to add a connection in just a single step.
 
 ```
-dqo> connection add --name=databricks-connection
+dqo> connection add --name=connection1
 --provider=databricks
 --databricks-host=<databricks_host>.azuredatabricks.net
 --databricks-port=443
@@ -115,7 +115,7 @@ dqo> connection add --name=databricks-connection
 --databricks-access-token=<access_token>
 ```
 
-After adding connection run `table import -c=databricks-connection` to select schemas and import tables.
+After adding connection run `table import -c=connection1` to select schemas and import tables.
 
 DQOps will ask you to select the schema from which the tables will be imported.
 
