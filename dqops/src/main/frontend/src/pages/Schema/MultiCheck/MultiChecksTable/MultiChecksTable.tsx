@@ -5,6 +5,7 @@ import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
 import MultiChecksTableItem from './MultiChecksTableItem';
 import { IFilterTemplate } from '../../../../shared/constants';
+import RadioButton from '../../../../components/RadioButton';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
@@ -44,16 +45,16 @@ export default function MultiChecksTable({
     <div className="border border-gray-300 rounded-lg p-4 my-4">
       <div className="flex justify-between gap-4">
         <div className="flex gap-x-4">
-          <Button
+          <RadioButton
             className="text-sm py-2.5"
-            label="Select All"
-            color="primary"
+            label="Select all"
+            checked={selectedData === checks}
             onClick={selectAll}
           />
-          <Button
+          <RadioButton
             className="text-sm py-2.5"
-            label="Unselect All"
-            color={!selectedData.length ? 'secondary' : 'primary'}
+            label="Unselect all"
+            checked={selectedData.length === 0}
             onClick={deselectAll}
           />
         </div>
