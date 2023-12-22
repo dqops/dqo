@@ -46,17 +46,17 @@ export default function MultiChecksTable({
         checks &&
         checks.length > 0 ? (
           <div className="flex gap-x-4">
-            <RadioButton
+            <Button
               className="text-sm py-2.5"
               label="Select all"
-              checked={selectedData === checks}
               onClick={selectAll}
+              color={selectedData === checks ? 'secondary' : 'primary'}
             />
-            <RadioButton
+            <Button
               className="text-sm py-2.5"
               label="Unselect all"
-              checked={selectedData.length === 0}
               onClick={deselectAll}
+              color={selectedData.length === 0 ? 'secondary' : 'primary'}
             />
           </div>
         ) : (
