@@ -94,12 +94,12 @@ function TreeProvider(props: any) {
   const activeTab = activeTabMaps[checkTypes];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
-  const [sidebarScrollHeight, setSidebarScrollHeight] = useState(0)
+  const [sidebarScrollHeight, setSidebarScrollHeight] = useState(0);
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
   const dispatch = useActionDispatch();
   const [loadingNodes, setLoadingNodes] = useState<Record<string, boolean>>({});
-  const [objectNotFound, setObjectNotFound] = useState(false)
+  const [objectNotFound, setObjectNotFound] = useState(false);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getConnections = async () => {
@@ -273,11 +273,10 @@ function TreeProvider(props: any) {
     node: CustomTreeNode,
     reset = true
   ): Promise<CustomTreeNode[]> => {
-    const res: AxiosResponse<TableListModel[]> =
-      await TableApiClient.getTables(
-        node.parentId?.toString() || '',
-        node.label
-      );
+    const res: AxiosResponse<TableListModel[]> = await TableApiClient.getTables(
+      node.parentId?.toString() || '',
+      node.label
+    );
     const items = res.data.map((table) => ({
       id: `${node.id}.${table.target?.table_name}`,
       label: table.target?.table_name || '',
@@ -1083,9 +1082,7 @@ function TreeProvider(props: any) {
       if (colArr && colArr.length > 0) {
         node.data_clean_job_template.columnNames = colArr;
       }
-      JobApiClient.deleteStoredData(undefined, false,
-        undefined,
-        {
+      JobApiClient.deleteStoredData(undefined, false, undefined, {
         ...node.data_clean_job_template,
 
         checkType,
@@ -1108,11 +1105,7 @@ function TreeProvider(props: any) {
           checkType = undefined;
           break;
       }
-      JobApiClient.deleteStoredData(
-        undefined,
-        false,
-        undefined,
-        {
+      JobApiClient.deleteStoredData(undefined, false, undefined, {
         connection: node.collect_statistics_job_template?.connection,
         fullTableName: node.collect_statistics_job_template?.fullTableName,
         checkType,
@@ -1157,7 +1150,7 @@ function TreeProvider(props: any) {
         checkType,
         connectionNode?.label ?? '',
         node.label,
-        'tables'
+        'multiple_checks'
       );
 
       if (firstLevelActiveTab === url) {
@@ -1197,7 +1190,7 @@ function TreeProvider(props: any) {
       } else if (checkType === CheckTypes.PROFILING) {
         tab = tab || 'statistics';
       } else {
-        tab = tab || 'detail'
+        tab = tab || 'detail';
       }
 
       const url = ROUTES.TABLE_LEVEL_PAGE(
@@ -1696,7 +1689,7 @@ function TreeProvider(props: any) {
         checkType === CheckTypes.PARTITIONED
       ) {
         tab = tab || 'daily';
-      } else if (checkType ===CheckTypes.PROFILING ) {
+      } else if (checkType === CheckTypes.PROFILING) {
         tab = tab || 'statistics';
       } else {
         tab = tab || 'detail';
@@ -1798,16 +1791,16 @@ function TreeProvider(props: any) {
 
     setTabMaps(newTabMaps);
   };
-  
+
   axios.interceptors.response.use(undefined, function (error) {
     const statusCode = error.response ? error.response.status : null;
     if (statusCode === 401 || statusCode === 403) {
       return; // handled elsewhere
     }
 
-    if (statusCode === 404 ) {
-      console.log(error)
-      setObjectNotFound(true)
+    if (statusCode === 404) {
+      console.log(error);
+      setObjectNotFound(true);
     }
     return Promise.reject(error);
   });
