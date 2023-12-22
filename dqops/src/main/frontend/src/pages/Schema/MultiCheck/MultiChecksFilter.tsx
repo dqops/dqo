@@ -12,12 +12,14 @@ interface IMultiChecksFilter {
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
   checkTypes: CheckTypes;
   onChangeSelectedCheck: (obj: CheckTemplate) => void;
+  onChangeChecks: (checks: CheckTemplate[]) => void;
 }
 export default function MultiChecksFilter({
   filterParameters,
   onChangeFilterParameters,
   checkTypes,
-  onChangeSelectedCheck
+  onChangeSelectedCheck,
+  onChangeChecks
 }: IMultiChecksFilter) {
   const [checkCategoryOptions, setCheckCategoryOptions] = useState<Option[]>(
     []
@@ -118,14 +120,18 @@ export default function MultiChecksFilter({
           <div className="flex gap-x-3 mr-2">
             <RadioButton
               label="Table"
-              onClick={() => onChangeFilterParameters({ checkTarget: 'table' })}
+              onClick={() => {
+                onChangeFilterParameters({ checkTarget: 'table' }),
+                  onChangeChecks([]);
+              }}
               checked={filterParameters.checkTarget === 'table'}
             />
             <RadioButton
               label="Column"
-              onClick={() =>
-                onChangeFilterParameters({ checkTarget: 'column' })
-              }
+              onClick={() => {
+                onChangeFilterParameters({ checkTarget: 'column' });
+                onChangeChecks([]);
+              }}
               checked={filterParameters.checkTarget === 'column'}
             />
           </div>
@@ -138,6 +144,7 @@ export default function MultiChecksFilter({
             onChange={(value) => {
               onChangeFilterParameters({ checkCategory: value });
               onChangeCheckOptions();
+              onChangeChecks([]);
             }}
           ></Select>
         </div>
@@ -148,8 +155,10 @@ export default function MultiChecksFilter({
             options={checkNameOptions}
             label="Check name"
             value={filterParameters.checkName}
-            onChange={(value) => onChangeFilterParameters({ checkName: value })}
-            // TODO: we cannot just change the check, we need to call a function that will take the selected check from array of CheckTemplate and store it as the selectedCheck (We are selecting the check template)
+            onChange={(value) => {
+              onChangeFilterParameters({ checkName: value });
+              onChangeChecks([]);
+            }}
           />
         </div>
       </div>

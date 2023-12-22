@@ -95,6 +95,7 @@ export default function MultiChecksSearch({
                 columnNamePattern: e.target.value
               })
             }
+            disabled={filterParameters.checkTarget === 'table'}
           />
         </div>
       </div>
@@ -107,6 +108,7 @@ export default function MultiChecksSearch({
             onChange={(e) =>
               onChangeFilterParameters({ columnDataType: e.target.value })
             }
+            disabled={filterParameters.checkTarget === 'table'}
           />
         </div>
       </div>

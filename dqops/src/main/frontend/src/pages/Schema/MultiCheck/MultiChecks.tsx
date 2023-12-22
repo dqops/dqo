@@ -62,6 +62,7 @@ export const MultiChecks = () => {
           onChangeFilterParameters={onChangeFilterParameters}
           checkTypes={checkTypes}
           onChangeSelectedCheck={(obj: CheckTemplate) => setSelectedCheck(obj)}
+          onChangeChecks={(checks: CheckTemplate[]) => setChecks(checks)}
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch

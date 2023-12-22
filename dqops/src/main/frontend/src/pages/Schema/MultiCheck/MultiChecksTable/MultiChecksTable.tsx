@@ -5,7 +5,6 @@ import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
 import MultiChecksTableItem from './MultiChecksTableItem';
 import { IFilterTemplate } from '../../../../shared/constants';
-import RadioButton from '../../../../components/RadioButton';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
