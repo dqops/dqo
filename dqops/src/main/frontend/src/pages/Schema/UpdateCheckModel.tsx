@@ -21,6 +21,7 @@ interface UpdateCheckModelProps {
   filterParameters: IFilterTemplate;
   selectedData: CheckTemplate[];
   onChangeIsUpdated: () => void;
+  onChangeLoading: (param: boolean) => void;
 }
 
 export const UpdateCheckModel = ({
@@ -30,7 +31,8 @@ export const UpdateCheckModel = ({
   selectedCheckModel,
   filterParameters,
   selectedData,
-  onChangeIsUpdated
+  onChangeIsUpdated,
+  onChangeLoading
 }: UpdateCheckModelProps) => {
   const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
   const [overideConflicts, setOverrideConflicts] = useState(true);
@@ -46,6 +48,7 @@ export const UpdateCheckModel = ({
     }));
   };
   const bulkActivateChecks = () => {
+    onChangeLoading(true);
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
@@ -72,10 +75,11 @@ export const UpdateCheckModel = ({
         selected_tables_to_columns,
         override_conflicts: overideConflicts
       }
-    );
+    ).finally(() => onChangeLoading(false));
   };
 
   const bulkDeactivateChecks = () => {
+    onChangeLoading(true);
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
@@ -100,7 +104,7 @@ export const UpdateCheckModel = ({
         },
         selected_tables_to_columns
       }
-    );
+    ).finally(() => onChangeLoading(false));
   };
 
   const bulkChecks = (): void => {

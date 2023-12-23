@@ -26,13 +26,16 @@ export default function MultiChecksTable({
 }: TMultiChecksTable) {
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
-
+  const [loading, setLoading] = useState(false);
   const selectAll = () => {
     setSelectedData(checks || []);
   };
 
   const deselectAll = () => {
     setSelectedData([]);
+  };
+  const onChangeLoading = (param: boolean) => {
+    setLoading(param);
   };
 
   const onChangeSelection = (check: CheckTemplate) => {
@@ -50,6 +53,7 @@ export default function MultiChecksTable({
         selectedData={selectedData}
         checks={checks}
         setAction={setAction}
+        loading={loading}
       />
       {filterParameters.checkName &&
         filterParameters.checkCategory &&
@@ -81,6 +85,7 @@ export default function MultiChecksTable({
           onChangeIsUpdated();
           setSelectedData([]);
         }}
+        onChangeLoading={onChangeLoading}
       />
     </div>
   );

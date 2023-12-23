@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../../../components/Button';
 import { CheckTemplate } from '../../../../api';
+import SvgIcon from '../../../../components/SvgIcon';
 
 type TMultiChecksTableButtons = {
   selectAll: () => void;
@@ -8,6 +9,7 @@ type TMultiChecksTableButtons = {
   selectedData: CheckTemplate[];
   checks: CheckTemplate[] | undefined;
   setAction: any;
+  loading: boolean;
 };
 
 export const MultiChecksTableButtons = ({
@@ -15,7 +17,8 @@ export const MultiChecksTableButtons = ({
   deselectAll,
   selectedData,
   checks,
-  setAction
+  setAction,
+  loading
 }: TMultiChecksTableButtons) => (
   <div className="flex justify-between gap-4">
     {checks && checks.length > 0 ? (
@@ -38,6 +41,12 @@ export const MultiChecksTableButtons = ({
     )}
 
     <div className="flex gap-x-4">
+      {loading ? (
+        <SvgIcon
+          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
+          name="sync"
+        />
+      ) : null}
       <Button
         className="text-sm py-2.5"
         label={
@@ -47,6 +56,7 @@ export const MultiChecksTableButtons = ({
         }
         color="primary"
         onClick={() => setAction('bulkEnabled')}
+        disabled={loading}
       />
       <Button
         className="text-sm py-2.5"
@@ -57,6 +67,7 @@ export const MultiChecksTableButtons = ({
         }
         color="primary"
         onClick={() => setAction('bulkDisabled')}
+        disabled={loading}
       />
     </div>
   </div>
