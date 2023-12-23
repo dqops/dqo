@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { IFilterTemplate } from '../../../shared/constants';
 import { CheckTemplate } from '../../../api';
+import Checkbox from '../../../components/Checkbox';
 
 interface IMultiChecksSearch {
   checkTypes: CheckTypes;
@@ -21,60 +22,65 @@ export default function MultiChecksSearch({
   onChangeChecks,
   isUpdated
 }: IMultiChecksSearch) {
+  const [activeOffCheck, setActiveOffChecks] = useState(false);
+
   const searchChecks = () => {
+    const {
+      connection,
+      schema,
+      activeTab,
+      tableNamePattern,
+      columnNamePattern,
+      columnDataType,
+      checkTarget,
+      checkCategory,
+      checkName
+    } = filterParameters;
+
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksModel(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.tableNamePattern,
-        filterParameters.columnNamePattern,
-        filterParameters.columnDataType,
-        filterParameters.checkTarget,
-        filterParameters.checkCategory,
-        filterParameters.checkName,
+        connection,
+        schema,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
         undefined,
-        true,
-        undefined
+        activeOffCheck ? undefined : true
       ).then((res) => {
         onChangeChecks(res.data);
       });
-    } else if (
-      checkTypes === CheckTypes.MONITORING &&
-      filterParameters.activeTab
-    ) {
+    } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.tableNamePattern,
-        filterParameters.columnNamePattern,
-        filterParameters.columnDataType,
-        filterParameters.checkTarget,
-        filterParameters.checkCategory,
-        filterParameters.checkName,
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
         undefined,
-        true,
-        undefined
+        activeOffCheck ? undefined : true
       ).then((res) => {
         onChangeChecks(res.data);
       });
-    } else if (
-      checkTypes === CheckTypes.PARTITIONED &&
-      filterParameters.activeTab
-    ) {
+    } else if (checkTypes === CheckTypes.PARTITIONED && activeTab) {
       SchemaApiClient.getSchemaPartitionedChecksModel(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.tableNamePattern,
-        filterParameters.columnNamePattern,
-        filterParameters.columnDataType,
-        filterParameters.checkTarget,
-        filterParameters.checkCategory,
-        filterParameters.checkName,
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
         undefined,
-        true,
-        undefined
+        activeOffCheck ? undefined : true
       ).then((res) => {
         onChangeChecks(res.data);
       });
@@ -129,7 +135,12 @@ export default function MultiChecksSearch({
           />
         </div>
       </div>
-      <div className="w-1/4 flex items-end justify-end">
+      <div className="w-1/4 flex items-center gap-x-8 justify-end">
+        <Checkbox
+          checked={activeOffCheck}
+          onChange={() => setActiveOffChecks((prev) => !prev)}
+          label={"Include also 'off' checks"}
+        />
         <Button
           label="Search"
           color={filterParameters.checkName ? 'primary' : 'secondary'}

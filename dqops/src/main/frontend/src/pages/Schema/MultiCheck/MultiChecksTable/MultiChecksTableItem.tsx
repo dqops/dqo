@@ -3,6 +3,7 @@ import { CheckConfigurationModel } from '../../../../api';
 import Checkbox from '../../../../components/Checkbox';
 import DisplaySensorParameters from '../../DisplaySensorParameters';
 import FieldValue from '../../FieldValue';
+import Switch from '../../../../components/Switch';
 
 type TMultiChecksTableItem = {
   checkTarget: 'column' | 'table' | undefined;
@@ -20,11 +21,12 @@ export default function MultiChecksTableItem({
   return (
     <tr>
       <td className="px-4 py-2 text-left">
-        <div className="flex">
+        <div className="flex gap-x-8">
           <Checkbox
             onChange={() => onChangeSelection(check)}
             checked={checked}
           />
+          <Switch checked={check.configured ?? false} />
         </div>
       </td>
       <td className="px-4 py-2 text-left">{check.check_name}</td>

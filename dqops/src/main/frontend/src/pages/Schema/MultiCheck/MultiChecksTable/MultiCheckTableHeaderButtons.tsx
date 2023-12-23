@@ -81,7 +81,7 @@ export const MultiChecksTableHeader = ({ checkTarget }: TCheckTarget) => {
   return (
     <thead>
       <tr>
-        <th></th>
+        <th className="pl-12 py-2 text-left">On/Of</th>
         <th className="px-4 py-2 text-left">Check Name</th>
         <th className="px-4 py-2 text-left">Check Category</th>
         <th className="px-4 py-2 text-left">Table</th>
