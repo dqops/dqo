@@ -1,5 +1,10 @@
 import React from 'react';
-import { CheckModel, FieldModel } from '../../../api';
+import {
+  CheckModel,
+  FieldModel,
+  RuleParametersModel,
+  RuleThresholdsModel
+} from '../../../api';
 import CheckRuleItem from '../../../components/DataQualityChecks/CheckRuleItem';
 import SensorParameters from '../../../components/DataQualityChecks/SensorParameters';
 
@@ -11,6 +16,20 @@ export default function UpdateCheckRuleSensor({
   updatedCheck,
   handleChange
 }: TUpdateCheckRuleSensor) {
+  const getCheckModelWithoutHelpText = (
+    severity: keyof RuleThresholdsModel
+  ): RuleParametersModel | undefined => {
+    const updatedCheckCopy = { ...updatedCheck };
+
+    updatedCheckCopy?.rule?.[severity]?.rule_parameters?.forEach((x) => {
+      if (x.definition) {
+        x.definition.help_text = undefined;
+      }
+    });
+
+    return updatedCheckCopy.rule?.[severity];
+  };
+
   return (
     <div className=" my-4">
       <div className="flex">
@@ -33,7 +52,12 @@ export default function UpdateCheckRuleSensor({
       <div className="flex">
         <div className="w-45 mr-[33px] flex justify-center items-center mt-11">
           <SensorParameters
-            parameters={updatedCheck?.sensor_parameters || []}
+            parameters={
+              updatedCheck?.sensor_parameters?.map((x) => ({
+                ...x,
+                definition: { ...x.definition, help_text: undefined }
+              })) || []
+            }
             onChange={(parameters: FieldModel[]) =>
               handleChange({ sensor_parameters: parameters })
             }
@@ -46,7 +70,7 @@ export default function UpdateCheckRuleSensor({
             Warning threshold
           </div>
           <CheckRuleItem
-            parameters={updatedCheck?.rule?.warning}
+            parameters={getCheckModelWithoutHelpText('warning')}
             onChange={(warning) =>
               handleChange({
                 rule: {
@@ -64,7 +88,7 @@ export default function UpdateCheckRuleSensor({
             Error threshold
           </div>
           <CheckRuleItem
-            parameters={updatedCheck?.rule?.error}
+            parameters={getCheckModelWithoutHelpText('error')}
             onChange={(error) =>
               handleChange({
                 rule: {
@@ -82,7 +106,7 @@ export default function UpdateCheckRuleSensor({
             Fatal threshold
           </div>
           <CheckRuleItem
-            parameters={updatedCheck?.rule?.fatal}
+            parameters={getCheckModelWithoutHelpText('fatal')}
             onChange={(fatal) =>
               handleChange({
                 rule: {

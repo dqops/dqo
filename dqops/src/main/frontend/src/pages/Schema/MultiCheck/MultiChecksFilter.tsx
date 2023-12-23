@@ -52,11 +52,6 @@ export default function MultiChecksFilter({
     const { connection, schema, activeTab, checkTarget } = filterParameters;
     console.log(connection, schema, activeTab, checkTarget);
     if (checkTypes === CheckTypes.PROFILING) {
-      console.log(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.checkTarget
-      );
       SchemaApiClient.getSchemaProfilingChecksTemplates(
         filterParameters.connection,
         filterParameters.schema,
