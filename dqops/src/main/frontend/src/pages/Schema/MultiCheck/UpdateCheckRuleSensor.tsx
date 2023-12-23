@@ -20,7 +20,7 @@ export default function UpdateCheckRuleSensor({
             Sensor parameters
           </div>
         ) : (
-          <></>
+          <div className="w-50 py-1.5 px-12"></div>
         )}
         <div className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative w-1/3">
           Passing rule

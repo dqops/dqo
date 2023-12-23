@@ -36,6 +36,7 @@ export default function MultiChecksFilter({
 
   useEffect(() => {
     const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
+      console.log(res.data);
       setChecks(res.data);
       const categories = Array.from(
         new Set(res.data.map((x) => x.check_category))
@@ -48,8 +49,14 @@ export default function MultiChecksFilter({
       );
       // TODO: we need to store the array of CheckTemplate, because we will need instances to put as selected
     };
-
+    const { connection, schema, activeTab, checkTarget } = filterParameters;
+    console.log(connection, schema, activeTab, checkTarget);
     if (checkTypes === CheckTypes.PROFILING) {
+      console.log(
+        filterParameters.connection,
+        filterParameters.schema,
+        filterParameters.checkTarget
+      );
       SchemaApiClient.getSchemaProfilingChecksTemplates(
         filterParameters.connection,
         filterParameters.schema,
@@ -80,15 +87,23 @@ export default function MultiChecksFilter({
     filterParameters.connection,
     filterParameters.schema,
     checkTypes,
-    filterParameters.checkTarget
+    filterParameters.checkTarget,
+    filterParameters.activeTab
   ]);
   const onChangeCheckOptions = () => {
     const checksCopy = checks
       .filter((x) => x.check_category === filterParameters.checkCategory)
       .map((x) => x.check_name);
 
+    const sortedChecks = checksCopy.sort((a, b): number => {
+      if (a && b) {
+        return a?.localeCompare(b);
+      }
+      return 0;
+    });
+
     setCheckNameOptions(
-      checksCopy.map((item) => ({
+      sortedChecks.map((item) => ({
         label: item ?? '',
         value: item ?? ''
       }))
@@ -117,26 +132,32 @@ export default function MultiChecksFilter({
       <div className="flex w-1/4">
         <div className="flex flex-col gap-3 w-45">
           <p>Check target</p>
-          <div className="flex gap-x-3 mr-2">
+          <div className="flex gap-x-3 mr-10">
             <RadioButton
               label="Table"
               onClick={() => {
                 onChangeFilterParameters({ checkTarget: 'table' }),
                   onChangeChecks([]);
+                setCheckNameOptions([]);
               }}
               checked={filterParameters.checkTarget === 'table'}
             />
             <RadioButton
               label="Column"
               onClick={() => {
-                onChangeFilterParameters({ checkTarget: 'column' });
+                onChangeFilterParameters({
+                  checkTarget: 'column',
+                  checkName: undefined,
+                  checkCategory: undefined
+                });
                 onChangeChecks([]);
+                setCheckNameOptions([]);
               }}
               checked={filterParameters.checkTarget === 'column'}
             />
           </div>
         </div>
-        <div className="max-w-75 w-75">
+        <div className="max-w-80 w-80">
           <Select
             label="Check category"
             options={sortObjects(checkCategoryOptions)}
