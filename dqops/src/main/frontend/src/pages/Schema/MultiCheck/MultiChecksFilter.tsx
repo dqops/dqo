@@ -49,8 +49,8 @@ export default function MultiChecksFilter({
       );
       // TODO: we need to store the array of CheckTemplate, because we will need instances to put as selected
     };
-    const { connection, schema, activeTab, checkTarget } = filterParameters;
-    console.log(connection, schema, activeTab, checkTarget);
+    // const { connection, schema, activeTab, checkTarget } = filterParameters;
+    // console.log(connection, schema, activeTab, checkTarget);
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
         filterParameters.connection,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import { SchemaApiClient } from '../../../services/apiClient';
@@ -11,13 +11,15 @@ interface IMultiChecksSearch {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
   onChangeChecks: (checks: CheckTemplate[]) => void;
+  isUpdated: boolean;
 }
 
 export default function MultiChecksSearch({
   checkTypes,
   filterParameters,
   onChangeFilterParameters,
-  onChangeChecks
+  onChangeChecks,
+  isUpdated
 }: IMultiChecksSearch) {
   const searchChecks = () => {
     if (checkTypes === CheckTypes.PROFILING) {
@@ -78,6 +80,12 @@ export default function MultiChecksSearch({
       });
     }
   };
+
+  useEffect(() => {
+    if (filterParameters.checkCategory && filterParameters.checkName) {
+      searchChecks();
+    }
+  }, [isUpdated]);
 
   return (
     <div className="flex w-full ">

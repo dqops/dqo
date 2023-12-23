@@ -27,6 +27,7 @@ export const MultiChecks = () => {
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
   const [checks, setChecks] = useState<CheckTemplate[]>([]);
+  const [isUpdated, setIsUpdated] = useState(false);
   const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   const [filterParameters, setFilterParameters] = useState<IFilterTemplate>({
     connection,
@@ -70,6 +71,7 @@ export const MultiChecks = () => {
           filterParameters={filterParameters}
           onChangeFilterParameters={onChangeFilterParameters}
           onChangeChecks={(checks: CheckTemplate[]) => setChecks(checks)}
+          isUpdated={isUpdated}
         />
         {filterParameters.checkName && filterParameters.checkCategory && (
           <MultiChecksTable
@@ -77,6 +79,7 @@ export const MultiChecks = () => {
             checks={checks}
             filterParameters={filterParameters}
             selectedCheckModel={selectedCheck.check_model ?? {}}
+            onChangeIsUpdated={() => setIsUpdated((prev) => !prev)}
           />
         )}
       </div>

@@ -20,6 +20,7 @@ interface UpdateCheckModelProps {
   selectedCheckModel: CheckModel | undefined;
   filterParameters: IFilterTemplate;
   selectedData: CheckTemplate[];
+  onChangeIsUpdated: () => void;
 }
 
 export const UpdateCheckModel = ({
@@ -28,7 +29,8 @@ export const UpdateCheckModel = ({
   action,
   selectedCheckModel,
   filterParameters,
-  selectedData
+  selectedData,
+  onChangeIsUpdated
 }: UpdateCheckModelProps) => {
   const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
   const [overideConflicts, setOverrideConflicts] = useState(true);
@@ -104,6 +106,7 @@ export const UpdateCheckModel = ({
   const bulkChecks = (): void => {
     action === 'bulkEnabled' ? bulkActivateChecks() : bulkDeactivateChecks();
     onClose();
+    onChangeIsUpdated();
   };
 
   const mapTableColumns = useMemo(() => {
@@ -134,6 +137,8 @@ export const UpdateCheckModel = ({
     });
     return mappedTables;
   }, [selectedData]);
+
+  console.log(mapTables, selectedData);
 
   return (
     <Dialog open={open} handler={onClose} className="min-w-240 max-w-240">

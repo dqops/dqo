@@ -11,13 +11,15 @@ type TMultiChecksTable = {
   checks: CheckTemplate[] | undefined;
   filterParameters: IFilterTemplate;
   selectedCheckModel: CheckModel;
+  onChangeIsUpdated: () => void;
 };
 
 export default function MultiChecksTable({
   checkTarget,
   checks,
   filterParameters,
-  selectedCheckModel
+  selectedCheckModel,
+  onChangeIsUpdated
 }: TMultiChecksTable) {
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
@@ -65,13 +67,21 @@ export default function MultiChecksTable({
         <div className="flex gap-x-4">
           <Button
             className="text-sm py-2.5"
-            label={!selectedData.length ? 'Activate for all maching filter' : 'Update for selected'}
+            label={
+              !selectedData.length
+                ? 'Activate for all maching filter'
+                : 'Update for selected'
+            }
             color="primary"
             onClick={() => setAction('bulkEnabled')}
           />
           <Button
             className="text-sm py-2.5"
-            label={!selectedData.length ? 'Deactivate for all maching filter' : 'Deactivate selected'}
+            label={
+              !selectedData.length
+                ? 'Deactivate for all maching filter'
+                : 'Deactivate selected'
+            }
             color="primary"
             onClick={() => setAction('bulkDisabled')}
           />
@@ -117,6 +127,10 @@ export default function MultiChecksTable({
         selectedCheckModel={selectedCheckModel}
         filterParameters={filterParameters}
         selectedData={selectedData}
+        onChangeIsUpdated={() => {
+          onChangeIsUpdated();
+          setSelectedData([]);
+        }}
       />
     </div>
   );
