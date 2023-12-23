@@ -138,8 +138,6 @@ export const UpdateCheckModel = ({
     return mappedTables;
   }, [selectedData]);
 
-  console.log(mapTables, selectedData);
-
   return (
     <Dialog open={open} handler={onClose} className="min-w-240 max-w-240">
       <DialogBody className="pt-10 pb-2 px-8">
