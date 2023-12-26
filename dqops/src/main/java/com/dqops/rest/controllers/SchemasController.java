@@ -373,11 +373,6 @@ public class SchemasController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.profiling,
                 null, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
@@ -419,11 +414,6 @@ public class SchemasController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.monitoring,
                 timeScale, checkTarget.orElse(null), checkCategory.orElse(null), checkName.orElse(null), principal);
@@ -464,11 +454,6 @@ public class SchemasController {
             @ApiParam(value = "Check name", required = false) @RequestParam(required = false) Optional<String> checkName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-
-        List<TableWrapper> tableWrappers = this.schemaService.getSchemaTables(userHome, connectionName, schemaName);
-        if (tableWrappers == null) {
-            return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
-        }
 
         List<CheckTemplate> checkTemplates = this.schemaService.getCheckTemplates(
                 connectionName, schemaName, CheckType.partitioned,
