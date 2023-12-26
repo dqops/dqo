@@ -5,14 +5,12 @@ import {
   CheckConfigurationModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  CheckTemplate,
-  FieldModel
+  CheckTemplate
 } from '../../api';
-import SensorParameters from '../../components/DataQualityChecks/SensorParameters';
 import Checkbox from '../../components/Checkbox';
-import CheckRuleItem from '../../components/DataQualityChecks/CheckRuleItem';
 import { ConnectionApiClient } from '../../services/apiClient';
 import { IFilterTemplate } from '../../shared/constants';
+import UpdateCheckRuleSensor from './MultiCheck/UpdateCheckRuleSensor';
 import { CheckTypes } from '../../shared/routes';
 
 interface UpdateCheckModelProps {
@@ -22,6 +20,8 @@ interface UpdateCheckModelProps {
   selectedCheckModel: CheckModel | undefined;
   filterParameters: IFilterTemplate;
   selectedData: CheckTemplate[];
+  onChangeIsUpdated: () => void;
+  onChangeLoading: (param: boolean) => void;
 }
 
 export const UpdateCheckModel = ({
@@ -30,7 +30,9 @@ export const UpdateCheckModel = ({
   action,
   selectedCheckModel,
   filterParameters,
-  selectedData
+  selectedData,
+  onChangeIsUpdated,
+  onChangeLoading
 }: UpdateCheckModelProps) => {
   const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
   const [overideConflicts, setOverrideConflicts] = useState(true);
@@ -46,6 +48,7 @@ export const UpdateCheckModel = ({
     }));
   };
   const bulkActivateChecks = () => {
+    onChangeLoading(true);
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
@@ -56,23 +59,27 @@ export const UpdateCheckModel = ({
       {
         check_search_filters: {
           connection: filterParameters.connection,
-          fullTableName: filterParameters.schema + ".*",
+          fullTableName: filterParameters.schema + '.*',
           checkTarget: filterParameters.checkTarget,
           columnDataType: filterParameters.columnDataType,
           checkName: filterParameters.checkName,
           checkCategory: filterParameters.checkCategory,
           checkType:
             filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
-          timeScale: filterParameters.checkTypes !== CheckTypes.PROFILING ? filterParameters.activeTab : undefined
+          timeScale:
+            filterParameters.checkTypes !== CheckTypes.PROFILING
+              ? filterParameters.activeTab
+              : undefined
         },
         check_model_patch: updatedCheck,
         selected_tables_to_columns,
         override_conflicts: overideConflicts
       }
-    );
+    ).finally(() => onChangeLoading(false));
   };
 
   const bulkDeactivateChecks = () => {
+    onChangeLoading(true);
     const selected_tables_to_columns =
       filterParameters.checkTarget === 'table'
         ? { ...mapTables }
@@ -83,23 +90,27 @@ export const UpdateCheckModel = ({
       {
         check_search_filters: {
           connection: filterParameters.connection,
-          fullTableName: filterParameters.schema + ".*",
+          fullTableName: filterParameters.schema + '.*',
           checkTarget: filterParameters.checkTarget,
           columnDataType: filterParameters.columnDataType,
           checkName: filterParameters.checkName,
           checkCategory: filterParameters.checkCategory,
           checkType:
             filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
-          timeScale: filterParameters.checkTypes !== CheckTypes.PROFILING ? filterParameters.activeTab : undefined
+          timeScale:
+            filterParameters.checkTypes !== CheckTypes.PROFILING
+              ? filterParameters.activeTab
+              : undefined
         },
         selected_tables_to_columns
       }
-    );
+    ).finally(() => onChangeLoading(false));
   };
 
   const bulkChecks = (): void => {
     action === 'bulkEnabled' ? bulkActivateChecks() : bulkDeactivateChecks();
     onClose();
+    onChangeIsUpdated();
   };
 
   const mapTableColumns = useMemo(() => {
@@ -132,76 +143,21 @@ export const UpdateCheckModel = ({
   }, [selectedData]);
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-150 max-w-150">
+    <Dialog open={open} handler={onClose} className="min-w-240 max-w-240">
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
-            {action === 'bulkEnabled' ? 'Activate Check:' : 'Deactivate Check: '}{' '}
+            {action === 'bulkEnabled'
+              ? 'Activate Check:'
+              : 'Deactivate Check: '}{' '}
             {updatedCheck?.check_name}
           </h1>
         </div>
-        {updatedCheck?.sensor_parameters &&
-          updatedCheck.sensor_parameters.length > 0 &&
-          action === 'bulkEnabled' && (
-            <div className="relative z-10 border rounded text-gray-700 border-gray-300 px-4 py-4  w-50">
-              <p className="text-gray-700 text-lg mb-4">Sensor parameters</p>
-              <SensorParameters
-                parameters={updatedCheck?.sensor_parameters || []}
-                onChange={(parameters: FieldModel[]) =>
-                  handleChange({ sensor_parameters: parameters })
-                }
-                onUpdate={() => undefined}
-              />
-            </div>
-          )}
         {action === 'bulkEnabled' && (
-          <div className="grid grid-cols-3 my-4">
-            <div className="bg-yellow-100 border border-gray-300 py-2">
-              <CheckRuleItem
-                parameters={updatedCheck?.rule?.warning}
-                onChange={(warning) =>
-                  handleChange({
-                    rule: {
-                      ...updatedCheck?.rule,
-                      warning: warning
-                    }
-                  })
-                }
-                type="warning"
-                onUpdate={() => {}}
-              />
-            </div>
-            <div className="bg-orange-100 border border-gray-300 py-2">
-              <CheckRuleItem
-                parameters={updatedCheck?.rule?.error}
-                onChange={(error) =>
-                  handleChange({
-                    rule: {
-                      ...updatedCheck?.rule,
-                      error: error
-                    }
-                  })
-                }
-                type="error"
-                onUpdate={() => {}}
-              />
-            </div>
-            <div className="bg-red-100 border border-gray-300 py-2">
-              <CheckRuleItem
-                parameters={updatedCheck?.rule?.fatal}
-                onChange={(fatal) =>
-                  handleChange({
-                    rule: {
-                      ...updatedCheck?.rule,
-                      fatal
-                    }
-                  })
-                }
-                type="fatal"
-                onUpdate={() => {}}
-              />
-            </div>
-          </div>
+          <UpdateCheckRuleSensor
+            updatedCheck={updatedCheck ?? {}}
+            handleChange={handleChange}
+          />
         )}
         {action === 'bulkEnabled' && (
           <div className="text-gray-700">

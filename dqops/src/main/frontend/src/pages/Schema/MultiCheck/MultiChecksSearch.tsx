@@ -1,83 +1,97 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
 import { IFilterTemplate } from '../../../shared/constants';
 import { CheckTemplate } from '../../../api';
+import Checkbox from '../../../components/Checkbox';
 
 interface IMultiChecksSearch {
   checkTypes: CheckTypes;
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
   onChangeChecks: (checks: CheckTemplate[]) => void;
+  isUpdated: boolean;
 }
 
 export default function MultiChecksSearch({
   checkTypes,
   filterParameters,
   onChangeFilterParameters,
-  onChangeChecks
+  onChangeChecks,
+  isUpdated
 }: IMultiChecksSearch) {
+  const [activeOffCheck, setActiveOffChecks] = useState(false);
+
   const searchChecks = () => {
+    const {
+      connection,
+      schema,
+      activeTab,
+      tableNamePattern,
+      columnNamePattern,
+      columnDataType,
+      checkTarget,
+      checkCategory,
+      checkName
+    } = filterParameters;
+
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksModel(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.tableNamePattern,
-        filterParameters.columnNamePattern,
-        filterParameters.columnDataType,
-        filterParameters.checkTarget,
-        filterParameters.checkCategory,
-        filterParameters.checkName,
+        connection,
+        schema,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
         undefined,
-        true,
-        undefined
+        activeOffCheck ? undefined : true
       ).then((res) => {
         onChangeChecks(res.data);
       });
-    } else if (
-      checkTypes === CheckTypes.MONITORING &&
-      filterParameters.activeTab
-    ) {
+    } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.tableNamePattern,
-        filterParameters.columnNamePattern,
-        filterParameters.columnDataType,
-        filterParameters.checkTarget,
-        filterParameters.checkCategory,
-        filterParameters.checkName,
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
         undefined,
-        true,
-        undefined
+        activeOffCheck ? undefined : true
       ).then((res) => {
         onChangeChecks(res.data);
       });
-    } else if (
-      checkTypes === CheckTypes.PARTITIONED &&
-      filterParameters.activeTab
-    ) {
+    } else if (checkTypes === CheckTypes.PARTITIONED && activeTab) {
       SchemaApiClient.getSchemaPartitionedChecksModel(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.tableNamePattern,
-        filterParameters.columnNamePattern,
-        filterParameters.columnDataType,
-        filterParameters.checkTarget,
-        filterParameters.checkCategory,
-        filterParameters.checkName,
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
         undefined,
-        true,
-        undefined
+        activeOffCheck ? undefined : true
       ).then((res) => {
         onChangeChecks(res.data);
       });
     }
   };
+
+  useEffect(() => {
+    if (filterParameters.checkCategory && filterParameters.checkName) {
+      searchChecks();
+    }
+  }, [isUpdated]);
 
   return (
     <div className="flex w-full ">
@@ -104,6 +118,7 @@ export default function MultiChecksSearch({
                 columnNamePattern: e.target.value
               })
             }
+            disabled={filterParameters.checkTarget === 'table'}
           />
         </div>
       </div>
@@ -116,10 +131,16 @@ export default function MultiChecksSearch({
             onChange={(e) =>
               onChangeFilterParameters({ columnDataType: e.target.value })
             }
+            disabled={filterParameters.checkTarget === 'table'}
           />
         </div>
       </div>
-      <div className="w-1/4 flex items-end justify-end">
+      <div className="w-1/4 flex items-center gap-x-8 justify-end">
+        <Checkbox
+          checked={activeOffCheck}
+          onChange={() => setActiveOffChecks((prev) => !prev)}
+          label={"Include also 'off' checks"}
+        />
         <Button
           label="Search"
           color={filterParameters.checkName ? 'primary' : 'secondary'}
