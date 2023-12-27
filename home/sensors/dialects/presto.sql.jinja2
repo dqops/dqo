@@ -1,4 +1,4 @@
-{% set macro_database_name =  connection.presto.database -%}
+{% set macro_database_name = connection.presto.database -%}
 {% set macro_schema_name = target_table.schema_name -%}
 {% set macro_table_name = target_table.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}

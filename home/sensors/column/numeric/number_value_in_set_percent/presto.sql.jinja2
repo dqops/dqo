@@ -1,16 +1,30 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-SELECT
-    CAST(
+
+{%- macro extract_in_list(values_list) -%}
+    {{ values_list|join(', ') -}}
+{% endmacro %}
+
+{%- macro actual_value() -%}
+    {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+    {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+    CAST(0.0 AS DOUBLE)
+    {%- else -%}
+    CAST (
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
-        END AS DOUBLE) as actual_value
+        END AS DOUBLE)
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    {{ actual_value() }} AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM (
@@ -21,5 +35,6 @@ FROM (
     FROM {{ lib.render_target_table() }} original_table
     {{- lib.render_where_clause(table_alias_prefix='original_table') }}
 ) analyzed_table
+{{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}

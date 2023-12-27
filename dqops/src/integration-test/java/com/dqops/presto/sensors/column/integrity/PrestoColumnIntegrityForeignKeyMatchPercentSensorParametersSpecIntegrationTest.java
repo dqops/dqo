@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.presto.sensors.column.bool;
+package com.dqops.presto.sensors.column.integrity;
 
 import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,92 +29,111 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.bool.ColumnBoolFalsePercentSensorParametersSpec;
+import com.dqops.sensors.column.integrity.ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+
 @SpringBootTest
-public class PrestoColumnBoolFalsePercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
-    private ColumnBoolFalsePercentSensorParametersSpec sut;
+public class PrestoColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
+    private ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnFalsePercentCheckSpec checkSpec;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private SampleTableMetadata sampleTableMetadataForeign;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.presto);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnBoolFalsePercentSensorParametersSpec();
-		this.checkSpec = new ColumnFalsePercentCheckSpec();
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.presto);
+        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.presto);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
+        this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec);
+                sampleTableMetadata, "foreign_key", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.3, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.3, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.3, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.3, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }
