@@ -298,9 +298,9 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
 
         List<ColumnChecksModel> columnChecksModels = tableSpec.getColumns().entrySet().stream()
                 .filter(colToSpec ->
-                        (checkSearchFilters.getColumn() == null || colToSpec.getKey().equals(checkSearchFilters.getColumn()))
-                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
-                                && (checkSearchFilters.getColumnDataType() == null || colToSpec.getValue().getTypeSnapshot().getColumnType().equals(checkSearchFilters.getColumnDataType()))
+                        (checkSearchFilters.getColumn() == null || Objects.equals(colToSpec.getKey(), checkSearchFilters.getColumn()))
+                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot() != null && colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
+                                && (checkSearchFilters.getColumnDataType() == null || colToSpec.getValue().getTypeSnapshot() != null && Objects.equals(colToSpec.getValue().getTypeSnapshot().getColumnType(), checkSearchFilters.getColumnDataType()))
                 ).map(columnNameToSpec -> getColumnChecksModelForColumn(
                         connectionSpec,
                         tableSpec,

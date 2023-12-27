@@ -139,7 +139,7 @@ export default function MultiChecksSearch({
         <Checkbox
           checked={activeOffCheck}
           onChange={() => setActiveOffChecks((prev) => !prev)}
-          label={"Include also 'off' checks"}
+          label={"Include also inactive checks"}
         />
         <Button
           label="Search"
