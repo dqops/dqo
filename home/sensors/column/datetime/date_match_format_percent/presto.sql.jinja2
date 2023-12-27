@@ -13,16 +13,17 @@
 {% endmacro -%}
 
 SELECT
-    CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-        ELSE 100.0 * SUM(
-            CASE
-                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_formats(parameters.date_formats)}})
-                    THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*)
-    END AS actual_value
+    CAST(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_formats(parameters.date_formats)}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS DOUBLE) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM (

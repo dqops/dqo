@@ -9,13 +9,13 @@
 {%- endmacro -%}
 
 SELECT
-    100.0 * SUM(
+    CAST( 100.0 * SUM(
         CASE
             WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                 THEN 0
             ELSE 1
         END
-    ) / COUNT(*) AS actual_value
+    ) / COUNT(*) AS DOUBLE) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
