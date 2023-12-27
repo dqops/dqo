@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { JobApiClient, SchemaApiClient } from '../../../services/apiClient';
+import { SchemaApiClient } from '../../../services/apiClient';
 import { SchemaModel } from '../../../api';
 import Button from '../../Button';
-import { toggleMenu } from '../../../redux/actions/job.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
-import { setActiveFirstLevelTab } from '../../../redux/actions/source.actions';
+import { addFirstLevelTab } from '../../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 
@@ -39,6 +38,21 @@ const SchemasView = () => {
     );
   };
 
+  const manageChecks = (schema: string) => {
+    const tab = 'multiple_checks';
+    const url = ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab);
+    const value = ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema);
+
+    dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value,
+        label: schema
+      })
+    );
+    history.push(url);
+  };
+
   const goToSchemas = () => {
     history.push(
       `${ROUTES.CONNECTION_DETAIL(
@@ -63,11 +77,11 @@ const SchemasView = () => {
           {schemas.map((item) => (
             <tr
               key={item.schema_name}
-              className="border-b border-gray-300 last:border-b-0"
+              className="border-b border-gray-300 last:border-b-0 relative"
             >
               <td className="py-2 pr-4 text-left">{item.schema_name}</td>
-              {isSourceScreen && (
-                <td className="py-2 px-4 text-left">
+              {isSourceScreen ? (
+                <td className="left-80 absolute py-1 px-4 text-left">
                   <Button
                     className="!py-2 !rounded-md"
                     textSize="sm"
@@ -77,6 +91,18 @@ const SchemasView = () => {
                     disabled={userProfile.can_manage_data_sources !== true}
                   />
                 </td>
+              ) : (
+                <div className="left-80 absolute text-xl">
+                  <Button
+                    className="!py-2 !rounded-md underline text-xl"
+                    textSize="sm"
+                    label="Manage checks"
+                    color="primary"
+                    variant="text"
+                    onClick={() => manageChecks(item.schema_name ?? '')}
+                    disabled={userProfile.can_manage_data_sources !== true}
+                  />
+                </div>
               )}
             </tr>
           ))}
