@@ -85,6 +85,18 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
     }
   }, [checkTypes]);
 
+  const defaultTabValue = useMemo(() => {
+    switch (checkTypes) {
+      case CheckTypes.PROFILING:
+        return 'statistics';
+      case CheckTypes.SOURCES:
+        return 'detail';
+      case CheckTypes.MONITORING:
+      case CheckTypes.PARTITIONED:
+        return 'daily';
+    }
+  }, [checkTypes]);
+
   return (
     <table className="w-full">
       <thead>
@@ -101,7 +113,12 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
       <tbody>
         {tables.map((item, index) => (
           <tr key={index}>
-            <td className="px-4">{item.target?.table_name}</td>
+            <Button
+              variant="text"
+              label={item.target?.table_name}
+              color="primary"
+              onClick={() => goToTable(item, defaultTabValue)}
+            ></Button>
             <td className="px-4">{item?.disabled}</td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>
