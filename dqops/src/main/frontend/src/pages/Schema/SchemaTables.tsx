@@ -54,14 +54,14 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
             label: 'Basic statistics',
             value: 'statistics'
           },
-          { label: 'Advanced checks', value: 'advanced' },
+          { label: 'Profiling checks', value: 'advanced' },
           { label: 'Current table status', value: 'table-quality-status' }
         ];
 
       case CheckTypes.SOURCES:
         return [
           {
-            label: 'Table',
+            label: 'Table configuration',
             value: 'detail'
           },
           { label: 'Date and time column', value: 'timestamps' },
