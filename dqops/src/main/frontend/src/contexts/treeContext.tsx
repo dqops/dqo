@@ -1150,7 +1150,7 @@ function TreeProvider(props: any) {
         checkType,
         connectionNode?.label ?? '',
         node.label,
-        'multiple_checks'
+        checkType === CheckTypes.SOURCES ? 'tables' : 'multiple_checks'
       );
 
       if (firstLevelActiveTab === url) {

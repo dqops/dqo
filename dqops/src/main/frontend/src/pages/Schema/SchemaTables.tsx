@@ -1,58 +1,122 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { TableListModel } from '../../api';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import Button from '../../components/Button';
 
 type SchemaTablesProps = {
   tables: TableListModel[];
 };
 
+type TButtonTabs = {
+  label: string;
+  value: string;
+};
+
 export const SchemaTables = ({ tables }: SchemaTablesProps) => {
-  const chechTypes: CheckTypes = useParams();
+  const {
+    checkTypes
+  }: {
+    checkTypes: CheckTypes;
+  } = useParams();
   const dispatch = useDispatch();
-  const history = useHistory();
-  //add routing to table and connection
-  const goToConnection = (connection: string) => {
+
+  const goToTable = (item: TableListModel, tab: string) => {
     dispatch(
-      addFirstLevelTab(chechTypes, {
-        url: ROUTES.CONNECTION_DETAIL(chechTypes, connection, 'detail'),
-        value: ROUTES.CONNECTION_LEVEL_VALUE(chechTypes, connection),
+      addFirstLevelTab(checkTypes, {
+        url: ROUTES.TABLE_LEVEL_PAGE(
+          checkTypes,
+          item.connection_name ?? '',
+          item.target?.schema_name ?? '',
+          item.target?.table_name ?? '',
+          tab
+        ),
+        value: ROUTES.TABLE_LEVEL_VALUE(
+          checkTypes,
+          item.connection_name ?? '',
+          item.target?.schema_name ?? '',
+          item.target?.table_name ?? ''
+        ),
         state: {},
-        label: connection
+        label: item.target?.table_name ?? ''
       })
     );
-    history.push(ROUTES.CONNECTION_DETAIL(chechTypes, connection, 'detail'));
     return;
   };
+
+  const buttonTabs: TButtonTabs[] = useMemo(() => {
+    switch (checkTypes) {
+      case CheckTypes.PROFILING:
+        return [
+          {
+            label: 'Basic statistics',
+            value: 'statistics'
+          },
+          { label: 'Advanced checks', value: 'advanced' },
+          { label: 'Current table status', value: 'table-quality-status' }
+        ];
+
+      case CheckTypes.SOURCES:
+        return [
+          {
+            label: 'Table',
+            value: 'detail'
+          },
+          { label: 'Date and time column', value: 'timestamps' },
+          { label: 'Incident configuration', value: 'incident_configuration' }
+        ];
+
+      case CheckTypes.MONITORING:
+      case CheckTypes.PARTITIONED:
+        return [
+          { label: 'Daily checks', value: 'daily' },
+          { label: 'Monthly checks', value: 'monthly' },
+          {
+            label: 'Monthly table status',
+            value: 'table-quality-status-monthly'
+          },
+          { label: 'Daily table status', value: 'table-quality-status-daily' }
+        ];
+
+      default:
+        return [];
+    }
+  }, [checkTypes]);
 
   return (
     <table className="w-full">
       <thead>
         <tr>
-          <th className="px-4 text-left">Connection</th>
-          <th className="px-4 text-left">Schema</th>
           <th className="px-4 text-left">Table</th>
           <th className="px-4 text-left">Disabled</th>
           <th className="px-4 text-left">Stage</th>
           <th className="px-4 text-left">Filter</th>
+          <th></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         {tables.map((item, index) => (
           <tr key={index}>
-            <td
-              className="px-4 text-teal-500 underline"
-              onClick={() => goToConnection(item.connection_name ?? '')}
-            >
-              {item.connection_name}
-            </td>
-            <td className="px-4">{item.target?.schema_name}</td>
             <td className="px-4">{item.target?.table_name}</td>
             <td className="px-4">{item?.disabled}</td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>
+            {buttonTabs.map((button) => {
+              return (
+                <td className="px-4" key={button.value}>
+                  <Button
+                    variant="text"
+                    label={button.label}
+                    color="primary"
+                    onClick={() => goToTable(item, button.value)}
+                  />
+                </td>
+              );
+            })}
           </tr>
         ))}
       </tbody>
