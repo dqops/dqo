@@ -1,14 +1,17 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { PrestoParametersSpec, SharedCredentialListModel } from "../../../../api";
-import JdbcPropertiesView from "../JdbcProperties";
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+import {
+  PrestoParametersSpec,
+  SharedCredentialListModel
+} from '../../../../api';
+import JdbcPropertiesView from '../JdbcProperties';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 
 interface IPrestoConnectionProps {
   presto?: PrestoParametersSpec;
   onChange?: (obj: PrestoParametersSpec) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
 const PrestoConnection = ({
@@ -16,7 +19,6 @@ const PrestoConnection = ({
   onChange,
   sharedCredentials
 }: IPrestoConnectionProps) => {
-
   const handleChange = (obj: Partial<PrestoParametersSpec>) => {
     if (!onChange) return;
 
@@ -28,36 +30,36 @@ const PrestoConnection = ({
 
   return (
     <SectionWrapper title="Presto connection parameters" className="mb-4">
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Host"
         className="mb-4"
         value={presto?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Port"
         className="mb-4"
-        value={(presto?.port || 8080).toString()}
+        value={presto?.port}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Database"
         className="mb-4"
         value={presto?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="User name"
         className="mb-4"
         value={presto?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Password"
         className="mb-4"
         maskingType="password"

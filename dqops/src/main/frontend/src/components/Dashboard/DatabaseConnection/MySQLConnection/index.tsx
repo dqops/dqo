@@ -1,21 +1,25 @@
 import React from 'react';
 
-import { MysqlParametersSpec, MysqlParametersSpecSslmodeEnum, SharedCredentialListModel } from "../../../../api";
-import JdbcPropertiesView from "../JdbcProperties";
+import {
+  MysqlParametersSpec,
+  MysqlParametersSpecSslmodeEnum,
+  SharedCredentialListModel
+} from '../../../../api';
+import JdbcPropertiesView from '../JdbcProperties';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 
 interface IMySQLConnectionProps {
   mysql?: MysqlParametersSpec;
   onChange?: (obj: MysqlParametersSpec) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
 const sslModes = [
   {
-    label: '',
-  },  
+    label: ''
+  },
   {
     label: 'DISABLED',
     value: MysqlParametersSpecSslmodeEnum.DISABLED
@@ -43,7 +47,6 @@ const MySQLConnection = ({
   onChange,
   sharedCredentials
 }: IMySQLConnectionProps) => {
-
   const handleChange = (obj: Partial<MysqlParametersSpec>) => {
     if (!onChange) return;
 
@@ -55,37 +58,37 @@ const MySQLConnection = ({
 
   return (
     <SectionWrapper title="MySQL connection parameters" className="mb-4">
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Host"
         className="mb-4"
         value={mysql?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Port"
         className="mb-4"
-        value={(mysql?.port || 3306).toString()}
+        value={mysql?.port}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="User name"
         className="mb-4"
         value={mysql?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Password"
         className="mb-4"
         maskingType="password"
         value={mysql?.password}
         onChange={(value) => handleChange({ password: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Database"
         className="mb-4"
         value={mysql?.database}
@@ -95,9 +98,7 @@ const MySQLConnection = ({
         label="SSL mode"
         options={sslModes}
         className="mb-4"
-        value={
-          mysql?.sslmode
-        }
+        value={mysql?.sslmode}
         onChange={(value) => handleChange({ sslmode: value })}
       />
       <JdbcPropertiesView
