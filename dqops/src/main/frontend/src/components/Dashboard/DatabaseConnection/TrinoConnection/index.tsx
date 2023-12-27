@@ -1,14 +1,17 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { TrinoParametersSpec, SharedCredentialListModel } from "../../../../api";
-import JdbcPropertiesView from "../JdbcProperties";
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+import {
+  TrinoParametersSpec,
+  SharedCredentialListModel
+} from '../../../../api';
+import JdbcPropertiesView from '../JdbcProperties';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 
 interface ITrinoConnectionProps {
   trino?: TrinoParametersSpec;
   onChange?: (obj: TrinoParametersSpec) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
 const TrinoConnection = ({
@@ -16,7 +19,6 @@ const TrinoConnection = ({
   onChange,
   sharedCredentials
 }: ITrinoConnectionProps) => {
-
   const handleChange = (obj: Partial<TrinoParametersSpec>) => {
     if (!onChange) return;
 
@@ -28,29 +30,29 @@ const TrinoConnection = ({
 
   return (
     <SectionWrapper title="Trino connection parameters" className="mb-4">
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Host"
         className="mb-4"
         value={trino?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Port"
         className="mb-4"
-        value={(trino?.port || 8080).toString()}
+        value={trino?.port}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Database"
         className="mb-4"
         value={trino?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="User name"
         className="mb-4"
         value={trino?.user}

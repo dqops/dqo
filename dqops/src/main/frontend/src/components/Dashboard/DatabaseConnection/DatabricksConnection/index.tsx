@@ -41,7 +41,7 @@ const DatabricksConnection = ({
         data={sharedCredentials}
         label="Port"
         className="mb-4"
-        value={(databricks?.port || 443).toString()}
+        value={databricks?.port}
         onChange={(value) => handleChange({ port: value })}
       />
       <FieldTypeInput
