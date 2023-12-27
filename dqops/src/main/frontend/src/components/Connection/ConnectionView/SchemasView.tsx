@@ -81,7 +81,7 @@ const SchemasView = () => {
             >
               <td className="py-2 pr-4 text-left">{item.schema_name}</td>
               {isSourceScreen ? (
-                <td className="py-2 px-4 text-left">
+                <td className="left-80 absolute py-1 px-4 text-left">
                   <Button
                     className="!py-2 !rounded-md"
                     textSize="sm"
