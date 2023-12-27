@@ -3,7 +3,7 @@ import { TableListModel } from '../../api';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
 
 type SchemaTablesProps = {
