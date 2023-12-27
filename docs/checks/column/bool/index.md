@@ -1,6 +1,6 @@
 # Checks/column/bool
 
-**This is a list of bool column checks in DQOps and a brief description of what they do.**
+**This is a list of bool column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

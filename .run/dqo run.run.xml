@@ -1,14 +1,15 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="dqo run" type="JarApplication">
-    <option name="JAR_PATH" value="$PROJECT_DIR$/dqops/target/dqo-dqops-0.4.1.jar" />
-    <option name="VM_PARAMETERS" value="-XX:MaxRAMPercentage=60.0 --add-opens java.base/java.nio=ALL-UNNAMED" />
-    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-    <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
-    <envs>
-      <env name="DQO_HOME" value="$PROJECT_DIR$/home" />
-      <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
-      <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
-    </envs>
-    <method v="2" />
-  </configuration>
+<configuration default="false" name="dqo run" type="JarApplication">
+  <option name="JAR_PATH" value="$PROJECT_DIR$/dqops/target/dqo-dqops-0.4.1.jar" />
+  <option name="VM_PARAMETERS" value="-XX:MaxRAMPercentage=60.0 --add-opens java.base/java.nio=ALL-UNNAMED" />
+  <option name="PROGRAM_PARAMETERS" value="--server.port=8888" />
+  <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+  <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
+  <envs>
+    <env name="DQO_HOME" value="$PROJECT_DIR$/home" />
+    <env name="DQO_USER_HOME" value="$PROJECT_DIR$/userhome" />
+    <env name="HADOOP_HOME" value="$PROJECT_DIR$/home" />
+  </envs>
+  <method v="2" />
+</configuration>
 </component>

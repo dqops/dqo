@@ -34,7 +34,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -292,10 +292,32 @@ public class ColumnSpec extends AbstractSpec {
     public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
                                                                        CheckTimeScale checkTimeScale,
                                                                        boolean attachCheckContainer) {
+        return getColumnCheckRootContainer(checkType, checkTimeScale, attachCheckContainer, true);
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category.  Returns null when the check container is not present.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the column specification.
+     *
+     * @param checkType            Check type.
+     * @param checkTimeScale       Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the column.
+     * @param createEmptyContainerWhenNull Creates a new check container instance when it is null.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale,
+                                                                       boolean attachCheckContainer,
+                                                                       boolean createEmptyContainerWhenNull) {
         switch (checkType) {
             case profiling: {
                 if (this.profilingChecks != null) {
                     return this.profilingChecks;
+                }
+
+                if (!createEmptyContainerWhenNull) {
+                    return null;
                 }
 
                 ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
@@ -309,6 +331,10 @@ public class ColumnSpec extends AbstractSpec {
             case monitoring: {
                 ColumnMonitoringChecksRootSpec monitoringSpec = this.monitoringChecks;
                 if (monitoringSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
                     monitoringSpec = new ColumnMonitoringChecksRootSpec();
                     monitoringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "monitoring_checks"));
                     if (attachCheckContainer) {
@@ -322,6 +348,10 @@ public class ColumnSpec extends AbstractSpec {
                             return monitoringSpec.getDaily();
                         }
 
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
                         ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoringCategoriesSpec = new ColumnDailyMonitoringCheckCategoriesSpec();
                         dailyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
@@ -332,6 +362,10 @@ public class ColumnSpec extends AbstractSpec {
                     case monthly: {
                         if (monitoringSpec.getMonthly() != null) {
                             return monitoringSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
 
                         ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoringCategoriesSpec = new ColumnMonthlyMonitoringCheckCategoriesSpec();
@@ -349,6 +383,10 @@ public class ColumnSpec extends AbstractSpec {
             case partitioned: {
                 ColumnPartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
                 if (partitionedChecksSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
                     partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
                     partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
                     if (attachCheckContainer) {
@@ -362,6 +400,10 @@ public class ColumnSpec extends AbstractSpec {
                             return partitionedChecksSpec.getDaily();
                         }
 
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
                         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new ColumnDailyPartitionedCheckCategoriesSpec();
                         dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
                         if (attachCheckContainer) {
@@ -372,6 +414,10 @@ public class ColumnSpec extends AbstractSpec {
                     case monthly: {
                         if (partitionedChecksSpec.getMonthly() != null) {
                             return partitionedChecksSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
                         }
 
                         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new ColumnMonthlyPartitionedCheckCategoriesSpec();

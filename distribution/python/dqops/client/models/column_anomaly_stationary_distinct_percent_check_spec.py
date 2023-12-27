@@ -15,8 +15,8 @@ if TYPE_CHECKING:
     from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
         AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
     )
-    from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
-        ColumnUniquenessDistinctCountSensorParametersSpec,
+    from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
+        ColumnUniquenessDistinctPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
@@ -50,7 +50,7 @@ class ColumnAnomalyStationaryDistinctPercentCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
-        parameters (Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]):
+        parameters (Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]):
         warning (Union[Unset, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec]):
         error (Union[Unset, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec]):
         fatal (Union[Unset, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec]):
@@ -65,7 +65,7 @@ class ColumnAnomalyStationaryDistinctPercentCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[
-        Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
+        Unset, "ColumnUniquenessDistinctPercentSensorParametersSpec"
     ] = UNSET
     warning: Union[
         Unset, "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
@@ -154,8 +154,8 @@ class ColumnAnomalyStationaryDistinctPercentCheckSpec:
         from ..models.anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
             AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
         )
-        from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
-            ColumnUniquenessDistinctCountSensorParametersSpec,
+        from ..models.column_uniqueness_distinct_percent_sensor_parameters_spec import (
+            ColumnUniquenessDistinctPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
@@ -188,11 +188,11 @@ class ColumnAnomalyStationaryDistinctPercentCheckSpec:
         data_grouping = d.pop("data_grouping", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]
+        parameters: Union[Unset, ColumnUniquenessDistinctPercentSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = ColumnUniquenessDistinctCountSensorParametersSpec.from_dict(
+            parameters = ColumnUniquenessDistinctPercentSensorParametersSpec.from_dict(
                 _parameters
             )
 

@@ -6,7 +6,7 @@ import httpx
 from ... import errors
 from ...client import AuthenticatedClient, Client
 from ...models.check_results_overview_data_model import CheckResultsOverviewDataModel
-from ...types import Response
+from ...types import UNSET, Response, Unset
 
 
 def _get_kwargs(
@@ -14,8 +14,18 @@ def _get_kwargs(
     schema_name: str,
     table_name: str,
     column_name: str,
+    *,
+    category: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
 ) -> Dict[str, Any]:
     pass
+
+    params: Dict[str, Any] = {}
+    params["category"] = category
+
+    params["checkName"] = check_name
+
+    params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
     return {
         "method": "get",
@@ -25,6 +35,7 @@ def _get_kwargs(
             tableName=table_name,
             columnName=column_name,
         ),
+        "params": params,
     }
 
 
@@ -66,6 +77,8 @@ def sync_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
+    category: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -77,6 +90,8 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
+        category (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -91,6 +106,8 @@ def sync_detailed(
         schema_name=schema_name,
         table_name=table_name,
         column_name=column_name,
+        category=category,
+        check_name=check_name,
     )
 
     response = client.get_httpx_client().request(
@@ -107,6 +124,8 @@ def sync(
     column_name: str,
     *,
     client: AuthenticatedClient,
+    category: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -118,6 +137,8 @@ def sync(
         schema_name (str):
         table_name (str):
         column_name (str):
+        category (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -133,6 +154,8 @@ def sync(
         table_name=table_name,
         column_name=column_name,
         client=client,
+        category=category,
+        check_name=check_name,
     ).parsed
 
 
@@ -143,6 +166,8 @@ async def asyncio_detailed(
     column_name: str,
     *,
     client: AuthenticatedClient,
+    category: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
 ) -> Response[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -154,6 +179,8 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         column_name (str):
+        category (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -168,6 +195,8 @@ async def asyncio_detailed(
         schema_name=schema_name,
         table_name=table_name,
         column_name=column_name,
+        category=category,
+        check_name=check_name,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -182,6 +211,8 @@ async def asyncio(
     column_name: str,
     *,
     client: AuthenticatedClient,
+    category: Union[Unset, None, str] = UNSET,
+    check_name: Union[Unset, None, str] = UNSET,
 ) -> Optional[List["CheckResultsOverviewDataModel"]]:
     """getColumnProfilingChecksOverview
 
@@ -193,6 +224,8 @@ async def asyncio(
         schema_name (str):
         table_name (str):
         column_name (str):
+        category (Union[Unset, None, str]):
+        check_name (Union[Unset, None, str]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -209,5 +242,7 @@ async def asyncio(
             table_name=table_name,
             column_name=column_name,
             client=client,
+            category=category,
+            check_name=check_name,
         )
     ).parsed

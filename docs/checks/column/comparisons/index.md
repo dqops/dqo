@@ -1,6 +1,6 @@
 # Checks/column/comparisons
 
-**This is a list of comparisons column checks in DQOps and a brief description of what they do.**
+**This is a list of comparisons column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

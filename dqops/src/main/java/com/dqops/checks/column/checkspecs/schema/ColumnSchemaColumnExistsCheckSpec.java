@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.comparison.Equals1RuleParametersSpec;
 import com.dqops.rules.comparison.EqualsInteger1RuleParametersSpec;
 import com.dqops.sensors.column.schema.ColumnColumnExistsSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -39,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnSchemaColumnExistsCheckSpec
-        extends AbstractCheckSpec<ColumnColumnExistsSensorParametersSpec, EqualsInteger1RuleParametersSpec, EqualsInteger1RuleParametersSpec, EqualsInteger1RuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnColumnExistsSensorParametersSpec, Equals1RuleParametersSpec, Equals1RuleParametersSpec, Equals1RuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnSchemaColumnExistsCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,17 +54,17 @@ public class ColumnSchemaColumnExistsCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when the column was not found.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private EqualsInteger1RuleParametersSpec warning;
+    private Equals1RuleParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality error when the column was not found.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private EqualsInteger1RuleParametersSpec error;
+    private Equals1RuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality fatal issue when the column was not found.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private EqualsInteger1RuleParametersSpec fatal;
+    private Equals1RuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -90,7 +91,7 @@ public class ColumnSchemaColumnExistsCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public EqualsInteger1RuleParametersSpec getWarning() {
+    public Equals1RuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +99,7 @@ public class ColumnSchemaColumnExistsCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(EqualsInteger1RuleParametersSpec warning) {
+    public void setWarning(Equals1RuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -110,7 +111,7 @@ public class ColumnSchemaColumnExistsCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public EqualsInteger1RuleParametersSpec getError() {
+    public Equals1RuleParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +119,7 @@ public class ColumnSchemaColumnExistsCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(EqualsInteger1RuleParametersSpec error) {
+    public void setError(Equals1RuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -130,7 +131,7 @@ public class ColumnSchemaColumnExistsCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public EqualsInteger1RuleParametersSpec getFatal() {
+    public Equals1RuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +139,7 @@ public class ColumnSchemaColumnExistsCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(EqualsInteger1RuleParametersSpec fatal) {
+    public void setFatal(Equals1RuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
@@ -161,6 +162,6 @@ public class ColumnSchemaColumnExistsCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }

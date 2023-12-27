@@ -16,7 +16,7 @@
 
 package com.dqops.data.incidents.services.models;
 
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 
 /**
  * Incident sort order columns.

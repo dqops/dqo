@@ -1,5 +1,6 @@
 import {
   ConnectionModelProviderTypeEnum,
+  TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
 } from '../api';
 
@@ -15,12 +16,34 @@ interface IDatabaseOption {
   displayName: string;
 }
 
+export type TParameters = {
+  name?: string;
+  refConnection?: string;
+  refSchema?: string;
+  refTable?: string;
+  dataGroupingArray?: TableComparisonGroupingColumnPairModel[];
+};
+
+export interface IFilterTemplate {
+  connection: string;
+  schema: string;
+  activeTab: 'daily' | 'monthly' | undefined;
+  tableNamePattern?: string | undefined;
+  columnNamePattern?: string | undefined;
+  columnDataType?: string | undefined;
+  checkTarget?: 'table' | 'column' | undefined;
+  checkCategory?: string | undefined;
+  checkName?: string | undefined;
+  checkTypes: CheckTypes;
+}
+
 enum CheckTypes {
   MONITORING = 'monitoring',
   SOURCES = 'sources',
   PROFILING = 'profiling',
   PARTITIONED = 'partitioned'
 }
+
 export const CONNECTION_LEVEL_TABS: {
   [key in CheckTypes]: PageTab[];
 } = {
@@ -264,7 +287,7 @@ export const databaseOptions: IDatabaseOption[] = [
   {
     type: ConnectionModelProviderTypeEnum.bigquery,
     name: 'BigQuery',
-    iconName: 'big-query',
+    iconName: 'bigquery',
     displayName: 'Bigquery'
   },
   {
@@ -290,6 +313,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'CockroachDB',
     iconName: 'cockroachdb',
     displayName: 'CockroachDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.databricks,
+    name: 'Databricks',
+    iconName: 'databricks',
+    displayName: 'Databricks'
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,

@@ -13,7 +13,7 @@ nav:
       - Review results on the dashboards: "getting-started/review-results-on-dashboards/review-results-on-dashboards.md"
   - DQOps concepts:
       - "dqo-concepts/index.md"
-      - Checks:
+      - Data quality checks:
           - "dqo-concepts/checks/index.md"
           - Profiling checks: "dqo-concepts/checks/profiling-checks/profiling-checks.md"
           - Monitoring checks: "dqo-concepts/checks/monitoring-checks/monitoring-checks.md"
@@ -21,18 +21,18 @@ nav:
       - Configuring checks: "dqo-concepts/checks/configuring-checks.md"
       - DQOps user home: "dqo-concepts/home-folders/dqops-user-home.md"
       - Running checks: "dqo-concepts/running-checks/running-checks.md"
-      - Sensors: "dqo-concepts/sensors/sensors.md"
-      - Rules: "dqo-concepts/rules/rules.md"
+      - Data quality sensors: "dqo-concepts/sensors/sensors.md"
+      - Data quality rules: "dqo-concepts/rules/rules.md"
       - Check execution flow: "dqo-concepts/architecture/check-execution-flow.md"
       - DQOps architecture: "dqo-concepts/architecture/dqops-architecture.md"
-      - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
-      - Dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
+      - Data quality dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
-      - Data storage: "dqo-concepts/data-storage/data-storage.md"
+      - Data quality KPIs: "dqo-concepts/data-quality-kpis/data-quality-kpis.md"
       - Incident management: "dqo-concepts/data-quality-incidents/incidents.md"
       - User interface overview: "dqo-concepts/user-interface-overview/user-interface-overview.md"
       - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
+      - Data storage: "dqo-concepts/data-storage/data-storage.md"
   - Installing DQOps:
       - Download DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
       - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
@@ -47,13 +47,19 @@ nav:
       - Redshift: "data-sources/redshift.md"
       - SQL Server: "data-sources/sql-server.md"
       - Snowflake: "data-sources/snowflake.md"
+      - Spark: "data-sources/spark.md"
+      - Databricks: "data-sources/databricks.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
+      - Data availability:
+          - Table availability: "examples/data-availability/table-availability.md"
       - Data completeness:
           - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
           - Number of null values: "examples/data-completeness/number-of-null-values.md"
+      - Data consistency:
+          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
@@ -66,15 +72,14 @@ nav:
           - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
-      - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
-          - Percentage of false values: "examples/data-reasonability/percentage-of-false-values.md"
-      - Availability:
-          - Table availability: "examples/stability/table-availability.md"
+          - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
+      - Schema:
+          - Table schema detection: "examples/schema/schema-detection.md"
       - Data quality monitoring:
+          - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
@@ -313,6 +318,11 @@ nav:
         - min in range: 'checks/column/numeric/min-in-range.md'
         - mean in range: 'checks/column/numeric/mean-in-range.md'
         - percentile in range: 'checks/column/numeric/percentile-in-range.md'
+        - median in range: 'checks/column/numeric/median-in-range.md'
+        - percentile 10 in range: 'checks/column/numeric/percentile-10-in-range.md'
+        - percentile 25 in range: 'checks/column/numeric/percentile-25-in-range.md'
+        - percentile 75 in range: 'checks/column/numeric/percentile-75-in-range.md'
+        - percentile 90 in range: 'checks/column/numeric/percentile-90-in-range.md'
         - sample stddev in range: 'checks/column/numeric/sample-stddev-in-range.md'
         - population stddev in range: 'checks/column/numeric/population-stddev-in-range.md'
         - sample variance in range: 'checks/column/numeric/sample-variance-in-range.md'
@@ -393,6 +403,8 @@ nav:
         - change distinct percent since 7 days: 'checks/column/uniqueness/change-distinct-percent-since-7-days.md'
         - change distinct percent since 30 days: 'checks/column/uniqueness/change-distinct-percent-since-30-days.md'
         - change distinct percent since yesterday: 'checks/column/uniqueness/change-distinct-percent-since-yesterday.md'
+        - anomaly stationary distinct count 30 days: 'checks/column/uniqueness/anomaly-stationary-distinct-count-30-days.md'
+        - anomaly stationary distinct count: 'checks/column/uniqueness/anomaly-stationary-distinct-count.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY

@@ -1,6 +1,6 @@
 # Checks/column/integrity
 
-**This is a list of integrity column checks in DQOps and a brief description of what they do.**
+**This is a list of integrity column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

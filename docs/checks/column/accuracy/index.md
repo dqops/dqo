@@ -1,6 +1,6 @@
 # Checks/column/accuracy
 
-**This is a list of accuracy column checks in DQOps and a brief description of what they do.**
+**This is a list of accuracy column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

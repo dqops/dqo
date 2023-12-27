@@ -1,6 +1,6 @@
 # Checks/table/timeliness
 
-**This is a list of timeliness table checks in DQOps and a brief description of what they do.**
+**This is a list of timeliness table data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

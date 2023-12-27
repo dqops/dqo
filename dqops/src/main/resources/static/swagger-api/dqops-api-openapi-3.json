@@ -5376,6 +5376,28 @@
             "exampleSetFlag" : false
           },
           "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
         } ],
         "responses" : {
           "200" : {
@@ -6707,6 +6729,28 @@
             "exampleSetFlag" : false
           },
           "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
         } ],
         "responses" : {
           "200" : {
@@ -7804,6 +7848,28 @@
           "in" : "path",
           "description" : "Column name",
           "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
           "schema" : {
             "type" : "string",
             "extensions" : { },
@@ -10234,6 +10300,28 @@
             "exampleSetFlag" : false
           },
           "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
         } ],
         "responses" : {
           "200" : {
@@ -11508,6 +11596,28 @@
             "exampleSetFlag" : false
           },
           "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
         } ],
         "responses" : {
           "200" : {
@@ -12705,6 +12815,28 @@
           "in" : "path",
           "description" : "Table name",
           "required" : true,
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "category",
+          "in" : "query",
+          "description" : "Optional check category",
+          "schema" : {
+            "type" : "string",
+            "extensions" : { },
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "extensions" : { }
+        }, {
+          "name" : "checkName",
+          "in" : "query",
+          "description" : "Optional check name",
           "schema" : {
             "type" : "string",
             "extensions" : { },
@@ -25572,7 +25704,7 @@
             "types" : [ "string" ]
           },
           "parameters" : {
-            "$ref" : "#/components/schemas/ColumnUniquenessDistinctCountSensorParametersSpec",
+            "$ref" : "#/components/schemas/ColumnUniquenessDistinctPercentSensorParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
@@ -25636,8 +25768,8 @@
             },
             "parameters" : {
               "description" : "Data quality check parameters",
-              "$ref" : "#/components/schemas/ColumnUniquenessDistinctCountSensorParametersSpec",
-              "originalRef" : "#/components/schemas/ColumnUniquenessDistinctCountSensorParametersSpec"
+              "$ref" : "#/components/schemas/ColumnUniquenessDistinctPercentSensorParametersSpec",
+              "originalRef" : "#/components/schemas/ColumnUniquenessDistinctPercentSensorParametersSpec"
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -25720,7 +25852,7 @@
             "types" : [ "string" ]
           },
           "parameters" : {
-            "$ref" : "#/components/schemas/ColumnUniquenessDistinctCountSensorParametersSpec",
+            "$ref" : "#/components/schemas/ColumnUniquenessDistinctPercentSensorParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
@@ -25784,8 +25916,8 @@
             },
             "parameters" : {
               "description" : "Data quality check parameters",
-              "$ref" : "#/components/schemas/ColumnUniquenessDistinctCountSensorParametersSpec",
-              "originalRef" : "#/components/schemas/ColumnUniquenessDistinctCountSensorParametersSpec"
+              "$ref" : "#/components/schemas/ColumnUniquenessDistinctPercentSensorParametersSpec",
+              "originalRef" : "#/components/schemas/ColumnUniquenessDistinctPercentSensorParametersSpec"
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -33593,17 +33725,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -33657,18 +33789,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a row count that raises a data quality error (alert), detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem, detects that the data type of values stored in a column has changed since the last time it was evaluated or the data type in the current daily/monthly partition differs from the data type in the previous partition.",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             }
           }
         }
@@ -46193,17 +46325,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/EqualsInteger1RuleParametersSpec",
+            "$ref" : "#/components/schemas/Equals1RuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/EqualsInteger1RuleParametersSpec",
+            "$ref" : "#/components/schemas/Equals1RuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/EqualsInteger1RuleParametersSpec",
+            "$ref" : "#/components/schemas/Equals1RuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -46257,18 +46389,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning when the column was not found.",
-              "$ref" : "#/components/schemas/EqualsInteger1RuleParametersSpec",
-              "originalRef" : "#/components/schemas/EqualsInteger1RuleParametersSpec"
+              "$ref" : "#/components/schemas/Equals1RuleParametersSpec",
+              "originalRef" : "#/components/schemas/Equals1RuleParametersSpec"
             },
             "error" : {
               "description" : "Alerting threshold that raises a data quality error when the column was not found.",
-              "$ref" : "#/components/schemas/EqualsInteger1RuleParametersSpec",
-              "originalRef" : "#/components/schemas/EqualsInteger1RuleParametersSpec"
+              "$ref" : "#/components/schemas/Equals1RuleParametersSpec",
+              "originalRef" : "#/components/schemas/Equals1RuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a data quality fatal issue when the column was not found.",
-              "$ref" : "#/components/schemas/EqualsInteger1RuleParametersSpec",
-              "originalRef" : "#/components/schemas/EqualsInteger1RuleParametersSpec"
+              "$ref" : "#/components/schemas/Equals1RuleParametersSpec",
+              "originalRef" : "#/components/schemas/Equals1RuleParametersSpec"
             }
           }
         }
@@ -46509,17 +46641,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -46573,18 +46705,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             }
           }
         }
@@ -61640,29 +61772,12 @@
           "description" : "Model of a configured schedule (enabled on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time."
         }
       },
-      "EqualsInteger1RuleParametersSpec" : {
+      "Equals1RuleParametersSpec" : {
         "type" : "object",
-        "properties" : {
-          "expected_value" : {
-            "type" : "integer",
-            "description" : "Expected value for the actual_value returned by the sensor. It must be an integer value.",
-            "format" : "int64",
-            "extensions" : { },
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        },
         "exampleSetFlag" : false,
         "types" : [ "object" ],
         "jsonSchema" : {
-          "type" : "object",
-          "properties" : {
-            "expected_value" : {
-              "type" : "integer",
-              "format" : "int64",
-              "description" : "Expected value for the actual_value returned by the sensor. It must be an integer value."
-            }
-          }
+          "type" : "object"
         }
       },
       "EqualsIntegerRuleParametersSpec" : {
@@ -73205,17 +73320,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -73269,18 +73384,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             }
           }
         }
@@ -73534,17 +73649,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -73598,18 +73713,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             }
           }
         }
@@ -73682,17 +73797,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -73746,18 +73861,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             }
           }
         }
@@ -73830,17 +73945,17 @@
             "exampleSetFlag" : false
           },
           "warning" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "error" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           },
           "fatal" : {
-            "$ref" : "#/components/schemas/ValueChangedParametersSpec",
+            "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
             "extensions" : { },
             "exampleSetFlag" : false
           }
@@ -73894,18 +74009,18 @@
             },
             "warning" : {
               "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "error" : {
               "description" : "Default alerting threshold for a row count that raises a data quality error (alert)",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             },
             "fatal" : {
               "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-              "$ref" : "#/components/schemas/ValueChangedParametersSpec",
-              "originalRef" : "#/components/schemas/ValueChangedParametersSpec"
+              "$ref" : "#/components/schemas/ValueChangedRuleParametersSpec",
+              "originalRef" : "#/components/schemas/ValueChangedRuleParametersSpec"
             }
           }
         }
@@ -76750,7 +76865,7 @@
           }
         }
       },
-      "ValueChangedParametersSpec" : {
+      "ValueChangedRuleParametersSpec" : {
         "type" : "object",
         "exampleSetFlag" : false,
         "types" : [ "object" ],

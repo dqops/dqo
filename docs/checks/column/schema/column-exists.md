@@ -13,7 +13,7 @@ Checks the metadata of the monitored table and verifies if the column exists.
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_exists|profiling| |Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|profile_column_exists|profiling| |Completeness|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_1](../../../../reference/rules/Comparison/#equals-1)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -42,17 +42,14 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
       profiling_checks:
         schema:
           profile_column_exists:
-            warning:
-              expected_value: 1
-            error:
-              expected_value: 1
-            fatal:
-              expected_value: 1
+            warning: {}
+            error: {}
+            fatal: {}
 ```
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
-```yaml hl_lines="13-21"
+```yaml hl_lines="13-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -68,12 +65,9 @@ spec:
       profiling_checks:
         schema:
           profile_column_exists:
-            warning:
-              expected_value: 1
-            error:
-              expected_value: 1
-            fatal:
-              expected_value: 1
+            warning: {}
+            error: {}
+            fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -105,7 +99,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_exists|monitoring|daily|Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|daily_column_exists|monitoring|daily|Completeness|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_1](../../../../reference/rules/Comparison/#equals-1)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -135,17 +129,14 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
         daily:
           schema:
             daily_column_exists:
-              warning:
-                expected_value: 1
-              error:
-                expected_value: 1
-              fatal:
-                expected_value: 1
+              warning: {}
+              error: {}
+              fatal: {}
 ```
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
-```yaml hl_lines="13-22"
+```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -162,12 +153,9 @@ spec:
         daily:
           schema:
             daily_column_exists:
-              warning:
-                expected_value: 1
-              error:
-                expected_value: 1
-              fatal:
-                expected_value: 1
+              warning: {}
+              error: {}
+              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -199,7 +187,7 @@ Checks the metadata of the monitored table and verifies if the column exists. St
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_exists|monitoring|monthly|Validity|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
+|monthly_column_exists|monitoring|monthly|Completeness|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_1](../../../../reference/rules/Comparison/#equals-1)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
@@ -229,17 +217,14 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
         monthly:
           schema:
             monthly_column_exists:
-              warning:
-                expected_value: 1
-              error:
-                expected_value: 1
-              fatal:
-                expected_value: 1
+              warning: {}
+              error: {}
+              fatal: {}
 ```
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
-```yaml hl_lines="13-22"
+```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -256,12 +241,9 @@ spec:
         monthly:
           schema:
             monthly_column_exists:
-              warning:
-                expected_value: 1
-              error:
-                expected_value: 1
-              fatal:
-                expected_value: 1
+              warning: {}
+              error: {}
+              fatal: {}
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:

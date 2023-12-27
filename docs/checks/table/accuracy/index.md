@@ -1,6 +1,6 @@
 # Checks/table/accuracy
 
-**This is a list of accuracy table checks in DQOps and a brief description of what they do.**
+**This is a list of accuracy table data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

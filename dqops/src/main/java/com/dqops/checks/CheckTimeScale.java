@@ -16,7 +16,7 @@
 package com.dqops.checks;
 
 import com.dqops.metadata.timeseries.TimePeriodGradient;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**

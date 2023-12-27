@@ -18,6 +18,7 @@ package com.dqops.metadata.sources;
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
+import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -35,7 +36,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.id.*;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
-import com.dqops.utils.docs.SampleValueFactory;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
@@ -73,6 +74,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             put("mysql", o -> o.mysql);
             put("oracle", o -> o.oracle);
             put("spark", o -> o.spark);
+            put("databricks", o -> o.databricks);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("incident_grouping", o -> o.incidentGrouping);
@@ -141,6 +143,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private SparkParametersSpec spark;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DatabricksParametersSpec databricks;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel SQL queries executed on this connection.")
     private Integer parallelJobsLimit;
@@ -392,6 +400,10 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         propagateHierarchyIdToField(oracle, "oracle");
     }
 
+    /**
+     * Returns the connection parameters for Spark.
+     * @return Spark connection parameters.
+     */
     public SparkParametersSpec getSpark() {
         return spark;
     }
@@ -404,6 +416,24 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         setDirtyIf(!Objects.equals(this.spark, spark));
         this.spark = spark;
         propagateHierarchyIdToField(spark, "spark");
+    }
+
+    /**
+     * Returns the connection parameters for Databricks.
+     * @return Databricks connection parameters.
+     */
+    public DatabricksParametersSpec getDatabricks() {
+        return databricks;
+    }
+
+    /**
+     * Sets the Databricks connection parameters.
+     * @param databricks New Databricks connection parameters.
+     */
+    public void setDatabricks(DatabricksParametersSpec databricks) {
+        setDirtyIf(!Objects.equals(this.databricks, databricks));
+        this.databricks = databricks;
+        propagateHierarchyIdToField(databricks, "databricks");
     }
 
     /**

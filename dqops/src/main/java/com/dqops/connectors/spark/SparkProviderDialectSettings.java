@@ -16,20 +16,15 @@
 
 package com.dqops.connectors.spark;
 
-import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
-import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
-import com.dqops.utils.string.StringCheckUtility;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import org.springframework.stereotype.Component;
 
-import java.util.Locale;
-
 /**
- * Provider dialect settings that are specific to SQL Server.
+ * Provider dialect settings that are specific to Spark.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

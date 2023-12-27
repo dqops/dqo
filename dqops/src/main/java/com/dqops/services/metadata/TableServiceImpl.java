@@ -129,7 +129,7 @@ public class TableServiceImpl implements TableService {
         checkSearchFilters.setCheckCategory(checkCategory);
         checkSearchFilters.setCheckName(checkName);
 
-        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModels = this.allChecksModelFactory.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
 
         CheckContainerTypeModel checkContainerTypeModel = new CheckContainerTypeModel(checkType, checkTimeScale);
 
@@ -169,6 +169,7 @@ public class TableServiceImpl implements TableService {
                                                                        String checkName,
                                                                        Boolean checkEnabled,
                                                                        Boolean checkConfigured,
+                                                                       int limit,
                                                                        DqoUserPrincipal principal) {
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setCheckType(checkContainerTypeModel.getCheckType());
@@ -183,7 +184,7 @@ public class TableServiceImpl implements TableService {
         filters.setEnabled(checkEnabled);
         filters.setCheckConfigured(checkConfigured);
 
-        return this.checkFlatConfigurationFactory.fromCheckSearchFilters(filters, principal);
+        return this.checkFlatConfigurationFactory.findAllCheckConfigurations(filters, principal, limit);
     }
 
     /**

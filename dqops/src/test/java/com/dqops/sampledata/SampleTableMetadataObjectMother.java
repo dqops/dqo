@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
+import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
@@ -80,6 +81,9 @@ public class SampleTableMetadataObjectMother {
 
             case spark:
                 return SparkConnectionSpecObjectMother.create();
+
+            case databricks:
+                return DatabricksConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -122,6 +126,9 @@ public class SampleTableMetadataObjectMother {
 
             case spark:
                 return SparkConnectionSpecObjectMother.getSchemaName();
+
+            case databricks:
+                return DatabricksConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());
@@ -175,4 +182,26 @@ public class SampleTableMetadataObjectMother {
 
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
+
+    /**
+     * Creates a sample table metadata with a non-existing table that cannot used for sql execution.
+     * Schema and table name should not point to the existing table.
+     * @param schemaName A schema name.
+     * @param tableName Imagined table name that should not exist in real database.
+     * @param providerType Target provider type.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataWithNonExistingTable(String schemaName, String tableName, ProviderType providerType) {
+        String connectionName = getConnectionNameForProvider(providerType);
+        ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType); // in order to support different database versions, we can accept a ConnectionSpec as a parameter
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+    }
+
 }

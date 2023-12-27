@@ -240,6 +240,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             MIN(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            (SELECT
+                MIN(referenced_table."customer_id")
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            MIN(analyzed_table."target_column") AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -309,6 +344,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             MIN(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            (SELECT
+                MIN(referenced_table.`customer_id`)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            MIN(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         ```
 ??? example "SQL Server"
 
@@ -591,6 +661,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             MIN(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            (SELECT
+                MIN(referenced_table."customer_id")
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            MIN(analyzed_table."target_column") AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -660,6 +765,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             MIN(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            (SELECT
+                MIN(referenced_table.`customer_id`)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            MIN(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         ```
 ??? example "SQL Server"
 
@@ -942,6 +1082,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             MIN(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            (SELECT
+                MIN(referenced_table."customer_id")
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            MIN(analyzed_table."target_column") AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+        ```
 ??? example "Redshift"
 
     === "Sensor template for Redshift"
@@ -1011,6 +1186,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             MIN(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            (SELECT
+                MIN(referenced_table.`customer_id`)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            MIN(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         ```
 ??? example "SQL Server"
 

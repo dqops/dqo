@@ -1,6 +1,6 @@
 # Checks/table
 
-**This is a list of table checks in DQOps broken down by category and a brief description of what they do.**
+**This is a list of table data quality checks supported by DQOps, broken down by a category and a brief description of what they do.**
 
 
 

@@ -30,6 +30,8 @@ server:
   compression:
      enabled: true
      mime-types: application/json,application/xml,text/html,image/jpeg,image/x-png,image/svg+xm
+  netty:
+    max-keep-alive-requests: 5
 
 springdoc:
   swagger-ui:
@@ -140,7 +142,7 @@ dqo:
     limits:
       sensor-readout-limit: 1000
       sensor-readout-limit-partitioned: 7000
-      fail-on-sensor-readout-limit-exceeded: true
+      fail-on-sensor-readout-limit-exceeded: false
       max-merged-queries: 100
   statistics:
     truncated-strings-length: 50

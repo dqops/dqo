@@ -189,7 +189,8 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.of(true));
+                Optional.of(true),
+                Optional.empty());
         Assertions.assertNotNull(responseEntity.getBody());
 
         List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
@@ -234,7 +235,8 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.of(true));
+                Optional.of(true),
+                Optional.empty());
         Assertions.assertNotNull(responseEntity.getBody());
 
         List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
@@ -277,7 +279,8 @@ public class SchemasControllerUTTests extends BaseTest {
                 Optional.empty(),
                 Optional.empty(),
                 Optional.empty(),
-                Optional.of(true));
+                Optional.of(true),
+                Optional.empty());
         Assertions.assertNotNull(responseEntity.getBody());
 
         List<CheckConfigurationModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());

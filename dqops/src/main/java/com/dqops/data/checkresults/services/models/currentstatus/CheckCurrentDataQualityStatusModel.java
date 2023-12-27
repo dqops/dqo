@@ -20,6 +20,8 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.data.checkresults.services.models.CheckResultStatus;
 import com.dqops.rules.RuleSeverityLevel;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,6 +30,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 /**
  * The most recent data quality status for a single data quality check.
@@ -90,4 +94,20 @@ public class CheckCurrentDataQualityStatusModel {
      */
     @JsonPropertyDescription("Data quality dimension, such as Completeness, Uniqueness, Validity.")
     private String qualityDimension;
+
+    public static class CheckCurrentDataQualityStatusModelSampleFactory implements SampleValueFactory<CheckCurrentDataQualityStatusModel> {
+        @Override
+        public CheckCurrentDataQualityStatusModel createSample() {
+            return new CheckCurrentDataQualityStatusModel() {{
+                setCurrentSeverity(CheckResultStatus.warning);
+                setHighestHistoricalSeverity(RuleSeverityLevel.error);
+                setLastExecutedAt(LocalDateTime.of(2007, 10, 14, 16,13, 42)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant());
+                setCheckType(CheckType.profiling);
+                setCategory(SampleStringsRegistry.getCategoryName());
+                setQualityDimension(SampleStringsRegistry.getQualityDimension());
+            }};
+        }
+    }
 }

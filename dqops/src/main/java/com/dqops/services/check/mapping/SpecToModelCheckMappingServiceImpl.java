@@ -160,17 +160,25 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         }
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        Optional<String> categoryNameFilter = Optional.ofNullable(checkContainerModel.getRunChecksJobTemplate()).map(ct -> ct.getCheckCategory());
+        Optional<String> categoryNameFilter = runChecksTemplate != null ? Optional.ofNullable(runChecksTemplate.getCheckCategory()) : Optional.empty();
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
         CheckType checkType = checkCategoriesSpec.getCheckType();
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
+        boolean includeAlsoEmptyCategories = runChecksTemplate == null || runChecksTemplate.getCheckConfigured() == null || !runChecksTemplate.getCheckConfigured();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             if (categoryFieldInfo.getDataType() != ParameterDataType.object_type) {
                 continue;
             }
 
-            Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            Object categoryFieldValue = includeAlsoEmptyCategories ?
+                    categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec) :
+                    categoryFieldInfo.getFieldValue(checkCategoriesSpec);
+
+            if (categoryFieldValue == null) {
+                continue;
+            }
+
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
                 AbstractComparisonCheckCategorySpecMap<?> comparisonCheckCategorySpecMap = (AbstractComparisonCheckCategorySpecMap<?>)categoryFieldValue;
                 Type actualTypeArgument = ((ParameterizedType) categoryFieldInfo.getClazz().getGenericSuperclass()).getActualTypeArguments()[0];
@@ -430,7 +438,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
         if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
             ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-            Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate()).map(ct -> ct.getCheckName());
+            Optional<String> checkNameFilter = runChecksTemplate != null ? Optional.ofNullable(runChecksTemplate.getCheckName()) : Optional.empty();
             List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
 
             for (FieldInfo checkFieldInfo : checksFields) {
@@ -484,7 +492,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     checkTarget,
                     checkType,
                     checkTimeScale,
-                    isOperator);
+                    isOperator,
+                    runChecksTemplate != null ? runChecksTemplate.getCheckName() : null);
         }
 
         return categoryModel;
@@ -502,6 +511,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
      * @param checkType Check type.
      * @param checkTimeScale Check time scale.
      * @param isOperator The current user is the operator and can manage the check.
+     * @param checkNameFilter Optional check name filter. When not null, only a check that matches the name exactly (equals) is added.
      */
     protected void addCustomChecksToCategoryModel(CustomCheckSpecMap customCheckSpecMap,
                                                   QualityCategoryModel targetCategoryModel,
@@ -512,7 +522,8 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                                                   CheckTarget checkTarget,
                                                   CheckType checkType,
                                                   CheckTimeScale checkTimeScale,
-                                                  boolean isOperator) {
+                                                  boolean isOperator,
+                                                  String checkNameFilter) {
         String category = targetCategoryModel.getCategory();
         if (executionContext == null || executionContext.getUserHomeContext() == null) {
             return;
@@ -526,6 +537,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
         for (CheckDefinitionSpec customCheckDefinitionSpec : customChecksInCategory) {
             String checkName = customCheckDefinitionSpec.getCheckName();
+
+            if (!Strings.isNullOrEmpty(checkNameFilter) && !Objects.equals(checkNameFilter, checkName)) {
+                continue;
+            }
+
             CustomCheckSpec customCheckSpec = customCheckSpecMap.get(checkName);
             boolean checkIsConfigured = false;
             if (customCheckSpec == null) {

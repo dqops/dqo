@@ -8,7 +8,7 @@ To modify the schedule you can use the user interface as described below or [man
 Different types of checks, such as Profiling, Monitoring, and Partition, have their own schedules. For more information
 on these [different check types, please refer to the DQOps Concepts section](../../dqo-concepts/checks/index.md).
 
-## Configuring a schedule at connection and table level
+## Configure a schedule at connection and table level
 
 To set up or modify a schedule for the entire connection, follow these steps:
 
@@ -45,7 +45,7 @@ execution will take place.
 ![Scheduling status](https://dqops.com/docs/images/working-with-dqo/schedules/scheduling-status.png).
 
 
-## Configuring a schedule at check level.
+## Configure a schedule at check level.
 
 To set up a schedule for a specific check, follow these steps:
 
@@ -64,7 +64,7 @@ To set up a schedule for a specific check, follow these steps:
 Please note that any changes made to the schedule at the check level will override the schedule set for the entire 
 connection or table.
 
-## Starting and stopping a scheduler
+## Start and stop a scheduler
 
 In DQOps, the scheduler is started as a default. 
 
@@ -86,7 +86,7 @@ To terminate dqo running in the background, simply use the Ctrl+C.
 For more information on the `run` command, please refer to the [Command-line interface section](../../command-line-interface/run.md).
 
 
-## Synchronizing data
+## Synchronize data
 
 All the YAML configuration files with data source metadata and schedules configuration are stored in `/sources` folder. 
 You can read more about the [data storage in DQOps here](../../dqo-concepts/data-storage/data-storage.md). 

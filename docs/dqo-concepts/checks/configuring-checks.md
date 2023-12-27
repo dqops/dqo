@@ -922,9 +922,61 @@ check that will compare the sum of values per day and raise a warning if the cha
                     anomaly_percent: 1.0
               schema:
                 daily_column_exists:
-                  warning:
-                    expected_value: 1
+                  warning: {}
                 daily_column_type_changed:
                   warning: {}
     ```
 
+### **List of default observability checks**
+The default observability checks are configured in the
+*[$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml](../../reference/yaml/DefaultObservabilityChecksYaml.md)* file
+in the [DQOps user home](../home-folders/dqops-user-home.md).
+
+The easiest way to change the default configuration is by using the *Default checks* editor in the *Configuration* section
+of the DQOps user interface.
+
+![Default checks editor](https://dqops.com/docs/images/concepts/default-checks-editor.png)
+
+The default configuration can be also changed by editing the file directly, using Visual Studio Code.
+
+The following table shows a list of default data quality checks and describes their purpose.
+
+**Profiling checks type**
+
+| Target | Check name                                                          | Description                                                                                                                                        |
+|--------|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| table  | [profile row count](../../checks/table/volume/row-count.md)         | Counts the number of rows in a table.                                                                                                              |
+| table  | [profile column count](../../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
+| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md) | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
+
+**Daily monitoring checks type**
+
+| Target | Check name                                                                                              | Description                                                                                                                                 |
+|--------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| table  | [daily row count](../../checks/table/volume/row-count.md)                                               | Counts the number of rows in a table.                                                                                                       |
+| table  | [daily row count change](../../checks/table/volume/row-count-change.md)                                 | Ensures that the row count changed by a fixed rate since the last readout.                                                                  |
+| table  | [daily row count anomaly differencing](../../checks/table/volume/row-count-anomaly-differencing.md)     | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                |
+| table  | [daily table availability](../../checks/table/availability/table-availability.md)                       | Verifies that a table exists, can be accessed, and queried without errors.                                                                  |
+| table  | [daily column count changed](../../checks/table/schema/column-count-changed.md)                         | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                            |
+| table  | [daily column list changed](../../checks/table/schema/column-list-changed.md)                           | Detects if the list of columns has changed since the last time the check was run.                                                           |
+| table  | [daily column list or order changed](../../checks/table/schema/column-list-or-order-changed.md)         | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                            |
+| table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                         | Detects if the column names or column types have changed since the last time the check was run.                                             |
+| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                           | Ensures that there are no more than a set number of null values in the monitored column.                                                    |
+| column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                       | Ensures that there are no more than a set percentage of null values in the monitored column.                                                |
+| column | [daily nulls percent anomaly stationary](../../checks/column/nulls/nulls-percent-anomaly-stationary.md) | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
+| column | [daily nulls percent change yesterday](../../checks/column/nulls/nulls-percent-change-yesterday.md)     | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |
+| column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                               | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
+| column | [daily string datatype changed](../../checks/column/datatype/string-datatype-changed.md)                | Scans all values in a string column and detects the data type of all values in a column.                                                    |
+| column | [daily mean anomaly stationary](../../checks/column/anomaly/mean-anomaly-stationary.md)                 | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
+| column | [daily sum anomaly differencing](../../checks/column/anomaly/sum-anomaly-differencing.md)               | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
+| column | [daily column exists](../../checks/column/schema/column-exists.md)                                      | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                     |
+| column | [daily column type changed](../../checks/column/schema/column-type-changed.md)                          | Detects if the data type of the column has changed since the last time it was retrieved.                                                    |
+
+
+## Next steps
+
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](../data-quality-dashboards/data-quality-dashboards.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../integrations/webhooks/index.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).

@@ -41,15 +41,8 @@ const SparkConnection = ({
         data={sharedCredentials}
         label="Port"
         className="mb-4"
-        value={(spark?.port || 1521).toString()}
+        value={spark?.port}
         onChange={(value) => handleChange({ port: value })}
-      />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Schema"
-        className="mb-4"
-        value={spark?.schema}
-        onChange={(value) => handleChange({ schema: value })}
       />
       <FieldTypeInput
         data={sharedCredentials}

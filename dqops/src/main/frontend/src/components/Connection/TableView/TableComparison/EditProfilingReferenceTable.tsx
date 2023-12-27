@@ -1,13 +1,12 @@
-import React, { ReactNode, useEffect, useState } from 'react';
-import SvgIcon from '../../../SvgIcon';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   ColumnApiClient,
   TableComparisonResultsApi,
   JobApiClient,
   TableComparisonsApi
 } from '../../../../services/apiClient';
-import { CheckTypes, ROUTES } from '../../../../shared/routes';
-import { useHistory, useParams } from 'react-router-dom';
+import { CheckTypes } from '../../../../shared/routes';
+import { useParams } from 'react-router-dom';
 import {
   CompareThresholdsModel,
   TableComparisonModel,
@@ -17,31 +16,25 @@ import {
   CheckContainerModel
 } from '../../../../api';
 import SectionWrapper from '../../../Dashboard/SectionWrapper';
-import Checkbox from '../../../Checkbox';
 import { Option } from '../../../Select';
-import {
-  addFirstLevelTab,
-  setCurrentJobId
-} from '../../../../redux/actions/source.actions';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
 import { getFirstLevelActiveTab } from '../../../../redux/selectors';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../../redux/reducers';
-import clsx from 'clsx';
-import EditReferenceTable from './EditReferenceTable';
-import useConnectionSchemaTableExists from '../../../../hooks/useConnectionSchemaTableExists';
 import { setUpdatedChecksModel } from '../../../../redux/actions/table.actions';
-import { Tooltip } from '@material-tailwind/react';
 import {
   EditProfilingReferenceTableProps,
-  TParameters,
   TSeverityValues,
   checkNames
 } from './TableComparisonConstans';
-import { calculateColor, onUpdate } from './TableComparisonUtils';
+import { onUpdate, validate404Status } from './TableComparisonUtils';
 import TableComparisonOverwiewBody from './TableComparisonOverwiewBody';
 import TableLevelResults from './TableLevelResults';
 import SeverityInputBlock from './SeverityInputBlock';
+import { TParameters } from '../../../../shared/constants';
+import Loader from '../../../Loader';
+import TableRow from './TableLevelRowResults';
+import EditReferenceTable from './EditReferenceTable';
 
 export const EditProfilingReferenceTable = ({
   checkTypes,
@@ -49,11 +42,9 @@ export const EditProfilingReferenceTable = ({
   onBack,
   selectedReference,
   categoryCheck,
-  isCreating,
   getNewTableComparison,
   onChangeSelectedReference,
   listOfExistingReferences,
-  canUserCompareTables,
   checksUI,
   onUpdateChecks
 }: EditProfilingReferenceTableProps) => {
@@ -79,16 +70,14 @@ export const EditProfilingReferenceTable = ({
   );
   const [columnOptions, setColumnOptions] = useState<Option[]>([]);
   const [jobId, setJobId] = useState<number>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const [tableComparisonResults, setTableComparisonResults] =
     useState<TableComparisonResultsModel>();
   const [tableLevelComparisonExtended, settableLevelComparisonExtended] =
     useState(false);
-  const history = useHistory();
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [isDataDeleted, setIsDataDeleted] = useState(false);
   const [parameters, setParameters] = useState<TParameters>({});
 
   const onChangeParameters = (obj: Partial<TParameters>) => {
@@ -97,22 +86,6 @@ export const EditProfilingReferenceTable = ({
       ...obj
     }));
   };
-
-  const { tableExist, schemaExist, connectionExist } =
-    useConnectionSchemaTableExists(
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? ''
-    );
-
-  const onChangeIsDataDeleted = (arg: boolean): void => {
-    setIsDataDeleted(arg);
-  };
-
-  const onChangeUpdatedParent = (variable: boolean): void => {
-    setIsUpdated(variable);
-  };
-
   const checkIfRowAndColumnCountClicked = () => {
     let values: string | any[] = [];
     if (!checksUI) {
@@ -130,18 +103,12 @@ export const EditProfilingReferenceTable = ({
       return;
     }
 
-    const rowCountElem = comparisonCategory.checks.find(
-      (c: any) =>
-        c.check_name === 'profile_row_count_match' ||
-        c.check_name === 'daily_row_count_match' ||
-        c.check_name === 'monthly_row_count_match'
+    const rowCountElem = comparisonCategory.checks.find((c: any) =>
+      c.check_name.includes('row_count_match')
     );
 
-    const columnCountElem = comparisonCategory.checks.find(
-      (c: any) =>
-        c.check_name === 'profile_column_count_match' ||
-        c.check_name === 'daily_column_count_match' ||
-        c.check_name === 'monthly_column_count_match'
+    const columnCountElem = comparisonCategory.checks.find((c: any) =>
+      c.check_name.includes('column_count_match')
     );
 
     if (rowCountElem) {
@@ -150,6 +117,35 @@ export const EditProfilingReferenceTable = ({
     if (columnCountElem) {
       setShowColumnCount(!!columnCountElem.configured);
     }
+    if (rowCountElem.configured === true) {
+      onChange({
+        compare_row_count: {
+          warning_difference_percent:
+            rowCountElem.rule.warning.rule_parameters[0].double_value,
+          error_difference_percent:
+            rowCountElem.rule.error.rule_parameters[0].double_value,
+          fatal_difference_percent:
+            rowCountElem.rule.fatal.rule_parameters[0].double_value
+        }
+      });
+    } else {
+      onChange({ compare_row_count: reference?.default_compare_thresholds });
+    }
+    if (columnCountElem.configured === true) {
+      onChange({
+        compare_column_count: {
+          warning_difference_percent:
+            columnCountElem.rule.warning.rule_parameters[0].double_value,
+          error_difference_percent:
+            columnCountElem.rule.error.rule_parameters[0].double_value,
+          fatal_difference_percent:
+            columnCountElem.rule.fatal.rule_parameters[0].double_value
+        }
+      });
+    } else {
+      onChange({ compare_column_count: reference?.default_compare_thresholds });
+    }
+    //cCompareThreshholdsModel in java fatal returns null
   };
 
   const handleChange = async (value: CheckContainerModel) => {
@@ -193,23 +189,36 @@ export const EditProfilingReferenceTable = ({
         setShowColumnCount(disabled);
       }
     }
+    selectedCheck.rule.warning.configured = true;
+    selectedCheck.rule.error.configured = true;
     if (severity) {
       if (severity.warning) {
+        selectedCheck.rule.warning.configured = true;
         selectedCheck.rule.warning.rule_parameters[0].double_value =
           severity.warning;
-        selectedCheck.rule.warning.configured = true;
       }
       if (severity.error) {
+        selectedCheck.rule.error.configured = true;
         selectedCheck.rule.error.rule_parameters[0].double_value =
           severity.error;
-        selectedCheck.rule.error.configured = true;
       }
       if (severity.fatal) {
+        selectedCheck.rule.fatal.configured = true;
         selectedCheck.rule.fatal.rule_parameters[0].double_value =
           severity.fatal;
-        selectedCheck.rule.fatal.configured = true;
       }
     }
+    if (reference?.compare_row_count === undefined) {
+      onChange({
+        compare_row_count: reference?.default_compare_thresholds
+      });
+    }
+    if (reference?.compare_column_count === undefined) {
+      onChange({
+        compare_column_count: reference?.default_compare_thresholds
+      });
+    }
+    setIsUpdated(true);
   };
 
   useEffect(() => {
@@ -263,99 +272,11 @@ export const EditProfilingReferenceTable = ({
     }
   }, [selectedReference]);
 
-  useEffect(() => {
-    if (
-      reference !== undefined &&
-      isCreating === false &&
-      connectionExist === true &&
-      schemaExist === true &&
-      tableExist === true &&
-      reference.reference_connection?.length !== 0 &&
-      reference.reference_table?.schema_name?.length !== 0 &&
-      reference.reference_table?.table_name?.length !== 0
-    ) {
-      ColumnApiClient.getColumns(
-        reference.reference_connection ?? '',
-        reference.reference_table?.schema_name ?? '',
-        reference.reference_table?.table_name ?? ''
-      )?.then((columnRes) => {
-        if (
-          columnRes &&
-          columnRes.data.length !== 0 &&
-          Array.isArray(columnRes.data)
-        ) {
-          setColumnOptions(
-            columnRes.data.map((item) => ({
-              label: item.column_name ?? '',
-              value: item.column_name ?? ''
-            }))
-          );
-        }
-      });
-    } else if (
-      parameters.refConnection &&
-      parameters.refSchema &&
-      parameters.refTable &&
-      ((connectionExist === true &&
-        schemaExist === true &&
-        tableExist === true) ||
-        isCreating === true)
-    ) {
-      ColumnApiClient.getColumns(
-        parameters.refConnection,
-        parameters.refSchema,
-        parameters.refTable
-      )?.then((columnRes) => {
-        setColumnOptions(
-          columnRes.data.map((item) => ({
-            label: item.column_name ?? '',
-            value: item.column_name ?? ''
-          }))
-        );
-      });
-    }
-  }, [
-    selectedReference,
-    tableExist,
-    schemaExist,
-    connectionExist,
-    reference?.reference_connection,
-    reference?.reference_table,
-    parameters.refTable
-  ]);
-
-  const goToRefTable = (reference: TableComparisonModel | undefined) => {
-    const url = ROUTES.TABLE_LEVEL_PAGE(
-      CheckTypes.SOURCES,
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? '',
-      'detail'
-    );
-    const value = ROUTES.TABLE_LEVEL_VALUE(
-      CheckTypes.SOURCES,
-      reference?.reference_connection ?? '',
-      reference?.reference_table?.schema_name ?? '',
-      reference?.reference_table?.table_name ?? ''
-    );
-    dispatch(
-      addFirstLevelTab(CheckTypes.SOURCES, {
-        url: url,
-        value,
-        label: reference?.reference_table?.table_name ?? '',
-        state: {}
-      })
-    );
-
-    history.push(url);
-  };
-
   const onChange = (obj: Partial<TableComparisonModel>): void => {
     setReference({
       ...(reference || {}),
       ...obj
     });
-    setIsUpdated(true);
   };
 
   const onChangeCompareRowCount = (obj: Partial<CompareThresholdsModel>) => {
@@ -377,50 +298,63 @@ export const EditProfilingReferenceTable = ({
   };
 
   useEffect(() => {
-    if (showRowCount) {
-      onChange({
-        compare_row_count: reference?.default_compare_thresholds
-      });
+    const updatedReference: TableComparisonModel = {};
+
+    if (showRowCount && reference?.compare_row_count === undefined) {
+      updatedReference.compare_row_count =
+        reference?.default_compare_thresholds;
     }
-    if (showColumnCount) {
-      onChange({
-        compare_column_count: reference?.default_compare_thresholds
-      });
+
+    if (showColumnCount && reference?.compare_column_count === undefined) {
+      updatedReference.compare_column_count =
+        reference?.default_compare_thresholds;
     }
-  }, [showRowCount, showColumnCount]);
+
+    if (Object.keys(updatedReference).length > 0) {
+      onChange(updatedReference);
+    }
+  }, [showColumnCount, showRowCount]);
 
   const getResultsData = async () => {
-    if (isCreating === false) {
-      if (checkTypes === 'profiling') {
-        await TableComparisonResultsApi.getTableComparisonProfilingResults(
-          connection,
-          schema,
-          table,
-          selectedReference ?? ''
-        ).then((res) => setTableComparisonResults(res.data));
-      } else if (checkTypes === 'monitoring') {
-        await TableComparisonResultsApi.getTableComparisonMonitoringResults(
-          connection,
-          schema,
-          table,
-          timePartitioned === 'daily' ? 'daily' : 'monthly',
-          selectedReference ?? ''
-        ).then((res) => setTableComparisonResults(res.data));
-      } else if (checkTypes === 'partitioned') {
-        await TableComparisonResultsApi.getTableComparisonPartitionedResults(
-          connection,
-          schema,
-          table,
-          timePartitioned === 'daily' ? 'daily' : 'monthly',
-          selectedReference ?? ''
-        ).then((res) => setTableComparisonResults(res.data));
-      }
+    if (checkTypes === 'profiling') {
+      await TableComparisonResultsApi.getTableComparisonProfilingResults(
+        connection,
+        schema,
+        table,
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+    } else if (checkTypes === 'monitoring') {
+      await TableComparisonResultsApi.getTableComparisonMonitoringResults(
+        connection,
+        schema,
+        table,
+        timePartitioned === 'daily' ? 'daily' : 'monthly',
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
+    } else if (checkTypes === 'partitioned') {
+      await TableComparisonResultsApi.getTableComparisonPartitionedResults(
+        connection,
+        schema,
+        table,
+        timePartitioned === 'daily' ? 'daily' : 'monthly',
+        selectedReference ?? ''
+      ).then((res) => setTableComparisonResults(res.data));
     }
   };
 
-  const onRunChecks = async () => {
+  const compareTables = async () => {
+    onUpdate(
+      connection,
+      schema,
+      table,
+      checkTypes,
+      timePartitioned,
+      reference,
+      handleChange,
+      checksUI
+    );
+    setIsUpdated(false);
     try {
-      setLoading(true);
       const res = await JobApiClient.runChecks(undefined, false, undefined, {
         check_search_filters: categoryCheck
           ? categoryCheck?.run_checks_job_template
@@ -434,36 +368,43 @@ export const EditProfilingReferenceTable = ({
               checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
             }
       });
-      dispatch(
-        setCurrentJobId(
-          checkTypes,
-          firstLevelActiveTab,
-          res.data?.jobId?.jobId ?? 0
-        )
+      setJobId(res.data?.jobId?.jobId);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const deleteData = async (params: { [key: string]: string | boolean }) => {
+    try {
+      const res = await JobApiClient.deleteStoredData(
+        undefined,
+        false,
+        undefined,
+        {
+          ...(reference?.compare_table_clean_data_job_template || {}),
+          ...params
+        }
       );
       setJobId(res.data?.jobId?.jobId);
     } catch (err) {
       console.error(err);
     }
   };
+
   const disabled =
     job &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
-    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed;
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.cancelled;
 
   useEffect(() => {
     if (
       job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
-      setLoading(false);
       getResultsData();
     }
-  }, [job?.status]);
-
-  useEffect(() => {
-    getResultsData();
-  }, [isDataDeleted]);
+  }, [job?.status, selectedReference]);
 
   const columnKey = Object.keys(
     tableComparisonResults?.table_comparison_results ?? []
@@ -474,48 +415,119 @@ export const EditProfilingReferenceTable = ({
   ).find((key) => key.includes('row'));
 
   useEffect(() => {
-    if (reference?.columns) {
-      setComparedColumnOptions(
-        reference?.columns.map((x) => ({
-          label: x.compared_column_name ?? '',
-          value: x.compared_column_name ?? ''
-        }))
-      );
-    } else {
-      ColumnApiClient.getColumns(connection, schema, table)?.then(
-        (columnRes) => {
-          setComparedColumnOptions(
+    const fetchColumns = async () => {
+      try {
+        const columnRes = await ColumnApiClient.getColumns(
+          connection,
+          schema,
+          table,
+          { validateStatus: validate404Status }
+        );
+        setComparedColumnOptions(
+          columnRes.data.map((item) => ({
+            label: item.column_name ?? '',
+            value: item.column_name ?? ''
+          }))
+        );
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchColumns();
+  }, [connection, schema, table]);
+
+  useEffect(() => {
+    if (
+      parameters.refConnection &&
+      parameters.refSchema &&
+      parameters.refTable
+    ) {
+      const fetchReferenceColumns = async () => {
+        try {
+          const columnRes = await ColumnApiClient.getColumns(
+            parameters.refConnection ?? '',
+            parameters.refSchema ?? '',
+            parameters.refTable ?? '',
+            { validateStatus: validate404Status }
+          );
+          setColumnOptions(
             columnRes.data.map((item) => ({
               label: item.column_name ?? '',
               value: item.column_name ?? ''
             }))
           );
+        } catch (error) {
+          console.error(error);
         }
-      );
-    }
-  }, [reference?.columns, connection, schema, table]);
+      };
 
-  const renderWarningTooltip = (): ReactNode => {
+      fetchReferenceColumns();
+    }
+  }, [parameters.refTable]);
+
+  useEffect(() => {
+    if (selectedReference) {
+      const fetchTableComparisonConfiguration = async () => {
+        try {
+          setLoading(true);
+          const res = await TableComparisonsApi.getTableComparisonConfiguration(
+            connection,
+            schema,
+            table,
+            selectedReference
+          );
+          if (res && res.data) {
+            onChangeParameters({
+              name: res.data?.table_comparison_configuration_name ?? '',
+              refConnection: res.data?.reference_connection ?? '',
+              refSchema: res.data?.reference_table?.schema_name ?? '',
+              refTable: res.data?.reference_table?.table_name ?? '',
+              dataGroupingArray: res.data.grouping_columns ?? []
+            });
+          }
+        } catch (error) {
+          console.error(error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchTableComparisonConfiguration();
+    }
+  }, [selectedReference]);
+
+  const memoizedReference = useMemo(() => {
+    return {
+      grouping_columns: parameters.dataGroupingArray,
+      reference_connection: parameters.refConnection,
+      reference_table: {
+        table_name: parameters.refTable,
+        schema_name: parameters.refSchema
+      }
+    };
+  }, [parameters]);
+
+  useEffect(() => {
+    setReference((prevState) => ({
+      ...prevState,
+      ...memoizedReference
+    }));
+  }, [memoizedReference]);
+
+  if (loading === true) {
     return (
-      <Tooltip
-        content="Previous comparison results are present, delete the results before comparing the tables again"
-        className="pr-6 max-w-80 py-4 px-4 bg-gray-800"
-      >
-        <div>
-          <SvgIcon
-            name="warning"
-            className="w-5 h-5 absolute bottom-[10px] left-[6px]"
-          />
-        </div>
-      </Tooltip>
+      <div className="flex justify-center h-100">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
     );
-  };
+  }
 
   return (
     <div className="text-sm">
       <div className="flex flex-col items-center justify-between border-b border-t border-gray-300 py-2 px-8 w-full">
         <EditReferenceTable
-          onUpdateParent={() =>
+          onUpdateChecks={() =>
             onUpdate(
               connection,
               schema,
@@ -527,29 +539,24 @@ export const EditProfilingReferenceTable = ({
               checksUI
             )
           }
+          deleteData={deleteData}
           onBack={onBack}
-          onChange={onChange}
+          onChangeIsUpdated={(isUpdated: boolean) => setIsUpdated(isUpdated)}
+          isUpdated={isUpdated}
           selectedReference={selectedReference}
-          isUpdatedParent={isUpdated}
           timePartitioned={timePartitioned}
-          onRunChecksRowCount={onRunChecks}
-          disabled={disabled || loading}
-          isCreating={isCreating}
-          goToRefTable={() => goToRefTable(reference)}
-          onChangeUpdatedParent={onChangeUpdatedParent}
-          combinedFunc={(name: string) => {
+          editConfigurationParameters={parameters}
+          onChangeParameters={onChangeParameters}
+          compareTables={compareTables}
+          disabled={disabled}
+          setConfigurationToEditing={(name: string) => {
             onChangeSelectedReference(name), getNewTableComparison();
           }}
-          cleanDataTemplate={reference?.compare_table_clean_data_job_template}
-          onChangeIsDataDeleted={onChangeIsDataDeleted}
-          isDataDeleted={isDataDeleted}
-          listOfExistingReferences={listOfExistingReferences}
-          canUserCompareTables={canUserCompareTables}
+          existingTableComparisonConfigurations={listOfExistingReferences}
           columnOptions={{
             comparedColumnsOptions: comparedColumnOptions ?? [],
             referencedColumnsOptions: columnOptions
           }}
-          onChangeParameters={onChangeParameters}
         />
       </div>
       {reference &&
@@ -573,80 +580,21 @@ export const EditProfilingReferenceTable = ({
                   </th>
                 </tr>
               </thead>
-              <tr className="mt-10 mb-10">
-                <th
-                  className="text-left pr-4 py-1.5 flex items-center gap-x-2 font-normal"
-                  onClick={() =>
-                    settableLevelComparisonExtended((prevState) => !prevState)
-                  }
-                >
-                  {tableLevelComparisonExtended ? (
-                    <SvgIcon name="chevron-down" className="w-5 h-5" />
-                  ) : (
-                    <SvgIcon name="chevron-right" className="w-5 h-5" />
-                  )}{' '}
-                  {table}
-                </th>
-                <th className="text-left px-4 py-1.5"></th>
-                <th
-                  className={clsx(
-                    'text-center px-0 py-4 pr-2 w-1/12 relative',
-                    calculateColor(
-                      '',
-                      '',
-                      'row_count',
-                      checkTypes,
-                      tableComparisonResults
-                    )
-                  )}
-                >
-                  <Checkbox
-                    checked={showRowCount}
-                    onChange={(checked) => {
-                      onUpdateChecksUI(checksUI, 'row', checked);
-                    }}
-                  />{' '}
-                  {calculateColor(
-                    '',
-                    '',
-                    'row_count',
-                    checkTypes,
-                    tableComparisonResults
-                  ).length !== 0 &&
-                    !showRowCount && <>{renderWarningTooltip()}</>}
-                </th>
-                <th
-                  className={clsx(
-                    'text-center px-0 py-4 pr-2 w-1/12 relative',
-                    reference.supports_compare_column_count === true
-                      ? calculateColor(
-                          '',
-                          '',
-                          'column_count',
-                          checkTypes,
-                          tableComparisonResults
-                        )
-                      : ''
-                  )}
-                >
-                  {reference.supports_compare_column_count === true ? (
-                    <Checkbox
-                      checked={showColumnCount}
-                      onChange={(checked) => {
-                        onUpdateChecksUI(checksUI, 'column', checked);
-                      }}
-                    />
-                  ) : null}
-                  {calculateColor(
-                    '',
-                    '',
-                    'column_count',
-                    checkTypes,
-                    tableComparisonResults
-                  ).length !== 0 &&
-                    !showColumnCount && <>{renderWarningTooltip()}</>}
-                </th>
-              </tr>
+              <TableRow
+                table={table}
+                tableLevelComparisonExtended={tableLevelComparisonExtended}
+                settableLevelComparisonExtended={
+                  settableLevelComparisonExtended
+                }
+                showRowCount={showRowCount}
+                onUpdateChecksUI={onUpdateChecksUI}
+                checksUI={checksUI}
+                setIsUpdated={setIsUpdated}
+                tableComparisonResults={tableComparisonResults}
+                showColumnCount={showColumnCount}
+                reference={reference}
+                checkTypes={checkTypes}
+              />
               <tr>
                 <th></th>
                 <th></th>
@@ -715,7 +663,9 @@ export const EditProfilingReferenceTable = ({
                   checkTypes={checkTypes}
                   tableComparisonResults={tableComparisonResults}
                   reference={reference}
-                  onChange={onChange}
+                  onChange={(obj: Partial<TableComparisonModel>) => {
+                    onChange(obj), setIsUpdated(true);
+                  }}
                 />
               ))}
             </table>

@@ -2,9 +2,11 @@ import {
   TableComparisonResultsModel,
   ComparisonCheckResultModel,
   TableComparisonModel,
-  CheckContainerModel
+  CheckContainerModel,
+  TableComparisonGroupingColumnPairModel
 } from '../../../../api';
 import { TableComparisonsApi } from '../../../../services/apiClient';
+import { TParameters } from '../../../../shared/constants';
 import { CheckTypes } from '../../../../shared/routes';
 
 export const getComparisonResults = (
@@ -141,4 +143,93 @@ export const onUpdate = (
   }
 
   handleChange(tableChecksToUpdate as CheckContainerModel);
+};
+
+export const getRequiredColumnsIndexes = (
+  dataGrouping: TableComparisonGroupingColumnPairModel[]
+) => {
+  const referenceGrouping = dataGrouping.map(
+    (x) => x?.reference_table_column_name
+  );
+  const comparedGrouping = dataGrouping.map(
+    (x) => x?.compared_table_column_name
+  );
+
+  const maxLeghtToCheck = Math.max(
+    referenceGrouping.length,
+    comparedGrouping.length
+  );
+
+  const referenceMissingIndexes = [];
+  const comparedMissingIndexes = [];
+
+  let check = false;
+  for (let i = maxLeghtToCheck - 1; i >= 0; i--) {
+    if (check === false) {
+      if (referenceGrouping?.[i] && comparedGrouping?.[i]) {
+        check = true;
+      } else if (
+        referenceGrouping?.[i] &&
+        (comparedGrouping?.[i] === undefined ||
+          comparedGrouping?.[i]?.length === 0)
+      ) {
+        check = true;
+        comparedMissingIndexes.push(i);
+      } else if (
+        comparedGrouping?.[i] &&
+        (referenceGrouping?.[i] === undefined ||
+          referenceGrouping?.[i]?.length === 0)
+      ) {
+        check = true;
+        referenceMissingIndexes.push(i);
+      }
+    } else {
+      if (
+        comparedGrouping?.[i] === undefined ||
+        comparedGrouping?.[i]?.length === 0
+      ) {
+        comparedMissingIndexes.push(i);
+      }
+      if (
+        referenceGrouping?.[i] === undefined ||
+        referenceGrouping?.[i]?.length === 0
+      ) {
+        referenceMissingIndexes.push(i);
+      }
+    }
+  }
+  return { referenceMissingIndexes, comparedMissingIndexes };
+};
+
+export const getIsButtonEnabled = (parameters: TParameters): boolean => {
+  const isDataGroupingCorrect = parameters.dataGroupingArray?.every(
+    (x) =>
+      x?.compared_table_column_name !== undefined &&
+      x?.reference_table_column_name !== undefined &&
+      x?.reference_table_column_name.length > 0 &&
+      x?.compared_table_column_name.length > 0
+  );
+
+  const isDataGroupingEmpty = parameters.dataGroupingArray?.every(
+    (x) =>
+      (x.compared_table_column_name === undefined ||
+        x.compared_table_column_name.length === 0) &&
+      (x.reference_table_column_name === undefined ||
+        x.reference_table_column_name.length === 0)
+  );
+
+  return !!(
+    parameters.refConnection &&
+    parameters.refSchema &&
+    parameters.refTable &&
+    parameters.name &&
+    (isDataGroupingCorrect ||
+      isDataGroupingEmpty ||
+      !parameters.dataGroupingArray ||
+      parameters.dataGroupingArray.length === 0)
+  );
+};
+
+export const validate404Status = (status: number): boolean => {
+  return status === 200 || status === 404;
 };

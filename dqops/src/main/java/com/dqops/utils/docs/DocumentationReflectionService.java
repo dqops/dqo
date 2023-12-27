@@ -16,6 +16,7 @@
 
 package com.dqops.utils.docs;
 
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.ReflectionService;
 

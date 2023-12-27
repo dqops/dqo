@@ -47,6 +47,8 @@
 |[datatype_equals](./Comparison/#datatype-equals)|Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type. The supported values are in the range 1..7, which are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|
 |[diff_percent](./Comparison/#diff-percent)|Data quality rule that verifies if a data quality check readout is less or equal a maximum value.|
 |[equals](./Comparison/#equals)|Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.|
+|[equals_0](./Comparison/#equals-0)|Data quality rule that verifies that a data quality check readout equals 0. It is used in data quality checks that have an expected value &quot;0&quot;.|
+|[equals_1](./Comparison/#equals-1)|Data quality rule that verifies that a data quality check readout equals 1. It is used in data quality checks that have an expected value &quot;1&quot;.|
 |[equals_integer](./Comparison/#equals-integer)|Data quality rule that verifies that a data quality check readout equals a given integer value, with an expected value preconfigured as 1.|
 |[max](./Comparison/#max)|Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.|
 |[max_count](./Comparison/#max-count)|Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.|

@@ -150,7 +150,7 @@ We aim to verify if the table meets size requirements and is not too small:
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check.
 
-After importing new tables, DQOps sets the schedule for 12:00 every day. Follow the steps below to change the schedule.
+After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every day. Follow the steps below to change the schedule.
 
 ![Change a schedule at the connection level](https://dqops.com/docs/images/examples/change-schedule-for-connection.png)
 

@@ -57,7 +57,7 @@ Schema model returned from REST API. Describes a schema on the source database w
 |connection_name|Connection name.|string|
 |schema_name|Schema name.|string|
 |already_imported|Has the schema been imported.|boolean|
-|[import_table_job_parameters](../jobs/#ImportTablesQueueJobParameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](../jobs/#ImportTablesQueueJobParameters)|
+|[import_table_job_parameters](/docs/client/models/jobs/#ImportTablesQueueJobParameters)|Job parameters for the import tables job that will import all tables from this schema.|[ImportTablesQueueJobParameters](/docs/client/models/jobs/#ImportTablesQueueJobParameters)|
 
 
 ___  

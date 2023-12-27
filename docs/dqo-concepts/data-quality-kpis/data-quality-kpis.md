@@ -3,7 +3,42 @@
 The purpose of data quality KPIs (Key Performance Indicators) is to measure data quality by calculating a reliable data quality score.
 The score can be calculated for different data sources and across different [data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md).
 
+
+## Data quality score formula
 DQOps calculates data quality KPIs as a percentage of passed [data quality checks](../checks/index.md) out of all executed checks.
+The result of measuring the data quality KPI for two data quality checks, [daily_nulls_percent](../../checks/column/nulls/nulls-percent.md#daily-nulls-percent-)
+and [daily_duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md#daily-duplicate-percent-) on
+5 columns over the period of 10 days is shown below.
+
+![Data quality score formula](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_min.png)
+
+Passed data quality checks are shown as green boxes. Data quality issues that decrease the data quality KPI
+are shown as orange (*error* severity issue) and red (*fatal* severity issue) boxes.
+
+DQOps supports also setting up a *warning* severity rule threshold. When only a *warning* severity rule
+does not pass, DQOps creates a data quality issue for the warning, but warnings are counted as passed data quality checks,
+not decreasing the overall data quality KPI.
+
+The reason for excluding *warning* severity data quality issues is due to the nature of warnings.
+They should be raised only for anomalies or data quality issues that are expected occasionally, and will be
+reviewed when they are detected.
+
+![Data quality score formula with warnings](https://dqops.com/docs/images/concepts/data-quality-kpis/data_quality_kpi_calculation_formula_with_warnings_min.png)
+
+
+## Using KPIs for improving data quality
+
+
+``` mermaid
+graph LR
+  S[New data quality<br/>incident identified] --> |New incident created| O(Open);
+  O --> |Assigned to be fixed by<br/> the 3rd level support| A(Acknowledged);
+  O --> |False alarm, mute| M(Muted);
+  A --> |Incident solved| R(Resolved);
+  A --> |Not an issue,<br/>do not raise it again| M(Muted);
+```
+
+
 The data quality checks that are included in the data quality KPI are defined as [monitoring checks](../checks/./monitoring-checks/monitoring-checks.md)
 and [partitioned checks](../checks//partition-checks/partition-checks.md).
 

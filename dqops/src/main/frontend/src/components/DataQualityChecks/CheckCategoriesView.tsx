@@ -33,6 +33,7 @@ interface CheckCategoriesViewProps {
   changeCopyUI: (category: string, checkName: string, checked: boolean) => void;
   copyCategory?: QualityCategoryModel;
   isDefaultEditing?: boolean;
+  isFiltered?: boolean;
 }
 const CheckCategoriesView = ({
   mode,
@@ -44,7 +45,8 @@ const CheckCategoriesView = ({
   timeWindowFilter,
   changeCopyUI,
   copyCategory,
-  isDefaultEditing
+  isDefaultEditing,
+  isFiltered
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -86,18 +88,22 @@ const CheckCategoriesView = ({
   }, []);
 
   const getExtendCheckCategoryModelWithDeletedChecks = () => {
-    const checkResultCopy = [...checkResultsOverview]
-      const deletedChecksArray = checkResultCopy.filter(
-        obj1 => category.checks && !category.checks.find(obj2 => obj1.checkName === obj2.check_name) 
-        && obj1.checkCategory === category.category
-        );
-        const deletedCheckModels :  CheckModel[] = deletedChecksArray.map((x) => ({
-          check_name: x.checkName,
-          check_hash: x.checkHash,
-          run_checks_job_template: {checkType: checkTypes as CheckSearchFiltersCheckTypeEnum}
-        }))
-        return deletedCheckModels ?? [];
-  }
+    const checkResultCopy = [...checkResultsOverview];
+    const deletedChecksArray = checkResultCopy.filter(
+      (obj1) =>
+        category.checks &&
+        !category.checks.find((obj2) => obj1.checkName === obj2.check_name) &&
+        obj1.checkCategory === category.category
+    );
+    const deletedCheckModels: CheckModel[] = deletedChecksArray.map((x) => ({
+      check_name: x.checkName,
+      check_hash: x.checkHash,
+      run_checks_job_template: {
+        checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
+      }
+    }));
+    return deletedCheckModels ?? [];
+  };
 
   return (
     <Fragment>
@@ -120,7 +126,7 @@ const CheckCategoriesView = ({
                     className="w-5 h-5 text-gray-700"
                   />
                 )}
-                {category.category?.replace(/^\w/, c => c.toUpperCase())}
+                {category.category?.replace(/^\w/, (c) => c.toUpperCase())}
               </div>
             </div>
             <div> </div>
@@ -146,7 +152,12 @@ const CheckCategoriesView = ({
                 <SvgIcon
                   name="play"
                   width={20}
-                  className={clsx("text-primary", userProfile.can_run_checks !== true ? "pointer-events-none cursor-not-allowed" : "cursor-pointer")}
+                  className={clsx(
+                    'text-primary',
+                    userProfile.can_run_checks !== true
+                      ? 'pointer-events-none cursor-not-allowed'
+                      : 'cursor-pointer'
+                  )}
                   onClick={onRunChecks}
                 />
                 <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
@@ -158,50 +169,51 @@ const CheckCategoriesView = ({
         </td>
       </tr>
       {category.checks &&
-  isExtended &&
-  [...category.checks, ...getExtendCheckCategoryModelWithDeletedChecks()].map(
-    (check, index) => (
-      <CheckListItem
-        check={check}
-        key={index}
-        onChange={(item) =>
-          handleChangeDataGroupingConfiguration(item, index)
-        }
-        checkResult={checkResultsOverview.find(
-          (item) => item.checkHash === check.check_hash
-        )}
-        getCheckOverview={getCheckOverview}
-        onUpdate={onUpdate}
-        timeWindowFilter={timeWindowFilter}
-        mode={mode}
-        changeCopyUI={(value) =>
-          changeCopyUI(category.category ?? '', check.check_name ?? '', value)
-        }
-        checkedCopyUI={
-          copyCategory?.checks?.find(
-            (item) => item.check_name === check.check_name
-          )?.configured
-        }
-        category={category.category}
-        comparisonName={category.comparison_name}
-        isDefaultEditing={isDefaultEditing}
-        canUserRunChecks={userProfile.can_run_checks}
-        isAlreadyDeleted={category.checks && !category.checks.find(x => x === 
-          check
-        )}
-      />
-    )
-  )}
+        isExtended &&
+        [
+          ...category.checks,
+          ...(isFiltered ? getExtendCheckCategoryModelWithDeletedChecks() : [])
+        ].map((check, index) => (
+          <CheckListItem
+            check={check}
+            key={index}
+            onChange={(item) =>
+              handleChangeDataGroupingConfiguration(item, index)
+            }
+            checkResult={checkResultsOverview.find(
+              (item) => item.checkHash === check.check_hash
+            )}
+            getCheckOverview={getCheckOverview}
+            onUpdate={onUpdate}
+            timeWindowFilter={timeWindowFilter}
+            mode={mode}
+            changeCopyUI={(value) =>
+              changeCopyUI(
+                category.category ?? '',
+                check.check_name ?? '',
+                value
+              )
+            }
+            checkedCopyUI={
+              copyCategory?.checks?.find(
+                (item) => item.check_name === check.check_name
+              )?.configured
+            }
+            category={category.category}
+            comparisonName={category.comparison_name}
+            isDefaultEditing={isDefaultEditing}
+            canUserRunChecks={userProfile.can_run_checks}
+            isAlreadyDeleted={
+              category.checks && !category.checks.find((x) => x === check)
+            }
+          />
+        ))}
       <DeleteOnlyDataDialog
         open={deleteDataDialogOpened}
         onClose={() => setDeleteDataDialogOpened(false)}
         onDelete={(params) => {
           setDeleteDataDialogOpened(false);
-          JobApiClient.deleteStoredData(
-            undefined,
-            false,
-            undefined,
-            {
+          JobApiClient.deleteStoredData(undefined, false, undefined, {
             ...category.data_clean_job_template,
             ...params
           });

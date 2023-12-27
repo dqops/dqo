@@ -103,6 +103,7 @@ Identifies a single partition for hive partitioned tables stored as parquet file
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|data_domain|Data domain name.|string|
 |[table_type](#dqoroot)|Table type.|[DqoRoot](#dqoroot)|
 |connection_name|Connection name.|string|
 |[table_name](../columns/#physicaltablename)|Table name (schema.table).|[PhysicalTableName](../columns/#physicaltablename)|

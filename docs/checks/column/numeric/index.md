@@ -1,6 +1,6 @@
 # Checks/column/numeric
 
-**This is a list of numeric column checks in DQOps and a brief description of what they do.**
+**This is a list of numeric column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 
@@ -147,35 +147,55 @@ Validates that the data in a numeric column is in the expected format or within 
 | Check name | Check type | Description |
 |------------|------------|-------------|
 |[profile_percentile_in_range](./column/numeric/percentile-in-range/#profile-percentile-in-range)|profiling|Verifies that the percentile of all values in a column is not outside the set range.|
-|[profile_median_in_range](./column/numeric/percentile-in-range/#profile-median-in-range)|profiling|Verifies that the median of all values in a column is not outside the set range.|
-|[profile_percentile_10_in_range](./column/numeric/percentile-in-range/#profile-percentile-10-in-range)|profiling|Verifies that the percentile 10 of all values in a column is not outside the set range.|
-|[profile_percentile_25_in_range](./column/numeric/percentile-in-range/#profile-percentile-25-in-range)|profiling|Verifies that the percentile 25 of all values in a column is not outside the set range.|
-|[profile_percentile_75_in_range](./column/numeric/percentile-in-range/#profile-percentile-75-in-range)|profiling|Verifies that the percentile 75 of all values in a column is not outside the set range.|
-|[profile_percentile_90_in_range](./column/numeric/percentile-in-range/#profile-percentile-90-in-range)|profiling|Verifies that the percentile 90 of all values in a column is not outside the set range.|
 |[daily_percentile_in_range](./column/numeric/percentile-in-range/#daily-percentile-in-range)|monitoring|Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[daily_median_in_range](./column/numeric/percentile-in-range/#daily-median-in-range)|monitoring|Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_percentile_10_in_range](./column/numeric/percentile-in-range/#daily-percentile-10-in-range)|monitoring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[daily_percentile_25_in_range](./column/numeric/percentile-in-range/#daily-percentile-25-in-range)|monitoring|Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[daily_percentile_75_in_range](./column/numeric/percentile-in-range/#daily-percentile-75-in-range)|monitoring|Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[daily_percentile_90_in_range](./column/numeric/percentile-in-range/#daily-percentile-90-in-range)|monitoring|Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
 |[monthly_percentile_in_range](./column/numeric/percentile-in-range/#monthly-percentile-in-range)|monitoring|Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[monthly_median_in_range](./column/numeric/percentile-in-range/#monthly-median-in-range)|monitoring|Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[monthly_percentile_10_in_range](./column/numeric/percentile-in-range/#monthly-percentile-10-in-range)|monitoring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[monthly_percentile_25_in_range](./column/numeric/percentile-in-range/#monthly-percentile-25-in-range)|monitoring|Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[monthly_percentile_75_in_range](./column/numeric/percentile-in-range/#monthly-percentile-75-in-range)|monitoring|Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[monthly_percentile_90_in_range](./column/numeric/percentile-in-range/#monthly-percentile-90-in-range)|monitoring|Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
 |[daily_partition_percentile_in_range](./column/numeric/percentile-in-range/#daily-partition-percentile-in-range)|partitioned|Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
-|[daily_partition_median_in_range](./column/numeric/percentile-in-range/#daily-partition-median-in-range)|partitioned|Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
-|[daily_partition_percentile_10_in_range](./column/numeric/percentile-in-range/#daily-partition-percentile-10-in-range)|partitioned|Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
-|[daily_partition_percentile_25_in_range](./column/numeric/percentile-in-range/#daily-partition-percentile-25-in-range)|partitioned|Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
-|[daily_partition_percentile_75_in_range](./column/numeric/percentile-in-range/#daily-partition-percentile-75-in-range)|partitioned|Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
-|[daily_partition_percentile_90_in_range](./column/numeric/percentile-in-range/#daily-partition-percentile-90-in-range)|partitioned|Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
 |[monthly_partition_percentile_in_range](./column/numeric/percentile-in-range/#monthly-partition-percentile-in-range)|partitioned|Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
-|[monthly_partition_median_in_range](./column/numeric/percentile-in-range/#monthly-partition-median-in-range)|partitioned|Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
-|[monthly_partition_percentile_10_in_range](./column/numeric/percentile-in-range/#monthly-partition-percentile-10-in-range)|partitioned|Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
-|[monthly_partition_percentile_25_in_range](./column/numeric/percentile-in-range/#monthly-partition-percentile-25-in-range)|partitioned|Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
-|[monthly_partition_percentile_75_in_range](./column/numeric/percentile-in-range/#monthly-partition-percentile-75-in-range)|partitioned|Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
-|[monthly_partition_percentile_90_in_range](./column/numeric/percentile-in-range/#monthly-partition-percentile-90-in-range)|partitioned|Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_median_in_range](./column/numeric/median-in-range/#profile-median-in-range)|profiling|Verifies that the median of all values in a column is not outside the set range.|
+|[daily_median_in_range](./column/numeric/median-in-range/#daily-median-in-range)|monitoring|Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[monthly_median_in_range](./column/numeric/median-in-range/#monthly-median-in-range)|monitoring|Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_median_in_range](./column/numeric/median-in-range/#daily-partition-median-in-range)|partitioned|Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_median_in_range](./column/numeric/median-in-range/#monthly-partition-median-in-range)|partitioned|Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_percentile_10_in_range](./column/numeric/percentile-10-in-range/#profile-percentile-10-in-range)|profiling|Verifies that the percentile 10 of all values in a column is not outside the set range.|
+|[daily_percentile_10_in_range](./column/numeric/percentile-10-in-range/#daily-percentile-10-in-range)|monitoring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_percentile_10_in_range](./column/numeric/percentile-10-in-range/#monthly-percentile-10-in-range)|monitoring|Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_percentile_10_in_range](./column/numeric/percentile-10-in-range/#daily-partition-percentile-10-in-range)|partitioned|Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_percentile_10_in_range](./column/numeric/percentile-10-in-range/#monthly-partition-percentile-10-in-range)|partitioned|Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_percentile_25_in_range](./column/numeric/percentile-25-in-range/#profile-percentile-25-in-range)|profiling|Verifies that the percentile 25 of all values in a column is not outside the set range.|
+|[daily_percentile_25_in_range](./column/numeric/percentile-25-in-range/#daily-percentile-25-in-range)|monitoring|Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_percentile_25_in_range](./column/numeric/percentile-25-in-range/#monthly-percentile-25-in-range)|monitoring|Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_percentile_25_in_range](./column/numeric/percentile-25-in-range/#daily-partition-percentile-25-in-range)|partitioned|Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_percentile_25_in_range](./column/numeric/percentile-25-in-range/#monthly-partition-percentile-25-in-range)|partitioned|Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_percentile_75_in_range](./column/numeric/percentile-75-in-range/#profile-percentile-75-in-range)|profiling|Verifies that the percentile 75 of all values in a column is not outside the set range.|
+|[daily_percentile_75_in_range](./column/numeric/percentile-75-in-range/#daily-percentile-75-in-range)|monitoring|Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_percentile_75_in_range](./column/numeric/percentile-75-in-range/#monthly-percentile-75-in-range)|monitoring|Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_percentile_75_in_range](./column/numeric/percentile-75-in-range/#daily-partition-percentile-75-in-range)|partitioned|Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_percentile_75_in_range](./column/numeric/percentile-75-in-range/#monthly-partition-percentile-75-in-range)|partitioned|Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
+
+
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[profile_percentile_90_in_range](./column/numeric/percentile-90-in-range/#profile-percentile-90-in-range)|profiling|Verifies that the percentile 90 of all values in a column is not outside the set range.|
+|[daily_percentile_90_in_range](./column/numeric/percentile-90-in-range/#daily-percentile-90-in-range)|monitoring|Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_percentile_90_in_range](./column/numeric/percentile-90-in-range/#monthly-percentile-90-in-range)|monitoring|Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_percentile_90_in_range](./column/numeric/percentile-90-in-range/#daily-partition-percentile-90-in-range)|partitioned|Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_percentile_90_in_range](./column/numeric/percentile-90-in-range/#monthly-partition-percentile-90-in-range)|partitioned|Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

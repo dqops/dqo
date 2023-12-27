@@ -493,6 +493,71 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{ lib.make_text_constant(i) }},
+                {%- else -%}
+                    {{ lib.make_text_constant(i) }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                NULL
+            {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{ render_else() }}
+            END AS actual_value,
+            MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                        THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+            END AS actual_value,
+            MAX(CAST(3 AS INT)) AS expected_value_alias,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -1016,6 +1081,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{ lib.make_text_constant(i) }},
+                    {%- else -%}
+                        {{ lib.make_text_constant(i) }}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                    COUNT(DISTINCT
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                            ELSE NULL
+                        END
+                    )
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{ render_else() }}
+                END AS actual_value,
+                MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                        CASE
+                            WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                            THEN analyzed_table.`target_column`
+                            ELSE NULL
+                        END
+                    )
+                END AS actual_value,
+                MAX(CAST(3 AS INT)) AS expected_value_alias,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1585,6 +1715,71 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{ lib.make_text_constant(i) }},
+                {%- else -%}
+                    {{ lib.make_text_constant(i) }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                NULL
+            {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{ render_else() }}
+            END AS actual_value,
+            MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                        THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+            END AS actual_value,
+            MAX(CAST(3 AS INT)) AS expected_value_alias,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -2109,6 +2304,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{ lib.make_text_constant(i) }},
+                    {%- else -%}
+                        {{ lib.make_text_constant(i) }}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                    COUNT(DISTINCT
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                            ELSE NULL
+                        END
+                    )
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{ render_else() }}
+                END AS actual_value,
+                MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                        CASE
+                            WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                            THEN analyzed_table.`target_column`
+                            ELSE NULL
+                        END
+                    )
+                END AS actual_value,
+                MAX(CAST(3 AS INT)) AS expected_value_alias,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2678,6 +2938,71 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{ lib.make_text_constant(i) }},
+                {%- else -%}
+                    {{ lib.make_text_constant(i) }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                NULL
+            {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{ render_else() }}
+            END AS actual_value,
+            MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                        THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+            END AS actual_value,
+            MAX(CAST(3 AS INT)) AS expected_value_alias,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -3202,6 +3527,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{ lib.make_text_constant(i) }},
+                    {%- else -%}
+                        {{ lib.make_text_constant(i) }}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                    COUNT(DISTINCT
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                            ELSE NULL
+                        END
+                    )
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{ render_else() }}
+                END AS actual_value,
+                MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                        CASE
+                            WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                            THEN analyzed_table.`target_column`
+                            ELSE NULL
+                        END
+                    )
+                END AS actual_value,
+                MAX(CAST(3 AS INT)) AS expected_value_alias,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3777,6 +4167,71 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{ lib.make_text_constant(i) }},
+                {%- else -%}
+                    {{ lib.make_text_constant(i) }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                NULL
+            {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{ render_else() }}
+            END AS actual_value,
+            MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                        THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+            END AS actual_value,
+            MAX(CAST(3 AS INT)) AS expected_value_alias,
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -4311,6 +4766,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{ lib.make_text_constant(i) }},
+                    {%- else -%}
+                        {{ lib.make_text_constant(i) }}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                    COUNT(DISTINCT
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                            ELSE NULL
+                        END
+                    )
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{ render_else() }}
+                END AS actual_value,
+                MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                        CASE
+                            WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                            THEN analyzed_table.`target_column`
+                            ELSE NULL
+                        END
+                    )
+                END AS actual_value,
+                MAX(CAST(3 AS INT)) AS expected_value_alias,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4884,6 +5404,71 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Spark"
+
+    === "Sensor template for Spark"
+
+        ```sql+jinja
+        {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{ lib.make_text_constant(i) }},
+                {%- else -%}
+                    {{ lib.make_text_constant(i) }}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_else() -%}
+            {%- if parameters.expected_values|length == 0 -%}
+                NULL
+            {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE {{ render_else() }}
+            END AS actual_value,
+            MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Spark"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN NULL
+                ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                        THEN analyzed_table.`target_column`
+                        ELSE NULL
+                    END
+                )
+            END AS actual_value,
+            MAX(CAST(3 AS INT)) AS expected_value_alias,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "SQL Server"
 
     === "Sensor template for SQL Server"
@@ -5418,6 +6003,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Spark"
+
+        === "Sensor template for Spark"
+            ```sql+jinja
+            {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{ lib.make_text_constant(i) }},
+                    {%- else -%}
+                        {{ lib.make_text_constant(i) }}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                    COUNT(DISTINCT
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                            ELSE NULL
+                        END
+                    )
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{ render_else() }}
+                END AS actual_value,
+                MAX(CAST({{ parameters.expected_values | length }} AS INT)) AS expected_value_alias
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Spark"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                        CASE
+                            WHEN analyzed_table.`target_column` IN ('USD','GBP','EUR')
+                            THEN analyzed_table.`target_column`
+                            ELSE NULL
+                        END
+                    )
+                END AS actual_value,
+                MAX(CAST(3 AS INT)) AS expected_value_alias,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

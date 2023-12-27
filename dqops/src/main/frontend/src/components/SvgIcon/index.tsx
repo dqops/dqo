@@ -94,6 +94,7 @@ import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as SparkSvg } from './svg/spark.svg';
+import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -115,7 +116,7 @@ const iconsMap: any = {
   'user-circle': UserCircleSvg,
   users: UsersSvg,
   'x-circle': XCircleSvg,
-  'big-query': BigQuerySvg,
+  bigquery: BigQuerySvg,
   'bigquery-big': BigQueryBigSvg,
   snowflake: SnowflakeSvg,
   info: InfoSvg,
@@ -195,7 +196,8 @@ const iconsMap: any = {
   done: DoneSvg,
   warning: WarningSvg,
   webhooks: WebhooksSvg,
-  spark: SparkSvg
+  spark: SparkSvg,
+  databricks: DatabricksSvg
 };
 
 interface SvgIconProps {

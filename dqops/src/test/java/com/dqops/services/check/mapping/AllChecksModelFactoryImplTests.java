@@ -111,7 +111,7 @@ public class AllChecksModelFactoryImplTests extends BaseTest {
         checkSearchFilters.setConnection(this.connectionSpec.getConnectionName());
 
         DqoUserPrincipal principal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
-        List<AllChecksModel> allChecksModels = this.sut.fromCheckSearchFilters(checkSearchFilters, principal);
+        List<AllChecksModel> allChecksModels = this.sut.findAllConfiguredAndPossibleChecks(checkSearchFilters, principal);
         Assertions.assertNotNull(allChecksModels);
         Assertions.assertEquals(1, allChecksModels.size());
     }

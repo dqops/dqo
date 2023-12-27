@@ -9,11 +9,11 @@ import { TableApiClient } from '../../services/apiClient';
 import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import { SchemaTables } from './SchemaTables';
-import { MultiChecks } from './MultiChecks';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import { MultiChecks } from './MultiCheck/MultiChecks';
 
 const SchemaPage = () => {
   const {
@@ -31,25 +31,23 @@ const SchemaPage = () => {
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const history = useHistory();
 
   const tabs = useMemo(
     () => [
+      ...(checkTypes !== CheckTypes.SOURCES
+        ? [
+            {
+              label: 'Data quality checks',
+              value: 'multiple_checks'
+            }
+          ]
+        : []),
       {
         label: 'Tables',
         value: 'tables'
-      },
-      ...(checkTypes !== CheckTypes.SOURCES
-        ? [
-            // {
-            //   label: 'Multiple checks edit',
-            //   value: 'multiple_checks'
-            // }
-          ]
-        : [])
+      }
     ],
     [checkTypes]
   );
@@ -91,8 +89,16 @@ const SchemaPage = () => {
         <div className="flex gap-4 items-center">
           <Button
             className="!h-10"
-            color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-            variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+            color={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'primary'
+                : 'secondary'
+            }
+            variant={
+              !(userProfile.can_manage_data_sources !== true)
+                ? 'outlined'
+                : 'contained'
+            }
             label="Import more tables"
             onClick={onImportMoreTables}
             disabled={userProfile.can_manage_data_sources !== true}
@@ -101,8 +107,16 @@ const SchemaPage = () => {
           {isSourceScreen && (
             <Button
               className="!h-10"
-              color={!(userProfile.can_manage_data_sources !== true) ? 'primary' : 'secondary'}
-              variant={!(userProfile.can_manage_data_sources !== true) ? "outlined" : "contained"}
+              color={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'primary'
+                  : 'secondary'
+              }
+              variant={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'outlined'
+                  : 'contained'
+              }
               label="Add Table"
               onClick={() => setAddTableDialogOpen(true)}
               disabled={userProfile.can_manage_data_sources !== true}

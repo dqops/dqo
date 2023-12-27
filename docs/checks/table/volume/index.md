@@ -1,6 +1,6 @@
 # Checks/table/volume
 
-**This is a list of volume table checks in DQOps and a brief description of what they do.**
+**This is a list of volume table data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

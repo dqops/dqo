@@ -1,6 +1,6 @@
 # Checks/column/schema
 
-**This is a list of schema column checks in DQOps and a brief description of what they do.**
+**This is a list of schema column data quality checks supported by DQOps and a brief description of what they do.**
 
 
 

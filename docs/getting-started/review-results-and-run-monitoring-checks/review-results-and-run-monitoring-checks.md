@@ -6,29 +6,37 @@ we describe how to review the initial results from the basic statistics and prof
 Once new tables are imported, DQOps automatically enables the following profiling and monitoring checks.
 To learn more about each check, click on the links below. 
 
-**Table-level checks:**
+**Profiling checks type**
 
-- [row count](../../checks/table/volume/row-count.md) counts the number of rows in a table.
-- [row count anomaly differencing](../../checks/table/volume/row-count-anomaly-differencing.md) ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
-- [row count change](../../checks/table/volume/row-count-change.md) ensures that the row count changed by a fixed rate since the last readout.
-- [table availability](../../checks/table/availability/table-availability.md) verifies that a table exists, can be accessed, and queried without errors.
-- [column count](../../checks/table/schema/column-count.md) retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
-- [column count changed](../../checks/table/schema/column-count-changed.md) detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.
-- [column list changed](../../checks/table/schema/column-list-changed.md) detects if the list of columns has changed since the last time the check was run.
-- [column list or order changed](../../checks/table/schema/column-list-or-order-changed.md) detects whether the list of columns and the order of columns have changed since the last time the check was run.
-- [column types changed](../../checks/table/schema/column-types-changed.md) detects if the column names or column types have changed since the last time the check was run.
+| Target | Check name                                                          | Description                                                                                                                                        |
+|--------|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| table  | [profile row count](../../checks/table/volume/row-count.md)         | Counts the number of rows in a table.                                                                                                              |
+| table  | [profile column count](../../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
+| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md) | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
 
-**Column-level checks:**
+**Daily monitoring checks type**
 
-- [nulls count](../../checks/column/nulls/nulls-count.md) ensures that there are no more than a set number of null values in the monitored column.
-- [nulls percent](../../checks/column/nulls/nulls-percent.md) ensures that there are no more than a set percentage of null values in the monitored column.
-- [nulls percent anomaly stationary](../../checks/column/nulls/nulls-percent-anomaly-stationary.md) ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
-- [nulls percent change yesterday](../../checks/column/nulls/nulls-percent-change-yesterday.md) ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
-- [not nulls percent](../../checks/column/nulls/not-nulls-percent.md) ensures that there are no more than a set percentage of not null values in the monitored column.
-- [string datatype changed](../../checks/column/datatype/string-datatype-changed.md) scans all values in a string column and detects the data type of all values in a column.
-- [column exists](../../checks/column/schema/column-exists.md) reads the metadata of the monitored table and verifies that the column still exists in the data source.
-- [column type changed](../../checks/column/schema/column-type-changed.md) detects if the data type of the column has changed since the last time it was retrieved.
-
+| Target | Check name                                                                                              | Description                                                                                                                                 |
+|--------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
+| table  | [daily row count](../../checks/table/volume/row-count.md)                                               | Counts the number of rows in a table.                                                                                                       |
+| table  | [daily row count change](../../checks/table/volume/row-count-change.md)                                 | Ensures that the row count changed by a fixed rate since the last readout.                                                                  |
+| table  | [daily row count anomaly differencing](../../checks/table/volume/row-count-anomaly-differencing.md)     | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                |
+| table  | [daily table availability](../../checks/table/availability/table-availability.md)                       | Verifies that a table exists, can be accessed, and queried without errors.                                                                  |
+| table  | [daily column count changed](../../checks/table/schema/column-count-changed.md)                         | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                            |
+| table  | [daily column list changed](../../checks/table/schema/column-list-changed.md)                           | Detects if the list of columns has changed since the last time the check was run.                                                           |
+| table  | [daily column list or order changed](../../checks/table/schema/column-list-or-order-changed.md)         | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                            |
+| table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                         | Detects if the column names or column types have changed since the last time the check was run.                                             |
+| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                           | Ensures that there are no more than a set number of null values in the monitored column.                                                    |
+| column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                       | Ensures that there are no more than a set percentage of null values in the monitored column.                                                |
+| column | [daily nulls percent anomaly stationary](../../checks/column/nulls/nulls-percent-anomaly-stationary.md) | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
+| column | [daily nulls percent change yesterday](../../checks/column/nulls/nulls-percent-change-yesterday.md)     | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |
+| column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                               | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
+| column | [daily string datatype changed](../../checks/column/datatype/string-datatype-changed.md)                | Scans all values in a string column and detects the data type of all values in a column.                                                    |
+| column | [daily mean anomaly stationary](../../checks/column/anomaly/mean-anomaly-stationary.md)                 | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
+| column | [daily sum anomaly differencing](../../checks/column/anomaly/sum-anomaly-differencing.md)               | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
+| column | [daily column exists](../../checks/column/schema/column-exists.md)                                      | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                     |
+| column | [daily column type changed](../../checks/column/schema/column-type-changed.md)                          | Detects if the data type of the column has changed since the last time it was retrieved.                                                    |
 
 All checks are scheduled to run daily at 12:00 a.m.
 
