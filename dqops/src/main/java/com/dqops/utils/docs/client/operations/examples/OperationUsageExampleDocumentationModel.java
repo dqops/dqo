@@ -21,13 +21,9 @@ import lombok.Data;
 @Data
 public class OperationUsageExampleDocumentationModel {
     /**
-     * Execution method header.
+     * Execution method.
      */
     private OperationExecutionMethod executionMethod;
-    /**
-     * Execution method code formatting.
-     */
-    private String executionCodeFormatting = "";
 
     /**
      * Operation model.

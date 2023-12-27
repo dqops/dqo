@@ -25,7 +25,6 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
                 renderedExample = renderedCurlUsageExample(operationModel,
                         operationsOperationDocumentationModel.getRequestBodyField(),
                         operationParameters);
-                model.setExecutionCodeFormatting("bash");
                 break;
             default:
                 renderedExample = "No render";

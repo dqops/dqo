@@ -66,6 +66,9 @@ public class PathParameterFillerUtility {
                 return SampleStringsRegistry.getMatchingStringForParameter(parameterName);
             case long_type:
                 return Long.toString(SampleLongsRegistry.getMatchingLongForParameter(parameterName));
+            case enum_type:
+                String jsonStringValue = GeneratorUtility.getSampleFromTypeModel(parameterType, false);
+                return jsonStringValue.replaceAll("^\"|\"$", "");
             default:
                 return GeneratorUtility.getSampleFromTypeModel(parameterType, false);
         }

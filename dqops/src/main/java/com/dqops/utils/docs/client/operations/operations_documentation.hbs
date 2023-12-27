@@ -41,9 +41,9 @@ ___{{#with "  "}}{{.}}{{/with}}
 {{#if usageExamples}}
 **Usage examples**{{#with "  "}}{{.}}{{/with}}
 {{#each usageExamples~}}
-=== "{{{executionMethod}}}"
+=== "{{{executionMethod.navbarHeader}}}"
     {{#with "  "}}{{.}}{{/with}}
-    ```{{{executionCodeFormatting}}}
+    ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
 {{/each~}}
