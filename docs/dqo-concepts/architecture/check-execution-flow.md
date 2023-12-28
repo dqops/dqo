@@ -82,7 +82,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      First, the rule for the *fatal* severity level is called. If the rule fails, the check result is a failure and
      is scored at a *fatal* severity level and no further rules (*error* or *warning* severity level rules) are evaluated.
 
-     If the *fatal* severity rule is not enabled or has passed (accepting the *sensor readout* as a valid result), DQOps continues
+     If the *fatal* severity rule is not activated or has passed (accepting the *sensor readout* as a valid result), DQOps continues
      the rule evaluation by evaluating the *error* severity rule. If the *error* severity rule also passes, the *warning* severity
      rule is evaluated. Failed data quality checks are called *data quality issues* or just `issues` on the 
      [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md).

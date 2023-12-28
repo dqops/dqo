@@ -1,6 +1,6 @@
 # Detect empty tables
 
-The following examples shows how to detect empty tables using the default data quality checks which are enabled in DQOps 
+The following examples shows how to detect empty tables using the default data quality checks which are activated in DQOps 
 once new tables are imported.
 
 **PROBLEM**
@@ -27,7 +27,7 @@ If the newly imported column is empty a warning alert will be triggered.
 
 ## Default checks configuration 
 
-Once new tables are imported, DQOps automatically enables the following profiling and monitoring checks.
+Once new tables are imported, DQOps automatically activates the following profiling and monitoring checks.
 To learn more about each check, click on the links below.
 
 **Profiling checks type**
@@ -83,7 +83,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the `311_service_requests` table from the **tree view** on the left.
@@ -94,13 +94,13 @@ To execute the check prepared in the example using the [user interface](../../dq
 3. Select the **Daily checks** tab.
 
     This tab displays a list of data quality checks in the check editor.
-    Here you can view the list of all table monitoring checks. Noticed the checks that have been enabled upon importing new tables have switched on the toggle button.
-    The icons located before the name of each check allow you to: enable and disable it, configure settings, run a check, review results, and get more information about it.
+    Here you can view the list of all table monitoring checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
+    The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
 
     Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
-4. Run the enabled [daily_row_count](../../checks/table/volume/row-count.md) check using the **Run check** button.
+4. Run the activated [daily_row_count](../../checks/table/volume/row-count.md) check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 

@@ -20,7 +20,7 @@ These topics introduce the basic concepts of DQOps.
     Data quality checks are configured by setting the incident alerting thresholds
     by setting the [data quality rule](./rules/rules.md) parameters.
 
-    DQOps uses YAML files to keep the configuration of data sources and the enabled data quality checks on monitored tables.
+    DQOps uses YAML files to keep the configuration of data sources and the activated data quality checks on monitored tables.
     The DQOps YAML file format is fully documented and the YAML schema files are published.
     
     The DQOps YAML schema files allow unprecedented coding experience with Visual Studio Code when managing the
@@ -135,7 +135,7 @@ These topics introduce the basic concepts of DQOps.
 
 - **[Data storage](./data-storage/data-storage.md)**
 
-    DQOps stores both the configuration of data sources, the configuration of data quality checks enabled on tables
+    DQOps stores both the configuration of data sources, the configuration of data quality checks activated on tables
     and the data quality check execution results locally in a `DQOps user home` folder.
 
     The data quality results are stored in a *$DQO_USER_HOME/.data* folder that is a Hive-compliant local data lake.

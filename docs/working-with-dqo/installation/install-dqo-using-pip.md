@@ -39,7 +39,7 @@ To use DQOps you need:
 DQOps is available on [PyPi repository](https://pypi.org/project/dqops/). 
 
 1. Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
-   DQOps will store the metadata of imported data sources, the configuration of enabled data quality checks, and the
+   DQOps will store the metadata of imported data sources, the configuration of activated data quality checks, and the
    data quality results.
 
 2. Open a terminal, change the current folder to the created directory, and install DQOps via pip manager

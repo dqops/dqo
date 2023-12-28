@@ -51,7 +51,7 @@ We will set six data quality monitoring checks on `bigquery-public-data.thelook_
     - error: 98.0%
     - fatal: 95.0%
 
-We will modify the default connection level schedule that apply to all enabled checks from 12:00 AM to 8:00 AM. For two 
+We will modify the default connection level schedule that apply to all activated checks from 12:00 AM to 8:00 AM. For two 
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
 The schedule for the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check will be temporarily disabled.
 
@@ -119,14 +119,14 @@ To view and modify individual check-level schedules:
 
 
 Similarly, we change the schedule of the uniqueness check [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md)
-enabled on the `id` column for **Run 15 minutes past every hour**.
+activated on the `id` column for **Run 15 minutes past every hour**.
 
 ![Check-level schedule override on daily-distinct-percent check](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override2.png)
 
 ### **Disable check-level schedule**
 
 We wanted to disable the scheduling of the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md)
-check enabled on the `age` column.
+check activated on the `age` column.
 
 To disable the check scheduling:
 
@@ -193,7 +193,7 @@ The `id` column also includes an updated schedule on a [daily_distinct_percent](
 
 The remaining monitoring checks will be run every day at 8:00 AM (0 8 * * *) as indicated in the YAML connection configuration mentioned earlier.
 
-The [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check enabled
+The [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check activated
 on the `age` column will not be run since the "disabled:" parameter has been set to "true" in the "schedule_override" section.
 
 ```yaml hl_lines="10-13 27-30 73-76"

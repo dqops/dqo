@@ -2,7 +2,7 @@
 
 ## How data grouping works
 
-When a new data source's metadata is imported into DQOps and the first data quality checks are enabled, the checks will
+When a new data source's metadata is imported into DQOps and the first data quality checks are activated, the checks will
 analyze the whole table. The data quality check will capture one metric (using a data quality sensor, that is an SQL query).
 Then, that single data quality sensor readout (the captured metric) is evaluated through the rule engine, which will
 result in creating a data quality rule result that is valid (no data quality issue detected) or is a data quality issue, 
@@ -281,7 +281,7 @@ spec:
 
 DQOps treats all data quality sensor readouts (metrics) and all data quality check results (rule evaluation results)
 as time series. Suppose that a table contains data from two countries and each group of data is identified by
-the value of the _country_ column value. The user enabled a **daily_row_count** check on the table.
+the value of the _country_ column value. The user activated a **daily_row_count** check on the table.
 DQOps will track the row count time series for both countries, allowing to detect anomalies or missing data
 for only one country. Detecting data quality issues that are related to a single data source is crucial for the root
 cause analysis and allows to contact the right person, 

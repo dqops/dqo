@@ -4,7 +4,7 @@ The folder on the disk where the files are stored is called a `DQOps user home`.
 
 Five most important kinds of files are stored in the `DQOps user home`.
 
-- **YAML** files with the configuration of enabled data quality checks on tables, data source connection settings and several
+- **YAML** files with the configuration of activated data quality checks on tables, data source connection settings and several
   other configuration files used for defining custom [sensors](../sensors/sensors.md), [rules](../rules/rules.md)
   and [checks](../checks/index.md).
 
