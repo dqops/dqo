@@ -38,6 +38,8 @@ http://localhost:8888/api/credentials
     ```
 
 
+
+
 ___  
 ## delete_shared_credential  
 Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.  
@@ -70,6 +72,8 @@ http://localhost:8888/api/credentials/{credentialName}
 		-H "Accept: application/json"
 
     ```
+
+
 
 
 ___  
@@ -106,6 +110,8 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```
 
 
+
+
 ___  
 ## get_all_shared_credentials  
 Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..  
@@ -137,6 +143,22 @@ http://localhost:8888/api/credentials
     curl http://localhost:8888/api/credentials^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "can_edit" : false,
+	  "can_access_credential" : false
+	}, {
+	  "can_edit" : false,
+	  "can_access_credential" : false
+	}, {
+	  "can_edit" : false,
+	  "can_access_credential" : false
+	} ]
     ```
 
 
@@ -178,6 +200,17 @@ http://localhost:8888/api/credentials/{credentialName}
     curl http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "credential_name" : "sample_credential",
+	  "type" : "text",
+	  "text_value" : "sample_credential_text_value"
+	}
     ```
 
 
@@ -223,5 +256,7 @@ http://localhost:8888/api/credential/{credentialName}
 		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
 
     ```
+
+
 
 

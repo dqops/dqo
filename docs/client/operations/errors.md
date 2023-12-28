@@ -53,6 +53,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_column_partitioned_errors  
 Returns the errors related to the recent column level partitioned checks executions for a requested time scale  
@@ -102,6 +115,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/errors^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	} ]
     ```
 
 
@@ -156,6 +182,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_table_monitoring_errors  
 Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale  
@@ -204,6 +243,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/errors^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	} ]
     ```
 
 
@@ -258,6 +310,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_table_profiling_errors  
 Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table  
@@ -305,6 +370,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/errors^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	}, {
+	  "errorEntries" : [ ]
+	} ]
     ```
 
 

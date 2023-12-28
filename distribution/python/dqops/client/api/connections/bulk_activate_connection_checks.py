@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.bulk_check_disable_parameters import BulkCheckDisableParameters
+from ...models.all_checks_patch_parameters import AllChecksPatchParameters
 from ...models.mono_void import MonoVoid
 from ...types import Response
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     check_name: str,
     *,
-    json_body: BulkCheckDisableParameters,
+    json_body: AllChecksPatchParameters,
 ) -> Dict[str, Any]:
     pass
 
@@ -22,7 +22,7 @@ def _get_kwargs(
 
     return {
         "method": "put",
-        "url": "api/connections/{connectionName}/checks/{checkName}/bulkdisable".format(
+        "url": "api/connections/{connectionName}/checks/{checkName}/bulkactivate".format(
             connectionName=connection_name,
             checkName=check_name,
         ),
@@ -59,17 +59,17 @@ def sync_detailed(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: BulkCheckDisableParameters,
+    json_body: AllChecksPatchParameters,
 ) -> Response[MonoVoid]:
-    """bulkDisableConnectionChecks
+    """bulkActivateConnectionChecks
 
-     Disables a named check on this connection in the locations specified by filter
+     Activates all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (BulkCheckDisableParameters): Parameter object for disabling all checks that fit
-            the filters.
+        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
+            all checks that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,17 +97,17 @@ def sync(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: BulkCheckDisableParameters,
+    json_body: AllChecksPatchParameters,
 ) -> Optional[MonoVoid]:
-    """bulkDisableConnectionChecks
+    """bulkActivateConnectionChecks
 
-     Disables a named check on this connection in the locations specified by filter
+     Activates all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (BulkCheckDisableParameters): Parameter object for disabling all checks that fit
-            the filters.
+        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
+            all checks that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -130,17 +130,17 @@ async def asyncio_detailed(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: BulkCheckDisableParameters,
+    json_body: AllChecksPatchParameters,
 ) -> Response[MonoVoid]:
-    """bulkDisableConnectionChecks
+    """bulkActivateConnectionChecks
 
-     Disables a named check on this connection in the locations specified by filter
+     Activates all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (BulkCheckDisableParameters): Parameter object for disabling all checks that fit
-            the filters.
+        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
+            all checks that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,17 +166,17 @@ async def asyncio(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: BulkCheckDisableParameters,
+    json_body: AllChecksPatchParameters,
 ) -> Optional[MonoVoid]:
-    """bulkDisableConnectionChecks
+    """bulkActivateConnectionChecks
 
-     Disables a named check on this connection in the locations specified by filter
+     Activates all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (BulkCheckDisableParameters): Parameter object for disabling all checks that fit
-            the filters.
+        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
+            all checks that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

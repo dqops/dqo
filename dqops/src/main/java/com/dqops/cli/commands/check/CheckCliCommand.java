@@ -28,8 +28,8 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "check", description = "Commands related to checks and rules", subcommands = {
         CheckRunCliCommand.class,
-        CheckEnableCliCommand.class,
-        CheckDisableCliCommand.class,
+        CheckActivateCliCommand.class,
+        CheckDeactivateCliCommand.class,
 })
 public class CheckCliCommand extends BaseCommand {
 }

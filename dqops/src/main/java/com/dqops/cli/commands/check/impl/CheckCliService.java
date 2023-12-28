@@ -16,7 +16,6 @@
 package com.dqops.cli.commands.check.impl;
 
 import com.dqops.cli.commands.check.impl.models.AllChecksModelCliPatchParameters;
-import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.execution.checks.CheckExecutionSummary;
 import com.dqops.execution.checks.progress.CheckExecutionProgressListener;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -43,10 +42,10 @@ public interface CheckCliService {
                                     boolean dummyRun);
 
     /**
-     * Disable existing checks matching the provided filters.
+     * Deactivates existing checks matching the provided filters.
      * @param filters Check search filters to find checks to disable.
      */
-    void disableChecks(CheckSearchFilters filters);
+    void deactivateChecks(CheckSearchFilters filters);
 
     /**
      * Update checks configuration based on provided parameters.

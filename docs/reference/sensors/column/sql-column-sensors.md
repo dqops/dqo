@@ -31,6 +31,20 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Databricks"
+      
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
       
     ```sql+jinja
@@ -55,6 +69,27 @@ Column level sensor that executes a given SQL expression on a column.
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -156,6 +191,27 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Databricks"
+      
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
       
     ```sql+jinja
@@ -194,6 +250,34 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -326,6 +410,30 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Databricks"
+      
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
       
     ```sql+jinja
@@ -370,6 +478,38 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        CAST(
+            CASE
+                WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                    replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+            END AS DOUBLE) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -512,6 +652,27 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Databricks"
+      
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
       
     ```sql+jinja
@@ -550,6 +711,34 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -682,6 +871,30 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Databricks"
+      
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
       
     ```sql+jinja
@@ -726,6 +939,38 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    SELECT
+        CAST(
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                            THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+            END AS DOUBLE) AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}

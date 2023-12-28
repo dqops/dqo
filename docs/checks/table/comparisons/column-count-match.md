@@ -14,28 +14,32 @@ Verifies that the column count of the tested (parent) table matches the column c
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_count_match|profiling| |Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_column_count_match
+dqo> check activate -c=connection_name -ch=profile_column_count_match
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_column_count_match
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_column_count_match
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_count_match
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_count_match
-```
+
 **Check structure (YAML)**
 ```yaml
   profiling_checks:
@@ -124,28 +128,32 @@ Verifies that the column count of the tested (parent) table matches the column c
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_count_match|monitoring|daily|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_column_count_match
+dqo> check activate -c=connection_name -ch=daily_column_count_match
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_column_count_match
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_column_count_match
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_count_match
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_count_match
-```
+
 **Check structure (YAML)**
 ```yaml
   monitoring_checks:
@@ -236,28 +244,32 @@ Verifies that the column count of the tested (parent) table matches the column c
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_count_match|monitoring|monthly|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_column_count_match
+dqo> check activate -c=connection_name -ch=monthly_column_count_match
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_column_count_match
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_column_count_match
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_count_match
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_count_match
-```
+
 **Check structure (YAML)**
 ```yaml
   monitoring_checks:

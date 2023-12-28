@@ -42,8 +42,8 @@ ___
 | Command&nbsp;name | Description |
 |--------------|-------------|
  | [dqo check run](./check/#dqo-check run) | Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality. |
- | [dqo check enable](./check/#dqo-check enable) | Enable data quality checks matching specified filters |
- | [dqo check disable](./check/#dqo-check disable) | Disable data quality checks matching specified filters |
+ | [dqo check activate](./check/#dqo-check activate) | Activates data quality checks matching specified filters |
+ | [dqo check deactivate](./check/#dqo-check deactivate) | Deactivates data quality checks matching specified filters |
 
 
 ## column

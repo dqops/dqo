@@ -35,6 +35,13 @@ http://localhost:8888/api/dashboards
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ { }, { }, { } ]
+    ```
+
+
 ___  
 ## get_dashboard_level_1  
 Returns a single dashboard in the tree of folder with a temporary authenticated url  
@@ -75,6 +82,13 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     curl http://localhost:8888/api/dashboards/sample_folder_0/sample_dashboard^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    { }
     ```
 
 
@@ -122,6 +136,13 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    { }
+    ```
+
+
 ___  
 ## get_dashboard_level_3  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
@@ -164,6 +185,13 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_dashboard^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    { }
     ```
 
 
@@ -213,6 +241,13 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ```
 
 
+
+**Return value sample**  
+    ```js
+    { }
+    ```
+
+
 ___  
 ## get_dashboard_level_5  
 Returns a single dashboard in the tree of folders with a temporary authenticated url  
@@ -257,6 +292,13 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_folder_5/sample_dashboard^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    { }
     ```
 
 

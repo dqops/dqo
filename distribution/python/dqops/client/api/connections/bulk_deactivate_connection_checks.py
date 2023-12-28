@@ -5,7 +5,7 @@ import httpx
 
 from ... import errors
 from ...client import AuthenticatedClient, Client
-from ...models.all_checks_patch_parameters import AllChecksPatchParameters
+from ...models.bulk_check_deactivate_parameters import BulkCheckDeactivateParameters
 from ...models.mono_void import MonoVoid
 from ...types import Response
 
@@ -14,7 +14,7 @@ def _get_kwargs(
     connection_name: str,
     check_name: str,
     *,
-    json_body: AllChecksPatchParameters,
+    json_body: BulkCheckDeactivateParameters,
 ) -> Dict[str, Any]:
     pass
 
@@ -22,7 +22,7 @@ def _get_kwargs(
 
     return {
         "method": "put",
-        "url": "api/connections/{connectionName}/checks/{checkName}/bulkenable".format(
+        "url": "api/connections/{connectionName}/checks/{checkName}/bulkdeactivate".format(
             connectionName=connection_name,
             checkName=check_name,
         ),
@@ -59,17 +59,17 @@ def sync_detailed(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: AllChecksPatchParameters,
+    json_body: BulkCheckDeactivateParameters,
 ) -> Response[MonoVoid]:
-    """bulkEnableConnectionChecks
+    """bulkDeactivateConnectionChecks
 
-     Enables a named check on this connection in the locations specified by filter
+     Deactivates (deletes) all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
-            all checks that fit the filters.
+        json_body (BulkCheckDeactivateParameters): Parameter object for deactivating all checks
+            that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -97,17 +97,17 @@ def sync(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: AllChecksPatchParameters,
+    json_body: BulkCheckDeactivateParameters,
 ) -> Optional[MonoVoid]:
-    """bulkEnableConnectionChecks
+    """bulkDeactivateConnectionChecks
 
-     Enables a named check on this connection in the locations specified by filter
+     Deactivates (deletes) all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
-            all checks that fit the filters.
+        json_body (BulkCheckDeactivateParameters): Parameter object for deactivating all checks
+            that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -130,17 +130,17 @@ async def asyncio_detailed(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: AllChecksPatchParameters,
+    json_body: BulkCheckDeactivateParameters,
 ) -> Response[MonoVoid]:
-    """bulkEnableConnectionChecks
+    """bulkDeactivateConnectionChecks
 
-     Enables a named check on this connection in the locations specified by filter
+     Deactivates (deletes) all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
-            all checks that fit the filters.
+        json_body (BulkCheckDeactivateParameters): Parameter object for deactivating all checks
+            that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -166,17 +166,17 @@ async def asyncio(
     check_name: str,
     *,
     client: AuthenticatedClient,
-    json_body: AllChecksPatchParameters,
+    json_body: BulkCheckDeactivateParameters,
 ) -> Optional[MonoVoid]:
-    """bulkEnableConnectionChecks
+    """bulkDeactivateConnectionChecks
 
-     Enables a named check on this connection in the locations specified by filter
+     Deactivates (deletes) all named check on this connection in the locations specified by filter
 
     Args:
         connection_name (str):
         check_name (str):
-        json_body (AllChecksPatchParameters): Parameter object for creating pruned patch trees of
-            all checks that fit the filters.
+        json_body (BulkCheckDeactivateParameters): Parameter object for deactivating all checks
+            that fit the filters.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -41,12 +41,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * "check enable" 2nd level CLI command that enables data quality checks.
+ * "check activate" 2nd level CLI command that activates data quality checks.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "enable", description = "Enable data quality checks matching specified filters")
-public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
+@CommandLine.Command(name = "activate", description = "Activates data quality checks matching specified filters")
+public class CheckActivateCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
@@ -55,17 +55,17 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     private OutputFormatService outputFormatService;
     private FileWriter fileWriter;
 
-    public CheckEnableCliCommand() {
+    public CheckActivateCliCommand() {
     }
 
     @Autowired
-    public CheckEnableCliCommand(TerminalReader terminalReader,
-                                 TerminalWriter terminalWriter,
-                                 TerminalTableWritter terminalTableWritter,
-                                 CheckCliService checkService,
-                                 JsonSerializer jsonSerializer,
-                                 OutputFormatService outputFormatService,
-                                 FileWriter fileWriter) {
+    public CheckActivateCliCommand(TerminalReader terminalReader,
+                                   TerminalWriter terminalWriter,
+                                   TerminalTableWritter terminalTableWritter,
+                                   CheckCliService checkService,
+                                   JsonSerializer jsonSerializer,
+                                   OutputFormatService outputFormatService,
+                                   FileWriter fileWriter) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.terminalTableWritter = terminalTableWritter;

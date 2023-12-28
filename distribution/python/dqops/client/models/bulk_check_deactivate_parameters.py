@@ -6,30 +6,30 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.bulk_check_disable_parameters_selected_tables_to_columns import (
-        BulkCheckDisableParametersSelectedTablesToColumns,
+    from ..models.bulk_check_deactivate_parameters_selected_tables_to_columns import (
+        BulkCheckDeactivateParametersSelectedTablesToColumns,
     )
     from ..models.check_search_filters import CheckSearchFilters
 
 
-T = TypeVar("T", bound="BulkCheckDisableParameters")
+T = TypeVar("T", bound="BulkCheckDeactivateParameters")
 
 
 @_attrs_define
-class BulkCheckDisableParameters:
-    """Parameter object for disabling all checks that fit the filters.
+class BulkCheckDeactivateParameters:
+    """Parameter object for deactivating all checks that fit the filters.
 
     Attributes:
         check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
-        selected_tables_to_columns (Union[Unset, BulkCheckDisableParametersSelectedTablesToColumns]): List of concrete
-            table and column names which will be the target. Column mappings are ignored for table level checks. This filter
-            is applied at the end.
+        selected_tables_to_columns (Union[Unset, BulkCheckDeactivateParametersSelectedTablesToColumns]): List of
+            concrete table and column names which will be the target. Column mappings are ignored for table level checks.
+            This filter is applied at the end.
     """
 
     check_search_filters: Union[Unset, "CheckSearchFilters"] = UNSET
     selected_tables_to_columns: Union[
-        Unset, "BulkCheckDisableParametersSelectedTablesToColumns"
+        Unset, "BulkCheckDeactivateParametersSelectedTablesToColumns"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -54,8 +54,8 @@ class BulkCheckDisableParameters:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.bulk_check_disable_parameters_selected_tables_to_columns import (
-            BulkCheckDisableParametersSelectedTablesToColumns,
+        from ..models.bulk_check_deactivate_parameters_selected_tables_to_columns import (
+            BulkCheckDeactivateParametersSelectedTablesToColumns,
         )
         from ..models.check_search_filters import CheckSearchFilters
 
@@ -69,24 +69,24 @@ class BulkCheckDisableParameters:
 
         _selected_tables_to_columns = d.pop("selected_tables_to_columns", UNSET)
         selected_tables_to_columns: Union[
-            Unset, BulkCheckDisableParametersSelectedTablesToColumns
+            Unset, BulkCheckDeactivateParametersSelectedTablesToColumns
         ]
         if isinstance(_selected_tables_to_columns, Unset):
             selected_tables_to_columns = UNSET
         else:
             selected_tables_to_columns = (
-                BulkCheckDisableParametersSelectedTablesToColumns.from_dict(
+                BulkCheckDeactivateParametersSelectedTablesToColumns.from_dict(
                     _selected_tables_to_columns
                 )
             )
 
-        bulk_check_disable_parameters = cls(
+        bulk_check_deactivate_parameters = cls(
             check_search_filters=check_search_filters,
             selected_tables_to_columns=selected_tables_to_columns,
         )
 
-        bulk_check_disable_parameters.additional_properties = d
-        return bulk_check_disable_parameters
+        bulk_check_deactivate_parameters.additional_properties = d
+        return bulk_check_deactivate_parameters
 
     @property
     def additional_keys(self) -> List[str]:

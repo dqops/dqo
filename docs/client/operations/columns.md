@@ -48,6 +48,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## delete_column  
 Deletes a column from the table  
@@ -89,6 +91,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "jobId" : 10832,
+	  "createdAt" : "2007-10-11T13:42:00Z"
+	}
     ```
 
 
@@ -136,6 +148,37 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "spec" : {
+	    "type_snapshot" : {
+	      "column_type" : "string",
+	      "nullable" : false,
+	      "length" : 256
+	    },
+	    "profiling_checks" : {
+	      "nulls" : {
+	        "profile_nulls_count" : {
+	          "error" : {
+	            "max_count" : 10
+	          }
+	        }
+	      }
+	    }
+	  },
+	  "can_edit" : true
+	}
+    ```
+
+
 ___  
 ## get_column_basic  
 Returns the column specification  
@@ -177,6 +220,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
     ```
 
 
@@ -224,6 +292,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	} ]
+    ```
+
+
 ___  
 ## get_column_labels  
 Return the list of labels assigned to a column  
@@ -265,6 +352,13 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    []
     ```
 
 
@@ -313,6 +407,48 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "checks" : [ {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+
+
 ___  
 ## get_column_monitoring_checks_daily  
 Return the configuration of daily column level data quality monitoring on a column  
@@ -354,6 +490,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "nulls" : {
+	    "daily_nulls_count" : {
+	      "error" : {
+	        "max_count" : 10
+	      }
+	    }
+	  }
+	}
     ```
 
 
@@ -399,6 +550,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/model^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
     ```
 
 
@@ -449,6 +630,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+
+
 ___  
 ## get_column_monitoring_checks_monthly  
 Return the configuration of monthly column level data quality monitoring on a column  
@@ -490,6 +701,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "nulls" : {
+	    "monthly_nulls_count" : {
+	      "error" : {
+	        "max_count" : 10
+	      }
+	    }
+	  }
+	}
     ```
 
 
@@ -538,6 +764,48 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "checks" : [ {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+
+
 ___  
 ## get_column_partitioned_checks_daily  
 Return the configuration of daily column level data quality partitioned checks on a column  
@@ -579,6 +847,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "nulls" : {
+	    "daily_partition_nulls_count" : {
+	      "error" : {
+	        "max_count" : 10
+	      }
+	    }
+	  }
+	}
     ```
 
 
@@ -624,6 +907,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/model^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
     ```
 
 
@@ -674,6 +987,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+
+
 ___  
 ## get_column_partitioned_checks_monthly  
 Return the configuration of monthly column level data quality partitioned checks on a column  
@@ -715,6 +1058,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "nulls" : {
+	    "monthly_partition_nulls_count" : {
+	      "error" : {
+	        "max_count" : 10
+	      }
+	    }
+	  }
+	}
     ```
 
 
@@ -762,6 +1120,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "nulls" : {
+	    "profile_nulls_count" : {
+	      "error" : {
+	        "max_count" : 10
+	      }
+	    }
+	  }
+	}
+    ```
+
+
 ___  
 ## get_column_profiling_checks_basic_model  
 Return a simplistic UI friendly model of column level data quality profiling checks on a column  
@@ -806,6 +1179,48 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "checks" : [ {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+
+
 ___  
 ## get_column_profiling_checks_model  
 Return a UI friendly model of data quality profiling checks on a column  
@@ -847,6 +1262,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
     ```
 
 
@@ -896,6 +1341,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+
+
 ___  
 ## get_column_statistics  
 Returns the column specification with the metrics captured by the most recent statistics collection.  
@@ -937,6 +1412,64 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/statistics^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "statistics" : [ {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 4372,
+	    "collectedAt" : "2007-10-11T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 9624,
+	    "collectedAt" : "2007-10-12T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 1575,
+	    "collectedAt" : "2007-10-13T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 5099,
+	    "collectedAt" : "2007-10-14T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 9922,
+	    "collectedAt" : "2007-10-15T18:00:00"
+	  } ],
+	  "collect_column_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "columnNames" : [ "sample_column" ]
+	  },
+	  "can_collect_statistics" : true
+	}
     ```
 
 
@@ -983,6 +1516,67 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	} ]
+    ```
+
+
 ___  
 ## get_columns_statistics  
 Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.  
@@ -1023,6 +1617,130 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/statistics^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_statistics" : [ {
+	    "connection_name" : "sample_connection",
+	    "table" : {
+	      "schema_name" : "sample_schema",
+	      "table_name" : "sample_table"
+	    },
+	    "column_name" : "sample_column",
+	    "has_any_configured_checks" : true,
+	    "type_snapshot" : {
+	      "column_type" : "string",
+	      "nullable" : false,
+	      "length" : 256
+	    },
+	    "statistics" : [ {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 4372,
+	      "collectedAt" : "2007-10-11T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9624,
+	      "collectedAt" : "2007-10-12T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 1575,
+	      "collectedAt" : "2007-10-13T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 5099,
+	      "collectedAt" : "2007-10-14T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9922,
+	      "collectedAt" : "2007-10-15T18:00:00"
+	    } ],
+	    "collect_column_statistics_job_template" : {
+	      "connection" : "sample_connection",
+	      "fullTableName" : "sample_schema.sample_table",
+	      "enabled" : true,
+	      "columnNames" : [ "sample_column" ]
+	    },
+	    "can_collect_statistics" : true
+	  }, {
+	    "connection_name" : "sample_connection",
+	    "table" : {
+	      "schema_name" : "sample_schema",
+	      "table_name" : "sample_table"
+	    },
+	    "column_name" : "sample_column_1",
+	    "has_any_configured_checks" : true,
+	    "type_snapshot" : {
+	      "column_type" : "string",
+	      "nullable" : false,
+	      "length" : 256
+	    },
+	    "statistics" : [ {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 4372,
+	      "collectedAt" : "2007-10-11T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9624,
+	      "collectedAt" : "2007-10-12T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 1575,
+	      "collectedAt" : "2007-10-13T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 5099,
+	      "collectedAt" : "2007-10-14T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9922,
+	      "collectedAt" : "2007-10-15T18:00:00"
+	    } ],
+	    "collect_column_statistics_job_template" : {
+	      "connection" : "sample_connection",
+	      "fullTableName" : "sample_schema.sample_table",
+	      "enabled" : true,
+	      "columnNames" : [ "sample_column" ]
+	    },
+	    "can_collect_statistics" : true
+	  } ],
+	  "collect_column_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "columnNames" : [ "sample_column" ],
+	    "collectorCategory" : "sample_category"
+	  },
+	  "can_collect_statistics" : true
+	}
     ```
 
 
@@ -1073,6 +1791,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_basic  
 Updates an existing column, changing only the basic information like the expected data type (the data type snapshot).  
@@ -1120,6 +1840,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_comments  
 Updates the list of comments assigned to a column.  
@@ -1162,9 +1884,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"[]"
+		"[{\"date\":\"2007-12-03T10:15:30\",\"comment_by\":\"sample_user\",\"comment\":\"Sample comment\"},{\"date\":\"2007-12-03T10:15:30\",\"comment_by\":\"sample_user\",\"comment\":\"Sample comment\"},{\"date\":\"2007-12-03T10:15:30\",\"comment_by\":\"sample_user\",\"comment\":\"Sample comment\"}]"
 
     ```
+
+
 
 
 ___  
@@ -1214,6 +1938,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_monitoring_checks_daily  
 Updates configuration of daily column level data quality monitoring on a column.  
@@ -1259,6 +1985,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"nulls\":{\"daily_nulls_count\":{\"error\":{\"max_count\":10}}}}"
 
     ```
+
+
 
 
 ___  
@@ -1309,6 +2037,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_monitoring_checks_monthly  
 Updates configuration of monthly column level data quality monitoring checks on a column.  
@@ -1356,6 +2086,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_partitioned_checks_daily  
 Updates configuration of daily column level data quality partitioned checks on a column.  
@@ -1401,6 +2133,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"nulls\":{\"daily_partition_nulls_count\":{\"error\":{\"max_count\":10}}}}"
 
     ```
+
+
 
 
 ___  
@@ -1451,6 +2185,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_partitioned_checks_monthly  
 Updates configuration of monthly column level data quality partitioned checks on a column.  
@@ -1496,6 +2232,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"nulls\":{\"monthly_partition_nulls_count\":{\"error\":{\"max_count\":10}}}}"
 
     ```
+
+
 
 
 ___  
@@ -1545,6 +2283,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_column_profiling_checks_model  
 Updates configuration of column level data quality profiling checks on a column from a UI friendly model.  
@@ -1590,5 +2330,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 
     ```
+
+
 
 

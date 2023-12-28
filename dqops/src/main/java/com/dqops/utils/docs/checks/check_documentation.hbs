@@ -15,28 +15,32 @@ ___
 |----------|----------|----------|-----------------|-----------------|------------|
 |{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{capitalizeFirst rule.category}}/#{{replace rule.ruleName "_" "-"}})|
 {{#with "  "}}{{.}}{{/with}}
-**Enable check (Shell)**{{#with "  "}}{{.}}{{/with}}
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**{{#with "  "}}{{.}}{{/with}}
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch={{checkName}}
+dqo> check activate -c=connection_name -ch={{checkName}}
 ```
+
 **Run check (Shell)**{{#with "  "}}{{.}}{{/with}}
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch={{checkName}}
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch={{checkName}}
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch={{checkName}}
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch={{checkName}}
-```
+
 **Check structure (YAML)**
 ```yaml
 {{#each checkSample~}}

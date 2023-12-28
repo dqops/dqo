@@ -3,11 +3,11 @@ from typing import Any, Dict, List, Type, TypeVar, cast
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="BulkCheckDisableParametersSelectedTablesToColumns")
+T = TypeVar("T", bound="BulkCheckDeactivateParametersSelectedTablesToColumns")
 
 
 @_attrs_define
-class BulkCheckDisableParametersSelectedTablesToColumns:
+class BulkCheckDeactivateParametersSelectedTablesToColumns:
     """List of concrete table and column names which will be the target. Column mappings are ignored for table level
     checks. This filter is applied at the end.
 
@@ -27,7 +27,7 @@ class BulkCheckDisableParametersSelectedTablesToColumns:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        bulk_check_disable_parameters_selected_tables_to_columns = cls()
+        bulk_check_deactivate_parameters_selected_tables_to_columns = cls()
 
         additional_properties = {}
         for prop_name, prop_dict in d.items():
@@ -35,10 +35,10 @@ class BulkCheckDisableParametersSelectedTablesToColumns:
 
             additional_properties[prop_name] = additional_property
 
-        bulk_check_disable_parameters_selected_tables_to_columns.additional_properties = (
+        bulk_check_deactivate_parameters_selected_tables_to_columns.additional_properties = (
             additional_properties
         )
-        return bulk_check_disable_parameters_selected_tables_to_columns
+        return bulk_check_deactivate_parameters_selected_tables_to_columns
 
     @property
     def additional_keys(self) -> List[str]:

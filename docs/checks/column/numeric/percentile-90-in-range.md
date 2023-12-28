@@ -14,28 +14,32 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_percentile_90_in_range|profiling| |Reasonableness|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_percentile_90_in_range
+dqo> check activate -c=connection_name -ch=profile_percentile_90_in_range
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_percentile_90_in_range
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_percentile_90_in_range
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_percentile_90_in_range
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_percentile_90_in_range
-```
+
 **Check structure (YAML)**
 ```yaml
       profiling_checks:
@@ -171,6 +175,79 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+                PERCENTILE(
+                ({{ lib.render_target_column('analyzed_table')}}),
+                {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE(
+                (analyzed_table.`target_column`),
+                0.9)
+                OVER (PARTITION BY
+                    
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
+                    
+                ) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Oracle"
 
     === "Sensor template for Oracle"
@@ -238,6 +315,79 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                    {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST(analyzed_table."target_column" AS DOUBLE),
+                    0.9)
+                OVER (PARTITION BY
+                    
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
+             DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
+                    
+                ) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -583,6 +733,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    ({{ lib.render_target_column('analyzed_table')}}),
+                    {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    (analyzed_table.`target_column`),
+                    0.9)
+                    OVER (PARTITION BY
+                        
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
+                        
+                analyzed_table.`country` AS grouping_level_1
+                analyzed_table.`state` AS grouping_level_2
+                    ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -655,6 +880,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                        {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST(analyzed_table."target_column" AS DOUBLE),
+                        0.9)
+                    OVER (PARTITION BY
+                        
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
+                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
+                        
+                analyzed_table."country" AS grouping_level_1
+                analyzed_table."state" AS grouping_level_2
+                    ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -884,28 +1184,32 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_percentile_90_in_range|monitoring|daily|Reasonableness|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_percentile_90_in_range
+dqo> check activate -c=connection_name -ch=daily_percentile_90_in_range
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_percentile_90_in_range
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_percentile_90_in_range
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_percentile_90_in_range
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_percentile_90_in_range
-```
+
 **Check structure (YAML)**
 ```yaml
       monitoring_checks:
@@ -1043,6 +1347,79 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+                PERCENTILE(
+                ({{ lib.render_target_column('analyzed_table')}}),
+                {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE(
+                (analyzed_table.`target_column`),
+                0.9)
+                OVER (PARTITION BY
+                    
+            CAST(CURRENT_TIMESTAMP() AS DATE),
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
+                    
+                ) AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Oracle"
 
     === "Sensor template for Oracle"
@@ -1110,6 +1487,79 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                    {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST(analyzed_table."target_column" AS DOUBLE),
+                    0.9)
+                OVER (PARTITION BY
+                    
+            CAST(CURRENT_TIMESTAMP AS date),
+             CAST(CURRENT_TIMESTAMP AS date)
+                    
+                ) AS actual_value,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -1456,6 +1906,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    ({{ lib.render_target_column('analyzed_table')}}),
+                    {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    (analyzed_table.`target_column`),
+                    0.9)
+                    OVER (PARTITION BY
+                        
+                CAST(CURRENT_TIMESTAMP() AS DATE),
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE))
+                        
+                analyzed_table.`country` AS grouping_level_1
+                analyzed_table.`state` AS grouping_level_2
+                    ) AS actual_value,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -1528,6 +2053,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                        {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST(analyzed_table."target_column" AS DOUBLE),
+                        0.9)
+                    OVER (PARTITION BY
+                        
+                CAST(CURRENT_TIMESTAMP AS date),
+                 CAST(CURRENT_TIMESTAMP AS date)
+                        
+                analyzed_table."country" AS grouping_level_1
+                analyzed_table."state" AS grouping_level_2
+                    ) AS actual_value,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1757,28 +2357,32 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_percentile_90_in_range|monitoring|monthly|Reasonableness|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_percentile_90_in_range
+dqo> check activate -c=connection_name -ch=monthly_percentile_90_in_range
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_percentile_90_in_range
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_percentile_90_in_range
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_percentile_90_in_range
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_percentile_90_in_range
-```
+
 **Check structure (YAML)**
 ```yaml
       monitoring_checks:
@@ -1916,6 +2520,79 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+                PERCENTILE(
+                ({{ lib.render_target_column('analyzed_table')}}),
+                {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE(
+                (analyzed_table.`target_column`),
+                0.9)
+                OVER (PARTITION BY
+                    
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
+                    
+                ) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Oracle"
 
     === "Sensor template for Oracle"
@@ -1983,6 +2660,79 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                    {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST(analyzed_table."target_column" AS DOUBLE),
+                    0.9)
+                OVER (PARTITION BY
+                    
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
+             DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
+                    
+                ) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -2329,6 +3079,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    ({{ lib.render_target_column('analyzed_table')}}),
+                    {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    (analyzed_table.`target_column`),
+                    0.9)
+                    OVER (PARTITION BY
+                        
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)),
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)))
+                        
+                analyzed_table.`country` AS grouping_level_1
+                analyzed_table.`state` AS grouping_level_2
+                    ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -2401,6 +3226,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                        {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST(analyzed_table."target_column" AS DOUBLE),
+                        0.9)
+                    OVER (PARTITION BY
+                        
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
+                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date))
+                        
+                analyzed_table."country" AS grouping_level_1
+                analyzed_table."state" AS grouping_level_2
+                    ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2630,28 +3530,32 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_percentile_90_in_range|partitioned|daily|Reasonableness|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_percentile_90_in_range
+dqo> check activate -c=connection_name -ch=daily_partition_percentile_90_in_range
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_partition_percentile_90_in_range
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_partition_percentile_90_in_range
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_percentile_90_in_range
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_percentile_90_in_range
-```
+
 **Check structure (YAML)**
 ```yaml
       partitioned_checks:
@@ -2795,6 +3699,79 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+                PERCENTILE(
+                ({{ lib.render_target_column('analyzed_table')}}),
+                {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE(
+                (analyzed_table.`target_column`),
+                0.9)
+                OVER (PARTITION BY
+                    
+            CAST(analyzed_table.`date_column` AS DATE),
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
+                    
+                ) AS actual_value,
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Oracle"
 
     === "Sensor template for Oracle"
@@ -2862,6 +3839,79 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(analyzed_table."date_column" AS date) AS time_period,
             CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                    {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST(analyzed_table."target_column" AS DOUBLE),
+                    0.9)
+                OVER (PARTITION BY
+                    
+            CAST(analyzed_table."date_column" AS date),
+             CAST(analyzed_table."date_column" AS date)
+                    
+                ) AS actual_value,
+            CAST(analyzed_table."date_column" AS date) AS time_period,
+            CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -3214,6 +4264,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    ({{ lib.render_target_column('analyzed_table')}}),
+                    {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    (analyzed_table.`target_column`),
+                    0.9)
+                    OVER (PARTITION BY
+                        
+                CAST(analyzed_table.`date_column` AS DATE),
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE))
+                        
+                analyzed_table.`country` AS grouping_level_1
+                analyzed_table.`state` AS grouping_level_2
+                    ) AS actual_value,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -3286,6 +4411,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                        {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST(analyzed_table."target_column" AS DOUBLE),
+                        0.9)
+                    OVER (PARTITION BY
+                        
+                CAST(analyzed_table."date_column" AS date),
+                 CAST(analyzed_table."date_column" AS date)
+                        
+                analyzed_table."country" AS grouping_level_1
+                analyzed_table."state" AS grouping_level_2
+                    ) AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3515,28 +4715,32 @@ Verifies that the percentile 90 of all values in a column is not outside the set
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_percentile_90_in_range|partitioned|monthly|Reasonableness|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_partition_percentile_90_in_range
+dqo> check activate -c=connection_name -ch=monthly_partition_percentile_90_in_range
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_partition_percentile_90_in_range
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_partition_percentile_90_in_range
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_percentile_90_in_range
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_percentile_90_in_range
-```
+
 **Check structure (YAML)**
 ```yaml
       partitioned_checks:
@@ -3680,6 +4884,79 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+                PERCENTILE(
+                ({{ lib.render_target_column('analyzed_table')}}),
+                {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table.`time_period` AS time_period,
+            nested_table.`time_period_utc` AS time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE(
+                (analyzed_table.`target_column`),
+                0.9)
+                OVER (PARTITION BY
+                    
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
+                    
+                ) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 ??? example "Oracle"
 
     === "Sensor template for Oracle"
@@ -3747,6 +5024,79 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.time_series is not none -%}
+                {{- lib.eol() -}}
+                {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                        {%- endif -%}
+                    {%- endwith %} AS grouping_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                    {{ parameters.percentile_value }})
+                OVER (PARTITION BY
+                    {{render_local_time_dimension_projection('analyzed_table')}}
+                    {{render_local_data_grouping_projections('analyzed_table') }}
+                ) AS actual_value
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            MAX(nested_table.actual_value) AS actual_value,
+            nested_table."time_period" AS time_period,
+            nested_table."time_period_utc" AS time_period_utc
+        FROM(
+            SELECT
+               APPROX_PERCENTILE(
+                    CAST(analyzed_table."target_column" AS DOUBLE),
+                    0.9)
+                OVER (PARTITION BY
+                    
+            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+             DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
+                    
+                ) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -4099,6 +5449,81 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    ({{ lib.render_target_column('analyzed_table')}}),
+                    {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table.`time_period` AS time_period,
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2
+            FROM(
+                SELECT
+                    PERCENTILE(
+                    (analyzed_table.`target_column`),
+                    0.9)
+                    OVER (PARTITION BY
+                        
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)),
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)))
+                        
+                analyzed_table.`country` AS grouping_level_1
+                analyzed_table.`state` AS grouping_level_2
+                    ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table) AS nested_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -4171,6 +5596,81 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.time_series is not none -%}
+                    {{- lib.eol() -}}
+                    {{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }},{{ lib.eol() -}}
+                    {{ indentation }} {{ lib.render_time_dimension_expression(table_alias_prefix) }}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            {%- macro render_local_data_grouping_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ lib.eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ lib.quote_identifier(data_grouping_level.column) }}
+                            {%- endif -%}
+                        {%- endwith %} AS grouping_{{ attribute }}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
+                        {{ parameters.percentile_value }})
+                    OVER (PARTITION BY
+                        {{render_local_time_dimension_projection('analyzed_table')}}
+                        {{render_local_data_grouping_projections('analyzed_table') }}
+                    ) AS actual_value
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                MAX(nested_table.actual_value) AS actual_value,
+                nested_table."time_period" AS time_period,
+                nested_table."time_period_utc" AS time_period_utc,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2
+            FROM(
+                SELECT
+                   APPROX_PERCENTILE(
+                        CAST(analyzed_table."target_column" AS DOUBLE),
+                        0.9)
+                    OVER (PARTITION BY
+                        
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)),
+                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))
+                        
+                analyzed_table."country" AS grouping_level_1
+                analyzed_table."state" AS grouping_level_2
+                    ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

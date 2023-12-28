@@ -90,7 +90,7 @@
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
 |[AllChecksPatchParameters](connections/#allcheckspatchparameters)||
-|[BulkCheckDisableParameters](connections/#bulkcheckdisableparameters)||
+|[BulkCheckDeactivateParameters](connections/#bulkcheckdeactivateparameters)||
 |[ConnectionSpecificationModel](connections/#connectionspecificationmodel)|Connection model returned by the rest api.|
 
 

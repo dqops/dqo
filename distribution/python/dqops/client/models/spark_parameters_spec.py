@@ -20,8 +20,6 @@ class SparkParametersSpec:
             variable.
         port (Union[Unset, str]): Spark port number. The default port is 10000. Supports also a ${SPARK_PORT}
             configuration with a custom environment variable.
-        schema (Union[Unset, str]): Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to
-            use dynamic substitution.
         user (Union[Unset, str]): Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
             dynamic substitution.
         password (Union[Unset, str]): Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
@@ -30,27 +28,29 @@ class SparkParametersSpec:
             statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a
             ${REDSHIFT_OPTIONS} configuration with a custom environment variable.
         properties (Union[Unset, SparkParametersSpecProperties]):
+        database (Union[Unset, str]):
     """
 
     host: Union[Unset, str] = UNSET
     port: Union[Unset, str] = UNSET
-    schema: Union[Unset, str] = UNSET
     user: Union[Unset, str] = UNSET
     password: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     properties: Union[Unset, "SparkParametersSpecProperties"] = UNSET
+    database: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         host = self.host
         port = self.port
-        schema = self.schema
         user = self.user
         password = self.password
         options = self.options
         properties: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
+
+        database = self.database
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -59,8 +59,6 @@ class SparkParametersSpec:
             field_dict["host"] = host
         if port is not UNSET:
             field_dict["port"] = port
-        if schema is not UNSET:
-            field_dict["schema"] = schema
         if user is not UNSET:
             field_dict["user"] = user
         if password is not UNSET:
@@ -69,6 +67,8 @@ class SparkParametersSpec:
             field_dict["options"] = options
         if properties is not UNSET:
             field_dict["properties"] = properties
+        if database is not UNSET:
+            field_dict["database"] = database
 
         return field_dict
 
@@ -83,8 +83,6 @@ class SparkParametersSpec:
 
         port = d.pop("port", UNSET)
 
-        schema = d.pop("schema", UNSET)
-
         user = d.pop("user", UNSET)
 
         password = d.pop("password", UNSET)
@@ -98,14 +96,16 @@ class SparkParametersSpec:
         else:
             properties = SparkParametersSpecProperties.from_dict(_properties)
 
+        database = d.pop("database", UNSET)
+
         spark_parameters_spec = cls(
             host=host,
             port=port,
-            schema=schema,
             user=user,
             password=password,
             options=options,
             properties=properties,
+            database=database,
         )
 
         spark_parameters_spec.additional_properties = d

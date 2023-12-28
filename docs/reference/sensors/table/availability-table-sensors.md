@@ -30,6 +30,25 @@ Table availability sensor runs a simple table scan query to detect if the table 
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "Databricks"
+      
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        0.0 AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "MySQL"
       
     ```sql+jinja
@@ -53,6 +72,25 @@ Table availability sensor runs a simple table scan query to detect if the table 
       
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        0.0 AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
+=== "Presto"
+      
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
         0.0 AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}

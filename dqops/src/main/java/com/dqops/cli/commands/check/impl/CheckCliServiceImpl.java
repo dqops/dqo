@@ -76,12 +76,12 @@ public class CheckCliServiceImpl implements CheckCliService {
     }
 
     /**
-     * Disable existing checks matching the provided filters.
+     * Deactivates existing checks matching the provided filters.
      *
      * @param filters Check search filters to find checks to disable.
      */
     @Override
-    public void disableChecks(CheckSearchFilters filters) {
+    public void deactivateChecks(CheckSearchFilters filters) {
         DqoUserPrincipal userPrincipal = this.apiKeyPrincipalProvider.getLocalUserPrincipal();
         BulkCheckDeactivateParameters parameters = new BulkCheckDeactivateParameters();
         parameters.setCheckSearchFilters(filters);

@@ -9,6 +9,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.big_query_parameters_spec import BigQueryParametersSpec
     from ..models.check_search_filters import CheckSearchFilters
+    from ..models.databricks_parameters_spec import DatabricksParametersSpec
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
@@ -49,6 +50,7 @@ class ConnectionModel:
         mysql (Union[Unset, MysqlParametersSpec]):
         oracle (Union[Unset, OracleParametersSpec]):
         spark (Union[Unset, SparkParametersSpec]):
+        databricks (Union[Unset, DatabricksParametersSpec]):
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -84,6 +86,7 @@ class ConnectionModel:
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     spark: Union[Unset, "SparkParametersSpec"] = UNSET
+    databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -146,6 +149,10 @@ class ConnectionModel:
         spark: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.spark, Unset):
             spark = self.spark.to_dict()
+
+        databricks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.databricks, Unset):
+            databricks = self.databricks.to_dict()
 
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
@@ -216,6 +223,8 @@ class ConnectionModel:
             field_dict["oracle"] = oracle
         if spark is not UNSET:
             field_dict["spark"] = spark
+        if databricks is not UNSET:
+            field_dict["databricks"] = databricks
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -253,6 +262,7 @@ class ConnectionModel:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.big_query_parameters_spec import BigQueryParametersSpec
         from ..models.check_search_filters import CheckSearchFilters
+        from ..models.databricks_parameters_spec import DatabricksParametersSpec
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
         )
@@ -353,6 +363,13 @@ class ConnectionModel:
         else:
             spark = SparkParametersSpec.from_dict(_spark)
 
+        _databricks = d.pop("databricks", UNSET)
+        databricks: Union[Unset, DatabricksParametersSpec]
+        if isinstance(_databricks, Unset):
+            databricks = UNSET
+        else:
+            databricks = DatabricksParametersSpec.from_dict(_databricks)
+
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
         if isinstance(_run_checks_job_template, Unset):
@@ -442,6 +459,7 @@ class ConnectionModel:
             mysql=mysql,
             oracle=oracle,
             spark=spark,
+            databricks=databricks,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

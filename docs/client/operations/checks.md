@@ -45,6 +45,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 
+
+
 ___  
 ## delete_check  
 Deletes a custom check definition  
@@ -79,6 +81,8 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 
+
+
 ___  
 ## get_all_checks  
 Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.  
@@ -110,6 +114,31 @@ http://localhost:8888/api/checks
     curl http://localhost:8888/api/checks^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "check_name" : "sample_check",
+	  "full_check_name" : "sample_target/sample_category/sample_check",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}, {
+	  "check_name" : "sample_check",
+	  "full_check_name" : "sample_target/sample_category/sample_check",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}, {
+	  "check_name" : "sample_check",
+	  "full_check_name" : "sample_target/sample_category/sample_check",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	} ]
     ```
 
 
@@ -154,6 +183,21 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "check_name" : "sample_check",
+	  "sensor_name" : "sample_target/sample_category/sample_sensor",
+	  "rule_name" : "sample_target/sample_category/sample_rule",
+	  "help_text" : "Sample help text",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}
+    ```
+
+
 ___  
 ## get_check_folder_tree  
 Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.  
@@ -185,6 +229,13 @@ http://localhost:8888/api/definitions/checks
     curl http://localhost:8888/api/definitions/checks^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    { }
     ```
 
 
@@ -230,5 +281,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
 
     ```
+
+
 
 

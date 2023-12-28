@@ -14,28 +14,32 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_string_parsable_to_integer_percent|profiling| |Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_string_parsable_to_integer_percent
+dqo> check activate -c=connection_name -ch=profile_string_parsable_to_integer_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_string_parsable_to_integer_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_string_parsable_to_integer_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_string_parsable_to_integer_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_string_parsable_to_integer_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       profiling_checks:
@@ -122,6 +126,42 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST(analyzed_table.`target_column` AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -248,6 +288,58 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -491,6 +583,42 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST(analyzed_table.`target_column` AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -619,6 +747,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -789,28 +974,32 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_string_parsable_to_integer_percent|monitoring|daily|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_string_parsable_to_integer_percent
+dqo> check activate -c=connection_name -ch=daily_string_parsable_to_integer_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_string_parsable_to_integer_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_string_parsable_to_integer_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_string_parsable_to_integer_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_string_parsable_to_integer_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       monitoring_checks:
@@ -899,6 +1088,42 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST(analyzed_table.`target_column` AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -1025,6 +1250,58 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -1269,6 +1546,42 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST(analyzed_table.`target_column` AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1397,6 +1710,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1567,28 +1937,32 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_string_parsable_to_integer_percent|monitoring|monthly|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_string_parsable_to_integer_percent
+dqo> check activate -c=connection_name -ch=monthly_string_parsable_to_integer_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_string_parsable_to_integer_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_string_parsable_to_integer_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_string_parsable_to_integer_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_string_parsable_to_integer_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       monitoring_checks:
@@ -1677,6 +2051,42 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST(analyzed_table.`target_column` AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -1803,6 +2213,58 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -2047,6 +2509,42 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST(analyzed_table.`target_column` AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2175,6 +2673,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2345,28 +2900,32 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_string_parsable_to_integer_percent|partitioned|daily|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_string_parsable_to_integer_percent
+dqo> check activate -c=connection_name -ch=daily_partition_string_parsable_to_integer_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_partition_string_parsable_to_integer_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_partition_string_parsable_to_integer_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_string_parsable_to_integer_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_string_parsable_to_integer_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       partitioned_checks:
@@ -2461,6 +3020,42 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(analyzed_table.`date_column` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST(analyzed_table.`target_column` AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value,
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -2587,6 +3182,58 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(analyzed_table."date_column" AS date) AS time_period,
             CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(original_table."date_column" AS date) AS time_period,
+            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -2841,6 +3488,42 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST(analyzed_table.`target_column` AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2969,6 +3652,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3137,28 +3877,32 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_string_parsable_to_integer_percent|partitioned|monthly|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_partition_string_parsable_to_integer_percent
+dqo> check activate -c=connection_name -ch=monthly_partition_string_parsable_to_integer_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_partition_string_parsable_to_integer_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_partition_string_parsable_to_integer_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_string_parsable_to_integer_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_string_parsable_to_integer_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       partitioned_checks:
@@ -3253,6 +3997,42 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE 100.0 * COUNT(
+                    CAST(analyzed_table.`target_column` AS INTEGER)
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -3379,6 +4159,58 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                    ) / COUNT(*)
+                END AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -3633,6 +4465,42 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE 100.0 * COUNT(
+                        CAST(analyzed_table.`target_column` AS INTEGER)
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3761,6 +4629,63 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 100.0
+                        ELSE 100.0 * COUNT(
+                            TRY_CAST(analyzed_table."target_column" AS BIGINT)
+                        ) / COUNT(*)
+                    END AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

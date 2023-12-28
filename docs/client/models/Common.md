@@ -404,6 +404,7 @@ Model depicting a named data quality check that can potentially be enabled, rega
 |help_text|Help text that describes the data quality check.|string|
 |[check_container_type](#checkcontainertypemodel)|Check type with time-scale.|[CheckContainerTypeModel](#checkcontainertypemodel)|
 |sensor_name|Full sensor name.|string|
+|[check_model](../Common/#checkmodel)|Template of the check model with the sensor parameters and rule parameters|[CheckModel](../Common/#checkmodel)|
 |sensor_parameters_definitions|List of sensor parameter fields definitions.|List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)]|
 |rule_parameters_definitions|List of threshold (alerting) rule&#x27;s parameters definitions (for a single rule, regardless of severity).|List[[ParameterDefinitionSpec](../../../reference/yaml/SensorDefinitionYaml/#parameterdefinitionspec)]|
 
@@ -420,7 +421,7 @@ Data source provider type (dialect type).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>mysql<br/>bigquery<br/>presto<br/>|
+|string|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>databricks<br/>mysql<br/>bigquery<br/>presto<br/>|
 
 ___  
 
@@ -447,6 +448,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |[mysql](../../../reference/yaml/ConnectionYaml/#mysqlparametersspec)|MySQL connection parameters.|[MysqlParametersSpec](../../../reference/yaml/ConnectionYaml/#mysqlparametersspec)|
 |[oracle](../../../reference/yaml/ConnectionYaml/#oracleparametersspec)|Oracle connection parameters.|[OracleParametersSpec](../../../reference/yaml/ConnectionYaml/#oracleparametersspec)|
 |[spark](../../../reference/yaml/ConnectionYaml/#sparkparametersspec)|Spark connection parameters.|[SparkParametersSpec](../../../reference/yaml/ConnectionYaml/#sparkparametersspec)|
+|[databricks](../../../reference/yaml/ConnectionYaml/#databricksparametersspec)|Databricks connection parameters.|[DatabricksParametersSpec](../../../reference/yaml/ConnectionYaml/#databricksparametersspec)|
 |[run_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run all checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
 |[run_profiling_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run profiling checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|
 |[run_monitoring_checks_job_template](../Common/#checksearchfilters)|Configured parameters for the &quot;check run&quot; job that should be pushed to the job queue in order to run monitoring checks within this connection.|[CheckSearchFilters](../Common/#checksearchfilters)|

@@ -32,21 +32,21 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * "check disable" 2nd level CLI command that disables data quality checks.
+ * "check deactivate" 2nd level CLI command that disables data quality checks.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "disable", description = "Disable data quality checks matching specified filters")
-public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
+@CommandLine.Command(name = "deactivate", description = "Deactivates data quality checks matching specified filters")
+public class CheckDeactivateCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalReader terminalReader;
     private CheckCliService checkService;
 
-    public CheckDisableCliCommand() {
+    public CheckDeactivateCliCommand() {
     }
 
     @Autowired
-    public CheckDisableCliCommand(TerminalReader terminalReader,
-                                  CheckCliService checkService) {
+    public CheckDeactivateCliCommand(TerminalReader terminalReader,
+                                     CheckCliService checkService) {
         this.terminalReader = terminalReader;
         this.checkService = checkService;
     }
@@ -255,7 +255,7 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
         filters.setColumnDataType(this.datatypeFilter);
         filters.setColumnNullable(this.columnNullable);
 
-        this.checkService.disableChecks(filters);
+        this.checkService.deactivateChecks(filters);
 
         return 0;
     }

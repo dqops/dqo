@@ -16,28 +16,32 @@ Verifies availability of the table in a database using a simple row count.
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_table_availability|profiling| |Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_table_availability
+dqo> check activate -c=connection_name -ch=profile_table_availability
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_table_availability
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_table_availability
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_table_availability
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_table_availability
-```
+
 **Check structure (YAML)**
 ```yaml
   profiling_checks:
@@ -128,6 +132,47 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period
         ORDER BY time_period
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 ??? example "MySQL"
 
     === "Sensor template for MySQL"
@@ -204,6 +249,47 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -380,28 +466,32 @@ Verifies availability on table in database using simple row count. Stores the mo
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_table_availability|monitoring|daily|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_table_availability
+dqo> check activate -c=connection_name -ch=daily_table_availability
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_table_availability
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_table_availability
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_table_availability
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_table_availability
-```
+
 **Check structure (YAML)**
 ```yaml
   monitoring_checks:
@@ -494,6 +584,47 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period
         ORDER BY time_period
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 ??? example "MySQL"
 
     === "Sensor template for MySQL"
@@ -570,6 +701,47 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -746,28 +918,32 @@ Verifies availability on table in database using simple row count. Stores the mo
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_table_availability
+dqo> check activate -c=connection_name -ch=monthly_table_availability
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_table_availability
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_table_availability
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_table_availability
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_table_availability
-```
+
 **Check structure (YAML)**
 ```yaml
   monitoring_checks:
@@ -860,6 +1036,47 @@ Please expand the database engine name section to see the SQL query rendered by 
         GROUP BY time_period
         ORDER BY time_period
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 ??? example "MySQL"
 
     === "Sensor template for MySQL"
@@ -936,6 +1153,47 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            0.0 AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            0.0 AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan

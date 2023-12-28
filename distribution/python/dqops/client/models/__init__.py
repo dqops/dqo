@@ -45,9 +45,9 @@ from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
 from .big_query_authentication_mode import BigQueryAuthenticationMode
 from .big_query_jobs_create_project import BigQueryJobsCreateProject
 from .big_query_parameters_spec import BigQueryParametersSpec
-from .bulk_check_disable_parameters import BulkCheckDisableParameters
-from .bulk_check_disable_parameters_selected_tables_to_columns import (
-    BulkCheckDisableParametersSelectedTablesToColumns,
+from .bulk_check_deactivate_parameters import BulkCheckDeactivateParameters
+from .bulk_check_deactivate_parameters_selected_tables_to_columns import (
+    BulkCheckDeactivateParametersSelectedTablesToColumns,
 )
 from .change_percent_1_day_rule_10_parameters_spec import (
     ChangePercent1DayRule10ParametersSpec,
@@ -1277,6 +1277,8 @@ from .data_grouping_configuration_trimmed_model import (
 )
 from .data_grouping_dimension_source import DataGroupingDimensionSource
 from .data_grouping_dimension_spec import DataGroupingDimensionSpec
+from .databricks_parameters_spec import DatabricksParametersSpec
+from .databricks_parameters_spec_properties import DatabricksParametersSpecProperties
 from .datatype_equals_rule_parameters_spec import DatatypeEqualsRuleParametersSpec
 from .datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from .default_schedules_spec import DefaultSchedulesSpec
@@ -1841,8 +1843,8 @@ __all__ = (
     "BigQueryAuthenticationMode",
     "BigQueryJobsCreateProject",
     "BigQueryParametersSpec",
-    "BulkCheckDisableParameters",
-    "BulkCheckDisableParametersSelectedTablesToColumns",
+    "BulkCheckDeactivateParameters",
+    "BulkCheckDeactivateParametersSelectedTablesToColumns",
     "ChangePercent1DayRule10ParametersSpec",
     "ChangePercent1DayRule20ParametersSpec",
     "ChangePercent1DayRule50ParametersSpec",
@@ -2326,6 +2328,8 @@ __all__ = (
     "DashboardsFolderSpec",
     "DashboardSpec",
     "DashboardSpecParameters",
+    "DatabricksParametersSpec",
+    "DatabricksParametersSpecProperties",
     "DataDeleteResultPartition",
     "DataGroupingConfigurationListModel",
     "DataGroupingConfigurationModel",

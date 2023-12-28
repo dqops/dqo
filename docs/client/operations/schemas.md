@@ -36,6 +36,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 |check_name|Check name|string| |
 |check_enabled|Check enabled|boolean| |
 |check_configured|Check configured|boolean| |
+|limit|Limit of results, the default value is 1000|long| |
 
 
 
@@ -49,6 +50,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/"daily"/model^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	} ]
     ```
 
 
@@ -98,6 +118,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_schema_partitioned_checks_model  
 Return a UI friendly model of configurations for data quality partitioned checks on a schema  
@@ -133,6 +166,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 |check_name|Check name|string| |
 |check_enabled|Check enabled|boolean| |
 |check_configured|Check configured|boolean| |
+|limit|Limit of results, the default value is 1000|long| |
 
 
 
@@ -146,6 +180,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/"daily"/model^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	} ]
     ```
 
 
@@ -195,6 +248,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_schema_profiling_checks_model  
 Return a flat list of configurations for profiling checks on a schema  
@@ -229,6 +295,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 |check_name|Check name|string| |
 |check_enabled|Check enabled|boolean| |
 |check_configured|Check configured|boolean| |
+|limit|Limit of results, the default value is 1000|long| |
 
 
 
@@ -242,6 +309,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	} ]
     ```
 
 
@@ -290,6 +376,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_schemas  
 Returns a list of schemas inside a connection  
@@ -328,6 +427,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     curl http://localhost:8888/api/connections/sample_connection/schemas^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "can_edit" : false,
+	  "can_collect_statistics" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}, {
+	  "can_edit" : false,
+	  "can_collect_statistics" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}, {
+	  "can_edit" : false,
+	  "can_collect_statistics" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	} ]
     ```
 
 

@@ -46,6 +46,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_results" : { },
+	  "column_comparison_results" : { }
+	}
+    ```
+
+
 ___  
 ## get_table_comparison_partitioned_results  
 Retrieves the results of the most table comparison performed using the partitioned comparison checks, comparing days or months of data.  
@@ -91,6 +101,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_results" : { },
+	  "column_comparison_results" : { }
+	}
+    ```
+
+
 ___  
 ## get_table_comparison_profiling_results  
 Retrieves the results of the most table comparison performed using the profiling checks comparison checks.  
@@ -132,6 +152,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_results" : { },
+	  "column_comparison_results" : { }
+	}
     ```
 
 

@@ -14,28 +14,32 @@ Verifies that percentage of the difference in total sum of a column in a table a
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_total_sum_match_percent|profiling| |Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_total_sum_match_percent
+dqo> check activate -c=connection_name -ch=profile_total_sum_match_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_total_sum_match_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_total_sum_match_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_total_sum_match_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_total_sum_match_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       profiling_checks:
@@ -128,6 +132,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             SUM(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            (SELECT
+                SUM(referenced_table.`customer_id`)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            SUM(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         ```
 ??? example "MySQL"
 
@@ -392,28 +431,32 @@ Verifies that the percentage of difference in total sum of a column in a table a
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_total_sum_match_percent|monitoring|daily|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_total_sum_match_percent
+dqo> check activate -c=connection_name -ch=daily_total_sum_match_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_total_sum_match_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_total_sum_match_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_total_sum_match_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_total_sum_match_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       monitoring_checks:
@@ -508,6 +551,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             SUM(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            (SELECT
+                SUM(referenced_table.`customer_id`)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            SUM(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         ```
 ??? example "MySQL"
 
@@ -772,28 +850,32 @@ Verifies that the percentage of difference in total sum of a column in a table a
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_total_sum_match_percent|monitoring|monthly|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_total_sum_match_percent
+dqo> check activate -c=connection_name -ch=monthly_total_sum_match_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_total_sum_match_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_total_sum_match_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_total_sum_match_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_total_sum_match_percent
-```
+
 **Check structure (YAML)**
 ```yaml
       monitoring_checks:
@@ -888,6 +970,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             SUM(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            (SELECT
+                SUM(referenced_table.`customer_id`)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            SUM(analyzed_table.`target_column`) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         ```
 ??? example "MySQL"
 

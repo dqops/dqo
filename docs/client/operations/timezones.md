@@ -35,3 +35,10 @@ http://localhost:8888/api/timezones
     ```
 
 
+
+**Return value sample**  
+    ```js
+    []
+    ```
+
+

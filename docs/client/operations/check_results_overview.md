@@ -48,6 +48,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_column_partitioned_checks_overview  
 Returns an overview of the most recent column level partitioned checks executions for a requested time scale  
@@ -92,6 +126,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/overview^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
     ```
 
 
@@ -141,6 +209,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_table_monitoring_checks_overview  
 Returns an overview of the most recent table level monitoring executions for the monitoring at a requested time scale  
@@ -184,6 +286,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/overview^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
     ```
 
 
@@ -233,6 +369,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+
+
 ___  
 ## get_table_profiling_checks_overview  
 Returns an overview of the most recent check executions for all table level data quality profiling checks on a table  
@@ -275,6 +445,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/overview^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
     ```
 
 

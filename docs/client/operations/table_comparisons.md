@@ -47,6 +47,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## create_table_comparison_monitoring_daily  
 Creates a table comparison configuration using daily monitoring checks  
@@ -91,6 +93,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 
     ```
+
+
 
 
 ___  
@@ -139,6 +143,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## create_table_comparison_partitioned_daily  
 Creates a table comparison configuration using daily partitioned checks  
@@ -183,6 +189,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 
     ```
+
+
 
 
 ___  
@@ -231,6 +239,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## create_table_comparison_profiling  
 Creates a table comparison configuration using profiling checks  
@@ -277,6 +287,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## delete_table_comparison_configuration  
 Deletes a table comparison configuration from a compared table  
@@ -312,6 +324,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"
 
     ```
+
+
 
 
 ___  
@@ -355,6 +369,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_configuration_name" : "sample_schema.sample_table",
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "check_type" : "profiling",
+	  "grouping_columns" : [ ],
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}
     ```
 
 
@@ -403,6 +436,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "table_comparison_configuration_name" : "sample_schema.sample_table",
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "check_type" : "profiling",
+	  "grouping_columns" : [ ],
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "table_comparison_configuration_name" : "sample_schema.sample_table",
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "check_type" : "profiling",
+	  "grouping_columns" : [ ],
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "table_comparison_configuration_name" : "sample_schema.sample_table",
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "check_type" : "profiling",
+	  "grouping_columns" : [ ],
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	} ]
+    ```
+
+
 ___  
 ## get_table_comparison_monitoring_daily  
 Returns a model of the table comparison using daily monitoring checks (comparison once a day)  
@@ -444,6 +520,56 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/daily^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_configuration_name" : "sample_table_comparison",
+	  "compared_connection" : "unknown",
+	  "compared_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "grouping_columns" : [ ],
+	  "default_compare_thresholds" : {
+	    "warning_difference_percent" : 0.0,
+	    "error_difference_percent" : 1.0
+	  },
+	  "supports_compare_column_count" : true,
+	  "columns" : [ ],
+	  "compare_table_run_checks_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "checkType" : "monitoring",
+	    "timeScale" : "daily",
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison"
+	  },
+	  "compare_table_clean_data_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true,
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison",
+	    "checkType" : "monitoring",
+	    "timeGradient" : "day"
+	  },
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}
     ```
 
 
@@ -491,6 +617,56 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_configuration_name" : "sample_table_comparison",
+	  "compared_connection" : "unknown",
+	  "compared_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "grouping_columns" : [ ],
+	  "default_compare_thresholds" : {
+	    "warning_difference_percent" : 0.0,
+	    "error_difference_percent" : 1.0
+	  },
+	  "supports_compare_column_count" : true,
+	  "columns" : [ ],
+	  "compare_table_run_checks_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "checkType" : "monitoring",
+	    "timeScale" : "daily",
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison"
+	  },
+	  "compare_table_clean_data_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true,
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison",
+	    "checkType" : "monitoring",
+	    "timeGradient" : "day"
+	  },
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+
+
 ___  
 ## get_table_comparison_partitioned_daily  
 Returns a model of the table comparison using daily partition checks (comparing day to day)  
@@ -532,6 +708,56 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/daily^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_configuration_name" : "sample_table_comparison",
+	  "compared_connection" : "unknown",
+	  "compared_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "grouping_columns" : [ ],
+	  "default_compare_thresholds" : {
+	    "warning_difference_percent" : 0.0,
+	    "error_difference_percent" : 1.0
+	  },
+	  "supports_compare_column_count" : true,
+	  "columns" : [ ],
+	  "compare_table_run_checks_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "checkType" : "monitoring",
+	    "timeScale" : "daily",
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison"
+	  },
+	  "compare_table_clean_data_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true,
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison",
+	    "checkType" : "monitoring",
+	    "timeGradient" : "day"
+	  },
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}
     ```
 
 
@@ -579,6 +805,56 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_configuration_name" : "sample_table_comparison",
+	  "compared_connection" : "unknown",
+	  "compared_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "grouping_columns" : [ ],
+	  "default_compare_thresholds" : {
+	    "warning_difference_percent" : 0.0,
+	    "error_difference_percent" : 1.0
+	  },
+	  "supports_compare_column_count" : true,
+	  "columns" : [ ],
+	  "compare_table_run_checks_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "checkType" : "monitoring",
+	    "timeScale" : "daily",
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison"
+	  },
+	  "compare_table_clean_data_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true,
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison",
+	    "checkType" : "monitoring",
+	    "timeGradient" : "day"
+	  },
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+
+
 ___  
 ## get_table_comparison_profiling  
 Returns a model of the table comparison using profiling checks (comparison at any time)  
@@ -620,6 +896,56 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/profiling^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "table_comparison_configuration_name" : "sample_table_comparison",
+	  "compared_connection" : "unknown",
+	  "compared_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "reference_connection" : "sample_connection",
+	  "reference_table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "grouping_columns" : [ ],
+	  "default_compare_thresholds" : {
+	    "warning_difference_percent" : 0.0,
+	    "error_difference_percent" : 1.0
+	  },
+	  "supports_compare_column_count" : true,
+	  "columns" : [ ],
+	  "compare_table_run_checks_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "checkType" : "monitoring",
+	    "timeScale" : "daily",
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison"
+	  },
+	  "compare_table_clean_data_job_template" : {
+	    "connection" : "unknown",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true,
+	    "checkCategory" : "comparisons",
+	    "tableComparisonName" : "sample_table_comparison",
+	    "checkType" : "monitoring",
+	    "timeGradient" : "day"
+	  },
+	  "can_edit" : true,
+	  "can_run_compare_checks" : true,
+	  "can_delete_data" : true
+	}
     ```
 
 
@@ -670,6 +996,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_table_comparison_monitoring_daily  
 Updates a table comparison checks monitoring daily  
@@ -715,6 +1043,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 
     ```
+
+
 
 
 ___  
@@ -764,6 +1094,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_table_comparison_partitioned_daily  
 Updates a table comparison checks partitioned daily (comparing day to day)  
@@ -809,6 +1141,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 
     ```
+
+
 
 
 ___  
@@ -858,6 +1192,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## update_table_comparison_profiling  
 Updates a table comparison profiling checks  
@@ -903,5 +1239,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 
     ```
+
+
 
 

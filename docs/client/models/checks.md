@@ -27,8 +27,8 @@ Check list folder model that is returned by the REST API.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|folders|A dictionary of nested folders with data quality checks. The keys are the folder names.|Dict[string, [CheckDefinitionFolderModel](/docs/client/models/checks/#CheckDefinitionFolderModel)]|
-|checks|List of data quality checks defined in this folder.|List[[CheckDefinitionListModel](/docs/client/models/checks/#CheckDefinitionListModel)]|
+|folders|A dictionary of nested folders with data quality checks. The keys are the folder names.|Dict[string, [CheckDefinitionFolderModel](../checks/#CheckDefinitionFolderModel)]|
+|checks|List of data quality checks defined in this folder.|List[[CheckDefinitionListModel](../checks/#CheckDefinitionListModel)]|
 
 
 ___  
