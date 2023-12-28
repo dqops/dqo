@@ -272,6 +272,11 @@ Results returned by the sensor:
 **************************************************
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the integrity of a column in one table against a column
+in another table. By using the [foreign_key_match_percentage](../../checks/column/integrity/foreign-key-match-percent.md) 
+check, we can monitor whether the matching data falls below a certain threshold. 
+If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

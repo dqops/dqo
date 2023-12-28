@@ -1,6 +1,6 @@
 # Table availability
 
-THe following examples shows how to verify the availability of a table in the database using a simple row count.
+The following examples shows how to verify the availability of a table in the database using a simple row count.
 
 **PROBLEM**
 
@@ -233,8 +233,11 @@ Results returned by the sensor:
 +------------+----------------+--------------------+
 |0.0         |2023-12-15T00:00|2023-12-15T00:00:00Z|
 +------------+----------------+--------------------+
-
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the availability of a table in the database. 
+By using the [table_availability](../../checks/table/availability/table-availability.md) check,
+we can monitor whether the tables exist and are available. 
 
 ## Next steps
 

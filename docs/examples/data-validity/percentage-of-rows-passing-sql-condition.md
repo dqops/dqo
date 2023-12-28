@@ -328,6 +328,10 @@ spec:
         nullable: true
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the validity of data in a table.
+By using the [sql_condition_passed_percent](../../checks/table/sql/sql-condition-passed-percent-on-table.md) table check, we can monitor that
+the percentage of rows passed a custom SQL condition does not fall below the set thresholds. If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

@@ -14,7 +14,7 @@ with values outside specified set.
 
 **SOLUTION**
 
-We will verify the data using profiling [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
+We will verify the data using monitoring [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
 Our data quality check will compare the values in the tested column to a set of accepted values. We accept only
 `services`, `at_home`,and  `teacher` values.
 
@@ -292,6 +292,11 @@ Results returned by the sensor:
 +------------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the consistency of data in a column.
+By using the [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check,
+we can monitor that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
+If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

@@ -221,11 +221,17 @@ spec:
         nullable: true
 ```
 
+In this example, we have demonstrated how to use DQOps to detect changes in the schema.
+By using the [column_count](../../checks/table/schema/column-count.md), [column_count_changed](../../checks/table/schema/column-count-changed.md),
+[column_list_changed](../../checks/table/schema/column-list-changed.md),
+[column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md), and
+[column_types_changed](../../checks/table/schema/column-types-changed.md) check, we can monitor typical schema changes issues.  
+If the change occurs, you will get a warning, error or fatal results, depending on your settings.
 
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [table_schema checks used in this example, go to the check details section](../../checks/table/schema/column-count.md).
+- For details on the [table schema checks used in this example, go to the check details section](../../checks/table/schema/column-count.md).
 - DQOps provides you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

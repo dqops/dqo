@@ -259,6 +259,10 @@ Results returned by the sensor:
 +------------+------------------------+---------------
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
+By using the [string_max_length](../../checks/column/strings/string-max-length.md) column check, we can monitor that 
+the maximal length of the string in a column does not exceed the set length. If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

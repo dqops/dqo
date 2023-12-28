@@ -311,6 +311,10 @@ Results returned by the sensor:
 **************************************************
 ```
 
+In this example, we have demonstrated how to use DQOps to verify that the table is not empty and meets the size requirements.
+By using the [row_count](../../checks/table/volume/row-count.md) table check, we can monitor that the number of
+rows in a table does not fall below the minimum accepted count. If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

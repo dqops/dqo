@@ -237,6 +237,10 @@ Results returned by the sensor:
 **************************************************
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
+By using the [contains_usa_zipcode_percent](../../checks/column/pii/contains-usa-zipcode-percent.md) column check, we can monitor that
+the percentage of rows containing valid USA zipcodes does not exceed set thresholds. If it does, you will get a warning, error or fatal results.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

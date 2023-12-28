@@ -269,6 +269,10 @@ Results returned by the sensor:
 **************************************************
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the completeness of data in a column. 
+By using the [nulls_count](../../checks/column/nulls/nulls-count.md) column check, we can monitor that the number of
+null values in a column does not exceed the minimum accepted count. If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQO as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

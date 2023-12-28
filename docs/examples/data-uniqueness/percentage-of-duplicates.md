@@ -259,6 +259,10 @@ Results returned by the sensor:
 **************************************************
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the uniqueness of data in a column.
+By using the [duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check, we can monitor that
+the percentage of duplicate values in a column does not exceed the maximum accepted percentage. If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

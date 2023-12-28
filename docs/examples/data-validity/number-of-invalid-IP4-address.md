@@ -267,6 +267,10 @@ Results returned by the sensor:
 **************************************************
 ```
 
+In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
+By using the [string_invalid_ip4_address_count](../../checks/column/strings/string-invalid-ip4-address-count.md) column check, we can monitor that
+the number of invalid IP4 address in a column does not exceed the maximum accepted count. If it does, you will get a warning, error or fatal result.
+
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).

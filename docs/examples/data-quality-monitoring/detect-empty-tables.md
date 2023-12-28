@@ -94,7 +94,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 3. Select the **Daily checks** tab.
 
     This tab displays a list of data quality checks in the check editor.
-    Here you can view the list of all table profiling checks. Noticed the checks that have been enabled upon importing new tables have switched on the toggle button.
+    Here you can view the list of all table monitoring checks. Noticed the checks that have been enabled upon importing new tables have switched on the toggle button.
     The icons located before the name of each check allow you to: enable and disable it, configure settings, run a check, review results, and get more information about it.
 
     Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
@@ -233,6 +233,9 @@ spec:
               warning: {}
 ```
 
+In this example, we have demonstrated how to use DQOps to detect empty tables.
+By using the default [daily_row_count](../../checks/table/volume/row-count.md) table check,
+we can monitor that the newly imported tables are not empty. If they are, you will get a warning result.
 
 ## Next steps
 
