@@ -88,19 +88,19 @@ const TableDetails = ({
       <table className="mb-6 w-160">
         <tbody>
           <tr>
-            <td className="px-4 py-2">Connection Name</td>
+            <td className="px-4 py-2">Connection name</td>
             <td className="px-4 py-2">{columnBasic?.connection_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Schema Name</td>
+            <td className="px-4 py-2">Schema name</td>
             <td className="px-4 py-2">{columnBasic?.table?.schema_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Table Name</td>
+            <td className="px-4 py-2">Table name</td>
             <td className="px-4 py-2">{columnBasic?.table?.table_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Column Name</td>
+            <td className="px-4 py-2">Column name</td>
             <td className="px-4 py-2">{columnBasic?.column_name}</td>
           </tr>
           <tr>
@@ -126,7 +126,7 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Column Type</td>
+            <td className="px-4 py-2">Column data type</td>
             <td className="px-4 py-2">
               <Input
                 value={columnBasic?.type_snapshot?.column_type}
