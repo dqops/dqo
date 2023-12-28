@@ -82,8 +82,8 @@ export const MultiChecksTableHeader = ({ checkTarget }: TCheckTarget) => {
     <thead>
       <tr>
         <th className="pl-12 py-2 text-left">Active</th>
-        <th className="px-4 py-2 text-left">Check Name</th>
-        <th className="px-4 py-2 text-left">Check Category</th>
+        <th className="px-4 py-2 text-left">Check name</th>
+        <th className="px-4 py-2 text-left">Check category</th>
         <th className="px-4 py-2 text-left">Table</th>
         {checkTarget === 'column' && (
           <th className="px-4 py-2 text-left">Column</th>

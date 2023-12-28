@@ -53,8 +53,8 @@ export default function MultiChecksSearch({
         <div className="max-w-120">
           <Input
             value={filterParameters.columnDataType}
-            label="Column type"
-            placeholder="Enter column type"
+            label="Column data type"
+            placeholder="Enter data type"
             onChange={(e) =>
               onChangeFilterParameters({ columnDataType: e.target.value })
             }
