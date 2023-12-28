@@ -93,7 +93,7 @@ The tree view in the **Incidents** section displays a list of all added sources 
 In the **Configuration** section, the tree view displays a list of all built-in data quality sensors, rules and data 
 quality checks that can be customized. The tree view in this section also provides access to the configuration of the following:
 
-- **Default checks configuration:** This allows you to configure checks that are automatically enabled after importing new tables.
+- **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
 - **Manage users:** This allows you to add new users and manage their roles.
 - **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
 - **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
@@ -108,7 +108,7 @@ quality checks that can be customized. The tree view in this section also provid
 Clicking on the tree vertical dots at the end of each element in the tree view in the **Profiling**, **Monitoring Checks**
 and **Partition Checks** sections opens a menu that allows to run the following functions:
 
-- Run all enabled checks on connection, schema, table or column
+- Run all activated checks on connection, schema, table or column
 - Collect statistics
 - Import metadata
 - Add schema, table or column

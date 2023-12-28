@@ -80,7 +80,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -99,7 +99,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     In our example we use names of the table `fips_codes_states` and column `state_fips_code` which were also imported.
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 

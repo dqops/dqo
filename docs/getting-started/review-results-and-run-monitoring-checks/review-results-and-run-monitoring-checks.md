@@ -3,7 +3,7 @@
 After [adding your first connection, and initiating automatic monitoring](../add-data-source-connection/add-data-source-connection.md),
 we describe how to review the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks. 
 
-Once new tables are imported, DQOps automatically enables the following profiling and monitoring checks.
+Once new tables are imported, DQOps automatically activates the following profiling and monitoring checks.
 To learn more about each check, click on the links below. 
 
 **Profiling checks type**
@@ -76,10 +76,10 @@ In the previous step we have run profiling checks for imported tables and column
 
     ![Profiling checks list](https://dqops.com/docs/images/getting-started/profiling-checks-list.png)
 
-    Here you can view the list of all table profiling checks. Noticed the checks that have been enabled upon importing new tables have switched on the toggle button.
-    The icons located before the name of each check allow you to: enable and disable it, configure settings, run a check, review results, and get more information about it.
+    Here you can view the list of all table profiling checks. Noticed the checks that have been activated upon importing new tables have switched on the toggle button.
+    The icons located before the name of each check allow you to: activate and deactivate it, configure settings, run a check, review results, and get more information about it.
  
-    For enabled checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
+    For activated checks, notice a square next to the name indicating the results of the check runs initiated by the Advisor:
 
     - green for a valid result
     - yellow for a warning
@@ -95,9 +95,9 @@ In the previous step we have run profiling checks for imported tables and column
     You can also review the results of other table checks on the list, as well as review the list of the column-level checks. 
     Just select the column of interest form the tree view on the left. 
 
-    On the list of checks you can enable other checks, change their thresholds and run them.
+    On the list of checks you can activate other checks, change their thresholds and run them.
 
-    Note that some enabled checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
+    Note that some activated checks, for example column-level profile_nulls_count and profile_null_percent, do not have thresholds levels set.
     For those check a [sensor](../../dqo-concepts/sensors/sensors.md) will be executed, and you can view its result on Results details, **Sensor readouts** tab.
     Based on the results, you can set the threshold for these checks.
     
@@ -129,7 +129,7 @@ Now let's run monitoring checks.
     You can view the details by placing the mouse cursor on the green square or view more detail results by clicking the
     **Results** icon
 
-    You can enable and run other monitoring checks and adjust their thresholds.
+    You can activate and run other monitoring checks and adjust their thresholds.
 
 ## Next step
 

@@ -30,7 +30,7 @@ To start DQOps in a Shell mode follow the steps below.
     ```
 
 2.  Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
-    DQOps will store the metadata of imported data sources, the configuration of enabled data quality checks, and the
+    DQOps will store the metadata of imported data sources, the configuration of activated data quality checks, and the
     data quality results.
 
 3.  Run DQOps Docker image

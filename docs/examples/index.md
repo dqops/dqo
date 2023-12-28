@@ -171,7 +171,7 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
     Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 

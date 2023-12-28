@@ -51,7 +51,7 @@ Entry requirements include:
 
 **DAG example**
 
-The following example shows how to configure an operator that receive status from the enabled monitoring checks on the "maven_restaurant_ratings.consumers" table located in "example_connection". 
+The following example shows how to configure an operator that receive status from the activated monitoring checks on the "maven_restaurant_ratings.consumers" table located in "example_connection". 
 The operator connects to the locally started DQOps server.
 
 ```python

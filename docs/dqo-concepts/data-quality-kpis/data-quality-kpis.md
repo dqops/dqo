@@ -54,7 +54,7 @@ using advanced data quality checks.
 
 The next step is configuring profiling checks to detect initial data quality issues. Sometimes, our expectation about the structure
 and quality of the data source does not match reality. The data source documentation is outdated,
-or the data quality checks are enabled only by reviewing a few sample values in each column. In that case, the data quality checks
+or the data quality checks are activated only by reviewing a few sample values in each column. In that case, the data quality checks
 that failed should be deactivated. Because DQOps [stores all data quality](../data-storage/data-storage.md) results after running
 the checks, the results should be deleted using the [delete data quality results](../../working-with-dqo/delete-data-quality-results/delete-data-quality-results.md) screen.
 If the orphaned results of failed data quality checks are not removed, they will decrease the data quality profiling KPIs,
