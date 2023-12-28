@@ -68,7 +68,7 @@ const SchemasView = () => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="py-2 pl-5 text-left">Schema Name</th>
+            <th className="py-2 pl-6 text-left">Schema Name</th>
             <th />
           </tr>
         </thead>
