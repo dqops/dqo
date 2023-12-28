@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TableListModel } from '../../api';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
@@ -6,23 +6,33 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
+import { TableApiClient } from '../../services/apiClient';
 
-type SchemaTablesProps = {
-  tables: TableListModel[];
-};
 
 type TButtonTabs = {
   label: string;
   value: string;
 };
 
-export const SchemaTables = ({ tables }: SchemaTablesProps) => {
+export const SchemaTables = () => {
   const {
-    checkTypes
+    checkTypes,
+    connection,
+    schema,
   }: {
     checkTypes: CheckTypes;
+    connection: string;
+    schema: string
   } = useParams();
   const dispatch = useDispatch();
+  const [tables, setTables] = useState<TableListModel[]>([]);
+  const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc')
+  
+  useEffect(() => {
+    TableApiClient.getTables(connection, schema).then((res) => {
+      setTables(res.data);
+    });
+  }, [schema, connection]);
 
   const goToTable = (item: TableListModel, tab: string) => {
     dispatch(
@@ -86,11 +96,34 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
     }
   }, [checkTypes]);
 
+  const sortTables = () => {
+    const array = [...tables];
+  
+    array.sort((a, b) => {
+      if (a.target?.table_name && b.target?.table_name) {
+        if (sortingDir === 'asc') {
+          return a.target.table_name.localeCompare(b.target.table_name);
+        } else {
+          return b.target.table_name.localeCompare(a.target.table_name);
+        }
+      }
+      return 0;
+    });
+    setSortingDir((prev) => prev ===     'asc' ? 'desc' : 'asc')
+    setTables(array);
+  };
+  
+
   return (
-    <table className="w-full">
+    <table className='min-w-275 max-w-400'>
       <thead>
         <tr>
-          <th className="px-4 text-left">Table</th>
+          <th className="px-4 text-left flex" onClick={sortTables}>Table
+            <div>
+              <SvgIcon name="chevron-up" className="w-3 h-3" />
+              <SvgIcon name="chevron-down" className="w-3 h-3" />
+            </div>
+          </th>
           <th className="px-4 text-left">Disabled</th>
           <th className="px-4 text-left">Stage</th>
           <th className="px-4 text-left">Filter</th>
@@ -101,7 +134,8 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
       </thead>
       <tbody>
         {tables.map((item, index) => (
-          <tr key={index}>
+          <tr
+           key={index} >
             <Button 
               className="px-4 underline cursor-pointer"
               label={item.target?.table_name} 
@@ -118,8 +152,8 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
             <td className="px-4">{item?.filter}</td>
             {buttonTabs.map((button) => {
               return (
-                <td className="px-4" key={button.value}>
-                  <Button
+                <td className="px-4 max-w-30" key={button.value}>
+                  <Button 
                     variant="text"
                     label={button.label}
                     color="primary"
