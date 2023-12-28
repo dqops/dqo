@@ -5,6 +5,7 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
+import SvgIcon from '../../components/SvgIcon';
 
 type SchemaTablesProps = {
   tables: TableListModel[];
@@ -106,7 +107,13 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
               label={item.target?.table_name} 
               onClick={() => goToTable(item, buttonTabs[0].value)}
             />
-            <td className="px-4">{item?.disabled}</td>
+            <td className="px-4">
+              {item?.disabled ? <SvgIcon
+               name='close'
+               className = 'text-red-700'
+               width={30}
+               height={22}
+             /> : null}</td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>
             {buttonTabs.map((button) => {
