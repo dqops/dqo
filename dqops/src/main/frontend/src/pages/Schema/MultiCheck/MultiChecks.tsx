@@ -7,6 +7,7 @@ import MultiChecksTable from './MultiChecksTable/MultiChecksTable';
 import MultiChecksSearch from './MultiChecksSearch';
 import MultiChecksFilter from './MultiChecksFilter';
 import { IFilterTemplate } from '../../../shared/constants';
+import { SchemaApiClient } from '../../../services/apiClient';
 
 const tabs = [
   {
@@ -27,7 +28,6 @@ export const MultiChecks = () => {
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
   const [checks, setChecks] = useState<CheckTemplate[]>([]);
-  const [isUpdated, setIsUpdated] = useState(false);
   const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   const [filterParameters, setFilterParameters] = useState<IFilterTemplate>({
     connection,
@@ -42,6 +42,69 @@ export const MultiChecks = () => {
       ...prev,
       ...obj
     }));
+  };
+  const [activeOffCheck, setActiveOffChecks] = useState(false);
+  const searchChecks = () => {
+    const {
+      connection,
+      schema,
+      activeTab,
+      tableNamePattern,
+      columnNamePattern,
+      columnDataType,
+      checkTarget,
+      checkCategory,
+      checkName
+    } = filterParameters;
+
+    if (checkTypes === CheckTypes.PROFILING) {
+      SchemaApiClient.getSchemaProfilingChecksModel(
+        connection,
+        schema,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
+        undefined,
+        activeOffCheck ? undefined : true
+      ).then((res) => {
+       setChecks(res.data);
+      });
+    } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
+      SchemaApiClient.getSchemaMonitoringChecksModel(
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
+        undefined,
+        activeOffCheck ? undefined : true
+      ).then((res) => {
+        setChecks(res.data);
+      });
+    } else if (checkTypes === CheckTypes.PARTITIONED && activeTab) {
+      SchemaApiClient.getSchemaPartitionedChecksModel(
+        connection,
+        schema,
+        activeTab,
+        tableNamePattern,
+        columnNamePattern,
+        columnDataType,
+        checkTarget,
+        checkCategory,
+        checkName,
+        undefined,
+        activeOffCheck ? undefined : true
+      ).then((res) => {
+        setChecks(res.data);
+      });
+    }
   };
 
   return (
@@ -67,11 +130,11 @@ export const MultiChecks = () => {
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
-          checkTypes={checkTypes}
           filterParameters={filterParameters}
           onChangeFilterParameters={onChangeFilterParameters}
-          onChangeChecks={(checks: CheckTemplate[]) => setChecks(checks)}
-          isUpdated={isUpdated}
+          searchChecks={searchChecks}
+          setActiveOffCheck={setActiveOffChecks}
+          activeOffCheck={activeOffCheck}
         />
         {filterParameters.checkName && filterParameters.checkCategory && (
           <MultiChecksTable
@@ -79,7 +142,7 @@ export const MultiChecks = () => {
             checks={checks}
             filterParameters={filterParameters}
             selectedCheckModel={selectedCheck.check_model ?? {}}
-            onChangeIsUpdated={() => setIsUpdated((prev) => !prev)}
+            searchChecks={searchChecks}
           />
         )}
       </div>

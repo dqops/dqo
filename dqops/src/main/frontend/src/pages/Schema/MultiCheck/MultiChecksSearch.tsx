@@ -1,97 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Input from '../../../components/Input';
 import Button from '../../../components/Button';
-import { SchemaApiClient } from '../../../services/apiClient';
-import { CheckTypes } from '../../../shared/routes';
 import { IFilterTemplate } from '../../../shared/constants';
-import { CheckTemplate } from '../../../api';
 import Checkbox from '../../../components/Checkbox';
 
 interface IMultiChecksSearch {
-  checkTypes: CheckTypes;
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
-  onChangeChecks: (checks: CheckTemplate[]) => void;
-  isUpdated: boolean;
+  activeOffCheck: boolean;
+  setActiveOffCheck: (arg : boolean) => void;
+  searchChecks: any
 }
 
 export default function MultiChecksSearch({
-  checkTypes,
   filterParameters,
   onChangeFilterParameters,
-  onChangeChecks,
-  isUpdated
+  setActiveOffCheck, 
+  activeOffCheck, 
+  searchChecks
 }: IMultiChecksSearch) {
-  const [activeOffCheck, setActiveOffChecks] = useState(false);
-
-  const searchChecks = () => {
-    const {
-      connection,
-      schema,
-      activeTab,
-      tableNamePattern,
-      columnNamePattern,
-      columnDataType,
-      checkTarget,
-      checkCategory,
-      checkName
-    } = filterParameters;
-
-    if (checkTypes === CheckTypes.PROFILING) {
-      SchemaApiClient.getSchemaProfilingChecksModel(
-        connection,
-        schema,
-        tableNamePattern,
-        columnNamePattern,
-        columnDataType,
-        checkTarget,
-        checkCategory,
-        checkName,
-        undefined,
-        activeOffCheck ? undefined : true
-      ).then((res) => {
-        onChangeChecks(res.data);
-      });
-    } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
-      SchemaApiClient.getSchemaMonitoringChecksModel(
-        connection,
-        schema,
-        activeTab,
-        tableNamePattern,
-        columnNamePattern,
-        columnDataType,
-        checkTarget,
-        checkCategory,
-        checkName,
-        undefined,
-        activeOffCheck ? undefined : true
-      ).then((res) => {
-        onChangeChecks(res.data);
-      });
-    } else if (checkTypes === CheckTypes.PARTITIONED && activeTab) {
-      SchemaApiClient.getSchemaPartitionedChecksModel(
-        connection,
-        schema,
-        activeTab,
-        tableNamePattern,
-        columnNamePattern,
-        columnDataType,
-        checkTarget,
-        checkCategory,
-        checkName,
-        undefined,
-        activeOffCheck ? undefined : true
-      ).then((res) => {
-        onChangeChecks(res.data);
-      });
-    }
-  };
-
-  useEffect(() => {
-    if (filterParameters.checkCategory && filterParameters.checkName) {
-      searchChecks();
-    }
-  }, [isUpdated]);
 
   return (
     <div className="flex w-full ">
@@ -138,7 +65,7 @@ export default function MultiChecksSearch({
       <div className="w-1/4 flex items-center gap-x-8 justify-end">
         <Checkbox
           checked={activeOffCheck}
-          onChange={() => setActiveOffChecks((prev) => !prev)}
+          onChange={() => setActiveOffCheck(!activeOffCheck)}
           label={"Include also inactive checks"}
         />
         <Button
