@@ -92,9 +92,9 @@ const SchemasView = () => {
                   />
                 </td>
               ) : (
-                <div className="left-80 absolute text-xl">
+                <div className="left-80 absolute">
                   <Button
-                    className="!py-2 !rounded-md underline text-xl"
+                    className="!py-2 !rounded-md underline"
                     textSize="sm"
                     label="Manage checks"
                     color="primary"
