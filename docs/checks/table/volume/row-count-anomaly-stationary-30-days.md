@@ -41,6 +41,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   partitioned_checks:
     daily:
@@ -53,9 +54,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
           fatal:
             anomaly_percent: 0.1
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

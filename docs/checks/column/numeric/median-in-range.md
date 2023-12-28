@@ -41,6 +41,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_median_i
 ```
 
 **Check structure (YAML)**
+
 ```yaml
       profiling_checks:
         numeric:
@@ -57,9 +58,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_median_i
               from: 10.0
               to: 20.5
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -1211,6 +1214,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_median_in_
 ```
 
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         daily:
@@ -1228,9 +1232,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_median_in_
                 from: 10.0
                 to: 20.5
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -2384,6 +2390,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_median_i
 ```
 
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         monthly:
@@ -2401,9 +2408,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_median_i
                 from: 10.0
                 to: 20.5
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -3557,6 +3566,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
 ```
 
 **Check structure (YAML)**
+
 ```yaml
       partitioned_checks:
         daily:
@@ -3574,9 +3584,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 from: 10.0
                 to: 20.5
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -4742,6 +4754,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
 ```
 
 **Check structure (YAML)**
+
 ```yaml
       partitioned_checks:
         monthly:
@@ -4759,9 +4772,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 from: 10.0
                 to: 20.5
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

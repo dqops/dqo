@@ -11,7 +11,7 @@
 {{#each checkGroups}}
 | Check name | Check type | Description |
 |------------|------------|-------------|
-{{#each allChecks}}|[{{checkName}}](./{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
+{{#each allChecks}}|[{{checkName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
 {{/each}}
 {{/each}}
 {{else}}

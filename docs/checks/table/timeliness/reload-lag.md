@@ -45,6 +45,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   partitioned_checks:
     daily:
@@ -57,9 +58,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
           fatal:
             max_days: 1.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -1387,6 +1390,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   partitioned_checks:
     monthly:
@@ -1399,9 +1403,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
           fatal:
             max_days: 1.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

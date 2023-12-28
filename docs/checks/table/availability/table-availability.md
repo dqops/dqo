@@ -10,7 +10,7 @@ ___
 ## **profile table availability**  
   
 **Check description**  
-Verifies availability of the table in a database using a simple row count.  
+Verifies availability of a table in a monitored database using a simple query.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -43,6 +43,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_table_av
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   profiling_checks:
     availability:
@@ -54,9 +55,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_table_av
         fatal:
           max_failures: 10
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -460,7 +463,7 @@ ___
 ## **daily table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent table availability status for each day when the data quality check was evaluated.  
+Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -493,6 +496,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_table_avai
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     daily:
@@ -505,9 +509,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_table_avai
           fatal:
             max_failures: 10
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -912,7 +918,7 @@ ___
 ## **monthly table availability**  
   
 **Check description**  
-Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.  
+Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -945,6 +951,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_table_av
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     monthly:
@@ -957,9 +964,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_table_av
           fatal:
             max_failures: 10
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

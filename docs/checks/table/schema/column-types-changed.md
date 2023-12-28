@@ -44,6 +44,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_t
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   profiling_checks:
     schema:
@@ -52,9 +53,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_t
         error: {}
         fatal: {}
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -131,6 +134,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_typ
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     daily:
@@ -140,9 +144,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_typ
           error: {}
           fatal: {}
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -220,6 +226,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_t
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     monthly:
@@ -229,9 +236,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_t
           error: {}
           fatal: {}
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

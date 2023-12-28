@@ -41,6 +41,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_row_coun
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   profiling_checks:
     volume:
@@ -52,9 +53,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_row_coun
         fatal:
           anomaly_percent: 0.1
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -834,6 +837,7 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_row_count_
 ```
 
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     daily:
@@ -846,9 +850,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_row_count_
           fatal:
             anomaly_percent: 0.1
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

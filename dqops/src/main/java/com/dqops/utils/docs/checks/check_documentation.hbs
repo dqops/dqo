@@ -42,14 +42,17 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch={{checkName}}
 ```
 
 **Check structure (YAML)**
+
 ```yaml
 {{#each checkSample~}}
 {{{this}}}
 {{/each~}}
 ```
+
 **Sample configuration (YAML)**{{#with "  "}}{{.}}{{/with}}
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 {{#with "  "}}{{.}}{{/with}}
+
 ```yaml hl_lines="{{checkSampleBeginLine}}-{{checkSampleEndLine}}"
 {{{sampleYaml}}}
 ```
