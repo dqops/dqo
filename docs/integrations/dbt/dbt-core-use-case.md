@@ -114,6 +114,6 @@ After loading data the data quality is tested to provide the actual status.
 
 ## What's next
 
-- [Learn about run checks operator](../run-checks-operator.md)
-- [Learn about webhooks notifications](../../webhooks/index.md)
-- [Learn about wait for job operator](../wait-for-job-operator.md)
+- [Learn about run checks operator](../airflow/run-checks-operator.md)
+- [Learn about webhooks notifications](../webhooks/index.md)
+- [Learn about wait for job operator](../airflow/wait-for-job-operator.md)

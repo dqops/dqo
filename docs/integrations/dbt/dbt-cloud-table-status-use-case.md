@@ -55,11 +55,11 @@ Then it looks for any data quality issue.
 
 !!! info "Schedules in DQOps"
 
-    DQOps has a built-in [scheduling component](../../../working-with-dqo/schedules/index.md). It allows you to run checks automatically on a different time of day.
+    DQOps has a built-in [scheduling component](../../working-with-dqo/schedules/index.md). It allows you to run checks automatically on a different time of day.
 
 The issue found by the table status is equal to finding at least one failed check on the tested table. 
 The example do not use any of optional parameters of the DqopsAssertTableStatusOperator, 
-so failed checks do not depend on [parameters that are available in the operator](../table-status-operator.md) 
+so failed checks do not depend on [parameters that are available in the operator](../airflow/table-status-operator.md) 
 such as check type, quality dimension or any other, that can limit the number of sensors that the table status task verifies.
 
 If any failed check exists, the Airflow DAG execution will not be completed as below. Loading stage will not start.
@@ -125,6 +125,6 @@ This is why the wait_timeout parameter is set to 1 second.
 
 ## What's next
 
-- [Learn about run checks operator](../run-checks-operator.md)
-- [Learn about webhooks notifications](../../webhooks/index.md)
-- [Learn about wait for job operator](../wait-for-job-operator.md)
+- [Learn about run checks operator](../airflow/run-checks-operator.md)
+- [Learn about webhooks notifications](../webhooks/index.md)
+- [Learn about wait for job operator](../airflow/wait-for-job-operator.md)
