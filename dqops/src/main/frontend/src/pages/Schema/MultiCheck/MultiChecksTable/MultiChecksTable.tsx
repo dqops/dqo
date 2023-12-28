@@ -14,7 +14,7 @@ type TMultiChecksTable = {
   checks: CheckTemplate[] | undefined;
   filterParameters: IFilterTemplate;
   selectedCheckModel: CheckModel;
-  onChangeIsUpdated: () => void;
+  searchChecks: () => void;
 };
 
 export default function MultiChecksTable({
@@ -22,7 +22,7 @@ export default function MultiChecksTable({
   checks,
   filterParameters,
   selectedCheckModel,
-  onChangeIsUpdated
+  searchChecks
 }: TMultiChecksTable) {
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
@@ -81,8 +81,8 @@ export default function MultiChecksTable({
         selectedCheckModel={selectedCheckModel}
         filterParameters={filterParameters}
         selectedData={selectedData}
-        onChangeIsUpdated={() => {
-          onChangeIsUpdated();
+        fetchResults={() => {
+          searchChecks();
           setSelectedData([]);
         }}
         onChangeLoading={onChangeLoading}
