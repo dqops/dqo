@@ -180,7 +180,7 @@ export default function TableQualityStatus({ timeScale }: IProps) {
           <div className="flex pb-6 gap-x-5">
             <RadioButton
               checked={month === 1}
-              label="Last month"
+              label="Current month"
               onClick={() => {
                 setSince(undefined), setMonth(1);
               }}
