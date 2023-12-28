@@ -69,7 +69,7 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
         ];
 
       case CheckTypes.MONITORING:
-      case CheckTypes.PARTITIONED:
+        case CheckTypes.PARTITIONED:
         return [
           { label: 'Daily checks', value: 'daily' },
           { label: 'Daily table status', value: 'table-quality-status-daily' },
@@ -101,7 +101,11 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
       <tbody>
         {tables.map((item, index) => (
           <tr key={index}>
-            <td className="px-4">{item.target?.table_name}</td>
+            <Button 
+              className="px-4 underline cursor-pointer"
+              label={item.target?.table_name} 
+              onClick={() => goToTable(item, buttonTabs[0].value)}
+            />
             <td className="px-4">{item?.disabled}</td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>

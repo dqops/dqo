@@ -82,7 +82,7 @@ const SchemasView = () => {
                 <Button
                   label={item.schema_name}
                   variant="text"
-                  color="primary"
+                  className='underline'
                   onClick={() => goToTable(item.schema_name ?? '', 'tables')}
                 />
               </td>
@@ -100,7 +100,6 @@ const SchemasView = () => {
               ) : (
                 <div className="left-80 absolute">
                   <Button
-                    className="!py-2 !rounded-md underline"
                     label="Manage checks"
                     color="primary"
                     variant="text"
