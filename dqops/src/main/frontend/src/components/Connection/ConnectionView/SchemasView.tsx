@@ -68,7 +68,7 @@ const SchemasView = () => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="py-2 pr-4 text-left">Schema Name</th>
+            <th className="py-2 pl-5 text-left">Schema Name</th>
             <th />
           </tr>
         </thead>
@@ -78,7 +78,7 @@ const SchemasView = () => {
               key={item.schema_name}
               className="border-b border-gray-300 last:border-b-0 relative"
             >
-              <td>
+              <td className="">
                 <Button
                   label={item.schema_name}
                   variant="text"
@@ -101,7 +101,6 @@ const SchemasView = () => {
                 <div className="left-80 absolute">
                   <Button
                     className="!py-2 !rounded-md underline"
-                    textSize="sm"
                     label="Manage checks"
                     color="primary"
                     variant="text"
