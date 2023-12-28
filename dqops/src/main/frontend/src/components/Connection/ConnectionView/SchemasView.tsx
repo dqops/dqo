@@ -38,8 +38,17 @@ const SchemasView = () => {
     );
   };
 
-  const manageChecks = (schema: string) => {
-    const tab = 'multiple_checks';
+  const goToSchemas = () => {
+    history.push(
+      `${ROUTES.CONNECTION_DETAIL(
+        checkTypes,
+        connection,
+        'schemas'
+      )}?import_schema=true`
+    );
+  };
+
+  const goToTable = (schema: string, tab: string) => {
     const url = ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab);
     const value = ROUTES.SCHEMA_LEVEL_VALUE(checkTypes, connection, schema);
 
@@ -51,16 +60,6 @@ const SchemasView = () => {
       })
     );
     history.push(url);
-  };
-
-  const goToSchemas = () => {
-    history.push(
-      `${ROUTES.CONNECTION_DETAIL(
-        checkTypes,
-        connection,
-        'schemas'
-      )}?import_schema=true`
-    );
   };
 
   return (
@@ -79,7 +78,14 @@ const SchemasView = () => {
               key={item.schema_name}
               className="border-b border-gray-300 last:border-b-0 relative"
             >
-              <td className="py-2 pr-4 text-left">{item.schema_name}</td>
+              <td>
+                <Button
+                  label={item.schema_name}
+                  variant="text"
+                  color="primary"
+                  onClick={() => goToTable(item.schema_name ?? '', 'tables')}
+                />
+              </td>
               {isSourceScreen ? (
                 <td className="left-80 absolute py-1 px-4 text-left">
                   <Button
@@ -99,7 +105,9 @@ const SchemasView = () => {
                     label="Manage checks"
                     color="primary"
                     variant="text"
-                    onClick={() => manageChecks(item.schema_name ?? '')}
+                    onClick={() =>
+                      goToTable(item.schema_name ?? '', 'multiple_checks')
+                    }
                     disabled={userProfile.can_manage_data_sources !== true}
                   />
                 </div>
