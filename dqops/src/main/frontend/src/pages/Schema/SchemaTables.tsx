@@ -55,7 +55,7 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
             value: 'statistics'
           },
           { label: 'Profiling checks', value: 'advanced' },
-          { label: 'Current table status', value: 'table-quality-status' }
+          { label: 'Profiling table status', value: 'table-quality-status' }
         ];
 
       case CheckTypes.SOURCES:
@@ -72,28 +72,16 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
       case CheckTypes.PARTITIONED:
         return [
           { label: 'Daily checks', value: 'daily' },
+          { label: 'Daily table status', value: 'table-quality-status-daily' },
           { label: 'Monthly checks', value: 'monthly' },
           {
             label: 'Monthly table status',
             value: 'table-quality-status-monthly'
-          },
-          { label: 'Daily table status', value: 'table-quality-status-daily' }
+          }
         ];
 
       default:
         return [];
-    }
-  }, [checkTypes]);
-
-  const defaultTabValue = useMemo(() => {
-    switch (checkTypes) {
-      case CheckTypes.PROFILING:
-        return 'statistics';
-      case CheckTypes.SOURCES:
-        return 'detail';
-      case CheckTypes.MONITORING:
-      case CheckTypes.PARTITIONED:
-        return 'daily';
     }
   }, [checkTypes]);
 
@@ -113,12 +101,7 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
       <tbody>
         {tables.map((item, index) => (
           <tr key={index}>
-            <Button
-              variant="text"
-              label={item.target?.table_name}
-              color="primary"
-              onClick={() => goToTable(item, defaultTabValue)}
-            ></Button>
+            <td className="px-4">{item.target?.table_name}</td>
             <td className="px-4">{item?.disabled}</td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>
