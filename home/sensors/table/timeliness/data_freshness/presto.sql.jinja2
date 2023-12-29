@@ -2,21 +2,46 @@
 
 {% macro render_current_event_diff() -%}
     {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-    (CAST(CURRENT_TIMESTAMP AS bigint) - MAX(CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS bigint))) / 24.0 / 3600.0
+    DATE_DIFF(
+        'MILLISECOND',
+        MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+        CURRENT_TIMESTAMP
+    ) / 24.0 / 3600.0 / 1000.0
     {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-    CAST(CURRENT_DATE AS bigint) - MAX(CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS bigint))
+    DATE_DIFF(
+        'DAY',
+        MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+        CURRENT_DATE
+    )
     {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
-    (CAST(CURRENT_TIMESTAMP AS bigint) - MAX(CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS bigint))) / 24.0 / 3600.0
+    DATE_DIFF(
+        'MILLISECOND',
+        MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
+        CURRENT_TIMESTAMP
+    ) / 24.0 / 3600.0 / 1000.0
     {%- else -%}
-    (CAST(CURRENT_TIMESTAMP AS bigint) - MAX(CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS bigint))) / 24.0 / 3600.0
+    TIMESTAMP_DIFF(
+        'MILLISECOND',
+        MAX(
+            TRY_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+        ),
+        CURRENT_TIMESTAMP
+    ) / 24.0 / 3600.0 / 1000.0
     {%- endif -%}
 {%- endmacro -%}
 
 SELECT
-    {{ render_current_event_diff() }} AS actual_value,
-    CAST(CURRENT_DATE AS date) AS time_period,
-    CAST(CURRENT_TIMESTAMP AS TIMESTAMP) AS time_period_utc
-FROM {{ lib.render_target_table() }} AS analyzed_table
+    CAST(({{ render_current_event_diff() }}) AS DOUBLE) AS actual_value
+    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+FROM (
+    SELECT
+        original_table.*
+        {{- lib.render_data_grouping_projections('original_table') }}
+        {{- lib.render_time_dimension_projection('original_table') }}
+    FROM {{ lib.render_target_table() }} original_table
+    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+) analyzed_table
 {{- lib.render_where_clause() -}}
-GROUP BY time_period, time_period_utc
-ORDER BY time_period, time_period_utc;
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
