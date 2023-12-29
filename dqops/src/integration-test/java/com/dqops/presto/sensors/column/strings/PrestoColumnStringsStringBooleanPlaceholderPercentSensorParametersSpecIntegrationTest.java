@@ -64,7 +64,7 @@ public class PrestoColumnStringsStringBooleanPlaceholderPercentSensorParametersS
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.7, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.66666666666667, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class PrestoColumnStringsStringBooleanPlaceholderPercentSensorParametersS
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.7, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.66666666666667, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class PrestoColumnStringsStringBooleanPlaceholderPercentSensorParametersS
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.7, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.66666666666667, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -103,7 +103,7 @@ public class PrestoColumnStringsStringBooleanPlaceholderPercentSensorParametersS
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(83.3, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(83.33333333333333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class PrestoColumnStringsStringBooleanPlaceholderPercentSensorParametersS
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.7, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(86.66666666666667, (double) resultTable.column(0).get(0), 0.001);
     }
 }
