@@ -146,7 +146,10 @@ export const SchemaTables = () => {
 
   const renderItem = (label: string, key: string) => {
     return (
-      <th className="px-4 text-left" onClick={() => sortTables(key)}>
+      <th
+        className="px-4 text-left cursor-pointer"
+        onClick={() => sortTables(key)}
+      >
         <div className="flex">
           {label}
           <div>
