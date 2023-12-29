@@ -25,12 +25,15 @@ import com.dqops.utils.docs.generators.GeneratorUtility;
 import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
+import com.dqops.utils.string.StringCaseFormat;
 import com.google.common.base.CaseFormat;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,7 +59,8 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
         String moduleName = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, controllerName);
         pythonExampleDocumentationModel.setModuleName(moduleName);
 
-        String apiMethodName = operationModel.getOperation().getOperationId();
+        String methodName = operationModel.getOperation().getOperationId();
+        String apiMethodName = StringCaseFormat.LOWER_CAMEL.to(StringCaseFormat.LOWER_UNDERSCORE_SEPARATE_NUMBER, methodName);
         pythonExampleDocumentationModel.setApiMethodName(apiMethodName);
 
         pythonExampleDocumentationModel.setAuth(auth);
@@ -90,7 +94,7 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
     }
 
     private void searchForModelsToImport(Set<String> acc, TypeModel typeModel) {
-        String className = typeModel.getClazz().getName();
+        String className = typeModel.getClazz().getSimpleName();
 
         if (typeModel.getDataType() == ParameterDataType.enum_type) {
             acc.add(className);
@@ -109,6 +113,11 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
                     ClassInfo modelClassInfo = reflectionService.getClassInfoForClass(typeModel.getClazz());
                     for (FieldInfo fieldInfo : modelClassInfo.getFields()) {
                         Method fieldGetter = fieldInfo.getGetterMethod();
+                        if (fieldGetter == null) {
+                            // TODO: Verify if the list or map-like objects are rendered properly, in curl and python.
+                            continue;
+                        }
+
                         TypeModel fieldTypeModel;
                         try {
                             Object fieldValue = fieldGetter.invoke(model);
@@ -116,7 +125,8 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
                                 continue;
                             }
 
-                            fieldTypeModel = reflectionService.getObjectsTypeModel(fieldInfo.getGenericDataType(), s -> null);
+                            Type objectsType = Objects.requireNonNullElse(fieldInfo.getGenericDataType(), fieldInfo.getClazz());
+                            fieldTypeModel = reflectionService.getObjectsTypeModel(objectsType, s -> null);
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             continue;
                         }

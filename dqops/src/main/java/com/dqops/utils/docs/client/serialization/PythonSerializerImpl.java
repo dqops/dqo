@@ -141,6 +141,10 @@ public class PythonSerializerImpl implements PythonSerializer {
             List<String> serializedFields = new ArrayList<>();
             for (FieldInfo fieldInfo : sourceClassInfo.getFields()) {
                 Method fieldGetter = fieldInfo.getGetterMethod();
+                if (fieldGetter == null) {
+                    continue;
+                }
+                
                 String serializedFieldValue;
                 try {
                     Object fieldValue = fieldGetter.invoke(parsedSource.getSource());

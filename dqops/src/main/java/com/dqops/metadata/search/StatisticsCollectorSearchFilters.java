@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public class StatisticsCollectorSearchFilters extends TableSearchFilters implements Cloneable {
     @JsonPropertyDescription("The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\\*', '\\*_id', 'prefix\\*suffix'.")
-    private Collection<String> columnNames = new LinkedHashSet<>();
+    private List<String> columnNames = new ArrayList<>();
 
     @JsonPropertyDescription("The target statistics collector name to capture only selected statistics. Uses the short collector name" +
             "This field supports search patterns such as: 'prefix\\*', '\\*suffix', 'prefix_\\*_suffix'. " +
@@ -78,7 +78,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Returns a set of target column names. When the collection of column names is not empty, only column level statistics are collected.
      * @return Collection of target column names.
      */
-    public Collection<String> getColumnNames() {
+    public List<String> getColumnNames() {
         return columnNames;
     }
 
@@ -86,7 +86,7 @@ public class StatisticsCollectorSearchFilters extends TableSearchFilters impleme
      * Sets a set of target column names.
      * @param columnNames Set of target column names.
      */
-    public void setColumnNames(Collection<String> columnNames) {
+    public void setColumnNames(List<String> columnNames) {
         this.columnNames = columnNames;
     }
 

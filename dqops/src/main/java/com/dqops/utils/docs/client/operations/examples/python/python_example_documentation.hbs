@@ -1,6 +1,6 @@
 from dqops import client
 from dqops.client.api.{{moduleName}} import {{apiMethodName}}
-{{#if modelImports}}from dqops.client.models import {{join modelImports ", \\\n                                "}}{{/if}}
+{{#if modelImports}}from dqops.client.models import {{{join modelImports ", \\\n                                "}}}{{/if}}
 
 {{#if auth}}
 token = 's4mp13_4u7h_70k3n'
@@ -13,7 +13,7 @@ dqops_client = client.{{#if auth}}Authenticated{{/if}}Client(
 )
 
 {{#if requestBody}}
-request_body = {{requestBody}}
+request_body = {{{requestBody}}}
 {{/if}}
 
 {{#if async}}async_result = {{/if}}{{apiMethodName}}.{{#if async}}a{{/if}}syncio(
