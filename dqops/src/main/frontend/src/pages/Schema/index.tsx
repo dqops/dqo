@@ -1,11 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import ConnectionLayout from '../../components/ConnectionLayout';
 import SvgIcon from '../../components/SvgIcon';
 import Tabs from '../../components/Tabs';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { TableListModel } from '../../api';
-import { TableApiClient } from '../../services/apiClient';
 import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import { SchemaTables } from './SchemaTables';
@@ -27,7 +25,6 @@ const SchemaPage = () => {
     tab: string;
     checkTypes: CheckTypes;
   } = useParams();
-  const [tables, setTables] = useState<TableListModel[]>([]);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const dispatch = useActionDispatch();
@@ -51,12 +48,6 @@ const SchemaPage = () => {
     ],
     [checkTypes]
   );
-
-  useEffect(() => {
-    TableApiClient.getTables(connection, schema).then((res) => {
-      setTables(res.data);
-    });
-  }, [schema, connection]);
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
@@ -129,7 +120,7 @@ const SchemaPage = () => {
       </div>
       {activeTab === 'tables' && (
         <div className="p-4">
-          <SchemaTables tables={tables} />
+          <SchemaTables />
         </div>
       )}
       {checkTypes !== CheckTypes.SOURCES && activeTab === 'multiple_checks' && (

@@ -1,27 +1,69 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { TableListModel } from '../../api';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import Button from '../../components/Button';
-
-type SchemaTablesProps = {
-  tables: TableListModel[];
-};
+import SvgIcon from '../../components/SvgIcon';
+import { TableApiClient } from '../../services/apiClient';
 
 type TButtonTabs = {
   label: string;
   value: string;
 };
+const headeritems: TButtonTabs[] = [
+  {
+    label: 'Table',
+    value: 'target.table_name'
+  },
+  {
+    label: 'Disabled',
+    value: 'disabled'
+  },
+  {
+    label: 'Stage',
+    value: 'stage'
+  },
+  {
+    label: 'Filter',
+    value: 'filter'
+  }
+];
 
-export const SchemaTables = ({ tables }: SchemaTablesProps) => {
+function getValueForKey<T>(obj: T, key: string): string | undefined {
+  const keys = key.split('.');
+  let value: any = obj;
+
+  for (const k of keys) {
+    value = value?.[k];
+    if (value === undefined) {
+      break;
+    }
+  }
+
+  return value?.toString();
+}
+
+export const SchemaTables = () => {
   const {
-    checkTypes
+    checkTypes,
+    connection,
+    schema
   }: {
     checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
   } = useParams();
   const dispatch = useDispatch();
+  const [tables, setTables] = useState<TableListModel[]>([]);
+  const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
+
+  useEffect(() => {
+    TableApiClient.getTables(connection, schema).then((res) => {
+      setTables(res.data);
+    });
+  }, [schema, connection]);
 
   const goToTable = (item: TableListModel, tab: string) => {
     dispatch(
@@ -85,29 +127,68 @@ export const SchemaTables = ({ tables }: SchemaTablesProps) => {
     }
   }, [checkTypes]);
 
+  const sortTables = (key: string): void => {
+    setTables((prev) => {
+      const array = [...prev];
+      array.sort((a, b) => {
+        const valueA = getValueForKey(a, key);
+        const valueB = getValueForKey(b, key);
+
+        return sortingDir === 'asc'
+          ? (valueA || '').localeCompare(valueB || '')
+          : (valueB || '').localeCompare(valueA || '');
+      });
+
+      setSortingDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      return array;
+    });
+  };
+
+  const renderItem = (label: string, key: string) => {
+    return (
+      <th
+        className="px-4 text-left cursor-pointer"
+        onClick={() => sortTables(key)}
+      >
+        <div className="flex">
+          {label}
+          <div>
+            <SvgIcon name="chevron-up" className="w-3 h-3" />
+            <SvgIcon name="chevron-down" className="w-3 h-3" />
+          </div>
+        </div>
+      </th>
+    );
+  };
+
   return (
-    <table className="w-full">
+    <table className="min-w-350 max-w-400">
       <thead>
-        <tr>
-          <th className="px-4 text-left">Table</th>
-          <th className="px-4 text-left">Disabled</th>
-          <th className="px-4 text-left">Stage</th>
-          <th className="px-4 text-left">Filter</th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
+        <tr>{headeritems.map((item) => renderItem(item.label, item.value))}</tr>
       </thead>
       <tbody>
         {tables.map((item, index) => (
           <tr key={index}>
-            <td className="px-4">{item.target?.table_name}</td>
-            <td className="px-4">{item?.disabled}</td>
+            <Button
+              className="px-4 underline cursor-pointer"
+              label={item.target?.table_name}
+              onClick={() => goToTable(item, buttonTabs[0].value)}
+            />
+            <td className="px-4">
+              {item?.disabled ? (
+                <SvgIcon
+                  name="close"
+                  className="text-red-700"
+                  width={30}
+                  height={22}
+                />
+              ) : null}
+            </td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>
             {buttonTabs.map((button) => {
               return (
-                <td className="px-4" key={button.value}>
+                <td className="px-4 " key={button.value}>
                   <Button
                     variant="text"
                     label={button.label}
