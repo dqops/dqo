@@ -33,6 +33,10 @@ const SchemaPage = () => {
 
   const tabs = useMemo(
     () => [
+      {
+        label: 'Tables',
+        value: 'tables'
+      },
       ...(checkTypes !== CheckTypes.SOURCES
         ? [
             {
@@ -40,11 +44,7 @@ const SchemaPage = () => {
               value: 'multiple_checks'
             }
           ]
-        : []),
-      {
-        label: 'Tables',
-        value: 'tables'
-      }
+        : [])
     ],
     [checkTypes]
   );
