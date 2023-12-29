@@ -15415,7 +15415,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "configured" : {
           "type" : "boolean",
@@ -16171,7 +16171,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16244,7 +16244,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16317,7 +16317,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16390,7 +16390,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16463,7 +16463,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16704,7 +16704,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16760,7 +16760,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16816,7 +16816,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -16872,7 +16872,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17060,7 +17060,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17116,7 +17116,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17172,7 +17172,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17228,7 +17228,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17284,7 +17284,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17340,7 +17340,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17396,7 +17396,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17452,7 +17452,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17508,7 +17508,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17564,7 +17564,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17620,7 +17620,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17676,7 +17676,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17850,7 +17850,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17906,7 +17906,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -17962,7 +17962,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18018,7 +18018,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18074,7 +18074,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18130,7 +18130,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18186,7 +18186,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18242,7 +18242,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18298,7 +18298,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18354,7 +18354,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18410,7 +18410,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18466,7 +18466,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18522,7 +18522,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18578,7 +18578,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18634,7 +18634,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18690,7 +18690,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18746,7 +18746,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18802,7 +18802,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18858,7 +18858,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18914,7 +18914,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -18970,7 +18970,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19026,7 +19026,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19082,7 +19082,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19138,7 +19138,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19292,7 +19292,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19348,7 +19348,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19404,7 +19404,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19578,7 +19578,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19634,7 +19634,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -19730,7 +19730,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20082,7 +20082,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20147,7 +20147,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20203,7 +20203,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20307,7 +20307,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20458,7 +20458,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20533,7 +20533,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20589,7 +20589,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20645,7 +20645,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20701,7 +20701,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20757,7 +20757,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20813,7 +20813,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20869,7 +20869,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -20925,7 +20925,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21021,7 +21021,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21094,7 +21094,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21227,7 +21227,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21283,7 +21283,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21430,7 +21430,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21486,7 +21486,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21542,7 +21542,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21598,7 +21598,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21840,7 +21840,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21896,7 +21896,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -21952,7 +21952,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -22008,7 +22008,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -22064,7 +22064,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -22120,7 +22120,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -22176,7 +22176,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -22480,7 +22480,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -22612,7 +22612,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -23697,7 +23697,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -23753,7 +23753,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -23809,7 +23809,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -23865,7 +23865,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -23921,7 +23921,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -23977,7 +23977,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24042,7 +24042,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24107,7 +24107,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24172,7 +24172,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24237,7 +24237,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24462,7 +24462,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24518,7 +24518,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24736,7 +24736,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24792,7 +24792,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -24884,7 +24884,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25000,7 +25000,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25103,7 +25103,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25172,7 +25172,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25241,7 +25241,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25505,7 +25505,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25561,7 +25561,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25617,7 +25617,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25673,7 +25673,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25729,7 +25729,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25785,7 +25785,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25841,7 +25841,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25897,7 +25897,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -25953,7 +25953,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26009,7 +26009,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26065,7 +26065,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26121,7 +26121,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26177,7 +26177,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26233,7 +26233,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26289,7 +26289,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26345,7 +26345,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26401,7 +26401,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26457,7 +26457,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26513,7 +26513,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26569,7 +26569,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26625,7 +26625,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26681,7 +26681,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26737,7 +26737,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26793,7 +26793,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26849,7 +26849,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26905,7 +26905,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -26961,7 +26961,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -27017,7 +27017,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -27073,7 +27073,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -27129,7 +27129,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -27185,7 +27185,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -27241,7 +27241,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -27297,7 +27297,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -28575,7 +28575,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -28631,7 +28631,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29204,7 +29204,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29260,7 +29260,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29316,7 +29316,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29372,7 +29372,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29428,7 +29428,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29484,7 +29484,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29540,7 +29540,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -29596,7 +29596,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -30030,7 +30030,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33313,7 +33313,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33382,7 +33382,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33438,7 +33438,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33494,7 +33494,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33550,7 +33550,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33606,7 +33606,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33719,7 +33719,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33775,7 +33775,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33831,7 +33831,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -33887,7 +33887,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -34008,7 +34008,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -34393,7 +34393,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -34600,7 +34600,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -34656,7 +34656,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -34712,7 +34712,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35027,7 +35027,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35170,7 +35170,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35226,7 +35226,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35282,7 +35282,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35351,7 +35351,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35407,7 +35407,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35463,7 +35463,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35721,7 +35721,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35790,7 +35790,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -35859,7 +35859,7 @@
         },
         "include_in_sla" : {
           "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset."
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
         },
         "quality_dimension" : {
           "type" : "string",
