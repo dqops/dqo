@@ -3,12 +3,18 @@ package com.dqops.utils.docs.client.operations.examples;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.docs.client.operations.OperationParameterDocumentationModel;
 import com.dqops.utils.docs.client.operations.OperationsOperationDocumentationModel;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationGenerator;
 import com.dqops.utils.docs.generators.GeneratorUtility;
 import io.swagger.v3.oas.models.PathItem;
 
 import java.util.List;
 
 public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
+    private final PythonExampleDocumentationGenerator pythonExampleDocumentationGenerator;
+    public UsageExampleModelFactoryImpl(PythonExampleDocumentationGenerator pythonExampleDocumentationGenerator) {
+        this.pythonExampleDocumentationGenerator = pythonExampleDocumentationGenerator;
+    }
+
     @Override
     public OperationUsageExampleDocumentationModel createOperationUsageExample(OperationExecutionMethod executionMethod,
                                                                                OperationsOperationDocumentationModel operationsOperationDocumentationModel) {
@@ -19,25 +25,37 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
         model.setExecutionMethod(executionMethod);
         model.setOperation(operationModel);
 
-        String renderedExample;
-        switch (executionMethod) {
-            case curl:
-                renderedExample = renderedCurlUsageExample(operationModel,
-                        operationsOperationDocumentationModel.getRequestBodyField(),
-                        operationParameters);
-                break;
-            default:
-                renderedExample = "No render";
-                break;
-        }
-
+        String renderedExample = renderUsageExample(executionMethod, operationsOperationDocumentationModel);
         model.setRenderedExample(renderedExample);
         return model;
     }
 
-    protected String renderedCurlUsageExample(OperationModel operationModel,
-                                              OperationParameterDocumentationModel requestBody,
-                                              List<OperationParameterDocumentationModel> operationParameters) {
+    protected String renderUsageExample(OperationExecutionMethod executionMethod, OperationsOperationDocumentationModel operationDocumentationModel) {
+        switch (executionMethod) {
+            case python_sync:
+                return pythonExampleDocumentationGenerator.renderPythonOperationExample(operationDocumentationModel,
+                        false, false);
+            case python_async:
+                return pythonExampleDocumentationGenerator.renderPythonOperationExample(operationDocumentationModel,
+                        false, true);
+            case auth_python_sync:
+                return pythonExampleDocumentationGenerator.renderPythonOperationExample(operationDocumentationModel,
+                        true, false);
+            case auth_python_async:
+                return pythonExampleDocumentationGenerator.renderPythonOperationExample(operationDocumentationModel,
+                        true, true);
+            case curl:
+                return renderCurlUsageExample(operationDocumentationModel.getOperationModel(),
+                        operationDocumentationModel.getRequestBodyField(),
+                        operationDocumentationModel.getParametersFields());
+            default:
+                return "The example is in another castle...";
+        }
+    }
+
+    protected String renderCurlUsageExample(OperationModel operationModel,
+                                            OperationParameterDocumentationModel requestBody,
+                                            List<OperationParameterDocumentationModel> operationParameters) {
         final String newLine = "^\n\t\t";
         StringBuilder renderedExample = new StringBuilder("curl");
 
@@ -58,7 +76,7 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
                     .append("-H \"Content-Type: application/json\"").append(newLine)
                     .append("-d").append(newLine);
 
-            String payload = GeneratorUtility.getSampleFromTypeModel(requestBody.getTypeModel(), false);
+            String payload = GeneratorUtility.generateJsonSampleFromTypeModel(requestBody.getTypeModel(), false);
             String payloadPadded = payload.replace("\"", "\\\"")
                     .replace(System.lineSeparator(), " ");
             renderedExample.append("\"")

@@ -27,7 +27,7 @@ import java.util.List;
 @Component
 public interface JsonSerializer {
     /**
-     * Serializes an object as a JOSN text.
+     * Serializes an object as a JSON text.
      * @param source Source object to be serialized.
      * @return Object serialized as a JSON string.
      * @throws JsonSerializationException
@@ -59,7 +59,7 @@ public interface JsonSerializer {
     ObjectMapper getMapper();
 
     /**
-     * Deserializes multiple jsons from a stream reader.
+     * Deserializes multiple JSONs from a stream reader.
      * @param reader Input stream reader.
      * @param clazz Target class.
      * @param <T> Json class object (target type).

@@ -15,9 +15,7 @@
  */
 package com.dqops.utils.docs.client;
 
-import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
-import com.dqops.utils.docs.LinkageStore;
-import com.dqops.utils.docs.MkDocsIndexReplaceUtility;
+import com.dqops.utils.docs.*;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGenerator;
 import com.dqops.utils.docs.client.models.ModelsDocumentationGeneratorImpl;
@@ -25,11 +23,19 @@ import com.dqops.utils.docs.client.models.ModelsDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGenerator;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.operations.OperationsDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactory;
 import com.dqops.utils.docs.client.operations.examples.UsageExampleModelFactoryImpl;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationGenerator;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationGeneratorImpl;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactory;
+import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactoryImpl;
+import com.dqops.utils.docs.client.serialization.PythonSerializerImpl;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
 import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
 import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
+import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
+import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -220,9 +226,17 @@ public class GeneratePythonDocumentationPostProcessor {
                 .resolve("operations")
                 .toAbsolutePath().normalize();
         DocumentationFolder currentOperationsDocFiles = DocumentationFolderFactory.loadCurrentFiles(operationsDocPath);
+
+        DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
+        PythonExampleDocumentationModelFactory pythonExampleDocumentationModelFactory = new PythonExampleDocumentationModelFactoryImpl(
+                documentationReflectionService,
+                new PythonSerializerImpl(new ParsedSampleObjectFactoryImpl(documentationReflectionService))
+        );
+        PythonExampleDocumentationGenerator pythonExampleDocumentationGenerator = new PythonExampleDocumentationGeneratorImpl(pythonExampleDocumentationModelFactory);
+        UsageExampleModelFactory usageExampleModelFactory = new UsageExampleModelFactoryImpl(pythonExampleDocumentationGenerator);
         OperationsDocumentationGenerator operationsDocumentationGenerator = new OperationsDocumentationGeneratorImpl(
                 new OperationsDocumentationModelFactoryImpl(),
-                new UsageExampleModelFactoryImpl());
+                usageExampleModelFactory);
 
         DocumentationFolder renderedDocumentation = operationsDocumentationGenerator.renderOperationsDocumentation(projectRoot, openAPIModel);
         renderedDocumentation.writeModifiedFiles(currentOperationsDocFiles);
