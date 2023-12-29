@@ -8,26 +8,57 @@ import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { TableApiClient } from '../../services/apiClient';
 
-
 type TButtonTabs = {
   label: string;
   value: string;
 };
+const headeritems: TButtonTabs[] = [
+  {
+    label: 'Table',
+    value: 'target.table_name'
+  },
+  {
+    label: 'Disabled',
+    value: 'disabled'
+  },
+  {
+    label: 'Stage',
+    value: 'stage'
+  },
+  {
+    label: 'Filter',
+    value: 'filter'
+  }
+];
+
+function getValueForKey<T>(obj: T, key: string): string | undefined {
+  const keys = key.split('.');
+  let value: any = obj;
+
+  for (const k of keys) {
+    value = value?.[k];
+    if (value === undefined) {
+      break;
+    }
+  }
+
+  return value?.toString();
+}
 
 export const SchemaTables = () => {
   const {
     checkTypes,
     connection,
-    schema,
+    schema
   }: {
     checkTypes: CheckTypes;
     connection: string;
-    schema: string
+    schema: string;
   } = useParams();
   const dispatch = useDispatch();
   const [tables, setTables] = useState<TableListModel[]>([]);
-  const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc')
-  
+  const [sortingDir, setSortingDir] = useState<'asc' | 'desc'>('asc');
+
   useEffect(() => {
     TableApiClient.getTables(connection, schema).then((res) => {
       setTables(res.data);
@@ -80,7 +111,7 @@ export const SchemaTables = () => {
         ];
 
       case CheckTypes.MONITORING:
-        case CheckTypes.PARTITIONED:
+      case CheckTypes.PARTITIONED:
         return [
           { label: 'Daily checks', value: 'daily' },
           { label: 'Daily table status', value: 'table-quality-status-daily' },
@@ -96,64 +127,66 @@ export const SchemaTables = () => {
     }
   }, [checkTypes]);
 
-  const sortTables = () => {
-    const array = [...tables];
-  
-    array.sort((a, b) => {
-      if (a.target?.table_name && b.target?.table_name) {
-        if (sortingDir === 'asc') {
-          return a.target.table_name.localeCompare(b.target.table_name);
-        } else {
-          return b.target.table_name.localeCompare(a.target.table_name);
-        }
-      }
-      return 0;
+  const sortTables = (key: string): void => {
+    setTables((prev) => {
+      const array = [...prev];
+      array.sort((a, b) => {
+        const valueA = getValueForKey(a, key);
+        const valueB = getValueForKey(b, key);
+
+        return sortingDir === 'asc'
+          ? (valueA || '').localeCompare(valueB || '')
+          : (valueB || '').localeCompare(valueA || '');
+      });
+
+      setSortingDir((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      return array;
     });
-    setSortingDir((prev) => prev ===     'asc' ? 'desc' : 'asc')
-    setTables(array);
   };
-  
+
+  const renderItem = (label: string, key: string) => {
+    return (
+      <th className="px-4 text-left" onClick={() => sortTables(key)}>
+        <div className="flex">
+          {label}
+          <div>
+            <SvgIcon name="chevron-up" className="w-3 h-3" />
+            <SvgIcon name="chevron-down" className="w-3 h-3" />
+          </div>
+        </div>
+      </th>
+    );
+  };
 
   return (
-    <table className='min-w-275 max-w-400'>
+    <table className="min-w-350 max-w-400">
       <thead>
-        <tr>
-          <th className="px-4 text-left flex" onClick={sortTables}>Table
-            <div>
-              <SvgIcon name="chevron-up" className="w-3 h-3" />
-              <SvgIcon name="chevron-down" className="w-3 h-3" />
-            </div>
-          </th>
-          <th className="px-4 text-left">Disabled</th>
-          <th className="px-4 text-left">Stage</th>
-          <th className="px-4 text-left">Filter</th>
-          <th></th>
-          <th></th>
-          <th></th>
-        </tr>
+        <tr>{headeritems.map((item) => renderItem(item.label, item.value))}</tr>
       </thead>
       <tbody>
         {tables.map((item, index) => (
-          <tr
-           key={index} >
-            <Button 
+          <tr key={index}>
+            <Button
               className="px-4 underline cursor-pointer"
-              label={item.target?.table_name} 
+              label={item.target?.table_name}
               onClick={() => goToTable(item, buttonTabs[0].value)}
             />
             <td className="px-4">
-              {item?.disabled ? <SvgIcon
-               name='close'
-               className = 'text-red-700'
-               width={30}
-               height={22}
-             /> : null}</td>
+              {item?.disabled ? (
+                <SvgIcon
+                  name="close"
+                  className="text-red-700"
+                  width={30}
+                  height={22}
+                />
+              ) : null}
+            </td>
             <td className="px-4">{item?.stage}</td>
             <td className="px-4">{item?.filter}</td>
             {buttonTabs.map((button) => {
               return (
-                <td className="px-4 max-w-30" key={button.value}>
-                  <Button 
+                <td className="px-4 " key={button.value}>
+                  <Button
                     variant="text"
                     label={button.label}
                     color="primary"
