@@ -15,12 +15,12 @@ These topics introduce the basic concepts of DQOps.
     a data quality issue is raised.
 
 
- - **[Configuring checks](./checks/configuring-checks.md)**
+ - **[Configuring data quality checks](./checks/configuring-checks.md)**
 
     Data quality checks are configured by setting the incident alerting thresholds
     by setting the [data quality rule](./rules/rules.md) parameters.
 
-    DQOps uses YAML files to keep the configuration of data sources and the enabled data quality checks on monitored tables.
+    DQOps uses YAML files to keep the configuration of data sources and the activated data quality checks on monitored tables.
     The DQOps YAML file format is fully documented and the YAML schema files are published.
     
     The DQOps YAML schema files allow unprecedented coding experience with Visual Studio Code when managing the
@@ -37,20 +37,20 @@ These topics introduce the basic concepts of DQOps.
     checks for all imported tables. The configuration is stored in YAML files for simplicity of editing in Visual Studio Code.
 
 
- - **[Running checks](./running-checks/running-checks.md)**
+ - **[Running data quality checks](./running-checks/running-checks.md)**
 
     Data quality checks configured for each table and column are executed by targeting the data source, table, column,
     check name, check type, check category or even labels assigned to tables or columns. 
 
 
- - **[Sensors](./sensors/sensors.md)**
+ - **[Data quality sensors](./sensors/sensors.md)**
 
     The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
     to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
     a `sensor readout` in DQOps.
 
 
- - **[Rules](./rules/rules.md)**
+ - **[Data quality rules](./rules/rules.md)**
 
     Data quality rules in DQOps are Python functions that receive the `sensor readout`
     that was captured by sensor (a result of an SQL query).
@@ -61,8 +61,9 @@ These topics introduce the basic concepts of DQOps.
 
  - **[Check execution flow](./architecture/check-execution-flow.md)**
 
-    Detailed data quality execution flows that show how DQOps uses [Sensors](./sensors/sensors.md), [Rules](./rules/rules.md),
-    [Checks](./checks/index.md) and how the data is [stored](./data-storage/data-storage.md).
+    Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
+    [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),
+    and how the data is [stored](./data-storage/data-storage.md).
 
 
  - **[Deployment architecture](./architecture/dqops-architecture.md)**
@@ -134,7 +135,7 @@ These topics introduce the basic concepts of DQOps.
 
 - **[Data storage](./data-storage/data-storage.md)**
 
-    DQOps stores both the configuration of data sources, the configuration of data quality checks enabled on tables
+    DQOps stores both the configuration of data sources, the configuration of data quality checks activated on tables
     and the data quality check execution results locally in a `DQOps user home` folder.
 
     The data quality results are stored in a *$DQO_USER_HOME/.data* folder that is a Hive-compliant local data lake.

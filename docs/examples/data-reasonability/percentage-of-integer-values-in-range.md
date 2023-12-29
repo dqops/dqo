@@ -59,7 +59,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -75,7 +75,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     has an additional parameters to select the **min_values** and **max_values** range.
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
@@ -267,6 +267,10 @@ Results returned by the sensor:
 +-----------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
+By using the [false_percent](../../checks/column/bool/false-percent.md) column check, we can monitor that the percentage
+of integer values from a range in a column does not exceed the minimum accepted value. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

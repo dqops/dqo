@@ -58,11 +58,17 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
-                [--mysql-database=<database>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
-                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--databricks-access-token=<accessToken>]
+                [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                [--databricks-http-path=<httpPath>]
+                [--databricks-options=<options>]
+                [--databricks-password=<password>] [--databricks-port=<port>]
+                [--databricks-user=<user>] [--mysql-database=<database>]
+                [--mysql-host=<host>] [--mysql-options=<options>]
+                [--mysql-password=<password>] [--mysql-port=<port>]
+                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-options=<options>] [--oracle-password=<password>]
                 [--oracle-port=<port>] [--oracle-user=<user>]
@@ -81,18 +87,17 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
                 [--spark-host=<host>] [--spark-options=<options>]
                 [--spark-password=<password>] [--spark-port=<port>]
-                [--spark-schema=<schema>] [--spark-user=<user>]
-                [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                [--sqlserver-options=<options>]
+                [--spark-user=<user>] [--sqlserver-database=<database>]
+                [--sqlserver-host=<host>] [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [--trino-database=<database>] [--trino-host=<host>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-A=<String=String>]... [-F=<String=String>]...
-                [-K=<String=String>]... [-M=<String=String>]...
-                [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-A=<String=String>]... [-D=<String=String>]...
+                [-F=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-O=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 **DQOps Shell synopsis**
@@ -105,11 +110,17 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--bigquery-json-key-path=<jsonKeyPath>]
                 [--bigquery-quota-project-id=<quotaProjectId>]
                 [--bigquery-source-project-id=<sourceProjectId>]
-                [--mysql-database=<database>] [--mysql-host=<host>]
-                [--mysql-options=<options>] [--mysql-password=<password>]
-                [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
-                [--mysql-user=<user>] [-n=<name>] [-of=<outputFormat>]
-                [--oracle-database=<database>] [--oracle-host=<host>]
+                [--databricks-access-token=<accessToken>]
+                [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                [--databricks-http-path=<httpPath>]
+                [--databricks-options=<options>]
+                [--databricks-password=<password>] [--databricks-port=<port>]
+                [--databricks-user=<user>] [--mysql-database=<database>]
+                [--mysql-host=<host>] [--mysql-options=<options>]
+                [--mysql-password=<password>] [--mysql-port=<port>]
+                [--mysql-sslmode=<sslmode>] [--mysql-user=<user>] [-n=<name>]
+                [-of=<outputFormat>] [--oracle-database=<database>]
+                [--oracle-host=<host>]
                 [--oracle-initialization-sql=<initializationSql>]
                 [--oracle-options=<options>] [--oracle-password=<password>]
                 [--oracle-port=<port>] [--oracle-user=<user>]
@@ -128,18 +139,17 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
                 [--spark-host=<host>] [--spark-options=<options>]
                 [--spark-password=<password>] [--spark-port=<port>]
-                [--spark-schema=<schema>] [--spark-user=<user>]
-                [--sqlserver-database=<database>] [--sqlserver-host=<host>]
-                [--sqlserver-options=<options>]
+                [--spark-user=<user>] [--sqlserver-database=<database>]
+                [--sqlserver-host=<host>] [--sqlserver-options=<options>]
                 [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                 [--sqlserver-user=<user>] [-t=<providerType>]
                 [--trino-database=<database>] [--trino-host=<host>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-A=<String=String>]... [-F=<String=String>]...
-                [-K=<String=String>]... [-M=<String=String>]...
-                [-O=<String=String>]... [-P=<String=String>]...
-                [-R=<String=String>]... [-S=<String=String>]...
-                [-T=<String=String>]...
+                [-A=<String=String>]... [-D=<String=String>]...
+                [-F=<String=String>]... [-K=<String=String>]...
+                [-M=<String=String>]... [-O=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+                [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -154,6 +164,14 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--bigquery-json-key-path">`--bigquery-json-key-path`</p><br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |<p id="connection add--bigquery-quota-project-id">`--bigquery-quota-project-id`</p><br/>|Bigquery quota GCP project id.| ||
 |<p id="connection add--bigquery-source-project-id">`--bigquery-source-project-id`</p><br/>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<p id="connection add--databricks-access-token">`--databricks-access-token`</p><br/>|Databricks access token for the warehouse.| ||
+|<p id="connection add--databricks-catalog">`--databricks-catalog`</p><br/>|Databricks catalog name.| ||
+|<p id="connection add--databricks-host">`--databricks-host`</p><br/>|Databricks host name| ||
+|<p id="connection add--databricks-http-path">`--databricks-http-path`</p><br/>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;| ||
+|<p id="connection add--databricks-options">`--databricks-options`</p><br/>|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<p id="connection add--databricks-password">`--databricks-password`</p><br/>|Databricks database password.| ||
+|<p id="connection add--databricks-port">`--databricks-port`</p><br/>|Databricks port number| ||
+|<p id="connection add--databricks-user">`--databricks-user`</p><br/>|Databricks user name.| ||
 |<p id="connection add-fw">`-fw`</p><br/><p id="connection add--file-write">`--file-write`</p><br/>|Write command response to a file| ||
 |<p id="connection add--headless">`--headless`</p><br/><p id="connection add-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="connection add-h">`-h`</p><br/><p id="connection add--help">`--help`</p><br/>|Show the help for the command and parameters| ||
@@ -185,7 +203,7 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--presto-password">`--presto-password`</p><br/>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--presto-port">`--presto-port`</p><br/>|Presto port number| ||
 |<p id="connection add--presto-user">`--presto-user`</p><br/>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>presto<br/>trino<br/>mysql<br/>oracle<br/>spark<br/>|
+|<p id="connection add-t">`-t`</p><br/><p id="connection add--provider">`--provider`</p><br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>presto<br/>trino<br/>mysql<br/>oracle<br/>spark<br/>databricks<br/>|
 |<p id="connection add--redshift-database">`--redshift-database`</p><br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--redshift-host">`--redshift-host`</p><br/>|Redshift host name| ||
 |<p id="connection add--redshift-options">`--redshift-options`</p><br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -202,7 +220,6 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--spark-options">`--spark-options`</p><br/>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<p id="connection add--spark-password">`--spark-password`</p><br/>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--spark-port">`--spark-port`</p><br/>|Spark port number| ||
-|<p id="connection add--spark-schema">`--spark-schema`</p><br/>|Spark schema name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--spark-user">`--spark-user`</p><br/>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--sqlserver-database">`--sqlserver-database`</p><br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add--sqlserver-disable-encryption">`--sqlserver-disable-encryption`</p><br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
@@ -216,6 +233,7 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection add--trino-port">`--trino-port`</p><br/>|Trino port number| ||
 |<p id="connection add--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection add-A">`-A`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
+|<p id="connection add-D">`-D`</p><br/>|Databricks additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection add-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||
@@ -282,6 +300,12 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--databricks-access-token=<accessToken>]
+                   [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                   [--databricks-http-path=<httpPath>]
+                   [--databricks-options=<options>]
+                   [--databricks-password=<password>]
+                   [--databricks-port=<port>] [--databricks-user=<user>]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -306,17 +330,18 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--snowflake-user=<user>]
                    [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
                    [--spark-options=<options>] [--spark-password=<password>]
-                   [--spark-port=<port>] [--spark-schema=<schema>]
-                   [--spark-user=<user>] [--sqlserver-database=<database>]
-                   [--sqlserver-host=<host>] [--sqlserver-options=<options>]
+                   [--spark-port=<port>] [--spark-user=<user>]
+                   [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                   [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [--trino-database=<database>]
                    [--trino-host=<host>] [--trino-port=<port>]
                    [--trino-user=<user>] [-A=<String=String>]...
-                   [-F=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [-D=<String=String>]... [-F=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-O=<String=String>]... [-P=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 **DQOps Shell synopsis**
@@ -329,6 +354,12 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--bigquery-json-key-path=<jsonKeyPath>]
                    [--bigquery-quota-project-id=<quotaProjectId>]
                    [--bigquery-source-project-id=<sourceProjectId>]
+                   [--databricks-access-token=<accessToken>]
+                   [--databricks-catalog=<catalog>] [--databricks-host=<host>]
+                   [--databricks-http-path=<httpPath>]
+                   [--databricks-options=<options>]
+                   [--databricks-password=<password>]
+                   [--databricks-port=<port>] [--databricks-user=<user>]
                    [--mysql-database=<database>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -353,17 +384,18 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--snowflake-user=<user>]
                    [--snowflake-warehouse=<warehouse>] [--spark-host=<host>]
                    [--spark-options=<options>] [--spark-password=<password>]
-                   [--spark-port=<port>] [--spark-schema=<schema>]
-                   [--spark-user=<user>] [--sqlserver-database=<database>]
-                   [--sqlserver-host=<host>] [--sqlserver-options=<options>]
+                   [--spark-port=<port>] [--spark-user=<user>]
+                   [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                   [--sqlserver-options=<options>]
                    [--sqlserver-password=<password>] [--sqlserver-port=<port>]
                    [--sqlserver-user=<user>] [--trino-database=<database>]
                    [--trino-host=<host>] [--trino-port=<port>]
                    [--trino-user=<user>] [-A=<String=String>]...
-                   [-F=<String=String>]... [-K=<String=String>]...
-                   [-M=<String=String>]... [-O=<String=String>]...
-                   [-P=<String=String>]... [-R=<String=String>]...
-                   [-S=<String=String>]... [-T=<String=String>]...
+                   [-D=<String=String>]... [-F=<String=String>]...
+                   [-K=<String=String>]... [-M=<String=String>]...
+                   [-O=<String=String>]... [-P=<String=String>]...
+                   [-R=<String=String>]... [-S=<String=String>]...
+                   [-T=<String=String>]...
 
 ```
 
@@ -378,6 +410,14 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--bigquery-json-key-path">`--bigquery-json-key-path`</p><br/>|Path to a GCP service account key JSON file used to authenticate to Bigquery.| ||
 |<p id="connection update--bigquery-quota-project-id">`--bigquery-quota-project-id`</p><br/>|Bigquery quota GCP project id.| ||
 |<p id="connection update--bigquery-source-project-id">`--bigquery-source-project-id`</p><br/>|Bigquery source GCP project id. This is the project that has datasets that will be imported.| ||
+|<p id="connection update--databricks-access-token">`--databricks-access-token`</p><br/>|Databricks access token for the warehouse.| ||
+|<p id="connection update--databricks-catalog">`--databricks-catalog`</p><br/>|Databricks catalog name.| ||
+|<p id="connection update--databricks-host">`--databricks-host`</p><br/>|Databricks host name| ||
+|<p id="connection update--databricks-http-path">`--databricks-http-path`</p><br/>|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;| ||
+|<p id="connection update--databricks-options">`--databricks-options`</p><br/>|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<p id="connection update--databricks-password">`--databricks-password`</p><br/>|Databricks database password.| ||
+|<p id="connection update--databricks-port">`--databricks-port`</p><br/>|Databricks port number| ||
+|<p id="connection update--databricks-user">`--databricks-user`</p><br/>|Databricks user name.| ||
 |<p id="connection update-fw">`-fw`</p><br/><p id="connection update--file-write">`--file-write`</p><br/>|Write command response to a file| ||
 |<p id="connection update--headless">`--headless`</p><br/><p id="connection update-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<p id="connection update-h">`-h`</p><br/><p id="connection update--help">`--help`</p><br/>|Show the help for the command and parameters| ||
@@ -425,7 +465,6 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--spark-options">`--spark-options`</p><br/>|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<p id="connection update--spark-password">`--spark-password`</p><br/>|Spark database password. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--spark-port">`--spark-port`</p><br/>|Spark port number| ||
-|<p id="connection update--spark-schema">`--spark-schema`</p><br/>|Spark schema name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--spark-user">`--spark-user`</p><br/>|Spark user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--sqlserver-database">`--sqlserver-database`</p><br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update--sqlserver-disable-encryption">`--sqlserver-disable-encryption`</p><br/>|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.| ||
@@ -439,6 +478,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 |<p id="connection update--trino-port">`--trino-port`</p><br/>|Trino port number| ||
 |<p id="connection update--trino-user">`--trino-user`</p><br/>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<p id="connection update-A">`-A`</p><br/>|Presto additional properties that are added to the JDBC connection string| ||
+|<p id="connection update-D">`-D`</p><br/>|Databricks additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-F">`-F`</p><br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-K">`-K`</p><br/>|Spark additional properties that are added to the JDBC connection string| ||
 |<p id="connection update-M">`-M`</p><br/>|MySQL additional properties that are added to the JDBC connection string| ||

@@ -35,3 +35,10 @@ http://localhost:8888/api/ishealthy
     ```
 
 
+
+**Return value sample**  
+    ```js
+    sample_string_value
+    ```
+
+

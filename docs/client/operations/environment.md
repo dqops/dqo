@@ -35,6 +35,15 @@ http://localhost:8888/api/environment/settings
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "properties" : { }
+	}
+    ```
+
+
 ___  
 ## get_user_profile  
 Returns the profile of the current user.  
@@ -69,6 +78,29 @@ http://localhost:8888/api/environment/profile
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "can_manage_account" : false,
+	  "can_view_any_object" : false,
+	  "can_manage_scheduler" : false,
+	  "can_cancel_jobs" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false,
+	  "can_collect_statistics" : false,
+	  "can_manage_data_sources" : false,
+	  "can_synchronize" : false,
+	  "can_edit_comments" : false,
+	  "can_edit_labels" : false,
+	  "can_manage_definitions" : false,
+	  "can_compare_tables" : false,
+	  "can_manage_users" : false,
+	  "can_manage_and_view_shared_credentials" : false
+	}
+    ```
+
+
 ___  
 ## issue_api_key  
 Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.  
@@ -100,6 +132,13 @@ http://localhost:8888/api/environment/issueapikey
     curl http://localhost:8888/api/environment/issueapikey^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    sample_string_value
     ```
 
 

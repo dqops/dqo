@@ -52,7 +52,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
 ### **Validation if the table is not empty**
 
 1. Go to the **Monitoring** section. 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
     Here you can see that the default check warning threshold is 1 which allows you to validate whether your table is empty or not.
 
     ![Navigating to a list of checks](https://dqops.com/docs/images/examples/row-count-navigating-to-the-list-of-checks-warning1.png)
@@ -66,7 +66,7 @@ The following is a fragment of the `bigquery-public-data.america_health_rankings
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
@@ -113,7 +113,7 @@ We aim to verify if the table meets size requirements and is not too small:
 
     ![Changing the threshold levels](https://dqops.com/docs/images/examples/row-count-changing-the-threshold-levels.png)
 
-2. Run the enabled check again using the **Run check** button.
+2. Run the activated check again using the **Run check** button.
 
 3. Access the results by clicking the **Results** button.
 
@@ -310,6 +310,10 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify that the table is not empty and meets the size requirements.
+By using the [row_count](../../checks/table/volume/row-count.md) table check, we can monitor that the number of
+rows in a table does not fall below the minimum accepted count. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

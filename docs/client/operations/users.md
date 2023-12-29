@@ -38,6 +38,8 @@ http://localhost:8888/api/mypassword
     ```
 
 
+
+
 ___  
 ## change_user_password  
 Changes the password of a user identified by the email.  
@@ -82,6 +84,8 @@ http://localhost:8888/api/users/{email}/password
     ```
 
 
+
+
 ___  
 ## create_user  
 Creates (adds) a new user to a multi-user account.  
@@ -119,6 +123,8 @@ http://localhost:8888/api/users
     ```
 
 
+
+
 ___  
 ## delete_user  
 Deletes a user from a multi-user account.  
@@ -153,6 +159,8 @@ http://localhost:8888/api/users/{email}
     ```
 
 
+
+
 ___  
 ## get_all_users  
 Returns a list of all users.  
@@ -184,6 +192,22 @@ http://localhost:8888/api/users
     curl http://localhost:8888/api/users^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	}, {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	}, {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	} ]
     ```
 
 
@@ -225,6 +249,16 @@ http://localhost:8888/api/users/{email}
     curl http://localhost:8888/api/users/sample_user@mail.com^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	}
     ```
 
 
@@ -270,5 +304,7 @@ http://localhost:8888/api/users/{email}
 		"{\"email\":\"sample_user@mail.com\",\"accountRole\":\"operator\"}"
 
     ```
+
+
 
 

@@ -77,4 +77,9 @@ public class OperationsOperationDocumentationModel {
      * Usage examples list.
      */
     private List<OperationUsageExampleDocumentationModel> usageExamples = new ArrayList<>();
+
+    /**
+     * Sample return value.
+     */
+    private String returnValueSample;
 }

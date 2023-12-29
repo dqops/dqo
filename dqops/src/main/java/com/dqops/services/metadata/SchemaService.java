@@ -90,5 +90,6 @@ public interface SchemaService {
             String checkName,
             Boolean checkEnabled,
             Boolean checkConfigured,
+            int limit,
             DqoUserPrincipal principal);
 }

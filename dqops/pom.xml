@@ -180,6 +180,12 @@
 			<groupId>org.springframework.shell</groupId>
 			<artifactId>spring-shell-starter</artifactId>
 			<version>3.1.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.tomcat.embed</groupId>
+					<artifactId>tomcat-embed-el</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.shell</groupId>
@@ -455,9 +461,9 @@
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
-			<groupId>io.prestosql</groupId>
+			<groupId>com.facebook.presto</groupId>
 			<artifactId>presto-jdbc</artifactId>
-			<version>350</version>
+			<version>0.284</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -517,6 +523,12 @@
 					<artifactId>hive-llap-server</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.databricks</groupId>
+			<artifactId>databricks-jdbc</artifactId>
+			<version>2.6.25</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- test dependencies -->

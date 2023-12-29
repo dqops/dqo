@@ -1,0 +1,36 @@
+{% import '/dialects/presto.sql.jinja2' as lib with context -%}
+
+{%- macro extract_in_list(values_list) -%}
+    {{ values_list|join(', ') -}}
+{% endmacro %}
+
+{%- macro actual_value() -%}
+    {%- if 'expected_values' not in parameters or parameters.expected_values | length == 0 -%}
+    0
+    {%- else -%}
+    COUNT(DISTINCT
+        CASE
+            WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                THEN {{ lib.render_target_column('analyzed_table') }}
+            ELSE NULL
+        END
+    )
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    {{ actual_value() }} AS actual_value,
+    MAX({{ parameters.expected_values | length }}) AS expected_value
+    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}

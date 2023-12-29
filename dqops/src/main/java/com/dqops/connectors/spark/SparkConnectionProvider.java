@@ -129,14 +129,6 @@ public class SparkConnectionProvider extends AbstractSqlConnectionProvider {
             sparkSpec.setPort(terminalReader.prompt("Spark port number (--spark-port)", "${SPARK_PORT}", false));
         }
 
-        if (Strings.isNullOrEmpty(sparkSpec.getSchema())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--spark-schema");
-            }
-
-            sparkSpec.setSchema(terminalReader.prompt("Spark schema name (--spark-schema)", "${SPARK_SCHEMA}", false));
-        }
-
         if (Strings.isNullOrEmpty(sparkSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--spark-user");

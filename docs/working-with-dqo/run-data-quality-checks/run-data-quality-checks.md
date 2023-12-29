@@ -1,11 +1,11 @@
 # Run data quality check
 
-In DQOps there are two ways to enable and run data quality checks:
+In DQOps there are two ways to activate and run data quality checks:
 
 - using the user interface 
 - using DQOps Shell
 
-To enable checks, you need to add a connection. You can learn [how to add connection here](../../data-sources/index.md).
+To activate checks, you need to add a connection. You can learn [how to add connection here](../../data-sources/index.md).
 
 For more information about [different categories of checks, see DQOps concepts section](../../dqo-concepts/checks/index.md).
 

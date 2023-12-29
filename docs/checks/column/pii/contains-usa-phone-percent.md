@@ -14,29 +14,34 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_contains_usa_phone_percent|profiling| |Validity|[contains_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_contains_usa_phone_percent
+dqo> check activate -c=connection_name -ch=profile_contains_usa_phone_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_contains_usa_phone_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_contains_usa_phone_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_contains_usa_phone_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_contains_usa_phone_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
       profiling_checks:
         pii:
@@ -48,9 +53,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
             fatal:
               max_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -133,6 +140,54 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -277,6 +332,71 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST(analyzed_table."target_column" AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -604,6 +724,54 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST(analyzed_table.`target_column` AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -750,6 +918,76 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST(analyzed_table."target_column" AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -993,29 +1231,34 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_contains_usa_phone_percent|monitoring|daily|Validity|[contains_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_contains_usa_phone_percent
+dqo> check activate -c=connection_name -ch=daily_contains_usa_phone_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_contains_usa_phone_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_contains_usa_phone_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_contains_usa_phone_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_contains_usa_phone_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         daily:
@@ -1028,9 +1271,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -1114,6 +1359,54 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+            TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -1258,6 +1551,71 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST(analyzed_table."target_column" AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -1586,6 +1944,54 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST(analyzed_table.`target_column` AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1732,6 +2138,76 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST(analyzed_table."target_column" AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1975,29 +2451,34 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_contains_usa_phone_percent|monitoring|monthly|Validity|[contains_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_contains_usa_phone_percent
+dqo> check activate -c=connection_name -ch=monthly_contains_usa_phone_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_contains_usa_phone_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_contains_usa_phone_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_contains_usa_phone_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_contains_usa_phone_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         monthly:
@@ -2010,9 +2491,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -2096,6 +2579,54 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -2240,6 +2771,71 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST(analyzed_table."target_column" AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -2568,6 +3164,54 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST(analyzed_table.`target_column` AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2714,6 +3358,76 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST(analyzed_table."target_column" AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2957,29 +3671,34 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_contains_usa_phone_percent|partitioned|daily|Validity|[contains_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_contains_usa_phone_percent
+dqo> check activate -c=connection_name -ch=daily_partition_contains_usa_phone_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_partition_contains_usa_phone_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_partition_contains_usa_phone_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_contains_usa_phone_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_contains_usa_phone_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
       partitioned_checks:
         daily:
@@ -2992,9 +3711,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -3084,6 +3805,54 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(analyzed_table.`date_column` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+            TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -3228,6 +3997,71 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST(analyzed_table."date_column" AS date) AS time_period,
             CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST(analyzed_table."target_column" AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(original_table."date_column" AS date) AS time_period,
+            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -3566,6 +4400,54 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST(analyzed_table.`target_column` AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3712,6 +4594,76 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST(analyzed_table."target_column" AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3953,29 +4905,34 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_contains_usa_phone_percent|partitioned|monthly|Validity|[contains_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-phone-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_partition_contains_usa_phone_percent
+dqo> check activate -c=connection_name -ch=monthly_partition_contains_usa_phone_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_partition_contains_usa_phone_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_partition_contains_usa_phone_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_contains_usa_phone_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_contains_usa_phone_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
       partitioned_checks:
         monthly:
@@ -3988,9 +4945,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -4080,6 +5039,54 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE 100.0 * SUM(
+                    CASE
+                        WHEN REGEXP(
+                            CAST(analyzed_table.`target_column` AS STRING),
+                            "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                        ) THEN 1
+                        ELSE 0
+                    END
+                ) / COUNT(*)
+            END AS actual_value,
+            DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+            TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -4224,6 +5231,71 @@ Please expand the database engine name section to see the SQL query rendered by 
             DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            CAST(
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(
+                                CAST(analyzed_table."target_column" AS VARCHAR),
+                                '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END
+            AS DOUBLE) AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
         GROUP BY time_period, time_period_utc
         ORDER BY time_period, time_period_utc
         ```
@@ -4562,6 +5634,54 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP(
+                                CAST(analyzed_table.`target_column` AS STRING),
+                                "((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))"
+                            ) THEN 1
+                            ELSE 0
+                        END
+                    ) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`country` AS grouping_level_1,
+                analyzed_table.`state` AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+            FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4708,6 +5828,76 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                CAST(
+                    CASE
+                        WHEN COUNT(*) = 0 THEN 0.0
+                        ELSE 100.0 * SUM(
+                            CASE
+                                WHEN REGEXP_LIKE(
+                                    CAST(analyzed_table."target_column" AS VARCHAR),
+                                    '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                                ) THEN 1
+                                ELSE 0
+                            END
+                        ) / COUNT(*)
+                    END
+                AS DOUBLE) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

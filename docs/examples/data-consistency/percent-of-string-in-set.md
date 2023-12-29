@@ -14,7 +14,7 @@ with values outside specified set.
 
 **SOLUTION**
 
-We will verify the data using profiling [daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
+We will verify the data using monitoring [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check.
 Our data quality check will compare the values in the tested column to a set of accepted values. We accept only
 `services`, `at_home`,and  `teacher` values.
 
@@ -79,7 +79,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -95,7 +95,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     be present in a string column. In our example, these values are `services`, `at_home` and `teacher`.
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
@@ -292,6 +292,11 @@ Results returned by the sensor:
 +------------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the consistency of data in a column.
+By using the [string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md) column check,
+we can monitor that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
+If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

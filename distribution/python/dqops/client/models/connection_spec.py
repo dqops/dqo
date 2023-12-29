@@ -13,6 +13,7 @@ if TYPE_CHECKING:
         ConnectionIncidentGroupingSpec,
     )
     from ..models.data_grouping_configuration_spec import DataGroupingConfigurationSpec
+    from ..models.databricks_parameters_spec import DatabricksParametersSpec
     from ..models.default_schedules_spec import DefaultSchedulesSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
@@ -43,6 +44,7 @@ class ConnectionSpec:
         mysql (Union[Unset, MysqlParametersSpec]):
         oracle (Union[Unset, OracleParametersSpec]):
         spark (Union[Unset, SparkParametersSpec]):
+        databricks (Union[Unset, DatabricksParametersSpec]):
         parallel_jobs_limit (Union[Unset, int]): The concurrency limit for the maximum number of parallel SQL queries
             executed on this connection.
         default_grouping_configuration (Union[Unset, DataGroupingConfigurationSpec]):
@@ -66,6 +68,7 @@ class ConnectionSpec:
     mysql: Union[Unset, "MysqlParametersSpec"] = UNSET
     oracle: Union[Unset, "OracleParametersSpec"] = UNSET
     spark: Union[Unset, "SparkParametersSpec"] = UNSET
+    databricks: Union[Unset, "DatabricksParametersSpec"] = UNSET
     parallel_jobs_limit: Union[Unset, int] = UNSET
     default_grouping_configuration: Union[
         Unset, "DataGroupingConfigurationSpec"
@@ -121,6 +124,10 @@ class ConnectionSpec:
         if not isinstance(self.spark, Unset):
             spark = self.spark.to_dict()
 
+        databricks: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.databricks, Unset):
+            databricks = self.databricks.to_dict()
+
         parallel_jobs_limit = self.parallel_jobs_limit
         default_grouping_configuration: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.default_grouping_configuration, Unset):
@@ -173,6 +180,8 @@ class ConnectionSpec:
             field_dict["oracle"] = oracle
         if spark is not UNSET:
             field_dict["spark"] = spark
+        if databricks is not UNSET:
+            field_dict["databricks"] = databricks
         if parallel_jobs_limit is not UNSET:
             field_dict["parallel_jobs_limit"] = parallel_jobs_limit
         if default_grouping_configuration is not UNSET:
@@ -200,6 +209,7 @@ class ConnectionSpec:
         from ..models.data_grouping_configuration_spec import (
             DataGroupingConfigurationSpec,
         )
+        from ..models.databricks_parameters_spec import DatabricksParametersSpec
         from ..models.default_schedules_spec import DefaultSchedulesSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
@@ -289,6 +299,13 @@ class ConnectionSpec:
         else:
             spark = SparkParametersSpec.from_dict(_spark)
 
+        _databricks = d.pop("databricks", UNSET)
+        databricks: Union[Unset, DatabricksParametersSpec]
+        if isinstance(_databricks, Unset):
+            databricks = UNSET
+        else:
+            databricks = DatabricksParametersSpec.from_dict(_databricks)
+
         parallel_jobs_limit = d.pop("parallel_jobs_limit", UNSET)
 
         _default_grouping_configuration = d.pop("default_grouping_configuration", UNSET)
@@ -337,6 +354,7 @@ class ConnectionSpec:
             mysql=mysql,
             oracle=oracle,
             spark=spark,
+            databricks=databricks,
             parallel_jobs_limit=parallel_jobs_limit,
             default_grouping_configuration=default_grouping_configuration,
             schedules=schedules,

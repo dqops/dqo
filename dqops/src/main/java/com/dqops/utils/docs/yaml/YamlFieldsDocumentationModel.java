@@ -15,7 +15,7 @@
  */
 package com.dqops.utils.docs.yaml;
 
-import com.dqops.utils.docs.TypeModel;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.EnumValueInfo;
 import lombok.Data;
 

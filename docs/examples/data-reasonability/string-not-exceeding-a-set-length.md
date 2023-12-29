@@ -55,7 +55,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -68,7 +68,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
@@ -258,6 +258,10 @@ Results returned by the sensor:
 |31          |2023-05-09T09:19:39.470Z|2023-05-09T09:19:39.470Z|
 +------------+------------------------+---------------
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
+By using the [string_max_length](../../checks/column/strings/string-max-length.md) column check, we can monitor that 
+the maximal length of the string in a column does not exceed the set length. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

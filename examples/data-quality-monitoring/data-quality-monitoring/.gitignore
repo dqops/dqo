@@ -1,0 +1,5 @@
+.credentials/
+.data/
+.index/
+.logs/
+.localsettings.dqosettings.yaml

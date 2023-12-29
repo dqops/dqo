@@ -14,29 +14,34 @@ Verifies that the total row count of the tested table matches the total row coun
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_total_row_count_match_percent|profiling| |Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_total_row_count_match_percent
+dqo> check activate -c=connection_name -ch=profile_total_row_count_match_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_total_row_count_match_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_total_row_count_match_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_total_row_count_match_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_total_row_count_match_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
   profiling_checks:
     accuracy:
@@ -50,9 +55,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
         fatal:
           max_diff_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -124,6 +131,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        ```
 ??? example "MySQL"
 
     === "Sensor template for MySQL"
@@ -193,6 +235,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
         ```
 ??? example "Redshift"
 
@@ -352,29 +429,34 @@ Verifies the total ow count of a tested table and compares it to a row count of 
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_total_row_count_match_percent|monitoring|daily|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_total_row_count_match_percent
+dqo> check activate -c=connection_name -ch=daily_total_row_count_match_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_total_row_count_match_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_total_row_count_match_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_total_row_count_match_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_total_row_count_match_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     daily:
@@ -389,9 +471,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
           fatal:
             max_diff_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -464,6 +548,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        ```
 ??? example "MySQL"
 
     === "Sensor template for MySQL"
@@ -533,6 +652,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
         ```
 ??? example "Redshift"
 
@@ -692,29 +846,34 @@ Verifies the total row count of a tested table and compares it to a row count of
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_total_row_count_match_percent|monitoring|monthly|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_total_row_count_match_percent
+dqo> check activate -c=connection_name -ch=monthly_total_row_count_match_percent
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_total_row_count_match_percent
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_total_row_count_match_percent
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_total_row_count_match_percent
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_total_row_count_match_percent
-```
+
 **Check structure (YAML)**
+
 ```yaml
   monitoring_checks:
     monthly:
@@ -729,9 +888,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
           fatal:
             max_diff_percent: 5.0
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="11-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -804,6 +965,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             COUNT(*) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM `<target_schema>`.`dim_customer` AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM `<target_schema>`.`<target_table>` AS analyzed_table
+        ```
 ??? example "MySQL"
 
     === "Sensor template for MySQL"
@@ -873,6 +1069,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
         ```
 ??? example "Redshift"
 

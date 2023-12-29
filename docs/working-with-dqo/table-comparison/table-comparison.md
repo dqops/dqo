@@ -50,17 +50,17 @@ To create a new table comparison, follow these steps:
 
     ![Select columns checks](https://dqops.com/docs/images/working-with-dqo/comparisons/selecting-columns-checks2.png)
 
-6. The right part of the comparison screen has a list of comparison checks which you can run. To enable the comparison 
+6. The right part of the comparison screen has a list of comparison checks which you can run. To activate the comparison 
     checks you want to run, simply click on the checkboxes.
 
-    Once you have enabled the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
+    Once you have activated the checks, you can set the severity level for each one. You can choose from three levels: warning, error, and fatal.
     [Learn more about the severity levels](../../../dqo-concepts/checks/#severity-levels).
 
     ![Table comparisons severity levels](https://dqops.com/docs/images/working-with-dqo/comparisons/table-comparisions-severity-levels2.png)
     
     When you create a new table comparison a new category of checks named Comparisons/[name of the comparison] is also 
     created on the [Check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor) with a list of table and column checks.
-    On the Editor screen you can enable and disable comparison checks, set severity levels, run checks and view the results.
+    On the Editor screen you can activate and deactivate comparison checks, set severity levels, run checks and view the results.
 
     ![List of checks](https://dqops.com/docs/images/working-with-dqo/comparisons/comparison-check-editor.png)
 

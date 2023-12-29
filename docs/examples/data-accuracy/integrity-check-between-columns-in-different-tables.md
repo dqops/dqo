@@ -80,7 +80,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -99,7 +99,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     In our example we use names of the table `fips_codes_states` and column `state_fips_code` which were also imported.
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
@@ -271,6 +271,11 @@ Results returned by the sensor:
 +------------+------------------------+------------------------+
 **************************************************
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the integrity of a column in one table against a column
+in another table. By using the [foreign_key_match_percentage](../../checks/column/integrity/foreign-key-match-percent.md) 
+check, we can monitor whether the matching data falls below a certain threshold. 
+If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

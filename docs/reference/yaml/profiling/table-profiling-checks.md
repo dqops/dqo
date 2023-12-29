@@ -1,6 +1,6 @@
 
-## TableProfilingCheckCategoriesSpec  
-Container of table level checks that are activated on a table level.  
+## TableVolumeProfilingChecksSpec  
+Container of built-in preconfigured volume data quality checks on a table level.  
   
 
 
@@ -14,15 +14,99 @@ Container of table level checks that are activated on a table level.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|one_per_week<br/>all_results<br/>one_per_hour<br/>one_per_month<br/>one_per_day<br/>| | |
-|[volume](../table-profiling-checks/#TableVolumeProfilingChecksSpec)|Configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](../table-profiling-checks/#TableVolumeProfilingChecksSpec)| | | |
-|[timeliness](../table-profiling-checks/#TableTimelinessProfilingChecksSpec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|[TableTimelinessProfilingChecksSpec](../table-profiling-checks/#TableTimelinessProfilingChecksSpec)| | | |
-|[accuracy](../table-profiling-checks/#TableAccuracyProfilingChecksSpec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|[TableAccuracyProfilingChecksSpec](../table-profiling-checks/#TableAccuracyProfilingChecksSpec)| | | |
-|[sql](../table-profiling-checks/#TableSqlProfilingChecksSpec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|[TableSqlProfilingChecksSpec](../table-profiling-checks/#TableSqlProfilingChecksSpec)| | | |
-|[availability](../table-profiling-checks/#TableAvailabilityProfilingChecksSpec)|Configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](../table-profiling-checks/#TableAvailabilityProfilingChecksSpec)| | | |
-|[schema](../table-profiling-checks/#TableSchemaProfilingChecksSpec)|Configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](../table-profiling-checks/#TableSchemaProfilingChecksSpec)| | | |
-|[comparisons](../table-profiling-checks/#TableComparisonProfilingChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonProfilingChecksSpecMap](../table-profiling-checks/#TableComparisonProfilingChecksSpecMap)| | | |
-|[custom](../table-profiling-checks/#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../table-profiling-checks/#CustomCheckSpecMap)| | | |
+|[profile_row_count](../../../../checks/table/volume/row-count/)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|[TableRowCountCheckSpec](../../../../checks/table/volume/row-count/)| | | |
+|[profile_row_count_anomaly_differencing_30_days](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyDifferencingRowCount30DaysCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)| | | |
+|[profile_row_count_anomaly_differencing](../../../../checks/table/volume/row-count-anomaly-differencing/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|[TableAnomalyDifferencingRowCountCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing/)| | | |
+|[profile_row_count_change](../../../../checks/table/volume/row-count-change/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableChangeRowCountCheckSpec](../../../../checks/table/volume/row-count-change/)| | | |
+|[profile_row_count_change_yesterday](../../../../checks/table/volume/row-count-change-yesterday/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](../../../../checks/table/volume/row-count-change-yesterday/)| | | |
+|[profile_row_count_change_7_days](../../../../checks/table/volume/row-count-change-7-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](../../../../checks/table/volume/row-count-change-7-days/)| | | |
+|[profile_row_count_change_30_days](../../../../checks/table/volume/row-count-change-30-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|[TableChangeRowCountSince30DaysCheckSpec](../../../../checks/table/volume/row-count-change-30-days/)| | | |
+|[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableComparisonProfilingChecksSpec  
+Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[profile_row_count_match](../../../../checks/table/comparisons/row-count-match/)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|[TableComparisonRowCountMatchCheckSpec](../../../../checks/table/comparisons/row-count-match/)| | | |
+|[profile_column_count_match](../../../../checks/table/comparisons/column-count-match/)|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.|[TableComparisonColumnCountMatchCheckSpec](../../../../checks/table/comparisons/column-count-match/)| | | |
+|[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## CustomCategoryCheckSpecMap  
+Dictionary of custom checks indexed by a check name that are configured on a category.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+
+
+
+
+
+
+
+
+
+___  
+
+## TableTimelinessProfilingChecksSpec  
+Container of timeliness data quality checks on a table level.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[profile_data_freshness](../../../../checks/table/timeliness/data-freshness/)|Calculates the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../../checks/table/timeliness/data-freshness/)| | | |
+|[profile_data_staleness](../../../../checks/table/timeliness/data-staleness/)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../../checks/table/timeliness/data-staleness/)| | | |
+|[profile_data_ingestion_delay](../../../../checks/table/timeliness/data-ingestion-delay/)|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../../checks/table/timeliness/data-ingestion-delay/)| | | |
+|[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
 
@@ -62,8 +146,8 @@ Container of comparison checks for each defined data comparison. The name of the
 
 ___  
 
-## TableComparisonProfilingChecksSpec  
-Container of built-in comparison (accuracy) checks on a table level that are using a defined comparison to identify the reference table and the data grouping configuration.  
+## MonitoringScheduleSpec  
+Monitoring job schedule specification.  
   
 
 
@@ -77,9 +161,8 @@ Container of built-in comparison (accuracy) checks on a table level that are usi
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profile_row_count_match](../../../../checks/table/comparisons/row-count-match/)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|[TableComparisonRowCountMatchCheckSpec](../../../../checks/table/comparisons/row-count-match/)| | | |
-|[profile_column_count_match](../../../../checks/table/comparisons/column-count-match/)|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.|[TableComparisonColumnCountMatchCheckSpec](../../../../checks/table/comparisons/column-count-match/)| | | |
-|[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+|cron_expression|Unix style cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud.|string| | | |
+|disabled|Disables the schedule. When the value of this &#x27;disable&#x27; field is false, the schedule is stored in the metadata but it is not activated to run data quality checks.|boolean| | | |
 
 
 
@@ -132,8 +215,15 @@ Custom check specification. This check is usable only when there is a matching c
 
 ___  
 
-## TableAccuracyProfilingChecksSpec  
-Container of built-in preconfigured accuracy data quality checks on a table level.  
+## CommentsListSpec  
+List of comments.  
+  
+
+
+___  
+
+## CommentSpec  
+Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.  
   
 
 
@@ -147,8 +237,89 @@ Container of built-in preconfigured accuracy data quality checks on a table leve
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profile_total_row_count_match_percent](../../../../checks/table/accuracy/total-row-count-match-percent/)|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|[TableAccuracyTotalRowCountMatchPercentCheckSpec](../../../../checks/table/accuracy/total-row-count-match-percent/)| | | |
+|date|Comment date and time|datetime| | | |
+|comment_by|Commented by|string| | | |
+|comment|Comment text|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## TableAvailabilityProfilingChecksSpec  
+Container of built-in preconfigured table availability data quality checks on a table level.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[profile_table_availability](../../../../checks/table/availability/table-availability/)|Verifies availability of a table in a monitored database using a simple query.|[TableAvailabilityCheckSpec](../../../../checks/table/availability/table-availability/)| | | |
 |[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## CustomCheckSpecMap  
+Dictionary of custom checks indexed by a check name.  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+___  
+
+## TableProfilingCheckCategoriesSpec  
+Container of table level checks that are activated on a table level.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|result_truncation|Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the &#x27;one_per_month&#x27; configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.|enum|one_per_week<br/>all_results<br/>one_per_hour<br/>one_per_month<br/>one_per_day<br/>| | |
+|[volume](../table-profiling-checks/#TableVolumeProfilingChecksSpec)|Configuration of volume data quality checks on a table level.|[TableVolumeProfilingChecksSpec](../table-profiling-checks/#TableVolumeProfilingChecksSpec)| | | |
+|[timeliness](../table-profiling-checks/#TableTimelinessProfilingChecksSpec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|[TableTimelinessProfilingChecksSpec](../table-profiling-checks/#TableTimelinessProfilingChecksSpec)| | | |
+|[accuracy](../table-profiling-checks/#TableAccuracyProfilingChecksSpec)|Configuration of accuracy checks on a table level. Accuracy checks compare the tested table with another reference table.|[TableAccuracyProfilingChecksSpec](../table-profiling-checks/#TableAccuracyProfilingChecksSpec)| | | |
+|[sql](../table-profiling-checks/#TableSqlProfilingChecksSpec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|[TableSqlProfilingChecksSpec](../table-profiling-checks/#TableSqlProfilingChecksSpec)| | | |
+|[availability](../table-profiling-checks/#TableAvailabilityProfilingChecksSpec)|Configuration of the table availability data quality checks on a table level.|[TableAvailabilityProfilingChecksSpec](../table-profiling-checks/#TableAvailabilityProfilingChecksSpec)| | | |
+|[schema](../table-profiling-checks/#TableSchemaProfilingChecksSpec)|Configuration of schema (column count and schema) data quality checks on a table level.|[TableSchemaProfilingChecksSpec](../table-profiling-checks/#TableSchemaProfilingChecksSpec)| | | |
+|[comparisons](../table-profiling-checks/#TableComparisonProfilingChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonProfilingChecksSpecMap](../table-profiling-checks/#TableComparisonProfilingChecksSpecMap)| | | |
+|[custom](../table-profiling-checks/#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../table-profiling-checks/#CustomCheckSpecMap)| | | |
 
 
 
@@ -190,38 +361,6 @@ Container of built-in preconfigured data quality checks on a table level that ar
 
 ___  
 
-## TableSchemaProfilingChecksSpec  
-Container of built-in preconfigured volume data quality checks on a table level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profile_column_count](../../../../checks/table/schema/column-count/)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|[TableSchemaColumnCountCheckSpec](../../../../checks/table/schema/column-count/)| | | |
-|[profile_column_count_changed](../../../../checks/table/schema/column-count-changed/)|Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|[TableSchemaColumnCountChangedCheckSpec](../../../../checks/table/schema/column-count-changed/)| | | |
-|[profile_column_list_changed](../../../../checks/table/schema/column-list-changed/)|Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|[TableSchemaColumnListChangedCheckSpec](../../../../checks/table/schema/column-list-changed/)| | | |
-|[profile_column_list_or_order_changed](../../../../checks/table/schema/column-list-or-order-changed/)|Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|[TableSchemaColumnListOrOrderChangedCheckSpec](../../../../checks/table/schema/column-list-or-order-changed/)| | | |
-|[profile_column_types_changed](../../../../checks/table/schema/column-types-changed/)|Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|[TableSchemaColumnTypesChangedCheckSpec](../../../../checks/table/schema/column-types-changed/)| | | |
-|[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## CustomRuleParametersSpec  
 Custom data quality rule.  
   
@@ -248,8 +387,8 @@ Custom data quality rule.
 
 ___  
 
-## MonitoringScheduleSpec  
-Monitoring job schedule specification.  
+## TableAccuracyProfilingChecksSpec  
+Container of built-in preconfigured accuracy data quality checks on a table level.  
   
 
 
@@ -263,117 +402,7 @@ Monitoring job schedule specification.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|cron_expression|Unix style cron expression that specifies when to execute scheduled operations like running data quality checks or synchronizing the configuration with the cloud.|string| | | |
-|disabled|Disables the schedule. When the value of this &#x27;disable&#x27; field is false, the schedule is stored in the metadata but it is not activated to run data quality checks.|boolean| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## CustomCheckSpecMap  
-Dictionary of custom checks indexed by a check name.  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-___  
-
-## TableTimelinessProfilingChecksSpec  
-Container of timeliness data quality checks on a table level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profile_data_freshness](../../../../checks/table/timeliness/data-freshness/)|Calculates the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../../checks/table/timeliness/data-freshness/)| | | |
-|[profile_data_staleness](../../../../checks/table/timeliness/data-staleness/)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../../checks/table/timeliness/data-staleness/)| | | |
-|[profile_data_ingestion_delay](../../../../checks/table/timeliness/data-ingestion-delay/)|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../../checks/table/timeliness/data-ingestion-delay/)| | | |
-|[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## CommentSpec  
-Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|date|Comment date and time|datetime| | | |
-|comment_by|Commented by|string| | | |
-|comment|Comment text|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## TableVolumeProfilingChecksSpec  
-Container of built-in preconfigured volume data quality checks on a table level.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profile_row_count](../../../../checks/table/volume/row-count/)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|[TableRowCountCheckSpec](../../../../checks/table/volume/row-count/)| | | |
-|[profile_row_count_anomaly_differencing_30_days](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyDifferencingRowCount30DaysCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)| | | |
-|[profile_row_count_anomaly_differencing](../../../../checks/table/volume/row-count-anomaly-differencing/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|[TableAnomalyDifferencingRowCountCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing/)| | | |
-|[profile_row_count_change](../../../../checks/table/volume/row-count-change/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.|[TableChangeRowCountCheckSpec](../../../../checks/table/volume/row-count-change/)| | | |
-|[profile_row_count_change_yesterday](../../../../checks/table/volume/row-count-change-yesterday/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](../../../../checks/table/volume/row-count-change-yesterday/)| | | |
-|[profile_row_count_change_7_days](../../../../checks/table/volume/row-count-change-7-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](../../../../checks/table/volume/row-count-change-7-days/)| | | |
-|[profile_row_count_change_30_days](../../../../checks/table/volume/row-count-change-30-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|[TableChangeRowCountSince30DaysCheckSpec](../../../../checks/table/volume/row-count-change-30-days/)| | | |
+|[profile_total_row_count_match_percent](../../../../checks/table/accuracy/total-row-count-match-percent/)|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|[TableAccuracyTotalRowCountMatchPercentCheckSpec](../../../../checks/table/accuracy/total-row-count-match-percent/)| | | |
 |[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -413,8 +442,8 @@ Custom sensor parameters for custom checks.
 
 ___  
 
-## TableAvailabilityProfilingChecksSpec  
-Container of built-in preconfigured table availability data quality checks on a table level.  
+## TableSchemaProfilingChecksSpec  
+Container of built-in preconfigured volume data quality checks on a table level.  
   
 
 
@@ -428,41 +457,12 @@ Container of built-in preconfigured table availability data quality checks on a 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profile_table_availability](../../../../checks/table/availability/table-availability/)|Verifies availability of the table in a database using a simple row count.|[TableAvailabilityCheckSpec](../../../../checks/table/availability/table-availability/)| | | |
+|[profile_column_count](../../../../checks/table/schema/column-count/)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|[TableSchemaColumnCountCheckSpec](../../../../checks/table/schema/column-count/)| | | |
+|[profile_column_count_changed](../../../../checks/table/schema/column-count-changed/)|Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|[TableSchemaColumnCountChangedCheckSpec](../../../../checks/table/schema/column-count-changed/)| | | |
+|[profile_column_list_changed](../../../../checks/table/schema/column-list-changed/)|Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.|[TableSchemaColumnListChangedCheckSpec](../../../../checks/table/schema/column-list-changed/)| | | |
+|[profile_column_list_or_order_changed](../../../../checks/table/schema/column-list-or-order-changed/)|Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.|[TableSchemaColumnListOrOrderChangedCheckSpec](../../../../checks/table/schema/column-list-or-order-changed/)| | | |
+|[profile_column_types_changed](../../../../checks/table/schema/column-types-changed/)|Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.|[TableSchemaColumnTypesChangedCheckSpec](../../../../checks/table/schema/column-types-changed/)| | | |
 |[custom_checks](../table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## CommentsListSpec  
-List of comments.  
-  
-
-
-___  
-
-## CustomCategoryCheckSpecMap  
-Dictionary of custom checks indexed by a check name that are configured on a category.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
 
 
 

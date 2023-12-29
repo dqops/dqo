@@ -15,12 +15,16 @@
  */
 package com.dqops.core.jobqueue;
 
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Identifies a single job.
@@ -152,5 +156,21 @@ public class DqoQueueJobId implements Comparable<DqoQueueJobId> {
                 ", jobBusinessKey=" + jobBusinessKey +
                 ", createdAt=" + createdAt +
                 '}';
+    }
+
+    public static class DqoQueueJobIdSampleFactory implements SampleValueFactory<DqoQueueJobId> {
+        @Override
+        public DqoQueueJobId createSample() {
+            return new DqoQueueJobId() {{
+                setJobId(SampleLongsRegistry.getJobId());
+                setCreatedAt(LocalDateTime.of((int)SampleLongsRegistry.getYear(),
+                        (int)SampleLongsRegistry.getMonth(),
+                        11,
+                        13,
+                        42,
+                        0
+                ).toInstant(ZoneOffset.UTC));
+            }};
+        }
     }
 }

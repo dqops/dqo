@@ -93,7 +93,7 @@ The tree view in the **Incidents** section displays a list of all added sources 
 In the **Configuration** section, the tree view displays a list of all built-in data quality sensors, rules and data 
 quality checks that can be customized. The tree view in this section also provides access to the configuration of the following:
 
-- **Default checks configuration:** This allows you to configure checks that are automatically enabled after importing new tables.
+- **Default checks configuration:** This allows you to configure checks that are automatically activated after importing new tables.
 - **Manage users:** This allows you to add new users and manage their roles.
 - **Default schedules:** This allows you to [configure schedules](../../working-with-dqo/schedules/index.md) that are automatically set after importing new tables.
 - **Defaults webhooks:** This allows you to [configure webhooks](../../integrations/webhooks/index.md).
@@ -108,7 +108,7 @@ quality checks that can be customized. The tree view in this section also provid
 Clicking on the tree vertical dots at the end of each element in the tree view in the **Profiling**, **Monitoring Checks**
 and **Partition Checks** sections opens a menu that allows to run the following functions:
 
-- Run all enabled checks on connection, schema, table or column
+- Run all activated checks on connection, schema, table or column
 - Collect statistics
 - Import metadata
 - Add schema, table or column
@@ -139,19 +139,19 @@ If the tab's content no longer exists, a pop-up notification will appear and the
 
 ### **Check editor**
 
-The main workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections, is where you can work with checks.
+Below we explain the main elements of the workspace in the **Profiling**, **Monitoring Checks** and **Partition Checks** sections.
 
 ![Check editor ](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/main-workspace-check-editor.png)
 
 
-The top section of the check editor workspace contains quick links that allow you to switch between different sections 
+The top section of this workspace contains quick links that allow you to switch between different sections 
 while keeping the same level in the tree. For instance, if you are in the monitoring section on a table and click the 
 **Partition checks >** link, you will be directed to the Partition check section on the same table. Linking works the 
 same when you are on the column level.
 
-Below the quick links, there are tabs that allow you to switch between Profiling (only in Profiling section) or Daily 
-and Monthly checks, review Table quality status, access the screen for setting Comparisons, view Basic data statistics 
-(only in Profiling section), or preview tables (only in Profiling section).
+Below the quick links, there are tabs that allow you to access the **Check editor** located in the **Profiling checks** tab
+(only in Profiling section) or **Daily checks** and **Monthly checks**, review **Table quality status**, access the screen
+for setting **Comparisons**, view **Basic data statistics** (only in Profiling section), or **Preview tables** (only in Profiling section).
 
 Under tabs selection, there is information about the set schedule configuration. Also, in the **Partition Checks** 
 section, there is additional information about the date partitioning column.
@@ -186,4 +186,41 @@ The buttons and icons allow you to:
     - Orange for an error
     - Red for a fatal error
     - Black for execution error.
+
+### **Table quality status**
+
+In the **Profiling**, **Monitoring Checks**, and **Partition Checks**, there is a tab called **Table quality status**.
+This tab provides a summary of the results of the executed checks, grouped by check category or data quality dimension.
+
+![Table quality status](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status.png)
+
+
+By using the radio buttons in the upper right corner of the screen, you can view the results for the **Current month**,
+**Last 3 months**, or select a specific starting date. You can also switch between viewing the **Current severity status**
+and the **Highest severity status**.
+
+There are two tables on the left-hand side of the screen, which show the **Current table status** and the summary of the
+**Total checks executed**. 
+
+Below these tables, there is a table with the Current severity statuses divided by the check category or data quality 
+dimension, depending on the selected option. The first row displays the results from the table-level checks executed 
+on the table, while the following rows show the column names and the results from the executed column-level checks. 
+The color indicate the current or the highest severity status:
+
+- green for a valid result
+- yellow for a warning
+- orange for an error
+- red for a fatal error
+
+You can view the list of executed checks by clicking on the arrow. Hovering over a check name will display more details.
+
+![Table quality status - detailed checks view](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/table-quality-status-detailed-checks-view.png)
+
+
+## What's next
+
+- Check the detailed process of running data quality checks and all DQOps engine internal components involved in the process in the [Data quality check execution flow](../architecture/check-execution-flow.md) section.
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
+
 

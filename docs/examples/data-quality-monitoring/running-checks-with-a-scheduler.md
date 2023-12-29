@@ -51,9 +51,9 @@ We will set six data quality monitoring checks on `bigquery-public-data.thelook_
     - error: 98.0%
     - fatal: 95.0%
 
-To set a schedule, we will create a connection level schedule that will apply to all enabled checks at 8:00 AM. For two 
+We will modify the default connection level schedule that apply to all activated checks from 12:00 AM to 8:00 AM. For two 
 checks that require more frequent runs, we will set individual check-level schedules that will override the connection level settings.
-The schedule for the daily_values_in_range_numeric_percent check will be temporarily disabled.
+The schedule for the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check will be temporarily disabled.
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 You can read more about scheduling [here](../../working-with-dqo/schedules/index.md). 
@@ -63,34 +63,102 @@ You can read more about scheduling [here](../../working-with-dqo/schedules/index
 By setting up a schedule, data can be constantly monitored, and errors can be triggered to alert about potential 
 issues with the data quality or operational processes.
 
-## Data structure
 
-The following is a fragment of the `bigquery-public-data.thelook_ecommerce.users` dataset. Some columns were omitted for clarity.  
+## Change the schedule settings using the user interface
+
+### **Evaluate and change the default schedule settings**
+
+To evaluate schedule settings open the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
+
+To view the connection-level schedule:
+
+1. Go to the **Data Source** section and select the "thelook_ecommerce" connection from the tree view on the left. 
+
+2. In the main workspace select the **Schedule** tab and the **Monitoring Daily** tab. 
+    Here, you can see that a schedule has been set to **Run every day at 12:00**.
+
+    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule1.png)
 
 
-| id    | first_name | last_name | email                        | age | gender | created_at         |
-|:------|:-----------|:----------|:-----------------------------|:----|:-------|:-------------------|
-| 1543  | Bob        | Caldwell  | bobcaldwell@example.net      | 61  | M      | 3/9/2021 15:49:00  |
-| 2586  | Brittany   | Flores    | brittanyflores@example.org   | 40  | F      | 1/24/2021 1:25:00  |
-| 38699 | Christina  | Johnson   | christinajohnson@example.com | 63  | F      | 6/7/2021 6:48:00   |
-| 49224 | Latoya     | Bird      | latoyabird@example.com       | 56  | F      | 6/22/2019 5:54:00  |
-| 57933 | Charles    | Martin    | charlesmartin@example.net    | 28  | M      | 7/25/2022 8:11:00  |
-| 58471 | Amanda     | Collins   | amandacollins@example.com    | 45  | F      | 8/24/2019 4:56:00  |
-| 73890 | Jose       | Marsh     | josemarsh@example.net        | 39  | M      | 11/21/2022 6:21:00 |
-| 82328 | Diane      | Leonard   | dianeleonard@example.net     | 62  | F      | 12/12/2021 6:47:00 |
-| 84680 | Mitchell   | Williams  | mitchellwilliams@example.net | 13  | M      | 3/1/2019 12:36:00  |
+In the example, we want to change the default schedule configration for Monitoring checks to 8:00 AM. 
+To do this simply change the value in the **Run every day at** and click the **Save** button.
+
+![Changing the default schedule for daily monitoring](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-changing-the-default-schedule.png)
+
+
+### **Set the check-level schedule**
+
+We also wanted to verify the availability of the `users` table every 30 minutes using the table-level
+[daily_table_availability](../../checks/table/availability/table-availability.md) check. DQOps allows to set check-level
+schedules and override the connection level settings.
+
+To view and modify individual check-level schedules:
+
+![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule1.png)
+
+1. Go to the section with a list of checks. In our example, we have set monitoring checks, so go to the **Monitoring Checks** section.
+
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+
+2. Select the table `users` from the tree view on the left.
+
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
+
+3. Select the **Daily checks** tab on the check editor.
+
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+
+4. Find the [daily_table_availability](../../checks/table/availability/table-availability.md) check in the Availability group, and click on the **Settings** icon.
+
+    ![Access the check-level schedule settings](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-access-check-level-settings.png)
+
+5. Select the **Schedule Override** tab and change the option from
+   **Use scheduling configuration from the connection levels** to **Run every 30 minutes**. Click the **Save** button to save the changes.
+
+    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override1.png)
+
+
+Similarly, we change the schedule of the uniqueness check [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md)
+activated on the `id` column for **Run 15 minutes past every hour**.
+
+![Check-level schedule override on daily-distinct-percent check](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override2.png)
+
+### **Disable check-level schedule**
+
+We wanted to disable the scheduling of the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md)
+check activated on the `age` column.
+
+To disable the check scheduling:
+
+1. Select the `age` column from the tree view
+
+2. Access the settings of the [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md)
+   check and select the **Schedule override** tab.
+
+3. Check the **Disable schedule** checkbutton and click the **Save** button.
+
+    ![Disable check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-disable-check-level-schedule.png)
+
+## Start and stop a scheduler
+
+In DQOps, the scheduler is started as a default. Data synchronization take place every 10 minutes.
+
+To start or stop the scheduler use the user interface. Simply switch on or off the **Jobs scheduler** using the button in the Notifications window
+on the [right upper right corner of the navigation bar](../../dqo-concepts/user-interface-overview/user-interface-overview.md).
+
+![Start and stop a scheduler](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
 
 
 ## YAML configuration file
 
-The YAML connection configuration file stores data source configurations and allows setting connection-level schedule. 
+The YAML connection configuration file stores data source configurations and allows setting connection-level schedule.
 
-In the YAML data source configuration file below, the highlighted sections indicate the area where the cron expression 
-for the schedule is set to run every day at 8:00 AM (0 8 * * *).
+In the YAML data source configuration file below, the highlighted sections indicate the area where the cron expression
+for the **Daily monitoring** schedule is set to run every day at 8:00 AM (0 8 * * *).
 
 If you want to learn more about cron formatting, please refer to the [Working with DQOps section](../../working-with-dqo/schedules/cron-formatting.md).
 
-```yaml hl_lines="10-12"
+```yaml hl_lines="13-14"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ConnectionYaml-schema.json
 apiVersion: dqo/v1
 kind: source
@@ -98,11 +166,19 @@ spec:
   provider_type: bigquery
   bigquery:
     source_project_id: bigquery-public-data
-    authentication_mode: google_application_credentials
     jobs_create_project: create_jobs_in_default_project_from_credentials
+    authentication_mode: google_application_credentials
   schedules:
+    profiling:
+      cron_expression: 0 12 * * *
     monitoring_daily:
       cron_expression: 0 8 * * *
+    monitoring_monthly:
+      cron_expression: 0 12 * * *
+    partitioned_daily:
+      cron_expression: 0 12 * * *
+    partitioned_monthly:
+      cron_expression: 0 12 * * *
   incident_grouping:
     grouping_level: table_dimension_category
     minimum_severity: warning
@@ -110,15 +186,17 @@ spec:
     mute_for_days: 60
 ```
 
-In the YAML table configuration file below, the highlighted section indicate that the table-level `daily_table_availability` 
-check is set with schedule_override section. This means that this check will be run every 30 min (*/30 * * * *). 
+In the YAML table configuration file below, the first highlighted section indicate that the table-level [daily_table_availability](../../checks/table/availability/table-availability.md)
+check is set with schedule_override section. This means that this check will be run every 30 min (*/30 * * * *).
 
-The `id` column also includes an updated schedule on a daily_distinct_percent check. This check will run 15 min past every hour.
-The remaining checks will be run every day at 8:00 AM (0 8 * * *) as indicated in the YAML connection configuration mentioned earlier.
-It is important to keep in mind that the daily_values_in_range_numeric_percent check will not be run since the "disabled:"
-parameter has been set to "true" in the "schedule_override" section.
+The `id` column also includes an updated schedule on a [daily_distinct_percent](../../checks/column/uniqueness/distinct-percent.md) check. This check will run 15 min past every hour.
 
-```yaml hl_lines="8-19"
+The remaining monitoring checks will be run every day at 8:00 AM (0 8 * * *) as indicated in the YAML connection configuration mentioned earlier.
+
+The [daily_values_in_range_numeric_percent](../../checks/column/numeric/values-in-range-numeric-percent.md) check activated
+on the `age` column will not be run since the "disabled:" parameter has been set to "true" in the "schedule_override" section.
+
+```yaml hl_lines="10-13 27-30 73-76"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -180,11 +258,11 @@ spec:
           pii:
             daily_contains_email_percent:
               warning:
-                min_percent: 99.0
+                max_percent: 0.0
               error:
-                min_percent: 98.0
+                max_percent: 1.0
               fatal:
-                min_percent: 95.0
+                max_percent: 5.0
     age:
       type_snapshot:
         column_type: INT64
@@ -212,10 +290,6 @@ spec:
         daily:
           strings:
             daily_string_value_in_set_percent:
-              parameters:
-                values:
-                - F
-                - M
               warning:
                 min_percent: 99.0
               error:
@@ -226,70 +300,7 @@ spec:
       type_snapshot:
         column_type: STRING
         nullable: true
-    street_address:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    postal_code:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    city:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    country:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    latitude:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
-    longitude:
-      type_snapshot:
-        column_type: FLOAT64
-        nullable: true
-    traffic_source:
-      type_snapshot:
-        column_type: STRING
-        nullable: true
-    created_at:
-      type_snapshot:
-        column_type: TIMESTAMP
-        nullable: true
 ```
-
-
-## Evaluating the schedule settings using the user interface
-
-To evaluate schedule settings that have been configured in YAML files open the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md)
-
-To view the connection-level schedule:
-
-1. Go to the Data Source section and select the "thelook_ecommerce" connection from the tree view on the left. 
-
-2. In the main workspace select the **Schedule** tab and the **Monitoring Daily** tab. 
-    Here, you can see that a schedule has been set to "Run every day at 8:00".
-
-    ![Navigating to a connection-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-connection-level-schedule.png)
-
-In the example, we want to verify the availability of the `users` table every 30 minutes using the **daily_table_availability** check.
-DQOps allows to set check-level schedules and override the connection level settings.
-
-To view and modify individual check-level schedules:
-
-1. Go to the section with a list of checks. In our example, we have set monitoring checks, so go to the **Monitoring Checks** section.
-
-2. In the main workspace select the table "users" from the tree view on the left. 
-
-3. Click on the **Settings** icon to the left of the daily_table_availability check name. 
-
-    ![Navigating to a check-level schedule](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-navigating-to-check-level-schedule.png)
-
-4. Select the **Schedule Override** tab to see that the check-level schedule is set to run every 30 minutes.
-
-    ![Check-level schedule override](https://dqops.com/docs/images/examples/running-check-with-a-scheduler-check-level-schedule-override.png)
 
 
 ## Starting a scheduler using the user interface
@@ -302,53 +313,6 @@ toggle the button next to the **Jobs scheduler**.
 The scheduler has been initiated and will run checks based on the set schedules. Data synchronization will
 take place every 10 minutes.
 
-## Starting a scheduler using DQOps Shell
-
-To initiate a scheduler in the DQOps Shell, simply enter the command `scheduler start`. To stop the scheduler, use the
-command `scheduler stop`.
-For further information on the `scheduler` commands, please refer to the [Command-line interface section](../../command-line-interface/scheduler.md).
-
-Scheduler can also be started in a server mode that continuously run a job scheduler and synchronize the data every 10 minutes.
-To do this, simply enter the command below in your terminal:
-```
-$ dqo run
-```
-To terminate dqo running in the background, simply use the Ctrl+C.
-
-For more information on the `run` command, please refer to the [Command-line interface section](../../command-line-interface/run.md).
-
-
-
-## Running the checks in the example and evaluating the results
-
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases). 
-
-Even if we have started scheduler we can run all the checks to verify the results. 
-To execute the check prepared in the example, run the following command in DQOps Shell:
-
-``` 
-check run
-```
-
-Review the results which should be similar to the one below.
-Results from all checks appear to be valid except for one that indicates a fatal error.
-
-
-```
-Check evaluation summary per table:
-+-----------------+-----------------------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection       |Table                  |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+-----------------+-----------------------+------+--------------+-------------+--------+------+------------+----------------+
-|thelook_ecommerce|thelook_ecommerce.users|6     |6             |5            |0       |0     |1           |0               |
-+-----------------+-----------------------+------+--------------+-------------+--------+------+------------+----------------+
-```
-
-For a more detailed insight of how the check is run, you can initiate the check in debug mode by executing the 
-following command, as in the other examples:
-
-```
-check run --mode=debug
-```
 
 ## Next step
 - Now that you have set up a schedule and get first results, you can evaluate them on dashboards. 

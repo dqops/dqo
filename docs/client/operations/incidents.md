@@ -35,6 +35,19 @@ http://localhost:8888/api/incidentstat
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "openIncidents" : 0
+	}, {
+	  "openIncidents" : 0
+	}, {
+	  "openIncidents" : 0
+	} ]
+    ```
+
+
 ___  
 ## find_recent_incidents_on_connection  
 Returns a list of recent data quality incidents.  
@@ -86,6 +99,31 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	}, {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	}, {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	} ]
+    ```
+
+
 ___  
 ## get_incident  
 Return a single data quality incident&#x27;s details.  
@@ -127,6 +165,19 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	}
     ```
 
 
@@ -176,6 +227,20 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "hasProfilingIssues" : false,
+	  "hasMonitoringIssues" : false,
+	  "hasPartitionedIssues" : false,
+	  "days" : { },
+	  "columns" : { },
+	  "checks" : { }
+	}
     ```
 
 
@@ -232,6 +297,94 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "id" : "3854372",
+	  "checkHash" : 0,
+	  "checkCategory" : "sample_category",
+	  "checkName" : "sample_check",
+	  "checkDisplayName" : "sample_target/sample_category/sample_check",
+	  "checkType" : "profiling",
+	  "actualValue" : 100.0,
+	  "expectedValue" : 110.0,
+	  "warningLowerBound" : 105.0,
+	  "warningUpperBound" : 115.0,
+	  "errorLowerBound" : 95.0,
+	  "errorUpperBound" : 125.0,
+	  "fatalLowerBound" : 85.0,
+	  "fatalUpperBound" : 135.0,
+	  "severity" : 2,
+	  "columnName" : "sample_column",
+	  "dataGroup" : "sample_data_grouping",
+	  "durationMs" : 142,
+	  "executedAt" : "2023-10-01T14:00:00Z",
+	  "timeGradient" : "hour",
+	  "timePeriod" : "2023-10-01T14:00:00",
+	  "includeInKpi" : true,
+	  "includeInSla" : true,
+	  "provider" : "BigQuery",
+	  "qualityDimension" : "sample_quality_dimension",
+	  "sensorName" : "sample_target/sample_category/sample_sensor"
+	}, {
+	  "id" : "3854372",
+	  "checkHash" : 0,
+	  "checkCategory" : "sample_category",
+	  "checkName" : "sample_check",
+	  "checkDisplayName" : "sample_target/sample_category/sample_check",
+	  "checkType" : "profiling",
+	  "actualValue" : 100.0,
+	  "expectedValue" : 110.0,
+	  "warningLowerBound" : 105.0,
+	  "warningUpperBound" : 115.0,
+	  "errorLowerBound" : 95.0,
+	  "errorUpperBound" : 125.0,
+	  "fatalLowerBound" : 85.0,
+	  "fatalUpperBound" : 135.0,
+	  "severity" : 2,
+	  "columnName" : "sample_column",
+	  "dataGroup" : "sample_data_grouping",
+	  "durationMs" : 142,
+	  "executedAt" : "2023-10-01T14:00:00Z",
+	  "timeGradient" : "hour",
+	  "timePeriod" : "2023-10-01T14:00:00",
+	  "includeInKpi" : true,
+	  "includeInSla" : true,
+	  "provider" : "BigQuery",
+	  "qualityDimension" : "sample_quality_dimension",
+	  "sensorName" : "sample_target/sample_category/sample_sensor"
+	}, {
+	  "id" : "3854372",
+	  "checkHash" : 0,
+	  "checkCategory" : "sample_category",
+	  "checkName" : "sample_check",
+	  "checkDisplayName" : "sample_target/sample_category/sample_check",
+	  "checkType" : "profiling",
+	  "actualValue" : 100.0,
+	  "expectedValue" : 110.0,
+	  "warningLowerBound" : 105.0,
+	  "warningUpperBound" : 115.0,
+	  "errorLowerBound" : 95.0,
+	  "errorUpperBound" : 125.0,
+	  "fatalLowerBound" : 85.0,
+	  "fatalUpperBound" : 135.0,
+	  "severity" : 2,
+	  "columnName" : "sample_column",
+	  "dataGroup" : "sample_data_grouping",
+	  "durationMs" : 142,
+	  "executedAt" : "2023-10-01T14:00:00Z",
+	  "timeGradient" : "hour",
+	  "timePeriod" : "2023-10-01T14:00:00",
+	  "includeInKpi" : true,
+	  "includeInSla" : true,
+	  "provider" : "BigQuery",
+	  "qualityDimension" : "sample_quality_dimension",
+	  "sensorName" : "sample_target/sample_category/sample_sensor"
+	} ]
+    ```
+
+
 ___  
 ## set_incident_issue_url  
 Changes the incident&#x27;s issueUrl to a new status.  
@@ -270,6 +423,8 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
 
+
+
 ___  
 ## set_incident_status  
 Changes the incident&#x27;s status to a new status.  
@@ -306,5 +461,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 		-H "Accept: application/json"
 
     ```
+
+
 
 

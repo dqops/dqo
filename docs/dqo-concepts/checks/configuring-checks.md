@@ -48,7 +48,7 @@ spec: # (2)!
 
 1.  The type of the file is identified in the `kind` element.
 2.  The `spec` [table specification](../../reference/yaml/TableYaml.md#tablespec) object that describes the table, its columns
-    and enabled data quality checks.
+    and activated data quality checks.
 3.  The configuration of timestamp columns that are used for timeliness checks such as freshness, and for running partitioned checks.
 4.  The column name (*date* in this example) that contains an event timestamp that is used to measure timeliness.
 5.  The column name (*date* in this example) that will be used in **GROUP BY** queries to measure the data quality at a partition level.
@@ -139,14 +139,14 @@ spec:
 
 The elements of the profiling checks configuration are listed in the table below.
 
-| Line  | Element&nbsp;path (within the `spec` node)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                             |
-|-------|--------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks containerprofiling checks specification](../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                       |
-| 7     | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                       |
-| 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node, it check becomes enabled. |
-| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](../rules/rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.          |
-| 10    | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.      |
-| 11    | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                        |   
+| Line  | Element&nbsp;path (within the `spec` node)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                           |
+|-------|--------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks containerprofiling checks specification](../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                     |
+| 7     | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                     |
+| 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node,check becomes activated. |
+| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](../rules/rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.        |
+| 10    | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.    |
+| 11    | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                      |   
 
 
 ### **Table-level monitoring checks**
@@ -318,7 +318,7 @@ flag will be *false*. The flag `include_in_sla` will be also *false*.
 Due to a limitation in the YAML format, a node without a value makes the YAML file invalid.
 However, every YAML supports JSON inclusions. 
 
-The following example shows how to enable a check without setting any rules by setting its value
+The following example shows how to activate a check without setting any rules by setting its value
 to a JSON `{}` empty object.
 
 ``` { .yaml .annotate linenums="1" hl_lines="8" }
@@ -421,14 +421,14 @@ spec:
 1.  The column dictionary node. The nodes below it are the column names.
 2.  The configuration and captured metadata of the first column *cumulative_confirmed*.
 3.  Data type snapshot contains the last imported physical data type of the column. DQOps uses these data types
-    to decide if some data type specific data quality checks could be enabled on the column.
+    to decide if some data type specific data quality checks could be activated on the column.
 4.  The data type of the column, it is a physical data type introspected from the monitored table.
 
 The node for each column contains a [type snapshot](../../reference/yaml/TableYaml.md#columntypesnapshotspec) object
 that is used by DQOps in the following cases:
 
-- The default [data quality checks](#default-data-quality-checks) are enabled depending on the column's data type.
-  Numeric anomaly checks are enabled only on numeric columns such as the *cumulative_confirmed* column in the example above.
+- The default [data quality checks](#default-data-quality-checks) are activated depending on the column's data type.
+  Numeric anomaly checks are activated only on numeric columns such as the *cumulative_confirmed* column in the example above.
 
 - The data quality [sensors](../sensors/sensors.md) may use the column's data type to decide if an additional type casting
   must be generated in the SQL query that will capture the metrics for the data quality check.
@@ -849,7 +849,7 @@ This column is numeric, which allowed to activate some numeric anomaly checks,
 such as the [daily_sum_anomaly_differencing](../../checks/column/anomaly/sum-anomaly-differencing.md#daily-sum-anomaly-differencing)
 check that will compare the sum of values per day and raise a warning if the change since yesterday is greater than 10%.
 
-??? info "Click to see a full *.dqotable.yaml* file with all default data observability checks enabled"
+??? info "Click to see a full *.dqotable.yaml* file with all default data observability checks activated"
 
     ``` yaml
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json

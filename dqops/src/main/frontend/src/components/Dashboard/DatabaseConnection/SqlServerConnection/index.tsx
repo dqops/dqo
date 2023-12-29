@@ -1,15 +1,18 @@
 import React from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
-import { SharedCredentialListModel, SqlServerParametersSpec } from "../../../../api";
-import JdbcPropertiesView from "../JdbcProperties";
-import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
-import Checkbox from "../../../Checkbox";
+import {
+  SharedCredentialListModel,
+  SqlServerParametersSpec
+} from '../../../../api';
+import JdbcPropertiesView from '../JdbcProperties';
+import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import Checkbox from '../../../Checkbox';
 
 interface ISqlServerConnectionProps {
   sqlserver?: SqlServerParametersSpec;
   onChange?: (obj: SqlServerParametersSpec) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
 const SqlServerConnection = ({
@@ -17,7 +20,6 @@ const SqlServerConnection = ({
   onChange,
   sharedCredentials
 }: ISqlServerConnectionProps) => {
-
   const handleChange = (obj: Partial<SqlServerParametersSpec>) => {
     if (!onChange) return;
 
@@ -28,36 +30,40 @@ const SqlServerConnection = ({
   };
 
   return (
-    <SectionWrapper title="Microsoft SQL Server/SQL Server connection parameters" className="mb-4">
-      <FieldTypeInput  
-        data = {sharedCredentials}
+    <SectionWrapper
+      title="Microsoft SQL Server/SQL Server connection parameters"
+      className="mb-4"
+    >
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Host"
         className="mb-4"
         value={sqlserver?.host}
         onChange={(value) => handleChange({ host: value })}
       />
-      <FieldTypeInput  data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Port"
         className="mb-4"
-        value={(sqlserver?.port || 1433).toString()}
+        value={sqlserver?.port}
         onChange={(value) => handleChange({ port: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Database"
         className="mb-4"
         value={sqlserver?.database}
         onChange={(value) => handleChange({ database: value })}
       />
-      <FieldTypeInput 
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="User name"
         className="mb-4"
         value={sqlserver?.user}
         onChange={(value) => handleChange({ user: value })}
       />
-      <FieldTypeInput  
-        data = {sharedCredentials}
+      <FieldTypeInput
+        data={sharedCredentials}
         label="Password"
         className="mb-4"
         maskingType="password"

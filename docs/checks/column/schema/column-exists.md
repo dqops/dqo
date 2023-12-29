@@ -15,29 +15,34 @@ Checks the metadata of the monitored table and verifies if the column exists.
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_column_exists|profiling| |Completeness|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_1](../../../../reference/rules/Comparison/#equals-1)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_column_exists
+dqo> check activate -c=connection_name -ch=profile_column_exists
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_column_exists
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_column_exists
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_exists
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_column_exists
-```
+
 **Check structure (YAML)**
+
 ```yaml
       profiling_checks:
         schema:
@@ -46,9 +51,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
             error: {}
             fatal: {}
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -101,29 +108,34 @@ Checks the metadata of the monitored table and verifies if the column exists. St
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_column_exists|monitoring|daily|Completeness|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_1](../../../../reference/rules/Comparison/#equals-1)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_column_exists
+dqo> check activate -c=connection_name -ch=daily_column_exists
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_column_exists
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_column_exists
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_exists
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_column_exists
-```
+
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         daily:
@@ -133,9 +145,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               error: {}
               fatal: {}
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -189,29 +203,34 @@ Checks the metadata of the monitored table and verifies if the column exists. St
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_column_exists|monitoring|monthly|Completeness|[column_exists](../../../../reference/sensors/column/schema-column-sensors/#column-exists)|[equals_1](../../../../reference/rules/Comparison/#equals-1)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_column_exists
+dqo> check activate -c=connection_name -ch=monthly_column_exists
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_column_exists
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_column_exists
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_exists
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_column_exists
-```
+
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         monthly:
@@ -221,9 +240,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               error: {}
               fatal: {}
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1

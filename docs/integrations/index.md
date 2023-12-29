@@ -1,4 +1,4 @@
-# DQOps integration
+# DQOps integrations
 DQOps integrates with multiple tools, using both the REST API interface and by using file formats based on open standards.
 
 - **[Airflow](./airflow/index.md)**
@@ -11,6 +11,13 @@ DQOps integrates with multiple tools, using both the REST API interface and by u
     downstream when fatal severity issues are detected. 
 
     The [DQOps Python package](https://pypi.org/project/dqops/) is available on PyPI.
+
+
+- **[Dbt](./dbt/index.md)**
+
+    DQOps provides examples of running data quality checks before and after Dbt asks using Apache Airflow.
+
+    Data quality checks can be executed on source tables before loading the data and after the data was loaded.
 
 
 - **[Looker Studio](./looker-studio/creating-custom-dashboards.md)**

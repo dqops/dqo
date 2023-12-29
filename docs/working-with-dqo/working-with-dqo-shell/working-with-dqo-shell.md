@@ -59,7 +59,7 @@ The suggested command will be displayed below, and you can select the `connectio
 
 DQOps also supports autocomplete of parameters, connection names or table names.
 
-For example, if you want to run all enabled checks on single table, simply start typing `-` or `--` after the `check run` command,
+For example, if you want to run all activated checks on single table, simply start typing `-` or `--` after the `check run` command,
 and the available parameters will be displayed. Just start typing the name of the parameter and hit the Tab key to use autocomplete.
 
 ![Autocomplete-parameters](https://dqops.com/docs/images/working-with-dqo/working-with-dqo-shell/autocomplete-parameters.png)
@@ -96,7 +96,7 @@ For more information on the `run` command, please refer to the [Command-line int
 ## Using DQOps commands on the command-line interface
 
 You can also use any DQOps commands directly on the command line. For example, 
-to run all the enabled checks use the following command
+to run all the activated checks use the following command
 
 === "`dqo`"
     ```

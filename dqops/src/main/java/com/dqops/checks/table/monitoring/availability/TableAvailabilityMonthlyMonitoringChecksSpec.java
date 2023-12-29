@@ -44,7 +44,7 @@ public class TableAvailabilityMonthlyMonitoringChecksSpec extends AbstractCheckC
         }
     };
 
-    @JsonPropertyDescription("Verifies availability on table in database using simple row count. Stores the most recent table availability status for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.")
     private TableAvailabilityCheckSpec monthlyTableAvailability;
 
 

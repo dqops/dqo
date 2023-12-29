@@ -16,7 +16,7 @@
 
 ___  
 
-## BulkCheckDisableParameters  
+## BulkCheckDeactivateParameters  
   
   
 

@@ -52,6 +52,9 @@ public enum ProviderType {
     @JsonProperty("spark")
     spark,
 
+    @JsonProperty("databricks")
+    databricks,
+
     // TODO: add more connectors
 
     ;
@@ -77,6 +80,8 @@ public enum ProviderType {
                 return "Oracle";
             case spark:
                 return "Spark";
+            case databricks:
+                return "Databricks";
             default:
                 throw new RuntimeException("Unsupported enum: " + this.name());
         }

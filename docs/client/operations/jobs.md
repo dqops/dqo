@@ -35,6 +35,8 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
 
+
+
 ___  
 ## collect_statistics_on_data_groups  
 Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping  
@@ -85,6 +87,15 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		-d^
 		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "status" : "queued"
+	}
     ```
 
 
@@ -141,6 +152,15 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "status" : "queued"
+	}
+    ```
+
+
 ___  
 ## delete_stored_data  
 Starts a new background job that will delete stored data about check results, sensor readouts etc.  
@@ -194,6 +214,19 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "jobId" : {
+	    "jobId" : 10832,
+	    "createdAt" : "2007-10-11T13:42:00Z"
+	  },
+	  "status" : "queued"
+	}
+    ```
+
+
 ___  
 ## get_all_jobs  
 Retrieves a list of all queued and recently finished jobs.  
@@ -225,6 +258,29 @@ http://localhost:8888/api/jobs/jobs
     curl http://localhost:8888/api/jobs/jobs^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "jobs" : [ ],
+	  "folderSynchronizationStatus" : {
+	    "sources" : "unchanged",
+	    "sensors" : "unchanged",
+	    "rules" : "unchanged",
+	    "checks" : "unchanged",
+	    "settings" : "unchanged",
+	    "credentials" : "unchanged",
+	    "data_sensor_readouts" : "unchanged",
+	    "data_check_results" : "unchanged",
+	    "data_statistics" : "unchanged",
+	    "data_errors" : "unchanged",
+	    "data_incidents" : "unchanged"
+	  },
+	  "lastSequenceNumber" : 3854372
+	}
     ```
 
 
@@ -269,6 +325,13 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    { }
+    ```
+
+
 ___  
 ## get_job_changes_since  
 Retrieves an incremental list of job changes (new jobs or job status changes)  
@@ -307,6 +370,29 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     curl http://localhost:8888/api/jobs/jobchangessince/3854372^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "jobChanges" : [ ],
+	  "folderSynchronizationStatus" : {
+	    "sources" : "unchanged",
+	    "sensors" : "unchanged",
+	    "rules" : "unchanged",
+	    "checks" : "unchanged",
+	    "settings" : "unchanged",
+	    "credentials" : "unchanged",
+	    "data_sensor_readouts" : "unchanged",
+	    "data_check_results" : "unchanged",
+	    "data_statistics" : "unchanged",
+	    "data_errors" : "unchanged",
+	    "data_incidents" : "unchanged"
+	  },
+	  "lastSequenceNumber" : 3854372
+	}
     ```
 
 
@@ -363,6 +449,15 @@ http://localhost:8888/api/jobs/importtables
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "status" : "queued"
+	}
+    ```
+
+
 ___  
 ## is_cron_scheduler_running  
 Checks if the DQOps internal CRON scheduler is running and processing jobs scheduled using cron expressions.  
@@ -388,6 +483,8 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 		-H "Accept: application/json"
 
     ```
+
+
 
 
 ___  
@@ -443,6 +540,15 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "status" : "queued"
+	}
+    ```
+
+
 ___  
 ## start_cron_scheduler  
 Starts the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.  
@@ -470,6 +576,8 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
 
+
+
 ___  
 ## stop_cron_scheduler  
 Stops the job scheduler that runs monitoring jobs that are scheduled by assigning cron expressions.  
@@ -495,6 +603,8 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 		-H "Accept: application/json"
 
     ```
+
+
 
 
 ___  
@@ -550,6 +660,15 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "status" : "queued"
+	}
+    ```
+
+
 ___  
 ## wait_for_job  
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.  
@@ -592,6 +711,13 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
 
+
+**Return value sample**  
+    ```js
+    { }
+    ```
+
+
 ___  
 ## wait_for_run_checks_job  
 Waits for a job to finish. Returns the status of a finished job or a current state of a job that is still running, but the wait timeout elapsed.  
@@ -631,6 +757,15 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     curl http://localhost:8888/api/jobs/runchecks/123123124324324/wait^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "status" : "queued"
+	}
     ```
 
 

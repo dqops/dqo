@@ -1,6 +1,10 @@
 import React from 'react';
 
-import { PostgresqlParametersSpec, PostgresqlParametersSpecSslmodeEnum, SharedCredentialListModel } from '../../../../api';
+import {
+  PostgresqlParametersSpec,
+  PostgresqlParametersSpecSslmodeEnum,
+  SharedCredentialListModel
+} from '../../../../api';
 import JdbcPropertiesView from '../JdbcProperties';
 import Select from '../../../Select';
 import SectionWrapper from '../../SectionWrapper';
@@ -9,13 +13,13 @@ import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
 interface IPostgreSQLConnectionProps {
   postgresql?: PostgresqlParametersSpec;
   onChange?: (obj: PostgresqlParametersSpec) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
 const sslModes = [
   {
-    label: '',
-  },  
+    label: ''
+  },
   {
     label: 'disable',
     value: PostgresqlParametersSpecSslmodeEnum.disable
@@ -63,28 +67,28 @@ const PostgreSQLConnection = ({
         className="mb-4"
         value={postgresql?.host}
         onChange={(value) => handleChange({ host: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="Port"
         className="mb-4"
-        value={(postgresql?.port || 5432).toString()}
+        value={postgresql?.port}
         onChange={(value) => handleChange({ port: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="Database"
         className="mb-4"
         value={postgresql?.database}
         onChange={(value) => handleChange({ database: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="User name"
         className="mb-4"
         value={postgresql?.user}
         onChange={(value) => handleChange({ user: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <FieldTypeInput
         label="Password"
@@ -92,15 +96,13 @@ const PostgreSQLConnection = ({
         maskingType="password"
         value={postgresql?.password}
         onChange={(value) => handleChange({ password: value })}
-        data = {sharedCredentials}
+        data={sharedCredentials}
       />
       <Select
         label="SSL mode"
         options={sslModes}
         className="mb-4"
-        value={
-          postgresql?.sslmode
-        }
+        value={postgresql?.sslmode}
         onChange={(value) => handleChange({ sslmode: value })}
       />
       <JdbcPropertiesView

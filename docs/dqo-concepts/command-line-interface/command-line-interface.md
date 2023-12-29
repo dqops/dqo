@@ -10,7 +10,7 @@ In your command line use the base call to DQOps program `dqo` with the optional 
 command which you would like to use and command options and parameters. 
 
 While in DQOps shell you just need to type the command and options or parameters. An example below show the differences in
-the two modes for the `check run` command that run all enabled checks.
+the two modes for the `check run` command that run all activated checks.
 
 **DQOps command structure example**  
 === "Command-line"
@@ -36,7 +36,7 @@ The suggested command will be displayed below, and you can select the `connectio
 
 DQOps also supports autocomplete of parameters, connection names or table names.
 
-For example, if you want to run all enabled checks on single table, simply start typing `-` or `--` after the `check run` command,
+For example, if you want to run all activated checks on single table, simply start typing `-` or `--` after the `check run` command,
 and the available parameters will be displayed. Just start typing the name of the parameter and hit the Tab key to use autocomplete.
 
 ![Autocomplete-parameters](https://dqops.com/docs/images/working-with-dqo/working-with-dqo-shell/autocomplete-parameters.png)
@@ -52,7 +52,7 @@ down your choice to a single table with `--table=` parameter.
 You can get help with any command by simply typing `--help` or `-h` at the end of a command name.
 
 For example, the following command in DQOps Shell displays description and all parameters for `check run` command that run
-all enabled checks.
+all activated checks.
 
 ```
 dqo> check run --help

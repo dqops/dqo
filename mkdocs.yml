@@ -48,13 +48,18 @@ nav:
       - SQL Server: "data-sources/sql-server.md"
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
+      - Databricks: "data-sources/databricks.md"
   - Use cases:
       - "examples/index.md"
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
+      - Data availability:
+          - Table availability: "examples/data-availability/table-availability.md"
       - Data completeness:
           - Number of rows in the table: "examples/data-completeness/number-of-rows-in-the-table.md"
           - Number of null values: "examples/data-completeness/number-of-null-values.md"
+      - Data consistency:
+          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data uniqueness:
           - Percentage of duplicates: "examples/data-uniqueness/percentage-of-duplicates.md"
       - Data validity:
@@ -67,17 +72,14 @@ nav:
           - Percentage of valid currency codes: "examples/data-validity/percentage-of-valid-currency-codes.md"
           - Percentage of negative values: "examples/data-validity/percentage-of-negative-values.md"
           - Percentage of valid UUID: "examples/data-validity/percentage-of-valid-uuid.md"
-      - Data consistency:
-          - Percent of rows with string values in set: "examples/data-consistency/percent-of-string-in-set.md"
       - Data reasonability:
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
           - A string not exceeding a set length: "examples/data-reasonability/string-not-exceeding-a-set-length.md"
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
-      - Availability:
-          - Table availability: "examples/stability/table-availability.md"
       - Schema:
           - Table schema detection: "examples/schema/schema-detection.md"
       - Data quality monitoring:
+          - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
@@ -105,11 +107,11 @@ nav:
           - Table status operator: "integrations/airflow/table-status-operator.md"
           - Wait for job operator: "integrations/airflow/wait-for-job-operator.md"
           - Run checks use case: "integrations/airflow/run-checks-use-case.md"
-          - Dbt:
-            - Dbt integration: "integrations/airflow/dbt/dbt-integration.md"
-            - Dbt cloud with run checks use case: "integrations/airflow/dbt/dbt-cloud-run-checks-use-case.md"
-            - Dbt cloud with table status use case: "integrations/airflow/dbt/dbt-cloud-table-status-use-case.md"
-            - Dbt core with run checks case: "integrations/airflow/dbt/dbt-core-use-case.md"
+      - Dbt:
+          - "integrations/dbt/index.md"
+          - Dbt cloud with run checks use case: "integrations/dbt/dbt-cloud-run-checks-use-case.md"
+          - Dbt cloud with table status use case: "integrations/dbt/dbt-cloud-table-status-use-case.md"
+          - Dbt core with run checks case: "integrations/dbt/dbt-core-use-case.md"
       - Looker Studio: "integrations/looker-studio/creating-custom-dashboards.md"
       - Slack: "integrations/slack/configuring-slack-notifications.md"
       - Visual Studio Code: "integrations/visual-studio-code/index.md"

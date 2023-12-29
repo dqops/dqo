@@ -18,29 +18,34 @@ Verifies that the top X most popular column values contain all values from a lis
 |----------|----------|----------|-----------------|-----------------|------------|
 |profile_expected_strings_in_top_values_count|profiling| |Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=profile_expected_strings_in_top_values_count
+dqo> check activate -c=connection_name -ch=profile_expected_strings_in_top_values_count
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=profile_expected_strings_in_top_values_count
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=profile_expected_strings_in_top_values_count
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_expected_strings_in_top_values_count
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=profile_expected_strings_in_top_values_count
-```
+
 **Check structure (YAML)**
+
 ```yaml
       profiling_checks:
         strings:
@@ -57,9 +62,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
             fatal:
               max_missing: 2
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -213,6 +220,124 @@ Please expand the database engine name section to see the SQL query rendered by 
                     TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM
                     `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    analyzed_table.`target_column` AS top_value,
+                    COUNT(*) AS total_values,
+                    DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM
+                    `<target_schema>`.`<target_table>` AS analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -588,6 +713,138 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            {{ lib.render_target_column('original_table') }} AS top_value
+                            {{- lib.render_data_grouping_projections('original_table') }}
+                            {{- lib.render_time_dimension_projection('original_table') }}
+                        FROM {{ lib.render_target_table() }} original_table
+                        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    ) analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            original_table."target_column" AS top_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        FROM ""."<target_schema>"."<target_table>" original_table
+                    ) analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -1265,6 +1522,126 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                        COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                    FROM
+                        {{ lib.render_target_table() }} AS analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        analyzed_table.`target_column` AS top_value,
+                        COUNT(*) AS total_values,
+                        analyzed_table.`country` AS grouping_level_1,
+                        analyzed_table.`state` AS grouping_level_2,
+                        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                    FROM
+                        `<target_schema>`.`<target_table>` AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1643,6 +2020,145 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values
+                            {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                            {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                {{ lib.render_target_column('original_table') }} AS top_value
+                                {{- lib.render_data_grouping_projections('original_table') }}
+                                {{- lib.render_time_dimension_projection('original_table') }}
+                            FROM {{ lib.render_target_table() }} original_table
+                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                        ) analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values,
+            
+                                    analyzed_table.grouping_level_1,
+            
+                                    analyzed_table.grouping_level_2
+            ,
+                        time_period,
+                        time_period_utc
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                original_table."target_column" AS top_value,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                            FROM ""."<target_schema>"."<target_table>" original_table
+                        ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
                 ) AS top_col_values
@@ -2158,29 +2674,34 @@ Verifies that the top X most popular column values contain all values from a lis
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_expected_strings_in_top_values_count|monitoring|daily|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_expected_strings_in_top_values_count
+dqo> check activate -c=connection_name -ch=daily_expected_strings_in_top_values_count
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_expected_strings_in_top_values_count
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_expected_strings_in_top_values_count
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_expected_strings_in_top_values_count
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_expected_strings_in_top_values_count
-```
+
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         daily:
@@ -2198,9 +2719,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_missing: 2
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -2355,6 +2878,124 @@ Please expand the database engine name section to see the SQL query rendered by 
                     TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                 FROM
                     `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    analyzed_table.`target_column` AS top_value,
+                    COUNT(*) AS total_values,
+                    CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                    TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                FROM
+                    `<target_schema>`.`<target_table>` AS analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -2730,6 +3371,138 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            {{ lib.render_target_column('original_table') }} AS top_value
+                            {{- lib.render_data_grouping_projections('original_table') }}
+                            {{- lib.render_time_dimension_projection('original_table') }}
+                        FROM {{ lib.render_target_table() }} original_table
+                        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    ) analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            original_table."target_column" AS top_value,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                        FROM ""."<target_schema>"."<target_table>" original_table
+                    ) analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -3408,6 +4181,126 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                        COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                    FROM
+                        {{ lib.render_target_table() }} AS analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        analyzed_table.`target_column` AS top_value,
+                        COUNT(*) AS total_values,
+                        analyzed_table.`country` AS grouping_level_1,
+                        analyzed_table.`state` AS grouping_level_2,
+                        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+                        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+                    FROM
+                        `<target_schema>`.`<target_table>` AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3786,6 +4679,145 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values
+                            {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                            {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                {{ lib.render_target_column('original_table') }} AS top_value
+                                {{- lib.render_data_grouping_projections('original_table') }}
+                                {{- lib.render_time_dimension_projection('original_table') }}
+                            FROM {{ lib.render_target_table() }} original_table
+                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                        ) analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values,
+            
+                                    analyzed_table.grouping_level_1,
+            
+                                    analyzed_table.grouping_level_2
+            ,
+                        time_period,
+                        time_period_utc
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                original_table."target_column" AS top_value,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                            FROM ""."<target_schema>"."<target_table>" original_table
+                        ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
                 ) AS top_col_values
@@ -4301,29 +5333,34 @@ Verifies that the top X most popular column values contain all values from a lis
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_expected_strings_in_top_values_count|monitoring|monthly|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_expected_strings_in_top_values_count
+dqo> check activate -c=connection_name -ch=monthly_expected_strings_in_top_values_count
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_expected_strings_in_top_values_count
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_expected_strings_in_top_values_count
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_expected_strings_in_top_values_count
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_expected_strings_in_top_values_count
-```
+
 **Check structure (YAML)**
+
 ```yaml
       monitoring_checks:
         monthly:
@@ -4341,9 +5378,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_missing: 2
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -4498,6 +5537,124 @@ Please expand the database engine name section to see the SQL query rendered by 
                     TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM
                     `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    analyzed_table.`target_column` AS top_value,
+                    COUNT(*) AS total_values,
+                    DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                FROM
+                    `<target_schema>`.`<target_table>` AS analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -4873,6 +6030,138 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            {{ lib.render_target_column('original_table') }} AS top_value
+                            {{- lib.render_data_grouping_projections('original_table') }}
+                            {{- lib.render_time_dimension_projection('original_table') }}
+                        FROM {{ lib.render_target_table() }} original_table
+                        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    ) analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            original_table."target_column" AS top_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                        FROM ""."<target_schema>"."<target_table>" original_table
+                    ) analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -5551,6 +6840,126 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                        COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                    FROM
+                        {{ lib.render_target_table() }} AS analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        analyzed_table.`target_column` AS top_value,
+                        COUNT(*) AS total_values,
+                        analyzed_table.`country` AS grouping_level_1,
+                        analyzed_table.`state` AS grouping_level_2,
+                        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
+                    FROM
+                        `<target_schema>`.`<target_table>` AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -5929,6 +7338,145 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values
+                            {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                            {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                {{ lib.render_target_column('original_table') }} AS top_value
+                                {{- lib.render_data_grouping_projections('original_table') }}
+                                {{- lib.render_time_dimension_projection('original_table') }}
+                            FROM {{ lib.render_target_table() }} original_table
+                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                        ) analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values,
+            
+                                    analyzed_table.grouping_level_1,
+            
+                                    analyzed_table.grouping_level_2
+            ,
+                        time_period,
+                        time_period_utc
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                original_table."target_column" AS top_value,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                            FROM ""."<target_schema>"."<target_table>" original_table
+                        ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
                 ) AS top_col_values
@@ -6444,29 +7992,34 @@ Verifies that the top X most popular column values contain all values from a lis
 |----------|----------|----------|-----------------|-----------------|------------|
 |daily_partition_expected_strings_in_top_values_count|partitioned|daily|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=daily_partition_expected_strings_in_top_values_count
+dqo> check activate -c=connection_name -ch=daily_partition_expected_strings_in_top_values_count
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=daily_partition_expected_strings_in_top_values_count
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=daily_partition_expected_strings_in_top_values_count
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_expected_strings_in_top_values_count
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=daily_partition_expected_strings_in_top_values_count
-```
+
 **Check structure (YAML)**
+
 ```yaml
       partitioned_checks:
         daily:
@@ -6484,9 +8037,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_missing: 2
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -6647,6 +8202,124 @@ Please expand the database engine name section to see the SQL query rendered by 
                     TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                 FROM
                     `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    analyzed_table.`target_column` AS top_value,
+                    COUNT(*) AS total_values,
+                    CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                    TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                FROM
+                    `<target_schema>`.`<target_table>` AS analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -7022,6 +8695,138 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            {{ lib.render_target_column('original_table') }} AS top_value
+                            {{- lib.render_data_grouping_projections('original_table') }}
+                            {{- lib.render_time_dimension_projection('original_table') }}
+                        FROM {{ lib.render_target_table() }} original_table
+                        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    ) analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            original_table."target_column" AS top_value,
+            CAST(original_table."date_column" AS date) AS time_period,
+            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                        FROM ""."<target_schema>"."<target_table>" original_table
+                    ) analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -7706,6 +9511,126 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                        COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                    FROM
+                        {{ lib.render_target_table() }} AS analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        analyzed_table.`target_column` AS top_value,
+                        COUNT(*) AS total_values,
+                        analyzed_table.`country` AS grouping_level_1,
+                        analyzed_table.`state` AS grouping_level_2,
+                        CAST(analyzed_table.`date_column` AS DATE) AS time_period,
+                        TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
+                    FROM
+                        `<target_schema>`.`<target_table>` AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -8084,6 +10009,145 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values
+                            {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                            {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                {{ lib.render_target_column('original_table') }} AS top_value
+                                {{- lib.render_data_grouping_projections('original_table') }}
+                                {{- lib.render_time_dimension_projection('original_table') }}
+                            FROM {{ lib.render_target_table() }} original_table
+                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                        ) analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values,
+            
+                                    analyzed_table.grouping_level_1,
+            
+                                    analyzed_table.grouping_level_2
+            ,
+                        time_period,
+                        time_period_utc
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                original_table."target_column" AS top_value,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                            FROM ""."<target_schema>"."<target_table>" original_table
+                        ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
                 ) AS top_col_values
@@ -8599,29 +10663,34 @@ Verifies that the top X most popular column values contain all values from a lis
 |----------|----------|----------|-----------------|-----------------|------------|
 |monthly_partition_expected_strings_in_top_values_count|partitioned|monthly|Reasonableness|[expected_strings_in_top_values_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-top-values-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
   
-**Enable check (Shell)**  
-To enable this check provide connection name and check name in [check enable command](../../../../command-line-interface/check/#dqo-check-enable)
+**Activate check (Shell)**  
+Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+
 ```
-dqo> check enable -c=connection_name -ch=monthly_partition_expected_strings_in_top_values_count
+dqo> check activate -c=connection_name -ch=monthly_partition_expected_strings_in_top_values_count
 ```
+
 **Run check (Shell)**  
-To run this check provide check name in [check run command](../../../../command-line-interface/check/#dqo-check-run)
+Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+
 ```
 dqo> check run -ch=monthly_partition_expected_strings_in_top_values_count
 ```
+
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+
 ```
 dqo> check run -c=connection_name -ch=monthly_partition_expected_strings_in_top_values_count
 ```
+
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_expected_strings_in_top_values_count
 ```
-It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
-```
-dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch=monthly_partition_expected_strings_in_top_values_count
-```
+
 **Check structure (YAML)**
+
 ```yaml
       partitioned_checks:
         monthly:
@@ -8639,9 +10708,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -col=column_name -ch
               fatal:
                 max_missing: 2
 ```
+
 **Sample configuration (YAML)**  
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
   
+
 ```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
@@ -8802,6 +10873,124 @@ Please expand the database engine name section to see the SQL query rendered by 
                     TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                 FROM
                     `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Databricks"
+
+    === "Sensor template for Databricks"
+
+        ```sql+jinja
+        {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                    COUNT(*) AS total_values
+                    {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                    {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                FROM
+                    {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Databricks"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    analyzed_table.`target_column` AS top_value,
+                    COUNT(*) AS total_values,
+                    DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                    TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                FROM
+                    `<target_schema>`.`<target_table>` AS analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -9177,6 +11366,138 @@ Please expand the database engine name section to see the SQL query rendered by 
                     CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM
                     "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                GROUP BY time_period, time_period_utc, top_value
+                ORDER BY time_period, time_period_utc, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= 
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
+??? example "Presto"
+
+    === "Sensor template for Presto"
+
+        ```sql+jinja
+        {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro render_from_subquery() -%}
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                    ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            {{ lib.render_target_column('original_table') }} AS top_value
+                            {{- lib.render_data_grouping_projections('original_table') }}
+                            {{- lib.render_time_dimension_projection('original_table') }}
+                        FROM {{ lib.render_target_table() }} original_table
+                        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    ) analyzed_table
+                {{- lib.render_where_clause(indentation = '        ') }}
+                {{- lib.render_group_by(indentation = '        ') }}, top_value
+                {{- lib.render_order_by(indentation = '        ') }}, total_values
+            ) AS top_col_values
+        ) AS top_values
+        WHERE top_values_rank <= {{ parameters.top }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+            {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                {%- for attribute in lib.data_groupings -%}
+                    {{ ',' }}
+                    {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                        {%- if data_grouping_level.source == 'tag' -%}
+                            {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                        {%- elif data_grouping_level.source == 'column_value' -%}
+                            {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+            NULL AS actual_value,
+            MAX(0) AS expected_value
+            {{- lib.render_data_grouping_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else %}
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX({{ parameters.expected_values | length }}) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+            {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+        {{ render_from_subquery() }}
+        {%- endif -%}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Presto"
+
+        ```sql
+        SELECT
+            COUNT(DISTINCT
+                CASE
+                    WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                    ELSE NULL
+                END
+            ) AS actual_value,
+            MAX(3) AS expected_value,
+            top_values.time_period,
+            top_values.time_period_utc
+        FROM
+        (
+            SELECT
+                top_col_values.top_value as top_value,
+                top_col_values.time_period as time_period,
+                top_col_values.time_period_utc as time_period_utc,
+                RANK() OVER(PARTITION BY top_col_values.time_period
+                    ORDER BY top_col_values.total_values) as top_values_rank
+            FROM
+            (
+                SELECT
+                    top_value,
+                    COUNT(*) AS total_values,
+                    time_period,
+                    time_period_utc
+                    FROM (
+                        SELECT
+                            original_table.*,
+                            original_table."target_column" AS top_value,
+            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                        FROM ""."<target_schema>"."<target_table>" original_table
+                    ) analyzed_table
                 GROUP BY time_period, time_period_utc, top_value
                 ORDER BY time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -9861,6 +12182,126 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "Databricks"
+
+        === "Sensor template for Databricks"
+            ```sql+jinja
+            {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        {{ lib.render_target_column('analyzed_table') }} AS top_value,
+                        COUNT(*) AS total_values
+                        {{- lib.render_data_grouping_projections('analyzed_table', indentation = '            ') }}
+                        {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
+                    FROM
+                        {{ lib.render_target_table() }} AS analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Databricks"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        analyzed_table.`target_column` AS top_value,
+                        COUNT(*) AS total_values,
+                        analyzed_table.`country` AS grouping_level_1,
+                        analyzed_table.`state` AS grouping_level_2,
+                        DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
+                        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
+                    FROM
+                        `<target_schema>`.`<target_table>` AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -10239,6 +12680,145 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= 
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "Presto"
+
+        === "Sensor template for Presto"
+            ```sql+jinja
+            {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- endmacro -%}
+            
+            {%- macro render_from_subquery() -%}
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values
+                            {{- lib.render_data_grouping_projections_reference('analyzed_table', indentation = '            ') }}
+                            {{- lib.render_time_dimension_projection_reference('analyzed_table', indentation = '            ') }}
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                {{ lib.render_target_column('original_table') }} AS top_value
+                                {{- lib.render_data_grouping_projections('original_table') }}
+                                {{- lib.render_time_dimension_projection('original_table') }}
+                            FROM {{ lib.render_target_table() }} original_table
+                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                        ) analyzed_table
+                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_group_by(indentation = '        ') }}, top_value
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                ) AS top_col_values
+            ) AS top_values
+            WHERE top_values_rank <= {{ parameters.top }}
+            {%- endmacro -%}
+            
+            {%- macro render_data_grouping(table_alias_prefix = '', indentation = '') -%}
+                {%- if lib.data_groupings is not none and (lib.data_groupings | length()) > 0 -%}
+                    {%- for attribute in lib.data_groupings -%}
+                        {{ ',' }}
+                        {%- with data_grouping_level = lib.data_groupings[attribute] -%}
+                            {%- if data_grouping_level.source == 'tag' -%}
+                                {{ indentation }}{{ lib.make_text_constant(data_grouping_level.tag) }}
+                            {%- elif data_grouping_level.source == 'column_value' -%}
+                                {{ indentation }}{{ table_alias_prefix }}.grouping_{{ attribute }}
+                            {%- endif -%}
+                        {%- endwith %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 %}
+                NULL AS actual_value,
+                MAX(0) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+                {%- else %}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ({{ extract_in_list(parameters.expected_values) }}) THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc
+                {{- render_data_grouping('top_values', indentation = lib.eol() ~ '    ') }}
+            {{ render_from_subquery() }}
+            {%- endif -%}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Presto"
+            ```sql
+            SELECT
+                COUNT(DISTINCT
+                    CASE
+                        WHEN top_values.top_value IN ('USD', 'GBP', 'EUR') THEN top_values.top_value
+                        ELSE NULL
+                    END
+                ) AS actual_value,
+                MAX(3) AS expected_value,
+                top_values.time_period,
+                top_values.time_period_utc,
+                top_values.grouping_level_1,
+                top_values.grouping_level_2
+            FROM
+            (
+                SELECT
+                    top_col_values.top_value as top_value,
+                    top_col_values.time_period as time_period,
+                    top_col_values.time_period_utc as time_period_utc,
+                    RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                FROM
+                (
+                    SELECT
+                        top_value,
+                        COUNT(*) AS total_values,
+            
+                                    analyzed_table.grouping_level_1,
+            
+                                    analyzed_table.grouping_level_2
+            ,
+                        time_period,
+                        time_period_utc
+                        FROM (
+                            SELECT
+                                original_table.*,
+                                original_table."target_column" AS top_value,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                            FROM ""."<target_schema>"."<target_table>" original_table
+                        ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
                     ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
                 ) AS top_col_values

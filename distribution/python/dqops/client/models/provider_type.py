@@ -3,6 +3,7 @@ from enum import Enum
 
 class ProviderType(str, Enum):
     BIGQUERY = "bigquery"
+    DATABRICKS = "databricks"
     MYSQL = "mysql"
     ORACLE = "oracle"
     POSTGRESQL = "postgresql"

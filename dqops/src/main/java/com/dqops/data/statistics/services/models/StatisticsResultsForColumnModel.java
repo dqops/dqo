@@ -17,6 +17,9 @@ package com.dqops.data.statistics.services.models;
 
 import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.utils.docs.generators.SampleListUtility;
+import com.dqops.utils.docs.generators.SampleStringsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,6 +28,8 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Model object with the statistics results for a column.
@@ -71,4 +76,24 @@ public class StatisticsResultsForColumnModel {
      */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
+
+    public static class StatisticsResultsForColumnModelSampleFactory implements SampleValueFactory<StatisticsResultsForColumnModel> {
+        @Override
+        public StatisticsResultsForColumnModel createSample() {
+            List<StatisticsMetricModel> statisticsMetricModels = SampleListUtility.generateList(StatisticsMetricModel.class, 5,
+                    StatisticsMetricModel::getResult,
+                    r -> Math.abs(new Random(Integer.toUnsignedLong((int)r)).nextInt() % 10_000),
+                    StatisticsMetricModel::setResult,
+
+                    StatisticsMetricModel::getCollectedAt,
+                    r -> r.plusDays(1),
+                    StatisticsMetricModel::setCollectedAt);
+            return new StatisticsResultsForColumnModel() {{
+                setConnectionName(SampleStringsRegistry.getConnectionName());
+                setTable(PhysicalTableName.fromSchemaTableFilter(SampleStringsRegistry.getSchemaTableName()));
+                setColumnName(SampleStringsRegistry.getColumnName());
+                setMetrics(statisticsMetricModels);
+            }};
+        }
+    }
 }

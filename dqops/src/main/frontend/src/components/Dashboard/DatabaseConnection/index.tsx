@@ -37,6 +37,9 @@ import OracleConnection from './OracleConnection';
 import OracleLogo from '../../SvgIcon/svg/oracle.svg';
 import SvgIcon from '../../SvgIcon';
 import SparkConnection from './SparkConnection';
+import SparkLogo from '../../SvgIcon/svg/spark.svg';
+import DatabricksConnection from './DatabricksConnection';
+import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
 import clsx from 'clsx';
 
 interface IDatabaseConnectionProps {
@@ -165,6 +168,8 @@ const DatabaseConnection = ({
         return 'Oracle Database Connection Settings';
       case ConnectionModelProviderTypeEnum.spark:
         return 'Spark Database Connection Settings';
+      case ConnectionModelProviderTypeEnum.databricks:
+        return 'Databricks Database Connection Settings';
       default:
         return 'Database Connection Settings';
     }
@@ -197,57 +202,64 @@ const DatabaseConnection = ({
     ),
     [ConnectionModelProviderTypeEnum.postgresql]: (
       <PostgreSQLConnection
-        postgresql={database.postgresql}
+        postgresql={{ ...database.postgresql, port: '5432' }}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
-        redshift={database.redshift}
+        redshift={{ ...database.redshift, port: '5439' }}
         onChange={(redshift) => onChange({ ...database, redshift })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.sqlserver]: (
       <SqlServerConnection
-        sqlserver={database.sqlserver}
+        sqlserver={{ ...database.sqlserver, port: '1433' }}
         onChange={(sqlserver) => onChange({ ...database, sqlserver })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.presto]: (
       <PrestoConnection
-        presto={database.presto}
+        presto={{ ...database.presto, port: '8080' }}
         onChange={(presto) => onChange({ ...database, presto })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.trino]: (
       <TrinoConnection
-        trino={database.trino}
+        trino={{ ...database.trino, port: '8080' }}
         onChange={(trino) => onChange({ ...database, trino })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.mysql]: (
       <MySQLConnection
-        mysql={database.mysql}
+        mysql={{ ...database.mysql, port: '3306' }}
         onChange={(mysql) => onChange({ ...database, mysql })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.oracle]: (
       <OracleConnection
-        oracle={database.oracle}
+        oracle={{ ...database.oracle, port: '1521' }}
         onChange={(oracle) => onChange({ ...database, oracle })}
         sharedCredentials={sharedCredentials}
       />
     ),
     [ConnectionModelProviderTypeEnum.spark]: (
       <SparkConnection
-        spark={database.spark}
+        spark={{ ...database.spark, port: '10000' }}
         onChange={(spark) => onChange({ ...database, spark })}
+        sharedCredentials={sharedCredentials}
+      />
+    ),
+    [ConnectionModelProviderTypeEnum.databricks]: (
+      <DatabricksConnection
+        databricks={{ ...database.databricks, port: '443' }}
+        onChange={(databricks) => onChange({ ...database, databricks })}
         sharedCredentials={sharedCredentials}
       />
     )
@@ -273,6 +285,10 @@ const DatabaseConnection = ({
         return MySQLLogo;
       case ConnectionModelProviderTypeEnum.oracle:
         return OracleLogo;
+      case ConnectionModelProviderTypeEnum.spark:
+        return SparkLogo;
+      case ConnectionModelProviderTypeEnum.databricks:
+        return DatabricksLogo;
       default:
         return '';
     }

@@ -90,8 +90,8 @@ Manages connections to monitored data sources
   
 |&nbsp;Operation&nbsp;name&nbsp;|&nbsp;HTTP&nbsp;call&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |----------------|------|---------------------------------|
-|[bulk_disable_connection_checks](./connections/#bulk_disable_connection_checks)|PUT|Disables a named check on this connection in the locations specified by filter|
-|[bulk_enable_connection_checks](./connections/#bulk_enable_connection_checks)|PUT|Enables a named check on this connection in the locations specified by filter|
+|[bulk_activate_connection_checks](./connections/#bulk_activate_connection_checks)|PUT|Activates all named check on this connection in the locations specified by filter|
+|[bulk_deactivate_connection_checks](./connections/#bulk_deactivate_connection_checks)|PUT|Deactivates (deletes) all named check on this connection in the locations specified by filter|
 |[create_connection](./connections/#create_connection)|POST|Creates a new connection|
 |[create_connection_basic](./connections/#create_connection_basic)|POST|Creates a new connection given the basic information.|
 |[delete_connection](./connections/#delete_connection)|DELETE|Deletes a connection|

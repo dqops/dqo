@@ -16,6 +16,7 @@
 package com.dqops.utils.docs;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ObjectDataType;
 import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;

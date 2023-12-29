@@ -18,20 +18,19 @@ You need a Spark Thrift Server to be running that provides a connection through 
 
 3. Add connection settings.
 
-    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark.png)
+    ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
 
-    | Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                              | 
-    |---------------------------|------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-    | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. |
-    | Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                |
-    | Host                      | host                                     | Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.                                                                                                                                         |
-    | Port                      | port                                     | Spark port name. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.                                                                                                              |
-    | Schema                    | schema                                   | Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                              |
-    | User name                 | user                                     | Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                                |
-    | Password                  | password                                 | Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.                                                                                                                        |
-    | Options                   | options                                  | Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.                                                      |
-    | Initialization SQL        | initialization_sql                       | Custom SQL that is executed after connecting to Spark. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS                                                         |
-    | JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Spark. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                         |
+    | Spark connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                             | 
+    |---------------------------|------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+    | Connection name           |                                          | The name of the connection that will be created in DQOps. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.               |
+    | Parallel jobs limit       |                                          | New limit. Null value will disable limit.                                                                                                                                                                                                               |
+    | Host                      | host                                     | Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.                                                                                                                                                        |
+    | Port                      | port                                     | Spark port name. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.                                                                                                                             |
+    | User name                 | user                                     | Spark user name. The value can be in the ${SPARK_USER} format to use dynamic substitution.                                                                                                                                                              |
+    | Password                  | password                                 | Spark database password. The value can be in the ${SPARK_PASSWORD} format to use dynamic substitution.                                                                                                                                                  |
+    | Options                   | options                                  | Spark connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.                                                                     |
+    | Initialization SQL        | initialization_sql                       | Custom SQL that is executed after connecting to Spark. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS                                                                        |
+    | JDBC connection property  |                                          | Optional setting. DQOps supports using JDBC driver to access Spark. [JDBC Concepts.](https://docs.oracle.com/en/database/oracle/oracle-database/23/jjdbc/introducing-JDBC.html).                                                                        |
     
     DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -60,7 +59,7 @@ You need a Spark Thrift Server to be running that provides a connection through 
 
     ![Importing tables](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables.png)
 
-8. When new tables are imported, DQOps automatically enables profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
+8. When new tables are imported, DQOps automatically activates profiling and monitoring checks, such as row count, table availability and checks detecting schema changes. These checks are scheduled to run daily at 12:00 p.m. By clicking on the Advisor at the top of the page, you can quickly collect basic statistics, run profiling checks or modify the schedule for newly imported tables.
 
     ![Importing tables - advisor](https://dqops.com/docs/images/working-with-dqo/adding-connections/importing-tables-advisor.png)
 
@@ -90,7 +89,6 @@ Database provider type (--provider):
 Please enter one of the [] values: 10
 Spark host name (--spark-host) [${SPARK_HOST}]: localhost
 Spark port number (--spark-port) [${SPARK_PORT}]: 10000
-Spark schema name (--spark-schema) [${SPARK_SCHEMA}]: default
 Spark user name (--spark-user) [${SPARK_USER}]: 
 Spark user password (--spark-password) [${SPARK_PASSWORD}]: 
 Connection connection1 was successfully added.
@@ -103,8 +101,7 @@ You can also run the command with parameters to add a connection in just a singl
 dqo> connection add --name=connection1
 --provider=spark
 --spark-host=localhost
---spark-port=1521
---spark-schema=default
+--spark-port=10000
 --spark-user=test
 --spark-password=xxx
 ```
@@ -136,11 +133,10 @@ apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: spark
-  osparkacle:
+  spark:
     host: localhost
-    port: 1521
+    port: 10000
     user: testing
-    schema: default
     password: xxx
   incident_grouping:
     grouping_level: table_dimension_category

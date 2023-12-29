@@ -1,141 +1,4 @@
 
-## LabelSetSpec  
-Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.  
-  
-
-
-
-
-___  
-
-## RedshiftParametersSpec  
-Redshift connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|string| | | |
-|port|Redshift port number. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|string| | | |
-|database|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## PrestoParametersSpec  
-Presto connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.|string| | | |
-|port|Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.|string| | | |
-|database|Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## DataGroupingDimensionSpec  
-Single data grouping dimension configuration. A data grouping dimension may be configured as a hardcoded value or a mapping to a column.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|source|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|enum|tag<br/>column_value<br/>| | |
-|tag|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|string| | | |
-|column|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|string| | | |
-|name|Data grouping dimension name.|string| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## SparkParametersSpec  
-Apache Spark connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.|string| | | |
-|port|Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.|string| | | |
-|schema|Spark schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## ConnectionYaml  
 Connection definition for a data source connection that is covered by data quality checks.  
   
@@ -196,40 +59,6 @@ Configuration of Webhook URLs used for new or updated incident&#x27;s notificati
 
 ___  
 
-## MysqlParametersSpec  
-MySql connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.|string| | | |
-|port|MySQL port number. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.|string| | | |
-|database|MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.|string| | | |
-|sslmode|SslMode MySQL connection parameter.|enum|DISABLED<br/>PREFERRED<br/>VERIFY_IDENTITY<br/>VERIFY_CA<br/>REQUIRED<br/>| | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## TrinoParametersSpec  
 Trino connection parameters.  
   
@@ -249,39 +78,6 @@ Trino connection parameters.
 |port|Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.|string| | | |
 |database|Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |user|Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## SnowflakeParametersSpec  
-Snowflake connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|account|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.. Supports also a ${SNOWFLAKE_ACCOUNT} configuration with a custom environment variable.|string| | | |
-|warehouse|Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration with a custom environment variable.|string| | | |
-|database|Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|role|Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom environment variable.|string| | | |
 |properties||Dict[string, string]| | | |
 
 
@@ -328,6 +124,68 @@ Oracle connection parameters.
 
 ___  
 
+## DataGroupingDimensionSpec  
+Single data grouping dimension configuration. A data grouping dimension may be configured as a hardcoded value or a mapping to a column.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|source|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|enum|tag<br/>column_value<br/>| | |
+|tag|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|string| | | |
+|column|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|string| | | |
+|name|Data grouping dimension name.|string| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## PrestoParametersSpec  
+Presto connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.|string| | | |
+|port|Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.|string| | | |
+|database|Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|properties||Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
 ## ConnectionSpec  
 Data source (connection) specification.  
   
@@ -343,7 +201,7 @@ Data source (connection) specification.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|provider_type|Database provider type (required).|enum|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>mysql<br/>bigquery<br/>presto<br/>| | |
+|provider_type|Database provider type (required).|enum|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>databricks<br/>mysql<br/>bigquery<br/>presto<br/>| | |
 |[bigquery](../ConnectionYaml/#BigQueryParametersSpec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](../ConnectionYaml/#BigQueryParametersSpec)| | | |
 |[snowflake](../ConnectionYaml/#SnowflakeParametersSpec)|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|[SnowflakeParametersSpec](../ConnectionYaml/#SnowflakeParametersSpec)| | | |
 |[postgresql](../ConnectionYaml/#PostgresqlParametersSpec)|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|[PostgresqlParametersSpec](../ConnectionYaml/#PostgresqlParametersSpec)| | | |
@@ -354,12 +212,230 @@ Data source (connection) specification.
 |[mysql](../ConnectionYaml/#MysqlParametersSpec)|MySQL connection parameters. Specify parameters in the mysql section or set the url (which is the MySQL JDBC url).|[MysqlParametersSpec](../ConnectionYaml/#MysqlParametersSpec)| | | |
 |[oracle](../ConnectionYaml/#OracleParametersSpec)|Oracle connection parameters. Specify parameters in the oracle section or set the url (which is the Oracle JDBC url).|[OracleParametersSpec](../ConnectionYaml/#OracleParametersSpec)| | | |
 |[spark](../ConnectionYaml/#SparkParametersSpec)|Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).|[SparkParametersSpec](../ConnectionYaml/#SparkParametersSpec)| | | |
+|[databricks](../ConnectionYaml/#DatabricksParametersSpec)|Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).|[DatabricksParametersSpec](../ConnectionYaml/#DatabricksParametersSpec)| | | |
 |parallel_jobs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer| | | |
 |[default_grouping_configuration](../ConnectionYaml/#DataGroupingConfigurationSpec)|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](../ConnectionYaml/#DataGroupingConfigurationSpec)| | | |
 |[schedules](../ConnectionYaml/#DefaultSchedulesSpec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[DefaultSchedulesSpec](../ConnectionYaml/#DefaultSchedulesSpec)| | | |
 |[incident_grouping](../ConnectionYaml/#ConnectionIncidentGroupingSpec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[ConnectionIncidentGroupingSpec](../ConnectionYaml/#ConnectionIncidentGroupingSpec)| | | |
 |[comments](../profiling/table-profiling-checks/#CommentsListSpec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](../profiling/table-profiling-checks/#CommentsListSpec)| | | |
 |[labels](../ConnectionYaml/#LabelSetSpec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|[LabelSetSpec](../ConnectionYaml/#LabelSetSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## SqlServerParametersSpec  
+Microsoft SQL Server connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.|string| | | |
+|port|SQL Server port number. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.|string| | | |
+|database|SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|string| | | |
+|disable_encryption|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.|boolean| | | |
+|properties||Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## SnowflakeParametersSpec  
+Snowflake connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|account|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.. Supports also a ${SNOWFLAKE_ACCOUNT} configuration with a custom environment variable.|string| | | |
+|warehouse|Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration with a custom environment variable.|string| | | |
+|database|Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|role|Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom environment variable.|string| | | |
+|properties||Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## MysqlParametersSpec  
+MySql connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|MySQL host name. Supports also a ${MYSQL_HOST} configuration with a custom environment variable.|string| | | |
+|port|MySQL port number. The default port is 3306. Supports also a ${MYSQL_PORT} configuration with a custom environment variable.|string| | | |
+|database|MySQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|MySQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.|string| | | |
+|sslmode|SslMode MySQL connection parameter.|enum|DISABLED<br/>PREFERRED<br/>VERIFY_IDENTITY<br/>VERIFY_CA<br/>REQUIRED<br/>| | |
+|properties||Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## LabelSetSpec  
+Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.  
+  
+
+
+
+
+___  
+
+## DataGroupingConfigurationSpec  
+Configuration of the data groupings that is used to calculate data quality checks with a GROUP BY clause.
+ Data grouping levels may be hardcoded if we have different (but similar) tables for different business areas (countries, product groups).
+ We can also pull data grouping levels directly from the database if a table has a column that identifies a business area.
+ Data quality results for new groups are dynamically identified in the database by the GROUP BY clause. Sensor values are extracted for each data group separately,
+ a time series is build for each data group separately.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[level_1](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 1 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_2](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 2 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_3](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 3 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_4](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 4 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_5](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 5 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_6](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 6 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_7](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 7 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_8](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 8 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|[level_9](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 9 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## RedshiftParametersSpec  
+Redshift connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|string| | | |
+|port|Redshift port number. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|string| | | |
+|database|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
+|properties||Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## DatabricksParametersSpec  
+Databricks connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.|string| | | |
+|port|Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.|string| | | |
+|catalog|Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.|string| | | |
+|user|Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.|string| | | |
+|password|Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.|string| | | |
+|http_path|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.|string| | | |
+|access_token|Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.|string| | | |
+|options|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.|string| | | |
+|properties||Dict[string, string]| | | |
 
 
 
@@ -406,74 +482,6 @@ Container of all monitoring schedules (cron expressions) for each type of checks
 
 ___  
 
-## SqlServerParametersSpec  
-Microsoft SQL Server connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.|string| | | |
-|port|SQL Server port number. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.|string| | | |
-|database|SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|string| | | |
-|disable_encryption|Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.|boolean| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
-## PostgresqlParametersSpec  
-Postgresql connection parameters.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.|string| | | |
-|port|PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.|string| | | |
-|database|PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|string| | | |
-|sslmode|Sslmode PostgreSQL connection parameter. The default value is disabled.|enum|allow<br/>prefer<br/>disable<br/>verify-ca<br/>require<br/>verify-full<br/>| | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___  
-
 ## ConnectionIncidentGroupingSpec  
 Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.  
   
@@ -496,6 +504,38 @@ Configuration of data quality incident grouping on a connection level. Defines h
 |mute_for_days|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|integer| | | |
 |disabled|Disables data quality incident creation for failed data quality checks on the data source.|boolean| | | |
 |[webhooks](../ConnectionYaml/#IncidentWebhookNotificationsSpec)|Configuration of Webhook URLs for new or updated incident notifications.|[IncidentWebhookNotificationsSpec](../ConnectionYaml/#IncidentWebhookNotificationsSpec)| | | |
+
+
+
+
+
+
+
+
+
+___  
+
+## SparkParametersSpec  
+Apache Spark connection parameters.  
+  
+
+
+
+
+
+
+
+
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.|string| | | |
+|port|Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.|string| | | |
+|user|Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
+|properties||Dict[string, string]| | | |
 
 
 
@@ -540,12 +580,8 @@ BigQuery connection parameters.
 
 ___  
 
-## DataGroupingConfigurationSpec  
-Configuration of the data groupings that is used to calculate data quality checks with a GROUP BY clause.
- Data grouping levels may be hardcoded if we have different (but similar) tables for different business areas (countries, product groups).
- We can also pull data grouping levels directly from the database if a table has a column that identifies a business area.
- Data quality results for new groups are dynamically identified in the database by the GROUP BY clause. Sensor values are extracted for each data group separately,
- a time series is build for each data group separately.  
+## PostgresqlParametersSpec  
+Postgresql connection parameters.  
   
 
 
@@ -559,15 +595,14 @@ Configuration of the data groupings that is used to calculate data quality check
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[level_1](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 1 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_2](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 2 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_3](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 3 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_4](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 4 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_5](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 5 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_6](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 6 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_7](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 7 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_8](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 8 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
-|[level_9](../ConnectionYaml/#DataGroupingDimensionSpec)|Data grouping dimension level 9 configuration.|[DataGroupingDimensionSpec](../ConnectionYaml/#DataGroupingDimensionSpec)| | | |
+|host|PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.|string| | | |
+|port|PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.|string| | | |
+|database|PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|string| | | |
+|sslmode|Sslmode PostgreSQL connection parameter. The default value is disabled.|enum|allow<br/>prefer<br/>disable<br/>verify-ca<br/>require<br/>verify-full<br/>| | |
+|properties||Dict[string, string]| | | |
 
 
 

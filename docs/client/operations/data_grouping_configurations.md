@@ -47,6 +47,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+
 ___  
 ## delete_table_grouping_configuration  
 Deletes a data grouping configuration from a table  
@@ -82,6 +84,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"
 
     ```
+
+
 
 
 ___  
@@ -128,6 +132,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "can_edit" : false
+	}
+    ```
+
+
 ___  
 ## get_table_grouping_configurations  
 Returns the list of data grouping configurations on a table  
@@ -171,6 +184,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "default_data_grouping_configuration" : false,
+	  "can_edit" : false
+	}, {
+	  "default_data_grouping_configuration" : false,
+	  "can_edit" : false
+	}, {
+	  "default_data_grouping_configuration" : false,
+	  "can_edit" : false
+	} ]
+    ```
+
+
 ___  
 ## set_table_default_grouping_configuration  
 Sets a table&#x27;s grouping configuration as the default or disables data grouping  
@@ -206,6 +235,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Accept: application/json"
 
     ```
+
+
 
 
 ___  
@@ -253,5 +284,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		"{\"data_grouping_configuration_name\":\"sample_data_grouping\",\"spec\":{\"level_3\":{\"source\":\"column_value\",\"column\":\"sample_column\"}},\"can_edit\":true}"
 
     ```
+
+
 
 

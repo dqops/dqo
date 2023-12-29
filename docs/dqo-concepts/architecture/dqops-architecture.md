@@ -16,7 +16,7 @@ DQOps achieves its principal idea by separating the platform into four core comp
     * command-line shell interface for running commands
   
 
-- `DQOPs user home` - Local folder storing the configuration of enabled data quality checks and a local copy of all
+- `DQOPs user home` - Local folder storing the configuration of activated data quality checks and a local copy of all
   data quality results, enabling offline and hybrid deployment models.
   The data model is described in the [Data storage](../data-storage/data-storage.md) documentation.
 

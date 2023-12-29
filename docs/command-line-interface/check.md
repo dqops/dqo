@@ -82,31 +82,31 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 
 
 ___
-### **dqo check enable**
+### **dqo check activate**
 
 **Description**
 
-Enable data quality checks matching specified filters
+Activates data quality checks matching specified filters
 
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
-              [-ch=<check>] [-col=<column>] [-ct=<checkType>]
-              [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
-              [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
-              [-F=<String=String>]... [-S=<String=String>]...
-              [-W=<String=String>]...
+$ dqo [dqo options...] check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
+                [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
+                [-F=<String=String>]... [-S=<String=String>]...
+                [-W=<String=String>]...
 
 ```
 **DQOps Shell synopsis**
 ```
-dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
-              [-ch=<check>] [-col=<column>] [-ct=<checkType>]
-              [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
-              [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
-              [-F=<String=String>]... [-S=<String=String>]...
-              [-W=<String=String>]...
+dqo> check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+                [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+                [-dt=<datatypeFilter>] [-of=<outputFormat>] [-sn=<sensor>]
+                [-t=<table>] [-ts=<timeScale>] [-E=<String=String>]...
+                [-F=<String=String>]... [-S=<String=String>]...
+                [-W=<String=String>]...
 
 ```
 
@@ -114,51 +114,51 @@ dqo> check enable [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="check enable-cat">`-cat`</p><br/><p id="check enable--category">`--category`</p><br/>|Check category name (standard, nulls, numeric, etc.)| ||
-|<p id="check enable-ch">`-ch`</p><br/><p id="check enable--check">`--check`</p><br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|<p id="check enable-ct">`-ct`</p><br/><p id="check enable--check-type">`--check-type`</p><br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
-|<p id="check enable-col">`-col`</p><br/><p id="check enable--column">`--column`</p><br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
-|<p id="check enable-c">`-c`</p><br/><p id="check enable--connection">`--connection`</p><br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
-|<p id="check enable-dt">`-dt`</p><br/><p id="check enable--data-type">`--data-type`</p><br/>|Datatype of columns on which to enable checks.| ||
-|<p id="check enable-E">`-E`</p><br/><p id="check enable--error-rule">`--error-rule`</p><br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
-|<p id="check enable-F">`-F`</p><br/><p id="check enable--fatal-rule">`--fatal-rule`</p><br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
-|<p id="check enable-fw">`-fw`</p><br/><p id="check enable--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="check enable-t">`-t`</p><br/><p id="check enable--table">`--table`</p><br/><p id="check enable--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
-|<p id="check enable--headless">`--headless`</p><br/><p id="check enable-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="check enable-h">`-h`</p><br/><p id="check enable--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="check enable-n">`-n`</p><br/><p id="check enable--nullable">`--nullable`</p><br/>|Enable check only on nullable columns (false for explicitly non-nullable columns).| ||
-|<p id="check enable-of">`-of`</p><br/><p id="check enable--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="check enable-o">`-o`</p><br/><p id="check enable--override">`--override`</p><br/>|Override existing configuration of selected checks.| ||
-|<p id="check enable-sn">`-sn`</p><br/><p id="check enable--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
-|<p id="check enable-S">`-S`</p><br/><p id="check enable--sensor-param">`--sensor-param`</p><br/>|Configuration parameters for the sensor. Usage: -S&lt;param_name&gt;&#x3D;&lt;param_value&gt;, --sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
-|<p id="check enable-ts">`-ts`</p><br/><p id="check enable--time-scale">`--time-scale`</p><br/>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
-|<p id="check enable-W">`-W`</p><br/><p id="check enable--warning-rule">`--warning-rule`</p><br/>|Warning level rule options. Usage: -W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-cat">`-cat`</p><br/><p id="check activate--category">`--category`</p><br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|<p id="check activate-ch">`-ch`</p><br/><p id="check activate--check">`--check`</p><br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
+|<p id="check activate-ct">`-ct`</p><br/><p id="check activate--check-type">`--check-type`</p><br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
+|<p id="check activate-col">`-col`</p><br/><p id="check activate--column">`--column`</p><br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
+|<p id="check activate-c">`-c`</p><br/><p id="check activate--connection">`--connection`</p><br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
+|<p id="check activate-dt">`-dt`</p><br/><p id="check activate--data-type">`--data-type`</p><br/>|Datatype of columns on which to enable checks.| ||
+|<p id="check activate-E">`-E`</p><br/><p id="check activate--error-rule">`--error-rule`</p><br/>|Error level rule options. Usage: -E&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --error-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-F">`-F`</p><br/><p id="check activate--fatal-rule">`--fatal-rule`</p><br/>|Fatal level rule options. Usage: -F&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
+|<p id="check activate-fw">`-fw`</p><br/><p id="check activate--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="check activate-t">`-t`</p><br/><p id="check activate--table">`--table`</p><br/><p id="check activate--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
+|<p id="check activate--headless">`--headless`</p><br/><p id="check activate-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="check activate-h">`-h`</p><br/><p id="check activate--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="check activate-n">`-n`</p><br/><p id="check activate--nullable">`--nullable`</p><br/>|Enable check only on nullable columns (false for explicitly non-nullable columns).| ||
+|<p id="check activate-of">`-of`</p><br/><p id="check activate--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="check activate-o">`-o`</p><br/><p id="check activate--override">`--override`</p><br/>|Override existing configuration of selected checks.| ||
+|<p id="check activate-sn">`-sn`</p><br/><p id="check activate--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|<p id="check activate-S">`-S`</p><br/><p id="check activate--sensor-param">`--sensor-param`</p><br/>|Configuration parameters for the sensor. Usage: -S&lt;param_name&gt;&#x3D;&lt;param_value&gt;, --sensor-param&#x3D;&lt;param_name&gt;&#x3D;&lt;param_value&gt;| ||
+|<p id="check activate-ts">`-ts`</p><br/><p id="check activate--time-scale">`--time-scale`</p><br/>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+|<p id="check activate-W">`-W`</p><br/><p id="check activate--warning-rule">`--warning-rule`</p><br/>|Warning level rule options. Usage: -W&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;, --warning-rule&#x3D;&lt;rule_name&gt;&#x3D;&lt;rule_value&gt;| ||
 
 
 
 
 ___
-### **dqo check disable**
+### **dqo check deactivate**
 
 **Description**
 
-Disable data quality checks matching specified filters
+Deactivates data quality checks matching specified filters
 
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
-               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
-               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
-               [-t=<table>] [-ts=<timeScale>]
+$ dqo [dqo options...] check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+                  [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+                  [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
+                  [-t=<table>] [-ts=<timeScale>]
 
 ```
 **DQOps Shell synopsis**
 ```
-dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
-               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
-               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
-               [-t=<table>] [-ts=<timeScale>]
+dqo> check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+                  [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+                  [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
+                  [-t=<table>] [-ts=<timeScale>]
 
 ```
 
@@ -166,20 +166,20 @@ dqo> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-|<p id="check disable-cat">`-cat`</p><br/><p id="check disable--category">`--category`</p><br/>|Check category name (standard, nulls, numeric, etc.)| ||
-|<p id="check disable-ch">`-ch`</p><br/><p id="check disable--check">`--check`</p><br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|<p id="check disable-ct">`-ct`</p><br/><p id="check disable--check-type">`--check-type`</p><br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
-|<p id="check disable-col">`-col`</p><br/><p id="check disable--column">`--column`</p><br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
-|<p id="check disable-c">`-c`</p><br/><p id="check disable--connection">`--connection`</p><br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
-|<p id="check disable-dt">`-dt`</p><br/><p id="check disable--data-type">`--data-type`</p><br/>|Datatype of columns on which to disable checks.| ||
-|<p id="check disable-fw">`-fw`</p><br/><p id="check disable--file-write">`--file-write`</p><br/>|Write command response to a file| ||
-|<p id="check disable-t">`-t`</p><br/><p id="check disable--table">`--table`</p><br/><p id="check disable--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
-|<p id="check disable--headless">`--headless`</p><br/><p id="check disable-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
-|<p id="check disable-h">`-h`</p><br/><p id="check disable--help">`--help`</p><br/>|Show the help for the command and parameters| ||
-|<p id="check disable-n">`-n`</p><br/><p id="check disable--nullable">`--nullable`</p><br/>|Disable check only on nullable columns (false for explicitly non-nullable columns).| ||
-|<p id="check disable-of">`-of`</p><br/><p id="check disable--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|<p id="check disable-s">`-s`</p><br/><p id="check disable--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
-|<p id="check disable-ts">`-ts`</p><br/><p id="check disable--time-scale">`--time-scale`</p><br/>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+|<p id="check deactivate-cat">`-cat`</p><br/><p id="check deactivate--category">`--category`</p><br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|<p id="check deactivate-ch">`-ch`</p><br/><p id="check deactivate--check">`--check`</p><br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
+|<p id="check deactivate-ct">`-ct`</p><br/><p id="check deactivate--check-type">`--check-type`</p><br/>|Data quality check type (profiling, monitoring, partitioned)| |profiling<br/>monitoring<br/>partitioned<br/>|
+|<p id="check deactivate-col">`-col`</p><br/><p id="check deactivate--column">`--column`</p><br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
+|<p id="check deactivate-c">`-c`</p><br/><p id="check deactivate--connection">`--connection`</p><br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
+|<p id="check deactivate-dt">`-dt`</p><br/><p id="check deactivate--data-type">`--data-type`</p><br/>|Datatype of columns on which to disable checks.| ||
+|<p id="check deactivate-fw">`-fw`</p><br/><p id="check deactivate--file-write">`--file-write`</p><br/>|Write command response to a file| ||
+|<p id="check deactivate-t">`-t`</p><br/><p id="check deactivate--table">`--table`</p><br/><p id="check deactivate--full-table-name">`--full-table-name`</p><br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
+|<p id="check deactivate--headless">`--headless`</p><br/><p id="check deactivate-hl">`-hl`</p><br/>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
+|<p id="check deactivate-h">`-h`</p><br/><p id="check deactivate--help">`--help`</p><br/>|Show the help for the command and parameters| ||
+|<p id="check deactivate-n">`-n`</p><br/><p id="check deactivate--nullable">`--nullable`</p><br/>|Disable check only on nullable columns (false for explicitly non-nullable columns).| ||
+|<p id="check deactivate-of">`-of`</p><br/><p id="check deactivate--output-format">`--output-format`</p><br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|<p id="check deactivate-s">`-s`</p><br/><p id="check deactivate--sensor">`--sensor`</p><br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|<p id="check deactivate-ts">`-ts`</p><br/><p id="check deactivate--time-scale">`--time-scale`</p><br/>|Time scale for monitoring and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
 
 
 

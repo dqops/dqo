@@ -56,7 +56,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -72,7 +72,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
 
     You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
     You can run all checks for the connection by clicking on the three dots icon next to the connection name in the tree view, and selecting the **Run checks** option.
@@ -221,11 +221,17 @@ spec:
         nullable: true
 ```
 
+In this example, we have demonstrated how to use DQOps to detect changes in the schema.
+By using the [column_count](../../checks/table/schema/column-count.md), [column_count_changed](../../checks/table/schema/column-count-changed.md),
+[column_list_changed](../../checks/table/schema/column-list-changed.md),
+[column_list_or_order_changed](../../checks/table/schema/column-list-or-order-changed.md), and
+[column_types_changed](../../checks/table/schema/column-types-changed.md) check, we can monitor typical schema changes issues.  
+If the change occurs, you will get a warning, error or fatal results, depending on your settings.
 
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [table_schema checks used in this example, go to the check details section](../../checks/table/schema/column-count.md).
+- For details on the [table schema checks used in this example, go to the check details section](../../checks/table/schema/column-count.md).
 - DQOps provides you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).
 - The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.

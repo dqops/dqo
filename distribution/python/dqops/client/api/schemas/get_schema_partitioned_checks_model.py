@@ -24,6 +24,7 @@ def _get_kwargs(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Dict[str, Any]:
     pass
 
@@ -47,6 +48,8 @@ def _get_kwargs(
     params["checkEnabled"] = check_enabled
 
     params["checkConfigured"] = check_configured
+
+    params["limit"] = limit
 
     params = {k: v for k, v in params.items() if v is not UNSET and v is not None}
 
@@ -106,6 +109,7 @@ def sync_detailed(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[List["CheckConfigurationModel"]]:
     """getSchemaPartitionedChecksModel
 
@@ -123,6 +127,7 @@ def sync_detailed(
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
         check_configured (Union[Unset, None, bool]):
+        limit (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -144,6 +149,7 @@ def sync_detailed(
         check_name=check_name,
         check_enabled=check_enabled,
         check_configured=check_configured,
+        limit=limit,
     )
 
     response = client.get_httpx_client().request(
@@ -167,6 +173,7 @@ def sync(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["CheckConfigurationModel"]]:
     """getSchemaPartitionedChecksModel
 
@@ -184,6 +191,7 @@ def sync(
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
         check_configured (Union[Unset, None, bool]):
+        limit (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -206,6 +214,7 @@ def sync(
         check_name=check_name,
         check_enabled=check_enabled,
         check_configured=check_configured,
+        limit=limit,
     ).parsed
 
 
@@ -223,6 +232,7 @@ async def asyncio_detailed(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Response[List["CheckConfigurationModel"]]:
     """getSchemaPartitionedChecksModel
 
@@ -240,6 +250,7 @@ async def asyncio_detailed(
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
         check_configured (Union[Unset, None, bool]):
+        limit (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -261,6 +272,7 @@ async def asyncio_detailed(
         check_name=check_name,
         check_enabled=check_enabled,
         check_configured=check_configured,
+        limit=limit,
     )
 
     response = await client.get_async_httpx_client().request(**kwargs)
@@ -282,6 +294,7 @@ async def asyncio(
     check_name: Union[Unset, None, str] = UNSET,
     check_enabled: Union[Unset, None, bool] = UNSET,
     check_configured: Union[Unset, None, bool] = UNSET,
+    limit: Union[Unset, None, int] = UNSET,
 ) -> Optional[List["CheckConfigurationModel"]]:
     """getSchemaPartitionedChecksModel
 
@@ -299,6 +312,7 @@ async def asyncio(
         check_name (Union[Unset, None, str]):
         check_enabled (Union[Unset, None, bool]):
         check_configured (Union[Unset, None, bool]):
+        limit (Union[Unset, None, int]):
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -322,5 +336,6 @@ async def asyncio(
             check_name=check_name,
             check_enabled=check_enabled,
             check_configured=check_configured,
+            limit=limit,
         )
     ).parsed

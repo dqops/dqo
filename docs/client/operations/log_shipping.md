@@ -38,6 +38,8 @@ http://localhost:8888/api/logs/debug
     ```
 
 
+
+
 ___  
 ## log_error  
 Logs an information message in the server&#x27;s logs as an error severity log entry.  
@@ -73,6 +75,8 @@ http://localhost:8888/api/logs/error
 		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
 
     ```
+
+
 
 
 ___  
@@ -112,6 +116,8 @@ http://localhost:8888/api/logs/info
     ```
 
 
+
+
 ___  
 ## log_warn  
 Logs an information message in the server&#x27;s logs as a warn severity log entry.  
@@ -147,5 +153,7 @@ http://localhost:8888/api/logs/warn
 		"{\"window_location\":\"window.location\",\"message\":\"Sample log message.\"}"
 
     ```
+
+
 
 

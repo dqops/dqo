@@ -2,59 +2,14 @@ Manages connections to monitored data sources
 
 
 ___  
-## bulk_disable_connection_checks  
-Disables a named check on this connection in the locations specified by filter  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_disable_connection_checks.py)
+## bulk_activate_connection_checks  
+Activates all named check on this connection in the locations specified by filter  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_activate_connection_checks.py)
   
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdisable  
-```
-
-
-
-**Parameters of this method are described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------|---------------------------------|-----------|-----------------|
-|connection_name|Connection name|string|:material-check-bold:|
-|check_name|Check name|string|:material-check-bold:|
-
-
-
-
-**Request body**  
-  
-|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
-|---------------------------------|-----------|-----------------|
-|Check search filters and table/column selectors.|[BulkCheckDisableParameters](../../models/connections/#bulkcheckdisableparameters)| |
-
-
-
-
-**Usage examples**  
-=== "curl"
-      
-    ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkdisable^
-		-H "Accept: application/json"^
-		-H "Content-Type: application/json"^
-		-d^
-		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"}}"
-
-    ```
-
-
-___  
-## bulk_enable_connection_checks  
-Enables a named check on this connection in the locations specified by filter  
-[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_enable_connection_checks.py)
-  
-
-**PUT**
-```
-http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkenable  
+http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkactivate  
 ```
 
 
@@ -82,13 +37,62 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulken
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkenable^
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkactivate^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"check_model_patch\":{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false},\"override_conflicts\":true}"
 
     ```
+
+
+
+
+___  
+## bulk_deactivate_connection_checks  
+Deactivates (deletes) all named check on this connection in the locations specified by filter  
+[Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/connections/bulk_deactivate_connection_checks.py)
+  
+
+**PUT**
+```
+http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkdeactivate  
+```
+
+
+
+**Parameters of this method are described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------|---------------------------------|-----------|-----------------|
+|connection_name|Connection name|string|:material-check-bold:|
+|check_name|Check name|string|:material-check-bold:|
+
+
+
+
+**Request body**  
+  
+|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
+|---------------------------------|-----------|-----------------|
+|Check search filters and table/column selectors.|[BulkCheckDeactivateParameters](../../models/connections/#bulkcheckdeactivateparameters)| |
+
+
+
+
+**Usage examples**  
+=== "curl"
+      
+    ```bash
+    curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkdeactivate^
+		-H "Accept: application/json"^
+		-H "Content-Type: application/json"^
+		-d^
+		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"}}"
+
+    ```
+
+
 
 
 ___  
@@ -135,6 +139,8 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 
+
+
 ___  
 ## create_connection_basic  
 Creates a new connection given the basic information.  
@@ -179,6 +185,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 
+
+
 ___  
 ## delete_connection  
 Deletes a connection  
@@ -220,6 +228,16 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "jobId" : 10832,
+	  "createdAt" : "2007-10-11T13:42:00Z"
+	}
+    ```
+
+
 ___  
 ## get_all_connections  
 Returns a list of connections (data sources)  
@@ -251,6 +269,151 @@ http://localhost:8888/api/connections
     curl http://localhost:8888/api/connections^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	} ]
     ```
 
 
@@ -295,6 +458,15 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "can_edit" : false
+	}
+    ```
+
+
 ___  
 ## get_connection_basic  
 Return the basic details of a connection given the connection name  
@@ -333,6 +505,59 @@ http://localhost:8888/api/connections/{connectionName}/basic
     curl http://localhost:8888/api/connections/sample_connection/basic^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
     ```
 
 
@@ -377,6 +602,25 @@ http://localhost:8888/api/connections/{connectionName}/comments
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	} ]
+    ```
+
+
 ___  
 ## get_connection_common_columns  
 Finds common column names that are used on one or more tables. The list of columns is sorted in descending order by column name.  
@@ -415,6 +659,19 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
     curl http://localhost:8888/api/connections/sample_connection/commoncolumns^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "tables_count" : 0
+	}, {
+	  "tables_count" : 0
+	}, {
+	  "tables_count" : 0
+	} ]
     ```
 
 
@@ -459,6 +716,18 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "level_3" : {
+	    "source" : "column_value",
+	    "column" : "sample_column"
+	  }
+	}
+    ```
+
+
 ___  
 ## get_connection_incident_grouping  
 Retrieves the configuration of data quality incident grouping and incident notifications  
@@ -497,6 +766,25 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
     curl http://localhost:8888/api/connections/sample_connection/incidentgrouping^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "grouping_level" : "table_dimension",
+	  "minimum_severity" : "warning",
+	  "divide_by_data_groups" : true,
+	  "max_incident_length_days" : 60,
+	  "mute_for_days" : 60,
+	  "webhooks" : {
+	    "incident_opened_webhook_url" : "https://sample_url.com/opened",
+	    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
+	    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
+	    "incident_muted_webhook_url" : "https://sample_url.com/muted"
+	  }
+	}
     ```
 
 
@@ -541,6 +829,13 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 
+
+**Return value sample**  
+    ```js
+    []
+    ```
+
+
 ___  
 ## get_connection_scheduling_group  
 Return the schedule for a connection for a scheduling group  
@@ -580,6 +875,15 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
     curl http://localhost:8888/api/connections/sample_connection/schedules/"partitioned_daily"^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "cron_expression" : "0 12 1 * *"
+	}
     ```
 
 
@@ -627,6 +931,8 @@ http://localhost:8888/api/connections/{connectionName}
     ```
 
 
+
+
 ___  
 ## update_connection_basic  
 Updates the basic information of a connection  
@@ -671,6 +977,8 @@ http://localhost:8888/api/connections/{connectionName}/basic
     ```
 
 
+
+
 ___  
 ## update_connection_comments  
 Updates (replaces) the list of comments of a connection  
@@ -710,9 +1018,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"[]"
+		"[{\"date\":\"2007-12-03T10:15:30\",\"comment_by\":\"sample_user\",\"comment\":\"Sample comment\"},{\"date\":\"2007-12-03T10:15:30\",\"comment_by\":\"sample_user\",\"comment\":\"Sample comment\"},{\"date\":\"2007-12-03T10:15:30\",\"comment_by\":\"sample_user\",\"comment\":\"Sample comment\"}]"
 
     ```
+
+
 
 
 ___  
@@ -759,6 +1069,8 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
     ```
 
 
+
+
 ___  
 ## update_connection_incident_grouping  
 Updates (replaces) configuration of incident grouping and notifications on a connection (data source) level.  
@@ -801,6 +1113,8 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 		"{\"grouping_level\":\"table_dimension\",\"minimum_severity\":\"warning\",\"divide_by_data_groups\":true,\"max_incident_length_days\":60,\"mute_for_days\":60,\"webhooks\":{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}}"
 
     ```
+
+
 
 
 ___  
@@ -847,6 +1161,8 @@ http://localhost:8888/api/connections/{connectionName}/labels
     ```
 
 
+
+
 ___  
 ## update_connection_scheduling_group  
 Updates the schedule of a connection for a scheduling group (named schedule for checks with a similar time series configuration)  
@@ -890,5 +1206,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 		"{\"cron_expression\":\"0 12 1 * *\"}"
 
     ```
+
+
 
 

@@ -1,6 +1,6 @@
 # Percentage of valid latitude and longitude
 
-Verifies that the percentage of valid latitude and longitude values are above the set threshold.
+Verifies that the percentage of valid latitude and longitude values are above a set threshold.
 
 **PROBLEM**
 
@@ -62,7 +62,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 1. Go to the **Monitoring** section.
 
-    The Monitoring Checks section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
+    The **Monitoring Checks** section enables the configuration of data quality checks that are designed for the daily and monthly monitoring of your data source.
 
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
@@ -75,7 +75,7 @@ To execute the check prepared in the example using the [user interface](../../dq
     This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
 
 
-4. Run the enabled check using the **Run check** button.
+4. Run the activated check using the **Run check** button.
     Run checks on latitude and longitude columns. 
 
     You can also run all the checks for an entire connection. Click on the three dots icon next to the name of the 
@@ -315,6 +315,12 @@ Results returned by the sensor:
 |99.19006528255773|2023-05-08T13:34:23.984Z|2023-05-08T13:34:23.984Z|
 +-----------------+------------------------+------------------------+
 ```
+
+In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
+By using the [valid_latitude_percent](../../checks/column/numeric/valid-latitude-percent.md) and
+[valid_longitude_percent](../../checks/column/numeric/valid-longitude-percent.md) column checks, we can monitor that
+the percentage of valid latitude and longitude values does not fall below a set threshold. If it does, you will get a warning, error or fatal resul
+
 
 ## Next steps
 

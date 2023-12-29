@@ -35,6 +35,36 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+
+
 ___  
 ## get_default_data_observability_daily_monitoring_table_checks  
 Returns UI model to show and edit the default configuration of the daily monitoring (Data Observability and monitoring) checks that are configured for all imported tables on a table level.  
@@ -66,6 +96,36 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
     ```
 
 
@@ -103,6 +163,36 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+
+
 ___  
 ## get_default_data_observability_monthly_monitoring_table_checks  
 Returns UI model to show and edit the default configuration of the monthly monitoring (Data Observability end of month scores) checks that are configured for all imported tables on a table level.  
@@ -134,6 +224,36 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
     ```
 
 
@@ -171,6 +291,36 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+
+
 ___  
 ## get_default_profiling_table_checks  
 Returns UI model to show and edit the default configuration of the profiling checks that are configured for all imported tables on a table level.  
@@ -202,6 +352,36 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/table^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
     ```
 
 
@@ -246,6 +426,15 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "cron_expression" : "0 12 1 * *"
+	}
+    ```
+
+
 ___  
 ## get_default_webhooks  
 Returns spec to show and edit the default configuration of webhooks.  
@@ -277,6 +466,18 @@ http://localhost:8888/api/defaults/defaultwebhooks
     curl http://localhost:8888/api/defaults/defaultwebhooks^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "incident_opened_webhook_url" : "https://sample_url.com/opened",
+	  "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
+	  "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
+	  "incident_muted_webhook_url" : "https://sample_url.com/muted"
+	}
     ```
 
 
@@ -317,6 +518,8 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
 
+
+
 ___  
 ## update_default_data_observability_daily_monitoring_table_checks  
 New configuration of the default daily monitoring (data observability) checks on a table level. These checks will be applied on new tables.  
@@ -352,6 +555,8 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 
     ```
+
+
 
 
 ___  
@@ -391,6 +596,8 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
 
+
+
 ___  
 ## update_default_data_observability_monthly_monitoring_table_checks  
 New configuration of the default monthly monitoring checkpoints on a table level. These checks will be applied on new tables.  
@@ -426,6 +633,8 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 
     ```
+
+
 
 
 ___  
@@ -465,6 +674,8 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
 
+
+
 ___  
 ## update_default_profiling_table_checks  
 New configuration of the default profiling checks on a table level. These checks will be applied to new tables.  
@@ -500,6 +711,8 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
 
     ```
+
+
 
 
 ___  
@@ -546,6 +759,8 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
 
+
+
 ___  
 ## update_default_webhooks  
 New configuration of the default webhooks.  
@@ -581,5 +796,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		"{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}"
 
     ```
+
+
 
 

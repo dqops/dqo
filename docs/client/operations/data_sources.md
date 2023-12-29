@@ -42,6 +42,19 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
 
+
+**Return value sample**  
+    ```js
+    [ {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	} ]
+    ```
+
+
 ___  
 ## get_remote_data_source_tables  
 Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.  
@@ -81,6 +94,19 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas/sample_schema/tables^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	} ]
     ```
 
 
@@ -132,6 +158,13 @@ http://localhost:8888/api/datasource/testconnection
 		-d^
 		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    { }
     ```
 
 

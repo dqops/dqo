@@ -26,6 +26,8 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
+import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
 import com.dqops.connectors.oracle.OracleParametersSpec;
@@ -628,9 +630,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 connectionSpec.setOracle(new OracleParametersSpec() {{
                     setDatabase("your_oracle_database");
                 }});
-                connectionSpec.setSpark(new SparkParametersSpec() {{
-                    setSchema("your_spark_schema");
+                connectionSpec.setSpark(new SparkParametersSpec() {{}});
+
+                connectionSpec.setDatabricks(new DatabricksParametersSpec() {{
+                    setCatalog("your_databricks_catalog");
                 }});
+
                 connectionSpec.setProviderType(providerType);
 
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
@@ -703,6 +708,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new OracleProviderDialectSettings();
             case spark:
                 return new SparkProviderDialectSettings();
+            case databricks:
+                return new DatabricksProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

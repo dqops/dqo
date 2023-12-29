@@ -45,6 +45,8 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 
+
+
 ___  
 ## delete_rule  
 Deletes a custom rule definition  
@@ -79,6 +81,8 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 
+
+
 ___  
 ## get_all_rules  
 Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.  
@@ -110,6 +114,31 @@ http://localhost:8888/api/rules
     curl http://localhost:8888/api/rules^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "rule_name" : "sample_rule",
+	  "full_rule_name" : "sample_target/sample_category/sample_rule",
+	  "custom" : false,
+	  "built_in" : true,
+	  "can_edit" : true
+	}, {
+	  "rule_name" : "sample_rule",
+	  "full_rule_name" : "sample_target/sample_category/sample_rule",
+	  "custom" : false,
+	  "built_in" : true,
+	  "can_edit" : true
+	}, {
+	  "rule_name" : "sample_rule",
+	  "full_rule_name" : "sample_target/sample_category/sample_rule",
+	  "custom" : false,
+	  "built_in" : true,
+	  "can_edit" : true
+	} ]
     ```
 
 
@@ -154,6 +183,21 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "rule_name" : "sample_rule",
+	  "type" : "python",
+	  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
+	  "mode" : "current_value",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}
+    ```
+
+
 ___  
 ## get_rule_folder_tree  
 Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.  
@@ -185,6 +229,64 @@ http://localhost:8888/api/definitions/rules
     curl http://localhost:8888/api/definitions/rules^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "rules" : [ {
+	    "rule_name" : "sample_rule",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_1",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_2",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_3",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  } ],
+	  "all_rules" : [ {
+	    "rule_name" : "sample_rule",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_1",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_2",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_3",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  } ]
+	}
     ```
 
 
@@ -230,5 +332,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 		"{\"rule_name\":\"sample_rule\",\"type\":\"python\",\"java_class_name\":\"com.dqops.execution.rules.runners.python.PythonRuleRunner\",\"mode\":\"current_value\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
 
     ```
+
+
 
 

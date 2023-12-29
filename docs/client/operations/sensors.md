@@ -45,6 +45,8 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 
+
+
 ___  
 ## delete_sensor  
 Deletes a custom sensor definition  
@@ -79,6 +81,8 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 
+
+
 ___  
 ## get_all_sensors  
 Returns a flat list of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
@@ -110,6 +114,25 @@ http://localhost:8888/api/sensors
     curl http://localhost:8888/api/sensors^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    [ {
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : false
+	}, {
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : false
+	}, {
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : false
+	} ]
     ```
 
 
@@ -154,6 +177,29 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
 
+
+**Return value sample**  
+    ```js
+    {
+	  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
+	  "sensor_definition_spec" : {
+	    "fields" : [ {
+	      "field_name" : "sample_string_param",
+	      "data_type" : "string"
+	    }, {
+	      "field_name" : "sample_double_param",
+	      "data_type" : "double"
+	    } ],
+	    "default_value" : 0.0
+	  },
+	  "provider_sensor_list" : [ ],
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}
+    ```
+
+
 ___  
 ## get_sensor_folder_tree  
 Returns a tree of all sensors available in DQOps, both built-in sensors and user defined or customized sensors.  
@@ -185,6 +231,15 @@ http://localhost:8888/api/definitions/sensors
     curl http://localhost:8888/api/definitions/sensors^
 		-H "Accept: application/json"
 
+    ```
+
+
+
+**Return value sample**  
+    ```js
+    {
+	  "all_sensors" : [ ]
+	}
     ```
 
 
@@ -231,5 +286,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
 
     ```
+
+
 
 

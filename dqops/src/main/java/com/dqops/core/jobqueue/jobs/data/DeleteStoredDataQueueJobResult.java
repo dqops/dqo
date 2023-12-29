@@ -18,6 +18,9 @@ package com.dqops.core.jobqueue.jobs.data;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.monitoring.DqoJobStatus;
 import com.dqops.data.models.DeleteStoredDataResult;
+import com.dqops.utils.docs.generators.GeneratorUtility;
+import com.dqops.utils.docs.generators.SampleLongsRegistry;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -25,6 +28,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 /**
  * Object returned from the operation that queues a "delete stored data" job. The result contains the job id that was started
@@ -67,5 +73,13 @@ public class DeleteStoredDataQueueJobResult {
 
     public DeleteStoredDataQueueJobResult(DqoQueueJobId jobId) {
         this.jobId = jobId;
+    }
+
+    public static class DeleteStoredDataQueueJobResultSampleFactory implements SampleValueFactory<DeleteStoredDataQueueJobResult> {
+        @Override
+        public DeleteStoredDataQueueJobResult createSample() {
+            DqoQueueJobId dqoQueueJobId = GeneratorUtility.generateSample(DqoQueueJobId.class);
+            return new DeleteStoredDataQueueJobResult(dqoQueueJobId);
+        }
     }
 }

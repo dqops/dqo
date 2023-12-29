@@ -84,10 +84,6 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
             }
         }
         jdbcConnectionBuilder.append('/');
-        String schema = this.getSecretValueProvider().expandValue(sparkParametersSpec.getSchema(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(schema)) {
-            jdbcConnectionBuilder.append(schema);
-        }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
         hikariConfig.setJdbcUrl(jdbcUrl);
@@ -205,7 +201,7 @@ public class SparkSourceConnection extends AbstractJdbcSourceConnection {
             List<TableSpec> tableSpecs = new ArrayList<>();
 
             for (String tableName : tableNames) {
-                String sql = "DESCRIBE " + tableName;
+                String sql = "DESCRIBE " + schemaName + "." + tableName;
                 tech.tablesaw.api.Table tableResult = this.executeQuery(sql, JobCancellationToken.createDummyJobCancellationToken(), null, false);
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
