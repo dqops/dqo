@@ -67,7 +67,7 @@ public class CheckResultsColumnNames extends SensorReadoutsColumnNames {
     public static final String INCLUDE_IN_KPI_COLUMN_NAME = "include_in_kpi";
 
     /**
-     * The boolean column that identifies data quality rule results that should be counted in the data quality SLA.
+     * The boolean column that identifies data quality rule results that should be counted in the data quality SLA (Data Contract).
      */
     public static final String INCLUDE_IN_SLA_COLUMN_NAME = "include_in_sla";
 

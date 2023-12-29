@@ -303,10 +303,10 @@ export const IncidentIssueList = ({ issues, filters, onChangeFilter, incidentDet
             <span>Fatal<br/>Upper Threshold</span>
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right">
-            Include In Kpi
+            Include In KPI
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
-            Include In Sla
+            Include In SLA (Data Contract)
           </th>
           <th className="text-sm px-4 !py-2 whitespace-nowrap text-gray-700">
             Duration Ms

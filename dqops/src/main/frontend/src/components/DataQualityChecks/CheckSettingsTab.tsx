@@ -131,7 +131,7 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
               </td>
             </tr>
             <tr>
-              <td className="px-4 py-2">Include in SLA</td>
+              <td className="px-4 py-2">Include in SLA (Data Contract)</td>
               <td className="px-4 py-2">
                 <div className="flex">
                   <Checkbox
@@ -144,7 +144,7 @@ const CheckSettingsTab = ({ check, onChange, isDefaultEditing }: ICheckSettingsT
               </td>
             </tr>
             <tr>
-              <td className="px-4 py-2">Quality Dimension</td>
+              <td className="px-4 py-2">Data Quality Dimension</td>
               <td className="px-4 py-2">
                 <div className="flex">
                   <Input
