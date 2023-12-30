@@ -70,7 +70,7 @@ export const MultiChecks = () => {
         undefined,
         activeOffCheck ? undefined : true
       ).then((res) => {
-       setChecks(res.data);
+        setChecks(res.data);
       });
     } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
@@ -106,7 +106,6 @@ export const MultiChecks = () => {
       });
     }
   };
-
   return (
     <div className="text-sm py-4">
       {checkTypes !== CheckTypes.PROFILING && (
@@ -114,9 +113,15 @@ export const MultiChecks = () => {
           <Tabs
             tabs={tabs}
             activeTab={filterParameters.activeTab}
-            onChange={(value: any) =>
-              onChangeFilterParameters({ activeTab: value })
-            }
+            onChange={(value: any) => {
+              setFilterParameters({
+                connection,
+                schema,
+                checkTarget: 'table',
+                checkTypes: checkTypes,
+                activeTab: value
+              });
+            }}
           />
         </div>
       )}

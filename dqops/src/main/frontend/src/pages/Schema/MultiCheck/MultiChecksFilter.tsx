@@ -131,7 +131,12 @@ export default function MultiChecksFilter({
             <RadioButton
               label="Table"
               onClick={() => {
-                onChangeFilterParameters({ checkTarget: 'table' }),
+                onChangeFilterParameters({
+                  checkTarget: 'table',
+                  columnNamePattern: undefined,
+                  columnDataType: undefined,
+                  tableNamePattern: undefined
+                }),
                   onChangeChecks([]);
                 setCheckNameOptions([]);
               }}

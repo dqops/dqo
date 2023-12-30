@@ -4,15 +4,17 @@ import clsx from 'clsx';
 export interface SwitchProps {
   checked: boolean;
   onChange?: (value: boolean) => void;
+  className?: string;
 }
 
-const Switch: React.FC<SwitchProps> = ({ checked, onChange }) => {
+const Switch: React.FC<SwitchProps> = ({ checked, onChange, className }) => {
   return (
     <div
       data-testid="switch"
       className={clsx(
         'relative cursor-pointer h-4 w-7 rounded-full',
-        checked ? 'bg-primary' : 'bg-gray-150'
+        checked ? 'bg-primary' : 'bg-gray-150',
+        className
       )}
       onClick={() => onChange && onChange(!checked)}
     >

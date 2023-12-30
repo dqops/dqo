@@ -76,8 +76,8 @@ export const UpdateCheckModel = ({
         override_conflicts: overideConflicts
       }
     )
-    .then(fetchResults)
-    .finally(() => onChangeLoading(false));
+      .then(fetchResults)
+      .finally(() => onChangeLoading(false));
   };
 
   const bulkDeactivateChecks = () => {
@@ -107,8 +107,8 @@ export const UpdateCheckModel = ({
         selected_tables_to_columns
       }
     )
-    .then(fetchResults)
-    .finally(() => onChangeLoading(false));
+      .then(fetchResults)
+      .finally(() => onChangeLoading(false));
   };
 
   const bulkChecks = (): void => {
@@ -146,7 +146,7 @@ export const UpdateCheckModel = ({
   }, [selectedData]);
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-240 max-w-240">
+    <Dialog open={open} handler={onClose} className="min-w-300 max-w-300">
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
