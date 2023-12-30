@@ -26,7 +26,12 @@ export default function MultiChecksTableItem({
             onChange={() => onChangeSelection(check)}
             checked={checked}
           />
-          <Switch checked={check.configured ?? false} />
+          <div className="cursor-not-allowed">
+            <Switch
+              className="pointer-events-none cursor-not-allowed"
+              checked={check.configured ?? false}
+            />
+          </div>
         </div>
       </td>
       <td className="px-4 py-2 text-left">{check.check_name}</td>

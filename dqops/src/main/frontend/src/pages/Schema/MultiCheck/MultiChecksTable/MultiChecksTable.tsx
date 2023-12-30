@@ -46,7 +46,7 @@ export default function MultiChecksTable({
     }
   };
   return (
-    <div className="border border-gray-300 rounded-lg p-4 my-4">
+    <div className="w-full border border-gray-300 rounded-lg p-4 my-4">
       <MultiChecksTableButtons
         selectAll={selectAll}
         deselectAll={deselectAll}
@@ -59,7 +59,7 @@ export default function MultiChecksTable({
         filterParameters.checkCategory &&
         checks &&
         checks.length > 0 && (
-          <table className="w-full mt-8">
+          <table className="mt-8">
             <MultiChecksTableHeader checkTarget={checkTarget} />
             <tbody>
               {checks?.map((check, index) => (
