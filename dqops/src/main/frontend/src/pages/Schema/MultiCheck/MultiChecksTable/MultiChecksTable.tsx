@@ -46,7 +46,7 @@ export default function MultiChecksTable({
     }
   };
   return (
-    <div className="w-full border border-gray-300 rounded-lg p-4 my-4">
+    <div className="w-max border border-gray-300 rounded-lg p-4 my-4">
       <MultiChecksTableButtons
         selectAll={selectAll}
         deselectAll={deselectAll}
