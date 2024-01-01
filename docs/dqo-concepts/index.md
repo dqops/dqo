@@ -6,13 +6,21 @@ These topics introduce the basic concepts of DQOps.
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
     of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
-    For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the
-    [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
+    For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
     and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
     of null values in a tested column is satisfied.
 
     If the percent of null values in a column raises above the threshold (maximum allowed percent),
     a data quality issue is raised.
+
+    DQOps has three types of data quality checks:
+   
+     - [Profiling checks](./checks/profiling-checks/profiling-checks.md) for measuring the initial data quality score during the profiling stage
+
+     - [Monitoring checks](./checks/monitoring-checks/monitoring-checks.md) for observing and measuring the data quality daily or monthly
+
+     - [Partition checks](./checks/partition-checks/partition-checks.md) for analyzing partitioned data incrementally, or analyzing
+       incrementally any table that has a date column.
 
 
  - **[Configuring data quality checks](./checks/configuring-checks.md)**
@@ -30,10 +38,10 @@ These topics introduce the basic concepts of DQOps.
 
  - **[DQOps user home](./home-folders/dqops-user-home.md)**
 
-    `DQOps user home` is the most important folder. When DQOps is started by running `python -m dqops`, the current working
-    folder becomes the `DQOps user home`.
+    `DQOps user home` is the most important folder, it is the place where DQOps stores all configuration and data quality results.
+    When DQOps is started by running `python -m dqops`, the current working folder is used as the default `DQOps user home`.
 
-    DQOps will set up a folder tree to store the list of monitored data sources and the configuration of data quality
+    On the first run, DQOps will set up a folder tree to store the list of monitored data sources and the configuration of data quality
     checks for all imported tables. The configuration is stored in YAML files for simplicity of editing in Visual Studio Code.
 
 
@@ -66,12 +74,6 @@ These topics introduce the basic concepts of DQOps.
     and how the data is [stored](./data-storage/data-storage.md).
 
 
- - **[Deployment architecture](./architecture/dqops-architecture.md)**
-
-    DQOps can be hosted locally, in the cloud or as a hybrid deployment, running a semi-offline DQOps instances
-    on-premise or in the customer's cloud environment.
-
-
  - **[Data quality KPIs](./data-quality-kpis/data-quality-kpis.md)**
 
     The data quality is measured by data quality KPIs (Key Performance Indicators).
@@ -86,6 +88,15 @@ These topics introduce the basic concepts of DQOps.
     - per data quality dimension
 
     - or a combination of any other dimensions
+
+
+ - **[Incremental data quality monitoring](./data-quality-kpis/incremental-data-quality-monitoring.md)**
+
+    Learn how [partition checks](./checks/partition-checks/partition-checks.md) are used to analyze data quality incrementally,
+    even for very big tables, reaching terabyte or petabyte scale.
+
+    Partitioned checks introduced by DQOps allow to detect data quality issues very early, as soon as invalid data was loaded
+    in the most recent batch.
 
 
  - **[Data quality dashboards](./data-quality-dashboards/data-quality-dashboards.md)**
@@ -121,7 +132,7 @@ These topics introduce the basic concepts of DQOps.
     - `Validity` detects common field format issues, such as an *email* field does not meet the email format
 
 
-- **[Data grouping](./data-grouping/data-grouping.md)**
+ - **[Data grouping](./data-grouping/data-grouping.md)**
 
     DQOps unique feature is the ability to use a **GROUP BY** clause in the data quality sensors, allowing to run data quality checks
     for multiple ranges of rows in the same table.
@@ -133,7 +144,18 @@ These topics introduce the basic concepts of DQOps.
     different data pipelines, or received from different vendors or departments.
 
 
-- **[Data storage](./data-storage/data-storage.md)**
+ - **[User interface overview](./user-interface-overview/user-interface-overview.md)**
+
+    The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
+    Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
+
+
+ - **[Command-line interface](./command-line-interface/command-line-interface.md)**
+
+    Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
+
+
+ - **[Data storage](./data-storage/data-storage.md)**
 
     DQOps stores both the configuration of data sources, the configuration of data quality checks activated on tables
     and the data quality check execution results locally in a `DQOps user home` folder.
@@ -142,14 +164,9 @@ These topics introduce the basic concepts of DQOps.
     Please read the [data storage](./data-storage/data-storage.md) concept guide to understand the data lake structure.
 
 
-- **[User interface overview](./user-interface-overview/user-interface-overview.md)**
+ - **[Deployment architecture](./architecture/dqops-architecture.md)**
 
-    The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
-    Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
-
-
-- **[Command-line interface](./command-line-interface/command-line-interface.md)**
-
-    Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
+    DQOps can be hosted locally, in the cloud or as a hybrid deployment, running a semi-offline DQOps instances
+    on-premise or in the customer's cloud environment.
 
  
