@@ -67,13 +67,6 @@ These topics introduce the basic concepts of DQOps.
     of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
 
 
- - **[Check execution flow](./architecture/check-execution-flow.md)**
-
-    Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
-    [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),
-    and how the data is [stored](./data-storage/data-storage.md).
-
-
  - **[Data quality KPIs](./data-quality-kpis/data-quality-kpis.md)**
 
     The data quality is measured by data quality KPIs (Key Performance Indicators).
@@ -169,4 +162,10 @@ These topics introduce the basic concepts of DQOps.
     DQOps can be hosted locally, in the cloud or as a hybrid deployment, running a semi-offline DQOps instances
     on-premise or in the customer's cloud environment.
 
+
+ - **[Check execution flow](./architecture/check-execution-flow.md)**
+
+    Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
+    [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),
+    and how the data is [stored](./data-storage/data-storage.md). Learn how execution errors are stored.
  

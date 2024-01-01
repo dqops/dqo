@@ -23,7 +23,6 @@ nav:
       - Running checks: "dqo-concepts/running-checks/running-checks.md"
       - Data quality sensors: "dqo-concepts/sensors/sensors.md"
       - Data quality rules: "dqo-concepts/rules/rules.md"
-      - Check execution flow: "dqo-concepts/architecture/check-execution-flow.md"
       - Data quality dashboards: "dqo-concepts/data-quality-dashboards/data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions/data-quality-dimensions.md"
       - Data grouping: "dqo-concepts/data-grouping/data-grouping.md"
@@ -34,6 +33,7 @@ nav:
       - Command-line interface: "dqo-concepts/command-line-interface/command-line-interface.md"
       - Data storage: "dqo-concepts/data-storage/data-storage.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
+      - Check execution flow: "dqo-concepts/architecture/check-execution-flow.md"
   - Installing DQOps:
       - Download DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
       - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
