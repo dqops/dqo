@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { CheckModel, CheckTemplate } from '../../../../api';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
@@ -20,13 +20,6 @@ type TMultiChecksTable = {
   selectedCheckModel: CheckModel;
   searchChecks: () => void;
 };
-
-type TCheckDefRouting =
-  | {
-      table: string;
-      column: string;
-    }
-  | { table: string };
 
 export default function MultiChecksTable({
   checkTarget,
@@ -59,153 +52,91 @@ export default function MultiChecksTable({
     }
   };
 
-  const goToSingleCheckScreenTable = (table: string) => {
-    let url = '';
-    let value;
-    if (!filterParameters.checkCategory || !filterParameters.checkName) return;
-    switch (filterParameters.checkTypes) {
-      case CheckTypes.PROFILING:
-        url = ROUTES.TABLE_PROFILING_UI_FILTER(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          filterParameters.checkCategory,
-          filterParameters.checkName
-        );
-        value = ROUTES.TABLE_PROFILING_VALUE(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table
-        );
-        break;
-      case CheckTypes.PARTITIONED:
-        url = ROUTES.TABLE_PARTITIONED_UI_FILTER(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          filterParameters.activeTab ?? 'daily',
-          filterParameters.checkCategory,
-          filterParameters.checkName
-        );
-        value = ROUTES.TABLE_PARTITIONED_VALUE(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table
-        );
-        break;
-      case CheckTypes.MONITORING:
-        url = ROUTES.TABLE_MONITORING_UI_FILTER(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          filterParameters.activeTab ?? 'daily',
-          filterParameters.checkCategory,
-          filterParameters.checkName
-        );
-        value = ROUTES.TABLE_MONITORING_VALUE(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table
-        );
-        break;
-    }
-    dispatch(
-      addFirstLevelTab(filterParameters.checkTypes, {
-        url,
-        value,
-        state: {},
-        label: table
-      })
-    );
-    history.push(url);
-  };
+  const goToCheckDefinition = useCallback(
+    (table: string, column?: string) => {
+      if (!filterParameters.checkCategory || !filterParameters.checkName)
+        return;
 
-  const goToSingleCheckScreenColumn = (table: string, column: string) => {
-    let url = '';
-    let value;
-    if (!filterParameters.checkCategory || !filterParameters.checkName) return;
-    switch (filterParameters.checkTypes) {
-      case CheckTypes.PROFILING:
-        url = ROUTES.COLUMN_PROFILING_UI_FILTER(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          column,
-          filterParameters.checkCategory,
-          filterParameters.checkName
-        );
-        value = ROUTES.COLUMN_PROFILING_VALUE(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          column
-        );
-        break;
-      case CheckTypes.PARTITIONED:
-        url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          column,
-          filterParameters.activeTab ?? 'daily',
-          filterParameters.checkCategory,
-          filterParameters.checkName
-        );
-        value = ROUTES.COLUMN_PARTITIONED_VALUE(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          column
-        );
-        break;
-      case CheckTypes.MONITORING:
-        url = ROUTES.COLUMN_MONITORING_UI_FILTER(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          column,
-          filterParameters.activeTab ?? 'daily',
-          filterParameters.checkCategory,
-          filterParameters.checkName
-        );
-        value = ROUTES.COLUMN_MONITORING_VALUE(
-          filterParameters.checkTypes,
-          filterParameters.connection,
-          filterParameters.schema,
-          table,
-          column
-        );
-        break;
-    }
-    dispatch(
-      addFirstLevelTab(filterParameters.checkTypes, {
-        url,
-        value,
-        state: {},
-        label: table
-      })
-    );
-    history.push(url);
-  };
+      const commonParams: [string, string, string, string] = [
+        filterParameters.checkTypes,
+        filterParameters.connection,
+        filterParameters.schema,
+        table
+      ];
 
-  const goToCheckDefinition = (def: TCheckDefRouting) => {
-    if (checkTarget === 'column' && 'column' in def) {
-      goToSingleCheckScreenColumn(def.table, def.column);
-    } else {
-      goToSingleCheckScreenTable(def.table);
-    }
-  };
+      let url = '';
+      let value = '';
+
+      switch (filterParameters.checkTypes) {
+        case CheckTypes.PROFILING:
+          url = column
+            ? ROUTES.COLUMN_PROFILING_UI_FILTER(
+                ...commonParams,
+                column,
+                filterParameters.checkCategory,
+                filterParameters.checkName
+              )
+            : ROUTES.TABLE_PROFILING_UI_FILTER(
+                ...commonParams,
+                filterParameters.checkCategory,
+                filterParameters.checkName
+              );
+          value = column
+            ? ROUTES.COLUMN_PROFILING_VALUE(...commonParams, column)
+            : ROUTES.TABLE_PROFILING_VALUE(...commonParams);
+          break;
+        case CheckTypes.PARTITIONED:
+          url = column
+            ? ROUTES.COLUMN_PARTITIONED_UI_FILTER(
+                ...commonParams,
+                column,
+                filterParameters.activeTab ?? 'daily',
+                filterParameters.checkCategory,
+                filterParameters.checkName
+              )
+            : ROUTES.TABLE_PARTITIONED_UI_FILTER(
+                ...commonParams,
+                filterParameters.activeTab ?? 'daily',
+                filterParameters.checkCategory,
+                filterParameters.checkName
+              );
+          value = column
+            ? ROUTES.COLUMN_PARTITIONED_VALUE(...commonParams, column)
+            : ROUTES.TABLE_PARTITIONED_VALUE(...commonParams);
+          break;
+        case CheckTypes.MONITORING:
+          url = column
+            ? ROUTES.COLUMN_MONITORING_UI_FILTER(
+                ...commonParams,
+                column,
+                filterParameters.activeTab ?? 'daily',
+                filterParameters.checkCategory,
+                filterParameters.checkName
+              )
+            : ROUTES.TABLE_MONITORING_UI_FILTER(
+                ...commonParams,
+                filterParameters.activeTab ?? 'daily',
+                filterParameters.checkCategory,
+                filterParameters.checkName
+              );
+          value = column
+            ? ROUTES.COLUMN_MONITORING_VALUE(...commonParams, column)
+            : ROUTES.TABLE_MONITORING_VALUE(...commonParams);
+          break;
+      }
+
+      dispatch(
+        addFirstLevelTab(filterParameters.checkTypes, {
+          url,
+          value,
+          state: {},
+          label: table
+        })
+      );
+      history.push(url);
+    },
+    [filterParameters]
+  );
 
   return (
     <div className="w-max border border-gray-300 rounded-lg p-4 my-4">

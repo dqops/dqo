@@ -4,31 +4,14 @@ import Checkbox from '../../../../components/Checkbox';
 import DisplaySensorParameters from '../../DisplaySensorParameters';
 import FieldValue from '../../FieldValue';
 import Switch from '../../../../components/Switch';
-import { CheckTypes } from '../../../../shared/routes';
-
-type TCheckDefRouting =
-  | {
-      table: string;
-      column: string;
-    }
-  | { table: string };
+import Button from '../../../../components/Button';
 
 type TMultiChecksTableItem = {
   checkTarget: 'column' | 'table' | undefined;
   check: CheckConfigurationModel;
   checked: boolean;
   onChangeSelection: (check: CheckConfigurationModel) => void;
-  goToCheckDefinition: (def: TCheckDefRouting) => void;
-  // goToSingleCheckScreenTable: (
-  //   checkTypes: CheckTypes,
-  //   connection: string,
-  //   schema: string,
-  //   table: string,
-  //   column: string,
-  //   timePartitioned: string,
-  //   category: string,
-  //   checkName: string
-  // ) => void;
+  goToCheckDefinition: (table: string, column?: string) => void;
 };
 
 export default function MultiChecksTableItem({
@@ -37,8 +20,7 @@ export default function MultiChecksTableItem({
   checked,
   onChangeSelection,
   goToCheckDefinition
-}: //goToSingleCheckScreenTable
-TMultiChecksTableItem) {
+}: TMultiChecksTableItem) {
   return (
     <tr>
       <td className="px-4 py-2 text-left">
@@ -55,21 +37,14 @@ TMultiChecksTableItem) {
           </div>
         </div>
       </td>
-      <td
-        className="px-4 py-2 text-left"
+      <Button
+        label={check.check_name}
+        variant="text"
+        className="px-4 py-2 text-left underline"
         onClick={() =>
-          goToCheckDefinition(
-            check.column_name
-              ? {
-                  table: check.table_name ?? '',
-                  column: check.column_name ?? ''
-                }
-              : { table: check.table_name ?? '' }
-          )
+          goToCheckDefinition(check.table_name ?? '', check.column_name)
         }
-      >
-        {check.check_name}
-      </td>
+      ></Button>
       <td className="px-4 py-2 text-left">{check.category_name}</td>
       <td className="px-4 py-2 text-left">{check.table_name}</td>
       {checkTarget === 'column' && (
