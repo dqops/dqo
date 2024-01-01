@@ -64,8 +64,8 @@ export default function MultiChecksTable({
 
       const commonParams = getCommonParams(filterParameters, table);
       const additionalParams = getAdditionalParams(filterParameters, column);
-      
-      const url = getUrl(filterParameters,commonParams,additionalParams,column);
+
+      const url = getUrl(filterParameters, commonParams, additionalParams, column);
       const value = getValue(filterParameters.checkTypes, commonParams, column);
 
       dispatch(
