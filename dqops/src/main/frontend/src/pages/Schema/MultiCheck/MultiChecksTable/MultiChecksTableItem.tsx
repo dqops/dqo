@@ -4,20 +4,41 @@ import Checkbox from '../../../../components/Checkbox';
 import DisplaySensorParameters from '../../DisplaySensorParameters';
 import FieldValue from '../../FieldValue';
 import Switch from '../../../../components/Switch';
+import { CheckTypes } from '../../../../shared/routes';
+
+type TCheckDefRouting =
+  | {
+      table: string;
+      column: string;
+    }
+  | { table: string };
 
 type TMultiChecksTableItem = {
   checkTarget: 'column' | 'table' | undefined;
   check: CheckConfigurationModel;
   checked: boolean;
   onChangeSelection: (check: CheckConfigurationModel) => void;
+  goToCheckDefinition: (def: TCheckDefRouting) => void;
+  // goToSingleCheckScreenTable: (
+  //   checkTypes: CheckTypes,
+  //   connection: string,
+  //   schema: string,
+  //   table: string,
+  //   column: string,
+  //   timePartitioned: string,
+  //   category: string,
+  //   checkName: string
+  // ) => void;
 };
 
 export default function MultiChecksTableItem({
   checkTarget,
   check,
   checked,
-  onChangeSelection
-}: TMultiChecksTableItem) {
+  onChangeSelection,
+  goToCheckDefinition
+}: //goToSingleCheckScreenTable
+TMultiChecksTableItem) {
   return (
     <tr>
       <td className="px-4 py-2 text-left">
@@ -34,7 +55,21 @@ export default function MultiChecksTableItem({
           </div>
         </div>
       </td>
-      <td className="px-4 py-2 text-left">{check.check_name}</td>
+      <td
+        className="px-4 py-2 text-left"
+        onClick={() =>
+          goToCheckDefinition(
+            check.column_name
+              ? {
+                  table: check.table_name ?? '',
+                  column: check.column_name ?? ''
+                }
+              : { table: check.table_name ?? '' }
+          )
+        }
+      >
+        {check.check_name}
+      </td>
       <td className="px-4 py-2 text-left">{check.category_name}</td>
       <td className="px-4 py-2 text-left">{check.table_name}</td>
       {checkTarget === 'column' && (
