@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { CheckModel, CheckTemplate } from '../../../../api';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
@@ -8,6 +8,15 @@ import {
   MultiChecksTableButtons,
   MultiChecksTableHeader
 } from './MultiCheckTableHeaderButtons';
+import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
+import { useHistory } from 'react-router-dom';
+import { useActionDispatch } from '../../../../hooks/useActionDispatch';
+import {
+  getCommonParams,
+  getAdditionalParams,
+  getUrl,
+  getValue
+} from './MultiChecksTableChecksRouting.utils';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
@@ -27,6 +36,8 @@ export default function MultiChecksTable({
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const dispatch = useActionDispatch();
   const selectAll = () => {
     setSelectedData(checks || []);
   };
@@ -45,6 +56,31 @@ export default function MultiChecksTable({
       setSelectedData([...selectedData, check]);
     }
   };
+
+  const goToCheckDefinition = useCallback(
+    (table: string, column?: string) => {
+      if (!filterParameters.checkCategory || !filterParameters.checkName)
+        return;
+
+      const commonParams = getCommonParams(filterParameters, table);
+      const additionalParams = getAdditionalParams(filterParameters, column);
+
+      const url = getUrl(filterParameters, commonParams, additionalParams, column);
+      const value = getValue(filterParameters.checkTypes, commonParams, column);
+
+      dispatch(
+        addFirstLevelTab(filterParameters.checkTypes, {
+          url,
+          value,
+          state: {},
+          label: table
+        })
+      );
+      history.push(url);
+    },
+    [filterParameters]
+  );
+
   return (
     <div className="w-max border border-gray-300 rounded-lg p-4 my-4">
       <MultiChecksTableButtons
@@ -69,6 +105,7 @@ export default function MultiChecksTable({
                   key={index}
                   checked={selectedData.includes(check)}
                   onChangeSelection={onChangeSelection}
+                  goToCheckDefinition={goToCheckDefinition}
                 />
               ))}
             </tbody>
