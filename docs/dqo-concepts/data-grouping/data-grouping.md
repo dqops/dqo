@@ -345,6 +345,47 @@ The columns that identify the data groups are:
   for each table, column, check and the data group. 
 
 
+## Integration of partitioned checks with data grouping
+[Partition checks](../checks/partition-checks/partition-checks.md) can also analyze partitions with grouping rows
+by additional dimensions within each date partition.
+Because both partition checks and data grouping by columns depends on adding all columns to the **GROUP BY** clause,
+DQOps groups rows both by the date partitioning column and the columns used for data grouping.
+
+The following SQL query shows how DQOps applies grouping by the grouping column and the partition date.
+
+
+``` { .sql .annotate linenums="12-14 16" }
+SELECT
+    CASE
+        WHEN COUNT(*) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN analyzed_table."target_column"
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*)
+    END AS actual_value,
+    analyzed_table."country" AS grouping_level_1,
+    CAST(analyzed_table."date_column" AS date) AS time_period,
+    CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+GROUP BY grouping_level_1, time_period, time_period_utc
+ORDER BY grouping_level_1, time_period, time_period_utc
+```
+
+The results of this query collect data quality scores for each day and country separately, and allows accurate
+identification of the source of the data quality issue.
+
+| time_period    |     US |     UK |     DE |
+|----------------|-------:|-------:|-------:|
+| **2023-10-04** |  96.4% |  94.2% |  95.2% |
+| **2023-10-05** |  95.3% |  94.7% |  95.6% |
+| **2023-10-05** |  93.9% |  96.4% |  96.2% |
+| **2023-10-07** |  94.8% |  94.9% |  95.4% |
+| **2023-10-08** |  94.7% | **0%** |  95.2% |
+
+
 ## What's next
 - Learn how DQOps calculated [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
 - Read how the data quality results are [stored as a Hive-compliant local data warehouse](../data-storage/data-storage.md)

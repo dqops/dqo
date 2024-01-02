@@ -1,4 +1,4 @@
-# Key concepts overview
+# DQOps key concepts overview
 
 These topics introduce the basic concepts of DQOps.
 

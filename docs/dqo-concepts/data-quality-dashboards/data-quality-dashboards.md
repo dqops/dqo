@@ -98,7 +98,7 @@ These dashboards allow filtering data by:
 
 **Highest issue severity per day** dashboards allow for reviewing and filtering a summary number of issues that arise 
 from data quality checks per day. Depending on the dashboard, the summary is grouped by table, column, 
-[data grouping](../data-grouping/data-grouping.md), or [check category](../../checks/#categories-of-checks).
+[data grouping](../data-grouping/data-grouping.md), or [check category](../../checks/index.md).
 These dashboards help evaluate the areas with the highest number of data quality issues that should be addressed. 
 It also allows to review how the issue severity changed per day of the month.
 
@@ -153,7 +153,7 @@ for each connection, schema, data grouping, etc.
 
 With these dashboards, senior management can review a summary of data quality KPIs or evaluate the KPIs per table, column, 
 [data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md), 
-[check category](../../checks/#categories-of-checks), [data grouping](../data-grouping/data-grouping.md) and day.
+[check category](../../checks/index.md), [data grouping](../data-grouping/data-grouping.md) and day.
 
 **KPIs per table and day** is a representative of this group. It allows reviewing data quality KPIs per table
 and day of the month. 
@@ -318,7 +318,7 @@ This dashboard allows filtering data by:
 ### **Statistics of executed checks** 
 
 **Statistics of executed checks** subgroup of dashboards contains summaries of executed checks per table, column, 
-[data grouping](../data-grouping/data-grouping.md), and [check category](../../checks/#categories-of-checks).
+[data grouping](../data-grouping/data-grouping.md), and [check category](../../checks/index.md).
 
 ### **Execution errors**
 

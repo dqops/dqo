@@ -164,11 +164,11 @@ Simply, open the DQOps User Interface Console (http://localhost:8888).
 3. Select the **Daily checks** tab.
 
     This tab displays a list of data quality checks in the Check editor. The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-    can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/#categories-of-checks)
+    can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../checks/index.md)
 
-    The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../checks/#severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../dqo-concepts/checks/index.md#issue-severity-levels)
     
-    Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    Learn more about [navigating the check editor](../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.

@@ -33,7 +33,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      -   triggering the checks from the [user interface](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
      
      -   submitting a 'run checks' job to the queue using a REST API client
-         by calling the [run checks](../../client/operations/jobs.md#run_checks) operation.
+         by calling the [run checks](../../client/operations/jobs.md#runchecks-) operation.
      
      -   the checks can be also scheduled for regular execution and triggered by
          an [internal CRON scheduler](../../working-with-dqo/schedules/index.md). 
@@ -42,8 +42,8 @@ The following steps are performed by the DQOps engine to run a data quality chec
      the target table and match the target checks by name, type, time scale or a column name.
      DQOps accesses the *DQOps user home* folder, reads all YAML files and finds the list of checks that are selected.
 
-     Please read the reference of the [CheckSearchFilters](../../../client/models/#checksearchfilters)
-     parameter that is passed to the [run checks](../../client/operations/jobs.md#run_checks) operation
+     Please read the reference of the [CheckSearchFilters](../../client/models/Common.md#checksearchfilters-)
+     parameter that is passed to the [run checks](../../client/operations/jobs.md#runchecks-) operation
      when using the DQOps Python client or running data quality checks using a REST API.
 
 3.   DQOps renders SQL queries that will be executed on the data sources.
@@ -68,7 +68,7 @@ The following steps are performed by the DQOps engine to run a data quality chec
      Before reading historical *sensor readouts*, DQOps loads the [rule](../rules/rules.md) definition
      [.dqorule.yaml](../../reference/yaml/RuleDefinitionYaml.md) file to decide if the rule requires historical data
      to evaluate the *sensor readout*. The configuration fields in
-     the [RuleDefinitionSpec](../../reference/yaml/RuleDefinitionYaml.md#RuleDefinitionSpec) are:
+     the [RuleDefinitionSpec](../../reference/yaml/RuleDefinitionYaml.md#ruledefinitionspec-) are:
 
      -   *mode* - decides if the rule uses historical values or only evaluates the current *sensor readout*
      
@@ -185,7 +185,7 @@ The steps are described below.
 8.   `Read previous sensor readout` is a conditional step performed only to evaluate data quality
      [rules](../rules/rules.md) that require historical values to detect anomalies. 
      The previous historical value can be used to detect changes from the last known value, such as
-     detecting schema changes such as the [daily_column_count_changed](../../checks/table/schema/column-count-changed.md#daily-column-count-changed)
+     detecting schema changes such as the [daily_column_count_changed](../../checks/table/schema/column-count-changed.md#daily-column-count-changed-)
      check that detects if the column count has changed.
      
 9.   `Evaluate sensor readouts` step calls the Python rule functions, passing the current *sensor readout*
@@ -218,11 +218,11 @@ The steps are described below.
 13.  `Update incident` updates an existing, active data quality incident that is not yet *RESOLVED*. No notifications are sent
      when an existing incident is updated by increasing the number of data quality issues and the last (issue) seen timestamp.
 
-     The call to the [run checks](../../client/operations/jobs.md#run_checks) Python client operation that started the
+     The call to the [run checks](../../client/operations/jobs.md#runchecks-) Python client operation that started the
      *run checks* job will return the severity level (*success*, *warning*, *error* or *fatal*) of the highest
      severity data quality issue that was identified during the run.
 
-     The highest severity is found in the [RunChecksQueueJobResult](../../client/models/jobs.md/#RunChecksQueueJobResult) object,
+     The highest severity is found in the [RunChecksQueueJobResult](../../client/models/jobs.md#runchecksqueuejobresult-) object,
      in the *result.highest_severity* field.
 
 14.  `Create incident` step is called when no active incident was found that matches the incident's hash code.
@@ -279,14 +279,14 @@ The following list describes the role of each internal component.
        by the Python rules, DQOps will still return a `succeeded` status.
        The only correct way to detect data quality issues identified during a data quality check execution queued by the
        [run checks](../../client/operations/jobs.md#run_checks) operation is to verify the highest severity status
-       found in the [RunChecksQueueJobResult](../../client/models/jobs.md/#RunChecksQueueJobResult) object,
+       found in the [RunChecksQueueJobResult](../../client/models/jobs.md#runchecksqueuejobresult-) object,
        in the *result.highest_severity* field.
      
      - `failed` is a status for a job that has failed due to some serious DQOps engine issues. The error details will be written
        to a local logging folder *$DQO_USER_HOME/.logs*.
        
      - `cancel_requested` is a status of a job that was requested to cancel, but was `running` at the time of cancellation.
-       Jobs can be cancelled by using the [cancel_job](../../client/operations/jobs.md#cancel_job) operation in the Python client
+       Jobs can be cancelled by using the [cancel_job](../../client/operations/jobs.md#canceljob-) operation in the Python client
        or calling a REST API directly. Only jobs in the `queued` and `waiting` statuses are cancelled instantly.
        Jobs in the `running` status are requested to stop gracefully. DQOps will try to cancel long-running SQL queries
        by calling the *Statement.cancel()* method on a JDBC connection which requests the database to stop the query execution.
@@ -356,7 +356,7 @@ The following list describes the role of each internal component.
 12.  `Parquet data in-memory cache` module is responsible for storing all Parquet files in-memory.
      The Parquet cache shortens the response time to preview the results in the user interface and also allows
      quick lookups to verify the data quality status of a table using the 
-     [get_table_data_quality_status](../../client/operations/check_results.md#get_table_data_quality_status) Python client
+     [get_table_data_quality_status](../../client/operations/check_results.md#gettabledataqualitystatus-) Python client
      or a REST API operation.
 
      The Parquet in-memory cache is the biggest memory usage contributor. In order to avoid any out-of-memory issues,

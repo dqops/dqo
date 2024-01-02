@@ -4,9 +4,9 @@ The DQOps web interface is divided into three main areas.
 
 ![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview2.png)
 
-1. The [navigation bar](./#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
-2. The [tree view](./#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
-3. The [main workspace](./#main-workspace) changes according to your selection in the navigation bar and the tree view.
+1. The [navigation bar](#navigation-bar) has links to the main DQOps data quality monitoring sections and provides access to the main settings and other functions.
+2. The [tree view](#tree-view) displays all the data sources available in your workspace or a list of dashboards depending on the section chosen in the navigation bar. 
+3. The [main workspace](#main-workspace) changes according to your selection in the navigation bar and the tree view.
 
 ## Navigation bar
 
@@ -16,7 +16,7 @@ The navigation bar allows you to select the specific sections that you want to f
 
 - The **Data Sources** section allows you to [add new connections](../../data-sources/index.md), import schemas and 
     tables, [set up schedules](../../working-with-dqo/schedules/index.md), add comments and labels, [configure data grouping](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md),
-    [set the date and time columns for partition checks](../run-data-quality-checks/run-data-quality-checks.md/#configure-date-or-datetime-column-for-partition-checks), 
+    [set the date and time columns for partition checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md#configure-date-or-datetime-column-for-partition-checks), 
     and [modify the settings of the incidents and notifications](../../working-with-dqo/incidents-and-notifications/incidents.md).
 - The **Profiling** section allows you to [collect and review basic data statistics](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md),
     as well as [enable and run profiling data quality checks](../../working-with-dqo/run-data-quality-checks/run-data-quality-checks.md)
@@ -157,9 +157,9 @@ Under tabs selection, there is information about the set schedule configuration.
 section, there is additional information about the date partitioning column.
 
 The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/#categories-of-checks)
+can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../checks/index.md)
 
-The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../checks/#severity-levels)
+The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../checks/index.md#issue-severity-levels)
 
 On the left of the name of each check, there are several buttons and icons. And under the name of the check, there is a data quality
 dimension category to which this check was categorized.

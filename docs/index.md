@@ -7,18 +7,19 @@ DQOps comes with more than 140 predefined data quality checks which helps you mo
 - Intuitive [user interface](./dqo-concepts/user-interface-overview/user-interface-overview.md) that uses tabs
   to work on multiple tables at the same time
 - [Command-line](./dqo-concepts/command-line-interface/command-line-interface.md) interface
-- Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, and MySQL
+- Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server, MySQL, Spark, Databricks, Oracle and others
 - More than 140 built-in table and column checks with easy customization
 - Table and column-level [data quality checks](./dqo-concepts/checks/index.md) which allows writing your own SQL queries
 - Daily and monthly date [partition testing](./dqo-concepts/checks/partition-checks/partition-checks.md)
 - [Data grouping](./dqo-concepts/data-grouping/data-grouping.md) by up to 9 different columns
 - Built-in [job scheduler](./working-with-dqo/schedules/index.md)
 - Calculation of [data quality KPIs](./dqo-concepts/data-quality-kpis/data-quality-kpis.md)
-- [Incremental data quality monitoring](./dqo-concepts/data-quality-kpis/incremental-data-quality-monitoring.md) to detect issues early
 - Built-in [data quality dashboards](./dqo-concepts/data-quality-dashboards/data-quality-dashboards.md)
-- Cloud hosted Data Quality Data Warehouse
+- [Incremental data quality monitoring](./dqo-concepts/data-quality-kpis/incremental-data-quality-monitoring.md) to detect issues early
+- [Compare tables](./working-with-dqo/table-comparison/table-comparison.md) to the source of truth
+- Cloud hosted [Data Quality Data Warehouse](./dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
 - [Incident](./working-with-dqo/incidents-and-notifications/incidents.md) management
-- Sending incident notifications using [webhooks](./integrations/webhooks/index.md) and [Slack](./integrations/slack/configuring-slack-notifications.md)
+- Sending incident notifications to [webhooks](./integrations/webhooks/index.md) and [Slack](./integrations/slack/configuring-slack-notifications.md)
 
 ## Getting started
 
