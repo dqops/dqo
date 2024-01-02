@@ -362,7 +362,6 @@ export const databaseOptions: IDatabaseOption[] = [
     iconName: 'presto',
     displayName: 'Presto'
   },
-  // todo: add trino
   {
     type: ConnectionModelProviderTypeEnum.redshift,
     name: 'Redshift',
@@ -380,6 +379,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Snowflake',
     iconName: 'snowflake',
     displayName: 'Snowflake'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.trino,
+    name: 'Trino',
+    iconName: 'trino',
+    displayName: 'Trino'
   },
   {
     type: ConnectionModelProviderTypeEnum.postgresql,
