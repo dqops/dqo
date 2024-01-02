@@ -135,7 +135,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
     }
 
     /**
-     * Creates and calculates a data_stream_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
+     * Creates and calculates a data_group_hash column from all grouping_level_X columns (grouping_level_1, grouping_level_2, ..., grouping_level_9).
      * @param dataGroupingLevelColumns Array of data stream level columns.
      * @param dataGroupingConfigurationSpec Data grouping configuration used to decide which data grouping dimension levels are configured and will be included in the data group hash.
      * @param rowCount Count of rows to process.

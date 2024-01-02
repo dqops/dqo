@@ -80,7 +80,7 @@ public interface CommonTableNormalizationService {
     TextColumn createDataGroupingNameColumn(TextColumn[] dataGroupingLevelColumns, int rowCount);
 
     /**
-     * Creates and populates a time_series_uuid column that is a hash of the check hash (or profiler hash) and the data_stream_hash and uniquely identifies a time series.
+     * Creates and populates a time_series_uuid column that is a hash of the check hash (or profiler hash) and the data_group_hash and uniquely identifies a time series.
      *
      * @param sortedDataGroupingHashColumn Column with data grouping hashes for each row.
      * @param checkOrProfilerHash        Check hash (or a profiler hash) that should be hashed into the time_series_uuid.
