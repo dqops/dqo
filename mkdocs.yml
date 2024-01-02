@@ -35,6 +35,7 @@ nav:
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Check execution flow: "dqo-concepts/architecture/check-execution-flow.md"
   - Installing DQOps:
+      - "working-with-dqo/installation/index.md"
       - Download DQOps using PIP: "working-with-dqo/installation/install-dqo-using-pip.md"
       - Run DQOps in Docker: "working-with-dqo/installation/run-dqo-as-docker-container.md"
       - Install DQOps from Git: "working-with-dqo/installation/install-dqo-from-git.md"

@@ -49,7 +49,7 @@ To use DQOps you need:
 
 1.  Create an empty catalogue.
 
-2.  Download zipped source code archive from [DQOps GitHub](https://github.com/dqops/dqo). 
+2.  Download zipped source code archive from [DQOps GitHub releases](https://github.com/dqops/dqo/releases). 
 
     You can learn how to download the source code archives in [GitHub Docs](https://docs.github.com/en/repositories/working-with-files/using-files/downloading-source-code-archives).
 
