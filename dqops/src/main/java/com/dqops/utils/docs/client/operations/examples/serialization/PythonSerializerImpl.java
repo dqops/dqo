@@ -1,5 +1,5 @@
 /*
- * Copyright © 2023 DQOps (support@dqops.com)
+ * Copyright © 2024 DQOps (support@dqops.com)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.utils.docs.client.serialization;
+package com.dqops.utils.docs.client.operations.examples.serialization;
 
 import com.dqops.metadata.fields.ParameterDataType;
+import com.dqops.utils.docs.client.operations.examples.PathParameterFillerUtility;
 import com.dqops.utils.docs.generators.ParsedSampleObject;
 import com.dqops.utils.docs.generators.ParsedSampleObjectFactory;
 import com.dqops.utils.reflection.ClassInfo;
@@ -144,7 +145,7 @@ public class PythonSerializerImpl implements PythonSerializer {
                 if (fieldGetter == null) {
                     continue;
                 }
-                
+
                 String serializedFieldValue;
                 try {
                     Object fieldValue = fieldGetter.invoke(parsedSource.getSource());
@@ -159,18 +160,19 @@ public class PythonSerializerImpl implements PythonSerializer {
 
                 String fieldPythonName = convertJavaVariableNameToPythonName(fieldInfo.getClassFieldName());
                 String serializedField = fieldPythonName + "=" + serializedFieldValue;
-                serializedFields.add(indent + serializedField.replace(newLine, newLine + indent));
+                serializedFields.add(serializedField.replace(newLine, newLine + indent));
             }
 
             StringBuilder serializedObject = new StringBuilder();
-            serializedObject.append(sourceClassInfo.getReflectedClass().getSimpleName())
+            String javaSimpleClassName = PathParameterFillerUtility.getJavaSimpleClassName(sourceClassInfo.getReflectedClass());
+            serializedObject.append(javaSimpleClassName)
                     .append("(");
-            if (serializedFields.size() <= 1) {
-                serializedFields.forEach(serializedObject::append);
-            } else {
-                serializedObject.append(newLine)
-                        .append(String.join("," + newLine, serializedFields))
+            if (serializedFields.size() > 1 || serializedFields.stream().anyMatch(f -> f.contains("\n"))) {
+                serializedObject.append(newLine).append(indent)
+                        .append(String.join("," + newLine + indent, serializedFields))
                         .append(newLine);
+            } else {
+                serializedFields.forEach(serializedObject::append);
             }
 
             serializedObject.append(")");

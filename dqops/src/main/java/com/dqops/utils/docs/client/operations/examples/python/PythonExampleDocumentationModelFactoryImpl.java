@@ -20,21 +20,20 @@ import com.dqops.utils.docs.DocumentationReflectionService;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
 import com.dqops.utils.docs.client.operations.OperationParameterDocumentationModel;
 import com.dqops.utils.docs.client.operations.examples.PathParameterFillerUtility;
-import com.dqops.utils.docs.client.serialization.PythonSerializer;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializer;
 import com.dqops.utils.docs.generators.GeneratorUtility;
 import com.dqops.utils.docs.generators.TypeModel;
 import com.dqops.utils.reflection.ClassInfo;
 import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.string.StringCaseFormat;
 import com.google.common.base.CaseFormat;
+import io.netty.handler.codec.http.HttpResponseStatus;
+import io.swagger.v3.oas.models.PathItem;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class PythonExampleDocumentationModelFactoryImpl implements PythonExampleDocumentationModelFactory {
@@ -62,6 +61,17 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
         String methodName = operationModel.getOperation().getOperationId();
         String apiMethodName = StringCaseFormat.LOWER_CAMEL.to(StringCaseFormat.LOWER_UNDERSCORE_SEPARATE_NUMBER, methodName);
         pythonExampleDocumentationModel.setApiMethodName(apiMethodName);
+
+//        operationModel.getOperation().getResponses().entrySet().stream()
+//                .sorted(Map.Entry.comparingByKey())
+//                .map(Map.Entry::getKey)
+//                .map(Integer::parseInt)
+//                .map(HttpResponseStatus::valueOf)
+//                .findFirst()
+//                .ifPresent(pythonExampleDocumentationModel::setHttpStatus);
+        if (operationModel.getHttpMethod() == PathItem.HttpMethod.GET) {
+            pythonExampleDocumentationModel.setHttpStatus(HttpResponseStatus.OK);
+        }
 
         pythonExampleDocumentationModel.setAuth(auth);
         pythonExampleDocumentationModel.setAsync(async);

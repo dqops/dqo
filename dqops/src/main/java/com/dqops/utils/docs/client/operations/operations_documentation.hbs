@@ -40,13 +40,13 @@ ___{{#with "  "}}{{.}}{{/with}}
 
 {{#if usageExamples}}
 **Usage examples**{{#with "  "}}{{.}}{{/with}}
-{{#each usageExamples~}}
+{{#each usageExamples}}
 === "{{{executionMethod.navbarHeader}}}"
     {{#with "  "}}{{.}}{{/with}}
     ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
-{{/each~}}
+{{/each}}
 {{/if}}
 
 {{#if returnValueSample}}

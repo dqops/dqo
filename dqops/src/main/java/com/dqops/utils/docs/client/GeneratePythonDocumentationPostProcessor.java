@@ -29,7 +29,7 @@ import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocum
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationGeneratorImpl;
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactory;
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactoryImpl;
-import com.dqops.utils.docs.client.serialization.PythonSerializerImpl;
+import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationFolderFactory;
 import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;

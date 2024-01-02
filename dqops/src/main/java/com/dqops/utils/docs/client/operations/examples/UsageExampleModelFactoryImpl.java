@@ -19,7 +19,6 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
     public OperationUsageExampleDocumentationModel createOperationUsageExample(OperationExecutionMethod executionMethod,
                                                                                OperationsOperationDocumentationModel operationsOperationDocumentationModel) {
         OperationModel operationModel = operationsOperationDocumentationModel.getOperationModel();
-        List<OperationParameterDocumentationModel> operationParameters = operationsOperationDocumentationModel.getParametersFields();
 
         OperationUsageExampleDocumentationModel model = new OperationUsageExampleDocumentationModel();
         model.setExecutionMethod(executionMethod);
@@ -56,7 +55,7 @@ public class UsageExampleModelFactoryImpl implements UsageExampleModelFactory {
     protected String renderCurlUsageExample(OperationModel operationModel,
                                             OperationParameterDocumentationModel requestBody,
                                             List<OperationParameterDocumentationModel> operationParameters) {
-        final String newLine = "^\n\t\t";
+        final String newLine = "^\n\t";
         StringBuilder renderedExample = new StringBuilder("curl");
 
         if (operationModel.getHttpMethod().equals(PathItem.HttpMethod.HEAD)) {

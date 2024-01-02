@@ -23,6 +23,7 @@ import com.dqops.utils.docs.generators.SampleLongsRegistry;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.TypeModel;
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -50,7 +51,18 @@ public final class PathParameterFillerUtility {
         for (Iterator<MatchResult> it = pathParameterMatcher.results().iterator(); it.hasNext(); ) {
             MatchResult matchResult = it.next();
             resultBuilder.append(pathUrl, pathUrlMatchCursor, matchResult.start());
-            resultBuilder.append(pathParameterIt.next());
+            String replacement = pathParameterIt.next();
+
+            if (replacement.charAt(0) == '\'' && replacement.charAt(replacement.length() - 1) == '\'') {
+                // Handle string formatting.
+                replacement = replacement.substring(1, replacement.length() - 1);
+            } else if (replacement.contains(".")) {
+                // Handle enum formatting.
+                String[] splitReplacement = replacement.split("\\.");
+                replacement = splitReplacement[splitReplacement.length - 1];
+            }
+
+            resultBuilder.append(replacement);
             pathUrlMatchCursor = matchResult.end();
         }
 
@@ -85,14 +97,28 @@ public final class PathParameterFillerUtility {
     private static String getSampleParameterValue(String parameterName, TypeModel parameterType) {
         switch (parameterType.getDataType()) {
             case string_type:
-                return SampleStringsRegistry.getMatchingStringForParameter(parameterName);
+                String sampleStringValue = SampleStringsRegistry.getMatchingStringForParameter(parameterName);
+                return String.format("'%s'", sampleStringValue);
             case long_type:
                 return Long.toString(SampleLongsRegistry.getMatchingLongForParameter(parameterName));
             case enum_type:
                 String jsonStringValue = GeneratorUtility.generateJsonSampleFromTypeModel(parameterType, false);
-                return jsonStringValue.replaceAll("^\"|\"$", "");
+                String enumValue = jsonStringValue.replaceAll("^\"|\"$", "");
+                return getJavaSimpleClassName(parameterType.getClazz()) + "." + enumValue;
             default:
                 return GeneratorUtility.generateJsonSampleFromTypeModel(parameterType, false);
+        }
+    }
+
+    public static String getJavaSimpleClassName(Class<?> clazz) {
+        if (Strings.isNullOrEmpty(clazz.getSimpleName())) {
+            String classFullName = clazz.getName();
+            String mainClassFullName = classFullName.split("\\$")[0];
+            String[] mainClassFullNameComponents = mainClassFullName.split("\\.");
+            String mainClassSimpleName = mainClassFullNameComponents[mainClassFullNameComponents.length - 1];
+            return mainClassSimpleName;
+        } else {
+            return clazz.getSimpleName();
         }
     }
 }

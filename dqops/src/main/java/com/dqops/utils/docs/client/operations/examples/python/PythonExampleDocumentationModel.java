@@ -15,6 +15,7 @@
  */
 package com.dqops.utils.docs.client.operations.examples.python;
 
+import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.Data;
 
 import java.util.List;
@@ -25,6 +26,11 @@ import java.util.List;
  */
 @Data
 public class PythonExampleDocumentationModel {
+    /**
+     * Expected HTTP status.
+     */
+    private HttpResponseStatus httpStatus;
+
     /**
      * Python module name.
      */
