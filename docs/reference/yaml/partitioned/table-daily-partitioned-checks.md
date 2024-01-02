@@ -1,6 +1,8 @@
 
-## TableTimelinessDailyPartitionedChecksSpec  
-Container of table level date partitioned timeliness data quality checks.  
+## TableComparisonDailyPartitionedChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the daily partitioned comparison checks for each configured reference table.  
   
 
 
@@ -14,11 +16,7 @@ Container of table level date partitioned timeliness data quality checks.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_data_freshness](../../../../checks/table/timeliness/data-freshness/)|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../../checks/table/timeliness/data-freshness/)| | | |
-|[daily_partition_data_staleness](../../../../checks/table/timeliness/data-staleness/)|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../../checks/table/timeliness/data-staleness/)| | | |
-|[daily_partition_data_ingestion_delay](../../../../checks/table/timeliness/data-ingestion-delay/)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../../checks/table/timeliness/data-ingestion-delay/)| | | |
-|[daily_partition_reload_lag](../../../../checks/table/timeliness/reload-lag/)|Daily partitioned check calculating the longest time a row waited to be load|[TablePartitionReloadLagCheckSpec](../../../../checks/table/timeliness/reload-lag/)| | | |
-|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableComparisonDailyPartitionedChecksSpec)]| | | |
 
 
 
@@ -59,8 +57,8 @@ Container of built-in comparison (accuracy) checks on a table level that are usi
 
 ___  
 
-## TableSqlDailyPartitionedChecksSpec  
-Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).  
+## TableDailyPartitionedCheckCategoriesSpec  
+Container of table level daily partitioned checks. Contains categories of daily partitioned checks.  
   
 
 
@@ -74,10 +72,11 @@ Container of built-in preconfigured data quality checks on a table level that ar
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_partition_sql_condition_passed_percent_on_table](../../../../checks/table/sql/sql-condition-passed-percent-on-table/)|Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|[TableSqlConditionPassedPercentCheckSpec](../../../../checks/table/sql/sql-condition-passed-percent-on-table/)| | | |
-|[daily_partition_sql_condition_failed_count_on_table](../../../../checks/table/sql/sql-condition-failed-count-on-table/)|Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|[TableSqlConditionFailedCountCheckSpec](../../../../checks/table/sql/sql-condition-failed-count-on-table/)| | | |
-|[daily_partition_sql_aggregate_expr_table](../../../../checks/table/sql/sql-aggregate-expr-table/)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|[TableSqlAggregateExprCheckSpec](../../../../checks/table/sql/sql-aggregate-expr-table/)| | | |
-|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+|[volume](../table-daily-partitioned-checks/#TableVolumeDailyPartitionedChecksSpec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[TableVolumeDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableVolumeDailyPartitionedChecksSpec)| | | |
+|[timeliness](../table-daily-partitioned-checks/#TableTimelinessDailyPartitionedChecksSpec)|Daily partitioned timeliness checks|[TableTimelinessDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableTimelinessDailyPartitionedChecksSpec)| | | |
+|[sql](../table-daily-partitioned-checks/#TableSqlDailyPartitionedChecksSpec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[TableSqlDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableSqlDailyPartitionedChecksSpec)| | | |
+|[comparisons](../table-daily-partitioned-checks/#TableComparisonDailyPartitionedChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](../table-daily-partitioned-checks/#TableComparisonDailyPartitionedChecksSpecMap)| | | |
+|[custom](../../profiling/table-profiling-checks/#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../../profiling/table-profiling-checks/#CustomCheckSpecMap)| | | |
 
 
 
@@ -89,10 +88,8 @@ Container of built-in preconfigured data quality checks on a table level that ar
 
 ___  
 
-## TableComparisonDailyPartitionedChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the daily partitioned comparison checks for each configured reference table.  
+## TableTimelinessDailyPartitionedChecksSpec  
+Container of table level date partitioned timeliness data quality checks.  
   
 
 
@@ -106,7 +103,11 @@ Container of comparison checks for each defined data comparison. The name of the
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [TableComparisonDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableComparisonDailyPartitionedChecksSpec)]| | | |
+|[daily_partition_data_freshness](../../../../checks/table/timeliness/data-freshness/)|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../../checks/table/timeliness/data-freshness/)| | | |
+|[daily_partition_data_staleness](../../../../checks/table/timeliness/data-staleness/)|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../../checks/table/timeliness/data-staleness/)| | | |
+|[daily_partition_data_ingestion_delay](../../../../checks/table/timeliness/data-ingestion-delay/)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../../checks/table/timeliness/data-ingestion-delay/)| | | |
+|[daily_partition_reload_lag](../../../../checks/table/timeliness/reload-lag/)|Daily partitioned check calculating the longest time a row waited to be load|[TablePartitionReloadLagCheckSpec](../../../../checks/table/timeliness/reload-lag/)| | | |
+|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
 
@@ -152,8 +153,8 @@ Container of table level date partitioned volume data quality checks.
 
 ___  
 
-## TableDailyPartitionedCheckCategoriesSpec  
-Container of table level daily partitioned checks. Contains categories of daily partitioned checks.  
+## TableSqlDailyPartitionedChecksSpec  
+Container of built-in preconfigured data quality checks on a table level that are using custom SQL expressions (conditions).  
   
 
 
@@ -167,11 +168,10 @@ Container of table level daily partitioned checks. Contains categories of daily 
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](../table-daily-partitioned-checks/#TableVolumeDailyPartitionedChecksSpec)|Volume daily partitioned data quality checks that verify the quality of every day of data separately|[TableVolumeDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableVolumeDailyPartitionedChecksSpec)| | | |
-|[timeliness](../table-daily-partitioned-checks/#TableTimelinessDailyPartitionedChecksSpec)|Daily partitioned timeliness checks|[TableTimelinessDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableTimelinessDailyPartitionedChecksSpec)| | | |
-|[sql](../table-daily-partitioned-checks/#TableSqlDailyPartitionedChecksSpec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|[TableSqlDailyPartitionedChecksSpec](../table-daily-partitioned-checks/#TableSqlDailyPartitionedChecksSpec)| | | |
-|[comparisons](../table-daily-partitioned-checks/#TableComparisonDailyPartitionedChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyPartitionedChecksSpecMap](../table-daily-partitioned-checks/#TableComparisonDailyPartitionedChecksSpecMap)| | | |
-|[custom](../../profiling/table-profiling-checks/#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../../profiling/table-profiling-checks/#CustomCheckSpecMap)| | | |
+|[daily_partition_sql_condition_passed_percent_on_table](../../../../checks/table/sql/sql-condition-passed-percent-on-table/)|Verifies that a set percentage of rows passed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|[TableSqlConditionPassedPercentCheckSpec](../../../../checks/table/sql/sql-condition-passed-percent-on-table/)| | | |
+|[daily_partition_sql_condition_failed_count_on_table](../../../../checks/table/sql/sql-condition-failed-count-on-table/)|Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.|[TableSqlConditionFailedCountCheckSpec](../../../../checks/table/sql/sql-condition-failed-count-on-table/)| | | |
+|[daily_partition_sql_aggregate_expr_table](../../../../checks/table/sql/sql-aggregate-expr-table/)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.|[TableSqlAggregateExprCheckSpec](../../../../checks/table/sql/sql-aggregate-expr-table/)| | | |
+|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
 

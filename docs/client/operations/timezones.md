@@ -26,19 +26,103 @@ http://localhost:8888/api/timezones
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/timezones^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.timezones import get_available_zone_ids
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_available_zone_ids.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.timezones import get_available_zone_ids
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_available_zone_ids.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.timezones import get_available_zone_ids
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_available_zone_ids.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.timezones import get_available_zone_ids
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_available_zone_ids.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
-    []
+    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
     ```
 
 

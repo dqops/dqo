@@ -1,6 +1,6 @@
 
-## TableDailyMonitoringCheckCategoriesSpec  
-Container of table level daily monitoring. Contains categories of daily monitoring.  
+## TableAvailabilityDailyMonitoringChecksSpec  
+Container of built-in preconfigured data quality checks on a table level that are detecting the table availability.  
   
 
 
@@ -14,14 +14,8 @@ Container of table level daily monitoring. Contains categories of daily monitori
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[volume](../table-daily-monitoring-checks/#TableVolumeDailyMonitoringChecksSpec)|Daily monitoring volume data quality checks|[TableVolumeDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableVolumeDailyMonitoringChecksSpec)| | | |
-|[timeliness](../table-daily-monitoring-checks/#TableTimelinessDailyMonitoringChecksSpec)|Daily monitoring timeliness checks|[TableTimelinessDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableTimelinessDailyMonitoringChecksSpec)| | | |
-|[accuracy](../table-daily-monitoring-checks/#TableAccuracyDailyMonitoringChecksSpec)|Daily monitoring accuracy checks|[TableAccuracyDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableAccuracyDailyMonitoringChecksSpec)| | | |
-|[sql](../table-daily-monitoring-checks/#TableSqlDailyMonitoringChecksSpec)|Daily monitoring custom SQL checks|[TableSqlDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableSqlDailyMonitoringChecksSpec)| | | |
-|[availability](../table-daily-monitoring-checks/#TableAvailabilityDailyMonitoringChecksSpec)|Daily monitoring table availability checks|[TableAvailabilityDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableAvailabilityDailyMonitoringChecksSpec)| | | |
-|[schema](../table-daily-monitoring-checks/#TableSchemaDailyMonitoringChecksSpec)|Daily monitoring table schema checks|[TableSchemaDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableSchemaDailyMonitoringChecksSpec)| | | |
-|[comparisons](../table-daily-monitoring-checks/#TableComparisonDailyMonitoringChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyMonitoringChecksSpecMap](../table-daily-monitoring-checks/#TableComparisonDailyMonitoringChecksSpecMap)| | | |
-|[custom](../../profiling/table-profiling-checks/#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../../profiling/table-profiling-checks/#CustomCheckSpecMap)| | | |
+|[daily_table_availability](../../../../checks/table/availability/table-availability/)|Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.|[TableAvailabilityCheckSpec](../../../../checks/table/availability/table-availability/)| | | |
+|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
 
@@ -65,8 +59,8 @@ Container of built-in preconfigured volume data quality checks on a table level 
 
 ___  
 
-## TableVolumeDailyMonitoringChecksSpec  
-Container of table level daily monitoring for volume data quality checks.  
+## TableTimelinessDailyMonitoringChecksSpec  
+Container of table level daily monitoring for timeliness data quality checks.  
   
 
 
@@ -80,13 +74,9 @@ Container of table level daily monitoring for volume data quality checks.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_row_count](../../../../checks/table/volume/row-count/)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.|[TableRowCountCheckSpec](../../../../checks/table/volume/row-count/)| | | |
-|[daily_row_count_anomaly_differencing_30_days](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyDifferencingRowCount30DaysCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)| | | |
-|[daily_row_count_anomaly_differencing](../../../../checks/table/volume/row-count-anomaly-differencing/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|[TableAnomalyDifferencingRowCountCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing/)| | | |
-|[daily_row_count_change](../../../../checks/table/volume/row-count-change/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.|[TableChangeRowCountCheckSpec](../../../../checks/table/volume/row-count-change/)| | | |
-|[daily_row_count_change_yesterday](../../../../checks/table/volume/row-count-change-yesterday/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](../../../../checks/table/volume/row-count-change-yesterday/)| | | |
-|[daily_row_count_change_7_days](../../../../checks/table/volume/row-count-change-7-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](../../../../checks/table/volume/row-count-change-7-days/)| | | |
-|[daily_row_count_change_30_days](../../../../checks/table/volume/row-count-change-30-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|[TableChangeRowCountSince30DaysCheckSpec](../../../../checks/table/volume/row-count-change-30-days/)| | | |
+|[daily_data_freshness](../../../../checks/table/timeliness/data-freshness/)|Daily  calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../../checks/table/timeliness/data-freshness/)| | | |
+|[daily_data_staleness](../../../../checks/table/timeliness/data-staleness/)|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../../checks/table/timeliness/data-staleness/)| | | |
+|[daily_data_ingestion_delay](../../../../checks/table/timeliness/data-ingestion-delay/)|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../../checks/table/timeliness/data-ingestion-delay/)| | | |
 |[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -157,8 +147,10 @@ Container of built-in preconfigured data quality checks on a table level that ar
 
 ___  
 
-## TableTimelinessDailyMonitoringChecksSpec  
-Container of table level daily monitoring for timeliness data quality checks.  
+## TableComparisonDailyMonitoringChecksSpecMap  
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains the daily monitoring comparison checks for each configured reference table.  
   
 
 
@@ -172,10 +164,7 @@ Container of table level daily monitoring for timeliness data quality checks.
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_data_freshness](../../../../checks/table/timeliness/data-freshness/)|Daily  calculating the number of days since the most recent event timestamp (freshness)|[TableDataFreshnessCheckSpec](../../../../checks/table/timeliness/data-freshness/)| | | |
-|[daily_data_staleness](../../../../checks/table/timeliness/data-staleness/)|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|[TableDataStalenessCheckSpec](../../../../checks/table/timeliness/data-staleness/)| | | |
-|[daily_data_ingestion_delay](../../../../checks/table/timeliness/data-ingestion-delay/)|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|[TableDataIngestionDelayCheckSpec](../../../../checks/table/timeliness/data-ingestion-delay/)| | | |
-|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+|self||Dict[string, [TableComparisonDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableComparisonDailyMonitoringChecksSpec)]| | | |
 
 
 
@@ -217,8 +206,8 @@ Container of built-in comparison (accuracy) checks on a table level that are usi
 
 ___  
 
-## TableAvailabilityDailyMonitoringChecksSpec  
-Container of built-in preconfigured data quality checks on a table level that are detecting the table availability.  
+## TableDailyMonitoringCheckCategoriesSpec  
+Container of table level daily monitoring. Contains categories of daily monitoring.  
   
 
 
@@ -232,8 +221,14 @@ Container of built-in preconfigured data quality checks on a table level that ar
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_table_availability](../../../../checks/table/availability/table-availability/)|Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.|[TableAvailabilityCheckSpec](../../../../checks/table/availability/table-availability/)| | | |
-|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
+|[volume](../table-daily-monitoring-checks/#TableVolumeDailyMonitoringChecksSpec)|Daily monitoring volume data quality checks|[TableVolumeDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableVolumeDailyMonitoringChecksSpec)| | | |
+|[timeliness](../table-daily-monitoring-checks/#TableTimelinessDailyMonitoringChecksSpec)|Daily monitoring timeliness checks|[TableTimelinessDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableTimelinessDailyMonitoringChecksSpec)| | | |
+|[accuracy](../table-daily-monitoring-checks/#TableAccuracyDailyMonitoringChecksSpec)|Daily monitoring accuracy checks|[TableAccuracyDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableAccuracyDailyMonitoringChecksSpec)| | | |
+|[sql](../table-daily-monitoring-checks/#TableSqlDailyMonitoringChecksSpec)|Daily monitoring custom SQL checks|[TableSqlDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableSqlDailyMonitoringChecksSpec)| | | |
+|[availability](../table-daily-monitoring-checks/#TableAvailabilityDailyMonitoringChecksSpec)|Daily monitoring table availability checks|[TableAvailabilityDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableAvailabilityDailyMonitoringChecksSpec)| | | |
+|[schema](../table-daily-monitoring-checks/#TableSchemaDailyMonitoringChecksSpec)|Daily monitoring table schema checks|[TableSchemaDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableSchemaDailyMonitoringChecksSpec)| | | |
+|[comparisons](../table-daily-monitoring-checks/#TableComparisonDailyMonitoringChecksSpecMap)|Dictionary of configuration of checks for table comparisons. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[TableComparisonDailyMonitoringChecksSpecMap](../table-daily-monitoring-checks/#TableComparisonDailyMonitoringChecksSpecMap)| | | |
+|[custom](../../profiling/table-profiling-checks/#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../../profiling/table-profiling-checks/#CustomCheckSpecMap)| | | |
 
 
 
@@ -245,10 +240,8 @@ Container of built-in preconfigured data quality checks on a table level that ar
 
 ___  
 
-## TableComparisonDailyMonitoringChecksSpecMap  
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains the daily monitoring comparison checks for each configured reference table.  
+## TableVolumeDailyMonitoringChecksSpec  
+Container of table level daily monitoring for volume data quality checks.  
   
 
 
@@ -262,7 +255,14 @@ Container of comparison checks for each defined data comparison. The name of the
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [TableComparisonDailyMonitoringChecksSpec](../table-daily-monitoring-checks/#TableComparisonDailyMonitoringChecksSpec)]| | | |
+|[daily_row_count](../../../../checks/table/volume/row-count/)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.|[TableRowCountCheckSpec](../../../../checks/table/volume/row-count/)| | | |
+|[daily_row_count_anomaly_differencing_30_days](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.|[TableAnomalyDifferencingRowCount30DaysCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing-30-days/)| | | |
+|[daily_row_count_anomaly_differencing](../../../../checks/table/volume/row-count-anomaly-differencing/)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.|[TableAnomalyDifferencingRowCountCheckSpec](../../../../checks/table/volume/row-count-anomaly-differencing/)| | | |
+|[daily_row_count_change](../../../../checks/table/volume/row-count-change/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.|[TableChangeRowCountCheckSpec](../../../../checks/table/volume/row-count-change/)| | | |
+|[daily_row_count_change_yesterday](../../../../checks/table/volume/row-count-change-yesterday/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.|[TableChangeRowCountSinceYesterdayCheckSpec](../../../../checks/table/volume/row-count-change-yesterday/)| | | |
+|[daily_row_count_change_7_days](../../../../checks/table/volume/row-count-change-7-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.|[TableChangeRowCountSince7DaysCheckSpec](../../../../checks/table/volume/row-count-change-7-days/)| | | |
+|[daily_row_count_change_30_days](../../../../checks/table/volume/row-count-change-30-days/)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.|[TableChangeRowCountSince30DaysCheckSpec](../../../../checks/table/volume/row-count-change-30-days/)| | | |
+|[custom_checks](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks/#CustomCategoryCheckSpecMap)| | | |
 
 
 

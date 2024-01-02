@@ -49,11 +49,11 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     private String column;
 
     @JsonPropertyDescription("The column data type that was imported from the data source and is stored in the " +
-            "[columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private String columnDataType;
 
     @JsonPropertyDescription("Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the " +
-            "[columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private Boolean columnNullable;
 
     @JsonPropertyDescription("The target type of object to run checks. Supported values are: *table* to run only table level checks or *column* to run only column level checks.")

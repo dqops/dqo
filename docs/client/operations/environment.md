@@ -26,17 +26,101 @@ http://localhost:8888/api/environment/settings
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/environment/settings^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_dqo_settings
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_dqo_settings.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_dqo_settings
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_dqo_settings.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_dqo_settings
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_dqo_settings.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_dqo_settings
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_dqo_settings.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "properties" : { }
@@ -69,17 +153,101 @@ http://localhost:8888/api/environment/profile
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/environment/profile^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_user_profile
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_user_profile.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_user_profile
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_user_profile.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_user_profile
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_user_profile.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import get_user_profile
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_user_profile.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "can_manage_account" : false,
@@ -126,19 +294,103 @@ http://localhost:8888/api/environment/issueapikey
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/environment/issueapikey^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import issue_api_key
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	issue_api_key.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import issue_api_key
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = issue_api_key.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import issue_api_key
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	issue_api_key.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.environment import issue_api_key
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = issue_api_key.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
-    sample_string_value
+    "sample_string_value"
     ```
 
 

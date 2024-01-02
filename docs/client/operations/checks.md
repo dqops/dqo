@@ -33,6 +33,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -41,8 +42,135 @@ http://localhost:8888/api/checks/{fullCheckName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import create_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	create_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import create_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = create_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import create_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	create_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import create_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = create_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -72,13 +200,97 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import delete_check
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	delete_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import delete_check
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = delete_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import delete_check
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	delete_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import delete_check
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = delete_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -108,17 +320,101 @@ http://localhost:8888/api/checks
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/checks^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_all_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_all_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_all_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_all_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "check_name" : "sample_check",
@@ -174,17 +470,105 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "check_name" : "sample_check",
@@ -223,17 +607,101 @@ http://localhost:8888/api/definitions/checks
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/definitions/checks^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check_folder_tree
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_check_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check_folder_tree
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_check_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check_folder_tree
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_check_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import get_check_folder_tree
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_check_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     { }
     ```
@@ -271,6 +739,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -279,8 +748,135 @@ http://localhost:8888/api/checks/{fullCheckName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"check_name\":\"sample_check\",\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"rule_name\":\"sample_target/sample_category/sample_rule\",\"help_text\":\"Sample help text\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import update_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	update_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import update_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = update_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import update_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	update_check.sync(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.checks import update_check
+	from dqops.client.models import CheckDefinitionModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = update_check.asyncio(
+	    'sample_target/sample_category/sample_check',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

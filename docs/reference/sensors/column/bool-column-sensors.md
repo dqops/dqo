@@ -132,17 +132,16 @@ Column level sensor that calculates the percentage of rows with a false value in
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN NOT {{ lib.render_target_column('analyzed_table')}}
-                            THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE) as actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -379,17 +378,16 @@ Column level sensor that calculates the percentage of rows with a true value in 
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}}
-                            THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE) as actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (

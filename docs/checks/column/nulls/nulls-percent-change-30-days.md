@@ -350,16 +350,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST( 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -378,16 +377,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN analyzed_table."target_column" IS NULL THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST( 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -872,16 +870,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST( 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -899,16 +896,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN analyzed_table."target_column" IS NULL THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST( 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1436,16 +1432,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST( 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -1464,16 +1459,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN analyzed_table."target_column" IS NULL THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST( 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -1949,16 +1943,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST( 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1976,16 +1969,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN analyzed_table."target_column" IS NULL THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST( 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2519,16 +2511,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST( 100.0 * SUM(
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -2547,16 +2538,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN analyzed_table."target_column" IS NULL THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST( 100.0 * SUM(
+                    CASE
+                        WHEN analyzed_table."target_column" IS NULL THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -3042,16 +3032,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST( 100.0 * SUM(
+                        CASE
+                            WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3069,16 +3058,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN analyzed_table."target_column" IS NULL THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST( 100.0 * SUM(
+                        CASE
+                            WHEN analyzed_table."target_column" IS NULL THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

@@ -69,7 +69,7 @@ The columns of this table are described below.
  | reference_table | The table name in another data source that contains the reference data used as the expected values for accuracy checks. | STRING |
  | reference_column | The column name in another data source that contains the reference data used as the expected values for accuracy checks. | STRING |
  | include_in_kpi | The boolean column that identifies data quality rule results that should be counted in the data quality KPI. | BOOLEAN |
- | include_in_sla | The boolean column that identifies data quality rule results that should be counted in the data quality SLA. | BOOLEAN |
+ | include_in_sla | The boolean column that identifies data quality rule results that should be counted in the data quality SLA (Data Contract). | BOOLEAN |
  | fatal_lower_bound | The warning lower bound, returned by the fatal severity rule. | DOUBLE |
  | fatal_upper_bound | The fatal upper bound, returned by the fatal severity rule. | DOUBLE |
  | error_lower_bound | The error lower bound, returned by the error (medium) severity rule. | DOUBLE |

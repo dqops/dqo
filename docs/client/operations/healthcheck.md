@@ -26,19 +26,103 @@ http://localhost:8888/api/ishealthy
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/ishealthy^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.healthcheck import is_healthy
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	is_healthy.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.healthcheck import is_healthy
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = is_healthy.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.healthcheck import is_healthy
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	is_healthy.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.healthcheck import is_healthy
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = is_healthy.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
-    sample_string_value
+    "sample_string_value"
     ```
 
 

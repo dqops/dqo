@@ -26,13 +26,97 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X DELETE http://localhost:8888/api/jobs/jobs/123123124324324^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import cancel_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	cancel_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import cancel_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = cancel_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import cancel_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	cancel_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import cancel_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = cancel_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -78,6 +162,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -86,12 +171,135 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_data_groups
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	collect_statistics_on_data_groups.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_data_groups
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	async_result = collect_statistics_on_data_groups.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_data_groups
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	collect_statistics_on_data_groups.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_data_groups
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	async_result = collect_statistics_on_data_groups.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "status" : "queued"
@@ -140,6 +348,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -148,12 +357,135 @@ http://localhost:8888/api/jobs/collectstatistics/table
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"columnNames\":[\"sample_column\"],\"collectorCategory\":\"sample_category\"}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_table
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	collect_statistics_on_table.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_table
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	async_result = collect_statistics_on_table.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_table
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	collect_statistics_on_table.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import collect_statistics_on_table
+	from dqops.client.models import StatisticsCollectorSearchFilters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = StatisticsCollectorSearchFilters(
+		column_names=[
+			'sample_column'
+		],
+		collector_category='sample_category',
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		enabled=True
+	)
+	
+	async_result = collect_statistics_on_table.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "status" : "queued"
@@ -202,6 +534,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -210,12 +543,143 @@ http://localhost:8888/api/jobs/deletestoreddata
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import delete_stored_data
+	from dqops.client.models import DeleteStoredDataQueueJobParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = DeleteStoredDataQueueJobParameters(
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		delete_errors=True,
+		delete_statistics=True,
+		delete_check_results=True,
+		delete_sensor_readouts=True,
+		column_names=[
+			'sample_column'
+		]
+	)
+	
+	delete_stored_data.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import delete_stored_data
+	from dqops.client.models import DeleteStoredDataQueueJobParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = DeleteStoredDataQueueJobParameters(
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		delete_errors=True,
+		delete_statistics=True,
+		delete_check_results=True,
+		delete_sensor_readouts=True,
+		column_names=[
+			'sample_column'
+		]
+	)
+	
+	async_result = delete_stored_data.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import delete_stored_data
+	from dqops.client.models import DeleteStoredDataQueueJobParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = DeleteStoredDataQueueJobParameters(
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		delete_errors=True,
+		delete_statistics=True,
+		delete_check_results=True,
+		delete_sensor_readouts=True,
+		column_names=[
+			'sample_column'
+		]
+	)
+	
+	delete_stored_data.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import delete_stored_data
+	from dqops.client.models import DeleteStoredDataQueueJobParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = DeleteStoredDataQueueJobParameters(
+		connection='sample_connection',
+		full_table_name='sample_schema.sample_table',
+		delete_errors=True,
+		delete_statistics=True,
+		delete_check_results=True,
+		delete_sensor_readouts=True,
+		column_names=[
+			'sample_column'
+		]
+	)
+	
+	async_result = delete_stored_data.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "jobId" : {
@@ -252,17 +716,101 @@ http://localhost:8888/api/jobs/jobs
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/jobs/jobs^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_all_jobs
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_jobs.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_all_jobs
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_jobs.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_all_jobs
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_jobs.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_all_jobs
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_jobs.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "jobs" : [ ],
@@ -316,17 +864,105 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/jobs/jobs/123123124324324^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     { }
     ```
@@ -364,17 +1000,105 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/jobs/jobchangessince/3854372^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job_changes_since
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_job_changes_since.sync(
+	    3854372,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job_changes_since
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_job_changes_since.asyncio(
+	    3854372,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job_changes_since
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_job_changes_since.sync(
+	    3854372,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import get_job_changes_since
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_job_changes_since.asyncio(
+	    3854372,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "jobChanges" : [ ],
@@ -437,6 +1161,7 @@ http://localhost:8888/api/jobs/importtables
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -445,12 +1170,127 @@ http://localhost:8888/api/jobs/importtables
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"connectionName\":\"sample_connection\",\"schemaName\":\"sample_schema\",\"tableNames\":[\"sample_table\"]}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import import_tables
+	from dqops.client.models import ImportTablesQueueJobParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = ImportTablesQueueJobParameters(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_names=[
+			'sample_table'
+		]
+	)
+	
+	import_tables.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import import_tables
+	from dqops.client.models import ImportTablesQueueJobParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = ImportTablesQueueJobParameters(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_names=[
+			'sample_table'
+		]
+	)
+	
+	async_result = import_tables.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import import_tables
+	from dqops.client.models import ImportTablesQueueJobParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = ImportTablesQueueJobParameters(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_names=[
+			'sample_table'
+		]
+	)
+	
+	import_tables.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import import_tables
+	from dqops.client.models import ImportTablesQueueJobParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = ImportTablesQueueJobParameters(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_names=[
+			'sample_table'
+		]
+	)
+	
+	async_result = import_tables.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "status" : "queued"
@@ -476,13 +1316,97 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/jobs/scheduler/isrunning^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import is_cron_scheduler_running
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	is_cron_scheduler_running.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import is_cron_scheduler_running
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = is_cron_scheduler_running.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import is_cron_scheduler_running
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	is_cron_scheduler_running.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import is_cron_scheduler_running
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = is_cron_scheduler_running.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -528,6 +1452,7 @@ http://localhost:8888/api/jobs/runchecks
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -536,12 +1461,143 @@ http://localhost:8888/api/jobs/runchecks
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"check_search_filters\":{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"column\":\"sample_column\",\"columnDataType\":\"string\"},\"dummy_execution\":false}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import run_checks
+	from dqops.client.models import CheckSearchFilters, \
+	                                RunChecksParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = RunChecksParameters(
+		check_search_filters=CheckSearchFilters(
+			column='sample_column',
+			column_data_type='string',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		dummy_execution=False
+	)
+	
+	run_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import run_checks
+	from dqops.client.models import CheckSearchFilters, \
+	                                RunChecksParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = RunChecksParameters(
+		check_search_filters=CheckSearchFilters(
+			column='sample_column',
+			column_data_type='string',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		dummy_execution=False
+	)
+	
+	async_result = run_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import run_checks
+	from dqops.client.models import CheckSearchFilters, \
+	                                RunChecksParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = RunChecksParameters(
+		check_search_filters=CheckSearchFilters(
+			column='sample_column',
+			column_data_type='string',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		dummy_execution=False
+	)
+	
+	run_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import run_checks
+	from dqops.client.models import CheckSearchFilters, \
+	                                RunChecksParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = RunChecksParameters(
+		check_search_filters=CheckSearchFilters(
+			column='sample_column',
+			column_data_type='string',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		dummy_execution=False
+	)
+	
+	async_result = run_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "status" : "queued"
@@ -567,13 +1623,93 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X POST http://localhost:8888/api/jobs/scheduler/status/start^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import start_cron_scheduler
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	start_cron_scheduler.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import start_cron_scheduler
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = start_cron_scheduler.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import start_cron_scheduler
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	start_cron_scheduler.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import start_cron_scheduler
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = start_cron_scheduler.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -596,13 +1732,93 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X POST http://localhost:8888/api/jobs/scheduler/status/stop^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import stop_cron_scheduler
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	stop_cron_scheduler.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import stop_cron_scheduler
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = stop_cron_scheduler.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import stop_cron_scheduler
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	stop_cron_scheduler.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import stop_cron_scheduler
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = stop_cron_scheduler.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -648,6 +1864,7 @@ http://localhost:8888/api/jobs/synchronize
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -656,12 +1873,171 @@ http://localhost:8888/api/jobs/synchronize
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"direction\":\"full\",\"forceRefreshNativeTables\":false,\"detectCronSchedules\":false,\"sources\":true,\"sensors\":true,\"rules\":true,\"checks\":true,\"settings\":true,\"credentials\":true,\"dataSensorReadouts\":true,\"dataCheckResults\":true,\"dataStatistics\":true,\"dataErrors\":true,\"dataIncidents\":true,\"synchronizeFolderWithLocalChanges\":false}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import synchronize_folders
+	from dqops.client.models import FileSynchronizationDirection, \
+	                                SynchronizeMultipleFoldersDqoQueueJobParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
+		direction=FileSynchronizationDirection.full,
+		force_refresh_native_tables=False,
+		detect_cron_schedules=False,
+		sources=True,
+		sensors=True,
+		rules=True,
+		checks=True,
+		settings=True,
+		credentials=True,
+		data_sensor_readouts=True,
+		data_check_results=True,
+		data_statistics=True,
+		data_errors=True,
+		data_incidents=True,
+		synchronize_folder_with_local_changes=False
+	)
+	
+	synchronize_folders.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import synchronize_folders
+	from dqops.client.models import FileSynchronizationDirection, \
+	                                SynchronizeMultipleFoldersDqoQueueJobParameters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
+		direction=FileSynchronizationDirection.full,
+		force_refresh_native_tables=False,
+		detect_cron_schedules=False,
+		sources=True,
+		sensors=True,
+		rules=True,
+		checks=True,
+		settings=True,
+		credentials=True,
+		data_sensor_readouts=True,
+		data_check_results=True,
+		data_statistics=True,
+		data_errors=True,
+		data_incidents=True,
+		synchronize_folder_with_local_changes=False
+	)
+	
+	async_result = synchronize_folders.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import synchronize_folders
+	from dqops.client.models import FileSynchronizationDirection, \
+	                                SynchronizeMultipleFoldersDqoQueueJobParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
+		direction=FileSynchronizationDirection.full,
+		force_refresh_native_tables=False,
+		detect_cron_schedules=False,
+		sources=True,
+		sensors=True,
+		rules=True,
+		checks=True,
+		settings=True,
+		credentials=True,
+		data_sensor_readouts=True,
+		data_check_results=True,
+		data_statistics=True,
+		data_errors=True,
+		data_incidents=True,
+		synchronize_folder_with_local_changes=False
+	)
+	
+	synchronize_folders.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import synchronize_folders
+	from dqops.client.models import FileSynchronizationDirection, \
+	                                SynchronizeMultipleFoldersDqoQueueJobParameters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
+		direction=FileSynchronizationDirection.full,
+		force_refresh_native_tables=False,
+		detect_cron_schedules=False,
+		sources=True,
+		sensors=True,
+		rules=True,
+		checks=True,
+		settings=True,
+		credentials=True,
+		data_sensor_readouts=True,
+		data_check_results=True,
+		data_statistics=True,
+		data_errors=True,
+		data_incidents=True,
+		synchronize_folder_with_local_changes=False
+	)
+	
+	async_result = synchronize_folders.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "status" : "queued"
@@ -702,17 +2078,105 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/jobs/jobs/123123124324324/wait^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	wait_for_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = wait_for_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	wait_for_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = wait_for_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     { }
     ```
@@ -751,17 +2215,105 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/jobs/runchecks/123123124324324/wait^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_run_checks_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	wait_for_run_checks_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_run_checks_job
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = wait_for_run_checks_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_run_checks_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	wait_for_run_checks_job.sync(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.jobs import wait_for_run_checks_job
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = wait_for_run_checks_job.asyncio(
+	    '123123124324324',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "status" : "queued"

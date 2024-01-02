@@ -339,7 +339,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -366,7 +366,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
             FROM (
@@ -888,7 +888,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                  {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
@@ -914,7 +914,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1489,7 +1489,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1516,7 +1516,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
             FROM (
@@ -2039,7 +2039,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                  {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
@@ -2065,7 +2065,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2640,7 +2640,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2667,7 +2667,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
             FROM (
@@ -3190,7 +3190,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                  {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
@@ -3216,7 +3216,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3797,7 +3797,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3824,7 +3824,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
             FROM (
@@ -4357,7 +4357,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                  {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
@@ -4383,7 +4383,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -4962,7 +4962,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4989,7 +4989,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
             FROM (
@@ -5522,7 +5522,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                  {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
                 FROM (
@@ -5548,7 +5548,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                             THEN 0
                         ELSE 1
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

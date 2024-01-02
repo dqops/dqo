@@ -1286,16 +1286,15 @@ Column level sensor that counts percentage of negative values in a column.
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -1723,7 +1722,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
                     WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -2031,17 +2030,16 @@ Column level sensor that calculates the percentage of rows for which the tested 
         {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         CAST(0.0 AS DOUBLE)
         {%- else -%}
-        CAST (
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
-                            THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE)
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END
         {%- endif -%}
     {% endmacro -%}
     
@@ -2387,7 +2385,8 @@ Column level sensor that finds the median in a given column.
         SELECT
            APPROX_PERCENTILE(
                 CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                {{ parameters.percentile_value }})
+                {{ parameters.percentile_value }}
+            )
             OVER (PARTITION BY
                 {{render_local_time_dimension_projection('analyzed_table')}}
                 {{render_local_data_grouping_projections('analyzed_table') }}
@@ -3427,7 +3426,7 @@ Column level sensor that counts percentage of valid latitude in a column.
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
                     ELSE 0
                 END
-            )/COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -3635,7 +3634,7 @@ Column level sensor that counts percentage of valid longitude in a column.
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                     ELSE 0
                 END
-            )/COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4070,7 +4069,7 @@ Column level sensor that calculates the percentage of values that are above than
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*)  AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4504,7 +4503,7 @@ Column level sensor that calculates the percentage of values that are below than
                     WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4721,7 +4720,7 @@ Column level sensor that finds the maximum value. It works on any data type that
                 WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                 ELSE 0
             END
-        ) / COUNT(*) AS DOUBLE) AS actual_value
+        ) AS DOUBLE) / COUNT(*)  AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4941,7 +4940,7 @@ Column level sensor that finds the maximum value. It works on any data type that
                 WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                 ELSE 0
             END
-        ) / COUNT(*) AS DOUBLE) AS actual_value
+        ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (

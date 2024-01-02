@@ -132,18 +132,17 @@ Column level sensor that calculates the percentage of rows with a valid email va
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 0.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                            THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END
-        AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END
+        AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -649,22 +648,20 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 0.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN
-                            REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
-                            REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                                '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
-                            THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END
-        AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN
+                        REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                        REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                            '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -948,20 +945,18 @@ Column level sensor that calculates the percent of values that contains a USA ph
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 0.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN REGEXP_LIKE(
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                            '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
-                        ) THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END
-        AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                        '((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1/)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))'
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -1224,20 +1219,19 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 0.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN REGEXP_LIKE(
-                            CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
-                            '[0-9]{5}(?:-[0-9]{4})?'
-                        ) THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END
-        AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR),
+                        '[0-9]{5}(?:-[0-9]{4})?'
+                    ) THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END
+        AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
