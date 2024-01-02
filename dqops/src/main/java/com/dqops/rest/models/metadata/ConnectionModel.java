@@ -233,6 +233,8 @@ public class ConnectionModel {
             setMysql(connectionSpec.getMysql());
             setOracle(connectionSpec.getOracle());
             setSpark(connectionSpec.getSpark());
+            setPresto(connectionSpec.getPresto());
+            setTrino(connectionSpec.getTrino());
             setDatabricks(connectionSpec.getDatabricks());
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
@@ -297,6 +299,8 @@ public class ConnectionModel {
         targetConnectionSpec.setMysql(this.getMysql());
         targetConnectionSpec.setOracle(this.getOracle());
         targetConnectionSpec.setSpark(this.getSpark());
+        targetConnectionSpec.setPresto(this.getPresto());
+        targetConnectionSpec.setTrino(this.getTrino());
         targetConnectionSpec.setDatabricks(this.getDatabricks());
     }
 

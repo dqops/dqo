@@ -67,6 +67,10 @@ const tabs = [
   {
     label: 'Databricks',
     value: ProviderSensorModelProviderTypeEnum.databricks
+  },
+  {
+    label: 'Presto',
+    value: ProviderSensorModelProviderTypeEnum.presto
   }
 ];
 
