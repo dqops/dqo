@@ -75,7 +75,7 @@ $DQO_USER_HOME
 6. The `.index` folder is used internally by DQOps to track the synchronization status of local files with the DQOps Cloud Data Lake.
    This folder is not intended to be modified manually.
 
-The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, check results, and error logs. These subfolders 
+The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, check results, and error logs. Those folders 
 are further organized into subfolders for specific connections, tables, and months. Each dataset contains parquet 
 files that store compressed data in a columnar format.
 The detailed schema of each type of data table that is stored in the `.data` folder is documented in the reference section of the documentation.
@@ -91,12 +91,13 @@ The schema of the following tables are documented:
 | statistics      | basic statistics about the data source, including column sample values                                          | [.data/statistics](../../reference/parquetfiles/statistics.md)           |
 
 
-## Storage of check results data
+## Storage of check results
 The way check results data are stored varies depending on the type of check used.
 
 ### **Profiling checks**
 
-When the profiling data quality check is run, all sensor readouts are saved. As an illustration, if the check
+When the [profiling data quality check](../checks/profiling-checks/profiling-checks.md) is run, 
+all sensor readouts are saved. As an illustration, if the check
 is run three times, the table with the results could look like this:
 
 | actual_value | time_period              |
@@ -208,8 +209,8 @@ For monthly monitoring checks, the original time_period of the result e.g. 2023-
 
 
 ## Synchronization with DQOps Cloud
-DQOps creates a separate Data Quality Data Warehouse for each account, not sharing any tables or databases between tenants.
-The Data Quality Data Warehouse is queries by a Looker Studio Community Connector provided by DQOps.
+DQOps creates a separate Data Quality Data Warehouse for each DQOps Cloud account, not sharing any tables or databases between tenants.
+The Data Quality Data Warehouse is queried by a Looker Studio Community Connector provided by DQOps.
 The data quality dashboards that are visible in DQOps are presented as embedded, multi-tenant Looker Studio dashboards.
 
 The local, offline copy of the Data Quality Data Lake enables multiple deployment options.
@@ -235,12 +236,136 @@ The local, offline copy of the Data Quality Data Lake enables multiple deploymen
     [DQOps sales](https://dqops.com/contact-us/).
 
 
+### **Authentication with DQOps Cloud**
+DQOps local instance authenticates to DQOps Cloud using a `DQOps Cloud Pairing API Key`, which can be found
+on the [https://cloud.dqops.com/account](https://cloud.dqops.com/account) page.
+
+The `DQOps Cloud Pairing API Key` is stored in the [`DQOps user home`*/.localsettings.dqosettings.yaml*](../../reference/yaml/LocalSettingsYaml.md) file.
+The file does not need to be modified manually. DQOps automates the process of issuing and downloading the `DQOps Cloud Pairing API Key`
+in a secure way.
+
+Open the [DQOps Shell](../command-line-interface/command-line-interface.md) and type the command
+
+&gt; [`cloud login`](../../command-line-interface/cloud.md#dqo-cloud-login)
+
+DQOps will open a browser window, navigate to the [https://cloud.dqops.com/account](https://cloud.dqops.com/account), and download the pairing key.
+
+Alternatively, if [DQOps is started in a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md), and 
+opening a browser window is not possible, it is also possible to pass the `DQOps Cloud Pairing API Key` using a `--dqo.cloud.api-key=KEY` parameter.
+Instead of using a parameter, the key can be passed by setting (and exporting) a `DQO_CLOUD_API_KEY` environment variable
+that holds the value of the `DQOps Cloud Pairing API Key`.
+
+
+### **Synchronize from UI**
+DQOps tracks local file changes, comparing the list of files previously synchronized to DQOps Cloud with the current list of files.
+When any YAML, or *.parquet* file is saved, deleted or updated locally, DQOps detects the file change and changes the color of the
+`Synchronize` button to green. 
+
+![Synchronize button status when local changes are present in DQOps](https://dqops.com/docs/images/concepts/data-storage/synchronize-button-local-changes-present-min.png){ loading=lazy }
+
+Press the `Synchronize` button to start the synchronization job. The progress of synchronization can be tracked in the job
+notification panel on the right of the `Synchronize` button.
+When no local changes are present, the button is white.
+
+![Synchronize button status when no local changes are present in DQOps](https://dqops.com/docs/images/concepts/data-storage/synchronize-button-no-local-changes-present-min.png){ loading=lazy }
+
+!!! info "Only local changes are detected"
+
+    DQOps only detects local changes. The button color is not aware of file changes pushed to the DQOps Cloud Data Lake
+    from another DQOps instance.
+
+    In order to pull remote changes from the DQOps Cloud Data Lake, please start the synchronization job even if the button is white.
+
+
+### **Synchronize from command-line**
+The synchronization can be triggered from the DQOps command line. The following commands are supported.
+
+| Command&nbsp;name                                                                                 | Description                                                                                                                                                              |
+|---------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| &gt; [`cloud sync all`](../../command-line-interface/cloud.md#dqo-cloud-sync-all)                 | Synchronizes all files between the local `DQOps user home` folder and the DQOps Cloud Data Lake                                                                          |
+| &gt; [`cloud sync data`](../../command-line-interface/cloud.md#dqo-cloud-sync-data)               | Synchronizes only parquet (data) files between the local `DQOps user home`*/.data* folder and the DQOps Cloud Data Lake                                                  |
+| &gt; [`cloud sync sources`](../../command-line-interface/cloud.md#dqo-cloud-sync-sources)         | Synchronizes only the configuration of data sources (YAML files) between the local `DQOps user home`*/sources* folder and the DQOps Cloud Data Lake                      |
+| &gt; [`cloud sync sensors`](../../command-line-interface/cloud.md#dqo-cloud-sync-sensors)         | Synchronizes only the definition of custom data quality sensors (query templates) between the local `DQOps user home`*/sensors* folder and the DQOps Cloud Data Lake     |
+| &gt; [`cloud sync rules`](../../command-line-interface/cloud.md#dqo-cloud-sync-rules)             | Synchronizes only the definition of custom data quality rules (Python functions) between the local `DQOps user home`*/rules* folder and the DQOps Cloud Data Lake        |
+| &gt; [`cloud sync checks`](../../command-line-interface/cloud.md#dqo-cloud-sync-checks)           | Synchronizes only the definition of custom data quality checks (sensor and rule pairs) between the local `DQOps user home`*/checks* folder and the DQOps Cloud Data Lake |
+| &gt; [`cloud sync settings`](../../command-line-interface/cloud.md#dqo-cloud-sync-settings)       | Synchronizes only the configuration (setting) files between the local `DQOps user home`*/settings* folder and the DQOps Cloud Data Lake                                  |
+| &gt; [`cloud sync credentials`](../../command-line-interface/cloud.md#dqo-cloud-sync-credentials) | Synchronizes only the shared credential files between the local `DQOps user home`*/credentials* folder and the DQOps Cloud Data Lake                                     |
+
+
+### **Automatic synchronization**
+DQOps automatically runs an initial synchronization when the application is started in a shell mode (without any commands to run and exit),
+or when DQOps is started in a server mode, using the [`dqo run`](../../command-line-interface/run.md) command.
+
+After DQOps is started, teh synchronization is performed according to the CRON schedule configured in the 
+[`--dqo.scheduler.synchronize-cron-schedule`](../../command-line-interface/dqo.md#--dqo.scheduler.synchronize-cron-schedule) parameter.
+
+!!! note "FREE (community) version limits"
+
+    The configuration of the minutes CRON component is ignored for DQOps Cloud account using a FREE version.
+    Instead, DQOps Cloud limits the synchronization frequency to one synchronization per hour on a randomly choosen time. 
+
+
+### **Trigger synchronization from DQOps Python client**
+Synchronization of a DQOps instance with the DQOps Cloud Data Lake can be also triggered using a DQOps Python client.
+
+Please find the documentation of all parameters in the [`synchronize_folders` command reference](../../client/operations/jobs.md#synchronize_folders-).
+
+
+```python
+from dqops import client
+from dqops.client.api.jobs import synchronize_folders
+from dqops.client.models import FileSynchronizationDirection, \
+                                SynchronizeMultipleFoldersDqoQueueJobParameters
+
+token = 'DQOps local API Key'
+
+dqops_client = client.AuthenticatedClient(
+    'http://localhost:8888/',
+    token=token
+)
+
+request_body = SynchronizeMultipleFoldersDqoQueueJobParameters(
+    direction=FileSynchronizationDirection.full,
+    force_refresh_native_tables=False,
+    detect_cron_schedules=False,
+    sources=True,
+    sensors=True,
+    rules=True,
+    checks=True,
+    settings=True,
+    credentials=True,
+    data_sensor_readouts=True,
+    data_check_results=True,
+    data_statistics=True,
+    data_errors=True,
+    data_incidents=True,
+    synchronize_folder_with_local_changes=False
+)
+
+synchronize_folders.sync(
+    client=dqops_client,
+    json_body=request_body
+)
+
+```
+
+
+
+### **Push data quality results to a private cloud**
 The local Data Quality Data Warehouse is not limited to be synchronized with DQOps Cloud data lake.
 Each user can set up a secondary file synchronization process that would replicate all the files in the `.data` folder
 to a different location, using the user's owned S3 buckets, Storage Accounts or Cloud Storage.
+
 Because the files are organized as a Hive-compatible data lake, it is possible to synchronize the data files
 to any on-premise or cloud hosted data lake. The data files for each table should be registered as external tables.
 This architecture will allow to build a private Data Quality Data Warehouse with custom data quality dashboards
 using any SQL engine that can query Hive-compatible external tables. To be precise, the files could be queried
 using Apache Hive, Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server, Azure Synapse, Snowflake,
 AWS Athena, and AWS Redshift Spectrum.
+
+
+## What's next
+- Review the [Parquet schema](../../reference/parquetfiles/index.md) of all tables stored in the `.data` folder
+- Learn how to [delete selected data quality results](../../working-with-dqo/delete-data-quality-results/delete-data-quality-results.md)
+- Learn about other folders stored in the **[DQOps user home](../home-folders/dqops-user-home.md)** folder
+- Review the architecture of DQOps and [how folders in the `DQOps user home` are handled](../architecture/dqops-architecture.md)
