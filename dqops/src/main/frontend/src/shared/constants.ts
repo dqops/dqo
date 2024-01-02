@@ -357,6 +357,13 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'PostgreSQL'
   },
   {
+    type: ConnectionModelProviderTypeEnum.presto,
+    name: 'Presto',
+    iconName: 'presto',
+    displayName: 'Presto'
+  },
+  // todo: add trino
+  {
     type: ConnectionModelProviderTypeEnum.redshift,
     name: 'Redshift',
     iconName: 'redshift',

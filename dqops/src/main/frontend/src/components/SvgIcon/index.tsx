@@ -95,6 +95,8 @@ import { ReactComponent as WarningSvg } from './svg/warning.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as SparkSvg } from './svg/spark.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
+import { ReactComponent as PrestoSvg } from './svg/presto.svg';
+import { ReactComponent as TrinoSvg } from './svg/trino.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -197,7 +199,9 @@ const iconsMap: any = {
   warning: WarningSvg,
   webhooks: WebhooksSvg,
   spark: SparkSvg,
-  databricks: DatabricksSvg
+  databricks: DatabricksSvg,
+  presto: PrestoSvg,
+  trino: TrinoSvg
 };
 
 interface SvgIconProps {
