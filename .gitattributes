@@ -6,3 +6,5 @@ make_docs text eol=lf
 find-dqo-home.sh text eol=lf
 set-dqo-envs.sh text eol=lf
 find-dqo-classpath.sh text eol=lf
+*.hbs text eol=lf
+*.md text eol=lf

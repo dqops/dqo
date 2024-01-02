@@ -33,6 +33,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -41,8 +42,171 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import create_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	create_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import create_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = create_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import create_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	create_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import create_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = create_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -72,13 +236,97 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import delete_sensor
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	delete_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import delete_sensor
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = delete_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import delete_sensor
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	delete_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import delete_sensor
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = delete_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -108,17 +356,101 @@ http://localhost:8888/api/sensors
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/sensors^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_all_sensors
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_sensors.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_all_sensors
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_sensors.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_all_sensors
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_sensors.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_all_sensors
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_sensors.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "custom" : false,
@@ -168,17 +500,105 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "full_sensor_name" : "sample_target/sample_category/sample_sensor",
@@ -225,17 +645,101 @@ http://localhost:8888/api/definitions/sensors
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/definitions/sensors^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor_folder_tree
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_sensor_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor_folder_tree
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_sensor_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor_folder_tree
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_sensor_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import get_sensor_folder_tree
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_sensor_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "all_sensors" : [ ]
@@ -276,6 +780,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -284,8 +789,171 @@ http://localhost:8888/api/sensors/{fullSensorName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"full_sensor_name\":\"sample_target/sample_category/sample_sensor\",\"sensor_definition_spec\":{\"fields\":[{\"field_name\":\"sample_string_param\",\"data_type\":\"string\"},{\"field_name\":\"sample_double_param\",\"data_type\":\"double\"}],\"default_value\":0.0},\"provider_sensor_list\":[],\"custom\":false,\"built_in\":false,\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import update_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	update_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import update_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = update_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import update_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	update_sensor.sync(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensors import update_sensor
+	from dqops.client.models import ParameterDefinitionsListSpec, \
+	                                ProviderSensorModel, \
+	                                SensorDefinitionSpec, \
+	                                SensorModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SensorModel(
+		full_sensor_name='sample_target/sample_category/sample_sensor',
+		sensor_definition_spec=SensorDefinitionSpec(
+			fields=ParameterDefinitionsListSpec(),
+			requires_event_timestamp=False,
+			requires_ingestion_timestamp=False,
+			default_value=0.0
+		),
+		provider_sensor_list=[
+		
+		],
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = update_sensor.asyncio(
+	    'sample_target/sample_category/sample_sensor',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

@@ -33,17 +33,105 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_schemas
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_remote_data_source_schemas.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_schemas
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_remote_data_source_schemas.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_schemas
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_remote_data_source_schemas.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_schemas
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_remote_data_source_schemas.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "alreadyImported" : false
@@ -88,17 +176,109 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas/sample_schema/tables^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_tables
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_remote_data_source_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_tables
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_remote_data_source_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_tables
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_remote_data_source_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import get_remote_data_source_tables
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_remote_data_source_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "alreadyImported" : false
@@ -149,6 +329,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -157,12 +338,319 @@ http://localhost:8888/api/datasource/testconnection
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"connection_name\":\"sample_connection\",\"parallel_jobs_limit\":4,\"provider_type\":\"postgresql\",\"postgresql\":{\"host\":\"localhost\",\"port\":\"5432\",\"database\":\"db\",\"user\":\"PASSWD\",\"sslmode\":\"disable\"},\"run_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true},\"run_profiling_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"profiling\"},\"run_monitoring_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"monitoring\"},\"run_partition_checks_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"checkType\":\"partitioned\"},\"collect_statistics_job_template\":{\"connection\":\"sample_connection\",\"enabled\":true,\"columnNames\":[]},\"data_clean_job_template\":{\"connection\":\"sample_connection\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true},\"can_edit\":false,\"can_collect_statistics\":true,\"can_run_checks\":true,\"can_delete_data\":true}"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import test_connection
+	from dqops.client.models import CheckSearchFilters, \
+	                                ConnectionModel, \
+	                                DeleteStoredDataQueueJobParameters, \
+	                                PostgresqlParametersSpec, \
+	                                PostgresqlSslMode, \
+	                                ProviderType, \
+	                                StatisticsCollectorSearchFilters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.postgresql,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.disable
+		),
+		run_checks_job_template=ConnectionModel(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=ConnectionModel(
+			check_type=CheckType.profiling,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=ConnectionModel(
+			check_type=CheckType.monitoring,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=ConnectionModel(
+			check_type=CheckType.partitioned,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=ConnectionModel(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=ConnectionModel(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+	
+	test_connection.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import test_connection
+	from dqops.client.models import CheckSearchFilters, \
+	                                ConnectionModel, \
+	                                DeleteStoredDataQueueJobParameters, \
+	                                PostgresqlParametersSpec, \
+	                                PostgresqlSslMode, \
+	                                ProviderType, \
+	                                StatisticsCollectorSearchFilters
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.postgresql,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.disable
+		),
+		run_checks_job_template=ConnectionModel(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=ConnectionModel(
+			check_type=CheckType.profiling,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=ConnectionModel(
+			check_type=CheckType.monitoring,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=ConnectionModel(
+			check_type=CheckType.partitioned,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=ConnectionModel(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=ConnectionModel(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+	
+	async_result = test_connection.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import test_connection
+	from dqops.client.models import CheckSearchFilters, \
+	                                ConnectionModel, \
+	                                DeleteStoredDataQueueJobParameters, \
+	                                PostgresqlParametersSpec, \
+	                                PostgresqlSslMode, \
+	                                ProviderType, \
+	                                StatisticsCollectorSearchFilters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.postgresql,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.disable
+		),
+		run_checks_job_template=ConnectionModel(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=ConnectionModel(
+			check_type=CheckType.profiling,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=ConnectionModel(
+			check_type=CheckType.monitoring,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=ConnectionModel(
+			check_type=CheckType.partitioned,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=ConnectionModel(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=ConnectionModel(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+	
+	test_connection.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_sources import test_connection
+	from dqops.client.models import CheckSearchFilters, \
+	                                ConnectionModel, \
+	                                DeleteStoredDataQueueJobParameters, \
+	                                PostgresqlParametersSpec, \
+	                                PostgresqlSslMode, \
+	                                ProviderType, \
+	                                StatisticsCollectorSearchFilters
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.postgresql,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.disable
+		),
+		run_checks_job_template=ConnectionModel(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=ConnectionModel(
+			check_type=CheckType.profiling,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=ConnectionModel(
+			check_type=CheckType.monitoring,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=ConnectionModel(
+			check_type=CheckType.partitioned,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=ConnectionModel(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=ConnectionModel(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+	
+	async_result = test_connection.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     { }
     ```

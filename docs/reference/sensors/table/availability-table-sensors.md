@@ -92,7 +92,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        0.0 AS actual_value
+        CAST(0.0 AS DOUBLE) AS actual_value
         {{- lib.render_time_dimension_projection('tab_scan') }}
     FROM
         (

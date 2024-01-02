@@ -25,7 +25,7 @@ In this example, we will set three minimum percentage thresholds levels for the 
 - error: 98.0%
 - fatal: 95.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -163,7 +163,7 @@ And the following parameters:
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_foreign_key_match_percent`
 check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQO concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="16-32"
 apiVersion: dqo/v1

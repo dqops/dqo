@@ -164,7 +164,7 @@ Column level sensor that calculates the percentage of values that match values i
                     THEN 0
                 ELSE 1
             END
-        ) / COUNT(*) AS DOUBLE) AS actual_value
+        ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
          {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (

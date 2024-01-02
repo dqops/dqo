@@ -18,7 +18,7 @@ the two modes for the `check run` command that run all activated checks.
     ```
     $ dqo [optional root_level_parameter] check run [options or parameters]
     ```
-=== "DQO Shell"
+=== "DQOps Shell"
 
     ```
     dqo> check run [options or parameters]
@@ -26,7 +26,7 @@ the two modes for the `check run` command that run all activated checks.
 
 ## Autocomplete
 
-DQOps Shell supports autocompletion, so you only need to start typing the command, hit the Tab and the DQO Shell will show you
+DQOps Shell supports autocompletion, so you only need to start typing the command, hit the Tab and the DQOps Shell will show you
 a list available options.
 
 For example, if you want to add a new connection using the `connection add` command, just start typing `c`.

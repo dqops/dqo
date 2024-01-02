@@ -21,10 +21,8 @@ import com.dqops.utils.serialization.JsonSerializer;
 import com.dqops.utils.serialization.JsonSerializerImpl;
 
 import java.lang.reflect.Constructor;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GeneratorUtility {
     private static JsonSerializer jsonSerializer = new JsonSerializerImpl();
@@ -78,35 +76,56 @@ public class GeneratorUtility {
     }
 
     /**
-     * Get sample string from {@link TypeModel} in a JSON form, assuming it doesn't have a complex nested structure.
+     * Get sample instance from {@link TypeModel}, assuming it doesn't have a complex nested structure of generic types.
      * @param typeModel TypeModel for which to generate a sample. Object, flat list or flat map.
-     * @param prettyPrint PrettyPrint flag passed to {@link JsonSerializer}.
-     * @return JSON string containing the sample.
+     * @return Sample instance from {@link TypeModel}.
      */
-    public static String getSampleFromTypeModel(TypeModel typeModel, boolean prettyPrint) {
+    public static Object generateSampleFromTypeModel(TypeModel typeModel) {
         switch (typeModel.getDataType()) {
             case enum_type:
+                return generateSample(typeModel.getClazz());
+
             case object_type:
                 ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
                 switch (objectDataType) {
                     case map_type:
-                        return "{}";
+                        return new HashMap<String, String>();
                     case list_type:
                         TypeModel genericTypeModel = typeModel.getGenericKeyType();
                         assert genericTypeModel.getObjectDataType() == ObjectDataType.object_type;
                         List<?> l = SampleListUtility.generateList(genericTypeModel.getClazz(), 3);
-                        return prettyPrint ? jsonSerializer.serializePrettyPrint(l) : jsonSerializer.serialize(l);
+                        return l;
                     case object_type:
                         Object sample = generateSample(typeModel.getClazz());
-                        return prettyPrint ? jsonSerializer.serializePrettyPrint(sample) : jsonSerializer.serialize(sample);
+                        return sample;
                 }
+
             case string_list_type:
+                return SampleListUtility.generateStringList("sampleString", 3);
             case integer_list_type:
-                return "[]";
+                return SampleListUtility.generateStringList("", 5).stream()
+                        .map(s -> s.substring(1))
+                        .map(Long::parseLong)
+                        .map(n -> n * n + SampleLongsRegistry.getSequenceNumber() % 4200)
+                        .map(Long::intValue)
+                        .collect(Collectors.toList());
             case string_type:
                 return "sample_string_value";
             default:
                 throw new IllegalArgumentException(typeModel.toString());
         }
+    }
+
+    /**
+     * Get sample string from {@link TypeModel} in a JSON form, assuming it doesn't have a complex nested structure.
+     * @param typeModel TypeModel for which to generate a sample. Object, flat list or flat map.
+     * @param prettyPrint PrettyPrint flag passed to {@link JsonSerializer}.
+     * @return JSON string containing the sample.
+     */
+    public static String generateJsonSampleFromTypeModel(TypeModel typeModel, boolean prettyPrint) {
+        Object serializedSample = generateSampleFromTypeModel(typeModel);
+        return prettyPrint
+                ? jsonSerializer.serializePrettyPrint(serializedSample)
+                : jsonSerializer.serialize(serializedSample);
     }
 }

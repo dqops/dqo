@@ -265,7 +265,7 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            0.0 AS actual_value
+            CAST(0.0 AS DOUBLE) AS actual_value
             {{- lib.render_time_dimension_projection('tab_scan') }}
         FROM
             (
@@ -283,7 +283,7 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            0.0 AS actual_value,
+            CAST(0.0 AS DOUBLE) AS actual_value,
             DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
             CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
         FROM
@@ -720,7 +720,7 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            0.0 AS actual_value
+            CAST(0.0 AS DOUBLE) AS actual_value
             {{- lib.render_time_dimension_projection('tab_scan') }}
         FROM
             (
@@ -738,7 +738,7 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            0.0 AS actual_value,
+            CAST(0.0 AS DOUBLE) AS actual_value,
             CAST(CURRENT_TIMESTAMP AS date) AS time_period,
             CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
         FROM
@@ -1175,7 +1175,7 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            0.0 AS actual_value
+            CAST(0.0 AS DOUBLE) AS actual_value
             {{- lib.render_time_dimension_projection('tab_scan') }}
         FROM
             (
@@ -1193,7 +1193,7 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            0.0 AS actual_value,
+            CAST(0.0 AS DOUBLE) AS actual_value,
             DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
             CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
         FROM

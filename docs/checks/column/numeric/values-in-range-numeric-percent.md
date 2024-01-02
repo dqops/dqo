@@ -301,7 +301,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -325,7 +325,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -752,7 +752,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -775,7 +775,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1252,7 +1252,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -1276,7 +1276,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -1704,7 +1704,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1727,7 +1727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2204,7 +2204,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -2228,7 +2228,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -2656,7 +2656,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2679,7 +2679,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3162,7 +3162,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -3186,7 +3186,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -3624,7 +3624,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3647,7 +3647,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -4128,7 +4128,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value
+            ) AS DOUBLE) / COUNT(*) AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -4152,7 +4152,7 @@ Please expand the database engine name section to see the SQL query rendered by 
                     WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*) AS DOUBLE) AS actual_value,
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -4590,7 +4590,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value
+                ) AS DOUBLE) / COUNT(*) AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4613,7 +4613,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table."target_column" >=  AND analyzed_table."target_column" <=  THEN 1
                         ELSE 0
                     END
-                ) / COUNT(*) AS DOUBLE) AS actual_value,
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

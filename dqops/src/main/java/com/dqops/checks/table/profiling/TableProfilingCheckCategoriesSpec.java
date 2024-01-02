@@ -314,6 +314,7 @@ public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContain
         public TableProfilingCheckCategoriesSpec createSample() {
             return new TableProfilingCheckCategoriesSpec() {{
                 setVolume(new TableVolumeProfilingChecksSpec.TableVolumeProfilingChecksSpecSampleFactory().createSample());
+                setComparisons(null);
             }};
         }
     }

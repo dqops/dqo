@@ -33,6 +33,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -41,8 +42,143 @@ http://localhost:8888/api/rules/{fullRuleName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"rule_name\":\"sample_rule\",\"type\":\"python\",\"java_class_name\":\"com.dqops.execution.rules.runners.python.PythonRuleRunner\",\"mode\":\"current_value\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import create_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	create_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import create_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = create_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import create_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	create_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import create_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = create_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -72,13 +208,97 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import delete_rule
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	delete_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import delete_rule
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = delete_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import delete_rule
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	delete_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import delete_rule
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = delete_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -108,17 +328,101 @@ http://localhost:8888/api/rules
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/rules^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_rules.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_rules.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_rules.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_rules.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "rule_name" : "sample_rule",
@@ -174,17 +478,105 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "rule_name" : "sample_rule",
@@ -223,17 +615,101 @@ http://localhost:8888/api/definitions/rules
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/definitions/rules^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_rule_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_rule_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_rule_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_rule_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "rules" : [ {
@@ -322,6 +798,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -330,8 +807,143 @@ http://localhost:8888/api/rules/{fullRuleName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"rule_name\":\"sample_rule\",\"type\":\"python\",\"java_class_name\":\"com.dqops.execution.rules.runners.python.PythonRuleRunner\",\"mode\":\"current_value\",\"custom\":false,\"built_in\":false,\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import update_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	update_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import update_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = update_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import update_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	update_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import update_rule
+	from dqops.client.models import RuleModel, \
+	                                RuleRunnerType, \
+	                                RuleTimeWindowMode
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.python,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.current_value,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+	
+	async_result = update_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

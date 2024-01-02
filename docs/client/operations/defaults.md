@@ -26,17 +26,101 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_daily_monitoring_column_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_daily_monitoring_column_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_daily_monitoring_column_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_column_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_daily_monitoring_column_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "categories" : [ {
@@ -90,17 +174,101 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_daily_monitoring_table_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_daily_monitoring_table_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_daily_monitoring_table_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_daily_monitoring_table_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_daily_monitoring_table_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "categories" : [ {
@@ -154,17 +322,101 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_monthly_monitoring_column_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_monthly_monitoring_column_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_column_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "categories" : [ {
@@ -218,17 +470,101 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_monthly_monitoring_table_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_data_observability_monthly_monitoring_table_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_data_observability_monthly_monitoring_table_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "categories" : [ {
@@ -282,17 +618,101 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/column^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_column_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_profiling_column_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_column_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_profiling_column_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_column_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_profiling_column_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_column_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_profiling_column_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "categories" : [ {
@@ -346,17 +766,101 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/table^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_table_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_profiling_table_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_table_checks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_profiling_table_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_table_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_profiling_table_checks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_profiling_table_checks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_profiling_table_checks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "categories" : [ {
@@ -417,17 +921,105 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/defaults/defaultschedule/"partitioned_daily"^
+    curl http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_schedule
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_schedule.sync(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_schedule
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_schedule.asyncio(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_schedule
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_schedule.sync(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_schedule
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_schedule.asyncio(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "cron_expression" : "0 12 1 * *"
@@ -460,17 +1052,101 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/defaults/defaultwebhooks^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_webhooks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_webhooks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_webhooks
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_webhooks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_webhooks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_default_webhooks.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import get_default_webhooks
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_default_webhooks.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "incident_opened_webhook_url" : "https://sample_url.com/opened",
@@ -506,6 +1182,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -514,8 +1191,227 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_daily_monitoring_column_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_daily_monitoring_column_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_daily_monitoring_column_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_daily_monitoring_column_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -545,6 +1441,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -553,8 +1450,227 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_daily_monitoring_table_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_daily_monitoring_table_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_daily_monitoring_table_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_daily_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_daily_monitoring_table_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -584,6 +1700,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -592,8 +1709,227 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_monthly_monitoring_column_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_monthly_monitoring_column_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_monthly_monitoring_column_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -623,6 +1959,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -631,8 +1968,227 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_monthly_monitoring_table_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_data_observability_monthly_monitoring_table_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_data_observability_monthly_monitoring_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_data_observability_monthly_monitoring_table_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -662,6 +2218,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -670,8 +2227,227 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_profiling_column_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_profiling_column_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_profiling_column_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_column_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_profiling_column_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -701,6 +2477,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -709,8 +2486,227 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"categories\":[{\"category\":\"sample_category\",\"help_text\":\"Sample help text\",\"checks\":[{\"check_name\":\"sample_check\",\"help_text\":\"Sample help text\",\"sensor_parameters\":[],\"sensor_name\":\"sample_target/sample_category/sample_sensor\",\"quality_dimension\":\"sample_quality_dimension\",\"supports_grouping\":false,\"disabled\":false,\"exclude_from_kpi\":false,\"include_in_sla\":false,\"configured\":false,\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}]}],\"can_edit\":false,\"can_run_checks\":false,\"can_delete_data\":false}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_profiling_table_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_profiling_table_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	update_default_profiling_table_checks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_profiling_table_checks
+	from dqops.client.models import CheckContainerModel, \
+	                                CheckModel, \
+	                                FieldModel, \
+	                                QualityCategoryModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+	
+	async_result = update_default_profiling_table_checks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -747,16 +2743,128 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl -X PUT http://localhost:8888/api/defaults/defaultschedule/"partitioned_daily"^
+    curl -X PUT http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"cron_expression\":\"0 12 1 * *\"}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_schedules
+	from dqops.client.models import CheckRunScheduleGroup, \
+	                                MonitoringScheduleSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+	
+	update_default_schedules.sync(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_schedules
+	from dqops.client.models import CheckRunScheduleGroup, \
+	                                MonitoringScheduleSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+	
+	async_result = update_default_schedules.asyncio(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_schedules
+	from dqops.client.models import CheckRunScheduleGroup, \
+	                                MonitoringScheduleSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+	
+	update_default_schedules.sync(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_schedules
+	from dqops.client.models import CheckRunScheduleGroup, \
+	                                MonitoringScheduleSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+	
+	async_result = update_default_schedules.asyncio(
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -786,6 +2894,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -794,8 +2903,119 @@ http://localhost:8888/api/defaults/defaultwebhooks
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"incident_opened_webhook_url\":\"https://sample_url.com/opened\",\"incident_acknowledged_webhook_url\":\"https://sample_url.com/acknowledged\",\"incident_resolved_webhook_url\":\"https://sample_url.com/resolved\",\"incident_muted_webhook_url\":\"https://sample_url.com/muted\"}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_webhooks
+	from dqops.client.models import IncidentWebhookNotificationsSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+	
+	update_default_webhooks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_webhooks
+	from dqops.client.models import IncidentWebhookNotificationsSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+	
+	async_result = update_default_webhooks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_webhooks
+	from dqops.client.models import IncidentWebhookNotificationsSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+	
+	update_default_webhooks.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.defaults import update_default_webhooks
+	from dqops.client.models import IncidentWebhookNotificationsSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+	
+	async_result = update_default_webhooks.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

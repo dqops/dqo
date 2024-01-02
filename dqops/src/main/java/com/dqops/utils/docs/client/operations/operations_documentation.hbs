@@ -40,17 +40,17 @@ ___{{#with "  "}}{{.}}{{/with}}
 
 {{#if usageExamples}}
 **Usage examples**{{#with "  "}}{{.}}{{/with}}
-{{#each usageExamples~}}
-=== "{{{executionMethod}}}"
+{{#each usageExamples}}
+=== "{{{executionMethod.navbarHeader}}}"
     {{#with "  "}}{{.}}{{/with}}
-    ```{{{executionCodeFormatting}}}
+    ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
-{{/each~}}
+{{/each}}
 {{/if}}
 
 {{#if returnValueSample}}
-**Return value sample**{{#with "  "}}{{.}}{{/with}}
+??? "Return value sample"{{#with "  "}}{{.}}{{/with}}
     ```js
     {{{returnValueSample}}}
     ```

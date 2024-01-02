@@ -204,11 +204,11 @@ DQOps can be used in Airflow's DAGs using DQOps operators. The most important DQ
 
 
 ### **Direct file modifications**
-The files in the *DQO user home* can be edited directly. Especially, DQOps provides the YAML file schema for Visual Studio Code,
+The files in the *DQOps user home* can be edited directly. Especially, DQOps provides the YAML file schema for Visual Studio Code,
 enabling out-of-the-box code completion support for the [connection.dqoconnection.yaml](../../reference/yaml/ConnectionYaml.md) and the
 [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../reference/yaml/TableYaml.md) table files.
 
-DQOps depends on the file system change notification to detect file modifications. When a YAML file in the *DQO user home*
+DQOps depends on the file system change notification to detect file modifications. When a YAML file in the *DQOps user home*
 is modified by the user or as a result of a *git pull* command, DQOps detects the change and invalidates a copy
 of the file in the in-memory cache instantly.
 
@@ -227,7 +227,7 @@ The following command will start DQOps as a docker container:
 
 The only important differences are:
 
-- *DQO user home* folder must be mounted as a volume to the */dqo/userhome* folder inside the container
+- *DQOps user home* folder must be mounted as a volume to the */dqo/userhome* folder inside the container
 
 - the web server port *8888* must be exposed from the container using the *-p 8888:8888* parameter
 

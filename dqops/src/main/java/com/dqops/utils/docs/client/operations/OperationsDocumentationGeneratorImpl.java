@@ -64,6 +64,8 @@ public class OperationsDocumentationGeneratorImpl implements OperationsDocumenta
                             operationExecutionMethod,
                             operationDocumentationModel
                     );
+                    usageExampleDocumentationModel.setRenderedExample(usageExampleDocumentationModel.getRenderedExample()
+                            .replace("\n", "\n\t"));
                     operationDocumentationModel.getUsageExamples().add(usageExampleDocumentationModel);
                 }
             }
