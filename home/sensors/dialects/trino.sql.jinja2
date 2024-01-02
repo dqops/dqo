@@ -327,3 +327,52 @@
 {{ indentation }}ORDER BY {{ render_grouping_column_names() }}
     {%- endif -%}
 {% endmacro %}
+
+{% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+    {%- if (target_column_data_type == 'VARCHAR') -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- elif (target_column_data_type == 'BOOLEAN') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'TINYINT') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'SMALLINT') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'INTEGER') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'BIGINT') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'REAL') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'DOUBLE') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'DECIMAL') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'VARBINARY') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'JSON') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'DATE') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'TIME') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'TIME WITH TIME ZONE') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'TIMESTAMP') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'TIMESTAMP WITH TIME ZONE') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'INTERVAL YEAR TO MONTH') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'INTERVAL DAY TO SECOND') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'ARRAY') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'MAP') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- elif (target_column_data_type == 'ROW') -%}
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- else -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- endif -%}
+{% endmacro -%}
+
