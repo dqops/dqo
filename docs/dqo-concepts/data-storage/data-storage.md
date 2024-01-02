@@ -336,7 +336,7 @@ Open the [DQOps Shell](../command-line-interface/command-line-interface.md) and 
 
 DQOps will open a browser window, navigate to the [https://cloud.dqops.com/account](https://cloud.dqops.com/account), and download the pairing key.
 
-Alternatively, if [DQOps is started in a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md), and 
+Alternatively, if [DQOps is started as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md), and 
 opening a browser window is not possible, it is also possible to pass the `DQOps Cloud Pairing API Key` using a `--dqo.cloud.api-key=KEY` parameter.
 Instead of using a parameter, the key can be passed by setting (and exporting) a `DQO_CLOUD_API_KEY` environment variable
 that holds the value of the `DQOps Cloud Pairing API Key`.
