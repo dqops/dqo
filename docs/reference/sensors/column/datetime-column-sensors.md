@@ -214,17 +214,16 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {% endmacro -%}
     
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_formats(parameters.date_formats)}})
-                            THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_formats(parameters.date_formats)}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -670,13 +669,12 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {%- endmacro -%}
     
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    {{ render_value_in_future() }}
-                ) / COUNT(*)
-            END AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -1081,16 +1079,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {%- endmacro -%}
     
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                    ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (

@@ -37,17 +37,121 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/comparisons/sample_table_comparison/results^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_monitoring_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_comparison_monitoring_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_monitoring_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_comparison_monitoring_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_monitoring_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_comparison_monitoring_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_monitoring_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_comparison_monitoring_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "table_comparison_results" : { },
@@ -92,17 +196,121 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/comparisons/sample_table_comparison/results^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_partitioned_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_comparison_partitioned_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_partitioned_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_comparison_partitioned_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_partitioned_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_comparison_partitioned_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_partitioned_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_comparison_partitioned_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "table_comparison_results" : { },
@@ -146,17 +354,117 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/comparisons/sample_table_comparison/results^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_comparison_profiling_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_comparison_profiling_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_comparison_profiling_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.table_comparison_results import get_table_comparison_profiling_results
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_comparison_profiling_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_table_comparison',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "table_comparison_results" : { },

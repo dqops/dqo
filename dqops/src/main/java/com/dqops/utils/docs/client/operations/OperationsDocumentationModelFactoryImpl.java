@@ -25,11 +25,9 @@ import com.dqops.utils.docs.client.apimodel.ComponentModel;
 import com.dqops.utils.docs.client.apimodel.ControllerModel;
 import com.dqops.utils.docs.client.apimodel.OpenAPIModel;
 import com.dqops.utils.docs.client.apimodel.OperationModel;
-import com.dqops.utils.docs.client.operations.examples.PathParameterFillerUtility;
 import com.dqops.utils.reflection.ObjectDataType;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.string.StringCaseFormat;
-import com.google.common.base.CaseFormat;
 import com.google.inject.internal.MoreTypes;
 import io.swagger.v3.oas.models.media.ArraySchema;
 import io.swagger.v3.oas.models.media.MapSchema;
@@ -191,7 +189,7 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
 
             operationsOperationDocumentationModel.setReturnValueField(returnParameterModel);
 
-            String sampleReturnValue = GeneratorUtility.getSampleFromTypeModel(returnParameterTypeModel, true);
+            String sampleReturnValue = GeneratorUtility.generateJsonSampleFromTypeModel(returnParameterTypeModel, true);
             sampleReturnValue = sampleReturnValue.replace(System.lineSeparator(), "\n\t");
             operationsOperationDocumentationModel.setReturnValueSample(sampleReturnValue);
         }
@@ -238,17 +236,6 @@ public class OperationsDocumentationModelFactoryImpl implements OperationsDocume
         }
 
         return documentationReflectionService.getObjectsTypeModel(type, linkAccessor);
-    }
-
-    private TypeModel getTypeModelForParameterDataType(String parameterType) {
-        ParameterDataType parameterDataType = KNOWN_DATA_TYPES.getOrDefault(parameterType, ParameterDataType.object_type);
-        TypeModel typeModel = new TypeModel();
-        typeModel.setDataType(parameterDataType);
-        if (parameterDataType == ParameterDataType.object_type) {
-            typeModel.setObjectDataType(ObjectDataType.object_type);
-        }
-        typeModel.setClassNameUsedOnTheField(parameterType);
-        return typeModel;
     }
 }
 

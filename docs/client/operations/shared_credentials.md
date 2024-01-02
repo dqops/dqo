@@ -26,6 +26,7 @@ http://localhost:8888/api/credentials
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -34,8 +35,119 @@ http://localhost:8888/api/credentials
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import create_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	create_shared_credential.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import create_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	async_result = create_shared_credential.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import create_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	create_shared_credential.sync(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import create_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	async_result = create_shared_credential.asyncio(
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -65,13 +177,97 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X DELETE http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import delete_shared_credential
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	delete_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import delete_shared_credential
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = delete_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import delete_shared_credential
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	delete_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import delete_shared_credential
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = delete_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -101,13 +297,101 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/credentials/sample_credential/download^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import download_shared_credential
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	download_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import download_shared_credential
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = download_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import download_shared_credential
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	download_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import download_shared_credential
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = download_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -137,17 +421,101 @@ http://localhost:8888/api/credentials
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/credentials^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_all_shared_credentials
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_shared_credentials.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_all_shared_credentials
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_shared_credentials.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_all_shared_credentials
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_all_shared_credentials.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_all_shared_credentials
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_all_shared_credentials.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "can_edit" : false,
@@ -194,17 +562,105 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_shared_credential
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_shared_credential
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_shared_credential
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import get_shared_credential
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "credential_name" : "sample_credential",
@@ -246,6 +702,7 @@ http://localhost:8888/api/credential/{credentialName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -254,8 +711,123 @@ http://localhost:8888/api/credential/{credentialName}
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"credential_name\":\"sample_credential\",\"type\":\"text\",\"text_value\":\"sample_credential_text_value\"}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import update_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	update_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import update_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	async_result = update_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import update_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	update_shared_credential.sync(
+	    'sample_credential',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.shared_credentials import update_shared_credential
+	from dqops.client.models import CredentialType, \
+	                                SharedCredentialModel
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.text,
+		text_value='sample_credential_text_value'
+	)
+	
+	async_result = update_shared_credential.asyncio(
+	    'sample_credential',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

@@ -266,11 +266,10 @@ Column level sensor that calculates the percentage of not null values in a colum
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN NULL
-                ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
-            END AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE CAST(100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -686,16 +685,15 @@ Column-level sensor that calculates the percentage of rows with null values.
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            CASE
-                WHEN COUNT(*) = 0 THEN 100.0
-                ELSE 100.0 * SUM(
-                    CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
-                        ELSE 0
-                    END
-                ) / COUNT(*)
-            END AS DOUBLE) AS actual_value
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST( 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (

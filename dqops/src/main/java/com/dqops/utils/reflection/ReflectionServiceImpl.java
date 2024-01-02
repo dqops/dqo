@@ -222,7 +222,7 @@ public class ReflectionServiceImpl implements ReflectionService {
             parameterDataType = ParameterDataType.enum_type;
             fieldInfo.setEnumValuesByName(getEnumValuesMap((Class<? extends Enum<?>>) fieldType));
         } else if (isClassList(fieldType) && isJavaClass(fieldType)) {
-            Type listParameterType = genericType.getActualTypeArguments()[0];
+            Type listParameterType = genericType != null ? genericType.getActualTypeArguments()[0] : Object.class;
             if (listParameterType == String.class) {
                 parameterDataType = ParameterDataType.string_list_type;
                 try {

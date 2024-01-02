@@ -23,16 +23,54 @@ import com.dqops.utils.docs.generators.SampleLongsRegistry;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.TypeModel;
 import com.google.common.base.CaseFormat;
+import com.google.common.base.Strings;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class PathParameterFillerUtility {
+public final class PathParameterFillerUtility {
     private static Pattern pathParameterPattern = Pattern.compile("\\{([^{}]*)\\}");
     public static String getSampleCallPath(String pathUrl, List<OperationParameterDocumentationModel> parameters) {
+        List<String> pathParameterValues = getSamplePathParameterValues(pathUrl, parameters);
+        return substitutePathUrlWithValues(pathUrl, pathParameterValues);
+    }
+
+    private static String substitutePathUrlWithValues(String pathUrl, List<String> pathParameterValues) {
+        StringBuilder resultBuilder = new StringBuilder();
+
+        Matcher pathParameterMatcher = pathParameterPattern.matcher(pathUrl);
+
+        Iterator<String> pathParameterIt = pathParameterValues.iterator();
+        int pathUrlMatchCursor = 0;
+        for (Iterator<MatchResult> it = pathParameterMatcher.results().iterator(); it.hasNext(); ) {
+            MatchResult matchResult = it.next();
+            resultBuilder.append(pathUrl, pathUrlMatchCursor, matchResult.start());
+            String replacement = pathParameterIt.next();
+
+            if (replacement.charAt(0) == '\'' && replacement.charAt(replacement.length() - 1) == '\'') {
+                // Handle string formatting.
+                replacement = replacement.substring(1, replacement.length() - 1);
+            } else if (replacement.contains(".")) {
+                // Handle enum formatting.
+                String[] splitReplacement = replacement.split("\\.");
+                replacement = splitReplacement[splitReplacement.length - 1];
+            }
+
+            resultBuilder.append(replacement);
+            pathUrlMatchCursor = matchResult.end();
+        }
+
+        resultBuilder.append(pathUrl, pathUrlMatchCursor, pathUrl.length());
+        return resultBuilder.toString();
+    }
+
+    public static List<String> getSamplePathParameterValues(String pathUrl, List<OperationParameterDocumentationModel> parameters) {
         Map<String, TypeModel> parameterMap = parameters.stream()
                 .filter(p -> p.getOperationParameterType() == OperationParameterType.pathParameter)
                 .collect(Collectors.toMap(
@@ -41,33 +79,46 @@ public class PathParameterFillerUtility {
                 ));
 
         String[] pathSplit = pathUrl.split("/");
+        List<String> samplePathParametersValues = new ArrayList<>();
 
         for (int i = 0; i < pathSplit.length; ++i) {
             String pathComponent = pathSplit[i];
             Matcher pathParameterMatcher = pathParameterPattern.matcher(pathComponent);
             if (pathParameterMatcher.find()) {
                 String pathParameter = pathParameterMatcher.group(1);
-                String filledPathComponent = getSampleParameterValue(pathParameter, parameterMap.get(pathParameter));
-                pathSplit[i] = filledPathComponent;
+                String samplePathParameterValue = getSampleParameterValue(pathParameter, parameterMap.get(pathParameter));
+                samplePathParametersValues.add(samplePathParameterValue);
             }
         }
 
-        String sampleCallPath = String.join("/", pathSplit);
-        if (sampleCallPath.charAt(sampleCallPath.length() - 1) == '/') {
-            sampleCallPath = sampleCallPath.substring(0, sampleCallPath.length() - 1);
-        }
-
-        return sampleCallPath;
+        return samplePathParametersValues;
     }
 
-    protected static String getSampleParameterValue(String parameterName, TypeModel parameterType) {
+    private static String getSampleParameterValue(String parameterName, TypeModel parameterType) {
         switch (parameterType.getDataType()) {
             case string_type:
-                return SampleStringsRegistry.getMatchingStringForParameter(parameterName);
+                String sampleStringValue = SampleStringsRegistry.getMatchingStringForParameter(parameterName);
+                return String.format("'%s'", sampleStringValue);
             case long_type:
                 return Long.toString(SampleLongsRegistry.getMatchingLongForParameter(parameterName));
+            case enum_type:
+                String jsonStringValue = GeneratorUtility.generateJsonSampleFromTypeModel(parameterType, false);
+                String enumValue = jsonStringValue.replaceAll("^\"|\"$", "");
+                return getJavaSimpleClassName(parameterType.getClazz()) + "." + enumValue;
             default:
-                return GeneratorUtility.getSampleFromTypeModel(parameterType, false);
+                return GeneratorUtility.generateJsonSampleFromTypeModel(parameterType, false);
+        }
+    }
+
+    public static String getJavaSimpleClassName(Class<?> clazz) {
+        if (Strings.isNullOrEmpty(clazz.getSimpleName())) {
+            String classFullName = clazz.getName();
+            String mainClassFullName = classFullName.split("\\$")[0];
+            String[] mainClassFullNameComponents = mainClassFullName.split("\\.");
+            String mainClassSimpleName = mainClassFullNameComponents[mainClassFullNameComponents.length - 1];
+            return mainClassSimpleName;
+        } else {
+            return clazz.getSimpleName();
         }
     }
 }

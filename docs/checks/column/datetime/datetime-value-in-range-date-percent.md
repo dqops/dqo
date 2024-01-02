@@ -394,16 +394,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         {%- endmacro -%}
         
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -422,16 +421,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -1037,16 +1035,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1064,16 +1061,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1726,16 +1722,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         {%- endmacro -%}
         
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -1754,16 +1749,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -2370,16 +2364,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2397,16 +2390,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3059,16 +3051,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         {%- endmacro -%}
         
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -3087,16 +3078,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -3703,16 +3693,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3730,16 +3719,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -4398,16 +4386,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         {%- endmacro -%}
         
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -4426,16 +4413,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -5049,16 +5035,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -5076,16 +5061,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -5742,16 +5726,15 @@ Please expand the database engine name section to see the SQL query rendered by 
         {%- endmacro -%}
         
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -5770,16 +5753,15 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                        ELSE 0
-                        END
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                    ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -6393,16 +6375,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             {%- endmacro -%}
             
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -6420,16 +6401,15 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
-                            ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('' AS TIMESTAMP) THEN 1
+                        ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

@@ -39,11 +39,11 @@ public class ColumnSearchFilters {
     private Boolean enabled = true;
 
     @JsonPropertyDescription("The column data type that was imported from the data source and is stored in the " +
-            "[columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private String columnDataType;
 
     @JsonPropertyDescription("Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the " +
-            "[columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
+            "[columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.")
     private Boolean nullable;
 
     @JsonPropertyDescription("An array of tags assigned to the table. All tags must be present on a table to match. The tags can use patterns:  'prefix\\*', '\\*suffix', 'prefix\\*suffix'. " +

@@ -301,13 +301,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -326,13 +325,12 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -763,13 +761,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -787,13 +784,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1274,13 +1270,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -1299,13 +1294,12 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -1737,13 +1731,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -1761,13 +1754,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2248,13 +2240,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -2273,13 +2264,12 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -2711,13 +2701,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2735,13 +2724,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3228,13 +3216,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -3253,13 +3240,12 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -3701,13 +3687,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3725,13 +3710,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -4216,13 +4200,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -4241,13 +4224,12 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * COUNT(
-                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                    ) / COUNT(*)
-                END AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * COUNT(
+                    TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -4689,13 +4671,12 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4713,13 +4694,12 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
-                        ELSE 100.0 * COUNT(
-                            TRY_CAST(analyzed_table."target_column" AS DOUBLE)
-                        ) / COUNT(*)
-                    END AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * COUNT(
+                        TRY_CAST(analyzed_table."target_column" AS DOUBLE)
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

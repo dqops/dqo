@@ -334,18 +334,17 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -364,18 +363,17 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -865,18 +863,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -894,18 +891,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -1445,18 +1441,17 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -1475,18 +1470,17 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -1977,18 +1971,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -2006,18 +1999,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -2557,18 +2549,17 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -2587,18 +2578,17 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -3089,18 +3079,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -3118,18 +3107,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -3675,18 +3663,17 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -3705,18 +3692,17 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -4217,18 +4203,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -4246,18 +4231,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value,
             
                             analyzed_table.grouping_level_1,
             
@@ -4801,18 +4785,17 @@ Please expand the database engine name section to see the SQL query rendered by 
         ```sql+jinja
         {% import '/dialects/presto.sql.jinja2' as lib with context -%}
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value
             {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM (
@@ -4831,18 +4814,17 @@ Please expand the database engine name section to see the SQL query rendered by 
 
         ```sql
         SELECT
-            CAST(
-                CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
-                    ELSE 100.0 * SUM(
-                        CASE
-                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                THEN 1
-                            ELSE 0
-                        END
-                    ) / COUNT(*)
-                END
-            AS DOUBLE) AS actual_value,
+            CASE
+                WHEN COUNT(*) = 0 THEN 0.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END
+            AS actual_value,
             time_period,
             time_period_utc
         FROM (
@@ -5343,18 +5325,17 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
             FROM (
@@ -5372,18 +5353,17 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Rendered SQL for Presto"
             ```sql
             SELECT
-                CAST(
-                    CASE
-                        WHEN COUNT(*) = 0 THEN 0.0
-                        ELSE 100.0 * SUM(
-                            CASE
-                                WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
-                                    THEN 1
-                                ELSE 0
-                            END
-                        ) / COUNT(*)
-                    END
-                AS DOUBLE) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN 0.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_LIKE(CAST(analyzed_table."target_column" AS VARCHAR), '[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}')
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END
+                AS actual_value,
             
                             analyzed_table.grouping_level_1,
             

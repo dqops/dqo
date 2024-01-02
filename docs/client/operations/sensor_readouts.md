@@ -44,17 +44,121 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/"daily"/readouts^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/readouts^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_column_monitoring_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_column_monitoring_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_column_monitoring_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_column_monitoring_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -109,17 +213,121 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/"daily"/readouts^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/readouts^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_column_partitioned_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_column_partitioned_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_column_partitioned_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_column_partitioned_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -173,17 +381,117 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/readouts^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_column_profiling_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_column_profiling_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_column_profiling_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_column_profiling_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -237,17 +545,117 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/"daily"/readouts^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/readouts^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_monitoring_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_monitoring_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_monitoring_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_monitoring_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -301,17 +709,117 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
-    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/"daily"/readouts^
+    curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/readouts^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_partitioned_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_partitioned_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_partitioned_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_partitioned_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -364,17 +872,113 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/readouts^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_profiling_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_profiling_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_profiling_sensor_readouts.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_profiling_sensor_readouts.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]

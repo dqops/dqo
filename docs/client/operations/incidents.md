@@ -26,17 +26,101 @@ http://localhost:8888/api/incidentstat
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/incidentstat^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	find_connection_incident_stats.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = find_connection_incident_stats.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	find_connection_incident_stats.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = find_connection_incident_stats.asyncio(
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "openIncidents" : 0
@@ -90,17 +174,109 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	find_recent_incidents_on_connection.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = find_recent_incidents_on_connection.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	find_recent_incidents_on_connection.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = find_recent_incidents_on_connection.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "year" : 0,
@@ -159,17 +335,117 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "year" : 0,
@@ -221,17 +497,117 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_incident_histogram.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_incident_histogram.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_incident_histogram.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_incident_histogram.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "hasProfilingIssues" : false,
@@ -288,17 +664,121 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_incident_issues.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_incident_issues.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_incident_issues.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_incident_issues.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "id" : "3854372",
@@ -414,13 +894,109 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_issue_url
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	set_incident_issue_url.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_issue_url
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = set_incident_issue_url.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_issue_url
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	set_incident_issue_url.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_issue_url
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = set_incident_issue_url.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -454,13 +1030,109 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_status
+	from dqops.client.models import IncidentStatus
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	set_incident_status.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_status
+	from dqops.client.models import IncidentStatus
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = set_incident_status.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_status
+	from dqops.client.models import IncidentStatus
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	set_incident_status.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import set_incident_status
+	from dqops.client.models import IncidentStatus
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = set_incident_status.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

@@ -43,7 +43,7 @@ If you want to learn more about checks and threshold levels, please refer to the
 
 **VALUE**
 
-If the number of failures will exceed 0, a warning alert will be triggered.
+If the number of failures exceeds 0, a warning alert will be triggered.
 
 ## Running the checks in the example and evaluating the results using the user interface
 

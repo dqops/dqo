@@ -35,6 +35,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -43,8 +44,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"data_grouping_configuration_name\":\"sample_data_grouping\",\"spec\":{\"level_3\":{\"source\":\"column_value\",\"column\":\"sample_column\"}},\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	create_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	async_result = create_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	create_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	async_result = create_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -77,13 +229,109 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	delete_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = delete_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	delete_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = delete_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -123,17 +371,117 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     {
 	  "can_edit" : false
@@ -175,17 +523,113 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings^
 		-H "Accept: application/json"
+	
+    ```
 
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_grouping_configurations.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_grouping_configurations.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	get_table_grouping_configurations.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	async_result = get_table_grouping_configurations.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
     ```
 
 
 
-**Return value sample**  
+
+??? "Return value sample"  
     ```js
     [ {
 	  "default_data_grouping_configuration" : false,
@@ -228,13 +672,105 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
     curl -X PATCH http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/setdefault^
 		-H "Accept: application/json"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	set_table_default_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
+	
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	async_result = set_table_default_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	set_table_default_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
+	
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	async_result = set_table_default_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 
@@ -274,6 +810,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 **Usage examples**  
+
 === "curl"
       
     ```bash
@@ -282,8 +819,163 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		-H "Content-Type: application/json"^
 		-d^
 		"{\"data_grouping_configuration_name\":\"sample_data_grouping\",\"spec\":{\"level_3\":{\"source\":\"column_value\",\"column\":\"sample_column\"}},\"can_edit\":true}"
-
+	
     ```
+
+=== "Python sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	update_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	async_result = update_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
+=== "Python auth sync client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	update_table_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+    ```
+
+=== "Python auth async client"
+      
+    ```python
+    from dqops import client
+	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
+	from dqops.client.models import DataGroupingConfigurationSpec, \
+	                                DataGroupingConfigurationTrimmedModel, \
+	                                DataGroupingDimensionSource, \
+	                                DataGroupingDimensionSpec
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	request_body = DataGroupingConfigurationTrimmedModel(
+		data_grouping_configuration_name='sample_data_grouping',
+		spec=DataGroupingConfigurationSpec(
+			level_3=DataGroupingDimensionSpec(
+				source=DataGroupingDimensionSource.column_value,
+				column='sample_column'
+			)
+		),
+		can_edit=True
+	)
+	
+	async_result = update_table_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_data_grouping',
+	    client=dqops_client,
+	    json_body=request_body
+	)
+	
+	await async_result
+	
+    ```
+
 
 
 

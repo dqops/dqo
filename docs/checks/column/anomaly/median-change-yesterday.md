@@ -359,7 +359,8 @@ Please expand the database engine name section to see the SQL query rendered by 
             SELECT
                APPROX_PERCENTILE(
                     CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                    {{ parameters.percentile_value }})
+                    {{ parameters.percentile_value }}
+                )
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
                     {{render_local_data_grouping_projections('analyzed_table') }}
@@ -381,7 +382,8 @@ Please expand the database engine name section to see the SQL query rendered by 
             SELECT
                APPROX_PERCENTILE(
                     CAST(analyzed_table."target_column" AS DOUBLE),
-                    0.5)
+                    0.5
+                )
                 OVER (PARTITION BY
                     
             DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
@@ -923,7 +925,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SELECT
                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }})
+                        {{ parameters.percentile_value }}
+                    )
                     OVER (PARTITION BY
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
@@ -946,7 +949,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SELECT
                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.5)
+                        0.5
+                    )
                     OVER (PARTITION BY
                         
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)),
@@ -1534,7 +1538,8 @@ Please expand the database engine name section to see the SQL query rendered by 
             SELECT
                APPROX_PERCENTILE(
                     CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                    {{ parameters.percentile_value }})
+                    {{ parameters.percentile_value }}
+                )
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
                     {{render_local_data_grouping_projections('analyzed_table') }}
@@ -1556,7 +1561,8 @@ Please expand the database engine name section to see the SQL query rendered by 
             SELECT
                APPROX_PERCENTILE(
                     CAST(analyzed_table."target_column" AS DOUBLE),
-                    0.5)
+                    0.5
+                )
                 OVER (PARTITION BY
                     
             CAST(CURRENT_TIMESTAMP AS date),
@@ -2099,7 +2105,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SELECT
                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }})
+                        {{ parameters.percentile_value }}
+                    )
                     OVER (PARTITION BY
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
@@ -2122,7 +2129,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SELECT
                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.5)
+                        0.5
+                    )
                     OVER (PARTITION BY
                         
                 CAST(CURRENT_TIMESTAMP AS date),
@@ -2716,7 +2724,8 @@ Please expand the database engine name section to see the SQL query rendered by 
             SELECT
                APPROX_PERCENTILE(
                     CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                    {{ parameters.percentile_value }})
+                    {{ parameters.percentile_value }}
+                )
                 OVER (PARTITION BY
                     {{render_local_time_dimension_projection('analyzed_table')}}
                     {{render_local_data_grouping_projections('analyzed_table') }}
@@ -2738,7 +2747,8 @@ Please expand the database engine name section to see the SQL query rendered by 
             SELECT
                APPROX_PERCENTILE(
                     CAST(analyzed_table."target_column" AS DOUBLE),
-                    0.5)
+                    0.5
+                )
                 OVER (PARTITION BY
                     
             CAST(analyzed_table."date_column" AS date),
@@ -3287,7 +3297,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SELECT
                    APPROX_PERCENTILE(
                         CAST({{ lib.render_target_column('analyzed_table')}} AS DOUBLE),
-                        {{ parameters.percentile_value }})
+                        {{ parameters.percentile_value }}
+                    )
                     OVER (PARTITION BY
                         {{render_local_time_dimension_projection('analyzed_table')}}
                         {{render_local_data_grouping_projections('analyzed_table') }}
@@ -3310,7 +3321,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                 SELECT
                    APPROX_PERCENTILE(
                         CAST(analyzed_table."target_column" AS DOUBLE),
-                        0.5)
+                        0.5
+                    )
                     OVER (PARTITION BY
                         
                 CAST(analyzed_table."date_column" AS date),

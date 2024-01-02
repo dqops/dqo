@@ -342,6 +342,7 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|column_names|The list of column names or column name patters. This field accepts search patterns in the format: &#x27;fk_\*&#x27;, &#x27;\*_id&#x27;, &#x27;prefix\*suffix&#x27;.|List[string]|
 |collector_name|The target statistics collector name to capture only selected statistics. Uses the short collector nameThis field supports search patterns such as: &#x27;prefix\*&#x27;, &#x27;\*suffix&#x27;, &#x27;prefix_\*_suffix&#x27;. In order to collect only top 10 most common column samples, use &#x27;column_samples&#x27;.|string|
 |sensor_name|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: &#x27;table/volume/row_\*&#x27;, &#x27;\*_count&#x27;, &#x27;table/volume/prefix_\*_suffix&#x27;.|string|
 |collector_category|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|string|
