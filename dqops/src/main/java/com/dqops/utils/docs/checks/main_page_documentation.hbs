@@ -6,12 +6,12 @@
 {{#if (gt checkTargets.length 1)}}## {{capitalizeFirst this}} checks{{/if}}
 {{#each checks}}
 {{#if (eq target ../this)}}
-{{#if (gt checkTargets.length 1)}}#{{/if}}## **{{categoryName}}**{{#with "  "}}{{.}}{{/with}}
+{{#if (gt checkTargets.length 1)}}#{{/if}}## **{{categoryName}}**
 {{categoryHelp}}
 {{#each checkGroups}}
 | Check name | Check type | Description |
 |------------|------------|-------------|
-{{#each allChecks}}|[{{checkName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
+{{#each allChecks}}|[{{checkName}}](/docs/checks/{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}.md#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
 {{/each}}
 {{/each}}
 {{else}}

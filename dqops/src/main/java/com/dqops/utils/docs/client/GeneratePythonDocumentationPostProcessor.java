@@ -143,13 +143,13 @@ public class GeneratePythonDocumentationPostProcessor {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
                 modelDestination = baseModelDestination
-                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence))
-                        .resolve("#" + modelName);
+                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence)
+                                + ".md" + "#" + modelName);
             } else {
                 // Model is used in several places.
                 modelDestination = baseModelDestination
-                        .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)
-                        .resolve("#" + modelName);
+                        .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER
+                                + ".md" + "#" + modelName);
             }
 
             linkageStore.put(modelName, modelDestination);
@@ -268,8 +268,9 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder docsRootFolder = DocumentationFolderFactory.loadCurrentFiles(docPath);
         DocumentationFolder docsRootFolderCorrected = DocumentationFolderFactory.loadCurrentFiles(docPath);
 
-        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService = new DocumentationFolderPostCorrectorServiceImpl();
-        documentationFolderPostCorrectorService.postProcessCorrect(projectRoot.toAbsolutePath(), docsRootFolderCorrected);
+        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService =
+                new DocumentationFolderPostCorrectorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostCorrectorService.postProcessCorrect(docsRootFolderCorrected);
         docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
     }
 }

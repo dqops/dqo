@@ -447,8 +447,9 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder docsRootFolder = DocumentationFolderFactory.loadCurrentFiles(docPath);
         DocumentationFolder docsRootFolderCorrected = DocumentationFolderFactory.loadCurrentFiles(docPath);
 
-        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService = new DocumentationFolderPostCorrectorServiceImpl();
-        documentationFolderPostCorrectorService.postProcessCorrect(projectRoot.toAbsolutePath(), docsRootFolderCorrected);
+        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService =
+                new DocumentationFolderPostCorrectorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostCorrectorService.postProcessCorrect(docsRootFolderCorrected);
         docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
     }
 }

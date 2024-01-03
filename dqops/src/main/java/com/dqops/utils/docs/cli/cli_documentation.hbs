@@ -21,8 +21,8 @@ $ dqo [root_level_parameter] [command]
 $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
 {{#if options}}
-**Options**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 {{#each options}}|{{#each names}}<p id="{{qualifiedName}}{{this}}">`{{this}}`</p><br/>{{/each}}|{{#each description}}{{this}}<br/>This parameter could be also configured by setting {{#each names}}{{upper (replace (replace (replace this "--" "") "." "_") "-" "_")}}{{/each}}  environment variable.{{/each}}|{{checkmark required}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|
@@ -40,8 +40,8 @@ $ dqo [dqo options...]{{{synopsis}}}
 dqo>{{{synopsis}}}
 ```
 {{#if options}}
-**Options**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 {{#each options}}|{{#each names}}<p id="{{qualifiedName}}{{this}}">`{{this}}`</p><br/>{{/each}}|{{#each description}}{{replace this ":mm" "\:mm"}}{{/each}}|{{checkmark required}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|

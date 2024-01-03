@@ -20,6 +20,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -31,19 +32,26 @@ import java.util.stream.Collectors;
  */
 public class DocumentationFolderPostCorrectorServiceImpl implements DocumentationFolderPostCorrectorService {
     private Map<Path, Path> correctPathRemapping = null;
-    private final Pattern windowsStylePathDelimiterPattern = Pattern.compile("\\(\\\\?([.\\w\\-]+\\\\?)*(#[\\w\\-]+)?\\)");
-    private final Pattern oldLinkFormatPattern = Pattern.compile("\\((/docs(/[\\w\\-]+)*/?)(#[\\w\\-]+)?\\)");
+    private final Pattern windowsStylePathDelimiterPattern = Pattern.compile("\\(\\\\?([.\\w\\-]+(\\.md)?\\\\?)*(#[\\w\\-]+)?\\)");
+    private final Pattern oldLinkFormatPattern = Pattern.compile("\\((/docs(/[\\w\\-]+)*(\\.md)?/?)(#[\\w\\-]+)?\\)");
+    private final Pattern referenceWithoutFilePattern = Pattern.compile("(?<=])\\(/?(([\\w\\-]+|\\.\\.)/?)+(#[\\w\\-]+)?\\)");
+
+    private final Path projectRootDirectory;
+
+    public DocumentationFolderPostCorrectorServiceImpl(Path projectRootDirectory) {
+        this.projectRootDirectory = projectRootDirectory;
+    }
 
     @Override
-    public void postProcessCorrect(Path projectDir, DocumentationFolder toCorrect) {
+    public void postProcessCorrect(DocumentationFolder toCorrect) {
         if (correctPathRemapping == null) {
-            correctPathRemapping = createPathRemappingForFolder(projectDir.getParent(), toCorrect);
+            correctPathRemapping = createPathRemappingForFolder(toCorrect);
         }
 
         pathMappingCorrection(toCorrect);
     }
 
-    protected Map<Path, Path> createPathRemappingForFolder(Path projectRootDirectory, DocumentationFolder documentationFolder) {
+    protected Map<Path, Path> createPathRemappingForFolder(DocumentationFolder documentationFolder) {
         Map<Path, Path> pathRemapping = new HashMap<>();
         createPathRemappingForFolderInternal(pathRemapping, documentationFolder, projectRootDirectory.relativize(documentationFolder.getDirectPath()));
         return pathRemapping;
@@ -81,19 +89,23 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
     protected void pathMappingCorrectionForFile(DocumentationMarkdownFile file) {
         String content = file.getFileContent();
         Path fileDirectPath = file.getDirectPath();
-        Path workingPath = fileDirectPath.getFileName().toString().equals("index.md")
-                ? fileDirectPath.getParent()
-                : fileDirectPath;
+        Path workingPath = fileDirectPath;
+//        Path workingPath = fileDirectPath.getFileName().toString().equals("index.md")
+//                ? fileDirectPath.getParent()
+//                : fileDirectPath;
 
-        Function<String, String> f1 = this::pathDelimiterStyleCorrectionForFileContent;
-        Function<Path, Function<String, String>> partialTransform = p -> toModify -> pathReferenceLevelCorrectionForFile(p, toModify);
+        Function<String, String> f1 = this::pathDelimiterStyleCorrection;
+        Function<Path, Function<String, String>> partialTransform = p ->
+                toModify -> pathReferenceLevelCorrection(p, toModify);
         Function<String, String> f2 = partialTransform.apply(workingPath);
+        Function<String, String> f3 = this::pathToFileReferenceCorrection;
 
-        String modifiedContent = f2.compose(f1).apply(content);
+        Function<String, String> compoundModifiers = f3.compose(f2).compose(f1);
+        String modifiedContent = compoundModifiers.apply(content);
         file.setFileContent(modifiedContent);
     }
 
-    protected String pathDelimiterStyleCorrectionForFileContent(String fileContent) {
+    protected String pathDelimiterStyleCorrection(String fileContent) {
         Matcher windowsDelimiterLinksMatcher = windowsStylePathDelimiterPattern.matcher(fileContent);
         List<MatchResult> matches = windowsDelimiterLinksMatcher.results().collect(Collectors.toList());
 
@@ -110,7 +122,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
         return newContent.toString();
     }
 
-    protected String pathReferenceLevelCorrectionForFile(Path workingPath, String fileContent) {
+    protected String pathReferenceLevelCorrection(Path workingPath, String fileContent) {
         Matcher foulLinksMatcher = oldLinkFormatPattern.matcher(fileContent);
         List<MatchResult> matches = foulLinksMatcher.results().collect(Collectors.toList());
 
@@ -119,9 +131,11 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
         for (MatchResult match : matches) {
             newContent.append(fileContent, i, match.start());
 
-            Path oldPath = Path.of(match.group(1).substring(1));
-            // Links directly to specific files don't seem to work.
-            Path newPath = correctPathRemapping.get(oldPath);
+            Path oldPath = projectRootDirectory.relativize(
+                    Path.of(match.group(1).substring(1)).toAbsolutePath()
+            );
+
+            Path newPath = Objects.requireNonNullElse(correctPathRemapping.get(oldPath), oldPath);
             Path relativeNewPath = workingPath.relativize(newPath.toAbsolutePath());
 
             String matchString = match.group();
@@ -133,6 +147,27 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 
             newContent.append(correctedMatch);
             i = match.end();
+        }
+        newContent.append(fileContent, i, fileContent.length());
+        return newContent.toString();
+    }
+
+    protected String pathToFileReferenceCorrection(String fileContent) {
+        Matcher noFileLinkswindowsDelimiterLinksMatcher = referenceWithoutFilePattern.matcher(fileContent);
+        List<MatchResult> matches = noFileLinkswindowsDelimiterLinksMatcher.results().collect(Collectors.toList());
+
+        StringBuilder newContent = new StringBuilder();
+        int i = 0;
+        for (MatchResult match : matches) {
+            newContent.append(fileContent, i, match.start(1));
+
+            String matchedReference = match.group(1);
+            if (matchedReference.charAt(matchedReference.length() - 1) == '/') {
+                matchedReference = matchedReference.substring(0, matchedReference.length() - 1);
+            }
+
+            newContent.append(matchedReference).append(".md");
+            i = match.end(1);
         }
         newContent.append(fileContent, i, fileContent.length());
         return newContent.toString();

@@ -208,9 +208,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             modelsObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
             modelsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
             modelsObjectDocumentationModel.setObjectClassPath(
-                    Path.of(absoluteFilePathToRef("/docs/client/models/" + destinationPath))
-                            .resolve("#" + classInfo.getReflectedClass().getSimpleName().toLowerCase())
-                            .toString()
+                    Path.of("/docs/client/models/" + destinationPath + ".md" + "#"
+                                    + classInfo.getReflectedClass().getSimpleName().toLowerCase()).toString()
             );
 
             for (FieldInfo info : infoFields) {

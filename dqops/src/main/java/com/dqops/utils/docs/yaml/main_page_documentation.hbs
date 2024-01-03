@@ -3,12 +3,12 @@
 {{/inline}}
 {{#*inline "groupedRecursive"}}
 {{>repeat token="#" n=level}} {{header}}
-{{#with "  "}}{{.}}{{/with}}
+
 {{helpText}}
 
 {{#if superiorObjects}}
-**The structure of this object is described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
 {{#each superiorObjects~}}
@@ -26,7 +26,7 @@
 }}
 {{/each}}
 {{#if subpages}}{{#if (eq level 2)}}
-___{{#with "  "}}{{.}}{{/with}}
+___
 {{/if}}{{/if}}
 {{/inline}}
 
