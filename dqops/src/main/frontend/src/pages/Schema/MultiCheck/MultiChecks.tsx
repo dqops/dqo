@@ -121,6 +121,7 @@ export const MultiChecks = () => {
         }))
       } 
     }, [connection, schema])
+    console.log(multiCheckFilters)
     
   return (
     <div className="text-sm py-4">
@@ -155,6 +156,7 @@ export const MultiChecks = () => {
           onChangeFilterParameters={onChangemultiCheckFilters}
           searchChecks={searchChecks}
         />
+        <hr className="mt-4 border-gray-300" />
         {multiCheckFilters?.checkName && multiCheckFilters?.checkCategory && (
           <MultiChecksTable
             checkTarget={multiCheckFilters?.checkTarget}

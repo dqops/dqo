@@ -82,7 +82,7 @@ export default function MultiChecksTable({
   );
 
   return (
-    <div className="w-max rounded-lg my-8">
+    <div className="w-max rounded-lg my-4">
       <MultiChecksTableButtons
         selectAll={selectAll}
         deselectAll={deselectAll}

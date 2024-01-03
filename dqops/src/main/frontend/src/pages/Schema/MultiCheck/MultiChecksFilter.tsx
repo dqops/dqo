@@ -131,7 +131,9 @@ export default function MultiChecksFilter({
                   checkTarget: 'table',
                   columnNamePattern: undefined,
                   columnDataType: undefined,
-                  tableNamePattern: undefined
+                  tableNamePattern: undefined,
+                  checkName: undefined,
+                  checkCategory: undefined
                 }),
                   onChangeChecks([]);
                 setCheckNameOptions([]);
