@@ -64,6 +64,7 @@ const ColumnProfilingChecksView = ({
   const [checkResultsOverview, setCheckResultsOverview] = useState<
     CheckResultsOverviewDataModel[]
   >([]);
+  const [activeTab, setActiveTab] = useState(tab === 'statistics' || tab === 'advanced' ? tab : 'statistics');
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
@@ -190,6 +191,7 @@ const ColumnProfilingChecksView = ({
         tab
       )
     );
+    setActiveTab(tab)
   };
 
   return (
@@ -200,13 +202,13 @@ const ColumnProfilingChecksView = ({
         onUpdate={onUpdate}
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
-        isStatistics={tab === 'statistics'}
+        isStatistics={activeTab === 'statistics'}
         onCollectStatistics={onCollectStatistics}
         runningStatistics={loadingJob}
       />
-      <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
-      {tab === 'statistics' && <ColumnStatisticsView statisticsCollectedIndicator={collectedStatisticsIndicator}/>}
-      {tab === 'advanced' && (
+      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
+      {activeTab === 'statistics' && <ColumnStatisticsView statisticsCollectedIndicator={collectedStatisticsIndicator}/>}
+      {activeTab === 'advanced' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={checksUI}

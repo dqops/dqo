@@ -71,12 +71,12 @@ export default function TableColumnsBody({
 
   const navigate = (column: string) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
-      'profiling',
+      CheckTypes.PROFILING,
       connection,
       schema,
       table,
       column,
-      'detail'
+      'statistics'
     );
     const value = ROUTES.COLUMN_LEVEL_VALUE(
       'profiling',
