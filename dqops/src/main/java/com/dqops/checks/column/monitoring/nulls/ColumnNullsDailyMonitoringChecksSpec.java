@@ -58,7 +58,7 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNullsCountCheckSpec dailyNullsCount;
 
     @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
@@ -85,7 +85,7 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
     private ColumnChangeNullPercentSince30DaysCheckSpec dailyNullsPercentChange30Days;
 
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNotNullsCountCheckSpec dailyNotNullsCount;
 
     @JsonPropertyDescription("Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")

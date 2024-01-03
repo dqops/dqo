@@ -1338,8 +1338,10 @@ from .incident_status import IncidentStatus
 from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
 from .incidents_per_connection_model import IncidentsPerConnectionModel
 from .max_count_rule_0_parameters_spec import MaxCountRule0ParametersSpec
+from .max_count_rule_1_parameters_spec import MaxCountRule1ParametersSpec
 from .max_count_rule_10_parameters_spec import MaxCountRule10ParametersSpec
 from .max_count_rule_15_parameters_spec import MaxCountRule15ParametersSpec
+from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
 from .max_days_rule_1_parameters_spec import MaxDaysRule1ParametersSpec
 from .max_days_rule_2_parameters_spec import MaxDaysRule2ParametersSpec
 from .max_days_rule_7_parameters_spec import MaxDaysRule7ParametersSpec
@@ -2390,8 +2392,10 @@ __all__ = (
     "IncidentStatus",
     "IncidentWebhookNotificationsSpec",
     "MaxCountRule0ParametersSpec",
+    "MaxCountRule100ParametersSpec",
     "MaxCountRule10ParametersSpec",
     "MaxCountRule15ParametersSpec",
+    "MaxCountRule1ParametersSpec",
     "MaxDaysRule1ParametersSpec",
     "MaxDaysRule2ParametersSpec",
     "MaxDaysRule7ParametersSpec",

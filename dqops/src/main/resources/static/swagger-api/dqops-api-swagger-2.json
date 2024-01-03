@@ -15760,11 +15760,11 @@
         },
         "columnDataType" : {
           "type" : "string",
-          "description" : "The column data type that was imported from the data source and is stored in the [columns -> column_name -> type_snapshot -> column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file."
+          "description" : "The column data type that was imported from the data source and is stored in the [columns -> column_name -> type_snapshot -> column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file."
         },
         "columnNullable" : {
           "type" : "boolean",
-          "description" : "Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file."
+          "description" : "Optional filter to find only nullable (when the value is *true*) or not nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file."
         },
         "checkTarget" : {
           "type" : "string",
@@ -21247,7 +21247,7 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxCountRule0ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule1ParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set number of rows with invalid latitude value in a column that raises a data quality alert",
@@ -21255,7 +21255,7 @@
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule15ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
         }
       }
     },
@@ -21303,7 +21303,7 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxCountRule0ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule1ParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set number of rows with invalid longitude value in a column that raises a data quality alert",
@@ -21311,7 +21311,7 @@
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule15ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
         }
       }
     },
@@ -22084,15 +22084,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MinCountRule0ParametersSpec"
+          "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set number of rows with not null values in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MinCountRuleWarningParametersSpec"
+          "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MinCountRuleFatalParametersSpec"
+          "$ref" : "#/definitions/MinCountRule1ParametersSpec"
         }
       }
     },
@@ -22196,7 +22196,7 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxCountRule0ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule1ParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set number of rows with null values in a column that raises a data quality error (alert).",
@@ -22204,7 +22204,7 @@
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule15ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
         }
       }
     },
@@ -22219,7 +22219,7 @@
           }
         },
         "daily_nulls_count" : {
-          "description" : "Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_nulls_percent" : {
@@ -22239,7 +22239,7 @@
           "$ref" : "#/definitions/ColumnChangeNullPercentSinceYesterdayCheckSpec"
         },
         "daily_not_nulls_count" : {
-          "description" : "Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_not_nulls_percent" : {
@@ -22271,7 +22271,7 @@
           }
         },
         "daily_partition_nulls_count" : {
-          "description" : "Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_partition_nulls_percent" : {
@@ -22291,7 +22291,7 @@
           "$ref" : "#/definitions/ColumnChangeNullPercentSinceYesterdayCheckSpec"
         },
         "daily_partition_not_nulls_count" : {
-          "description" : "Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "description" : "Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_partition_not_nulls_percent" : {
@@ -22323,7 +22323,7 @@
           }
         },
         "monthly_nulls_count" : {
-          "description" : "Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_nulls_percent" : {
@@ -22331,7 +22331,7 @@
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_not_nulls_count" : {
-          "description" : "Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
+          "description" : "Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_not_nulls_percent" : {
@@ -22351,7 +22351,7 @@
           }
         },
         "monthly_partition_nulls_count" : {
-          "description" : "Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_partition_nulls_percent" : {
@@ -22359,7 +22359,7 @@
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_partition_not_nulls_count" : {
-          "description" : "Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "description" : "Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_partition_not_nulls_percent" : {
@@ -22523,7 +22523,7 @@
           }
         },
         "profile_nulls_count" : {
-          "description" : "Verifies that the number of null values in a column does not exceed the maximum accepted count.",
+          "description" : "Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "profile_nulls_percent" : {
@@ -22543,7 +22543,7 @@
           "$ref" : "#/definitions/ColumnChangeNullPercentSinceYesterdayCheckSpec"
         },
         "profile_not_nulls_count" : {
-          "description" : "Verifies that the number of not null values in a column does not exceed the minimum accepted count.",
+          "description" : "Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not exceed the minimum accepted count.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "profile_not_nulls_percent" : {
@@ -31364,6 +31364,16 @@
         }
       }
     },
+    "MaxCountRule100ParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "max_count" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Maximum accepted value for the actual_value returned by the sensor (inclusive)."
+        }
+      }
+    },
     "MaxCountRule10ParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -31375,6 +31385,16 @@
       }
     },
     "MaxCountRule15ParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "max_count" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "Maximum accepted value for the actual_value returned by the sensor (inclusive)."
+        }
+      }
+    },
+    "MaxCountRule1ParametersSpec" : {
       "type" : "object",
       "properties" : {
         "max_count" : {

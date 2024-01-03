@@ -657,11 +657,11 @@ Checks for the presence of null or missing values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[profile_nulls_count](column/nulls/nulls-count/#profile-nulls-count)|profiling|Verifies that the number of null values in a column does not exceed the maximum accepted count.|
-|[daily_nulls_count](column/nulls/nulls-count/#daily-nulls-count)|monitoring|Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_nulls_count](column/nulls/nulls-count/#monthly-nulls-count)|monitoring|Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_nulls_count](column/nulls/nulls-count/#daily-partition-nulls-count)|partitioned|Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_nulls_count](column/nulls/nulls-count/#monthly-partition-nulls-count)|partitioned|Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[profile_nulls_count](column/nulls/nulls-count/#profile-nulls-count)|profiling|Detects columns with any null values when the max_count&#x3D;0. Verifies that the number of null values in a column does not exceed the maximum accepted count.|
+|[daily_nulls_count](column/nulls/nulls-count/#daily-nulls-count)|monitoring|Detects columns with any null values when the max_count&#x3D;0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_nulls_count](column/nulls/nulls-count/#monthly-nulls-count)|monitoring|Detects columns with any null values when the max_count&#x3D;0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_nulls_count](column/nulls/nulls-count/#daily-partition-nulls-count)|partitioned|Detects columns with any null values when the max_count&#x3D;0. Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_nulls_count](column/nulls/nulls-count/#monthly-partition-nulls-count)|partitioned|Detects columns with any null values when the max_count&#x3D;0. Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |
@@ -717,11 +717,11 @@ Checks for the presence of null or missing values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
-|[profile_not_nulls_count](column/nulls/not-nulls-count/#profile-not-nulls-count)|profiling|Verifies that the number of not null values in a column does not exceed the minimum accepted count.|
-|[daily_not_nulls_count](column/nulls/not-nulls-count/#daily-not-nulls-count)|monitoring|Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
-|[monthly_not_nulls_count](column/nulls/not-nulls-count/#monthly-not-nulls-count)|monitoring|Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
-|[daily_partition_not_nulls_count](column/nulls/not-nulls-count/#daily-partition-not-nulls-count)|partitioned|Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
-|[monthly_partition_not_nulls_count](column/nulls/not-nulls-count/#monthly-partition-not-nulls-count)|partitioned|Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
+|[profile_not_nulls_count](column/nulls/not-nulls-count/#profile-not-nulls-count)|profiling|Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not exceed the minimum accepted count.|
+|[daily_not_nulls_count](column/nulls/not-nulls-count/#daily-not-nulls-count)|monitoring|Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|
+|[monthly_not_nulls_count](column/nulls/not-nulls-count/#monthly-not-nulls-count)|monitoring|Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|
+|[daily_partition_not_nulls_count](column/nulls/not-nulls-count/#daily-partition-not-nulls-count)|partitioned|Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.|
+|[monthly_partition_not_nulls_count](column/nulls/not-nulls-count/#monthly-partition-not-nulls-count)|partitioned|Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.|
 
 
 | Check name | Check type | Description |

@@ -40,10 +40,10 @@ class CheckSearchFilters:
             'prefix\*suffix'.
         column_data_type (Union[Unset, str]): The column data type that was imported from the data source and is stored
             in the [columns -> column_name -> type_snapshot ->
-            column_type](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
+            column_type](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
         column_nullable (Union[Unset, bool]): Optional filter to find only nullable (when the value is *true*) or not
             nullable (when the value is *false*) columns, based on the value of the [columns -> column_name -> type_snapshot
-            -> nullable](../../reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
+            -> nullable](/docs/reference/yaml/TableYaml/#columntypesnapshotspec) field in the *.dqotable.yaml* file.
         check_target (Union[Unset, CheckTarget]):
         check_type (Union[Unset, CheckType]):
         time_scale (Union[Unset, CheckTimeScale]):

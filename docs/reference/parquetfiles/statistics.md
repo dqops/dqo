@@ -58,7 +58,7 @@ The columns of this table are described below.
  | collector_target | Column for a statistics collector target (table, column). | STRING |
  | collector_category | Column for a statistics collector category. | STRING |
  | sensor_name | Column for a sensor name. | STRING |
- | time_series_id | Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the profiler_hash and data_stream_hash. | STRING |
+ | time_series_id | Column for a time series id (uuid). Identifies a single time series. A time series is a combination of the profiler_hash and data_group_hash. | STRING |
  | executed_at | Column for a statistics collector executed at timestamp. | TIMESTAMP |
  | duration_ms | Column for a sensor duration in milliseconds. | INTEGER |
  | error_message | Column for an optional error message when the status is &#x27;error&#x27;. | STRING |

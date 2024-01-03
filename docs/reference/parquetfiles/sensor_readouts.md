@@ -53,7 +53,7 @@ The columns of this table are described below.
  | table_comparison | The name of a table comparison configuration used for a data comparison (accuracy) check. | STRING |
  | quality_dimension | The data quality dimension name. The popular dimensions are: Timeliness, Completeness, Consistency, Validity, Reasonableness, Uniqueness. | STRING |
  | sensor_name | The data quality sensor name. | STRING |
- | time_series_id | The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_stream_hash. | STRING |
+ | time_series_id | The time series id (uuid). Identifies a single time series. A time series is a combination of the check_hash and data_group_hash. | STRING |
  | executed_at | The UTC timestamp, when the data sensor was executed. | TIMESTAMP |
  | duration_ms | The sensor (query) execution duration in milliseconds. | INTEGER |
  | created_at | The timestamp when the row was created at. | TIMESTAMP |

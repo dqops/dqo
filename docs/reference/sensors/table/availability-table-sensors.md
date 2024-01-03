@@ -177,4 +177,23 @@ Table availability sensor runs a simple table scan query to detect if the table 
             {{ lib.render_where_clause() }}
         ) AS tab_scan
     ```
+=== "Trino"
+      
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    SELECT
+        CAST(0.0 AS DOUBLE) AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 ___

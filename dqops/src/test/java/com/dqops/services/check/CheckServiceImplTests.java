@@ -410,7 +410,7 @@ public class CheckServiceImplTests extends BaseTest {
                 .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
                 .findAny().get();
 
-        MaxCountRule15ParametersSpec maxCountRule = new MaxCountRule15ParametersSpec(50L);
+        MaxCountRule100ParametersSpec maxCountRule = new MaxCountRule100ParametersSpec(50L);
         ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
         checkSpec.setFatal(maxCountRule);
 
@@ -456,7 +456,7 @@ public class CheckServiceImplTests extends BaseTest {
                 .flatMap(uiQualityCategoryModel -> uiQualityCategoryModel.getChecks().stream())
                 .findAny().get();
 
-        MaxCountRule15ParametersSpec maxCountRule = new MaxCountRule15ParametersSpec(50L);
+        MaxCountRule100ParametersSpec maxCountRule = new MaxCountRule100ParametersSpec(50L);
         ColumnNullsCountCheckSpec checkSpec = new ColumnNullsCountCheckSpec();
         checkSpec.setFatal(maxCountRule);
 

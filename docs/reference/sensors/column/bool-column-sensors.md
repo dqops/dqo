@@ -243,6 +243,34 @@ Column level sensor that calculates the percentage of rows with a false value in
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "Trino"
+      
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END as actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **true percent**
@@ -486,6 +514,34 @@ Column level sensor that calculates the percentage of rows with a true value in 
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Trino"
+      
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT(*)
+        END as actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```

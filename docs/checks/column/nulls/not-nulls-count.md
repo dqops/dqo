@@ -8,7 +8,7 @@ ___
 ## **profile not nulls count**  
   
 **Check description**  
-Verifies that the number of not null values in a column does not exceed the minimum accepted count.  
+Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not exceed the minimum accepted count.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -47,11 +47,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_not_null
         nulls:
           profile_not_nulls_count:
             warning:
-              min_count: 5
+              min_count: 1
             error:
               min_count: 1
             fatal:
-              min_count: 100
+              min_count: 1
 ```
 
 **Sample configuration (YAML)**  
@@ -75,11 +75,11 @@ spec:
         nulls:
           profile_not_nulls_count:
             warning:
-              min_count: 5
+              min_count: 1
             error:
               min_count: 1
             fatal:
-              min_count: 100
+              min_count: 1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -392,6 +392,45 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(analyzed_table."target_column") AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -427,11 +466,11 @@ Expand the *Configure with data grouping* section to see additional examples for
             nulls:
               profile_not_nulls_count:
                 warning:
-                  min_count: 5
+                  min_count: 1
                 error:
                   min_count: 1
                 fatal:
-                  min_count: 100
+                  min_count: 1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -765,6 +804,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             
                 
             ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
 
 
@@ -777,7 +860,7 @@ ___
 ## **daily not nulls count**  
   
 **Check description**  
-Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
+Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -817,11 +900,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_not_nulls_
           nulls:
             daily_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
 ```
 
 **Sample configuration (YAML)**  
@@ -846,11 +929,11 @@ spec:
           nulls:
             daily_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1163,6 +1246,45 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(analyzed_table."target_column") AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -1199,11 +1321,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 daily_not_nulls_count:
                   warning:
-                    min_count: 5
+                    min_count: 1
                   error:
                     min_count: 1
                   fatal:
-                    min_count: 100
+                    min_count: 1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1537,6 +1659,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             
                 
             ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
 
 
@@ -1549,7 +1715,7 @@ ___
 ## **monthly not nulls count**  
   
 **Check description**  
-Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -1589,11 +1755,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_not_null
           nulls:
             monthly_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
 ```
 
 **Sample configuration (YAML)**  
@@ -1618,11 +1784,11 @@ spec:
           nulls:
             monthly_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1935,6 +2101,45 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(analyzed_table."target_column") AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -1971,11 +2176,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 monthly_not_nulls_count:
                   warning:
-                    min_count: 5
+                    min_count: 1
                   error:
                     min_count: 1
                   fatal:
-                    min_count: 100
+                    min_count: 1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2309,6 +2514,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             
                 
             ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
 
 
@@ -2321,7 +2570,7 @@ ___
 ## **daily partition not nulls count**  
   
 **Check description**  
-Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
+Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -2361,11 +2610,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
           nulls:
             daily_partition_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
 ```
 
 **Sample configuration (YAML)**  
@@ -2391,11 +2640,11 @@ spec:
           nulls:
             daily_partition_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2717,6 +2966,45 @@ Please expand the database engine name section to see the SQL query rendered by 
         
             
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(analyzed_table."target_column") AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(original_table."date_column" AS date) AS time_period,
+            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -2754,11 +3042,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 daily_partition_not_nulls_count:
                   warning:
-                    min_count: 5
+                    min_count: 1
                   error:
                     min_count: 1
                   fatal:
-                    min_count: 100
+                    min_count: 1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -3095,6 +3383,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             
                 
             ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     
 
 
@@ -3107,7 +3439,7 @@ ___
 ## **monthly partition not nulls count**  
   
 **Check description**  
-Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
+Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
@@ -3147,11 +3479,11 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
           nulls:
             monthly_partition_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
 ```
 
 **Sample configuration (YAML)**  
@@ -3177,11 +3509,11 @@ spec:
           nulls:
             monthly_partition_not_nulls_count:
               warning:
-                min_count: 5
+                min_count: 1
               error:
                 min_count: 1
               fatal:
-                min_count: 100
+                min_count: 1
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -3503,6 +3835,45 @@ Please expand the database engine name section to see the SQL query rendered by 
         
             
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            COUNT(analyzed_table."target_column") AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -3540,11 +3911,11 @@ Expand the *Configure with data grouping* section to see additional examples for
               nulls:
                 monthly_partition_not_nulls_count:
                   warning:
-                    min_count: 5
+                    min_count: 1
                   error:
                     min_count: 1
                   fatal:
-                    min_count: 100
+                    min_count: 1
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -3880,6 +4251,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 

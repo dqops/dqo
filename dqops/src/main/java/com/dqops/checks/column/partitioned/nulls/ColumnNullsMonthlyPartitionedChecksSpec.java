@@ -51,13 +51,13 @@ public class ColumnNullsMonthlyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNullsCountCheckSpec monthlyPartitionNullsCount;
 
     @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNullsPercentCheckSpec monthlyPartitionNullsPercent;
 
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    @JsonPropertyDescription("Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNotNullsCountCheckSpec monthlyPartitionNotNullsCount;
 
     @JsonPropertyDescription("Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.")

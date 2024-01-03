@@ -451,6 +451,47 @@ Please expand the database engine name section to see the SQL query rendered by 
                 
             ) AS tab_scan
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(0.0 AS DOUBLE) AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST(0.0 AS DOUBLE) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 
 
 
@@ -906,6 +947,47 @@ Please expand the database engine name section to see the SQL query rendered by 
                 
             ) AS tab_scan
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(0.0 AS DOUBLE) AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST(0.0 AS DOUBLE) AS actual_value,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
 
 
 
@@ -1360,6 +1442,47 @@ Please expand the database engine name section to see the SQL query rendered by 
                 FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
                 
             ) AS tab_scan
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        SELECT
+            CAST(0.0 AS DOUBLE) AS actual_value
+            {{- lib.render_time_dimension_projection('tab_scan') }}
+        FROM
+            (
+                SELECT
+                    *
+                    {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{ lib.render_where_clause() }}
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST(0.0 AS DOUBLE) AS actual_value,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+        FROM
+            (
+                SELECT
+                    *,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                
+                LIMIT 1
+            ) AS tab_scan
+        GROUP BY time_period
+        ORDER BY time_period
         ```
 
 
