@@ -74,7 +74,7 @@ export default function TableQualityStatusColumnCategory({
       schema,
       table,
       column,
-      'detail'
+      checkTypes === CheckTypes.PROFILING ? 'statistics' : 'daily'
     );
     const value = ROUTES.COLUMN_LEVEL_VALUE(
       checkTypes,
@@ -84,11 +84,11 @@ export default function TableQualityStatusColumnCategory({
       column
     );
     dispatch(
-      addFirstLevelTab(CheckTypes.PROFILING, {
+      addFirstLevelTab(checkTypes, {
         url,
         value,
         state: {},
-        label: table
+        label: column
       })
     );
     history.push(url);
