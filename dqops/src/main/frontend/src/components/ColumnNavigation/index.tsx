@@ -177,7 +177,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
 
     history.push(url);
   };
-console.log(showNavigation)
+
   const renderNavigation = () => {
     return (
     <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
