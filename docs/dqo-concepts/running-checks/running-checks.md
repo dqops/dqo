@@ -1,6 +1,6 @@
 # Running data quality checks
 DQOps supports running data quality checks from the DQOps command-line shell, user interface, Python client
-and triggered directly by a call to a REST API endpoint [run_checks](../../client/operations/jobs.md#run_checks).
+and triggered directly by a call to a REST API endpoint [run_checks](../../client/operations/jobs.md#run_checks-).
 
 Data quality checks can be also scheduled to run in regular intervals to continuously monitor the data sources.
 DQOps uses an internal job scheduler that is based on a popular Quartz library. The schedules are defined as CRON
@@ -189,8 +189,8 @@ spec:
             min_count: 1
 ```
 
-In order to run only the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count),
-without running the [monthly_row_count](../../checks/table/volume/row-count.md#monthly-row-count),
+In order to run only the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count-),
+without running the [monthly_row_count](../../checks/table/volume/row-count.md#monthly-row-count-),
 we can target it with a `--check=` parameter as shown in the following example.
 
 ``` { .asc .annotate }
