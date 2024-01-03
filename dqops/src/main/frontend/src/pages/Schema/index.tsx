@@ -78,7 +78,6 @@ const SchemaPage = () => {
       )}?import_schema=true&import_table=true&schema=${schema}`
     );
   };
-  console.log(activeTab)
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">

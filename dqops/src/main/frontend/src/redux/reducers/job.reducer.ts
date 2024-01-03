@@ -26,6 +26,8 @@ import {
   ImportTablesQueueJobParameters
 } from '../../api';
 import moment from 'moment';
+import { IFilterTemplate } from '../../shared/constants';
+import { CheckTypes } from '../../shared/routes';
 
 export interface IJobsState {
   jobs?: DqoJobQueueInitialSnapshotModel;
@@ -51,6 +53,7 @@ export interface IJobsState {
   isCronScheduled: boolean;
   isLicenseFree: boolean;
   userProfile: DqoUserProfileModel;
+  multiCheckFilters?: IFilterTemplate
 }
 
 const initialState: IJobsState = {
@@ -72,7 +75,14 @@ const initialState: IJobsState = {
   advisorJobId: 0,
   isCronScheduled: true,
   isLicenseFree: false,
-  userProfile: {}
+  userProfile: {},
+  multiCheckFilters: {
+    connection : '',
+    schema : '',
+    activeTab: 'daily',
+    checkTarget: 'table',
+    checkTypes: CheckTypes.PROFILING
+  }
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -267,6 +277,12 @@ const schemaReducer = (state = initialState, action: any) => {
       return {
         ...state,
         userProfile: action.userProfile
+      }
+    }
+    case JOB_ACTION.SET_MULTICHECK_FILTERS: {
+      return  {
+        ...state,
+        multiCheckFilters: action.multiCheckFilters
       }
     }
     default:
