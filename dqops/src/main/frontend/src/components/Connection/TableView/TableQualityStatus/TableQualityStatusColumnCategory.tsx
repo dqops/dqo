@@ -33,6 +33,7 @@ interface ITableQualityStatusColumnCategoryProps {
     severity: any,
     severityType: 'current' | 'highest'
   ) => React.JSX.Element;
+  timeScale: "daily" | "monthly" | undefined
 }
 
 export default function TableQualityStatusColumnCategory({
@@ -45,7 +46,8 @@ export default function TableQualityStatusColumnCategory({
   firstLevelChecks,
   setExtendedChecks,
   renderSecondLevelTooltip,
-  renderTooltipContent
+  renderTooltipContent,
+  timeScale
 }: ITableQualityStatusColumnCategoryProps) {
   const dispatch = useActionDispatch();
   const history = useHistory();
@@ -74,7 +76,7 @@ export default function TableQualityStatusColumnCategory({
       schema,
       table,
       column,
-      checkTypes === CheckTypes.PROFILING ? 'statistics' : 'daily'
+      checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale ?? 'daily'
     );
     const value = ROUTES.COLUMN_LEVEL_VALUE(
       checkTypes,
