@@ -167,9 +167,9 @@ const DatabaseConnection = ({
       case ConnectionModelProviderTypeEnum.oracle:
         return 'Oracle Database Connection Settings';
       case ConnectionModelProviderTypeEnum.spark:
-        return 'Spark Database Connection Settings';
+        return 'Spark Connection Settings';
       case ConnectionModelProviderTypeEnum.databricks:
-        return 'Databricks Database Connection Settings';
+        return 'Databricks Connection Settings';
       default:
         return 'Database Connection Settings';
     }

@@ -71,6 +71,10 @@ const tabs = [
   {
     label: 'Presto',
     value: ProviderSensorModelProviderTypeEnum.presto
+  },
+  {
+    label: 'Trino',
+    value: ProviderSensorModelProviderTypeEnum.trino
   }
 ];
 

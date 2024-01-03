@@ -80,6 +80,6 @@ public class TrinoConnectionSpecObjectMother {
      * @return Schema name.
      */
     public static String getSchemaName() {
-        return "DEFAULT";
+        return "default";
     }
 }
