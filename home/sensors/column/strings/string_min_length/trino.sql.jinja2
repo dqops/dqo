@@ -2,7 +2,7 @@
 
 SELECT
     MIN(
-        LENGTH({{render_column_cast_to_string('analyzed_table')}})
+        LENGTH({{ lib.render_column_cast_to_string('analyzed_table') }})
     ) AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
