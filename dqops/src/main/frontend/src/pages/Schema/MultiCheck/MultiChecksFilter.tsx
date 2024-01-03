@@ -47,6 +47,7 @@ export default function MultiChecksFilter({
         }))
       );
     };
+    if (filterParameters.connection.length === 0) return
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
         filterParameters.connection,
@@ -105,7 +106,7 @@ export default function MultiChecksFilter({
     if (filterParameters.checkCategory) {
       onChangeCheckOptions();
     }
-  }, [filterParameters.checkCategory]);
+  }, [filterParameters.checkCategory, checks]);
 
   useEffect(() => {
     if (filterParameters.checkName && filterParameters.checkName) {
@@ -130,7 +131,9 @@ export default function MultiChecksFilter({
                   checkTarget: 'table',
                   columnNamePattern: undefined,
                   columnDataType: undefined,
-                  tableNamePattern: undefined
+                  tableNamePattern: undefined,
+                  checkName: undefined,
+                  checkCategory: undefined
                 }),
                   onChangeChecks([]);
                 setCheckNameOptions([]);

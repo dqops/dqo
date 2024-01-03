@@ -8,10 +8,11 @@ import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import { SchemaTables } from './SchemaTables';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelTab } from '../../redux/actions/source.actions';
+import { setActiveFirstLevelTab, setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { MultiChecks } from './MultiCheck/MultiChecks';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 const SchemaPage = () => {
   const {
@@ -30,6 +31,7 @@ const SchemaPage = () => {
   const dispatch = useActionDispatch();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const history = useHistory();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const tabs = useMemo(
     () => [
@@ -50,6 +52,14 @@ const SchemaPage = () => {
   );
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab)
+      )
+    );
+
     history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
   };
 
@@ -68,7 +78,6 @@ const SchemaPage = () => {
       )}?import_schema=true&import_table=true&schema=${schema}`
     );
   };
-
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">

@@ -7,16 +7,12 @@ import Checkbox from '../../../components/Checkbox';
 interface IMultiChecksSearch {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
-  activeOffCheck: boolean;
-  setActiveOffCheck: (arg : boolean) => void;
   searchChecks: any
 }
 
 export default function MultiChecksSearch({
   filterParameters,
   onChangeFilterParameters,
-  setActiveOffCheck, 
-  activeOffCheck, 
   searchChecks
 }: IMultiChecksSearch) {
 
@@ -64,8 +60,8 @@ export default function MultiChecksSearch({
       </div>
       <div className="w-1/4 flex items-center gap-x-8 justify-end">
         <Checkbox
-          checked={activeOffCheck}
-          onChange={() => setActiveOffCheck(!activeOffCheck)}
+          checked={filterParameters.activeOffCheck}
+          onChange={() =>  onChangeFilterParameters({ activeOffCheck: !filterParameters.activeOffCheck })}
           label={"Include also inactive checks"}
         />
         <Button

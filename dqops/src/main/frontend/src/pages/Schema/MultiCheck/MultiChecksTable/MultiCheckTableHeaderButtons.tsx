@@ -40,7 +40,7 @@ export const MultiChecksTableButtons = ({
       <div />
     )}
 
-    <div className="flex gap-x-4">
+    <div className="flex gap-x-4 absolute right-12">
       {loading ? (
         <SvgIcon
           className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
