@@ -16,6 +16,7 @@
 
 import { JOB_ACTION } from '../types';
 import {
+  CheckTemplate,
   CloudSynchronizationFoldersStatusModel,
   DataGroupingConfigurationSpec,
   DqoJobChangeModel,
@@ -53,7 +54,8 @@ export interface IJobsState {
   isCronScheduled: boolean;
   isLicenseFree: boolean;
   userProfile: DqoUserProfileModel;
-  multiCheckFilters?: IFilterTemplate
+  multiCheckFilters?: IFilterTemplate,
+  multiCheckSearchedChecks?: CheckTemplate[]
 }
 
 const initialState: IJobsState = {
@@ -82,7 +84,8 @@ const initialState: IJobsState = {
     activeTab: 'daily',
     checkTarget: 'table',
     checkTypes: CheckTypes.PROFILING
-  }
+  },
+  multiCheckSearchedChecks: [] 
 };
 
 const schemaReducer = (state = initialState, action: any) => {
@@ -283,6 +286,12 @@ const schemaReducer = (state = initialState, action: any) => {
       return  {
         ...state,
         multiCheckFilters: action.multiCheckFilters
+      }
+    }
+    case JOB_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {
+      return  {
+        ...state,
+        multiCheckSearchedChecks: action.multiCheckSearchedChecks
       }
     }
     default:

@@ -20,6 +20,7 @@ import { JobApiClient } from '../../services/apiClient';
 import { JOB_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
+  CheckTemplate,
   DqoJobQueueIncrementalSnapshotModel,
   DqoJobQueueInitialSnapshotModel,
   DqoUserProfileModel,
@@ -144,4 +145,11 @@ export const setMulticheckFilters = (
 ) => ({
   type: JOB_ACTION.SET_MULTICHECK_FILTERS,
   multiCheckFilters
+})
+
+export const setMultiCheckSearchedChecks = (
+  multiCheckSearchedChecks: CheckTemplate[]
+) => ({
+  type: JOB_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
+  multiCheckSearchedChecks
 })

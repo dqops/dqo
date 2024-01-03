@@ -8,7 +8,7 @@ import MultiChecksSearch from './MultiChecksSearch';
 import MultiChecksFilter from './MultiChecksFilter';
 import { IFilterTemplate } from '../../../shared/constants';
 import { SchemaApiClient } from '../../../services/apiClient';
-import { setMulticheckFilters } from '../../../redux/actions/job.actions';
+import { setMulticheckFilters, setMultiCheckSearchedChecks } from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -31,9 +31,7 @@ export const MultiChecks = () => {
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
-  const { multiCheckFilters } = useSelector((state: IRootState) => state.job || {});
-  
-  const [checks, setChecks] = useState<CheckTemplate[]>([]);
+  const { multiCheckFilters, multiCheckSearchedChecks } = useSelector((state: IRootState) => state.job || {});
   const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   
   const dispatch = useActionDispatch()
@@ -62,7 +60,6 @@ export const MultiChecks = () => {
       checkName,
       activeOffCheck
     } = multiCheckFilters as IFilterTemplate;
-
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksModel(
         connection,
@@ -76,7 +73,7 @@ export const MultiChecks = () => {
         undefined,
         activeOffCheck ? undefined : true
       ).then((res) => {
-        setChecks(res.data);
+        dispatch(setMultiCheckSearchedChecks(res.data));
       });
     } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
@@ -92,7 +89,7 @@ export const MultiChecks = () => {
         undefined,
         activeOffCheck ? undefined : true
       ).then((res) => {
-        setChecks(res.data);
+        dispatch(setMultiCheckSearchedChecks(res.data));
       });
     } else if (checkTypes === CheckTypes.PARTITIONED && activeTab) {
       SchemaApiClient.getSchemaPartitionedChecksModel(
@@ -108,7 +105,7 @@ export const MultiChecks = () => {
         undefined,
         activeOffCheck ? undefined : true
       ).then((res) => {
-        setChecks(res.data);
+        dispatch(setMultiCheckSearchedChecks(res.data));
       });
     }
   };
@@ -150,7 +147,7 @@ export const MultiChecks = () => {
           onChangeFilterParameters={onChangemultiCheckFilters}
           checkTypes={checkTypes}
           onChangeSelectedCheck={(obj: CheckTemplate) => setSelectedCheck(obj)}
-          onChangeChecks={(checks: CheckTemplate[]) => setChecks(checks)}
+          onChangeChecks={(checks: CheckTemplate[]) => dispatch(setMultiCheckSearchedChecks(checks))}
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
@@ -161,7 +158,7 @@ export const MultiChecks = () => {
         {multiCheckFilters?.checkName && multiCheckFilters?.checkCategory && (
           <MultiChecksTable
             checkTarget={multiCheckFilters?.checkTarget}
-            checks={checks}
+            checks={multiCheckSearchedChecks}
             filterParameters={multiCheckFilters as IFilterTemplate}
             selectedCheckModel={selectedCheck.check_model ?? {}}
             searchChecks={searchChecks}
