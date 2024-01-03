@@ -82,7 +82,7 @@ const IncidentsLayout = ({ children }: LayoutProps) => {
               limit={7}
             />
             <div className="bg-white border border-gray-300 flex-auto min-h-0 overflow-auto">
-              {!!activeTab && activeTab !== '/incidents/new-tab' && <div>12{children}</div>}
+              {!!activeTab && activeTab !== '/incidents/new-tab' && <div>{children}</div>}
             </div>
           </div>
         </div>
