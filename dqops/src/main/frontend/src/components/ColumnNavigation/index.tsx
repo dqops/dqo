@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import clsx from 'clsx';
 import SvgIcon from '../SvgIcon';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { useDispatch } from 'react-redux';
 import { useHistory, useParams } from 'react-router-dom';
+import IconButton from '../IconButton';
 
 type NavigationMenu = {
   label: string;
@@ -55,6 +56,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     checkTypes: CheckTypes;
   } = useParams();
   const history = useHistory();
+  const [showNavigation, setShowNavigation] = useState(false)
 
   const activeIndex = useMemo(() => {
     return navigations.findIndex((item) => item.value === checkTypes);
@@ -176,32 +178,43 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
     history.push(url);
   };
 
-  return (
+  const renderNavigation = () => {
+    return (
     <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
       {navigations.map((item, index) => (
-        <div
-          className={clsx(
-            'flex items-center cursor-pointer w-70',
-            activeIndex === index ? 'font-bold' : ''
-          )}
-          key={item.value}
-          onClick={() => onChangeNavigation(item)}
-        >
-          {activeIndex > index ? (
-            <SvgIcon name="chevron-left" className="w-3 mr-2" />
-          ) : (
-            ''
-          )}
-          <span>{item.label}</span>
-          {activeIndex < index ? (
-            <SvgIcon name="chevron-right" className="w-6 ml-2" />
-          ) : (
-            ''
-          )}
-        </div>
-      ))}
-    </div>
-  );
+      <div
+        className={clsx(
+          'flex items-center cursor-pointer w-70',
+          activeIndex === index ? 'font-bold' : ''
+        )}
+        key={item.value}
+        onClick={() => onChangeNavigation(item)}
+      >
+        {activeIndex > index ? (
+          <SvgIcon name="chevron-left" className="w-3 mr-2" />
+        ) : (
+          ''
+        )}
+        <span>{item.label}</span>
+        {activeIndex < index ? (
+          <SvgIcon name="chevron-right" className="w-6 ml-2" />
+        ) : (
+          ''
+        )}
+      </div>
+    ))}
+  </div>
+    )
+  }
+
+  return (
+    <>
+    <IconButton className='w-7 h-7 absolute right-0 top-7' onClick={() => setShowNavigation(prev => !prev)} >
+      <SvgIcon name={showNavigation ? "chevron-down" : "chevron-left"} className='ml-3'/>
+    </IconButton>
+    {showNavigation ? renderNavigation() : null}
+    </>
+  )
 };
 
 export default ColumnNavigation;
