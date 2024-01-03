@@ -53,7 +53,7 @@ const ColumnProfilingChecksView = ({
   tableName,
   columnName
 }: IProfilingViewProps) => {
-  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { checkTypes, tab }: { checkTypes: CheckTypes, tab: string } = useParams();
   const { checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
     getFirstLevelState(checkTypes)
   );
@@ -65,7 +65,6 @@ const ColumnProfilingChecksView = ({
     CheckResultsOverviewDataModel[]
   >([]);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [activeTab, setActiveTab] = useState('statistics');
   const [loadingJob, setLoadingJob] = useState(false);
   const [statistics, setStatistics] = useState<ColumnStatisticsModel>();
   const [jobId, setJobId] = useState<number>();
@@ -191,7 +190,6 @@ const ColumnProfilingChecksView = ({
         tab
       )
     );
-    setActiveTab(tab);
   };
 
   return (
@@ -202,13 +200,13 @@ const ColumnProfilingChecksView = ({
         onUpdate={onUpdate}
         isUpdated={isUpdatedChecksUi}
         isUpdating={isUpdating}
-        isStatistics={activeTab === 'statistics'}
+        isStatistics={tab === 'statistics'}
         onCollectStatistics={onCollectStatistics}
         runningStatistics={loadingJob}
       />
-      <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
-      {activeTab === 'statistics' && <ColumnStatisticsView statisticsCollectedIndicator={collectedStatisticsIndicator}/>}
-      {activeTab === 'advanced' && (
+      <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} className='w-full h-12 overflow-hidden max-w-full'/>
+      {tab === 'statistics' && <ColumnStatisticsView statisticsCollectedIndicator={collectedStatisticsIndicator}/>}
+      {tab === 'advanced' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={checksUI}
