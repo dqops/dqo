@@ -165,6 +165,7 @@ export default function TableQualityStatusOverview({
             categoryDimension={categoryDimension}
             renderSecondLevelTooltip={renderSecondLevelTooltip}
             renderTooltipContent={renderTooltipContent}
+            timeScale = {timeScale}
           />
         ))}
       </tbody>
