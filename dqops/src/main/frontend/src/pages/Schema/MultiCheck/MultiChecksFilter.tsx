@@ -36,7 +36,6 @@ export default function MultiChecksFilter({
 
   useEffect(() => {
     const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
-      console.log(res.data);
       setChecks(res.data);
       const categories = Array.from(
         new Set(res.data.map((x) => x.check_category))
@@ -47,10 +46,7 @@ export default function MultiChecksFilter({
           value: item ?? ''
         }))
       );
-      // TODO: we need to store the array of CheckTemplate, because we will need instances to put as selected
     };
-    // const { connection, schema, activeTab, checkTarget } = filterParameters;
-    // console.log(connection, schema, activeTab, checkTarget);
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
         filterParameters.connection,
@@ -124,7 +120,6 @@ export default function MultiChecksFilter({
 
   return (
     <div className="flex w-full">
-      <div className="flex w-1/4">
         <div className="flex flex-col gap-3 w-45">
           <p>Check target</p>
           <div className="flex gap-x-3 mr-10">
@@ -157,7 +152,6 @@ export default function MultiChecksFilter({
             />
           </div>
         </div>
-        <div className="max-w-80 w-80">
           <Select
             label="Check category"
             options={sortObjects(checkCategoryOptions)}
@@ -167,11 +161,7 @@ export default function MultiChecksFilter({
               onChangeCheckOptions();
               onChangeChecks([]);
             }}
-          ></Select>
-        </div>
-      </div>
-      <div className="flex w-1/4 px-10">
-        <div className="max-w-120 w-120">
+          />
           <Select
             options={checkNameOptions}
             label="Check name"
@@ -180,9 +170,8 @@ export default function MultiChecksFilter({
               onChangeFilterParameters({ checkName: value });
               onChangeChecks([]);
             }}
+            className='ml-10'
           />
-        </div>
-      </div>
     </div>
   );
 }
