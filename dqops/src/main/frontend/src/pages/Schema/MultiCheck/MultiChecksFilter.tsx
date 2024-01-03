@@ -36,7 +36,6 @@ export default function MultiChecksFilter({
 
   useEffect(() => {
     const processResult = (res: AxiosResponse<CheckTemplate[]>) => {
-      console.log(res.data);
       setChecks(res.data);
       const categories = Array.from(
         new Set(res.data.map((x) => x.check_category))
@@ -47,10 +46,7 @@ export default function MultiChecksFilter({
           value: item ?? ''
         }))
       );
-      // TODO: we need to store the array of CheckTemplate, because we will need instances to put as selected
     };
-    // const { connection, schema, activeTab, checkTarget } = filterParameters;
-    // console.log(connection, schema, activeTab, checkTarget);
     if (filterParameters.connection.length === 0) return
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
@@ -110,7 +106,7 @@ export default function MultiChecksFilter({
     if (filterParameters.checkCategory) {
       onChangeCheckOptions();
     }
-  }, [filterParameters.checkCategory]);
+  }, [filterParameters.checkCategory, checks]);
 
   useEffect(() => {
     if (filterParameters.checkName && filterParameters.checkName) {

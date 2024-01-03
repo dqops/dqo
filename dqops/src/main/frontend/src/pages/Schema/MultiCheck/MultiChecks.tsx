@@ -34,7 +34,6 @@ export const MultiChecks = () => {
   const { multiCheckFilters } = useSelector((state: IRootState) => state.job || {});
   
   const [checks, setChecks] = useState<CheckTemplate[]>([]);
-  const [activeOffCheck, setActiveOffChecks] = useState(false);
   const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   
   const dispatch = useActionDispatch()
@@ -60,7 +59,8 @@ export const MultiChecks = () => {
       columnDataType,
       checkTarget,
       checkCategory,
-      checkName
+      checkName,
+      activeOffCheck
     } = multiCheckFilters as IFilterTemplate;
 
     if (checkTypes === CheckTypes.PROFILING) {
@@ -157,8 +157,6 @@ export const MultiChecks = () => {
           filterParameters={multiCheckFilters as IFilterTemplate}
           onChangeFilterParameters={onChangemultiCheckFilters}
           searchChecks={searchChecks}
-          setActiveOffCheck={setActiveOffChecks}
-          activeOffCheck={activeOffCheck}
         />
         {multiCheckFilters?.checkName && multiCheckFilters?.checkCategory && (
           <MultiChecksTable

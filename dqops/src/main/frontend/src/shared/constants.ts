@@ -35,6 +35,7 @@ export interface IFilterTemplate {
   checkCategory?: string | undefined;
   checkName?: string | undefined;
   checkTypes: CheckTypes;
+  activeOffCheck?: boolean;
 }
 
 enum CheckTypes {
