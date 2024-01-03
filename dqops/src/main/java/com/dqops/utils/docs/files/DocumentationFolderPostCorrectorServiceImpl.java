@@ -121,7 +121,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 
             Path oldPath = Path.of(match.group(1).substring(1));
             // Links directly to specific files don't seem to work.
-            Path newPath = oldPath; // correctPathRemapping.get(oldPath);
+            Path newPath = correctPathRemapping.get(oldPath);
             Path relativeNewPath = workingPath.relativize(newPath.toAbsolutePath());
 
             String matchString = match.group();
