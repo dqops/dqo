@@ -651,6 +651,106 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+            {%- if (lib.target_column_data_type == 'STRING') -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATE') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- else -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH(analyzed_table."target_column") >= 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -1280,6 +1380,111 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+                {%- if (lib.target_column_data_type == 'STRING') -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- else -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH(analyzed_table."target_column") >= 5
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -1938,6 +2143,106 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+            {%- if (lib.target_column_data_type == 'STRING') -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATE') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- else -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH(analyzed_table."target_column") >= 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -2568,6 +2873,111 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+                {%- if (lib.target_column_data_type == 'STRING') -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- else -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH(analyzed_table."target_column") >= 5
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -3226,6 +3636,106 @@ Please expand the database engine name section to see the SQL query rendered by 
             CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+            {%- if (lib.target_column_data_type == 'STRING') -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATE') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- else -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH(analyzed_table."target_column") >= 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -3856,6 +4366,111 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+                {%- if (lib.target_column_data_type == 'STRING') -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- else -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH(analyzed_table."target_column") >= 5
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -4524,6 +5139,106 @@ Please expand the database engine name section to see the SQL query rendered by 
         
             
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+            {%- if (lib.target_column_data_type == 'STRING') -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATE') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- else -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH(analyzed_table."target_column") >= 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            CAST(original_table."date_column" AS date) AS time_period,
+            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -5158,6 +5873,111 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+                {%- if (lib.target_column_data_type == 'STRING') -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- else -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH(analyzed_table."target_column") >= 5
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -5826,6 +6646,106 @@ Please expand the database engine name section to see the SQL query rendered by 
         
             
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+            {%- if (lib.target_column_data_type == 'STRING') -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT64') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATE') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIME') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+            {%- else -%}
+                {{ lib.render_target_column(analyzed_table_to_render) }}
+            {%- endif -%}
+        {% endmacro -%}
+        
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        FROM (
+            SELECT
+                original_table.*
+                {{- lib.render_data_grouping_projections('original_table') }}
+                {{- lib.render_time_dimension_projection('original_table') }}
+            FROM {{ lib.render_target_table() }} original_table
+            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+        ) analyzed_table
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CASE
+                WHEN COUNT(*) = 0 THEN 100.0
+                ELSE CAST(100.0 * SUM(
+                    CASE
+                        WHEN LENGTH(analyzed_table."target_column") >= 5
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS DOUBLE) / COUNT(*)
+            END AS actual_value,
+            time_period,
+            time_period_utc
+        FROM (
+            SELECT
+                original_table.*,
+            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+            FROM ""."<target_schema>"."<target_table>" original_table
+        ) analyzed_table
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -6460,6 +7380,111 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+                {%- if (lib.target_column_data_type == 'STRING') -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT64') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+                {%- else -%}
+                    {{ lib.render_target_column(analyzed_table_to_render) }}
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN 100.0
+                    ELSE CAST(100.0 * SUM(
+                        CASE
+                            WHEN LENGTH(analyzed_table."target_column") >= 5
+                                THEN 1
+                            ELSE 0
+                        END
+                    ) AS DOUBLE) / COUNT(*)
+                END AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 

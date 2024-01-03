@@ -58,7 +58,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of null values in a column does not exceed the maximum accepted count.")
+    @JsonPropertyDescription("Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count.")
     private ColumnNullsCountCheckSpec profileNullsCount;
 
     @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.")
@@ -85,7 +85,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
     private ColumnChangeNullPercentSince30DaysCheckSpec ProfileNullsPercentChange30Days;
 
-    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
     private ColumnNotNullsCountCheckSpec profileNotNullsCount;
 
     @JsonPropertyDescription("Verifies that the percent of not null values in a column does not exceed the minimum accepted percentage.")

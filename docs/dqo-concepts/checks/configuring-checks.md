@@ -898,8 +898,13 @@ check that will compare the sum of values per day and raise a warning if the cha
             nullable: true
           profiling_checks:
             nulls:
-              profile_nulls_count: {}
+              profile_nulls_count:
+                warning:
+                  max_count: 1
               profile_nulls_percent: {}
+              profile_not_nulls_count:
+                warning:
+                  min_count: 1
           monitoring_checks:
             daily:
               nulls:
@@ -913,6 +918,9 @@ check that will compare the sum of values per day and raise a warning if the cha
                     max_percent: 10.0
                     exact_day: false
                 daily_not_nulls_percent: {}
+                daily_not_nulls_count:
+                  warning:
+                    min_count: 1
               anomaly:
                 daily_mean_anomaly_stationary:
                   warning:
@@ -943,18 +951,19 @@ The following table shows a list of default data quality checks and describes th
 
 **Profiling checks type**
 
-| Target | Check name                                                          | Description                                                                                                                                        |
-|--------|---------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../../checks/table/volume/row-count.md)         | Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                                                 |
-| table  | [profile column count](../../checks/table/schema/column-count.md)   | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)     | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md) | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
+| Target | Check name                                                              | Description                                                                                                                                        |
+|--------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
+| table  | [profile row count](../../checks/table/volume/row-count.md)             | Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                                                 |
+| table  | [profile column count](../../checks/table/schema/column-count.md)       | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)         | Detects empty values in a column. Raises a warning when any null values were found.                                                                |
+| column | [profile not_nulls count](../../checks/column/nulls/not-nulls-count.md) | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).                    |
+| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md)     | Measures the percentage of null values in a column. This check is used to profile the data source before a valid threshold is applied in the rule. |
 
 **Daily monitoring checks type**
 
 | Target | Check name                                                                                              | Description                                                                                                                                 |
 |--------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [daily row count](../../checks/table/volume/row-count.md)                                               | Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                                          |
+| table  | [daily row count](../../checks/table/volume/row-count.md)                                               | Detects empty tables. Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                    |
 | table  | [daily row count change](../../checks/table/volume/row-count-change.md)                                 | Ensures that the row count changed by a fixed rate since the last readout.                                                                  |
 | table  | [daily row count anomaly differencing](../../checks/table/volume/row-count-anomaly-differencing.md)     | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                |
 | table  | [daily table availability](../../checks/table/availability/table-availability.md)                       | Verifies that a table exists, can be accessed, and queried without errors.                                                                  |
@@ -962,7 +971,8 @@ The following table shows a list of default data quality checks and describes th
 | table  | [daily column list changed](../../checks/table/schema/column-list-changed.md)                           | Detects if the list of columns has changed since the last time the check was run.                                                           |
 | table  | [daily column list or order changed](../../checks/table/schema/column-list-or-order-changed.md)         | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                            |
 | table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                         | Detects if the column names or column types have changed since the last time the check was run.                                             |
-| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                           | Ensures that there are no more than a set number of null values in the monitored column.                                                    |
+| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                           | Monitors the table for partially incomplete columns, having any nulls (the max_count of nulls is 0).                                        |
+| column | [daily not_nulls count](../../checks/column/nulls/not-nulls-count.md)      | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).             |
 | column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                       | Ensures that there are no more than a set percentage of null values in the monitored column.                                                |
 | column | [daily nulls percent anomaly stationary](../../checks/column/nulls/nulls-percent-anomaly-stationary.md) | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
 | column | [daily nulls percent change yesterday](../../checks/column/nulls/nulls-percent-change-yesterday.md)     | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |

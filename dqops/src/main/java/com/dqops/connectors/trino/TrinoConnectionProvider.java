@@ -33,6 +33,8 @@ import org.springframework.stereotype.Component;
 import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.columns.Column;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 
 /**
@@ -205,9 +207,21 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
     @Override
     public String formatConstant(Object constant, ColumnTypeSnapshotSpec columnType) {
         StringBuilder formattedConstant = new StringBuilder();
-        if (StringCheckUtility.equalsAny(columnType.getColumnType(), "DATE", "TIME", "TIMESTAMP")) {
+
+        if (constant instanceof Boolean) {
+            Boolean asBoolean = (Boolean)constant;
+            return asBoolean ? "true" : "false";
+        }
+
+        if (StringCheckUtility.equalsAny(columnType.getColumnType(), "DATE", "TIME")) {
             formattedConstant.append( columnType.getColumnType().toLowerCase());
             formattedConstant.append(" ");
+        }
+
+        // due to bug in presto/trino the datetime yyyy-MM-dd HH:mm:ss format is not supported
+        if (constant instanceof LocalDateTime) {
+            LocalDateTime asLocalTimeTime = (LocalDateTime)constant;
+            return "cast('" + asLocalTimeTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")) + "' as timestamp)";
         }
 
         formattedConstant.append(super.formatConstant(constant, columnType));

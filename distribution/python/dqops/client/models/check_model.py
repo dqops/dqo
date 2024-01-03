@@ -54,9 +54,9 @@ class CheckModel:
         exclude_from_kpi (Union[Unset, bool]): Data quality check results (alerts) are included in the data quality KPI
             calculation by default. Set this field to true in order to exclude this data quality check from the data quality
             KPI calculation.
-        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA. The data
-            quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract
-            for the dataset.
+        include_in_sla (Union[Unset, bool]): Marks the data quality check as part of a data quality SLA (Data Contract).
+            The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data
+            Contract for the dataset.
         configured (Union[Unset, bool]): True if the data quality check is configured (not null). When saving the data
             quality check configuration, set the flag to true for storing the check.
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a

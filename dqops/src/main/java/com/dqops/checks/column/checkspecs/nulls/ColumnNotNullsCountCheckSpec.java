@@ -20,6 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleWarningParametersSpec;
 import com.dqops.rules.comparison.MinCountRuleFatalParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
@@ -40,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNotNullsCountCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNotNullsCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRuleWarningParametersSpec, MinCountRuleFatalParametersSpec> {
+        extends AbstractCheckSpec<ColumnNullsNotNullsCountSensorParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec, MinCountRule1ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNotNullsCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,17 +55,17 @@ public class ColumnNotNullsCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec warning;
+    private MinCountRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with not null values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleWarningParametersSpec error;
+    private MinCountRule1ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRuleFatalParametersSpec fatal;
+    private MinCountRule1ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +92,7 @@ public class ColumnNotNullsCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRule0ParametersSpec getWarning() {
+    public MinCountRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +100,7 @@ public class ColumnNotNullsCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRule0ParametersSpec warning) {
+    public void setWarning(MinCountRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +112,7 @@ public class ColumnNotNullsCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinCountRuleWarningParametersSpec getError() {
+    public MinCountRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +120,7 @@ public class ColumnNotNullsCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinCountRuleWarningParametersSpec error) {
+    public void setError(MinCountRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -131,7 +132,7 @@ public class ColumnNotNullsCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRuleFatalParametersSpec getFatal() {
+    public MinCountRule1ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +140,7 @@ public class ColumnNotNullsCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRuleFatalParametersSpec fatal) {
+    public void setFatal(MinCountRule1ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

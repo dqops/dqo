@@ -583,6 +583,70 @@ Please expand the database engine name section to see the SQL query rendered by 
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
         ON analyzed_table.[target_column] = foreign_table.[customer_id]
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+        LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -1143,6 +1207,75 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                FROM (
+                    SELECT
+                        original_table.*
+                        {{- lib.render_data_grouping_projections('original_table') }}
+                        {{- lib.render_time_dimension_projection('original_table') }}
+                    FROM {{ lib.render_target_table() }} original_table
+                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                ) analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT
+                        original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    FROM ""."<target_schema>"."<target_table>" original_table
+                ) analyzed_table
+            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -1733,6 +1866,70 @@ Please expand the database engine name section to see the SQL query rendered by 
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
         ON analyzed_table.[target_column] = foreign_table.[customer_id]
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+            CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+        LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -2294,6 +2491,75 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                FROM (
+                    SELECT
+                        original_table.*
+                        {{- lib.render_data_grouping_projections('original_table') }}
+                        {{- lib.render_time_dimension_projection('original_table') }}
+                    FROM {{ lib.render_target_table() }} original_table
+                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                ) analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT
+                        original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(CURRENT_TIMESTAMP AS date) AS time_period,
+                CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
+                    FROM ""."<target_schema>"."<target_table>" original_table
+                ) analyzed_table
+            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -2884,6 +3150,70 @@ Please expand the database engine name section to see the SQL query rendered by 
         LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
         ON analyzed_table.[target_column] = foreign_table.[customer_id]
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+        LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -3445,6 +3775,75 @@ Expand the *Configure with data grouping* section to see additional examples for
                 
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                FROM (
+                    SELECT
+                        original_table.*
+                        {{- lib.render_data_grouping_projections('original_table') }}
+                        {{- lib.render_time_dimension_projection('original_table') }}
+                    FROM {{ lib.render_target_table() }} original_table
+                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                ) analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT
+                        original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
+                    FROM ""."<target_schema>"."<target_table>" original_table
+                ) analyzed_table
+            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -4045,6 +4444,70 @@ Please expand the database engine name section to see the SQL query rendered by 
         
             
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            CAST(original_table."date_column" AS date) AS time_period,
+            CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+        LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -4610,6 +5073,75 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                FROM (
+                    SELECT
+                        original_table.*
+                        {{- lib.render_data_grouping_projections('original_table') }}
+                        {{- lib.render_time_dimension_projection('original_table') }}
+                    FROM {{ lib.render_target_table() }} original_table
+                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                ) analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT
+                        original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                CAST(original_table."date_column" AS date) AS time_period,
+                CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
+                    FROM ""."<target_schema>"."<target_table>" original_table
+                ) analyzed_table
+            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 
@@ -5210,6 +5742,70 @@ Please expand the database engine name section to see the SQL query rendered by 
         
             
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_foreign_table(foreign_table) -%}
+        {%- if foreign_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+        {%- else -%}
+           {{ foreign_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value
+            {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+            FROM (
+                SELECT
+                    original_table.*
+                    {{- lib.render_data_grouping_projections('original_table') }}
+                    {{- lib.render_time_dimension_projection('original_table') }}
+                FROM {{ lib.render_target_table() }} original_table
+                {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+            ) analyzed_table
+        LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+        ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+        {{- lib.render_where_clause() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            CAST( 100.0 * SUM(
+                CASE
+                    WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                        THEN 0
+                    ELSE 1
+                END
+            ) AS DOUBLE) / COUNT(*) AS actual_value,
+            time_period,
+            time_period_utc
+            FROM (
+                SELECT
+                    original_table.*,
+            DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+            CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                FROM ""."<target_schema>"."<target_table>" original_table
+            ) analyzed_table
+        LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+        ON analyzed_table."target_column" = foreign_table."customer_id"
+        GROUP BY time_period, time_period_utc
+        ORDER BY time_period, time_period_utc
+        ```
 
   
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
@@ -5775,6 +6371,75 @@ Expand the *Configure with data grouping* section to see additional examples for
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
             
                 
+            ```
+    ??? example "Trino"
+
+        === "Sensor template for Trino"
+            ```sql+jinja
+            {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_foreign_table(foreign_table) -%}
+            {%- if foreign_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(foreign_table) -}}
+            {%- else -%}
+               {{ foreign_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value
+                {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+                FROM (
+                    SELECT
+                        original_table.*
+                        {{- lib.render_data_grouping_projections('original_table') }}
+                        {{- lib.render_time_dimension_projection('original_table') }}
+                    FROM {{ lib.render_target_table() }} original_table
+                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                ) analyzed_table
+            LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for Trino"
+            ```sql
+            SELECT
+                CAST( 100.0 * SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 0
+                        ELSE 1
+                    END
+                ) AS DOUBLE) / COUNT(*) AS actual_value,
+            
+                            analyzed_table.grouping_level_1,
+            
+                            analyzed_table.grouping_level_2
+            ,
+                time_period,
+                time_period_utc
+                FROM (
+                    SELECT
+                        original_table.*,
+                original_table."country" AS grouping_level_1,
+                original_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
+                CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
+                    FROM ""."<target_schema>"."<target_table>" original_table
+                ) analyzed_table
+            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
     
 

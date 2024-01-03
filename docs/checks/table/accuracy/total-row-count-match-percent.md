@@ -411,6 +411,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             COUNT(*) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+        ```
 
 
 
@@ -828,6 +863,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             COUNT(*) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
         ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+        ```
 
 
 
@@ -1244,6 +1314,41 @@ Please expand the database engine name section to see the SQL query rendered by 
             ) AS expected_value,
             COUNT(*) AS actual_value
         FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+        ```
+??? example "Trino"
+
+    === "Sensor template for Trino"
+
+        ```sql+jinja
+        {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+        
+        {%- macro render_referenced_table(referenced_table) -%}
+        {%- if referenced_table.find(".") < 0 -%}
+           {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+        {%- else -%}
+           {{ referenced_table }}
+        {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause() -}}
+        ```
+    === "Rendered SQL for Trino"
+
+        ```sql
+        SELECT
+            (SELECT
+                COUNT(*)
+            FROM ""."<target_schema>"."dim_customer" AS referenced_table
+            ) AS expected_value,
+            COUNT(*) AS actual_value
+        FROM ""."<target_schema>"."<target_table>" AS analyzed_table
         ```
 
 

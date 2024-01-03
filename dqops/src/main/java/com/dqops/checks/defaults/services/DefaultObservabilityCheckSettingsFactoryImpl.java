@@ -133,6 +133,9 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         ColumnNullsDailyMonitoringChecksSpec columnNulls = new ColumnNullsDailyMonitoringChecksSpec();
         columnNulls.setDailyNullsCount(new ColumnNullsCountCheckSpec());
+        columnNulls.setDailyNotNullsCount(new ColumnNotNullsCountCheckSpec() {{
+            setWarning(new MinCountRule1ParametersSpec());
+        }});
         columnNulls.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNulls.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
         columnNulls.setDailyNullsPercentAnomalyStationary(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
@@ -163,7 +166,12 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
-        columnNulls.setProfileNullsCount(new ColumnNullsCountCheckSpec());
+        columnNulls.setProfileNullsCount(new ColumnNullsCountCheckSpec() {{
+            setWarning(new MaxCountRule1ParametersSpec());
+        }});
+        columnNulls.setProfileNotNullsCount(new ColumnNotNullsCountCheckSpec() {{
+            setWarning(new MinCountRule1ParametersSpec());
+        }});
         columnNulls.setProfileNullsPercent(new ColumnNullsPercentCheckSpec());
         defaultSettings.getColumn().setNulls(columnNulls);
 

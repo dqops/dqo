@@ -54,22 +54,6 @@ spec:
 The code sample below shows the content of the  *comparison/between_floats.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -188,22 +172,6 @@ spec:
 The code sample below shows the content of the  *comparison/between_ints.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -317,22 +285,6 @@ spec:
 The code sample below shows the content of the  *comparison/datatype_equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -435,22 +387,6 @@ spec:
 The code sample below shows the content of the  *comparison/diff_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -571,22 +507,6 @@ spec:
 The code sample below shows the content of the  *comparison/equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -678,22 +598,6 @@ spec:
 The code sample below shows the content of the  *comparison/equals_0.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -785,22 +689,6 @@ spec:
 The code sample below shows the content of the  *comparison/equals_1.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -906,22 +794,6 @@ spec:
 The code sample below shows the content of the  *comparison/equals_integer.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1026,22 +898,6 @@ spec:
 The code sample below shows the content of the  *comparison/max.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1145,22 +1001,6 @@ spec:
 The code sample below shows the content of the  *comparison/max_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1264,22 +1104,6 @@ spec:
 The code sample below shows the content of the  *comparison/max_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1388,22 +1212,6 @@ spec:
 The code sample below shows the content of the  *comparison/max_failures.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1530,22 +1338,6 @@ spec:
 The code sample below shows the content of the  *comparison/max_missing.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1653,22 +1445,6 @@ spec:
 The code sample below shows the content of the  *comparison/max_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1774,22 +1550,6 @@ spec:
 The code sample below shows the content of the  *comparison/max_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -1895,22 +1655,6 @@ spec:
 The code sample below shows the content of the  *comparison/min.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -2016,22 +1760,6 @@ spec:
 The code sample below shows the content of the  *comparison/min_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -2135,22 +1863,6 @@ spec:
 The code sample below shows the content of the  *comparison/min_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -2256,22 +1968,6 @@ spec:
 The code sample below shows the content of the  *comparison/min_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
@@ -2365,22 +2061,6 @@ spec:
 The code sample below shows the content of the  *comparison/value_changed.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
-#
-# Copyright © 2021 DQOps (support@dqops.com)
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-
 from datetime import datetime
 from typing import Sequence
 
