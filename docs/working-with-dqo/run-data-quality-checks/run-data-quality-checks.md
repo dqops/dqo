@@ -12,12 +12,13 @@ For more information about [different categories of checks, see DQOps concepts s
 ## Run data quality checks using the user interface
 
 1. In DQOps user interface navigate to the check section **Profiling**, **Monitoring checks** or **Partition checks** at the top of the screen.
-    To learn more about [different types of checks go to the concept section](../../../dqo-concepts/checks/#types-of-checks). 
+    To learn more about [different types of checks go to the concept section](../../dqo-concepts/checks/index.md#types-of-checks). 
 
     ![Navigate to check section](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/navigate-to-the-check-section2.png)
    
 2. On the tree view on the left, select a table or column of interest by expanding the connection.
-    This will open a **Check editor** screen when you can work with checks. Check out the Concept section to learn more about the [Check editor screen](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This will open a **Check editor** screen when you can work with checks. 
+    Check out the Concept section to learn more about the [Check editor screen](../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
     ![Select a table or column of interest](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/select-a-table-or-colum-of-interest2.png)
    
@@ -26,9 +27,9 @@ For more information about [different categories of checks, see DQOps concepts s
     (only in Profiling section), or preview tables (only in Profiling section).
 
     The table with data quality checks contains a list of checks divided into different data quality subcategories that you
-    can expand and collapse by clicking on an arrow. [Learn more about the different check subcategories.](../../../dqo-concepts/checks/#categories-of-checks)
+    can expand and collapse by clicking on an arrow. [Learn more about the different check categories.](../../dqo-concepts/checks/index.md#categories-of-checks)
 
-    The right side of the table allows setting different threshold levels (severity levels). [Lear more about threshold levels ](../../../dqo-concepts/checks/#severity-levels)
+    The right side of the table allows setting different threshold levels (severity levels). [Learn more about threshold levels ](../../dqo-concepts/checks/index.md#issue-severity-levels)
 
 
 3. Enable the check of interest by clicking the switch button next to the name of the check in the list on the right.
@@ -37,7 +38,7 @@ For more information about [different categories of checks, see DQOps concepts s
 
 4. Set the threshold levels or leave default values. Set parameters if the check has any. Click the **Save** button in the upper right corner.
     
-    You can read more about [threshold severity levels in DQOps concepts section]((../../../dqo-concepts/checks/#severity-levels)).
+    You can read more about [threshold severity levels in DQOps concepts section](../../dqo-concepts/checks/index.md#issue-severity-levels).
 
     ![Set threshold levels](https://dqops.com/docs/images/working-with-dqo/run-data-quality-checks/set-threshold-levels2.png)
 
@@ -85,7 +86,7 @@ To learn more about partition checks, go to [DQOps concepts section](../../dqo-c
 
 To run partition checks you need to configure a date or datetime columns which will be used as the time partitioning key for the table.
 
-To configure the date or datetime colum:
+To configure the date or datetime column:
 
 1. Go to the **Data Sources** section.
 
@@ -181,8 +182,8 @@ To add and run data quality checks using the DQOps Shell, follow the steps below
     dqo> check run
     ```
    
-    You can execute the check run for the whole connection, table or specyfic check type using additional parameters. 
-    For more details check the [CLI section](../../command-line-interface/check.md/#dqo-check-run)
+    You can execute the check run for the whole connection, table or specific check type using additional parameters. 
+    For more details check the [CLI section](../../command-line-interface/check.md#dqo-check-run)
 
     You should see the table with the results similar to the one below.
  
@@ -241,7 +242,7 @@ The date or datetime column for partition checks and the event and ingestion tim
 the appropriate parameters to the YAML configuration file.
 
 Below is an example of the YAML file showing sample configuration with set event timestamps column `event_timestamp_column`,
-ingestion timestamps column `ingestion_timestamp_column` and datetime column for partition checks `partitioned_checks_timestamp_source`. 
+ingestion timestamps column `ingestion_timestamp_column` and datetime column for partition checks `partition_by_column`. 
 
 ``` yaml hl_lines="7-10"
 apiVersion: dqo/v1
@@ -253,7 +254,7 @@ spec:
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
-    partitioned_checks_timestamp_source: event_timestamp
+    partition_by_column: event_timestamp
   columns:
     target_column:
       partition_checks:
