@@ -25,11 +25,11 @@ import org.springframework.beans.factory.BeanFactory;
 import java.util.Map;
 
 /**
- * Object mother for a testable spark connection spec that provides access to the sandbox database.
+ * Object mother for a testable Databricks connection spec that provides access to the sandbox database.
  */
 public class DatabricksConnectionSpecObjectMother {
     /**
-     * Connection name to spark.
+     * Connection name to databricks.
      */
     public static final String CONNECTION_NAME = "databricks_connection";
 
