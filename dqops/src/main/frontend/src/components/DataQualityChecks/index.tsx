@@ -318,7 +318,6 @@ const DataQualityChecks = ({
     }));
     return customCategory ?? [];
   };
-  console.log(checkResultsOverview);
 
   return (
     <div
