@@ -55,10 +55,16 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
-        HikariConfig hikariConfig = new HikariConfig();
-        ConnectionSpec connectionSpec = this.getConnectionSpec();
-        TrinoParametersSpec trinoSpec = connectionSpec.getTrino();
+        TrinoParametersSpec trinoSpec = this.getConnectionSpec().getTrino();
+        switch (trinoSpec.getTrinoEngineType()){
+            case trino: return makeHikariConfigForTrino(trinoSpec, secretValueLookupContext);
+            case athena: return makeHikariConfigForAthena(trinoSpec, secretValueLookupContext);
+            default: throw new RuntimeException("Cannot create hikari config. Unsupported enum: " + trinoSpec.getTrinoEngineType());
+        }
+    }
 
+    private HikariConfig makeHikariConfigForTrino(TrinoParametersSpec trinoSpec, SecretValueLookupContext secretValueLookupContext){
+        HikariConfig hikariConfig = new HikariConfig();
         String host = this.getSecretValueProvider().expandValue(trinoSpec.getHost(), secretValueLookupContext);
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:trino://");
@@ -94,6 +100,45 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         if (trinoSpec.getProperties() != null) {
             dataSourceProperties.putAll(trinoSpec.getProperties());
         }
+        hikariConfig.setDataSourceProperties(dataSourceProperties);
+        return hikariConfig;
+    }
+
+    private HikariConfig makeHikariConfigForAthena(TrinoParametersSpec trinoSpec, SecretValueLookupContext secretValueLookupContext){
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl("jdbc:athena://");
+
+        Properties dataSourceProperties = new Properties();
+        if (trinoSpec.getAthenaProperties() != null) {
+            dataSourceProperties.putAll(trinoSpec.getAthenaProperties());
+        }
+
+        String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(region)){
+            dataSourceProperties.put("Region", region);
+        }
+
+        String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaCatalog(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(catalog)){
+            dataSourceProperties.put("Catalog", catalog);
+        }
+
+        String database = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaDatabase(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(database)){
+            dataSourceProperties.put("Database", database);
+        }
+
+        String outputLocation = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaOutputLocation(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(outputLocation)){
+            dataSourceProperties.put("OutputLocation", outputLocation);
+        }
+
+        String workgroup = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaWorkGroup(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(workgroup)){
+            dataSourceProperties.put("Workgroup", workgroup);
+        }
+//        connectionParameters.setProperty("CredentialsProvider","DefaultChain");
+
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 
         return hikariConfig;

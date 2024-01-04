@@ -105,6 +105,18 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             connectionSpec.setTrino(trinoSpec);
         }
 
+        TrinoEngineType trinoEngineType = terminalReader.promptEnum("Trino engine type (--trino-engine)", TrinoEngineType.class, null, false);
+//        String trinoEngine = terminalReader.prompt("Trino engine type (--trino-engine)", "${TRINO_ENGINE}", true);
+        trinoSpec.setTrinoEngineType(trinoEngineType);
+
+        switch (trinoEngineType){
+            case trino -> promptForTrinoConnectionParameters(trinoSpec, isHeadless, terminalReader);
+            case athena -> promptForAthenaConnectionParameters(trinoSpec, isHeadless, terminalReader);
+        }
+
+    }
+
+    private void promptForTrinoConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
         if (Strings.isNullOrEmpty(trinoSpec.getHost())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-host");
@@ -144,6 +156,44 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
 //
 //            trinoSpec.setPassword(terminalReader.prompt("Trino user password (--trino-password)", "${TRINO_PASSWORD}", false));
 //        }
+    }
+
+    private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaRegion())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-region");
+            }
+            trinoSpec.setAthenaRegion(terminalReader.prompt(" (--athena-region)", "${ATHENA_REGION}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaCatalog())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-catalog");
+            }
+            trinoSpec.setAthenaCatalog(terminalReader.prompt(" (--athena-catalog)", "${ATHENA_CATALOG}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaDatabase())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-database");
+            }
+            trinoSpec.setAthenaDatabase(terminalReader.prompt(" (--athena-database)", "${ATHENA_DATABASE}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaWorkGroup())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-work-group");
+            }
+            trinoSpec.setAthenaWorkGroup(terminalReader.prompt(" (--athena-work-group)", "${ATHENA_WORK_GROUP}", false));
+        }
+
+        if (Strings.isNullOrEmpty(trinoSpec.getAthenaOutputLocation())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--athena-output-location");
+            }
+            trinoSpec.setAthenaOutputLocation(terminalReader.prompt(" (--athena-output-location)", "${ATHENA_OUTPUT_LOCATION}", false));
+        }
+
     }
 
     /**
