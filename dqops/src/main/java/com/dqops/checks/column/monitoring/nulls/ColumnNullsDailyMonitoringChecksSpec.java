@@ -45,6 +45,9 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
             put("daily_nulls_count", o -> o.dailyNullsCount);
             put("daily_nulls_percent", o -> o.dailyNullsPercent);
 
+            put("daily_not_nulls_count", o -> o.dailyNotNullsCount);
+            put("daily_not_nulls_percent", o -> o.dailyNotNullsPercent);
+
             put("daily_nulls_percent_anomaly_stationary_30_days", o ->o.dailyNullsPercentAnomalyStationary30Days);
             put("daily_nulls_percent_anomaly_stationary", o ->o.dailyNullsPercentAnomalyStationary);
 
@@ -52,17 +55,20 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
             put("daily_nulls_percent_change_yesterday", o ->o.dailyNullsPercentChangeYesterday);
             put("daily_nulls_percent_change_7_days", o ->o.dailyNullsPercentChange7Days);
             put("daily_nulls_percent_change_30_days", o ->o.dailyNullsPercentChange30Days);
-            
-            put("daily_not_nulls_count", o -> o.dailyNotNullsCount);
-            put("daily_not_nulls_percent", o -> o.dailyNotNullsPercent);
         }
     };
 
-    @JsonPropertyDescription("Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNullsCountCheckSpec dailyNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec dailyNullsPercent;
+
+    @JsonPropertyDescription("Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNotNullsCountCheckSpec dailyNotNullsCount;
+
+    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNotNullsPercentCheckSpec dailyNotNullsPercent;
 
     @JsonProperty("daily_nulls_percent_anomaly_stationary_30_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.")
@@ -84,12 +90,6 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     @JsonProperty("daily_nulls_percent_change_30_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
     private ColumnChangeNullPercentSince30DaysCheckSpec dailyNullsPercentChange30Days;
-
-    @JsonPropertyDescription("Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNotNullsCountCheckSpec dailyNotNullsCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNotNullsPercentCheckSpec dailyNotNullsPercent;
 
     /**
      * Returns nulls count check specification.
@@ -125,6 +125,42 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyNullsPercent, dailyNullsPercent));
         this.dailyNullsPercent = dailyNullsPercent;
         propagateHierarchyIdToField(dailyNullsPercent, "daily_nulls_percent");
+    }
+
+    /**
+     * Returns not nulls count check specification.
+     * @return Not nulls count check specification.
+     */
+    public ColumnNotNullsCountCheckSpec getDailyNotNullsCount() {
+        return dailyNotNullsCount;
+    }
+
+    /**
+     * Sets a new definition of a not nulls count check.
+     * @param dailyNotNullsCount Not nulls count check specification.
+     */
+    public void setDailyNotNullsCount(ColumnNotNullsCountCheckSpec dailyNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyNotNullsCount, dailyNotNullsCount));
+        this.dailyNotNullsCount = dailyNotNullsCount;
+        propagateHierarchyIdToField(dailyNotNullsCount, "daily_not_nulls_count");
+    }
+
+    /**
+     * Returns a not nulls percent check specification.
+     * @return Not nulls percent check specification.
+     */
+    public ColumnNotNullsPercentCheckSpec getDailyNotNullsPercent() {
+        return dailyNotNullsPercent;
+    }
+
+    /**
+     * Sets a new definition of a not nulls percent check.
+     * @param dailyNotNullsPercent Not nulls percent check specification.
+     */
+    public void setDailyNotNullsPercent(ColumnNotNullsPercentCheckSpec dailyNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNotNullsPercent, dailyNotNullsPercent));
+        this.dailyNotNullsPercent = dailyNotNullsPercent;
+        propagateHierarchyIdToField(dailyNotNullsPercent, "daily_not_nulls_percent");
     }
 
     /**
@@ -235,42 +271,6 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
         propagateHierarchyIdToField(dailyNullsPercentChange30Days, "daily_nulls_percent_change_30_days");
     }
     
-    /**
-     * Returns not nulls count check specification.
-     * @return Not nulls count check specification.
-     */
-    public ColumnNotNullsCountCheckSpec getDailyNotNullsCount() {
-        return dailyNotNullsCount;
-    }
-
-    /**
-     * Sets a new definition of a not nulls count check.
-     * @param dailyNotNullsCount Not nulls count check specification.
-     */
-    public void setDailyNotNullsCount(ColumnNotNullsCountCheckSpec dailyNotNullsCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyNotNullsCount, dailyNotNullsCount));
-        this.dailyNotNullsCount = dailyNotNullsCount;
-        propagateHierarchyIdToField(dailyNotNullsCount, "daily_not_nulls_count");
-    }
-
-    /**
-     * Returns a not nulls percent check specification.
-     * @return Not nulls percent check specification.
-     */
-    public ColumnNotNullsPercentCheckSpec getDailyNotNullsPercent() {
-        return dailyNotNullsPercent;
-    }
-
-    /**
-     * Sets a new definition of a not nulls percent check.
-     * @param dailyNotNullsPercent Not nulls percent check specification.
-     */
-    public void setDailyNotNullsPercent(ColumnNotNullsPercentCheckSpec dailyNotNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNotNullsPercent, dailyNotNullsPercent));
-        this.dailyNotNullsPercent = dailyNotNullsPercent;
-        propagateHierarchyIdToField(dailyNotNullsPercent, "daily_not_nulls_percent");
-    }
-
     /**
      * Returns the child map on the spec class with all fields.
      *

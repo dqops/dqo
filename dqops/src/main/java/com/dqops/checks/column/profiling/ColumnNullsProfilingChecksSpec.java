@@ -44,7 +44,10 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         {
             put("profile_nulls_count", o -> o.profileNullsCount);
             put("profile_nulls_percent", o -> o.profileNullsPercent);
-            
+
+            put("profile_not_nulls_count", o -> o.profileNotNullsCount);
+            put("profile_not_nulls_percent", o -> o.profileNotNullsPercent);
+
             put("profile_nulls_percent_anomaly_stationary_30_days", o ->o.profileNullsPercentAnomalyStationary30Days);
             put("profile_nulls_percent_anomaly_stationary", o ->o.profileNullsPercentAnomalyStationary);
             
@@ -52,17 +55,20 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_nulls_percent_change_yesterday", o ->o.profileNullsPercentChangeYesterday);
             put("profile_nulls_percent_change_7_days", o ->o.profileNullsPercentChange7Days);
             put("profile_nulls_percent_change_30_days", o ->o.ProfileNullsPercentChange30Days);
-            
-            put("profile_not_nulls_count", o -> o.profileNotNullsCount);
-            put("profile_not_nulls_percent", o -> o.profileNotNullsPercent);
         }
     };
 
-    @JsonPropertyDescription("Detects columns with any null values when the max_count=0. Verifies that the number of null values in a column does not exceed the maximum accepted count.")
+    @JsonPropertyDescription("Detects that a column has any null values (with the rule threshold max_count=0). Verifies that the number of null values in a column does not exceed the maximum accepted count.")
     private ColumnNullsCountCheckSpec profileNullsCount;
 
-    @JsonPropertyDescription("Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.")
+    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage.")
     private ColumnNullsPercentCheckSpec profileNullsPercent;
+
+    @JsonPropertyDescription("Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
+    private ColumnNotNullsCountCheckSpec profileNotNullsCount;
+
+    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage.")
+    private ColumnNotNullsPercentCheckSpec profileNotNullsPercent;
 
     @JsonProperty("profile_nulls_percent_anomaly_stationary_30_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.")
@@ -85,11 +91,6 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
     private ColumnChangeNullPercentSince30DaysCheckSpec ProfileNullsPercentChange30Days;
 
-    @JsonPropertyDescription("Detects empty columns with the min_count=0 rule. Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
-    private ColumnNotNullsCountCheckSpec profileNotNullsCount;
-
-    @JsonPropertyDescription("Verifies that the percent of not null values in a column does not exceed the minimum accepted percentage.")
-    private ColumnNotNullsPercentCheckSpec profileNotNullsPercent;
 
     /**
      * Returns a nulls count check specification.
@@ -126,7 +127,43 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.profileNullsPercent = profileNullsPercent;
         propagateHierarchyIdToField(profileNullsPercent, "profile_nulls_percent");
     }
-    
+
+    /**
+     * Returns a not nulls count check specification.
+     * @return Not nulls count check specification.
+     */
+    public ColumnNotNullsCountCheckSpec getProfileNotNullsCount() {
+        return profileNotNullsCount;
+    }
+
+    /**
+     * Sets a new not nulls count check  specification.
+     * @param profileNotNullsCount Not nulls count check specification.
+     */
+    public void setProfileNotNullsCount(ColumnNotNullsCountCheckSpec profileNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.profileNotNullsCount, profileNotNullsCount));
+        this.profileNotNullsCount = profileNotNullsCount;
+        propagateHierarchyIdToField(profileNotNullsCount, "profile_not_nulls_count");
+    }
+
+    /**
+     * Returns a not nulls percent check specification.
+     * @return Not nulls percent check specification.
+     */
+    public ColumnNotNullsPercentCheckSpec getProfileNotNullsPercent() {
+        return profileNotNullsPercent;
+    }
+
+    /**
+     * Sets a new not null percent check specification.
+     * @param profileNotNullsPercent Not nulls percent check specification.
+     */
+    public void setProfileNotNullsPercent(ColumnNotNullsPercentCheckSpec profileNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNotNullsPercent, profileNotNullsPercent));
+        this.profileNotNullsPercent = profileNotNullsPercent;
+        propagateHierarchyIdToField(profileNotNullsPercent, "profile_not_nulls_percent");
+    }
+
     /**
      * Returns a null percent value anomaly 30 days check specification.
      * @return Null percent value anomaly 30 days check specification.
@@ -233,43 +270,6 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.ProfileNullsPercentChange30Days, profileNullsPercentChange30Days));
         this.ProfileNullsPercentChange30Days = profileNullsPercentChange30Days;
         propagateHierarchyIdToField(profileNullsPercentChange30Days, "profile_nulls_percent_change_30_days");
-    }
-
-    /**
-     * Returns a not nulls count check specification.
-     * @return Not nulls count check specification.
-     */
-    public ColumnNotNullsCountCheckSpec getProfileNotNullsCount() {
-        return profileNotNullsCount;
-    }
-
-    /**
-     * Sets a new not nulls count check  specification.
-     * @param profileNotNullsCount Not nulls count check specification.
-     */
-    public void setProfileNotNullsCount(ColumnNotNullsCountCheckSpec profileNotNullsCount) {
-        this.setDirtyIf(!Objects.equals(this.profileNotNullsCount, profileNotNullsCount));
-        this.profileNotNullsCount = profileNotNullsCount;
-        propagateHierarchyIdToField(profileNotNullsCount, "profile_not_nulls_count");
-    }
-
-
-    /**
-     * Returns a not nulls percent check specification.
-     * @return Not nulls percent check specification.
-     */
-    public ColumnNotNullsPercentCheckSpec getProfileNotNullsPercent() {
-        return profileNotNullsPercent;
-    }
-
-    /**
-     * Sets a new not null percent check specification.
-     * @param profileNotNullsPercent Not nulls percent check specification.
-     */
-    public void setProfileNotNullsPercent(ColumnNotNullsPercentCheckSpec profileNotNullsPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileNotNullsPercent, profileNotNullsPercent));
-        this.profileNotNullsPercent = profileNotNullsPercent;
-        propagateHierarchyIdToField(profileNotNullsPercent, "profile_not_nulls_percent");
     }
 
     /**
