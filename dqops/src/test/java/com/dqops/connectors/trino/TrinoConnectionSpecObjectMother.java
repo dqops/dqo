@@ -70,8 +70,10 @@ public class TrinoConnectionSpecObjectMother {
                 setPort(testContainer.getMappedPort(TRINO_PORT).toString());
                 setDatabase(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
+                setTrinoEngineType(TrinoEngineType.trino);
             }});
         }};
+
         return connectionSpec;
     }
 

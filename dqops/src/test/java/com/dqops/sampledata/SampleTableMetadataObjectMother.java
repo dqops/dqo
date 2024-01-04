@@ -152,8 +152,22 @@ public class SampleTableMetadataObjectMother {
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataForCsvFile(String csvFileName, ProviderType providerType) {
+        ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType);
+        SampleTableMetadata sampleTableMetadata = createSampleTableMetadataForCsvFile(csvFileName, connectionSpecRaw);
+        return sampleTableMetadata;
+    }
+
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param csvFileName Sample data CSV file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForCsvFile(String csvFileName, ConnectionSpec connectionSpecRaw) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
-        ConnectionSpec connectionSpecRaw = makeConnectionSpecForProvider(providerType); // in order to support different database versions, we can accept a ConnectionSpec as a parameter
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         String targetSchema = getSchemaForProvider(providerType);
