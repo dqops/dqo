@@ -18,15 +18,12 @@ import { JobApiClient } from '../../services/apiClient';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { CheckTypes, ROUTES } from '../../shared/routes';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Checkbox from '../../components/Checkbox';
 import { IconButton } from '@material-tailwind/react';
 
 interface ITableColumnsBodyProps {
-  connection: string;
-  schema: string;
-  table: string;
   columns: MyData[];
   objectStates: any;
   statistics: any;
@@ -36,9 +33,6 @@ interface ITableColumnsBodyProps {
 }
 
 export default function TableColumnsBody({
-  connection,
-  schema,
-  table,
   columns,
   objectStates,
   statistics,
@@ -47,6 +41,17 @@ export default function TableColumnsBody({
   showDataStreamButtonFunc
 }: ITableColumnsBodyProps) {
   const history = useHistory();
+    const {
+      connection,
+      schema,
+      table,
+  checkTypes
+  }: {
+    connection: string;
+    schema: string;
+    table: string;
+    checkTypes: CheckTypes;
+  } = useParams();
   const { userProfile, job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
   );
@@ -71,22 +76,22 @@ export default function TableColumnsBody({
 
   const navigate = (column: string) => {
     const url = ROUTES.COLUMN_LEVEL_PAGE(
-      CheckTypes.PROFILING,
+      checkTypes,
       connection,
       schema,
       table,
       column,
-      'statistics'
+      checkTypes === CheckTypes.PROFILING ? 'statistics' : 'daily'
     );
     const value = ROUTES.COLUMN_LEVEL_VALUE(
-      'profiling',
+      checkTypes,
       connection,
       schema,
       table,
       column
     );
     dispatch(
-      addFirstLevelTab(CheckTypes.PROFILING, {
+      addFirstLevelTab(checkTypes, {
         url,
         value,
         state: {},
