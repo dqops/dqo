@@ -1,6 +1,6 @@
-**data ingestion delay** checks  
+**data ingestion delay** checks
 
-**Description**  
+**Description**
 Table-level check that calculates time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse / data lake.
  The most recent row is identified by finding the most recent (maximum) value of the timestamp column that should contain the last modification timestamp from the source.
  The timestamp when the row was loaded is identified by the most recent (maximum) value a timestamp column that was filled by the data pipeline, for example: &quot;loaded_at&quot;, &quot;updated_at&quot;, etc.
@@ -9,24 +9,25 @@ Table-level check that calculates time difference between the most recent row in
 
 ___
 
-## **profile data ingestion delay**  
-  
-**Check description**  
-Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
-  
+## **profile data ingestion delay**
+
+
+**Check description**
+Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_data_ingestion_delay|profiling| |Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_data_ingestion_delay|profiling| |Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_data_ingestion_delay
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_data_ingestion_delay
@@ -44,23 +45,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_data_ingestion_delay
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    timeliness:
-      profile_data_ingestion_delay:
-        warning:
-          max_days: 1.0
-        error:
-          max_days: 2.0
-        fatal:
-          max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -93,7 +80,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -804,12 +791,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-19 36-41"
@@ -857,7 +844,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1597,24 +1584,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily data ingestion delay**  
-  
-**Check description**  
-Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
-  
+## **daily data ingestion delay**
+
+
+**Check description**
+Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_data_ingestion_delay|monitoring|daily|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_data_ingestion_delay|monitoring|daily|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_data_ingestion_delay
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_data_ingestion_delay
@@ -1632,24 +1620,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_data_ingestion_delay
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      timeliness:
-        daily_data_ingestion_delay:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1683,7 +1656,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2394,12 +2367,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-19 37-42"
@@ -2448,7 +2421,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3188,24 +3161,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly data ingestion delay**  
-  
-**Check description**  
-Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
-  
+## **monthly data ingestion delay**
+
+
+**Check description**
+Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_data_ingestion_delay|monitoring|monthly|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_data_ingestion_delay|monitoring|monthly|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_data_ingestion_delay
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_data_ingestion_delay
@@ -3223,24 +3197,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_data_ingestion_delay
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      timeliness:
-        monthly_data_ingestion_delay:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3274,7 +3233,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3985,12 +3944,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-19 37-42"
@@ -4039,7 +3998,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4779,24 +4738,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition data ingestion delay**  
-  
-**Check description**  
-Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
-  
+## **daily partition data ingestion delay**
+
+
+**Check description**
+Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_data_ingestion_delay|partitioned|daily|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_data_ingestion_delay|partitioned|daily|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_data_ingestion_delay
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_data_ingestion_delay
@@ -4814,24 +4774,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_data_ingestion_delay
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    daily:
-      timeliness:
-        daily_partition_data_ingestion_delay:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4871,7 +4816,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -5586,12 +5531,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-20 43-48"
@@ -5646,7 +5591,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -6384,24 +6329,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition data ingestion delay**  
-  
-**Check description**  
-Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp  
-  
+## **monthly partition data ingestion delay**
+
+
+**Check description**
+Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_data_ingestion_delay|partitioned|monthly|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_data_ingestion_delay|partitioned|monthly|Timeliness|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_data_ingestion_delay
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_data_ingestion_delay
@@ -6419,24 +6365,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_data_ingestion_delay
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    monthly:
-      timeliness:
-        monthly_partition_data_ingestion_delay:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -6476,7 +6407,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -7191,12 +7122,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-20 43-48"
@@ -7251,7 +7182,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)
+    [data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors.md#data-ingestion-delay)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

@@ -18,6 +18,7 @@ package com.dqops.utils.docs.cli;
 import com.dqops.cli.commands.ICommand;
 import com.google.api.client.util.Lists;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.parquet.Strings;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 

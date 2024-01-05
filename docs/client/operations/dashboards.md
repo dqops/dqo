@@ -1,22 +1,22 @@
-Provides access to data quality dashboards  
+Provides access to data quality dashboards
 
 
-___  
-## get_all_dashboards  
-Returns a list of root folders with dashboards  
+___
+## get_all_dashboards
+Returns a list of root folders with dashboards
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_all_dashboards.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/dashboards  
+http://localhost:8888/api/dashboards
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dashboards_folder_spec||List[[DashboardsFolderSpec](../../models/dashboards/#dashboardsfolderspec)]|
+|dashboards_folder_spec||List[[DashboardsFolderSpec](../../models/dashboards.md#dashboardsfolderspec)]|
 
 
 
@@ -25,10 +25,10 @@ http://localhost:8888/api/dashboards
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/dashboards^
 		-H "Accept: application/json"
@@ -36,7 +36,7 @@ http://localhost:8888/api/dashboards
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
@@ -54,7 +54,7 @@ http://localhost:8888/api/dashboards
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
@@ -74,7 +74,7 @@ http://localhost:8888/api/dashboards
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
@@ -95,7 +95,7 @@ http://localhost:8888/api/dashboards
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_all_dashboards
@@ -120,34 +120,34 @@ http://localhost:8888/api/dashboards
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ { }, { }, { } ]
     ```
 
 
-___  
-## get_dashboard_level_1  
-Returns a single dashboard in the tree of folder with a temporary authenticated url  
+___
+## get_dashboard_level_1
+Returns a single dashboard in the tree of folder with a temporary authenticated url
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_1.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/dashboards/{folder}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](../../models/dashboards.md#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards.md#authenticateddashboardmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |folder|Root folder name|string|:material-check-bold:|
@@ -159,10 +159,10 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_0/sample_dashboard^
 		-H "Accept: application/json"
@@ -170,7 +170,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
@@ -190,7 +190,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
@@ -212,7 +212,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
@@ -235,7 +235,7 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_1
@@ -262,34 +262,34 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```
 
 
-___  
-## get_dashboard_level_2  
-Returns a single dashboard in the tree of folders with a temporary authenticated url  
+___
+## get_dashboard_level_2
+Returns a single dashboard in the tree of folders with a temporary authenticated url
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_2.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](../../models/dashboards.md#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards.md#authenticateddashboardmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |folder_1|Root folder name|string|:material-check-bold:|
@@ -302,10 +302,10 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_dashboard^
 		-H "Accept: application/json"
@@ -313,7 +313,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
@@ -334,7 +334,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
@@ -357,7 +357,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
@@ -381,7 +381,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_2
@@ -409,34 +409,34 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```
 
 
-___  
-## get_dashboard_level_3  
-Returns a single dashboard in the tree of folders with a temporary authenticated url  
+___
+## get_dashboard_level_3
+Returns a single dashboard in the tree of folders with a temporary authenticated url
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_3.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](../../models/dashboards.md#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards.md#authenticateddashboardmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |folder_1|Root folder name|string|:material-check-bold:|
@@ -450,10 +450,10 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_dashboard^
 		-H "Accept: application/json"
@@ -461,7 +461,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
@@ -483,7 +483,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
@@ -507,7 +507,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
@@ -532,7 +532,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_3
@@ -561,34 +561,34 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```
 
 
-___  
-## get_dashboard_level_4  
-Returns a single dashboard in the tree of folders with a temporary authenticated url  
+___
+## get_dashboard_level_4
+Returns a single dashboard in the tree of folders with a temporary authenticated url
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_4.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{dashboardName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](../../models/dashboards.md#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards.md#authenticateddashboardmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |folder_1|Root folder name|string|:material-check-bold:|
@@ -603,10 +603,10 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_dashboard^
 		-H "Accept: application/json"
@@ -614,7 +614,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
@@ -637,7 +637,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
@@ -662,7 +662,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
@@ -688,7 +688,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_4
@@ -718,34 +718,34 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```
 
 
-___  
-## get_dashboard_level_5  
-Returns a single dashboard in the tree of folders with a temporary authenticated url  
+___
+## get_dashboard_level_5
+Returns a single dashboard in the tree of folders with a temporary authenticated url
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/dashboards/get_dashboard_level_5.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{folder5}/{dashboardName}  
+http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{folder5}/{dashboardName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[authenticated_dashboard_model](../../models/dashboards/#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards/#authenticateddashboardmodel)|
+|[authenticated_dashboard_model](../../models/dashboards.md#authenticateddashboardmodel)||[AuthenticatedDashboardModel](../../models/dashboards.md#authenticateddashboardmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |folder_1|Root folder name|string|:material-check-bold:|
@@ -761,10 +761,10 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_folder_5/sample_dashboard^
 		-H "Accept: application/json"
@@ -772,7 +772,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
@@ -796,7 +796,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
@@ -822,7 +822,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
@@ -849,7 +849,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.dashboards import get_dashboard_level_5
@@ -880,7 +880,7 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```

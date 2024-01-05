@@ -123,7 +123,7 @@ Now let's run monitoring checks.
 2. Click the **Run check** icon next to daily_row_count check. This check verifies that the number of rows in the table
     does not exceed the minimum accepted count set as the threshold level which is 1 in this case.
    
-    You can read more about [threshold severity levels in DQOps concepts section](../../dqo-concepts/checks/#severity-levels).
+    You can read more about [threshold severity levels in DQOps concepts section](../../dqo-concepts/checks.md#severity-levels).
 
     ![Running check](https://dqops.com/docs/images/getting-started/run-daily-row-count-check.png)
     

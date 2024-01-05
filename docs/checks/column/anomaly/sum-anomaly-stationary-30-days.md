@@ -1,28 +1,29 @@
-**sum anomaly stationary 30 days** checks  
+**sum anomaly stationary 30 days** checks
 
-**Description**  
+**Description**
 Column level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.
 
 ___
 
-## **daily partition sum anomaly stationary 30 days**  
-  
-**Check description**  
-Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.  
-  
+## **daily partition sum anomaly stationary 30 days**
+
+
+**Check description**
+Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sum_anomaly_stationary_30_days|partitioned|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average-30-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_sum_anomaly_stationary_30_days|partitioned|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)|[anomaly_stationary_percentile_moving_average_30_days](../../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average-30-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_sum_anomaly_stationary_30_days
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_sum_anomaly_stationary_30_days
@@ -40,33 +41,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_sum_anomaly_stationary_30_days
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        daily:
-          anomaly:
-            daily_partition_sum_anomaly_stationary_30_days:
-              warning:
-                anomaly_percent: 0.1
-              error:
-                anomaly_percent: 0.1
-              fatal:
-                anomaly_percent: 0.1
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="14-23"
+
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -85,12 +69,6 @@ spec:
                 anomaly_percent: 0.1
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -100,7 +78,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -430,22 +408,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-22 46-51"
+    ```yaml hl_lines="10-20 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -473,12 +449,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     anomaly_percent: 0.1
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -493,7 +463,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+    [sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

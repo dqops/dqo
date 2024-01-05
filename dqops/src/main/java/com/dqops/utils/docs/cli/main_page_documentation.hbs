@@ -5,6 +5,6 @@ ___
 ## {{rootCommandName}}
 | Command&nbsp;name | Description |
 |--------------|-------------|
-{{#each commands}} | {{#if (eq qualifiedName "dqo")}} [dqo](./{{rootCommandName}}/#dqo){{else}}[dqo {{qualifiedName}}](./{{rootCommandName}}/#dqo-{{qualifiedName}}){{/if}} | {{#each description}}{{this}}{{else}}For this command description is not added yet.{{/each}} |
+{{#each commands}} | {{#if (or (eq qualifiedName "") (eq qualifiedName "dqo"))}} [dqo](../{{rootCommandName}}.md#dqo){{else}}[dqo {{qualifiedName}}](../{{rootCommandName}}.md#dqo-{{slugify qualifiedName}}){{/if}} | {{#each description}}{{this}}{{else}}For this command description is not added yet.{{/each}} |
 {{/each}}
 {{/each}}

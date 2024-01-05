@@ -1,30 +1,31 @@
-**table availability** checks  
+**table availability** checks
 
-**Description**  
+**Description**
 Table-level check that verifies that a query can be executed on a table and that the server does not return errors, that the table exists, and that the table is accessible (queryable).
  The actual value (the result of the check) is the number of failures. When the table is accessible and a simple query was executed without errors, the result is 0.0.
  The sensor result (the actual value) 1.0 means that there is a failure. A value higher than 1.0 is stored only in the check result table and it is the number of consecutive failures in following days.
 
 ___
 
-## **profile table availability**  
-  
-**Check description**  
-Verifies availability of a table in a monitored database using a simple query.  
-  
+## **profile table availability**
+
+
+**Check description**
+Verifies availability of a table in a monitored database using a simple query.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_table_availability|profiling| |Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_table_availability|profiling| |Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../../reference/rules/Comparison.md#max-failures)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_table_availability
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_table_availability
@@ -42,32 +43,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_table_availability
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    availability:
-      profile_table_availability:
-        warning:
-          max_failures: 0
-        error:
-          max_failures: 5
-        fatal:
-          max_failures: 10
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-19"
+
+```yaml hl_lines="8-16"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -80,18 +64,12 @@ spec:
           max_failures: 5
         fatal:
           max_failures: 10
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)
+[table_availability](../../../../reference/sensors/table/availability-table-sensors.md#table-availability)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -501,24 +479,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily table availability**  
-  
-**Check description**  
-Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.  
-  
+## **daily table availability**
+
+
+**Check description**
+Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_table_availability|monitoring|daily|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_table_availability|monitoring|daily|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../../reference/rules/Comparison.md#max-failures)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_table_availability
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_table_availability
@@ -536,33 +515,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_table_availability
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      availability:
-        daily_table_availability:
-          warning:
-            max_failures: 0
-          error:
-            max_failures: 5
-          fatal:
-            max_failures: 10
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-20"
+
+```yaml hl_lines="8-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -576,18 +537,12 @@ spec:
             max_failures: 5
           fatal:
             max_failures: 10
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)
+[table_availability](../../../../reference/sensors/table/availability-table-sensors.md#table-availability)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -997,24 +952,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly table availability**  
-  
-**Check description**  
-Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.  
-  
+## **monthly table availability**
+
+
+**Check description**
+Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/Comparison/#max-failures)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_table_availability|monitoring|monthly|Availability|[table_availability](../../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[max_failures](../../../../reference/rules/Comparison.md#max-failures)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_table_availability
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_table_availability
@@ -1032,33 +988,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_table_availability
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      availability:
-        monthly_table_availability:
-          warning:
-            max_failures: 0
-          error:
-            max_failures: 5
-          fatal:
-            max_failures: 10
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-20"
+
+```yaml hl_lines="8-17"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1072,18 +1010,12 @@ spec:
             max_failures: 5
           fatal:
             max_failures: 10
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)
+[table_availability](../../../../reference/sensors/table/availability-table-sensors.md#table-availability)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"

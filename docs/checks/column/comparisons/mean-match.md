@@ -1,29 +1,30 @@
-**mean match** checks  
+**mean match** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
  Compares the mean (average) value for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 ___
 
-## **profile mean match**  
-  
-**Check description**  
-Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.  
-  
+## **profile mean match**
+
+
+**Check description**
+Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_match|profiling| |Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_mean_match|profiling| |Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_mean_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_mean_match
@@ -41,34 +42,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_mean_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      profiling_checks:
-        comparisons:
-          compare_to_source_of_truth_table:
-            reference_column: source_of_truth_column_name
-            profile_mean_match:
-              warning:
-                max_diff_percent: 0.0
-              error:
-                max_diff_percent: 1.0
-              fatal:
-                max_diff_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="24-34"
+
+```yaml hl_lines="21-31"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -98,12 +80,6 @@ spec:
                 max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -116,7 +92,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -450,24 +426,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily mean match**  
-  
-**Check description**  
-Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily mean match**
+
+
+**Check description**
+Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_match|monitoring|daily|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_mean_match|monitoring|daily|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_mean_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_mean_match
@@ -485,35 +462,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_mean_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        daily:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              daily_mean_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="24-35"
+
+```yaml hl_lines="21-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -544,12 +501,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -562,7 +513,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -896,24 +847,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly mean match**  
-  
-**Check description**  
-Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.  
-  
+## **monthly mean match**
+
+
+**Check description**
+Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_mean_match|monitoring|monthly|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_mean_match|monitoring|monthly|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_mean_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_mean_match
@@ -931,35 +883,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_mean_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        monthly:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              monthly_mean_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="24-35"
+
+```yaml hl_lines="21-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -990,12 +922,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -1008,7 +934,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1342,24 +1268,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily partition mean match**  
-  
-**Check description**  
-Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).  
-  
+## **daily partition mean match**
+
+
+**Check description**
+Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_match|partitioned|daily|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_mean_match|partitioned|daily|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_mean_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_mean_match
@@ -1377,35 +1304,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_mean_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        daily:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              daily_partition_mean_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="25-36"
+
+```yaml hl_lines="23-34"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -1437,12 +1345,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -1460,7 +1362,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1798,24 +1700,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly partition mean match**  
-  
-**Check description**  
-Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).  
-  
+## **monthly partition mean match**
+
+
+**Check description**
+Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_mean_match|partitioned|monthly|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_mean_match|partitioned|monthly|Accuracy|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_mean_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_mean_match
@@ -1833,35 +1736,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_mean_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        monthly:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              monthly_partition_mean_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="25-36"
+
+```yaml hl_lines="23-34"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -1893,12 +1777,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -1916,7 +1794,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"

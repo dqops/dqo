@@ -4,11 +4,11 @@
 ```
 column/accuracy/total_average_match_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of the difference in average of a column in a table and average of a column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -17,9 +17,9 @@ Column level sensor that calculates the percentage of the difference in average 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -41,7 +41,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -63,7 +63,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -85,7 +85,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -110,7 +110,7 @@ Column level sensor that calculates the percentage of the difference in average 
     GROUP BY actual_value
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -132,7 +132,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -154,7 +154,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -177,7 +177,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -200,7 +200,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -222,7 +222,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -245,7 +245,7 @@ Column level sensor that calculates the percentage of the difference in average 
     {{- lib.render_where_clause() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -273,11 +273,11 @@ ___
 ```
 column/accuracy/total_max_match_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of the difference in max of a column in a table and max of a column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -286,9 +286,9 @@ Column level sensor that calculates the percentage of the difference in max of a
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -310,7 +310,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -332,7 +332,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -354,7 +354,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -378,7 +378,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     GROUP BY actual_value
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -400,7 +400,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -422,7 +422,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -444,7 +444,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -466,7 +466,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -488,7 +488,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -510,7 +510,7 @@ Column level sensor that calculates the percentage of the difference in max of a
     {{- lib.render_where_clause() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -538,11 +538,11 @@ ___
 ```
 column/accuracy/total_min_match_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of the difference in min of a column in a table and min of a column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -551,9 +551,9 @@ Column level sensor that calculates the percentage of the difference in min of a
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -575,7 +575,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -597,7 +597,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -619,7 +619,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -644,7 +644,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     GROUP BY actual_value
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -666,7 +666,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -688,7 +688,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -710,7 +710,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -732,7 +732,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -754,7 +754,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -776,7 +776,7 @@ Column level sensor that calculates the percentage of the difference in min of a
     {{- lib.render_where_clause() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -804,11 +804,11 @@ ___
 ```
 column/accuracy/total_not_null_count_match_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of the difference in row count of a column in a table and row count of a column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -817,9 +817,9 @@ Column level sensor that calculates the percentage of the difference in row coun
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -841,7 +841,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -863,7 +863,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -885,7 +885,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -910,7 +910,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     GROUP BY actual_value
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -932,7 +932,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -954,7 +954,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -976,7 +976,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -998,7 +998,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -1020,7 +1020,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -1042,7 +1042,7 @@ Column level sensor that calculates the percentage of the difference in row coun
     {{- lib.render_where_clause() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -1070,11 +1070,11 @@ ___
 ```
 column/accuracy/total_sum_match_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of the difference in sum of a column in a table and sum of a column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |referenced_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -1083,9 +1083,9 @@ Column level sensor that calculates the percentage of the difference in sum of a
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -1107,7 +1107,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -1129,7 +1129,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -1151,7 +1151,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -1173,7 +1173,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -1195,7 +1195,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -1217,7 +1217,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -1239,7 +1239,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -1261,7 +1261,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -1283,7 +1283,7 @@ Column level sensor that calculates the percentage of the difference in sum of a
     {{- lib.render_where_clause() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     

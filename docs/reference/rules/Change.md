@@ -6,11 +6,11 @@ ___
 ```
 change/between_change
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value between the provided bounds.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -150,11 +150,11 @@ ___
 ```
 change/between_change_1_day
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value between the provided bounds compared to yesterday.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -314,11 +314,11 @@ ___
 ```
 change/between_change_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value between the provided bounds compared to last month.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -478,11 +478,11 @@ ___
 ```
 change/between_change_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value between the provided bounds compared to last week.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimal accepted change with regards to the previous readout (inclusive).|double| ||
@@ -642,11 +642,11 @@ ___
 ```
 change/between_percent_change
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent between the provided bounds.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
@@ -781,11 +781,11 @@ ___
 ```
 change/between_percent_change_1_day
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent between the provided bounds compared to yesterday.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
@@ -939,11 +939,11 @@ ___
 ```
 change/between_percent_change_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent between the provided bounds compared to last month.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
@@ -1097,11 +1097,11 @@ ___
 ```
 change/between_percent_change_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent between the provided bounds compared to last week.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from_percent|Minimal accepted change relative to the previous readout (inclusive).|double| ||
@@ -1255,11 +1255,11 @@ ___
 ```
 change/change_difference
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to previous readout (inclusive).|double| ||
@@ -1386,11 +1386,11 @@ ___
 ```
 change/change_difference_1_day
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to yesterday.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to a readout 1 day ago (inclusive).|double| ||
@@ -1536,11 +1536,11 @@ ___
 ```
 change/change_difference_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last month.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to a readout 30 days ago (inclusive).|double| ||
@@ -1686,11 +1686,11 @@ ___
 ```
 change/change_difference_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a value within the provided bound compared to last week.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_difference|Maximum accepted absolute difference compared to a readout 7 days ago (inclusive).|double| ||
@@ -1836,11 +1836,11 @@ ___
 ```
 change/change_percent
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to previous readout (inclusive).|double| ||
@@ -1968,11 +1968,11 @@ ___
 ```
 change/change_percent_1_day
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to yesterday.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to a readout 1 day ago (inclusive).|double| ||
@@ -2118,11 +2118,11 @@ ___
 ```
 change/change_percent_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last month.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to a readout 30 days ago (inclusive).|double| ||
@@ -2268,11 +2268,11 @@ ___
 ```
 change/change_percent_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if data quality sensor readout value changed by a percent within the provided bound compared to last week.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Percentage of maximum accepted change compared to a readout 7 days ago (inclusive).|double| ||

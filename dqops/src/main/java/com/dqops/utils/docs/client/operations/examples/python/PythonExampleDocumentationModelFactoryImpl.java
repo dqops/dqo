@@ -136,7 +136,7 @@ public class PythonExampleDocumentationModelFactoryImpl implements PythonExample
                             }
 
                             Type objectsType = Objects.requireNonNullElse(fieldInfo.getGenericDataType(), fieldInfo.getClazz());
-                            fieldTypeModel = reflectionService.getObjectsTypeModel(objectsType, s -> null);
+                            fieldTypeModel = reflectionService.getObjectsTypeModel(objectsType, _s -> null);
                         } catch (IllegalAccessException | InvocationTargetException e) {
                             continue;
                         }

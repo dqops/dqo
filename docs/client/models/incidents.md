@@ -1,10 +1,10 @@
 
-## CheckResultEntryModel  
-Detailed results for a single check. Represent one row in the check results table.  
-  
+## CheckResultEntryModel
+Detailed results for a single check. Represent one row in the check results table.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -13,7 +13,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |check_category|Check category name|string|
 |check_name|Check name|string|
 |check_display_name|Check display name|string|
-|[check_type](../table_comparisons/#CheckType)|Check type|[CheckType](../table_comparisons/#CheckType)|
+|[check_type](../table_comparisons.md#CheckType)|Check type|[CheckType](../table_comparisons.md#CheckType)|
 |actual_value|Actual value|double|
 |expected_value|Expected value|double|
 |warning_lower_bound|Warning lower bound|double|
@@ -26,7 +26,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 |column_name|Column name|string|
 |data_group|Data group name|string|
 |duration_ms|Duration (ms)|integer|
-|[time_gradient](../errors/#timeperiodgradient)|Time gradient|[TimePeriodGradient](../errors/#timeperiodgradient)|
+|[time_gradient](../errors.md#timeperiodgradient)|Time gradient|[TimePeriodGradient](../errors.md#timeperiodgradient)|
 |time_period|Time period|datetime|
 |include_in_kpi|Include in KPI|boolean|
 |include_in_sla|Include in SLA|boolean|
@@ -36,27 +36,27 @@ Detailed results for a single check. Represent one row in the check results tabl
 |table_comparison|Table comparison name|string|
 
 
-___  
+___
 
-## CheckResultSortOrder  
-Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.  
-  
+## CheckResultSortOrder
+Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|checkType<br/>severity<br/>executedAt<br/>sensorName<br/>checkDisplayName<br/>actualValue<br/>checkCategory<br/>checkHash<br/>checkName<br/>dataGroup<br/>expectedValue<br/>timePeriod<br/>qualityDimension<br/>timeGradient<br/>columnName<br/>|
 
-___  
+___
 
-## IncidentDailyIssuesCount  
-A model that stores a daily number of incidents.  
-  
+## IncidentDailyIssuesCount
+A model that stores a daily number of incidents.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -66,15 +66,15 @@ A model that stores a daily number of incidents.
 |total_count|The total count of failed data quality checks on this day.|integer|
 
 
-___  
+___
 
-## IncidentIssueHistogramModel  
+## IncidentIssueHistogramModel
 Model that returns histograms of the data quality issue occurrences related to a data quality incident.
- The dates in the daily histogram are using the default timezone of the DQOps server.  
-  
+ The dates in the daily histogram are using the default timezone of the DQOps server.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -86,27 +86,27 @@ Model that returns histograms of the data quality issue occurrences related to a
 |checks|A map of data quality check names with the most data quality issues related to the incident. The map returns the count of issues as the value.|Dict[string, integer]|
 
 
-___  
+___
 
-## IncidentStatus  
-Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.  
-  
+## IncidentStatus
+Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|acknowledged<br/>muted<br/>open<br/>resolved<br/>|
 
-___  
+___
 
-## IncidentModel  
-Data quality incident model shown on an incident details screen.  
-  
+## IncidentModel
+Data quality incident model shown on an incident details screen.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -127,30 +127,30 @@ Data quality incident model shown on an incident details screen.
 |minimum_severity|The minimum severity of the data quality incident, copied from the incident configuration at a connection or table at the time when the incident was first seen. Possible values are: 1 - warning, 2 - error, 3 - fatal.|integer|
 |failed_checks_count|The total number of failed data quality checks that were seen when the incident was raised for the first time.|integer|
 |issue_url|The link (url) to a ticket in an external system that is tracking this incident.|string|
-|[status](../incidents/#IncidentStatus)|Incident status.|[IncidentStatus](../incidents/#IncidentStatus)|
+|[status](#IncidentStatus)|Incident status.|[IncidentStatus](#IncidentStatus)|
 
 
-___  
+___
 
-## IncidentSortOrder  
-Incident sort order columns.  
-  
+## IncidentSortOrder
+Incident sort order columns.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|dataGroup<br/>lastSeen<br/>firstSeen<br/>tablePriority<br/>qualityDimension<br/>checkName<br/>failedChecksCount<br/>table<br/>highestSeverity<br/>|
 
-___  
+___
 
-## IncidentsPerConnectionModel  
-Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.  
-  
+## IncidentsPerConnectionModel
+Simple model that returns a list of connections and a number of open (new) data quality incidents per connection.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -158,18 +158,18 @@ Simple model that returns a list of connections and a number of open (new) data 
 |open_incidents|Count of open (new) data quality incidents.|integer|
 
 
-___  
+___
 
-## SortDirection  
-REST api model sort direction.  
-  
+## SortDirection
+REST api model sort direction.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|asc<br/>desc<br/>|
 
-___  
+___
 

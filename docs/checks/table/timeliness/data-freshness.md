@@ -1,30 +1,31 @@
-**data freshness** checks  
+**data freshness** checks
 
-**Description**  
+**Description**
 Table-level check that calculates the time difference between the most recent row in the table and the current time.
  The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.
  This check is also known as &quot;Data Freshness&quot;.
 
 ___
 
-## **profile data freshness**  
-  
-**Check description**  
-Calculates the number of days since the most recent event timestamp (freshness)  
-  
+## **profile data freshness**
+
+
+**Check description**
+Calculates the number of days since the most recent event timestamp (freshness)
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_data_freshness|profiling| |Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_data_freshness|profiling| |Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_data_freshness
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_data_freshness
@@ -42,23 +43,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    timeliness:
-      profile_data_freshness:
-        warning:
-          max_days: 1.0
-        error:
-          max_days: 2.0
-        fatal:
-          max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -91,7 +78,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -752,12 +739,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-19 36-41"
@@ -805,7 +792,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1495,24 +1482,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily data freshness**  
-  
-**Check description**  
-Daily  calculating the number of days since the most recent event timestamp (freshness)  
-  
+## **daily data freshness**
+
+
+**Check description**
+Daily  calculating the number of days since the most recent event timestamp (freshness)
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_data_freshness|monitoring|daily|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_data_freshness|monitoring|daily|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_data_freshness
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_data_freshness
@@ -1530,24 +1518,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      timeliness:
-        daily_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1581,7 +1554,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2242,12 +2215,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-19 37-42"
@@ -2296,7 +2269,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2986,24 +2959,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly data freshness**  
-  
-**Check description**  
-Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)  
-  
+## **monthly data freshness**
+
+
+**Check description**
+Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_data_freshness|monitoring|monthly|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_data_freshness|monitoring|monthly|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_data_freshness
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_data_freshness
@@ -3021,24 +2995,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      timeliness:
-        monthly_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3072,7 +3031,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3733,12 +3692,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-19 37-42"
@@ -3787,7 +3746,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4477,24 +4436,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition data freshness**  
-  
-**Check description**  
-Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)  
-  
+## **daily partition data freshness**
+
+
+**Check description**
+Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_data_freshness|partitioned|daily|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_data_freshness|partitioned|daily|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_data_freshness
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_data_freshness
@@ -4512,24 +4472,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    daily:
-      timeliness:
-        daily_partition_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4569,7 +4514,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -5234,12 +5179,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-20 43-48"
@@ -5294,7 +5239,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -5982,24 +5927,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition data freshness**  
-  
-**Check description**  
-Monthly partitioned check calculating the number of days since the most recent event (freshness)  
-  
+## **monthly partition data freshness**
+
+
+**Check description**
+Monthly partitioned check calculating the number of days since the most recent event (freshness)
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_data_freshness|partitioned|monthly|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_data_freshness|partitioned|monthly|Timeliness|[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_data_freshness
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_data_freshness
@@ -6017,24 +5963,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    monthly:
-      timeliness:
-        monthly_partition_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -6074,7 +6005,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+[data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -6739,12 +6670,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-20 43-48"
@@ -6799,7 +6730,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors/#data-freshness)
+    [data_freshness](../../../../reference/sensors/table/timeliness-table-sensors.md#data-freshness)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

@@ -1,28 +1,29 @@
-**value above max value percent** checks  
+**value above max value percent** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that the percentage of values in the monitored column with a value above the value defined by the user as a parameter does not fall below set thresholds.
 
 ___
 
-## **profile value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter.  
-  
+## **profile value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_value_above_max_value_percent|profiling| |Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_value_above_max_value_percent|profiling| |Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_value_above_max_value_percent
@@ -40,32 +41,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_value_above_max_value_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      profiling_checks:
-        numeric:
-          profile_value_above_max_value_percent:
-            warning:
-              max_percent: 100.0
-            error:
-              max_percent: 99.0
-            fatal:
-              max_percent: 95.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-21"
+
+```yaml hl_lines="10-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -82,17 +66,11 @@ spec:
               max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -554,22 +532,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 39-44"
+    ```yaml hl_lines="8-18 30-35"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -595,12 +570,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -610,7 +579,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1101,24 +1070,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_value_above_max_value_percent|monitoring|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_value_above_max_value_percent|monitoring|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_value_above_max_value_percent
@@ -1136,33 +1106,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_value_above_max_value_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        daily:
-          numeric:
-            daily_value_above_max_value_percent:
-              warning:
-                max_percent: 100.0
-              error:
-                max_percent: 99.0
-              fatal:
-                max_percent: 95.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-22"
+
+```yaml hl_lines="10-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1180,17 +1132,11 @@ spec:
                 max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1652,22 +1598,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="8-18 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -1694,12 +1637,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -1709,7 +1646,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2200,24 +2137,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_value_above_max_value_percent|monitoring|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_value_above_max_value_percent|monitoring|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_value_above_max_value_percent
@@ -2235,33 +2173,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_value_above_max_value_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        monthly:
-          numeric:
-            monthly_value_above_max_value_percent:
-              warning:
-                max_percent: 100.0
-              error:
-                max_percent: 99.0
-              fatal:
-                max_percent: 95.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-22"
+
+```yaml hl_lines="10-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -2279,17 +2199,11 @@ spec:
                 max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2751,22 +2665,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 40-45"
+    ```yaml hl_lines="8-18 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2793,12 +2704,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -2808,7 +2713,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3299,24 +3204,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_value_above_max_value_percent|partitioned|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_value_above_max_value_percent|partitioned|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_value_above_max_value_percent
@@ -3334,33 +3240,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_value_above_max_value_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        daily:
-          numeric:
-            daily_partition_value_above_max_value_percent:
-              warning:
-                max_percent: 100.0
-              error:
-                max_percent: 99.0
-              fatal:
-                max_percent: 95.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="14-23"
+
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -3379,12 +3268,6 @@ spec:
                 max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -3394,7 +3277,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3860,22 +3743,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-22 46-51"
+    ```yaml hl_lines="10-20 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -3903,12 +3784,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -3923,7 +3798,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4412,24 +4287,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_value_above_max_value_percent|partitioned|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_value_above_max_value_percent|partitioned|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_value_above_max_value_percent
@@ -4447,33 +4323,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_value_above_max_value_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        monthly:
-          numeric:
-            monthly_partition_value_above_max_value_percent:
-              warning:
-                max_percent: 100.0
-              error:
-                max_percent: 99.0
-              fatal:
-                max_percent: 95.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="14-23"
+
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -4492,12 +4351,6 @@ spec:
                 max_percent: 95.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -4507,7 +4360,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4973,22 +4826,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-22 46-51"
+    ```yaml hl_lines="10-20 38-43"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -5016,12 +4867,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_percent: 95.0
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -5036,7 +4881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

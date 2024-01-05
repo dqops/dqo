@@ -23,8 +23,8 @@ dqo> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="scheduler start-crm">`-crm`</p><br/><p id="scheduler start--check-run-mode">`--check-run-mode`</p><br/>|Check execution reporting mode (silent, summary, info, debug)| |silent<br/>summary<br/>info<br/>debug<br/>|
@@ -58,8 +58,8 @@ dqo> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="scheduler stop-fw">`-fw`</p><br/><p id="scheduler stop--file-write">`--file-write`</p><br/>|Write command response to a file| ||

@@ -4,7 +4,7 @@
 ```
 column/strings/expected_strings_in_top_values_count
 ```
-**Description**  
+**Description**
 Column level sensor that counts how many expected string values are among the TOP most popular values in the column.
  The sensor will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
@@ -12,8 +12,8 @@ Column level sensor that counts how many expected string values are among the TO
  This sensor is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
  The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|List of expected string values that should be found in the tested column among the TOP most popular (highest distinct count) column values.|string_list| ||
@@ -22,9 +22,9 @@ Column level sensor that counts how many expected string values are among the TO
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -103,7 +103,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
@@ -181,7 +181,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -260,7 +260,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -351,7 +351,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -430,7 +430,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -516,7 +516,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -595,7 +595,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -674,7 +674,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
@@ -752,7 +752,7 @@ Column level sensor that counts how many expected string values are among the TO
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -842,7 +842,7 @@ Column level sensor that counts how many expected string values are among the TO
     {%- endif -%}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -934,13 +934,13 @@ ___
 ```
 column/strings/expected_strings_in_use_count
 ```
-**Description**  
+**Description**
 Column level sensor that counts how many expected string values are used in a tested column. Finds unique column values from the set of expected string values and counts them.
  This sensor is useful to analyze string columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row.
  The typical type of columns analyzed using this sensor are currency, country, status or gender columns.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|List of expected string values that should be found in the tested column.|string_list| ||
@@ -948,9 +948,9 @@ Column level sensor that counts how many expected string values are used in a te
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -989,7 +989,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -1031,7 +1031,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -1073,7 +1073,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -1120,7 +1120,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -1162,7 +1162,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -1208,7 +1208,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
@@ -1249,7 +1249,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -1291,7 +1291,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -1333,7 +1333,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -1375,7 +1375,7 @@ Column level sensor that counts how many expected string values are used in a te
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -1427,15 +1427,15 @@ ___
 ```
 column/strings/string_boolean_placeholder_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with a boolean placeholder string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -1457,7 +1457,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -1479,7 +1479,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1501,7 +1501,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -1528,7 +1528,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1550,7 +1550,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -1579,7 +1579,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -1601,7 +1601,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -1623,7 +1623,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -1645,7 +1645,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -1667,7 +1667,7 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -1702,15 +1702,15 @@ ___
 ```
 column/strings/string_empty_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with an empty string.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -1773,7 +1773,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -1793,7 +1793,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -1814,7 +1814,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -1840,7 +1840,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1860,7 +1860,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -1888,7 +1888,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -1908,7 +1908,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -1928,7 +1928,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -1948,7 +1948,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -1968,7 +1968,7 @@ Column level sensor that calculates the number of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -2002,15 +2002,15 @@ ___
 ```
 column/strings/string_empty_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with an empty string.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -2076,7 +2076,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -2099,7 +2099,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2122,7 +2122,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -2150,7 +2150,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2173,7 +2173,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -2204,7 +2204,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -2227,7 +2227,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -2250,7 +2250,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -2273,7 +2273,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -2296,7 +2296,7 @@ Column level sensor that calculates the percentage of rows with an empty string.
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -2333,15 +2333,15 @@ ___
 ```
 column/strings/string_invalid_email_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with an invalid emails value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -2360,7 +2360,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -2379,7 +2379,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2398,7 +2398,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -2422,7 +2422,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2441,7 +2441,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -2467,7 +2467,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -2486,7 +2486,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -2505,7 +2505,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -2524,7 +2524,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -2543,7 +2543,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -2575,15 +2575,15 @@ ___
 ```
 column/strings/string_invalid_ip4_address_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with an invalid IP4 address value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -2602,7 +2602,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -2621,7 +2621,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2640,7 +2640,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -2665,7 +2665,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2684,7 +2684,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -2710,7 +2710,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -2729,7 +2729,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -2748,7 +2748,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -2767,7 +2767,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -2791,7 +2791,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -2823,15 +2823,15 @@ ___
 ```
 column/strings/string_invalid_ip6_address_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with an invalid IP6 address value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -2850,7 +2850,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -2869,7 +2869,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2888,7 +2888,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -2914,7 +2914,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -2933,7 +2933,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -2959,7 +2959,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -2978,7 +2978,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -2997,7 +2997,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -3016,7 +3016,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -3035,7 +3035,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -3067,15 +3067,15 @@ ___
 ```
 column/strings/string_invalid_uuid_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with an invalid uuid value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -3094,7 +3094,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -3113,7 +3113,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -3132,7 +3132,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -3157,7 +3157,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -3176,7 +3176,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -3202,7 +3202,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -3221,7 +3221,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -3240,7 +3240,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -3259,7 +3259,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -3278,7 +3278,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -3310,11 +3310,11 @@ ___
 ```
 column/strings/string_length_above_max_length_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the count of values that are longer than a given length in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
@@ -3322,9 +3322,9 @@ Column level sensor that calculates the count of values that are longer than a g
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -3386,7 +3386,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -3405,7 +3405,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -3425,7 +3425,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -3450,7 +3450,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -3469,7 +3469,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -3539,7 +3539,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -3558,7 +3558,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -3578,7 +3578,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -3597,7 +3597,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -3616,7 +3616,7 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -3692,11 +3692,11 @@ ___
 ```
 column/strings/string_length_above_max_length_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of values that are longer than a given length in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
@@ -3704,9 +3704,9 @@ Column level sensor that calculates the percentage of values that are longer tha
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -3771,7 +3771,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -3794,7 +3794,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -3817,7 +3817,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -3845,7 +3845,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -3867,7 +3867,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -3939,7 +3939,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -3961,7 +3961,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -3984,7 +3984,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -4007,7 +4007,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -4029,7 +4029,7 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -4107,11 +4107,11 @@ ___
 ```
 column/strings/string_length_below_min_length_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the count of values that are shorter than a given length in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
@@ -4119,9 +4119,9 @@ Column level sensor that calculates the count of values that are shorter than a 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -4183,7 +4183,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -4202,7 +4202,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -4222,7 +4222,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -4247,7 +4247,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -4266,7 +4266,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -4336,7 +4336,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -4355,7 +4355,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -4375,7 +4375,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -4394,7 +4394,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -4413,7 +4413,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -4489,11 +4489,11 @@ ___
 ```
 column/strings/string_length_below_min_length_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of values that are shorter than a given length in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
@@ -4501,9 +4501,9 @@ Column level sensor that calculates the percentage of values that are shorter th
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -4568,7 +4568,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -4590,7 +4590,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -4613,7 +4613,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -4641,7 +4641,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -4663,7 +4663,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -4736,7 +4736,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -4758,7 +4758,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -4781,7 +4781,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -4803,7 +4803,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -4825,7 +4825,7 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -4904,11 +4904,11 @@ ___
 ```
 column/strings/string_length_in_range_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of strings with a length below the indicated length in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_length|Sets a minimal string length|integer| ||
@@ -4917,9 +4917,9 @@ Column level sensor that calculates the percentage of strings with a length belo
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -4974,7 +4974,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -4996,7 +4996,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -5019,7 +5019,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -5047,7 +5047,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -5069,7 +5069,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -5098,7 +5098,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -5121,7 +5121,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -5144,7 +5144,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -5166,7 +5166,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -5188,7 +5188,7 @@ Column level sensor that calculates the percentage of strings with a length belo
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -5223,11 +5223,11 @@ ___
 ```
 column/strings/string_match_date_regex_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
@@ -5235,9 +5235,9 @@ Column level sensor that calculates the percentage of values that does fit a giv
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -5274,7 +5274,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -5311,7 +5311,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -5348,7 +5348,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -5391,7 +5391,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -5427,7 +5427,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -5471,7 +5471,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -5507,7 +5507,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -5544,7 +5544,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -5581,7 +5581,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -5618,7 +5618,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -5668,15 +5668,15 @@ ___
 ```
 column/strings/string_match_name_regex_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of values that does fit a given name regex in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -5698,7 +5698,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -5720,7 +5720,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -5742,7 +5742,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -5770,7 +5770,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -5792,7 +5792,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -5821,7 +5821,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -5843,7 +5843,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -5865,7 +5865,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -5887,7 +5887,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -5909,7 +5909,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -5944,11 +5944,11 @@ ___
 ```
 column/strings/string_match_regex_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percent of values that fit to a regex in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
@@ -5956,9 +5956,9 @@ Column level sensor that calculates the percent of values that fit to a regex in
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -5989,7 +5989,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -6020,7 +6020,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -6051,7 +6051,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -6088,7 +6088,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -6119,7 +6119,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -6157,7 +6157,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -6188,7 +6188,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -6219,7 +6219,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -6250,7 +6250,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {% macro make_text_constant(string) -%}
@@ -6280,7 +6280,7 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -6320,15 +6320,15 @@ ___
 ```
 column/strings/string_max_length
 ```
-**Description**  
+**Description**
 Column level sensor that ensures that the length of string in a column does not exceed the maximum accepted length.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -6386,7 +6386,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -6401,7 +6401,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -6417,7 +6417,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -6438,7 +6438,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -6453,7 +6453,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -6476,7 +6476,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -6491,7 +6491,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -6506,7 +6506,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -6521,7 +6521,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -6536,7 +6536,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -6565,15 +6565,15 @@ ___
 ```
 column/strings/string_mean_length
 ```
-**Description**  
+**Description**
 Column level sensor that ensures that the length of string in a column does not exceed the mean accepted length.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -6631,7 +6631,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -6646,7 +6646,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -6662,7 +6662,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -6683,7 +6683,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -6698,7 +6698,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -6763,7 +6763,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -6778,7 +6778,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -6793,7 +6793,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -6808,7 +6808,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -6823,7 +6823,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -6894,15 +6894,15 @@ ___
 ```
 column/strings/string_min_length
 ```
-**Description**  
+**Description**
 Column level sensor that ensures that the length of string in a column does not exceed the minimum accepted length.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -6960,7 +6960,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -6975,7 +6975,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -6991,7 +6991,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -7012,7 +7012,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -7027,7 +7027,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -7050,7 +7050,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -7065,7 +7065,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -7080,7 +7080,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -7095,7 +7095,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -7110,7 +7110,7 @@ Column level sensor that ensures that the length of string in a column does not 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -7139,11 +7139,11 @@ ___
 ```
 column/strings/string_not_match_date_regex_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of values that does not fit to a date regex in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>Month D, YYYY<br/>MM/DD/YYYY<br/>YYYY/MM/DD<br/>DD/MM/YYYY<br/>|
@@ -7151,9 +7151,9 @@ Column level sensor that calculates the number of values that does not fit to a 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -7190,7 +7190,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -7224,7 +7224,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -7261,7 +7261,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -7304,7 +7304,7 @@ Column level sensor that calculates the number of values that does not fit to a 
         {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -7340,7 +7340,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -7384,7 +7384,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -7420,7 +7420,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -7457,7 +7457,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -7491,7 +7491,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
@@ -7527,7 +7527,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -7577,11 +7577,11 @@ ___
 ```
 column/strings/string_not_match_regex_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of values that does not fit to a regex in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
@@ -7589,9 +7589,9 @@ Column level sensor that calculates the number of values that does not fit to a 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -7622,7 +7622,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     {%- macro make_text_constant(string) -%}
@@ -7652,7 +7652,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -7683,7 +7683,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -7720,7 +7720,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -7751,7 +7751,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -7789,7 +7789,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -7820,7 +7820,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -7851,7 +7851,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     {%- macro make_text_constant(string) -%}
@@ -7881,7 +7881,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     {%- macro make_text_constant(string) -%}
@@ -7911,7 +7911,7 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -7955,15 +7955,15 @@ ___
 ```
 column/strings/string_null_placeholder_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with a null placeholder string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -8025,7 +8025,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -8045,7 +8045,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -8065,7 +8065,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -8090,7 +8090,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -8110,7 +8110,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -8137,7 +8137,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -8157,7 +8157,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -8177,7 +8177,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -8197,7 +8197,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -8216,7 +8216,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -8249,15 +8249,15 @@ ___
 ```
 column/strings/string_null_placeholder_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a null placeholder string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -8322,7 +8322,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -8344,7 +8344,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -8367,7 +8367,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -8395,7 +8395,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -8418,7 +8418,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -8448,7 +8448,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -8471,7 +8471,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -8494,7 +8494,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -8516,7 +8516,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -8539,7 +8539,7 @@ Column level sensor that calculates the percentage of rows with a null placehold
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -8575,15 +8575,15 @@ ___
 ```
 column/strings/string_parsable_to_float_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with parsable to float string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8602,7 +8602,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -8620,7 +8620,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{ lib.render_order_by() }}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8639,7 +8639,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8663,7 +8663,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -8681,7 +8681,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8707,7 +8707,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -8725,7 +8725,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8744,7 +8744,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -8762,7 +8762,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{ lib.render_order_by() }}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -8780,7 +8780,7 @@ Column level sensor that calculates the percentage of rows with parsable to floa
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8812,15 +8812,15 @@ ___
 ```
 column/strings/string_parsable_to_integer_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with parsable to integer string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8839,7 +8839,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -8857,7 +8857,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8876,7 +8876,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8903,7 +8903,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -8921,7 +8921,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8947,7 +8947,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -8965,7 +8965,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -8984,7 +8984,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -9002,7 +9002,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -9020,7 +9020,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
@@ -9052,15 +9052,15 @@ ___
 ```
 column/strings/string_surrounded_by_whitespace_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -9124,7 +9124,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -9145,7 +9145,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -9167,7 +9167,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -9194,7 +9194,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -9215,7 +9215,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -9286,7 +9286,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -9307,7 +9307,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -9329,7 +9329,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -9350,7 +9350,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -9371,7 +9371,7 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -9448,15 +9448,15 @@ ___
 ```
 column/strings/string_surrounded_by_whitespace_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with string surrounded by whitespace column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -9523,7 +9523,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -9548,7 +9548,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -9573,7 +9573,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -9603,7 +9603,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -9627,7 +9627,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -9701,7 +9701,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -9725,7 +9725,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -9750,7 +9750,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -9775,7 +9775,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -9800,7 +9800,7 @@ Column level sensor that calculates the percentage of rows with string surrounde
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -9880,15 +9880,15 @@ ___
 ```
 column/strings/string_valid_country_code_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a valid country code string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -9910,7 +9910,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -9932,7 +9932,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -9954,7 +9954,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -9981,7 +9981,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -10003,7 +10003,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -10032,7 +10032,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -10054,7 +10054,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -10076,7 +10076,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -10098,7 +10098,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -10120,7 +10120,7 @@ Column level sensor that calculates the percentage of rows with a valid country 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -10155,15 +10155,15 @@ ___
 ```
 column/strings/string_valid_currency_code_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a valid currency code string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -10228,7 +10228,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -10250,7 +10250,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -10273,7 +10273,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -10301,7 +10301,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -10323,7 +10323,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -10395,7 +10395,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -10417,7 +10417,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -10439,7 +10439,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -10461,7 +10461,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -10483,7 +10483,7 @@ Column level sensor that calculates the percentage of rows with a valid currency
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -10561,15 +10561,15 @@ ___
 ```
 column/strings/string_valid_date_percent
 ```
-**Description**  
+**Description**
 Column level sensor that ensures that there is at least a minimum percentage of valid dates in a monitored column..
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -10634,7 +10634,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -10657,7 +10657,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -10680,7 +10680,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -10708,7 +10708,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -10730,7 +10730,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -10760,7 +10760,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -10785,7 +10785,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -10807,7 +10807,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -10830,7 +10830,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -10852,7 +10852,7 @@ Column level sensor that ensures that there is at least a minimum percentage of 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -10888,15 +10888,15 @@ ___
 ```
 column/strings/string_valid_uuid_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a valid UUID value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -10918,7 +10918,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -10940,7 +10940,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -10962,7 +10962,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -10989,7 +10989,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -11011,7 +11011,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -11040,7 +11040,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -11062,7 +11062,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -11084,7 +11084,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -11106,7 +11106,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -11128,7 +11128,7 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -11163,13 +11163,13 @@ ___
 ```
 column/strings/string_value_in_set_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows for which the tested string (text) column contains a value from the list of expected values.
  Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
  This sensor is useful for testing that a string column with a low number of unique values (country, currency, state, gender, etc.) contains only values from a set of expected values.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|A list of expected values that must be present in a string column, only values from this list are accepted and rows having these values in the tested column are counted as valid rows.|string_list| ||
@@ -11177,9 +11177,9 @@ Column level sensor that calculates the percentage of rows for which the tested 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -11220,7 +11220,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
@@ -11260,7 +11260,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -11301,7 +11301,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -11347,7 +11347,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -11388,7 +11388,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -11436,7 +11436,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -11477,7 +11477,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -11518,7 +11518,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
@@ -11558,7 +11558,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -11599,7 +11599,7 @@ Column level sensor that calculates the percentage of rows for which the tested 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -11653,15 +11653,15 @@ ___
 ```
 column/strings/string_whitespace_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the number of rows with an whitespace string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -11725,7 +11725,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -11746,7 +11746,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -11768,7 +11768,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -11795,7 +11795,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -11816,7 +11816,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -11845,7 +11845,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -11866,7 +11866,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -11887,7 +11887,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -11908,7 +11908,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -11929,7 +11929,7 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -11964,15 +11964,15 @@ ___
 ```
 column/strings/string_whitespace_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a whitespace string column value.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -12039,7 +12039,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -12063,7 +12063,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -12088,7 +12088,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -12118,7 +12118,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -12142,7 +12142,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -12174,7 +12174,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -12198,7 +12198,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -12223,7 +12223,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -12247,7 +12247,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -12271,7 +12271,7 @@ Column level sensor that calculates the percentage of rows with a whitespace str
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     

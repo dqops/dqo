@@ -2,12 +2,12 @@
 
 These topics introduce the basic concepts of DQOps.
 
- - **[Data quality checks](./checks/index.md)**
+ - **[Data quality checks](../checks/index.md)**
 
     A data quality check detects data quality issues. The check in DQOps is defined as a pair
-    of a [sensor](./sensors/sensors.md) that captures metrics from the data source and a [rule](./rules/rules.md) that verifies the sensor's readout.
-    For example, the [nulls_percent](../checks/column/nulls/nulls-percent.md) check uses both the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
-    and the [max_percent](../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
+    of a [sensor](../sensors/sensors.md) that captures metrics from the data source and a [rule](../rules/rules.md) that verifies the sensor's readout.
+    For example, the [nulls_percent](../../checks/column/nulls/nulls-percent.md) check uses both the [null_percent](../../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor
+    and the [max_percent](../../reference/rules/Comparison.md#max-percent) rule to detect if the maximum percent
     of null values in a tested column is satisfied.
 
     If the percent of null values in a column raises above the threshold (maximum allowed percent),
@@ -15,18 +15,18 @@ These topics introduce the basic concepts of DQOps.
 
     DQOps has three types of data quality checks:
    
-     - [Profiling checks](./checks/profiling-checks/profiling-checks.md) for measuring the initial data quality score during the profiling stage
+     - [Profiling checks](../checks/profiling-checks/profiling-checks.md) for measuring the initial data quality score during the profiling stage
 
-     - [Monitoring checks](./checks/monitoring-checks/monitoring-checks.md) for observing and measuring the data quality daily or monthly
+     - [Monitoring checks](../checks/monitoring-checks/monitoring-checks.md) for observing and measuring the data quality daily or monthly
 
-     - [Partition checks](./checks/partition-checks/partition-checks.md) for analyzing partitioned data incrementally, or analyzing
+     - [Partition checks](../checks/partition-checks/partition-checks.md) for analyzing partitioned data incrementally, or analyzing
        incrementally any table that has a date column.
 
 
- - **[Configuring data quality checks](./checks/configuring-checks.md)**
+ - **[Configuring data quality checks](../checks/configuring-checks.md)**
 
     Data quality checks are configured by setting the incident alerting thresholds
-    by setting the [data quality rule](./rules/rules.md) parameters.
+    by setting the [data quality rule](../rules/rules.md) parameters.
 
     DQOps uses YAML files to keep the configuration of data sources and the activated data quality checks on monitored tables.
     The DQOps YAML file format is fully documented and the YAML schema files are published.
@@ -36,7 +36,7 @@ These topics introduce the basic concepts of DQOps.
     are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
     
 
- - **[DQOps user home](./home-folders/dqops-user-home.md)**
+ - **[DQOps user home](../home-folders/dqops-user-home.md)**
 
     `DQOps user home` is the most important folder, it is the place where DQOps stores all configuration and data quality results.
     When DQOps is started by running `python -m dqops`, the current working folder is used as the default `DQOps user home`.
@@ -45,29 +45,29 @@ These topics introduce the basic concepts of DQOps.
     checks for all imported tables. The configuration is stored in YAML files for simplicity of editing in Visual Studio Code.
 
 
- - **[Running data quality checks](./running-checks/running-checks.md)**
+ - **[Running data quality checks](../running-checks/running-checks.md)**
 
     Data quality checks configured for each table and column are executed by targeting the data source, table, column,
     check name, check type, check category or even labels assigned to tables or columns. 
 
 
- - **[Data quality sensors](./sensors/sensors.md)**
+ - **[Data quality sensors](../sensors/sensors.md)**
 
     The data quality `sensors` are SQL queries defined as Jinja2 templates. A sensor is called by a data quality check
     to capture a data quality measure such as the row count from the monitored source. The sensor's measure is called
     a `sensor readout` in DQOps.
 
 
- - **[Data quality rules](./rules/rules.md)**
+ - **[Data quality rules](../rules/rules.md)**
 
     Data quality rules in DQOps are Python functions that receive the `sensor readout`
     that was captured by sensor (a result of an SQL query).
     The rule verifies if the `sensor readout` is valid or a data quality issue should be raised.
-    For example, the [max_percent](../reference/rules/Comparison.md#max-percent) rule will verify if the result
-    of the [null_percent](../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
+    For example, the [max_percent](../../reference/rules/Comparison.md#max-percent) rule will verify if the result
+    of the [null_percent](../../reference/sensors/column/nulls-column-sensors.md#null-percent) sensor is valid.
 
 
- - **[Data quality KPIs](./data-quality-kpis/data-quality-kpis.md)**
+ - **[Data quality KPIs](../data-quality-kpis/data-quality-kpis.md)**
 
     The data quality is measured by data quality KPIs (Key Performance Indicators).
     The definition of a data quality KPI in DQOps is a percentage of passed data quality checks out of all executed data quality checks.
@@ -83,16 +83,16 @@ These topics introduce the basic concepts of DQOps.
     - or a combination of any other dimensions
 
 
- - **[Incremental data quality monitoring](./data-quality-kpis/incremental-data-quality-monitoring.md)**
+ - **[Incremental data quality monitoring](../data-quality-kpis/incremental-data-quality-monitoring.md)**
 
-    Learn how [partition checks](./checks/partition-checks/partition-checks.md) are used to analyze data quality incrementally,
+    Learn how [partition checks](../checks/partition-checks/partition-checks.md) are used to analyze data quality incrementally,
     even for very big tables, reaching terabyte or petabyte scale.
 
     Partitioned checks introduced by DQOps allow to detect data quality issues very early, as soon as invalid data was loaded
     in the most recent batch.
 
 
- - **[Data quality dashboards](./data-quality-dashboards/data-quality-dashboards.md)**
+ - **[Data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md)**
 
     DQOps stores the data quality check results locally, but also the data is synchronized to a `Data Quality Data Warehouse`
     hosted in the cloud by DQOps for each user.
@@ -102,7 +102,7 @@ These topics introduce the basic concepts of DQOps.
     the user's `Data Quality Data Warehouse`.
 
 
- - **[Data quality dimensions](./data-quality-dimensions/data-quality-dimensions.md)**
+ - **[Data quality dimensions](../data-quality-dimensions/data-quality-dimensions.md)**
 
     The data quality dimensions are the fundamental way to group data quality checks into groups of checks that detect similar issue.
     The most important data quality dimensions supported by DQOps are:
@@ -125,7 +125,7 @@ These topics introduce the basic concepts of DQOps.
     - `Validity` detects common field format issues, such as an *email* field does not meet the email format
 
 
- - **[Data grouping](./data-grouping/data-grouping.md)**
+ - **[Data grouping](../data-grouping/data-grouping.md)**
 
     DQOps unique feature is the ability to use a **GROUP BY** clause in the data quality sensors, allowing to run data quality checks
     for multiple ranges of rows in the same table.
@@ -137,35 +137,35 @@ These topics introduce the basic concepts of DQOps.
     different data pipelines, or received from different vendors or departments.
 
 
- - **[User interface overview](./user-interface-overview/user-interface-overview.md)**
+ - **[User interface overview](../user-interface-overview/user-interface-overview.md)**
 
     The user interface in DQOps is using a tabbed application that resembles many popular database management tools.
     Configuring data quality checks on multiple tables at the same time is supported in separate tabs.  
 
 
- - **[Command-line interface](./command-line-interface/command-line-interface.md)**
+ - **[Command-line interface](../command-line-interface/command-line-interface.md)**
 
     Command-line access to DQOps is supported by a shell interface. The DQOps shell supports command and table name completion.
 
 
- - **[Data storage](./data-storage/data-storage.md)**
+ - **[Data storage](../data-storage/data-storage.md)**
 
     DQOps stores both the configuration of data sources, the configuration of data quality checks activated on tables
     and the data quality check execution results locally in a `DQOps user home` folder.
 
     The data quality results are stored in a *$DQO_USER_HOME/.data* folder that is a Hive-compliant local data lake.
-    Please read the [data storage](./data-storage/data-storage.md) concept guide to understand the data lake structure.
+    Please read the [data storage](../data-storage/data-storage.md) concept guide to understand the data lake structure.
 
 
- - **[Deployment architecture](./architecture/dqops-architecture.md)**
+ - **[Deployment architecture](../architecture/dqops-architecture.md)**
 
     DQOps can be hosted locally, in the cloud or as a hybrid deployment, running a semi-offline DQOps instances
     on-premise or in the customer's cloud environment.
 
 
- - **[Check execution flow](./architecture/check-execution-flow.md)**
+ - **[Check execution flow](../architecture/check-execution-flow.md)**
 
-    Detailed data quality execution flows that show how DQOps executes [data quality sensors](./sensors/sensors.md),
-    [data quality rules](./rules/rules.md), [data quality checks](./checks/index.md),
-    and how the data is [stored](./data-storage/data-storage.md). Learn how execution errors are stored.
+    Detailed data quality execution flows that show how DQOps executes [data quality sensors](../sensors/sensors.md),
+    [data quality rules](../rules/rules.md), [data quality checks](../checks/index.md),
+    and how the data is [stored](../data-storage/data-storage.md). Learn how execution errors are stored.
  

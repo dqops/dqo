@@ -1,50 +1,37 @@
 
-## Object  
-  
-  
+## DqoSettingsModel
+REST API model that returns a key/value list of all DQOps configuration properties.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
+|properties|Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user configuration files, environment variables and &#x27;dqo&#x27; command arguments.|Dict[string, Object]|
 
 
-___  
+___
 
-## DqoSettingsModel  
-REST API model that returns a key/value list of all DQOps configuration properties.  
-  
-
-**The structure of this object is described below**  
-  
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
-|---------------|---------------------------------|-----------|
-|properties|Dictionary of all effective DQOps system properties, retrieved from the default configuration files, user configuration files, environment variables and &#x27;dqo&#x27; command arguments.|Dict[string, [Object](#object)]|
+## DqoUserRole
+DQOps user role within a data domain or a whole account level.
 
 
-___  
+**The structure of this object is described below**
 
-## DqoUserRole  
-DQOps user role within a data domain or a whole account level.  
-  
-
-**The structure of this object is described below**  
-  
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
 |string|editor<br/>viewer<br/>admin<br/>none<br/>operator<br/>|
 
-___  
+___
 
-## DqoUserProfileModel  
-The model that describes the current user and his access rights.  
-  
+## DqoUserProfileModel
+The model that describes the current user and his access rights.
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
@@ -76,5 +63,5 @@ The model that describes the current user and his access rights.
 |can_manage_and_view_shared_credentials|User can manage shared credentials and view (or download) already defined shared credentials.|boolean|
 
 
-___  
+___
 

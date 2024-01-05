@@ -1,30 +1,31 @@
-**column count changed** checks  
+**column count changed** checks
 
-**Description**  
+**Description**
 A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run.
  This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
  that was captured and is stored in the data quality check results database.
 
 ___
 
-## **profile column count changed**  
-  
-**Check description**  
-Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.  
-  
+## **profile column count changed**
+
+
+**Check description**
+Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_count_changed|profiling| |Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_column_count_changed|profiling| |Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_column_count_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_column_count_changed
@@ -42,29 +43,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_count_changed
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    schema:
-      profile_column_count_changed:
-        warning: {}
-        error: {}
-        fatal: {}
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-16"
+
+```yaml hl_lines="8-13"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -74,18 +61,12 @@ spec:
         warning: {}
         error: {}
         fatal: {}
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 
@@ -97,24 +78,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily column count changed**  
-  
-**Check description**  
-Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.  
-  
+## **daily column count changed**
+
+
+**Check description**
+Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_count_changed|monitoring|daily|Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_column_count_changed|monitoring|daily|Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_column_count_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_column_count_changed
@@ -132,30 +114,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_count_changed
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      schema:
-        daily_column_count_changed:
-          warning: {}
-          error: {}
-          fatal: {}
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-17"
+
+```yaml hl_lines="8-14"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -166,18 +133,12 @@ spec:
           warning: {}
           error: {}
           fatal: {}
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 
@@ -189,24 +150,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly column count changed**  
-  
-**Check description**  
-Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.  
-  
+## **monthly column count changed**
+
+
+**Check description**
+Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_count_changed|monitoring|monthly|Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_column_count_changed|monitoring|monthly|Consistency|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_column_count_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_column_count_changed
@@ -224,30 +186,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_count_changed
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      schema:
-        monthly_column_count_changed:
-          warning: {}
-          error: {}
-          fatal: {}
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="11-17"
+
+```yaml hl_lines="8-14"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -258,18 +205,12 @@ spec:
           warning: {}
           error: {}
           fatal: {}
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 

@@ -21,8 +21,8 @@ dqo> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud login-fw">`-fw`</p><br/><p id="cloud login--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -54,8 +54,8 @@ dqo> cloud password [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud password-fw">`-fw`</p><br/><p id="cloud password--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -89,8 +89,8 @@ dqo> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync data-d">`-d`</p><br/><p id="cloud sync data--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -127,8 +127,8 @@ dqo> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync sources-d">`-d`</p><br/><p id="cloud sync sources--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -164,8 +164,8 @@ dqo> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync sensors-d">`-d`</p><br/><p id="cloud sync sensors--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -201,8 +201,8 @@ dqo> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync rules-d">`-d`</p><br/><p id="cloud sync rules--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -238,8 +238,8 @@ dqo> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync checks-d">`-d`</p><br/><p id="cloud sync checks--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -275,8 +275,8 @@ dqo> cloud sync settings [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync settings-d">`-d`</p><br/><p id="cloud sync settings--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -312,8 +312,8 @@ dqo> cloud sync credentials [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync credentials-d">`-d`</p><br/><p id="cloud sync credentials--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
@@ -349,8 +349,8 @@ dqo> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="cloud sync all-d">`-d`</p><br/><p id="cloud sync all--direction">`--direction`</p><br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|

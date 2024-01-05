@@ -3,7 +3,7 @@
 
 
 # profiling
-  
+
 
 
 
@@ -11,7 +11,7 @@
 
 
 ## table
-  
+
 
 
 
@@ -19,15 +19,15 @@
 
 
 ### profiling_checks
-  
 
 
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-||[TableProfilingCheckCategoriesSpec](table-profiling-checks/#TableProfilingCheckCategoriesSpec)|
+||[TableProfilingCheckCategoriesSpec](../table-profiling-checks.md#TableProfilingCheckCategoriesSpec)|
 
 
 
@@ -36,13 +36,13 @@
 
 
 
-___  
+___
 
 
 
 
 ## column
-  
+
 
 
 
@@ -50,15 +50,15 @@ ___
 
 
 ### profiling_checks
-  
 
 
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-||[ColumnProfilingCheckCategoriesSpec](column-profiling-checks/#ColumnProfilingCheckCategoriesSpec)|
+||[ColumnProfilingCheckCategoriesSpec](../column-profiling-checks.md#ColumnProfilingCheckCategoriesSpec)|
 
 
 
@@ -67,7 +67,7 @@ ___
 
 
 
-___  
+___
 
 
 

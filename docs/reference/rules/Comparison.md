@@ -6,11 +6,11 @@ ___
 ```
 comparison/between_floats
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is between from and to values.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -54,6 +54,22 @@ spec:
 The code sample below shows the content of the  *comparison/between_floats.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -124,11 +140,11 @@ ___
 ```
 comparison/between_ints
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is between begin and end values.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
@@ -172,6 +188,22 @@ spec:
 The code sample below shows the content of the  *comparison/between_ints.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -243,12 +275,12 @@ ___
 ```
 comparison/datatype_equals
 ```
-**Description**  
+**Description**
 Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
  The supported values are in the range 1..7, which are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_datatype|Expected data type code, the data type codes are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|integer| ||
@@ -285,6 +317,22 @@ spec:
 The code sample below shows the content of the  *comparison/datatype_equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -349,11 +397,11 @@ ___
 ```
 comparison/diff_percent
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_diff_percent|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|double| ||
@@ -387,6 +435,22 @@ spec:
 The code sample below shows the content of the  *comparison/diff_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -460,11 +524,11 @@ ___
 ```
 comparison/equals
 ```
-**Description**  
+**Description**
 Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
@@ -507,6 +571,22 @@ spec:
 The code sample below shows the content of the  *comparison/equals.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -572,7 +652,7 @@ ___
 ```
 comparison/equals_0
 ```
-**Description**  
+**Description**
 Data quality rule that verifies that a data quality check readout equals 0. It is used in data quality checks that have an expected value &quot;0&quot;.
 
 
@@ -598,6 +678,22 @@ spec:
 The code sample below shows the content of the  *comparison/equals_0.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -663,7 +759,7 @@ ___
 ```
 comparison/equals_1
 ```
-**Description**  
+**Description**
 Data quality rule that verifies that a data quality check readout equals 1. It is used in data quality checks that have an expected value &quot;1&quot;.
 
 
@@ -689,6 +785,22 @@ spec:
 The code sample below shows the content of the  *comparison/equals_1.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -754,11 +866,11 @@ ___
 ```
 comparison/equals_integer
 ```
-**Description**  
+**Description**
 Data quality rule that verifies that a data quality check readout equals a given integer value, with an expected value preconfigured as 1.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_value|Expected value for the actual_value returned by the sensor. It must be an integer value.|long| ||
@@ -794,6 +906,22 @@ spec:
 The code sample below shows the content of the  *comparison/equals_integer.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -858,11 +986,11 @@ ___
 ```
 comparison/max
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -898,6 +1026,22 @@ spec:
 The code sample below shows the content of the  *comparison/max.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -963,11 +1107,11 @@ ___
 ```
 comparison/max_count
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
@@ -1001,6 +1145,22 @@ spec:
 The code sample below shows the content of the  *comparison/max_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1066,11 +1226,11 @@ ___
 ```
 comparison/max_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -1104,6 +1264,22 @@ spec:
 The code sample below shows the content of the  *comparison/max_days.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1169,11 +1345,11 @@ ___
 ```
 comparison/max_failures
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if the number of executive failures (the sensor returned 0) is below the max_failures. The default maximum failures is 0 failures (the first failure is reported).
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_failures|Maximum number of consecutive days with check failures. A check is failed when a sensor query fails due to a connection error, missing or corrupted table.|long| ||
@@ -1212,6 +1388,22 @@ spec:
 The code sample below shows the content of the  *comparison/max_failures.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1294,15 +1486,15 @@ ___
 ```
 comparison/max_missing
 ```
-**Description**  
+**Description**
 Data quality rule that verifies the results of the data quality checks that count the number of values
  present in a column, comparing it to a list of expected values. The rule compares the count of expected values (received as expected_value)
  to the count of values found in the column (as the actual_value). The rule fails when the difference is higher than
  the expected max_missing, which is the maximum difference between the expected_value (the count of values in the expected_values list)
  and the actual number of values found in the column that match the list.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_missing|The maximum number of values from the expected_values list that were not found in the column (inclusive).|long| ||
@@ -1338,6 +1530,22 @@ spec:
 The code sample below shows the content of the  *comparison/max_missing.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1407,11 +1615,11 @@ ___
 ```
 comparison/max_percent
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -1445,6 +1653,22 @@ spec:
 The code sample below shows the content of the  *comparison/max_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1510,11 +1734,11 @@ ___
 ```
 comparison/max_value
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -1550,6 +1774,22 @@ spec:
 The code sample below shows the content of the  *comparison/max_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1615,11 +1855,11 @@ ___
 ```
 comparison/min
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -1655,6 +1895,22 @@ spec:
 The code sample below shows the content of the  *comparison/min.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1720,11 +1976,11 @@ ___
 ```
 comparison/min_count
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
@@ -1760,6 +2016,22 @@ spec:
 The code sample below shows the content of the  *comparison/min_count.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1825,11 +2097,11 @@ ___
 ```
 comparison/min_percent
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -1863,6 +2135,22 @@ spec:
 The code sample below shows the content of the  *comparison/min_percent.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -1928,11 +2216,11 @@ ___
 ```
 comparison/min_value
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
@@ -1968,6 +2256,22 @@ spec:
 The code sample below shows the content of the  *comparison/min_value.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 
@@ -2033,7 +2337,7 @@ ___
 ```
 comparison/value_changed
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 
 
@@ -2061,6 +2365,22 @@ spec:
 The code sample below shows the content of the  *comparison/value_changed.py* file. The *evaluate_rule* function at the bottom evaluates the sensor result and returns the rule evaluation result.
 
 ```python
+#
+# Copyright © 2021 DQOps (support@dqops.com)
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
 from datetime import datetime
 from typing import Sequence
 

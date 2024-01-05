@@ -4,11 +4,11 @@
 ```
 column/integrity/foreign_key_match_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of values that match values in column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |foreign_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -17,9 +17,9 @@ Column level sensor that calculates the percentage of values that match values i
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -49,7 +49,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -79,7 +79,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -115,7 +115,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -145,7 +145,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -182,7 +182,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -212,7 +212,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -242,7 +242,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -272,7 +272,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -302,7 +302,7 @@ Column level sensor that calculates the percentage of values that match values i
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -345,11 +345,11 @@ ___
 ```
 column/integrity/foreign_key_not_match_count
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the count of values that does not match values in column of another table.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |foreign_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
@@ -358,9 +358,9 @@ Column level sensor that calculates the count of values that does not match valu
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -390,7 +390,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -420,7 +420,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -460,7 +460,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -494,7 +494,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -531,7 +531,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -565,7 +565,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -595,7 +595,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -625,7 +625,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -655,7 +655,7 @@ Column level sensor that calculates the count of values that does not match valu
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     

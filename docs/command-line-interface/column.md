@@ -25,8 +25,8 @@ dqo> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column add-C">`-C`</p><br/><p id="column add--column">`--column`</p><br/>|Column name| ||
@@ -65,8 +65,8 @@ dqo> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column remove-C">`-C`</p><br/><p id="column remove--column">`--column`</p><br/>|Column name, supports patterns: c_*, *_id, prefix*suffix.| ||
@@ -105,8 +105,8 @@ dqo> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column update-C">`-C`</p><br/><p id="column update--column">`--column`</p><br/>|Column name| ||
@@ -147,8 +147,8 @@ dqo> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column list-C">`-C`</p><br/><p id="column list--column">`--column`</p><br/>|Connection name filter| ||
@@ -187,8 +187,8 @@ dqo> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column enable-C">`-C`</p><br/><p id="column enable--column">`--column`</p><br/>|Column name| ||
@@ -225,8 +225,8 @@ dqo> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column disable-C">`-C`</p><br/><p id="column disable--column">`--column`</p><br/>|Column name| ||
@@ -263,8 +263,8 @@ dqo> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="column rename-C">`-C`</p><br/><p id="column rename--column">`--column`</p><br/>|Column name| ||
