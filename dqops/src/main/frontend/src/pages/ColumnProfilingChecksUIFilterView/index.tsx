@@ -119,7 +119,6 @@ const ColumnProfilingChecksUIFilterView = () => {
       )
     );
   };
-  console.log(checksUIFilter);
 
   return (
     <ConnectionLayout>
