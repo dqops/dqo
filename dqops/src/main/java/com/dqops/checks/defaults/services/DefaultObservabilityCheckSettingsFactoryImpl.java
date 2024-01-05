@@ -162,7 +162,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getTable().setVolume(tableVolume);
 
         TableSchemaProfilingChecksSpec tableSchema = new TableSchemaProfilingChecksSpec();
-        tableSchema.setProfileColumnCount(new TableSchemaColumnCountCheckSpec());
+        tableSchema.setProfileExpectedColumnCount(new TableSchemaColumnCountCheckSpec());
         defaultSettings.getTable().setSchema(tableSchema);
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
