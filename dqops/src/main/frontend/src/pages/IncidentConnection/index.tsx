@@ -31,6 +31,7 @@ import { IconButton, Tooltip } from "@material-tailwind/react";
 import AddIssueUrlDialog from "./AddIssueUrlDialog";
 import { getDaysString } from "../../utils";
 import { SortableColumn } from "./SortableColumn";
+import { IRootState } from "../../redux/reducers";
 
 const options = [
   {
@@ -72,7 +73,8 @@ const statusOptions = [
 
 export const IncidentConnection = () => {
   const { connection }: { connection: string } = useParams();
-  const { incidents, isEnd, filters = {} } = useSelector(getFirstLevelIncidentsState);
+  const { incidents, isEnd, filters = {}} = useSelector(getFirstLevelIncidentsState);
+  const { activeTab } = useSelector((state: IRootState) => state.incidents);
   const dispatch = useActionDispatch();
   const history = useHistory();
   const [searchTerm, setSearchTerm] = useState("");
@@ -285,10 +287,12 @@ export const IncidentConnection = () => {
 
 
   useEffect(() => {
-    dispatch(getIncidentsByConnection({
-      connection,
-    }));
-  }, [connection]);
+    if (activeTab && activeTab?.length > 0 ) {
+      dispatch(getIncidentsByConnection({
+        connection,
+      }));
+    }
+  }, [connection, activeTab]);
 
   useEffect(() => {
     onChangeFilter({
@@ -324,6 +328,7 @@ export const IncidentConnection = () => {
     }));
     history.push(ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection, 'incidents'));
   };
+  console.log(activeTab)
 
   return (
     <IncidentsLayout>
