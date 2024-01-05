@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.column.checkspecs.anomaly;
+package com.dqops.checks.table.checkspecs.volume;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.change.ChangePercent7DaysRule10ParametersSpec;
-import com.dqops.rules.change.ChangePercent7DaysRule20ParametersSpec;
-import com.dqops.rules.change.ChangePercent7DaysRule50ParametersSpec;
-import com.dqops.sensors.column.numeric.ColumnNumericMeanSensorParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule10ParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule20ParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule50ParametersSpec;
+import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
+ * Table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeMeanSince7DaysCheckSpec
-        extends AbstractCheckSpec<ColumnNumericMeanSensorParametersSpec, ChangePercent7DaysRule10ParametersSpec, ChangePercent7DaysRule20ParametersSpec, ChangePercent7DaysRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeMeanSince7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableRowCountChange30DaysCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, ChangePercent30DaysRule10ParametersSpec, ChangePercent30DaysRule20ParametersSpec, ChangePercent30DaysRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableRowCountChange30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,22 +49,22 @@ public class ColumnChangeMeanSince7DaysCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericMeanSensorParametersSpec parameters = new ColumnNumericMeanSensorParametersSpec();
+    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercent7DaysRule10ParametersSpec warning;
+    private ChangePercent30DaysRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercent7DaysRule20ParametersSpec error;
+    private ChangePercent30DaysRule20ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercent7DaysRule50ParametersSpec fatal;
+    private ChangePercent30DaysRule50ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -72,7 +72,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericMeanSensorParametersSpec getParameters() {
+    public TableVolumeRowCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericMeanSensorParametersSpec parameters) {
+    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -93,7 +93,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public ChangePercent7DaysRule10ParametersSpec getWarning() {
+    public ChangePercent30DaysRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +102,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ChangePercent7DaysRule10ParametersSpec warning) {
+    public void setWarning(ChangePercent30DaysRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +114,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public ChangePercent7DaysRule20ParametersSpec getError() {
+    public ChangePercent30DaysRule20ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +123,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(ChangePercent7DaysRule20ParametersSpec error) {
+    public void setError(ChangePercent30DaysRule20ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -135,7 +135,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ChangePercent7DaysRule50ParametersSpec getFatal() {
+    public ChangePercent30DaysRule50ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -144,7 +144,7 @@ public class ColumnChangeMeanSince7DaysCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ChangePercent7DaysRule50ParametersSpec fatal) {
+    public void setFatal(ChangePercent30DaysRule50ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

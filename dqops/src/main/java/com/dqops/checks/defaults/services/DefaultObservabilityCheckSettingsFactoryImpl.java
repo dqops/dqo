@@ -34,7 +34,7 @@ import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
 import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
-import com.dqops.checks.table.checkspecs.volume.TableChangeRowCountCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
@@ -84,7 +84,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableVolume.setDailyRowCount(new TableRowCountCheckSpec() {{
             setWarning(new MinCountRuleWarningParametersSpec());
         }});
-        tableVolume.setDailyRowCountChange(new TableChangeRowCountCheckSpec() {{
+        tableVolume.setDailyRowCountChange(new TableRowCountChangeCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
         tableVolume.setDailyRowCountAnomalyDifferencing(new TableAnomalyDifferencingRowCountCheckSpec() {{
@@ -141,7 +141,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         columnNulls.setDailyNullsPercentAnomalyStationary(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
-        columnNulls.setDailyNullsPercentChangeYesterday(new ColumnChangeNullPercentSinceYesterdayCheckSpec() {{
+        columnNulls.setDailyNullsPercentChange1Day(new ColumnNullPercentChange1DayCheckSpec() {{
             setWarning(new ChangePercent1DayRule10ParametersSpec());
         }});
         defaultSettings.getColumn().setNulls(columnNulls);

@@ -39,9 +39,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeMedianSinceYesterdayCheckSpec
+public class ColumnMedianChange1DayCheckSpec
         extends AbstractCheckSpec<ColumnNumericMedianSensorParametersSpec, ChangePercent1DayRule10ParametersSpec, ChangePercent1DayRule20ParametersSpec, ChangePercent1DayRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeMedianSinceYesterdayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMedianChange1DayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };

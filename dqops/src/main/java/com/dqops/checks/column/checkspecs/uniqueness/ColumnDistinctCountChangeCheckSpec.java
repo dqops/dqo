@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.table.checkspecs.volume;
+package com.dqops.checks.column.checkspecs.uniqueness;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule50ParametersSpec;
-import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
+import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table-level check that ensures that the row count changed by a fixed rate since the last readout.
+ * Column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableChangeRowCountCheckSpec
-        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, ChangePercentRule10ParametersSpec, ChangePercentRule20ParametersSpec, ChangePercentRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableChangeRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnDistinctCountChangeCheckSpec
+        extends AbstractCheckSpec<ColumnUniquenessDistinctCountSensorParametersSpec, ChangePercentRule10ParametersSpec, ChangePercentRule20ParametersSpec, ChangePercentRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctCountChangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class TableChangeRowCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
+    private ColumnUniquenessDistinctCountSensorParametersSpec parameters = new ColumnUniquenessDistinctCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class TableChangeRowCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public TableVolumeRowCountSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class TableChangeRowCountCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

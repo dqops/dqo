@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercent1DayRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercent1DayRule50ParametersSpec;
-import com.dqops.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericMeanSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
+ * Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeSumSinceYesterdayCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, ChangePercent1DayRule10ParametersSpec, ChangePercent1DayRule20ParametersSpec, ChangePercent1DayRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeSumSinceYesterdayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMeanChange1DayCheckSpec
+        extends AbstractCheckSpec<ColumnNumericMeanSensorParametersSpec, ChangePercent1DayRule10ParametersSpec, ChangePercent1DayRule20ParametersSpec, ChangePercent1DayRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMeanChange1DayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnChangeSumSinceYesterdayCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericSumSensorParametersSpec parameters = new ColumnNumericSumSensorParametersSpec();
+    private ColumnNumericMeanSensorParametersSpec parameters = new ColumnNumericMeanSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnChangeSumSinceYesterdayCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericSumSensorParametersSpec getParameters() {
+    public ColumnNumericMeanSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class ColumnChangeSumSinceYesterdayCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericSumSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericMeanSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -52,9 +52,9 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_nulls_percent_anomaly_stationary", o ->o.profileNullsPercentAnomalyStationary);
             
             put("profile_nulls_percent_change", o ->o.profileNullsPercentChange);
-            put("profile_nulls_percent_change_yesterday", o ->o.profileNullsPercentChangeYesterday);
+            put("profile_nulls_percent_change_1_day", o ->o.profileNullsPercentChange1Day);
             put("profile_nulls_percent_change_7_days", o ->o.profileNullsPercentChange7Days);
-            put("profile_nulls_percent_change_30_days", o ->o.ProfileNullsPercentChange30Days);
+            put("profile_nulls_percent_change_30_days", o ->o.profileNullsPercentChange30Days);
         }
     };
 
@@ -78,18 +78,19 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     private ColumnAnomalyStationaryNullPercentCheckSpec profileNullsPercentAnomalyStationary;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeNullPercentCheckSpec profileNullsPercentChange;
+    private ColumnNullPercentChangeCheckSpec profileNullsPercentChange;
 
+    @JsonProperty("profile_nulls_percent_change_1_day")
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.")
-    private ColumnChangeNullPercentSinceYesterdayCheckSpec profileNullsPercentChangeYesterday;
+    private ColumnNullPercentChange1DayCheckSpec profileNullsPercentChange1Day;
 
     @JsonProperty("profile_nulls_percent_change_7_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.")
-    private ColumnChangeNullPercentSince7DaysCheckSpec profileNullsPercentChange7Days;
+    private ColumnNullPercentChange7DaysCheckSpec profileNullsPercentChange7Days;
 
     @JsonProperty("profile_nulls_percent_change_30_days")
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.")
-    private ColumnChangeNullPercentSince30DaysCheckSpec ProfileNullsPercentChange30Days;
+    private ColumnNullPercentChange30DaysCheckSpec profileNullsPercentChange30Days;
 
 
     /**
@@ -204,7 +205,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns the null percent value change check.
      * @return Null percent value change check.
      */
-    public ColumnChangeNullPercentCheckSpec getProfileNullsPercentChange() {
+    public ColumnNullPercentChangeCheckSpec getProfileNullsPercentChange() {
         return profileNullsPercentChange;
     }
 
@@ -212,7 +213,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new null percent value change check.
      * @param profileNullsPercentChange Null percent value change check.
      */
-    public void setProfileNullsPercentChange(ColumnChangeNullPercentCheckSpec profileNullsPercentChange) {
+    public void setProfileNullsPercentChange(ColumnNullPercentChangeCheckSpec profileNullsPercentChange) {
         this.setDirtyIf(!Objects.equals(this.profileNullsPercentChange, profileNullsPercentChange));
         this.profileNullsPercentChange = profileNullsPercentChange;
         propagateHierarchyIdToField(profileNullsPercentChange, "profile_nulls_percent_change");
@@ -222,25 +223,25 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns the null percent value change yesterday check.
      * @return Null percent value change yesterday check.
      */
-    public ColumnChangeNullPercentSinceYesterdayCheckSpec getProfileNullsPercentChangeYesterday() {
-        return profileNullsPercentChangeYesterday;
+    public ColumnNullPercentChange1DayCheckSpec getProfileNullsPercentChange1Day() {
+        return profileNullsPercentChange1Day;
     }
 
     /**
      * Sets a new null percent value change yesterday check.
-     * @param profileNullsPercentChangeYesterday Null percent value change yesterday check.
+     * @param profileNullsPercentChange1Day Null percent value change yesterday check.
      */
-    public void setProfileNullsPercentChangeYesterday(ColumnChangeNullPercentSinceYesterdayCheckSpec profileNullsPercentChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.profileNullsPercentChangeYesterday, profileNullsPercentChangeYesterday));
-        this.profileNullsPercentChangeYesterday = profileNullsPercentChangeYesterday;
-        propagateHierarchyIdToField(profileNullsPercentChangeYesterday, "profile_nulls_percent_change_yesterday");
+    public void setProfileNullsPercentChange1Day(ColumnNullPercentChange1DayCheckSpec profileNullsPercentChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentChange1Day, profileNullsPercentChange1Day));
+        this.profileNullsPercentChange1Day = profileNullsPercentChange1Day;
+        propagateHierarchyIdToField(profileNullsPercentChange1Day, "profile_nulls_percent_change_1_day");
     }
 
     /**
      * Returns the null percent value change 7 days check.
      * @return Null percent value change 7 days check.
      */
-    public ColumnChangeNullPercentSince7DaysCheckSpec getProfileNullsPercentChange7Days() {
+    public ColumnNullPercentChange7DaysCheckSpec getProfileNullsPercentChange7Days() {
         return profileNullsPercentChange7Days;
     }
 
@@ -248,7 +249,7 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Sets a new null percent value change 7 days check.
      * @param profileNullsPercentChange7Days Null percent value change 7 days check.
      */
-    public void setProfileNullsPercentChange7Days(ColumnChangeNullPercentSince7DaysCheckSpec profileNullsPercentChange7Days) {
+    public void setProfileNullsPercentChange7Days(ColumnNullPercentChange7DaysCheckSpec profileNullsPercentChange7Days) {
         this.setDirtyIf(!Objects.equals(this.profileNullsPercentChange7Days, profileNullsPercentChange7Days));
         this.profileNullsPercentChange7Days = profileNullsPercentChange7Days;
         propagateHierarchyIdToField(profileNullsPercentChange7Days, "profile_nulls_percent_change_7_days");
@@ -258,17 +259,17 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns the null percent value change 30 days check.
      * @return Null percent value change 30 days check.
      */
-    public ColumnChangeNullPercentSince30DaysCheckSpec getProfileNullsPercentChange30Days() {
-        return ProfileNullsPercentChange30Days;
+    public ColumnNullPercentChange30DaysCheckSpec getProfileNullsPercentChange30Days() {
+        return profileNullsPercentChange30Days;
     }
 
     /**
      * Sets a new null percent value change 30 days check.
      * @param profileNullsPercentChange30Days Null percent value change 30 days check.
      */
-    public void setProfileNullsPercentChange30Days(ColumnChangeNullPercentSince30DaysCheckSpec profileNullsPercentChange30Days) {
-        this.setDirtyIf(!Objects.equals(this.ProfileNullsPercentChange30Days, profileNullsPercentChange30Days));
-        this.ProfileNullsPercentChange30Days = profileNullsPercentChange30Days;
+    public void setProfileNullsPercentChange30Days(ColumnNullPercentChange30DaysCheckSpec profileNullsPercentChange30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentChange30Days, profileNullsPercentChange30Days));
+        this.profileNullsPercentChange30Days = profileNullsPercentChange30Days;
         propagateHierarchyIdToField(profileNullsPercentChange30Days, "profile_nulls_percent_change_30_days");
     }
 

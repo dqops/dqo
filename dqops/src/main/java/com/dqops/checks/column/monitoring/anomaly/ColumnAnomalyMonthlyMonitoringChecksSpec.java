@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeMeanCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeMedianCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnChangeSumCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnMeanChangeCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnMedianChangeCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnSumChangeCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -49,19 +49,19 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     };
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
-    private ColumnChangeMeanCheckSpec monthlyMeanChange;
+    private ColumnMeanChangeCheckSpec monthlyMeanChange;
 
     @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
-    private ColumnChangeMedianCheckSpec monthlyMedianChange;
+    private ColumnMedianChangeCheckSpec monthlyMedianChange;
 
     @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
-    private ColumnChangeSumCheckSpec monthlySumChange;
+    private ColumnSumChangeCheckSpec monthlySumChange;
 
     /**
      * Returns the mean value change check.
      * @return Mean value change check.
      */
-    public ColumnChangeMeanCheckSpec getMonthlyMeanChange() {
+    public ColumnMeanChangeCheckSpec getMonthlyMeanChange() {
         return monthlyMeanChange;
     }
 
@@ -69,7 +69,7 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
      * Sets a new mean value change check.
      * @param monthlyMeanChange Mean value change check.
      */
-    public void setMonthlyMeanChange(ColumnChangeMeanCheckSpec monthlyMeanChange) {
+    public void setMonthlyMeanChange(ColumnMeanChangeCheckSpec monthlyMeanChange) {
         this.setDirtyIf(!Objects.equals(this.monthlyMeanChange, monthlyMeanChange));
         this.monthlyMeanChange = monthlyMeanChange;
         propagateHierarchyIdToField(monthlyMeanChange, "monthly_mean_change");
@@ -79,7 +79,7 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
      * Returns the median change check.
      * @return Median change check.
      */
-    public ColumnChangeMedianCheckSpec getMonthlyMedianChange() {
+    public ColumnMedianChangeCheckSpec getMonthlyMedianChange() {
         return monthlyMedianChange;
     }
 
@@ -87,7 +87,7 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
      * Sets a new median change check.
      * @param monthlyMedianChange Median change check.
      */
-    public void setMonthlyMedianChange(ColumnChangeMedianCheckSpec monthlyMedianChange) {
+    public void setMonthlyMedianChange(ColumnMedianChangeCheckSpec monthlyMedianChange) {
         this.setDirtyIf(!Objects.equals(this.monthlyMedianChange, monthlyMedianChange));
         this.monthlyMedianChange = monthlyMedianChange;
         propagateHierarchyIdToField(monthlyMedianChange, "monthly_median_change");
@@ -97,7 +97,7 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
      * Returns the sum change check.
      * @return Sum change check.
      */
-    public ColumnChangeSumCheckSpec getMonthlySumChange() {
+    public ColumnSumChangeCheckSpec getMonthlySumChange() {
         return monthlySumChange;
     }
 
@@ -105,7 +105,7 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
      * Sets a new sum change check.
      * @param monthlySumChange Sum change check.
      */
-    public void setMonthlySumChange(ColumnChangeSumCheckSpec monthlySumChange) {
+    public void setMonthlySumChange(ColumnSumChangeCheckSpec monthlySumChange) {
         this.setDirtyIf(!Objects.equals(this.monthlySumChange, monthlySumChange));
         this.monthlySumChange = monthlySumChange;
         propagateHierarchyIdToField(monthlySumChange, "monthly_sum_change");

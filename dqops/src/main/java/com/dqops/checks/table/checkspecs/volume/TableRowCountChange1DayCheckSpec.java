@@ -13,17 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.column.checkspecs.uniqueness;
+package com.dqops.checks.table.checkspecs.volume;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
-import com.dqops.rules.change.ChangePercentRule20ParametersSpec;
-import com.dqops.rules.change.ChangePercentRule50ParametersSpec;
-import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
-import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
+import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
+import com.dqops.rules.change.ChangePercent1DayRule20ParametersSpec;
+import com.dqops.rules.change.ChangePercent1DayRule50ParametersSpec;
+import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -35,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
+ * Table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeDistinctPercentCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, ChangePercentRule10ParametersSpec, ChangePercentRule20ParametersSpec, ChangePercentRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeDistinctPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class TableRowCountChange1DayCheckSpec
+        extends AbstractCheckSpec<TableVolumeRowCountSensorParametersSpec, ChangePercent1DayRule10ParametersSpec, ChangePercent1DayRule20ParametersSpec, ChangePercent1DayRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableRowCountChange1DayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,22 +49,22 @@ public class ColumnChangeDistinctPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDistinctPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctPercentSensorParametersSpec();
+    private TableVolumeRowCountSensorParametersSpec parameters = new TableVolumeRowCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentRule10ParametersSpec warning;
+    private ChangePercent1DayRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentRule20ParametersSpec error;
+    private ChangePercent1DayRule20ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercentRule50ParametersSpec fatal;
+    private ChangePercent1DayRule50ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -73,7 +72,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessDistinctPercentSensorParametersSpec getParameters() {
+    public TableVolumeRowCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -82,7 +81,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessDistinctPercentSensorParametersSpec parameters) {
+    public void setParameters(TableVolumeRowCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -94,7 +93,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public ChangePercentRule10ParametersSpec getWarning() {
+    public ChangePercent1DayRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -103,7 +102,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ChangePercentRule10ParametersSpec warning) {
+    public void setWarning(ChangePercent1DayRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -115,7 +114,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public ChangePercentRule20ParametersSpec getError() {
+    public ChangePercent1DayRule20ParametersSpec getError() {
         return this.error;
     }
 
@@ -124,7 +123,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(ChangePercentRule20ParametersSpec error) {
+    public void setError(ChangePercent1DayRule20ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -136,7 +135,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ChangePercentRule50ParametersSpec getFatal() {
+    public ChangePercent1DayRule50ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -145,7 +144,7 @@ public class ColumnChangeDistinctPercentCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ChangePercentRule50ParametersSpec fatal) {
+    public void setFatal(ChangePercent1DayRule50ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

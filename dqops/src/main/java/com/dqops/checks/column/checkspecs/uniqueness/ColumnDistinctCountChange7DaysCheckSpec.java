@@ -23,7 +23,6 @@ import com.dqops.rules.change.ChangePercent7DaysRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercent7DaysRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercent7DaysRule50ParametersSpec;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
-import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -35,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.
+ * Column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeDistinctPercentSince7DaysCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, ChangePercent7DaysRule10ParametersSpec, ChangePercent7DaysRule20ParametersSpec, ChangePercent7DaysRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeDistinctPercentSince7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnDistinctCountChange7DaysCheckSpec
+        extends AbstractCheckSpec<ColumnUniquenessDistinctCountSensorParametersSpec, ChangePercent7DaysRule10ParametersSpec, ChangePercent7DaysRule20ParametersSpec, ChangePercent7DaysRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctCountChange7DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -50,7 +49,7 @@ public class ColumnChangeDistinctPercentSince7DaysCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDistinctPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctPercentSensorParametersSpec();
+    private ColumnUniquenessDistinctCountSensorParametersSpec parameters = new ColumnUniquenessDistinctCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -73,7 +72,7 @@ public class ColumnChangeDistinctPercentSince7DaysCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessDistinctPercentSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -82,7 +81,7 @@ public class ColumnChangeDistinctPercentSince7DaysCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessDistinctPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

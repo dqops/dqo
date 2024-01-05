@@ -45,10 +45,11 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_row_count", o -> o.dailyPartitionRowCount);
-            put("daily_partition_row_count_anomaly_stationary_30_days", o -> o.dailyPartitionRowCountAnomalyStationary30Days);
             put("daily_partition_row_count_anomaly_stationary", o -> o.dailyPartitionRowCountAnomalyStationary);
+            put("daily_partition_row_count_anomaly_stationary_30_days", o -> o.dailyPartitionRowCountAnomalyStationary30Days);
+
             put("daily_partition_row_count_change", o -> o.dailyPartitionRowCountChange);
-            put("daily_partition_row_count_change_yesterday", o -> o.dailyPartitionRowCountChangeYesterday);
+            put("daily_partition_row_count_change_1_day", o -> o.dailyPartitionRowCountChange1Day);
             put("daily_partition_row_count_change_7_days", o -> o.dailyPartitionRowCountChange7Days);
             put("daily_partition_row_count_change_30_days", o -> o.dailyPartitionRowCountChange30Days);
         }
@@ -61,27 +62,28 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec dailyPartitionRowCount;
 
-    @JsonProperty("daily_partition_row_count_anomaly_stationary_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.")
-    private TableAnomalyStationaryPartitionRowCount30DaysCheckSpec dailyPartitionRowCountAnomalyStationary30Days;
-
     @JsonProperty("daily_partition_row_count_anomaly_stationary")
     @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.")
     private TableAnomalyStationaryPartitionRowCountCheckSpec dailyPartitionRowCountAnomalyStationary;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
-    private TableChangeRowCountCheckSpec dailyPartitionRowCountChange;
+    @JsonProperty("daily_partition_row_count_anomaly_stationary_30_days")
+    @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 30 days.")
+    private TableAnomalyStationaryPartitionRowCount30DaysCheckSpec dailyPartitionRowCountAnomalyStationary30Days;
 
+    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
+    private TableRowCountChangeCheckSpec dailyPartitionRowCountChange;
+
+    @JsonProperty("daily_partition_row_count_change_1_day")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.")
-    private TableChangeRowCountSinceYesterdayCheckSpec dailyPartitionRowCountChangeYesterday;
+    private TableRowCountChange1DayCheckSpec dailyPartitionRowCountChange1Day;
 
     @JsonProperty("daily_partition_row_count_change_7_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.")
-    private TableChangeRowCountSince7DaysCheckSpec dailyPartitionRowCountChange7Days;
+    private TableRowCountChange7DaysCheckSpec dailyPartitionRowCountChange7Days;
 
     @JsonProperty("daily_partition_row_count_change_30_days")
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.")
-    private TableChangeRowCountSince30DaysCheckSpec dailyPartitionRowCountChange30Days;
+    private TableRowCountChange30DaysCheckSpec dailyPartitionRowCountChange30Days;
 
 
     /**
@@ -103,24 +105,6 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     }
 
     /**
-     * Returns the row count anomaly 30 days check.
-     * @return Row count anomaly 30 days check.
-     */
-    public TableAnomalyStationaryPartitionRowCount30DaysCheckSpec getDailyPartitionRowCountAnomalyStationary30Days() {
-        return dailyPartitionRowCountAnomalyStationary30Days;
-    }
-
-    /**
-     * Sets a new row count anomaly 30 days check.
-     * @param dailyPartitionRowCountAnomalyStationary30Days Row count anomaly 30 days check.
-     */
-    public void setDailyPartitionRowCountAnomalyStationary30Days(TableAnomalyStationaryPartitionRowCount30DaysCheckSpec dailyPartitionRowCountAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomalyStationary30Days, dailyPartitionRowCountAnomalyStationary30Days));
-        this.dailyPartitionRowCountAnomalyStationary30Days = dailyPartitionRowCountAnomalyStationary30Days;
-        propagateHierarchyIdToField(dailyPartitionRowCountAnomalyStationary30Days, "daily_partition_row_count_anomaly_stationary_30_days");
-    }
-
-    /**
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
@@ -139,10 +123,28 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     }
 
     /**
+     * Returns the row count anomaly 30 days check.
+     * @return Row count anomaly 30 days check.
+     */
+    public TableAnomalyStationaryPartitionRowCount30DaysCheckSpec getDailyPartitionRowCountAnomalyStationary30Days() {
+        return dailyPartitionRowCountAnomalyStationary30Days;
+    }
+
+    /**
+     * Sets a new row count anomaly 30 days check.
+     * @param dailyPartitionRowCountAnomalyStationary30Days Row count anomaly 30 days check.
+     */
+    public void setDailyPartitionRowCountAnomalyStationary30Days(TableAnomalyStationaryPartitionRowCount30DaysCheckSpec dailyPartitionRowCountAnomalyStationary30Days) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountAnomalyStationary30Days, dailyPartitionRowCountAnomalyStationary30Days));
+        this.dailyPartitionRowCountAnomalyStationary30Days = dailyPartitionRowCountAnomalyStationary30Days;
+        propagateHierarchyIdToField(dailyPartitionRowCountAnomalyStationary30Days, "daily_partition_row_count_anomaly_stationary_30_days");
+    }
+
+    /**
      * Returns the row count change check.
      * @return Row count change check.
      */
-    public TableChangeRowCountCheckSpec getDailyPartitionRowCountChange() {
+    public TableRowCountChangeCheckSpec getDailyPartitionRowCountChange() {
         return dailyPartitionRowCountChange;
     }
 
@@ -150,7 +152,7 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Sets a new row count change check.
      * @param dailyPartitionRowCountChange Row count change check.
      */
-    public void setDailyPartitionRowCountChange(TableChangeRowCountCheckSpec dailyPartitionRowCountChange) {
+    public void setDailyPartitionRowCountChange(TableRowCountChangeCheckSpec dailyPartitionRowCountChange) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountChange, dailyPartitionRowCountChange));
         this.dailyPartitionRowCountChange = dailyPartitionRowCountChange;
         propagateHierarchyIdToField(dailyPartitionRowCountChange, "daily_partition_row_count_change");
@@ -160,25 +162,25 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Returns the row count change since yesterday check.
      * @return Row count change since yesterday check.
      */
-    public TableChangeRowCountSinceYesterdayCheckSpec getDailyPartitionRowCountChangeYesterday() {
-        return dailyPartitionRowCountChangeYesterday;
+    public TableRowCountChange1DayCheckSpec getDailyPartitionRowCountChange1Day() {
+        return dailyPartitionRowCountChange1Day;
     }
 
     /**
      * Sets a new row count change since yesterday check.
-     * @param dailyPartitionRowCountChangeYesterday Row count change since yesterday check.
+     * @param dailyPartitionRowCountChange1Day Row count change since yesterday check.
      */
-    public void setDailyPartitionRowCountChangeYesterday(TableChangeRowCountSinceYesterdayCheckSpec dailyPartitionRowCountChangeYesterday) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountChangeYesterday, dailyPartitionRowCountChangeYesterday));
-        this.dailyPartitionRowCountChangeYesterday = dailyPartitionRowCountChangeYesterday;
-        propagateHierarchyIdToField(dailyPartitionRowCountChangeYesterday, "daily_partition_row_count_change_yesterday");
+    public void setDailyPartitionRowCountChange1Day(TableRowCountChange1DayCheckSpec dailyPartitionRowCountChange1Day) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountChange1Day, dailyPartitionRowCountChange1Day));
+        this.dailyPartitionRowCountChange1Day = dailyPartitionRowCountChange1Day;
+        propagateHierarchyIdToField(dailyPartitionRowCountChange1Day, "daily_partition_row_count_change_1_day");
     }
 
     /**
      * Returns the row count change since 7 days check.
      * @return Row count change since 7 days check.
      */
-    public TableChangeRowCountSince7DaysCheckSpec getDailyPartitionRowCountChange7Days() {
+    public TableRowCountChange7DaysCheckSpec getDailyPartitionRowCountChange7Days() {
         return dailyPartitionRowCountChange7Days;
     }
 
@@ -186,7 +188,7 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Sets a new row count change since 7 days check.
      * @param dailyPartitionRowCountChange7Days Row count change since 7 days check.
      */
-    public void setDailyPartitionRowCountChange7Days(TableChangeRowCountSince7DaysCheckSpec dailyPartitionRowCountChange7Days) {
+    public void setDailyPartitionRowCountChange7Days(TableRowCountChange7DaysCheckSpec dailyPartitionRowCountChange7Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountChange7Days, dailyPartitionRowCountChange7Days));
         this.dailyPartitionRowCountChange7Days = dailyPartitionRowCountChange7Days;
         propagateHierarchyIdToField(dailyPartitionRowCountChange7Days, "daily_partition_row_count_change_7_days");
@@ -196,7 +198,7 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Returns the row count change since 30 days check.
      * @return Row count change since 30 days check.
      */
-    public TableChangeRowCountSince30DaysCheckSpec getDailyPartitionRowCountChange30Days() {
+    public TableRowCountChange30DaysCheckSpec getDailyPartitionRowCountChange30Days() {
         return dailyPartitionRowCountChange30Days;
     }
 
@@ -204,7 +206,7 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
      * Sets a new row count change since 30 days check.
      * @param dailyPartitionRowCountChange30Days Row count change since 30 days check.
      */
-    public void setDailyPartitionRowCountChange30Days(TableChangeRowCountSince30DaysCheckSpec dailyPartitionRowCountChange30Days) {
+    public void setDailyPartitionRowCountChange30Days(TableRowCountChange30DaysCheckSpec dailyPartitionRowCountChange30Days) {
         this.setDirtyIf(!Objects.equals(this.dailyPartitionRowCountChange30Days, dailyPartitionRowCountChange30Days));
         this.dailyPartitionRowCountChange30Days = dailyPartitionRowCountChange30Days;
         propagateHierarchyIdToField(dailyPartitionRowCountChange30Days, "daily_partition_row_count_change_30_days");

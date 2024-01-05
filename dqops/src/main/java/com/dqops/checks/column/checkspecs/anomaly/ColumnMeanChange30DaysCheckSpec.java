@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.column.checkspecs.nulls;
+package com.dqops.checks.column.checkspecs.anomaly;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.change.ChangePercent1DayRule10ParametersSpec;
-import com.dqops.rules.change.ChangePercent1DayRule20ParametersSpec;
-import com.dqops.rules.change.ChangePercent1DayRule50ParametersSpec;
-import com.dqops.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule10ParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule20ParametersSpec;
+import com.dqops.rules.change.ChangePercent30DaysRule50ParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericMeanSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+ * Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeNullPercentSinceYesterdayCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNullsPercentSensorParametersSpec, ChangePercent1DayRule10ParametersSpec, ChangePercent1DayRule20ParametersSpec, ChangePercent1DayRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeNullPercentSinceYesterdayCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMeanChange30DaysCheckSpec
+        extends AbstractCheckSpec<ColumnNumericMeanSensorParametersSpec, ChangePercent30DaysRule10ParametersSpec, ChangePercent30DaysRule20ParametersSpec, ChangePercent30DaysRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMeanChange30DaysCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,22 +49,22 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullsPercentSensorParametersSpec parameters = new ColumnNullsNullsPercentSensorParametersSpec();
+    private ColumnNumericMeanSensorParametersSpec parameters = new ColumnNumericMeanSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercent1DayRule10ParametersSpec warning;
+    private ChangePercent30DaysRule10ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercent1DayRule20ParametersSpec error;
+    private ChangePercent30DaysRule20ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ChangePercent1DayRule50ParametersSpec fatal;
+    private ChangePercent30DaysRule50ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -72,7 +72,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNullsNullsPercentSensorParametersSpec getParameters() {
+    public ColumnNumericMeanSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNullsNullsPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericMeanSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -93,7 +93,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public ChangePercent1DayRule10ParametersSpec getWarning() {
+    public ChangePercent30DaysRule10ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -102,7 +102,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(ChangePercent1DayRule10ParametersSpec warning) {
+    public void setWarning(ChangePercent30DaysRule10ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -114,7 +114,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public ChangePercent1DayRule20ParametersSpec getError() {
+    public ChangePercent30DaysRule20ParametersSpec getError() {
         return this.error;
     }
 
@@ -123,7 +123,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(ChangePercent1DayRule20ParametersSpec error) {
+    public void setError(ChangePercent30DaysRule20ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -135,7 +135,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public ChangePercent1DayRule50ParametersSpec getFatal() {
+    public ChangePercent30DaysRule50ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -144,7 +144,7 @@ public class ColumnChangeNullPercentSinceYesterdayCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(ChangePercent1DayRule50ParametersSpec fatal) {
+    public void setFatal(ChangePercent30DaysRule50ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

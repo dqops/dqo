@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.column.checkspecs.anomaly;
+package com.dqops.checks.column.checkspecs.uniqueness;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.change.ChangePercentRule10ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule20ParametersSpec;
 import com.dqops.rules.change.ChangePercentRule50ParametersSpec;
-import com.dqops.sensors.column.numeric.ColumnNumericMeanSensorParametersSpec;
+import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.
+ * Column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnChangeMeanCheckSpec
-        extends AbstractCheckSpec<ColumnNumericMeanSensorParametersSpec, ChangePercentRule10ParametersSpec, ChangePercentRule20ParametersSpec, ChangePercentRule50ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnChangeMeanCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnDistinctPercentChangeCheckSpec
+        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, ChangePercentRule10ParametersSpec, ChangePercentRule20ParametersSpec, ChangePercentRule50ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctPercentChangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnChangeMeanCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericMeanSensorParametersSpec parameters = new ColumnNumericMeanSensorParametersSpec();
+    private ColumnUniquenessDistinctPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnChangeMeanCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericMeanSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class ColumnChangeMeanCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericMeanSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
