@@ -18,9 +18,13 @@ package com.dqops.connectors.trino;
 import com.dqops.connectors.ConnectorOperationFailedException;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.jdbc.JdbcQueryFailedException;
+import com.dqops.core.jobqueue.JobCancellationListenerHandle;
+import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.*;
+import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +32,8 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.sql.Statement;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -105,6 +111,11 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     private HikariConfig makeHikariConfigForAthena(TrinoParametersSpec trinoSpec, SecretValueLookupContext secretValueLookupContext){
+        try {
+            Class.forName("com.amazon.athena.jdbc.AthenaDriver");   // todo: lazy registering
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         HikariConfig hikariConfig = new HikariConfig();
         hikariConfig.setJdbcUrl("jdbc:athena://");
 
@@ -137,4 +148,105 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
         return hikariConfig;
     }
+
+    /**
+     * Creates a target table following the table specification.
+     *
+     * @param tableSpec Table specification with the physical table name, column names and physical column data types.
+     */
+    @Override
+    public void createTable(TableSpec tableSpec) {
+
+        TrinoEngineType trinoEngineType = this.getConnectionSpec().getTrino().getTrinoEngineType();
+
+        switch (trinoEngineType){
+            case trino -> super.createTable(tableSpec);
+            case athena -> {
+                String createTableSql = generateCreateTableSqlStatementForAthena(tableSpec);
+                this.executeCommand(createTableSql, JobCancellationToken.createDummyJobCancellationToken());
+            }
+        }
+
+    }
+
+    String generateCreateTableSqlStatementForAthena(TableSpec tableSpec){
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("CREATE EXTERNAL TABLE IF NOT EXISTS ");
+        sqlBuilder.append(tableSpec.getPhysicalTableName().getSchemaName());
+        sqlBuilder.append(".");
+        sqlBuilder.append(tableSpec.getPhysicalTableName().getTableName());
+        sqlBuilder.append(" (\n");
+
+        Map.Entry<String, ColumnSpec> [] columnKeyPairs = tableSpec.getColumns().entrySet().toArray(Map.Entry[]::new);
+        for(int i = 0; i < columnKeyPairs.length ; i++) {
+            Map.Entry<String, ColumnSpec> columnKeyPair = columnKeyPairs[i];
+
+            if (i != 0) { // not the first iteration
+                sqlBuilder.append(",\n");
+            }
+
+            sqlBuilder.append("    ");
+            sqlBuilder.append(columnKeyPair.getKey());
+            sqlBuilder.append(" ");
+            ColumnTypeSnapshotSpec typeSnapshot = columnKeyPair.getValue().getTypeSnapshot();
+            sqlBuilder.append(typeSnapshot.getColumnType());
+            if (typeSnapshot.getLength() != null) {
+                sqlBuilder.append("(");
+                sqlBuilder.append(typeSnapshot.getLength());
+                sqlBuilder.append(")");
+            }
+            else if (typeSnapshot.getPrecision() != null && typeSnapshot.getScale() != null) {
+                sqlBuilder.append("(");
+                sqlBuilder.append(typeSnapshot.getPrecision());
+                sqlBuilder.append(",");
+                sqlBuilder.append(typeSnapshot.getScale());
+                sqlBuilder.append(")");
+            }
+
+        }
+        sqlBuilder.append("\n)");
+        sqlBuilder.append("\n");
+
+        String tableName = tableSpec.getPhysicalTableName().getTableName();
+        sqlBuilder.append("ROW FORMAT DELIMITED\n");
+        sqlBuilder.append("FIELDS TERMINATED BY ','\n");
+        sqlBuilder.append("STORED AS TEXTFILE\n");
+//        sqlBuilder.append("LOCATION 's3://dqops-athena-test/" + tableName + "/" + tableName + ".csv'\n");
+        sqlBuilder.append("LOCATION 's3://dqops-athena-test/" + tableName + "'\n");
+        sqlBuilder.append("TBLPROPERTIES ('skip.header.line.count'='1');\n");
+
+        String createTableSql = sqlBuilder.toString();
+        return createTableSql;
+    }
+
+
+    /**
+     * Executes a provider specific SQL that runs a command DML/DDL command.
+     *
+     * @param sqlStatement SQL DDL or DML statement.
+     * @param jobCancellationToken Job cancellation token, enables cancelling a running query.
+     */
+    @Override
+    public long executeCommand(String sqlStatement, JobCancellationToken jobCancellationToken) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                try (JobCancellationListenerHandle cancellationListenerHandle =
+                             jobCancellationToken.registerCancellationListener(
+                                     cancellationToken -> RunSilently.run(statement::cancel))) {
+                    statement.execute(sqlStatement);
+                    return 0;
+                }
+                finally {
+                    jobCancellationToken.throwIfCancelled();
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL statement failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlStatement),
+                    ex, sqlStatement, connectionName);
+        }
+    }
+
 }
