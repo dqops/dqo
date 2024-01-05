@@ -327,7 +327,7 @@ const DataQualityChecks = ({
         minWidth: '100%'
       }}
     >
-      <div className="flex items-center text-sm mb-3 gap-6">
+      <div className="flex items-center text-sm my-3 gap-6">
         {isDefaultEditing !== true && (
           <div className="flex items-center space-x-1 gap-x-4">
             <div className="flex items-center space-x-1">
