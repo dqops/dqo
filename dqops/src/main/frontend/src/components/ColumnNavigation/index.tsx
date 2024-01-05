@@ -191,7 +191,7 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
         onClick={() => onChangeNavigation(item)}
       >
         {activeIndex > index ? (
-          <SvgIcon name="chevron-left" className="w-3 mr-2" />
+          <SvgIcon name="chevron-left" className="w-6 mr-2" />
         ) : (
           ''
         )}
@@ -209,8 +209,8 @@ const ColumnNavigation = ({ defaultTab }: ColumnNavigationProps) => {
 
   return (
     <>
-    <IconButton className='w-7 h-7 absolute right-0 top-7' onClick={() => setShowNavigation(prev => !prev)} >
-      <SvgIcon name={showNavigation ? "chevron-down" : "chevron-left"} className='ml-3'/>
+    <IconButton className=' absolute right-0 top-7' >
+      <SvgIcon name={showNavigation ? "chevron-down" : "chevron-left"} className='ml-3 w-6 h-6' onClick={() => setShowNavigation(prev => !prev)}/>
     </IconButton>
     {showNavigation ? renderNavigation() : null}
     </>
