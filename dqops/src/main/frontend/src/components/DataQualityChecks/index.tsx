@@ -5,7 +5,8 @@ import {
   CheckContainerModelEffectiveScheduleEnabledStatusEnum,
   CheckModel,
   EffectiveScheduleModelScheduleLevelEnum,
-  QualityCategoryModel
+  QualityCategoryModel,
+  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
@@ -310,14 +311,38 @@ const DataQualityChecks = ({
         checksUI.categories &&
         !checksUI.categories.find(
           (obj2) =>
-            obj1.checkCategory === obj2.category ||
-            obj1.checkCategory + '/' + obj1.comparisonName === obj2.category
+          obj1.checkCategory + '/' + obj1.comparisonName === obj2.category ||
+          obj1.checkCategory === obj2.category 
         )
     );
-    const customCategory: QualityCategoryModel[] = missingCategory.map((x) => ({
-      category: x.checkCategory
+
+    const customCategory: CheckResultsOverviewDataModel[] = missingCategory.map((x) => ({
+      ...x, checkCategory: x.comparisonName ? x.checkCategory + '/' + x.comparisonName : x.checkCategory
     }));
-    return customCategory ?? [];
+
+    const groupedArray = customCategory.reduce((acc : QualityCategoryModel[], obj) => {
+      const existingCategory = acc.find(item => item.category === obj.checkCategory);
+      
+      if (existingCategory && existingCategory.checks) {
+        existingCategory.checks.push({ check_name: obj.checkName, check_hash: obj.checkHash,
+          run_checks_job_template: {
+            checkType: checkTypes as CheckSearchFiltersCheckTypeEnum,
+            timeScale: tab || timePartitioned
+           } });
+      } else {
+        acc.push({ category: obj.checkCategory, comparison_name: obj.comparisonName, checks: [
+       {check_name: obj.checkName, 
+        check_hash: obj.checkHash,
+        run_checks_job_template: {
+         checkType: checkTypes as CheckSearchFiltersCheckTypeEnum,
+         timeScale: tab || timePartitioned
+        }, 
+      }]});
+    }
+    
+      return acc;
+    }, []);
+    return groupedArray ?? [];
   };
 
   return (
@@ -454,10 +479,8 @@ const DataQualityChecks = ({
           setShowAdvanced={setShowAdvanced}
         />
         <tbody>
-          {[
-            ...(checksUI?.categories ?? []),
-            ...(isFiltered !== true ? getCustomCategoryBasedOnResults() : [])
-          ].map((category, index) => (
+          {
+            (checksUI?.categories ?? []).map((category, index) => (
             <CheckCategoriesView
               key={index}
               category={category}
@@ -477,6 +500,28 @@ const DataQualityChecks = ({
               showAdvanced={showAdvanced}
             />
           ))}
+          {isFiltered !== true &&
+          getCustomCategoryBasedOnResults().map((category, index) => (
+          <CheckCategoriesView
+              key={index}
+              category={category}
+              checkResultsOverview={checkResultsOverview}
+              timeWindowFilter={RUN_CHECK_TIME_WINDOW_FILTERS[timeWindow]}
+              handleChangeDataGroupingConfiguration={(check, jIndex) =>
+                handleChangeDataGrouping(check, index, jIndex)
+              }
+              onUpdate={onUpdate}
+              getCheckOverview={getCheckOverview}
+              mode={mode}
+              changeCopyUI={changeCopyUI}
+              copyCategory={copyUI?.categories?.find(
+                (item) => item.category === category.category
+              )}
+              isDefaultEditing={isDefaultEditing}
+              showAdvanced={showAdvanced}
+              isAlreadyDeleted = {true}
+            />
+            ))}
         </tbody>
       </table>
     </div>
