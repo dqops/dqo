@@ -6,21 +6,26 @@ import { AxiosResponse } from 'axios';
 import { CheckTemplate } from '../../../api';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useParams } from 'react-router-dom';
 
 interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
-  checkTypes: CheckTypes;
-  onChangeSelectedCheck: (obj: CheckTemplate) => void;
   onChangeChecks: (checks: CheckTemplate[]) => void;
+  timeScale: 'daily' | 'monthly'
 }
 export default function MultiChecksFilter({
   filterParameters,
   onChangeFilterParameters,
-  checkTypes,
-  onChangeSelectedCheck,
-  onChangeChecks
+  onChangeChecks,
+  timeScale
 }: IMultiChecksFilter) {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
+    useParams();
   const [checkCategoryOptions, setCheckCategoryOptions] = useState<Option[]>(
     []
   );
@@ -46,45 +51,50 @@ export default function MultiChecksFilter({
           value: item ?? ''
         }))
       );
+      if (filterParameters?.checkName && filterParameters?.checkName) {
+      const selectedCheck = res.data.find(
+        (x) =>
+          x.check_category === filterParameters?.checkCategory &&
+          x.check_name === filterParameters?.checkName
+      );
+      onChangeFilterParameters({selectedCheck: selectedCheck});
+      }
     };
-    if (filterParameters.connection.length === 0) return
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.checkTarget
+        connection,
+        schema,
+        filterParameters?.checkTarget
       ).then(processResult);
     } else if (
-      checkTypes === CheckTypes.MONITORING &&
-      filterParameters.activeTab
+      checkTypes === CheckTypes.MONITORING
     ) {
       SchemaApiClient.getSchemaMonitoringChecksTemplates(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.checkTarget
+        connection,
+        schema,
+        timeScale,
+        filterParameters?.checkTarget
       ).then(processResult);
     } else if (
-      checkTypes === CheckTypes.PARTITIONED &&
-      filterParameters.activeTab
+      checkTypes === CheckTypes.PARTITIONED
     ) {
       SchemaApiClient.getSchemaPartitionedChecksTemplates(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.checkTarget
+        connection,
+        schema,
+        timeScale,
+        filterParameters?.checkTarget
       ).then(processResult);
     }
   }, [
-    filterParameters.connection,
-    filterParameters.schema,
+    connection,
+    schema,
     checkTypes,
-    filterParameters.checkTarget,
-    filterParameters.activeTab
+    filterParameters?.checkTarget,
+    timeScale
   ]);
   const onChangeCheckOptions = () => {
     const checksCopy = checks
-      .filter((x) => x.check_category === filterParameters.checkCategory)
+      .filter((x) => x.check_category === filterParameters?.checkCategory)
       .map((x) => x.check_name);
 
     const sortedChecks = checksCopy.sort((a, b): number => {
@@ -103,21 +113,21 @@ export default function MultiChecksFilter({
   };
 
   useEffect(() => {
-    if (filterParameters.checkCategory) {
+    if (filterParameters?.checkCategory) {
       onChangeCheckOptions();
     }
-  }, [filterParameters.checkCategory, checks]);
+  }, [filterParameters?.checkCategory, checks, timeScale, connection, schema]);
 
   useEffect(() => {
-    if (filterParameters.checkName && filterParameters.checkName) {
+    if (filterParameters?.checkName && filterParameters?.checkName) {
       const selectedCheck = checks.find(
         (x) =>
-          x.check_category === filterParameters.checkCategory &&
-          x.check_name === filterParameters.checkName
+          x.check_category === filterParameters?.checkCategory &&
+          x.check_name === filterParameters?.checkName
       );
-      onChangeSelectedCheck(selectedCheck ?? {});
+      onChangeFilterParameters({selectedCheck: selectedCheck});
     }
-  }, [filterParameters.checkName]);
+  }, [filterParameters?.checkName, timeScale, connection, schema]);
 
   return (
     <div className="flex w-full">
@@ -138,7 +148,7 @@ export default function MultiChecksFilter({
                   onChangeChecks([]);
                 setCheckNameOptions([]);
               }}
-              checked={filterParameters.checkTarget === 'table'}
+              checked={filterParameters?.checkTarget === 'table'}
             />
             <RadioButton
               label="Column"
@@ -151,29 +161,30 @@ export default function MultiChecksFilter({
                 onChangeChecks([]);
                 setCheckNameOptions([]);
               }}
-              checked={filterParameters.checkTarget === 'column'}
+              checked={filterParameters?.checkTarget === 'column'}
             />
           </div>
         </div>
           <Select
             label="Check category"
             options={sortObjects(checkCategoryOptions)}
-            value={filterParameters.checkCategory}
+            value={filterParameters?.checkCategory}
             onChange={(value) => {
               onChangeFilterParameters({ checkCategory: value });
               onChangeCheckOptions();
               onChangeChecks([]);
             }}
+            className='min-w-60'
           />
           <Select
             options={checkNameOptions}
             label="Check name"
-            value={filterParameters.checkName}
+            value={filterParameters?.checkName}
             onChange={(value) => {
               onChangeFilterParameters({ checkName: value });
               onChangeChecks([]);
             }}
-            className='ml-10'
+            className='ml-10 min-w-60'
           />
     </div>
   );

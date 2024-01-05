@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { CheckModel, CheckTemplate } from '../../../../api';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
@@ -9,14 +9,9 @@ import {
   MultiChecksTableHeader
 } from './MultiCheckTableHeaderButtons';
 import { addFirstLevelTab } from '../../../../redux/actions/source.actions';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useActionDispatch } from '../../../../hooks/useActionDispatch';
-import {
-  getCommonParams,
-  getAdditionalParams,
-  getUrl,
-  getValue
-} from './MultiChecksTableChecksRouting.utils';
+import { CheckTypes, ROUTES } from '../../../../shared/routes';
 
 type TMultiChecksTable = {
   checkTarget: 'column' | 'table' | undefined;
@@ -24,15 +19,29 @@ type TMultiChecksTable = {
   filterParameters: IFilterTemplate;
   selectedCheckModel: CheckModel;
   searchChecks: () => void;
+  timeScale: 'daily' | 'monthly'
 };
+type TCheckDefRouting =
+  | {
+      table: string;
+      column: string;
+    }
+  | { table: string };
 
 export default function MultiChecksTable({
   checkTarget,
   checks,
   filterParameters,
   selectedCheckModel,
-  searchChecks
+  searchChecks,
+  timeScale
 }: TMultiChecksTable) {
+  const {
+    checkTypes,
+    connection, 
+    schema
+  }: { checkTypes: CheckTypes, connection: string, schema: string} =
+    useParams();
   const [selectedData, setSelectedData] = useState<CheckTemplate[]>([]);
   const [action, setAction] = useState<'bulkEnabled' | 'bulkDisabled'>();
   const [loading, setLoading] = useState(false);
@@ -57,29 +66,153 @@ export default function MultiChecksTable({
     }
   };
 
-  const goToCheckDefinition = useCallback(
-    (table: string, column?: string) => {
-      if (!filterParameters.checkCategory || !filterParameters.checkName)
-        return;
+  const goToSingleCheckScreenTable = (table: string) => {
+    let url = '';
+    let value;
+    if (!filterParameters.checkCategory || !filterParameters.checkName) return;
+    switch (checkTypes) {
+      case CheckTypes.PROFILING:
+        url = ROUTES.TABLE_PROFILING_UI_FILTER(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          filterParameters.checkCategory,
+          filterParameters.checkName
+        );
+        value = ROUTES.TABLE_PROFILING_VALUE(
+          checkTypes,
+          connection,
+          schema,
+          table
+        );
+        break;
+      case CheckTypes.PARTITIONED:
+        url = ROUTES.TABLE_PARTITIONED_UI_FILTER(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
+        );
+        value = ROUTES.TABLE_PARTITIONED_VALUE(
+          checkTypes,
+          connection,
+          schema,
+          table
+        );
+        break;
+      case CheckTypes.MONITORING:
+        url = ROUTES.TABLE_MONITORING_UI_FILTER(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
+        );
+        value = ROUTES.TABLE_MONITORING_VALUE(
+          checkTypes,
+          connection,
+          schema,
+          table
+        );
+        break;
+    }
+    dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value,
+        state: {},
+        label: table
+      })
+    );
+    history.push(url);
+  };
 
-      const commonParams = getCommonParams(filterParameters, table);
-      const additionalParams = getAdditionalParams(filterParameters, column);
+  const goToSingleCheckScreenColumn = (table: string, column: string) => {
+    let url = '';
+    let value;
+    if (!filterParameters.checkCategory || !filterParameters.checkName) return;
+    switch (checkTypes) {
+      case CheckTypes.PROFILING:
+        url = ROUTES.COLUMN_PROFILING_UI_FILTER(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column,
+          filterParameters.checkCategory,
+          filterParameters.checkName
+        );
+        value = ROUTES.COLUMN_PROFILING_VALUE(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column
+        );
+        break;
+      case CheckTypes.PARTITIONED:
+        url = ROUTES.COLUMN_PARTITIONED_UI_FILTER(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
+        );
+        value = ROUTES.COLUMN_PARTITIONED_VALUE(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column
+        );
+        break;
+      case CheckTypes.MONITORING:
+        url = ROUTES.COLUMN_MONITORING_UI_FILTER(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column,
+          timeScale,
+          filterParameters.checkCategory,
+          filterParameters.checkName
+        );
+        value = ROUTES.COLUMN_MONITORING_VALUE(
+          checkTypes,
+          connection,
+          schema,
+          table,
+          column
+        );
+        break;
+    }
+    dispatch(
+      addFirstLevelTab(checkTypes, {
+        url,
+        value,
+        state: {},
+        label: table
+      })
+    );
+    history.push(url);
+  };
 
-      const url = getUrl(filterParameters, commonParams, additionalParams, column);
-      const value = getValue(filterParameters.checkTypes, commonParams, column);
-
-      dispatch(
-        addFirstLevelTab(filterParameters.checkTypes, {
-          url,
-          value,
-          state: {},
-          label: table
-        })
-      );
-      history.push(url);
-    },
-    [filterParameters]
-  );
+  const goToCheckDefinition = (def: TCheckDefRouting) => {
+    if (checkTarget === 'column' && 'column' in def) {
+      goToSingleCheckScreenColumn(def.table, def.column);
+    } else {
+      goToSingleCheckScreenTable(def.table);
+    }
+  };
 
   return (
     <div className="w-max rounded-lg my-4">
@@ -91,8 +224,8 @@ export default function MultiChecksTable({
         setAction={setAction}
         loading={loading}
       />
-      {filterParameters.checkName &&
-        filterParameters.checkCategory &&
+      {filterParameters?.checkName &&
+        filterParameters?.checkCategory &&
         checks &&
         checks.length > 0 && (
           <table className="mt-8">
@@ -100,7 +233,7 @@ export default function MultiChecksTable({
             <tbody>
               {checks?.map((check, index) => (
                 <MultiChecksTableItem
-                  checkTarget={filterParameters.checkTarget}
+                  checkTarget={filterParameters?.checkTarget}
                   check={check}
                   key={index}
                   checked={selectedData.includes(check)}
@@ -123,6 +256,7 @@ export default function MultiChecksTable({
           setSelectedData([]);
         }}
         onChangeLoading={onChangeLoading}
+        timeScale = {timeScale}
       />
     </div>
   );

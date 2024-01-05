@@ -6,12 +6,19 @@ import FieldValue from '../../FieldValue';
 import Switch from '../../../../components/Switch';
 import Button from '../../../../components/Button';
 
+type TCheckDefRouting =
+  | {
+      table: string;
+      column: string;
+    }
+  | { table: string };
+
 type TMultiChecksTableItem = {
   checkTarget: 'column' | 'table' | undefined;
   check: CheckConfigurationModel;
   checked: boolean;
   onChangeSelection: (check: CheckConfigurationModel) => void;
-  goToCheckDefinition: (table: string, column?: string) => void;
+  goToCheckDefinition: (arg: TCheckDefRouting) => void;
 };
 
 export default function MultiChecksTableItem({
@@ -42,7 +49,14 @@ export default function MultiChecksTableItem({
         variant="text"
         className="px-4 py-2 text-left underline"
         onClick={() =>
-          goToCheckDefinition(check.table_name ?? '', check.column_name)
+          goToCheckDefinition(
+            check.column_name
+              ? {
+                  table: check.table_name ?? '',
+                  column: check.column_name ?? ''
+                }
+              : { table: check.table_name ?? '' }
+          )
         }
       ></Button>
       <td className="px-4 py-2 text-left">{check.category_name}</td>

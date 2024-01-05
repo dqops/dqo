@@ -85,7 +85,7 @@ const setActiveTabState = (
 ) => {
   const newState = state ? structuredClone(state) : state;
   const activeTab = action?.activeTab || newState[action.checkType]?.activeTab;
-
+  
   return {
     ...newState,
     [action.checkType]: {
@@ -1342,6 +1342,32 @@ const connectionReducer = (state = initialState, action: Action) => {
           [action.data]: false
         }
       });
+    }
+    case SOURCE_ACTION.SET_MULTICHECK_FILTERS: {
+      const firstState =
+      state[action.checkType]?.tabs.find(
+        (item) => item.value === action.activeTab
+      )?.state || {};
+
+      const checksState: Record<string, any> =
+      firstState.multiCheckFilters || ({} as any);
+
+      return setActiveTabState(state, action, {
+        multiCheckFilters: {...checksState, ...action.data}
+      })
+    }
+    case SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {      
+      const firstState =
+      state[action.checkType]?.tabs.find(
+        (item) => item.value === action.activeTab
+      )?.state || {};
+
+      const checksState: Record<string, any> =
+      firstState.multiCheckSearchedChecks || ({} as any);
+
+      return setActiveTabState(state, action, {
+        multiCheckSearchedChecks: {...checksState, ...action.data}
+      })
     }
     default:
       return state;
