@@ -43,20 +43,6 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    timeliness:
-      profile_data_freshness:
-        warning:
-          max_days: 1.0
-        error:
-          max_days: 2.0
-        fatal:
-          max_days: 1.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
@@ -1530,21 +1516,6 @@ It is additionally feasible to run this check on a specific table. In order to d
 
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_data_freshness
-```
-
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      timeliness:
-        daily_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
 ```
 
 **Sample configuration (YAML)**
@@ -3024,21 +2995,6 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_data_freshness
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      timeliness:
-        monthly_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
@@ -4514,21 +4470,6 @@ It is additionally feasible to run this check on a specific table. In order to d
 
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_data_freshness
-```
-
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    daily:
-      timeliness:
-        daily_partition_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
 ```
 
 **Sample configuration (YAML)**
@@ -6020,21 +5961,6 @@ It is additionally feasible to run this check on a specific table. In order to d
 
 ```
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_data_freshness
-```
-
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    monthly:
-      timeliness:
-        monthly_partition_data_freshness:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
 ```
 
 **Sample configuration (YAML)**

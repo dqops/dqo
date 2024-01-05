@@ -1,4 +1,33 @@
 
+## ColumnDatatypeMonthlyMonitoringChecksSpec
+Container of datatype data quality monitoring checks on a column level that are checking at a monthly level.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_string_datatype_detected](../../../../checks/column/datatype/string-datatype-detected.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDatatypeStringDatatypeDetectedCheckSpec](../../../../checks/column/datatype/string-datatype-detected.md)| | | |
+|[monthly_string_datatype_changed](../../../../checks/column/datatype/string-datatype-changed.md)|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnDatatypeStringDatatypeChangedCheckSpec](../../../../checks/column/datatype/string-datatype-changed.md)| | | |
+|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
 ## ColumnAccuracyMonthlyMonitoringChecksSpec
 Container of accuracy data quality monitoring checks on a column level that are checking at a monthly level.
 
@@ -19,93 +48,6 @@ Container of accuracy data quality monitoring checks on a column level that are 
 |[monthly_total_max_match_percent](../../../../checks/column/accuracy/total-max-match-percent.md)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalMaxMatchPercentCheckSpec](../../../../checks/column/accuracy/total-max-match-percent.md)| | | |
 |[monthly_total_average_match_percent](../../../../checks/column/accuracy/total-average-match-percent.md)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalAverageMatchPercentCheckSpec](../../../../checks/column/accuracy/total-average-match-percent.md)| | | |
 |[monthly_total_not_null_count_match_percent](../../../../checks/column/accuracy/total-not-null-count-match-percent.md)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec](../../../../checks/column/accuracy/total-not-null-count-match-percent.md)| | | |
-|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## ColumnSchemaMonthlyMonitoringChecksSpec
-Container of built-in preconfigured data quality checks on a column level that are checking the column schema at a monthly level.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_column_exists](../../../../checks/column/schema/column-exists.md)|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.|[ColumnSchemaColumnExistsCheckSpec](../../../../checks/column/schema/column-exists.md)| | | |
-|[monthly_column_type_changed](../../../../checks/column/schema/column-type-changed.md)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.|[ColumnSchemaTypeChangedCheckSpec](../../../../checks/column/schema/column-type-changed.md)| | | |
-|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## ColumnComparisonMonthlyMonitoringChecksSpecMap
-Container of comparison checks for each defined data comparison. The name of the key in this dictionary
- must match a name of a table comparison that is defined on the parent table.
- Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|self||Dict[string, [ColumnComparisonMonthlyMonitoringChecksSpec](#ColumnComparisonMonthlyMonitoringChecksSpec)]| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## ColumnDatatypeMonthlyMonitoringChecksSpec
-Container of datatype data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_string_datatype_detected](../../../../checks/column/datatype/string-datatype-detected.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDatatypeStringDatatypeDetectedCheckSpec](../../../../checks/column/datatype/string-datatype-detected.md)| | | |
-|[monthly_string_datatype_changed](../../../../checks/column/datatype/string-datatype-changed.md)|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.|[ColumnDatatypeStringDatatypeChangedCheckSpec](../../../../checks/column/datatype/string-datatype-changed.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -180,8 +122,8 @@ Container of strings data quality monitoring checks on a column level that are c
 
 ___
 
-## ColumnDatetimeMonthlyMonitoringChecksSpec
-Container of date-time data quality monitoring checks on a column level that are checking at a monthly level.
+## ColumnBoolMonthlyMonitoringChecksSpec
+Container of boolean monitoring data quality checks on a column level that are checking at a monthly level.
 
 
 
@@ -195,9 +137,8 @@ Container of date-time data quality monitoring checks on a column level that are
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_date_match_format_percent](../../../../checks/column/datetime/date-match-format-percent.md)|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.|[ColumnDatetimeDateMatchFormatPercentCheckSpec](../../../../checks/column/datetime/date-match-format-percent.md)| | | |
-|[monthly_date_values_in_future_percent](../../../../checks/column/datetime/date-values-in-future-percent.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDateValuesInFuturePercentCheckSpec](../../../../checks/column/datetime/date-values-in-future-percent.md)| | | |
-|[monthly_datetime_value_in_range_date_percent](../../../../checks/column/datetime/datetime-value-in-range-date-percent.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDatetimeValueInRangeDatePercentCheckSpec](../../../../checks/column/datetime/datetime-value-in-range-date-percent.md)| | | |
+|[monthly_true_percent](../../../../checks/column/bool/true-percent.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnTruePercentCheckSpec](../../../../checks/column/bool/true-percent.md)| | | |
+|[monthly_false_percent](../../../../checks/column/bool/false-percent.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnFalsePercentCheckSpec](../../../../checks/column/bool/false-percent.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -210,8 +151,8 @@ Container of date-time data quality monitoring checks on a column level that are
 
 ___
 
-## ColumnNullsMonthlyMonitoringChecksSpec
-Container of nulls data quality monitoring checks on a column level that are checking at a monthly level.
+## ColumnAnomalyMonthlyMonitoringChecksSpec
+Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
 
 
 
@@ -225,10 +166,9 @@ Container of nulls data quality monitoring checks on a column level that are che
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_nulls_count](../../../../checks/column/nulls/nulls-count.md)|Detects columns with any null values when the max_count&#x3D;0. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNullsCountCheckSpec](../../../../checks/column/nulls/nulls-count.md)| | | |
-|[monthly_nulls_percent](../../../../checks/column/nulls/nulls-percent.md)|Verifies that the percentage of null values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNullsPercentCheckSpec](../../../../checks/column/nulls/nulls-percent.md)| | | |
-|[monthly_not_nulls_count](../../../../checks/column/nulls/not-nulls-count.md)|Detects empty columns with the min_count&#x3D;0 rule. Verifies that the number of not null values in a column does not fall below the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNotNullsCountCheckSpec](../../../../checks/column/nulls/not-nulls-count.md)| | | |
-|[monthly_not_nulls_percent](../../../../checks/column/nulls/not-nulls-percent.md)|Verifies that the percentage of not nulls in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNotNullsPercentCheckSpec](../../../../checks/column/nulls/not-nulls-percent.md)| | | |
+|[monthly_mean_change](../../../../checks/column/anomaly/mean-change.md)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](../../../../checks/column/anomaly/mean-change.md)| | | |
+|[monthly_median_change](../../../../checks/column/anomaly/median-change.md)|Verifies that the median in a column changed in a fixed rate since last readout.|[ColumnChangeMedianCheckSpec](../../../../checks/column/anomaly/median-change.md)| | | |
+|[monthly_sum_change](../../../../checks/column/anomaly/sum-change.md)|Verifies that the sum in a column changed in a fixed rate since last readout.|[ColumnChangeSumCheckSpec](../../../../checks/column/anomaly/sum-change.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -241,8 +181,8 @@ Container of nulls data quality monitoring checks on a column level that are che
 
 ___
 
-## ColumnIntegrityMonthlyMonitoringChecksSpec
-Container of integrity data quality monitoring checks on a column level that are checking at a monthly level.
+## ColumnSchemaMonthlyMonitoringChecksSpec
+Container of built-in preconfigured data quality checks on a column level that are checking the column schema at a monthly level.
 
 
 
@@ -256,40 +196,8 @@ Container of integrity data quality monitoring checks on a column level that are
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_foreign_key_not_match_count](../../../../checks/column/integrity/foreign-key-not-match-count.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnIntegrityForeignKeyNotMatchCountCheckSpec](../../../../checks/column/integrity/foreign-key-not-match-count.md)| | | |
-|[monthly_foreign_key_match_percent](../../../../checks/column/integrity/foreign-key-match-percent.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnIntegrityForeignKeyMatchPercentCheckSpec](../../../../checks/column/integrity/foreign-key-match-percent.md)| | | |
-|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## ColumnPiiMonthlyMonitoringChecksSpec
-Container of PII data quality monitoring checks on a column level that are checking at a monthly level.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_contains_usa_phone_percent](../../../../checks/column/pii/contains-usa-phone-percent.md)|Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsUsaPhonePercentCheckSpec](../../../../checks/column/pii/contains-usa-phone-percent.md)| | | |
-|[monthly_contains_usa_zipcode_percent](../../../../checks/column/pii/contains-usa-zipcode-percent.md)|Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsUsaZipcodePercentCheckSpec](../../../../checks/column/pii/contains-usa-zipcode-percent.md)| | | |
-|[monthly_contains_email_percent](../../../../checks/column/pii/contains-email-percent.md)|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsEmailPercentCheckSpec](../../../../checks/column/pii/contains-email-percent.md)| | | |
-|[monthly_contains_ip4_percent](../../../../checks/column/pii/contains-ip4-percent.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsIp4PercentCheckSpec](../../../../checks/column/pii/contains-ip4-percent.md)| | | |
-|[monthly_contains_ip6_percent](../../../../checks/column/pii/contains-ip6-percent.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsIp6PercentCheckSpec](../../../../checks/column/pii/contains-ip6-percent.md)| | | |
+|[monthly_column_exists](../../../../checks/column/schema/column-exists.md)|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.|[ColumnSchemaColumnExistsCheckSpec](../../../../checks/column/schema/column-exists.md)| | | |
+|[monthly_column_type_changed](../../../../checks/column/schema/column-type-changed.md)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.|[ColumnSchemaTypeChangedCheckSpec](../../../../checks/column/schema/column-type-changed.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -338,8 +246,8 @@ Container of built-in preconfigured column level comparison checks that compare 
 
 ___
 
-## ColumnBoolMonthlyMonitoringChecksSpec
-Container of boolean monitoring data quality checks on a column level that are checking at a monthly level.
+## ColumnDatetimeMonthlyMonitoringChecksSpec
+Container of date-time data quality monitoring checks on a column level that are checking at a monthly level.
 
 
 
@@ -353,9 +261,80 @@ Container of boolean monitoring data quality checks on a column level that are c
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_true_percent](../../../../checks/column/bool/true-percent.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnTruePercentCheckSpec](../../../../checks/column/bool/true-percent.md)| | | |
-|[monthly_false_percent](../../../../checks/column/bool/false-percent.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnFalsePercentCheckSpec](../../../../checks/column/bool/false-percent.md)| | | |
+|[monthly_date_match_format_percent](../../../../checks/column/datetime/date-match-format-percent.md)|Verifies that the percentage of date values matching the given format in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.|[ColumnDatetimeDateMatchFormatPercentCheckSpec](../../../../checks/column/datetime/date-match-format-percent.md)| | | |
+|[monthly_date_values_in_future_percent](../../../../checks/column/datetime/date-values-in-future-percent.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDateValuesInFuturePercentCheckSpec](../../../../checks/column/datetime/date-values-in-future-percent.md)| | | |
+|[monthly_datetime_value_in_range_date_percent](../../../../checks/column/datetime/datetime-value-in-range-date-percent.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnDatetimeValueInRangeDatePercentCheckSpec](../../../../checks/column/datetime/datetime-value-in-range-date-percent.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+## ColumnIntegrityMonthlyMonitoringChecksSpec
+Container of integrity data quality monitoring checks on a column level that are checking at a monthly level.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_foreign_key_not_match_count](../../../../checks/column/integrity/foreign-key-not-match-count.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnIntegrityForeignKeyNotMatchCountCheckSpec](../../../../checks/column/integrity/foreign-key-not-match-count.md)| | | |
+|[monthly_foreign_key_match_percent](../../../../checks/column/integrity/foreign-key-match-percent.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnIntegrityForeignKeyMatchPercentCheckSpec](../../../../checks/column/integrity/foreign-key-match-percent.md)| | | |
+|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+## ColumnMonthlyMonitoringCheckCategoriesSpec
+Container of column level monthly monitoring checks. Contains categories of monthly monitoring checks.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[nulls](#ColumnNullsMonthlyMonitoringChecksSpec)|Monthly monitoring checks of nulls in the column|[ColumnNullsMonthlyMonitoringChecksSpec](#ColumnNullsMonthlyMonitoringChecksSpec)| | | |
+|[numeric](#ColumnNumericMonthlyMonitoringChecksSpec)|Monthly monitoring checks of numeric in the column|[ColumnNumericMonthlyMonitoringChecksSpec](#ColumnNumericMonthlyMonitoringChecksSpec)| | | |
+|[strings](#ColumnStringsMonthlyMonitoringChecksSpec)|Monthly monitoring checks of strings in the column|[ColumnStringsMonthlyMonitoringChecksSpec](#ColumnStringsMonthlyMonitoringChecksSpec)| | | |
+|[uniqueness](#ColumnUniquenessMonthlyMonitoringChecksSpec)|Monthly monitoring checks of uniqueness in the column|[ColumnUniquenessMonthlyMonitoringChecksSpec](#ColumnUniquenessMonthlyMonitoringChecksSpec)| | | |
+|[datetime](#ColumnDatetimeMonthlyMonitoringChecksSpec)|Monthly monitoring checks of datetime in the column|[ColumnDatetimeMonthlyMonitoringChecksSpec](#ColumnDatetimeMonthlyMonitoringChecksSpec)| | | |
+|[pii](#ColumnPiiMonthlyMonitoringChecksSpec)|Monthly monitoring checks of Personal Identifiable Information (PII) in the column|[ColumnPiiMonthlyMonitoringChecksSpec](#ColumnPiiMonthlyMonitoringChecksSpec)| | | |
+|[sql](#ColumnSqlMonthlyMonitoringChecksSpec)|Monthly monitoring checks of custom SQL checks in the column|[ColumnSqlMonthlyMonitoringChecksSpec](#ColumnSqlMonthlyMonitoringChecksSpec)| | | |
+|[bool](#ColumnBoolMonthlyMonitoringChecksSpec)|Monthly monitoring checks of booleans in the column|[ColumnBoolMonthlyMonitoringChecksSpec](#ColumnBoolMonthlyMonitoringChecksSpec)| | | |
+|[integrity](#ColumnIntegrityMonthlyMonitoringChecksSpec)|Monthly monitoring checks of integrity in the column|[ColumnIntegrityMonthlyMonitoringChecksSpec](#ColumnIntegrityMonthlyMonitoringChecksSpec)| | | |
+|[accuracy](#ColumnAccuracyMonthlyMonitoringChecksSpec)|Monthly monitoring checks of accuracy in the column|[ColumnAccuracyMonthlyMonitoringChecksSpec](#ColumnAccuracyMonthlyMonitoringChecksSpec)| | | |
+|[datatype](#ColumnDatatypeMonthlyMonitoringChecksSpec)|Monthly monitoring checks of datatype in the column|[ColumnDatatypeMonthlyMonitoringChecksSpec](#ColumnDatatypeMonthlyMonitoringChecksSpec)| | | |
+|[anomaly](#ColumnAnomalyMonthlyMonitoringChecksSpec)|Monthly monitoring checks of anomaly in the column|[ColumnAnomalyMonthlyMonitoringChecksSpec](#ColumnAnomalyMonthlyMonitoringChecksSpec)| | | |
+|[schema](#ColumnSchemaMonthlyMonitoringChecksSpec)|Monthly monitoring column schema checks|[ColumnSchemaMonthlyMonitoringChecksSpec](#ColumnSchemaMonthlyMonitoringChecksSpec)| | | |
+|[comparisons](#ColumnComparisonMonthlyMonitoringChecksSpecMap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyMonitoringChecksSpecMap](#ColumnComparisonMonthlyMonitoringChecksSpecMap)| | | |
+|[custom](../../profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
 
 
 
@@ -410,8 +389,8 @@ Container of uniqueness data quality monitoring checks on a column level that ar
 
 ___
 
-## ColumnSqlMonthlyMonitoringChecksSpec
-Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
+## ColumnNullsMonthlyMonitoringChecksSpec
+Container of nulls data quality monitoring checks on a column level that are checking at a monthly level.
 
 
 
@@ -425,9 +404,10 @@ Container of built-in preconfigured data quality checks on a column level that a
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_sql_condition_passed_percent_on_column](../../../../checks/column/sql/sql-condition-passed-percent-on-column.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnSqlConditionPassedPercentCheckSpec](../../../../checks/column/sql/sql-condition-passed-percent-on-column.md)| | | |
-|[monthly_sql_condition_failed_count_on_column](../../../../checks/column/sql/sql-condition-failed-count-on-column.md)|Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnSqlConditionFailedCountCheckSpec](../../../../checks/column/sql/sql-condition-failed-count-on-column.md)| | | |
-|[monthly_sql_aggregate_expr_column](../../../../checks/column/sql/sql-aggregate-expr-column.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnSqlAggregateExprCheckSpec](../../../../checks/column/sql/sql-aggregate-expr-column.md)| | | |
+|[monthly_nulls_count](../../../../checks/column/nulls/nulls-count.md)|Detects that a column has any null values (with the rule threshold max_count&#x3D;0). Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNullsCountCheckSpec](../../../../checks/column/nulls/nulls-count.md)| | | |
+|[monthly_nulls_percent](../../../../checks/column/nulls/nulls-percent.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNullsPercentCheckSpec](../../../../checks/column/nulls/nulls-percent.md)| | | |
+|[monthly_not_nulls_count](../../../../checks/column/nulls/not-nulls-count.md)|Detects columns that are empty and have no values (with the rule threshold min_count&#x3D;1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNotNullsCountCheckSpec](../../../../checks/column/nulls/not-nulls-count.md)| | | |
+|[monthly_not_nulls_percent](../../../../checks/column/nulls/not-nulls-percent.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnNotNullsPercentCheckSpec](../../../../checks/column/nulls/not-nulls-percent.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
@@ -440,8 +420,10 @@ Container of built-in preconfigured data quality checks on a column level that a
 
 ___
 
-## ColumnAnomalyMonthlyMonitoringChecksSpec
-Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
+## ColumnComparisonMonthlyMonitoringChecksSpecMap
+Container of comparison checks for each defined data comparison. The name of the key in this dictionary
+ must match a name of a table comparison that is defined on the parent table.
+ Contains configuration of column level comparison checks. Each column level check container also defines the name of the reference column name to which we are comparing.
 
 
 
@@ -455,10 +437,7 @@ Container of built-in preconfigured data quality checks on a column level for de
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_mean_change](../../../../checks/column/anomaly/mean-change.md)|Verifies that the mean value in a column changed in a fixed rate since last readout.|[ColumnChangeMeanCheckSpec](../../../../checks/column/anomaly/mean-change.md)| | | |
-|[monthly_median_change](../../../../checks/column/anomaly/median-change.md)|Verifies that the median in a column changed in a fixed rate since last readout.|[ColumnChangeMedianCheckSpec](../../../../checks/column/anomaly/median-change.md)| | | |
-|[monthly_sum_change](../../../../checks/column/anomaly/sum-change.md)|Verifies that the sum in a column changed in a fixed rate since last readout.|[ColumnChangeSumCheckSpec](../../../../checks/column/anomaly/sum-change.md)| | | |
-|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+|self||Dict[string, [ColumnComparisonMonthlyMonitoringChecksSpec](#ColumnComparisonMonthlyMonitoringChecksSpec)]| | | |
 
 
 
@@ -470,8 +449,8 @@ Container of built-in preconfigured data quality checks on a column level for de
 
 ___
 
-## ColumnMonthlyMonitoringCheckCategoriesSpec
-Container of column level monthly monitoring checks. Contains categories of monthly monitoring checks.
+## ColumnPiiMonthlyMonitoringChecksSpec
+Container of PII data quality monitoring checks on a column level that are checking at a monthly level.
 
 
 
@@ -485,21 +464,12 @@ Container of column level monthly monitoring checks. Contains categories of mont
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[nulls](#ColumnNullsMonthlyMonitoringChecksSpec)|Monthly monitoring checks of nulls in the column|[ColumnNullsMonthlyMonitoringChecksSpec](#ColumnNullsMonthlyMonitoringChecksSpec)| | | |
-|[numeric](#ColumnNumericMonthlyMonitoringChecksSpec)|Monthly monitoring checks of numeric in the column|[ColumnNumericMonthlyMonitoringChecksSpec](#ColumnNumericMonthlyMonitoringChecksSpec)| | | |
-|[strings](#ColumnStringsMonthlyMonitoringChecksSpec)|Monthly monitoring checks of strings in the column|[ColumnStringsMonthlyMonitoringChecksSpec](#ColumnStringsMonthlyMonitoringChecksSpec)| | | |
-|[uniqueness](#ColumnUniquenessMonthlyMonitoringChecksSpec)|Monthly monitoring checks of uniqueness in the column|[ColumnUniquenessMonthlyMonitoringChecksSpec](#ColumnUniquenessMonthlyMonitoringChecksSpec)| | | |
-|[datetime](#ColumnDatetimeMonthlyMonitoringChecksSpec)|Monthly monitoring checks of datetime in the column|[ColumnDatetimeMonthlyMonitoringChecksSpec](#ColumnDatetimeMonthlyMonitoringChecksSpec)| | | |
-|[pii](#ColumnPiiMonthlyMonitoringChecksSpec)|Monthly monitoring checks of Personal Identifiable Information (PII) in the column|[ColumnPiiMonthlyMonitoringChecksSpec](#ColumnPiiMonthlyMonitoringChecksSpec)| | | |
-|[sql](#ColumnSqlMonthlyMonitoringChecksSpec)|Monthly monitoring checks of custom SQL checks in the column|[ColumnSqlMonthlyMonitoringChecksSpec](#ColumnSqlMonthlyMonitoringChecksSpec)| | | |
-|[bool](#ColumnBoolMonthlyMonitoringChecksSpec)|Monthly monitoring checks of booleans in the column|[ColumnBoolMonthlyMonitoringChecksSpec](#ColumnBoolMonthlyMonitoringChecksSpec)| | | |
-|[integrity](#ColumnIntegrityMonthlyMonitoringChecksSpec)|Monthly monitoring checks of integrity in the column|[ColumnIntegrityMonthlyMonitoringChecksSpec](#ColumnIntegrityMonthlyMonitoringChecksSpec)| | | |
-|[accuracy](#ColumnAccuracyMonthlyMonitoringChecksSpec)|Monthly monitoring checks of accuracy in the column|[ColumnAccuracyMonthlyMonitoringChecksSpec](#ColumnAccuracyMonthlyMonitoringChecksSpec)| | | |
-|[datatype](#ColumnDatatypeMonthlyMonitoringChecksSpec)|Monthly monitoring checks of datatype in the column|[ColumnDatatypeMonthlyMonitoringChecksSpec](#ColumnDatatypeMonthlyMonitoringChecksSpec)| | | |
-|[anomaly](#ColumnAnomalyMonthlyMonitoringChecksSpec)|Monthly monitoring checks of anomaly in the column|[ColumnAnomalyMonthlyMonitoringChecksSpec](#ColumnAnomalyMonthlyMonitoringChecksSpec)| | | |
-|[schema](#ColumnSchemaMonthlyMonitoringChecksSpec)|Monthly monitoring column schema checks|[ColumnSchemaMonthlyMonitoringChecksSpec](#ColumnSchemaMonthlyMonitoringChecksSpec)| | | |
-|[comparisons](#ColumnComparisonMonthlyMonitoringChecksSpecMap)|Dictionary of configuration of checks for table comparisons at a column level. The key that identifies each comparison must match the name of a data comparison that is configured on the parent table.|[ColumnComparisonMonthlyMonitoringChecksSpecMap](#ColumnComparisonMonthlyMonitoringChecksSpecMap)| | | |
-|[custom](../../profiling/table-profiling-checks.md#CustomCheckSpecMap)|Dictionary of custom checks. The keys are check names within this category.|[CustomCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCheckSpecMap)| | | |
+|[monthly_contains_usa_phone_percent](../../../../checks/column/pii/contains-usa-phone-percent.md)|Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsUsaPhonePercentCheckSpec](../../../../checks/column/pii/contains-usa-phone-percent.md)| | | |
+|[monthly_contains_usa_zipcode_percent](../../../../checks/column/pii/contains-usa-zipcode-percent.md)|Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsUsaZipcodePercentCheckSpec](../../../../checks/column/pii/contains-usa-zipcode-percent.md)| | | |
+|[monthly_contains_email_percent](../../../../checks/column/pii/contains-email-percent.md)|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsEmailPercentCheckSpec](../../../../checks/column/pii/contains-email-percent.md)| | | |
+|[monthly_contains_ip4_percent](../../../../checks/column/pii/contains-ip4-percent.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsIp4PercentCheckSpec](../../../../checks/column/pii/contains-ip4-percent.md)| | | |
+|[monthly_contains_ip6_percent](../../../../checks/column/pii/contains-ip6-percent.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnPiiContainsIp6PercentCheckSpec](../../../../checks/column/pii/contains-ip6-percent.md)| | | |
+|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 
 
@@ -556,6 +526,36 @@ Container of built-in preconfigured data quality monitoring on a column level th
 |[monthly_valid_latitude_percent](../../../../checks/column/numeric/valid-latitude-percent.md)|Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnValidLatitudePercentCheckSpec](../../../../checks/column/numeric/valid-latitude-percent.md)| | | |
 |[monthly_invalid_longitude_count](../../../../checks/column/numeric/invalid-longitude-count.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnInvalidLongitudeCountCheckSpec](../../../../checks/column/numeric/invalid-longitude-count.md)| | | |
 |[monthly_valid_longitude_percent](../../../../checks/column/numeric/valid-longitude-percent.md)|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnValidLongitudePercentCheckSpec](../../../../checks/column/numeric/valid-longitude-percent.md)| | | |
+|[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+## ColumnSqlMonthlyMonitoringChecksSpec
+Container of built-in preconfigured data quality checks on a column level that are using custom SQL expressions (conditions).
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_sql_condition_passed_percent_on_column](../../../../checks/column/sql/sql-condition-passed-percent-on-column.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnSqlConditionPassedPercentCheckSpec](../../../../checks/column/sql/sql-condition-passed-percent-on-column.md)| | | |
+|[monthly_sql_condition_failed_count_on_column](../../../../checks/column/sql/sql-condition-failed-count-on-column.md)|Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnSqlConditionFailedCountCheckSpec](../../../../checks/column/sql/sql-condition-failed-count-on-column.md)| | | |
+|[monthly_sql_aggregate_expr_column](../../../../checks/column/sql/sql-aggregate-expr-column.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.|[ColumnSqlAggregateExprCheckSpec](../../../../checks/column/sql/sql-aggregate-expr-column.md)| | | |
 |[custom_checks](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|[CustomCategoryCheckSpecMap](../../profiling/table-profiling-checks.md#CustomCategoryCheckSpecMap)| | | |
 
 

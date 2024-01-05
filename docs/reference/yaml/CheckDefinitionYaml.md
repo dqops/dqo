@@ -17,6 +17,7 @@ Custom data quality check specification. Provides the custom check configuration
 |sensor_name|Sensor name. It is a folder name inside the user&#x27;s home &#x27;sensors&#x27; folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name: table/volume/row_count.|string| | | |
 |rule_name|Rule name used for the check. It is a path to a custom rule python module that starts at the user&#x27;s home &#x27;rules&#x27; folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.|string| | | |
 |help_text|Help text that describes the data quality check.|string| | | |
+|standard|This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.|boolean| | | |
 
 
 

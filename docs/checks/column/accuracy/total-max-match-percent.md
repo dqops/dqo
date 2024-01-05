@@ -41,35 +41,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_total_max_match_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      profiling_checks:
-        accuracy:
-          profile_total_max_match_percent:
-            parameters:
-              referenced_table: dim_customer
-              referenced_column: customer_id
-            warning:
-              max_diff_percent: 0.0
-            error:
-              max_diff_percent: 1.0
-            fatal:
-              max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="13-24"
+```yaml hl_lines="10-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -89,12 +69,6 @@ spec:
               max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
@@ -536,36 +510,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_total_max_match_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        daily:
-          accuracy:
-            daily_total_max_match_percent:
-              parameters:
-                referenced_table: dim_customer
-                referenced_column: customer_id
-              warning:
-                max_diff_percent: 0.0
-              error:
-                max_diff_percent: 1.0
-              fatal:
-                max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="13-25"
+```yaml hl_lines="10-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -586,12 +539,6 @@ spec:
                 max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
@@ -1033,36 +980,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_total_max_match_percent
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        monthly:
-          accuracy:
-            monthly_total_max_match_percent:
-              parameters:
-                referenced_table: dim_customer
-                referenced_column: customer_id
-              warning:
-                max_diff_percent: 0.0
-              error:
-                max_diff_percent: 1.0
-              fatal:
-                max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="13-25"
+```yaml hl_lines="10-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1083,12 +1009,6 @@ spec:
                 max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 

@@ -41,33 +41,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    comparisons:
-      compare_to_source_of_truth_table:
-        profile_column_count_match:
-          warning:
-            max_diff_percent: 0.0
-          error:
-            max_diff_percent: 1.0
-          fatal:
-            max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="22-31"
+```yaml hl_lines="19-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -93,12 +75,6 @@ spec:
           fatal:
             max_diff_percent: 5.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -159,34 +135,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      comparisons:
-        compare_to_source_of_truth_table:
-          daily_column_count_match:
-            warning:
-              max_diff_percent: 0.0
-            error:
-              max_diff_percent: 1.0
-            fatal:
-              max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="22-32"
+```yaml hl_lines="19-29"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -213,12 +170,6 @@ spec:
             fatal:
               max_diff_percent: 5.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -279,34 +230,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      comparisons:
-        compare_to_source_of_truth_table:
-          monthly_column_count_match:
-            warning:
-              max_diff_percent: 0.0
-            error:
-              max_diff_percent: 1.0
-            fatal:
-              max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="22-32"
+```yaml hl_lines="19-29"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -333,12 +265,6 @@ spec:
             fatal:
               max_diff_percent: 5.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used

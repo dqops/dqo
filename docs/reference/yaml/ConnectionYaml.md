@@ -1,6 +1,83 @@
 
+## ConnectionSpec
+Data source (connection) specification.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|provider_type|Database provider type (required).|enum|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>databricks<br/>mysql<br/>bigquery<br/>presto<br/>| | |
+|[bigquery](#BigQueryParametersSpec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](#BigQueryParametersSpec)| | | |
+|[snowflake](#SnowflakeParametersSpec)|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|[SnowflakeParametersSpec](#SnowflakeParametersSpec)| | | |
+|[postgresql](#PostgresqlParametersSpec)|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|[PostgresqlParametersSpec](#PostgresqlParametersSpec)| | | |
+|[redshift](#RedshiftParametersSpec)|Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).|[RedshiftParametersSpec](#RedshiftParametersSpec)| | | |
+|[sqlserver](#SqlServerParametersSpec)|SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).|[SqlServerParametersSpec](#SqlServerParametersSpec)| | | |
+|[presto](#PrestoParametersSpec)|Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).|[PrestoParametersSpec](#PrestoParametersSpec)| | | |
+|[trino](#TrinoParametersSpec)|Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).|[TrinoParametersSpec](#TrinoParametersSpec)| | | |
+|[mysql](#MysqlParametersSpec)|MySQL connection parameters. Specify parameters in the mysql section or set the url (which is the MySQL JDBC url).|[MysqlParametersSpec](#MysqlParametersSpec)| | | |
+|[oracle](#OracleParametersSpec)|Oracle connection parameters. Specify parameters in the oracle section or set the url (which is the Oracle JDBC url).|[OracleParametersSpec](#OracleParametersSpec)| | | |
+|[spark](#SparkParametersSpec)|Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).|[SparkParametersSpec](#SparkParametersSpec)| | | |
+|[databricks](#DatabricksParametersSpec)|Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).|[DatabricksParametersSpec](#DatabricksParametersSpec)| | | |
+|parallel_jobs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer| | | |
+|[default_grouping_configuration](#DataGroupingConfigurationSpec)|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](#DataGroupingConfigurationSpec)| | | |
+|[schedules](#DefaultSchedulesSpec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[DefaultSchedulesSpec](#DefaultSchedulesSpec)| | | |
+|[incident_grouping](#ConnectionIncidentGroupingSpec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[ConnectionIncidentGroupingSpec](#ConnectionIncidentGroupingSpec)| | | |
+|[comments](../profiling/table-profiling-checks.md#CommentsListSpec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](../profiling/table-profiling-checks.md#CommentsListSpec)| | | |
+|[labels](#LabelSetSpec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|[LabelSetSpec](#LabelSetSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
+
 ## LabelSetSpec
 Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.
+
+
+
+
+
+___
+
+## BigQueryParametersSpec
+BigQuery connection parameters.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|source_project_id|Source GCP project ID. This is the project that has datasets that will be imported.|string| | | |
+|jobs_create_project|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.|enum|create_jobs_in_default_project_from_credentials<br/>create_jobs_in_source_project<br/>create_jobs_in_selected_billing_project_id<br/>| | |
+|billing_project_id|Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.|string| | | |
+|authentication_mode|Authentication mode to the Google Cloud.|enum|json_key_content<br/>json_key_path<br/>google_application_credentials<br/>| | |
+|json_key_content|JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.|string| | | |
+|json_key_path|A path to the JSON key file. Requires the authentication-mode: json_key_path.|string| | | |
+|quota_project_id|Quota GCP project ID.|string| | | |
+
+
+
+
 
 
 
@@ -42,8 +119,8 @@ MySql connection parameters.
 
 ___
 
-## DatabricksParametersSpec
-Databricks connection parameters.
+## PrestoParametersSpec
+Presto connection parameters.
 
 
 
@@ -57,14 +134,11 @@ Databricks connection parameters.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.|string| | | |
-|port|Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.|string| | | |
-|catalog|Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.|string| | | |
-|user|Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.|string| | | |
-|password|Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.|string| | | |
-|http_path|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.|string| | | |
-|access_token|Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.|string| | | |
-|options|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.|string| | | |
+|host|Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.|string| | | |
+|port|Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.|string| | | |
+|database|Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |properties||Dict[string, string]| | | |
 
 
@@ -77,8 +151,8 @@ Databricks connection parameters.
 
 ___
 
-## TrinoParametersSpec
-Trino connection parameters.
+## PostgresqlParametersSpec
+Postgresql connection parameters.
 
 
 
@@ -92,10 +166,13 @@ Trino connection parameters.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.|string| | | |
-|port|Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.|string| | | |
-|database|Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|host|PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.|string| | | |
+|port|PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.|string| | | |
+|database|PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|string| | | |
+|sslmode|Sslmode PostgreSQL connection parameter. The default value is disabled.|enum|allow<br/>prefer<br/>disable<br/>verify-ca<br/>require<br/>verify-full<br/>| | |
 |properties||Dict[string, string]| | | |
 
 
@@ -175,12 +252,8 @@ Snowflake connection parameters.
 
 ___
 
-## DefaultSchedulesSpec
-Container of all monitoring schedules (cron expressions) for each type of checks.
- Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
- Each group of checks could be divided additionally by time scale (daily, monthly, etc).
- Each time scale has a different monitoring schedule used by the job scheduler to run the checks.
- These schedules are defined in this object.
+## OracleParametersSpec
+Oracle connection parameters.
 
 
 
@@ -194,11 +267,14 @@ Container of all monitoring schedules (cron expressions) for each type of checks
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[profiling](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running profiling data quality checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
-|[monitoring_daily](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running daily monitoring checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
-|[monitoring_monthly](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running monthly monitoring checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
-|[partitioned_daily](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running daily partitioned checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
-|[partitioned_monthly](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running monthly partitioned checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
+|host|Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom environment variable.|string| | | |
+|port|Oracle port number. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.|string| | | |
+|database|Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.|string| | | |
+|initialization_sql|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;|string| | | |
+|properties||Dict[string, string]| | | |
 
 
 
@@ -210,8 +286,8 @@ Container of all monitoring schedules (cron expressions) for each type of checks
 
 ___
 
-## PrestoParametersSpec
-Presto connection parameters.
+## TrinoParametersSpec
+Trino connection parameters.
 
 
 
@@ -225,11 +301,42 @@ Presto connection parameters.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Presto host name. Supports also a ${PRESTO_HOST} configuration with a custom environment variable.|string| | | |
-|port|Presto port number. The default port is 8080. Supports also a ${PRESTO_PORT} configuration with a custom environment variable.|string| | | |
-|database|Presto database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Presto user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Presto database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|host|Trino host name. Supports also a ${TRINO_HOST} configuration with a custom environment variable.|string| | | |
+|port|Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.|string| | | |
+|database|Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|properties||Dict[string, string]| | | |
+
+
+
+
+
+
+
+
+
+___
+
+## SparkParametersSpec
+Apache Spark connection parameters.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.|string| | | |
+|port|Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.|string| | | |
+|user|Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|options|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
 |properties||Dict[string, string]| | | |
 
 
@@ -271,8 +378,8 @@ Connection definition for a data source connection that is covered by data quali
 
 ___
 
-## ConnectionSpec
-Data source (connection) specification.
+## DatabricksParametersSpec
+Databricks connection parameters.
 
 
 
@@ -286,90 +393,14 @@ Data source (connection) specification.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|provider_type|Database provider type (required).|enum|snowflake<br/>oracle<br/>postgresql<br/>redshift<br/>sqlserver<br/>trino<br/>spark<br/>databricks<br/>mysql<br/>bigquery<br/>presto<br/>| | |
-|[bigquery](#BigQueryParametersSpec)|BigQuery connection parameters. Specify parameters in the bigquery section.|[BigQueryParametersSpec](#BigQueryParametersSpec)| | | |
-|[snowflake](#SnowflakeParametersSpec)|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|[SnowflakeParametersSpec](#SnowflakeParametersSpec)| | | |
-|[postgresql](#PostgresqlParametersSpec)|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the PostgreSQL JDBC url).|[PostgresqlParametersSpec](#PostgresqlParametersSpec)| | | |
-|[redshift](#RedshiftParametersSpec)|Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).|[RedshiftParametersSpec](#RedshiftParametersSpec)| | | |
-|[sqlserver](#SqlServerParametersSpec)|SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).|[SqlServerParametersSpec](#SqlServerParametersSpec)| | | |
-|[presto](#PrestoParametersSpec)|Presto connection parameters. Specify parameters in the presto section or set the url (which is the Presto JDBC url).|[PrestoParametersSpec](#PrestoParametersSpec)| | | |
-|[trino](#TrinoParametersSpec)|Trino connection parameters. Specify parameters in the trino section or set the url (which is the Trino JDBC url).|[TrinoParametersSpec](#TrinoParametersSpec)| | | |
-|[mysql](#MysqlParametersSpec)|MySQL connection parameters. Specify parameters in the mysql section or set the url (which is the MySQL JDBC url).|[MysqlParametersSpec](#MysqlParametersSpec)| | | |
-|[oracle](#OracleParametersSpec)|Oracle connection parameters. Specify parameters in the oracle section or set the url (which is the Oracle JDBC url).|[OracleParametersSpec](#OracleParametersSpec)| | | |
-|[spark](#SparkParametersSpec)|Spark connection parameters. Specify parameters in the spark section or set the url (which is the Spark JDBC url).|[SparkParametersSpec](#SparkParametersSpec)| | | |
-|[databricks](#DatabricksParametersSpec)|Databricks connection parameters. Specify parameters in the databricks section or set the url (which is the Databricks JDBC url).|[DatabricksParametersSpec](#DatabricksParametersSpec)| | | |
-|parallel_jobs_limit|The concurrency limit for the maximum number of parallel SQL queries executed on this connection.|integer| | | |
-|[default_grouping_configuration](#DataGroupingConfigurationSpec)|Default data grouping configuration for all tables. The configuration may be overridden on table, column and check level. Data groupings are configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning. a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). |[DataGroupingConfigurationSpec](#DataGroupingConfigurationSpec)| | | |
-|[schedules](#DefaultSchedulesSpec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|[DefaultSchedulesSpec](#DefaultSchedulesSpec)| | | |
-|[incident_grouping](#ConnectionIncidentGroupingSpec)|Configuration of data quality incident grouping. Configures how failed data quality checks are grouped into data quality incidents.|[ConnectionIncidentGroupingSpec](#ConnectionIncidentGroupingSpec)| | | |
-|[comments](../profiling/table-profiling-checks.md#CommentsListSpec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|[CommentsListSpec](../profiling/table-profiling-checks.md#CommentsListSpec)| | | |
-|[labels](#LabelSetSpec)|Custom labels that were assigned to the connection. Labels are used for searching for tables when filtered data quality checks are executed.|[LabelSetSpec](#LabelSetSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## BigQueryParametersSpec
-BigQuery connection parameters.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|source_project_id|Source GCP project ID. This is the project that has datasets that will be imported.|string| | | |
-|jobs_create_project|Configures the way how to select the project that will be used to start BigQuery jobs and will be used for billing. The user/service identified by the credentials must have bigquery.jobs.create permission in that project.|enum|create_jobs_in_default_project_from_credentials<br/>create_jobs_in_source_project<br/>create_jobs_in_selected_billing_project_id<br/>| | |
-|billing_project_id|Billing GCP project ID. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.|string| | | |
-|authentication_mode|Authentication mode to the Google Cloud.|enum|json_key_content<br/>json_key_path<br/>google_application_credentials<br/>| | |
-|json_key_content|JSON key content. Use an environment variable that contains the content of the key as ${KEY_ENV} or a name of a secret in the GCP Secret Manager: ${sm://key-secret-name}. Requires the authentication-mode: json_key_content.|string| | | |
-|json_key_path|A path to the JSON key file. Requires the authentication-mode: json_key_path.|string| | | |
-|quota_project_id|Quota GCP project ID.|string| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## PostgresqlParametersSpec
-Postgresql connection parameters.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.|string| | | |
-|port|PostgreSQL port number. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.|string| | | |
-|database|PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|string| | | |
-|sslmode|Sslmode PostgreSQL connection parameter. The default value is disabled.|enum|allow<br/>prefer<br/>disable<br/>verify-ca<br/>require<br/>verify-full<br/>| | |
+|host|Databricks host name. Supports also a ${DATABRICKS_HOST} configuration with a custom environment variable.|string| | | |
+|port|Databricks port number. The default port is 443. Supports also a ${DATABRICKS_PORT} configuration with a custom environment variable.|string| | | |
+|catalog|Databricks catalog name. Supports also a ${DATABRICKS_CATALOG} configuration with a custom environment variable.|string| | | |
+|user|Databricks user name. Supports also a ${DATABRICKS_USER} configuration with a custom environment variable.|string| | | |
+|password|Databricks database password. Supports also a ${DATABRICKS_PASSWORD} configuration with a custom environment variable.|string| | | |
+|http_path|Databricks http path to the warehouse. For example: /sql/1.0/warehouses/&lt;warehouse instance id&gt;. Supports also a ${DATABRICKS_HTTP_PATH} configuration with a custom environment variable.|string| | | |
+|access_token|Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.|string| | | |
+|options|Databricks connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.|string| | | |
 |properties||Dict[string, string]| | | |
 
 
@@ -410,6 +441,39 @@ Configuration of the data groupings that is used to calculate data quality check
 |[level_7](#DataGroupingDimensionSpec)|Data grouping dimension level 7 configuration.|[DataGroupingDimensionSpec](#DataGroupingDimensionSpec)| | | |
 |[level_8](#DataGroupingDimensionSpec)|Data grouping dimension level 8 configuration.|[DataGroupingDimensionSpec](#DataGroupingDimensionSpec)| | | |
 |[level_9](#DataGroupingDimensionSpec)|Data grouping dimension level 9 configuration.|[DataGroupingDimensionSpec](#DataGroupingDimensionSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
+
+## ConnectionIncidentGroupingSpec
+Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|grouping_level|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|enum|table_dimension_category_name<br/>table_dimension<br/>table_dimension_category_type<br/>table<br/>table_dimension_category<br/>| | |
+|minimum_severity|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|enum|warning<br/>error<br/>fatal<br/>| | |
+|divide_by_data_groups|Create separate data quality incidents for each data group, creating different incidents for different groups of rows. By default, data groups are ignored for grouping data quality issues into data quality incidents.|boolean| | | |
+|max_incident_length_days|The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.|integer| | | |
+|mute_for_days|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|integer| | | |
+|disabled|Disables data quality incident creation for failed data quality checks on the data source.|boolean| | | |
+|[webhooks](#IncidentWebhookNotificationsSpec)|Configuration of Webhook URLs for new or updated incident notifications.|[IncidentWebhookNotificationsSpec](#IncidentWebhookNotificationsSpec)| | | |
 
 
 
@@ -485,105 +549,6 @@ Redshift connection parameters.
 
 ___
 
-## ConnectionIncidentGroupingSpec
-Configuration of data quality incident grouping on a connection level. Defines how similar data quality issues are grouped into incidents.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|grouping_level|Grouping level of failed data quality checks for creating higher level data quality incidents. The default grouping level is by a table, a data quality dimension and a check category (i.e. a datatype data quality incident detected on a table X in the numeric checks category).|enum|table_dimension_category_name<br/>table_dimension<br/>table_dimension_category_type<br/>table<br/>table_dimension_category<br/>| | |
-|minimum_severity|Minimum severity level of data quality issues that are grouped into incidents. The default minimum severity level is &#x27;warning&#x27;. Other supported severity levels are &#x27;error&#x27; and &#x27;fatal&#x27;.|enum|warning<br/>error<br/>fatal<br/>| | |
-|divide_by_data_groups|Create separate data quality incidents for each data group, creating different incidents for different groups of rows. By default, data groups are ignored for grouping data quality issues into data quality incidents.|boolean| | | |
-|max_incident_length_days|The maximum length of a data quality incident in days. When a new data quality issue is detected after max_incident_length_days days since a similar data quality was first seen, a new data quality incident is created that will capture all following data quality issues for the next max_incident_length_days days. The default value is 60 days.|integer| | | |
-|mute_for_days|The number of days that all similar data quality issues are muted when a a data quality incident is closed in the &#x27;mute&#x27; status.|integer| | | |
-|disabled|Disables data quality incident creation for failed data quality checks on the data source.|boolean| | | |
-|[webhooks](#IncidentWebhookNotificationsSpec)|Configuration of Webhook URLs for new or updated incident notifications.|[IncidentWebhookNotificationsSpec](#IncidentWebhookNotificationsSpec)| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## SparkParametersSpec
-Apache Spark connection parameters.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Spark host name. Supports also a ${SPARK_HOST} configuration with a custom environment variable.|string| | | |
-|port|Spark port number. The default port is 10000. Supports also a ${SPARK_PORT} configuration with a custom environment variable.|string| | | |
-|user|Spark user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Spark database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|Spark connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___
-
-## OracleParametersSpec
-Oracle connection parameters.
-
-
-
-
-
-
-
-
-
-**The structure of this object is described below**
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|host|Oracle host name. Supports also a ${ORACLE_HOST} configuration with a custom environment variable.|string| | | |
-|port|Oracle port number. The default port is 1521. Supports also a ${ORACLE_PORT} configuration with a custom environment variable.|string| | | |
-|database|Oracle database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Oracle user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|options|Oracle connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.|string| | | |
-|initialization_sql|Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT&#x3D;&#x27;YYYY-DD-MM HH24:MI:SS&#x27;|string| | | |
-|properties||Dict[string, string]| | | |
-
-
-
-
-
-
-
-
-
-___
-
 ## DataGroupingDimensionSpec
 Single data grouping dimension configuration. A data grouping dimension may be configured as a hardcoded value or a mapping to a column.
 
@@ -603,6 +568,41 @@ Single data grouping dimension configuration. A data grouping dimension may be c
 |tag|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|string| | | |
 |column|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|string| | | |
 |name|Data grouping dimension name.|string| | | |
+
+
+
+
+
+
+
+
+
+___
+
+## DefaultSchedulesSpec
+Container of all monitoring schedules (cron expressions) for each type of checks.
+ Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
+ Each group of checks could be divided additionally by time scale (daily, monthly, etc).
+ Each time scale has a different monitoring schedule used by the job scheduler to run the checks.
+ These schedules are defined in this object.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[profiling](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running profiling data quality checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
+|[monitoring_daily](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running daily monitoring checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
+|[monitoring_monthly](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running monthly monitoring checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
+|[partitioned_daily](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running daily partitioned checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
+|[partitioned_monthly](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)|Schedule for running monthly partitioned checks.|[MonitoringScheduleSpec](../profiling/table-profiling-checks.md#MonitoringScheduleSpec)| | | |
 
 
 

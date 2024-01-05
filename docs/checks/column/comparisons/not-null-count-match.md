@@ -42,34 +42,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_not_null_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      profiling_checks:
-        comparisons:
-          compare_to_source_of_truth_table:
-            reference_column: source_of_truth_column_name
-            profile_not_null_count_match:
-              warning:
-                max_diff_percent: 0.0
-              error:
-                max_diff_percent: 1.0
-              fatal:
-                max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="24-34"
+```yaml hl_lines="21-31"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -99,12 +80,6 @@ spec:
                 max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -501,35 +476,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_not_null_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        daily:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              daily_not_null_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="24-35"
+```yaml hl_lines="21-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -560,12 +515,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -962,35 +911,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_not_null_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        monthly:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              monthly_not_null_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="24-35"
+```yaml hl_lines="21-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1021,12 +950,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     country:
       labels:
       - column used as the first grouping key for calculating aggregated values used
@@ -1423,35 +1346,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_not_null_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        daily:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              daily_partition_not_null_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="25-36"
+```yaml hl_lines="23-34"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -1483,12 +1387,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -1894,35 +1792,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_not_null_count_match
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        monthly:
-          comparisons:
-            compare_to_source_of_truth_table:
-              reference_column: source_of_truth_column_name
-              monthly_partition_not_null_count_match:
-                warning:
-                  max_diff_percent: 0.0
-                error:
-                  max_diff_percent: 1.0
-                fatal:
-                  max_diff_percent: 5.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="25-36"
+```yaml hl_lines="23-34"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -1954,12 +1833,6 @@ spec:
                   max_diff_percent: 5.0
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\

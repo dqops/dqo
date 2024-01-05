@@ -41,34 +41,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_sql_condition_passed_percent_on_table
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  profiling_checks:
-    sql:
-      profile_sql_condition_passed_percent_on_table:
-        parameters:
-          sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-        warning:
-          min_percent: 100.0
-        error:
-          min_percent: 99.0
-        fatal:
-          min_percent: 95.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="11-21"
+```yaml hl_lines="8-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -83,13 +64,7 @@ spec:
           min_percent: 99.0
         fatal:
           min_percent: 95.0
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
@@ -615,14 +590,11 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-19 38-43"
+    ```yaml hl_lines="8-16 29-34"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -647,12 +619,6 @@ Expand the *Configure with data grouping* section to see additional examples for
             fatal:
               min_percent: 95.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -1235,44 +1201,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_sql_condition_passed_percent_on_table
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    daily:
-      sql:
-        daily_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="11-31"
+```yaml hl_lines="8-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1297,13 +1234,7 @@ spec:
             min_percent: 99.0
           fatal:
             min_percent: 95.0
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
@@ -1829,14 +1760,11 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-19 48-53"
+    ```yaml hl_lines="8-16 39-44"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -1871,12 +1799,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 min_percent: 95.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -2459,44 +2381,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_sql_condition_passed_percent_on_table
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  monitoring_checks:
-    monthly:
-      sql:
-        monthly_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="11-31"
+```yaml hl_lines="8-28"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -2521,13 +2414,7 @@ spec:
             min_percent: 99.0
           fatal:
             min_percent: 95.0
-  columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
+  columns: {}
 
 ```
 
@@ -3053,14 +2940,11 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-19 48-53"
+    ```yaml hl_lines="8-16 39-44"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -3095,12 +2979,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 min_percent: 95.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -3683,44 +3561,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_sql_condition_passed_percent_on_table
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    daily:
-      sql:
-        daily_partition_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-32"
+```yaml hl_lines="10-30"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -3747,12 +3597,6 @@ spec:
           fatal:
             min_percent: 95.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -4287,14 +4131,12 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 54-59"
+    ```yaml hl_lines="10-18 46-51"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -4330,12 +4172,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 min_percent: 95.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -4921,44 +4757,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_sql_condition_passed_percent_on_table
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    monthly:
-      sql:
-        monthly_partition_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-        min_sql_condition_passed_percent_on_table:
-          parameters:
-            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
-          warning:
-            min_percent: 100.0
-          error:
-            min_percent: 99.0
-          fatal:
-            min_percent: 95.0
-```
-
 **Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-32"
+```yaml hl_lines="10-30"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -4985,12 +4793,6 @@ spec:
           fatal:
             min_percent: 95.0
   columns:
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -5525,14 +5327,12 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-20 54-59"
+    ```yaml hl_lines="10-18 46-51"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -5568,12 +5368,6 @@ Expand the *Configure with data grouping* section to see additional examples for
               fatal:
                 min_percent: 95.0
       columns:
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
