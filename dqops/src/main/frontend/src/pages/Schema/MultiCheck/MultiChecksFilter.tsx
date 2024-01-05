@@ -174,6 +174,7 @@ export default function MultiChecksFilter({
               onChangeCheckOptions();
               onChangeChecks([]);
             }}
+            className='min-w-60'
           />
           <Select
             options={checkNameOptions}
@@ -183,7 +184,7 @@ export default function MultiChecksFilter({
               onChangeFilterParameters({ checkName: value });
               onChangeChecks([]);
             }}
-            className='ml-10'
+            className='ml-10 min-w-60'
           />
     </div>
   );
