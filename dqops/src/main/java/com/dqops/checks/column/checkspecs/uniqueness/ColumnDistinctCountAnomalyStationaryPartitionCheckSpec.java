@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule01ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule05ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
-import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctPercentSensorParametersSpec;
+import com.dqops.sensors.column.uniqueness.ColumnUniquenessDistinctCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+ * Column-level check that ensures that the distinct count value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAnomalyStationaryDistinctPercentCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDistinctPercentSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyStationaryDistinctPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnDistinctCountAnomalyStationaryPartitionCheckSpec
+        extends AbstractCheckSpec<ColumnUniquenessDistinctCountSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDistinctCountAnomalyStationaryPartitionCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnAnomalyStationaryDistinctPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessDistinctPercentSensorParametersSpec parameters = new ColumnUniquenessDistinctPercentSensorParametersSpec();
+    private ColumnUniquenessDistinctCountSensorParametersSpec parameters = new ColumnUniquenessDistinctCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnAnomalyStationaryDistinctPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnUniquenessDistinctPercentSensorParametersSpec getParameters() {
+    public ColumnUniquenessDistinctCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class ColumnAnomalyStationaryDistinctPercentCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnUniquenessDistinctPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnUniquenessDistinctCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -49,7 +49,6 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
             put("daily_not_nulls_percent", o -> o.dailyNotNullsPercent);
 
             put("daily_nulls_percent_anomaly", o ->o.dailyNullsPercentAnomaly);
-            put("daily_nulls_percent_anomaly_30_days", o ->o.dailyNullsPercentAnomaly30Days);
 
             put("daily_nulls_percent_change", o ->o.dailyNullsPercentChange);
             put("daily_nulls_percent_change_1_day", o ->o.dailyNullsPercentChange1Day);
@@ -71,11 +70,7 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
     private ColumnNotNullsPercentCheckSpec dailyNotNullsPercent;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.")
-    private ColumnAnomalyStationaryNullPercentCheckSpec dailyNullsPercentAnomaly;
-
-    @JsonProperty("daily_nulls_percent_anomaly_30_days")
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 30 days.")
-    private ColumnAnomalyStationaryNullPercent30DaysCheckSpec dailyNullsPercentAnomaly30Days;
+    private ColumnNullPercentAnomalyStationaryCheckSpec dailyNullsPercentAnomaly;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since the last readout.")
     private ColumnNullPercentChangeCheckSpec dailyNullsPercentChange;
@@ -168,7 +163,7 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Returns a null percent value anomaly 90 days check specification.
      * @return Null percent value anomaly 90 days check specification.
      */
-    public ColumnAnomalyStationaryNullPercentCheckSpec getDailyNullsPercentAnomaly() {
+    public ColumnNullPercentAnomalyStationaryCheckSpec getDailyNullsPercentAnomaly() {
         return dailyNullsPercentAnomaly;
     }
 
@@ -176,28 +171,10 @@ public class ColumnNullsDailyMonitoringChecksSpec extends AbstractCheckCategoryS
      * Sets a new specification of a null percent value anomaly 90 days check.
      * @param dailyNullsPercentAnomaly Null percent value anomaly 90 days check specification.
      */
-    public void setDailyNullsPercentAnomaly(ColumnAnomalyStationaryNullPercentCheckSpec dailyNullsPercentAnomaly) {
+    public void setDailyNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec dailyNullsPercentAnomaly) {
         this.setDirtyIf(!Objects.equals(this.dailyNullsPercentAnomaly, dailyNullsPercentAnomaly));
         this.dailyNullsPercentAnomaly = dailyNullsPercentAnomaly;
         propagateHierarchyIdToField(dailyNullsPercentAnomaly, "daily_nulls_percent_anomaly");
-    }
-
-    /**
-     * Returns a null percent value anomaly 30 days check specification.
-     * @return Null percent value anomaly 30 days check specification.
-     */
-    public ColumnAnomalyStationaryNullPercent30DaysCheckSpec getDailyNullsPercentAnomaly30Days() {
-        return dailyNullsPercentAnomaly30Days;
-    }
-
-    /**
-     * Sets a new specification of a null percent value anomaly 30 days check.
-     * @param dailyNullsPercentAnomaly30Days Null percent value anomaly 30 days check specification.
-     */
-    public void setDailyNullsPercentAnomaly30Days(ColumnAnomalyStationaryNullPercent30DaysCheckSpec dailyNullsPercentAnomaly30Days) {
-        this.setDirtyIf(!Objects.equals(this.dailyNullsPercentAnomaly30Days, dailyNullsPercentAnomaly30Days));
-        this.dailyNullsPercentAnomaly30Days = dailyNullsPercentAnomaly30Days;
-        propagateHierarchyIdToField(dailyNullsPercentAnomaly30Days, "daily_nulls_percent_anomaly_30_days");
     }
 
     /**

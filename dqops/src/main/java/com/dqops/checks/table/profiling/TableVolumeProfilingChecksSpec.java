@@ -43,8 +43,7 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<TableVolumeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_row_count", o -> o.profileRowCount);
-            put("profile_row_count_anomaly_differencing", o -> o.profileRowCountAnomalyDifferencing);
-            put("profile_row_count_anomaly_differencing_30_days", o -> o.profileRowCountAnomalyDifferencing30Days);
+            put("profile_row_count_anomaly", o -> o.profileRowCountAnomaly);
 
             put("profile_row_count_change", o -> o.profileRowCountChange);
             put("profile_row_count_change_1_day", o -> o.profileRowCountChange1Day);
@@ -58,13 +57,8 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
             "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
     private TableRowCountCheckSpec profileRowCount;
 
-    @JsonProperty("profile_row_count_anomaly_differencing")
     @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
-    private TableAnomalyDifferencingRowCountCheckSpec profileRowCountAnomalyDifferencing;
-
-    @JsonProperty("profile_row_count_anomaly_differencing_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 30 days.")
-    private TableAnomalyDifferencingRowCount30DaysCheckSpec profileRowCountAnomalyDifferencing30Days;
+    private TableRowCountAnomalyDifferencingCheckSpec profileRowCountAnomaly;
 
     @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
     private TableRowCountChangeCheckSpec profileRowCountChange;
@@ -104,36 +98,18 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns the row count anomaly 60 days check.
      * @return Row count anomaly 60 days check.
      */
-    public TableAnomalyDifferencingRowCountCheckSpec getProfileRowCountAnomalyDifferencing() {
-        return profileRowCountAnomalyDifferencing;
+    public TableRowCountAnomalyDifferencingCheckSpec getProfileRowCountAnomaly() {
+        return profileRowCountAnomaly;
     }
 
     /**
      * Sets a new row count anomaly 60 days check.
-     * @param profileRowCountAnomalyDifferencing Row count anomaly 60 days check.
+     * @param profileRowCountAnomaly Row count anomaly 60 days check.
      */
-    public void setProfileRowCountAnomalyDifferencing(TableAnomalyDifferencingRowCountCheckSpec profileRowCountAnomalyDifferencing) {
-        this.setDirtyIf(!Objects.equals(this.profileRowCountAnomalyDifferencing, profileRowCountAnomalyDifferencing));
-        this.profileRowCountAnomalyDifferencing = profileRowCountAnomalyDifferencing;
-        propagateHierarchyIdToField(profileRowCountAnomalyDifferencing, "profile_row_count_anomaly_differencing");
-    }
-
-    /**
-     * Returns the row count anomaly 30 days check.
-     * @return Row count anomaly 30 days check.
-     */
-    public TableAnomalyDifferencingRowCount30DaysCheckSpec getProfileRowCountAnomalyDifferencing30Days() {
-        return profileRowCountAnomalyDifferencing30Days;
-    }
-
-    /**
-     * Sets a new row count anomaly 30 days check.
-     * @param profileRowCountAnomalyDifferencing30Days Row count anomaly 30 days check.
-     */
-    public void setProfileRowCountAnomalyDifferencing30Days(TableAnomalyDifferencingRowCount30DaysCheckSpec profileRowCountAnomalyDifferencing30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileRowCountAnomalyDifferencing30Days, profileRowCountAnomalyDifferencing30Days));
-        this.profileRowCountAnomalyDifferencing30Days = profileRowCountAnomalyDifferencing30Days;
-        propagateHierarchyIdToField(profileRowCountAnomalyDifferencing30Days, "profile_row_count_anomaly_differencing_30_days");
+    public void setProfileRowCountAnomaly(TableRowCountAnomalyDifferencingCheckSpec profileRowCountAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileRowCountAnomaly, profileRowCountAnomaly));
+        this.profileRowCountAnomaly = profileRowCountAnomaly;
+        propagateHierarchyIdToField(profileRowCountAnomaly, "profile_row_count_anomaly");
     }
 
     /**

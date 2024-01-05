@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.column.checkspecs.nulls;
+package com.dqops.checks.column.checkspecs.anomaly;
 
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule01ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule05ParametersSpec;
 import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
-import com.dqops.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericMedianSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -34,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+ * Column level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAnomalyStationaryNullPercentCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNullsPercentSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyStationaryNullPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnMedianAnomalyStationaryCheckSpec
+        extends AbstractCheckSpec<ColumnNumericMedianSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMedianAnomalyStationaryCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -49,7 +49,7 @@ public class ColumnAnomalyStationaryNullPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNullsPercentSensorParametersSpec parameters = new ColumnNullsNullsPercentSensorParametersSpec();
+    private ColumnNumericMedianSensorParametersSpec parameters = new ColumnNumericMedianSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnAnomalyStationaryNullPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNullsNullsPercentSensorParametersSpec getParameters() {
+    public ColumnNumericMedianSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -81,7 +81,7 @@ public class ColumnAnomalyStationaryNullPercentCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNullsNullsPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericMedianSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

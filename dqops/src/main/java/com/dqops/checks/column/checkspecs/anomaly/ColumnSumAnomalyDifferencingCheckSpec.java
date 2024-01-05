@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule01ParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule05ParametersSpec;
-import com.dqops.rules.percentile.AnomalyStationaryPercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec;
+import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericSumSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -40,9 +40,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAnomalyStationaryPartitionSumCheckSpec
-        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, AnomalyStationaryPercentileMovingAverageRule1ParametersSpec, AnomalyStationaryPercentileMovingAverageRule05ParametersSpec, AnomalyStationaryPercentileMovingAverageRule01ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyStationaryPartitionSumCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnSumAnomalyDifferencingCheckSpec
+        extends AbstractCheckSpec<ColumnNumericSumSensorParametersSpec, AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec, AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec, AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnSumAnomalyDifferencingCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -55,17 +55,17 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRule1ParametersSpec warning;
+    private AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with negative value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRule05ParametersSpec error;
+    private AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private AnomalyStationaryPercentileMovingAverageRule01ParametersSpec fatal;
+    private AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -94,7 +94,7 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRule1ParametersSpec getWarning() {
+    public AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -103,7 +103,7 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(AnomalyStationaryPercentileMovingAverageRule1ParametersSpec warning) {
+    public void setWarning(AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -115,7 +115,7 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRule05ParametersSpec getError() {
+    public AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec getError() {
         return this.error;
     }
 
@@ -124,7 +124,7 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(AnomalyStationaryPercentileMovingAverageRule05ParametersSpec error) {
+    public void setError(AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -136,7 +136,7 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public AnomalyStationaryPercentileMovingAverageRule01ParametersSpec getFatal() {
+    public AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -145,7 +145,7 @@ public class ColumnAnomalyStationaryPartitionSumCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(AnomalyStationaryPercentileMovingAverageRule01ParametersSpec fatal) {
+    public void setFatal(AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

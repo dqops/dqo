@@ -16,8 +16,8 @@
 
 package com.dqops.checks.defaults.services;
 
-import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyDifferencingSumCheckSpec;
-import com.dqops.checks.column.checkspecs.anomaly.ColumnAnomalyStationaryMeanCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnSumAnomalyDifferencingCheckSpec;
+import com.dqops.checks.column.checkspecs.anomaly.ColumnMeanAnomalyStationaryCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
@@ -33,7 +33,7 @@ import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
-import com.dqops.checks.table.checkspecs.volume.TableAnomalyDifferencingRowCountCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
@@ -87,7 +87,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableVolume.setDailyRowCountChange(new TableRowCountChangeCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
         }});
-        tableVolume.setDailyRowCountAnomalyDifferencing(new TableAnomalyDifferencingRowCountCheckSpec() {{
+        tableVolume.setDailyRowCountAnomaly(new TableRowCountAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
         defaultSettings.getTable().setVolume(tableVolume);
@@ -99,10 +99,10 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getColumn().setDatatype(columnDatatype);
 
         ColumnAnomalyDailyMonitoringChecksSpec columnAnomaly = new ColumnAnomalyDailyMonitoringChecksSpec();
-        columnAnomaly.setDailySumAnomaly(new ColumnAnomalyDifferencingSumCheckSpec() {{
+        columnAnomaly.setDailySumAnomaly(new ColumnSumAnomalyDifferencingCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
-        columnAnomaly.setDailyMeanAnomaly(new ColumnAnomalyStationaryMeanCheckSpec() {{
+        columnAnomaly.setDailyMeanAnomaly(new ColumnMeanAnomalyStationaryCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         defaultSettings.getColumn().setAnomaly(columnAnomaly);
@@ -138,7 +138,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         columnNulls.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNulls.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
-        columnNulls.setDailyNullsPercentAnomaly(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
+        columnNulls.setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         columnNulls.setDailyNullsPercentChange1Day(new ColumnNullPercentChange1DayCheckSpec() {{
