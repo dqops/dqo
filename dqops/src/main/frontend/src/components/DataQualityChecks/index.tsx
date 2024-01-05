@@ -20,6 +20,8 @@ import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import Button from '../Button';
 import Select from '../Select';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
+import { useSelector } from 'react-redux';
+import { getFirstLevelActiveTab } from '../../redux/selectors';
 
 interface IDataQualityChecksProps {
   checksUI?: CheckContainerModel;
@@ -69,6 +71,8 @@ const DataQualityChecks = ({
   const [mode, setMode] = useState<string>();
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
   const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
   
   const { sidebarWidth } = useTree();
   const handleChangeDataGrouping = (
@@ -97,7 +101,7 @@ const DataQualityChecks = ({
 
   useEffect(() => {
     getCheckOverview();
-  }, [checkTypes, connection, schema, table, column, timePartitioned]);
+  }, [checkTypes, connection, schema, table, column, timePartitioned, firstLevelActiveTab]);
 
   const goToSchedule = () => {
     if (
