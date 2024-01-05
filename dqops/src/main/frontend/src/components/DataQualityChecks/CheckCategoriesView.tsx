@@ -6,7 +6,6 @@ import {
   TimeWindowFilterParameters,
   CheckModel,
   QualityCategoryModel,
-  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useSelector } from 'react-redux';
 import { JobApiClient } from '../../services/apiClient';
@@ -34,7 +33,8 @@ interface CheckCategoriesViewProps {
   copyCategory?: QualityCategoryModel;
   isDefaultEditing?: boolean;
   isFiltered?: boolean;
-  showAdvanced?: boolean
+  showAdvanced?: boolean,
+  isAlreadyDeleted?: boolean
 }
 const CheckCategoriesView = ({
   mode,
@@ -48,7 +48,8 @@ const CheckCategoriesView = ({
   copyCategory,
   isDefaultEditing,
   isFiltered,
-  showAdvanced
+  showAdvanced,
+  isAlreadyDeleted
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -89,27 +90,9 @@ const CheckCategoriesView = ({
     shouldExtend();
   }, []);
 
-  const getExtendCheckCategoryModelWithDeletedChecks = () => {
-    const checkResultCopy = [...checkResultsOverview];
-    const deletedChecksArray = checkResultCopy.filter(
-      (obj1) =>
-        category.checks &&
-        !category.checks.find((obj2) => obj1.checkName === obj2.check_name && (showAdvanced || obj2.standard || obj2.configured)) &&
-        obj1.checkCategory === category.category
-    );
-    const deletedCheckModels: CheckModel[] = deletedChecksArray.map((x) => ({
-      check_name: x.checkName,
-      check_hash: x.checkHash,
-      run_checks_job_template: {
-        checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
-      }
-    }));
-    return deletedCheckModels ?? [];
-  };
-
   return (
     <Fragment>
-      <tr onClick={() => getExtendCheckCategoryModelWithDeletedChecks()}>
+      <tr>
         <td className="py-2 px-4 bg-gray-50 border-b border-t" colSpan={2}>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -172,10 +155,8 @@ const CheckCategoriesView = ({
       </tr>
       {category.checks &&
         isExtended &&
-        [
-          ...category.checks.filter((check) => showAdvanced || check.standard || check.configured),
-          ...(isFiltered ? getExtendCheckCategoryModelWithDeletedChecks() : [])
-        ].map((check, index) => (
+          category.checks.filter((check) => showAdvanced || check.standard || check.configured || isAlreadyDeleted || isFiltered)
+          .map((check, index) => (
           <CheckListItem
             check={check}
             key={index}
@@ -205,9 +186,7 @@ const CheckCategoriesView = ({
             comparisonName={category.comparison_name}
             isDefaultEditing={isDefaultEditing}
             canUserRunChecks={userProfile.can_run_checks}
-            isAlreadyDeleted={
-              category.checks && !category.checks.find((x) => x === check)
-            }
+            isAlreadyDeleted={isAlreadyDeleted}
           />
         ))}
       <DeleteOnlyDataDialog
