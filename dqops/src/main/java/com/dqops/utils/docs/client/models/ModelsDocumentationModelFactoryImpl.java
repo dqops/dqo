@@ -41,6 +41,9 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
     private final DocumentationReflectionService documentationReflectionService = new DocumentationReflectionServiceImpl(new ReflectionServiceImpl());
     private static final CommentFormatter commentFormatter = new CommentFormatter();
+    private static final Set<Class<?>> excludedClasses = Set.of(
+            Object.class
+    );
 
     @Override
     public ModelsSuperiorObjectDocumentationModel createDocumentationForSharedModels(Collection<ComponentModel> componentModels) {
@@ -135,10 +138,35 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
     private String getControllerNameFromDocsLink(Path docsLink) {
         String[] docsLinkSplit = docsLink.toUri().getPath().split("/");
-        if (docsLinkSplit.length < 2) {
+        if (docsLinkSplit.length == 0) {
             return null;
         }
-        return docsLinkSplit[docsLinkSplit.length - 2];
+
+        String controllerReference;
+        String last = docsLinkSplit[docsLinkSplit.length - 1];
+        if (last.charAt(0) == '#') {
+            // '/' between controller name and component anchor '#'
+            if (docsLinkSplit.length == 1) {
+                return null;
+            }
+
+            controllerReference = docsLinkSplit[docsLinkSplit.length - 2];
+        } else {
+            // anchor '#' directly after controller name
+             int indexOfAnchor = last.indexOf('#');
+             if (indexOfAnchor == -1) {
+                 // No anchor
+                 controllerReference = last;
+             } else {
+                 controllerReference = last.substring(0, indexOfAnchor);
+             }
+        }
+
+        String mdExtension = ".md";
+        if (controllerReference.endsWith(mdExtension)) {
+            return controllerReference.substring(0, controllerReference.length() - mdExtension.length());
+        }
+        return controllerReference;
     }
 
     private ModelsSuperiorObjectDocumentationModel generateModelsSuperiorObjectDocumentationModel(String destinationPath,
@@ -179,7 +207,8 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
                                                                                                 Map<String, ComponentModel> componentModelMap) {
         List<ModelsObjectDocumentationModel> result = new LinkedList<>();
         if (targetClass != null && !visitedObjects.containsKey(targetClass)
-                && !isComponentReferencedExternally(destinationPath, targetClass, componentModelMap)) {
+                && !isComponentReferencedExternally(destinationPath, targetClass, componentModelMap)
+                && !excludedClasses.contains(targetClass)) {
             visitedObjects.put(targetClass, null);
 
             ModelsObjectDocumentationModel modelsObjectDocumentationModel = new ModelsObjectDocumentationModel();
@@ -208,7 +237,7 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
             modelsObjectDocumentationModel.setClassSimpleName(classInfo.getReflectedClass().getSimpleName());
             modelsObjectDocumentationModel.setReflectedClass(classInfo.getReflectedClass());
             modelsObjectDocumentationModel.setObjectClassPath(
-                    Path.of("/docs/client/models/" + destinationPath + ".md" + "#"
+                    Path.of("/docs/client/models/" + ensureEndsWithFileExtension(destinationPath) + "#"
                                     + classInfo.getReflectedClass().getSimpleName().toLowerCase()).toString()
             );
 
@@ -275,6 +304,14 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
         return result;
     }
 
+    private String ensureEndsWithFileExtension(String s) {
+        String mdExtension = ".md";
+        if (s.endsWith(mdExtension)) {
+            return s;
+        }
+        return s + mdExtension;
+    }
+
     private List<ModelsObjectDocumentationModel> generateModelObjectDocumentationGeneralized(String destinationPath,
                                                                                              TypeModel typeModel,
                                                                                              Map<Class<?>, ModelsObjectDocumentationModel> visitedObjects,
@@ -288,13 +325,17 @@ public class ModelsDocumentationModelFactoryImpl implements ModelsDocumentationM
 
     private TypeModel getObjectsTypeModel(Type type, Map<String, ComponentModel> componentModelMap) {
         Function<Class<?>, String> linkAccessor = (clazz) -> {
+            if (excludedClasses.contains(clazz)) {
+                return null;
+            }
+
             String simpleClassName = clazz.getSimpleName();
             ComponentModel componentModel = componentModelMap.get(simpleClassName);
             if (componentModel != null && componentModel.getDocsLink() != null) {
                 return componentModel.getDocsLink().toString();
-            } else {
-                return "#" + simpleClassName.toLowerCase();
             }
+
+            return "#" + simpleClassName.toLowerCase();
         };
 
         return documentationReflectionService.getObjectsTypeModel(type, linkAccessor);

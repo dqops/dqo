@@ -16,8 +16,6 @@
 
 package com.dqops.utils.docs.files;
 
-import java.nio.file.Path;
-
 public interface DocumentationFolderPostCorrectorService {
     void postProcessCorrect(DocumentationFolder toCorrect);
 }

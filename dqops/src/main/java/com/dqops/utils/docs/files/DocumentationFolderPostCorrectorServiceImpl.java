@@ -16,11 +16,10 @@
 
 package com.dqops.utils.docs.files;
 
+import com.google.common.collect.Streams;
+
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
@@ -32,9 +31,38 @@ import java.util.stream.Collectors;
  */
 public class DocumentationFolderPostCorrectorServiceImpl implements DocumentationFolderPostCorrectorService {
     private Map<Path, Path> correctPathRemapping = null;
+
+    // REGEXPs to find and replace foul links.
+    /**
+     * Links that use '\' instead of '/' as a path delimiter.
+     */
     private final Pattern windowsStylePathDelimiterPattern = Pattern.compile("\\(\\\\?([.\\w\\-]+(\\.md)?\\\\?)*(#[\\w\\-]+)?\\)");
-    private final Pattern oldLinkFormatPattern = Pattern.compile("\\((/docs(/[\\w\\-]+)*(\\.md)?/?)(#[\\w\\-]+)?\\)");
-    private final Pattern referenceWithoutFilePattern = Pattern.compile("(?<=])\\(/?(([\\w\\-]+|\\.\\.)/?)+(#[\\w\\-]+)?\\)");
+
+    /**
+     * Absolute links, with projectRoot (dqops directory) as root.
+     */
+    private final Pattern absoluteLinksPattern = Pattern.compile("\\((/docs(/[\\w\\-]+)*(\\.md)?/?)(#[\\w\\-]+)?\\)");
+
+    /**
+     * Links to files that don't include the ".md" extension.
+     */
+    private final Pattern referenceWithoutFilePattern = Pattern.compile("]\\((([\\w\\-]+|\\.\\.)/?)+(#[\\w\\-]+)?\\)");
+
+    /**
+     * Links with '/' after filename, usually between ".md" and "#".
+     */
+    private final Pattern redundantSlashPattern = Pattern.compile("]\\((.(?!\\.com))*\\.md(/)(.(?!\\.com))*\\)");
+
+    // REGEXPs to ensure correctness.
+    /**
+     * General pattern for discerning links. Matches all Markdown links without ".com".
+     */
+    private final Pattern generalInternalLink = Pattern.compile("]\\((.(?!\\.com))*\\)");
+    /**
+     * Pattern for ensuring a correct links format.
+     */
+    private final Pattern correctLinkFormat = Pattern.compile("]\\((?!\\))((\\.\\./)*([\\w\\-]+/)*[\\w\\-]+\\.md)?(#([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+)?\\)");
+
 
     private final Path projectRootDirectory;
 
@@ -94,13 +122,18 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 //                ? fileDirectPath.getParent()
 //                : fileDirectPath;
 
-        Function<String, String> f1 = this::pathDelimiterStyleCorrection;
+        Deque<Function<String, String>> contentModifiers = new ArrayDeque<>();
+        contentModifiers.add(this::pathDelimiterStyleCorrection);
+
         Function<Path, Function<String, String>> partialTransform = p ->
                 toModify -> pathReferenceLevelCorrection(p, toModify);
-        Function<String, String> f2 = partialTransform.apply(workingPath);
-        Function<String, String> f3 = this::pathToFileReferenceCorrection;
+        contentModifiers.add(partialTransform.apply(workingPath));
 
-        Function<String, String> compoundModifiers = f3.compose(f2).compose(f1);
+        contentModifiers.add(this::pathToFileReferenceCorrection);
+        contentModifiers.add(this::redundantSlashCorrection);
+
+        Function<String, String> compoundModifiers = Streams.stream(contentModifiers.descendingIterator())
+                .reduce(Function::compose).get();
         String modifiedContent = compoundModifiers.apply(content);
         file.setFileContent(modifiedContent);
     }
@@ -123,7 +156,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
     }
 
     protected String pathReferenceLevelCorrection(Path workingPath, String fileContent) {
-        Matcher foulLinksMatcher = oldLinkFormatPattern.matcher(fileContent);
+        Matcher foulLinksMatcher = absoluteLinksPattern.matcher(fileContent);
         List<MatchResult> matches = foulLinksMatcher.results().collect(Collectors.toList());
 
         StringBuilder newContent = new StringBuilder();
@@ -153,8 +186,8 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
     }
 
     protected String pathToFileReferenceCorrection(String fileContent) {
-        Matcher noFileLinkswindowsDelimiterLinksMatcher = referenceWithoutFilePattern.matcher(fileContent);
-        List<MatchResult> matches = noFileLinkswindowsDelimiterLinksMatcher.results().collect(Collectors.toList());
+        Matcher noFileLinksMatcher = referenceWithoutFilePattern.matcher(fileContent);
+        List<MatchResult> matches = noFileLinksMatcher.results().collect(Collectors.toList());
 
         StringBuilder newContent = new StringBuilder();
         int i = 0;
@@ -168,6 +201,20 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
 
             newContent.append(matchedReference).append(".md");
             i = match.end(1);
+        }
+        newContent.append(fileContent, i, fileContent.length());
+        return newContent.toString();
+    }
+
+    protected String redundantSlashCorrection(String fileContent) {
+        Matcher extraSlashLinksMatcher = redundantSlashPattern.matcher(fileContent);
+        List<MatchResult> matches = extraSlashLinksMatcher.results().collect(Collectors.toList());
+
+        StringBuilder newContent = new StringBuilder();
+        int i = 0;
+        for (MatchResult match : matches) {
+            newContent.append(fileContent, i, match.start(2));
+            i = match.end(2);
         }
         newContent.append(fileContent, i, fileContent.length());
         return newContent.toString();
