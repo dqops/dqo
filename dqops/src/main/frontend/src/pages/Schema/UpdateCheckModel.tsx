@@ -12,6 +12,7 @@ import { ConnectionApiClient } from '../../services/apiClient';
 import { IFilterTemplate } from '../../shared/constants';
 import UpdateCheckRuleSensor from './MultiCheck/UpdateCheckRuleSensor';
 import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
 
 interface UpdateCheckModelProps {
   open: boolean;
@@ -22,6 +23,7 @@ interface UpdateCheckModelProps {
   selectedData: CheckTemplate[];
   fetchResults: () => void;
   onChangeLoading: (param: boolean) => void;
+  timeScale: 'daily' | 'monthly'
 }
 
 export const UpdateCheckModel = ({
@@ -32,8 +34,15 @@ export const UpdateCheckModel = ({
   filterParameters,
   selectedData,
   onChangeLoading,
-  fetchResults
+  fetchResults,
+  timeScale
 }: UpdateCheckModelProps) => {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
+    useParams();
   const [updatedCheck, setUpdatedCheck] = useState<CheckModel>();
   const [overideConflicts, setOverrideConflicts] = useState(true);
 
@@ -54,21 +63,21 @@ export const UpdateCheckModel = ({
         ? { ...mapTables }
         : { ...mapTableColumns };
     ConnectionApiClient.bulkActivateConnectionChecks(
-      filterParameters?.connection,
+      connection,
       filterParameters?.checkName ?? '',
       {
         check_search_filters: {
-          connection: filterParameters?.connection,
-          fullTableName: filterParameters?.schema + '.*',
+          connection: connection,
+          fullTableName: schema + '.*',
           checkTarget: filterParameters?.checkTarget,
           columnDataType: filterParameters?.columnDataType,
           checkName: filterParameters?.checkName,
           checkCategory: filterParameters?.checkCategory,
           checkType:
-            filterParameters?.checkTypes as CheckSearchFiltersCheckTypeEnum,
+            checkTypes as CheckSearchFiltersCheckTypeEnum,
           timeScale:
-            filterParameters?.checkTypes !== CheckTypes.PROFILING
-              ? filterParameters?.activeTab
+            checkTypes !== CheckTypes.PROFILING
+              ? timeScale
               : undefined
         },
         check_model_patch: updatedCheck,
@@ -87,21 +96,21 @@ export const UpdateCheckModel = ({
         ? { ...mapTables }
         : { ...mapTableColumns };
     ConnectionApiClient.bulkDeactivateConnectionChecks(
-      filterParameters?.connection,
+      connection,
       filterParameters?.checkName ?? '',
       {
         check_search_filters: {
-          connection: filterParameters?.connection,
-          fullTableName: filterParameters?.schema + '.*',
+          connection: connection,
+          fullTableName: schema + '.*',
           checkTarget: filterParameters?.checkTarget,
           columnDataType: filterParameters?.columnDataType,
           checkName: filterParameters?.checkName,
           checkCategory: filterParameters?.checkCategory,
           checkType:
-            filterParameters?.checkTypes as CheckSearchFiltersCheckTypeEnum,
+            checkTypes as CheckSearchFiltersCheckTypeEnum,
           timeScale:
-            filterParameters?.checkTypes !== CheckTypes.PROFILING
-              ? filterParameters?.activeTab
+            checkTypes !== CheckTypes.PROFILING
+              ? timeScale
               : undefined
         },
         selected_tables_to_columns

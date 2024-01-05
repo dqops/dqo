@@ -25,16 +25,12 @@ export type TParameters = {
 };
 
 export interface IFilterTemplate {
-  connection: string;
-  schema: string;
-  activeTab: 'daily' | 'monthly' | undefined;
   tableNamePattern?: string | undefined;
   columnNamePattern?: string | undefined;
   columnDataType?: string | undefined;
   checkTarget?: 'table' | 'column' | undefined;
   checkCategory?: string | undefined;
   checkName?: string | undefined;
-  checkTypes: CheckTypes;
   activeOffCheck?: boolean;
 }
 

@@ -6,21 +6,28 @@ import { AxiosResponse } from 'axios';
 import { CheckTemplate } from '../../../api';
 import { SchemaApiClient } from '../../../services/apiClient';
 import { CheckTypes } from '../../../shared/routes';
+import { useParams } from 'react-router-dom';
 
 interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
-  checkTypes: CheckTypes;
   onChangeSelectedCheck: (obj: CheckTemplate) => void;
   onChangeChecks: (checks: CheckTemplate[]) => void;
+  timeScale: 'daily' | 'monthly'
 }
 export default function MultiChecksFilter({
   filterParameters,
   onChangeFilterParameters,
-  checkTypes,
   onChangeSelectedCheck,
-  onChangeChecks
+  onChangeChecks,
+  timeScale
 }: IMultiChecksFilter) {
+  const {
+    checkTypes,
+    connection,
+    schema
+  }: { checkTypes: CheckTypes; connection: string; schema: string } =
+    useParams();
   const [checkCategoryOptions, setCheckCategoryOptions] = useState<Option[]>(
     []
   );
@@ -47,40 +54,37 @@ export default function MultiChecksFilter({
         }))
       );
     };
-    if (filterParameters?.connection.length === 0) return
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
-        filterParameters?.connection,
-        filterParameters?.schema,
+        connection,
+        schema,
         filterParameters?.checkTarget
       ).then(processResult);
     } else if (
-      checkTypes === CheckTypes.MONITORING &&
-      filterParameters?.activeTab
+      checkTypes === CheckTypes.MONITORING
     ) {
       SchemaApiClient.getSchemaMonitoringChecksTemplates(
-        filterParameters?.connection,
-        filterParameters?.schema,
-        filterParameters?.activeTab,
+        connection,
+        schema,
+        timeScale,
         filterParameters?.checkTarget
       ).then(processResult);
     } else if (
-      checkTypes === CheckTypes.PARTITIONED &&
-      filterParameters?.activeTab
+      checkTypes === CheckTypes.PARTITIONED
     ) {
       SchemaApiClient.getSchemaPartitionedChecksTemplates(
-        filterParameters?.connection,
-        filterParameters?.schema,
-        filterParameters?.activeTab,
+        connection,
+        schema,
+        timeScale,
         filterParameters?.checkTarget
       ).then(processResult);
     }
   }, [
-    filterParameters?.connection,
-    filterParameters?.schema,
+    connection,
+    schema,
     checkTypes,
     filterParameters?.checkTarget,
-    filterParameters?.activeTab
+    timeScale
   ]);
   const onChangeCheckOptions = () => {
     const checksCopy = checks

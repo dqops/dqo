@@ -36,6 +36,7 @@ export const MultiChecks = () => {
   const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
+  const [timeScale, setTimeScale] = useState<'daily' | 'monthly'>('daily') 
   
   const dispatch = useActionDispatch()
   
@@ -52,7 +53,6 @@ export const MultiChecks = () => {
   };
   const searchChecks = () => {
     const {
-      activeTab : tab,
       tableNamePattern,
       columnNamePattern,
       columnDataType,
@@ -76,11 +76,11 @@ export const MultiChecks = () => {
       ).then((res: AxiosResponse<CheckConfigurationModel[], any>) => {
         dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, res.data));
       });
-    } else if (checkTypes === CheckTypes.MONITORING && tab) {
+    } else if (checkTypes === CheckTypes.MONITORING) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
         connection,
         schema,
-        tab,
+        timeScale,
         tableNamePattern,
         columnNamePattern,
         columnDataType,
@@ -92,11 +92,11 @@ export const MultiChecks = () => {
       ).then((res: AxiosResponse<CheckConfigurationModel[], any>) => {
         dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, res.data));
       });
-    } else if (checkTypes === CheckTypes.PARTITIONED && tab) {
+    } else if (checkTypes === CheckTypes.PARTITIONED) {
       SchemaApiClient.getSchemaPartitionedChecksModel(
         connection,
         schema,
-        tab,
+        timeScale,
         tableNamePattern,
         columnNamePattern,
         columnDataType,
@@ -111,17 +111,17 @@ export const MultiChecks = () => {
     }
   };
 
-  useEffect(() => {
-     if (!multiCheckFilters?.connection) {
-       dispatch(setMulticheckFilters(checkTypes, activeTab, {
-         connection,
-         schema,
-         activeTab: 'daily',
-         checkTarget: 'table',
-         checkTypes: checkTypes
-        }))
-      } 
-    }, [connection, schema])
+  // useEffect(() => {
+  //    if (!multiCheckFilters?.connection) {
+  //      dispatch(setMulticheckFilters(checkTypes, activeTab, {
+  //        connection,
+  //        schema,
+  //        activeTab: 'daily',
+  //        checkTarget: 'table',
+  //        checkTypes: checkTypes
+  //       }))
+  //     } 
+  //   }, [connection, schema])
     
   return (
     <div className="text-sm py-4">
@@ -129,15 +129,12 @@ export const MultiChecks = () => {
         <div className="border-b border-gray-300 pb-0 mb-4">
           <Tabs
             tabs={tabs}
-            activeTab={(multiCheckFilters ?? {})?.activeTab}
+            activeTab={timeScale}
             onChange={(value: any) => {
               dispatch(setMulticheckFilters(checkTypes, activeTab,{
-                connection,
-                schema,
-                checkTarget: 'table',
-                checkTypes: checkTypes,
-                activeTab: value
-              }));
+                checkTarget: 'table'
+              })),
+              setTimeScale(value)
             }}
           />
         </div>
@@ -146,9 +143,9 @@ export const MultiChecks = () => {
         <MultiChecksFilter
           filterParameters={multiCheckFilters as IFilterTemplate}
           onChangeFilterParameters={onChangemultiCheckFilters}
-          checkTypes={checkTypes}
           onChangeSelectedCheck={(obj: CheckTemplate) => setSelectedCheck(obj)}
           onChangeChecks={(checks: CheckTemplate[]) => dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, checks))}
+          timeScale = {timeScale}
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
@@ -164,6 +161,7 @@ export const MultiChecks = () => {
             filterParameters={multiCheckFilters as IFilterTemplate}
             selectedCheckModel={selectedCheck.check_model ?? {}}
             searchChecks={searchChecks}
+            timeScale = {timeScale}
           />
         )}
       </div>
