@@ -6,7 +6,6 @@ import {
   TimeWindowFilterParameters,
   CheckModel,
   QualityCategoryModel,
-  CheckSearchFiltersCheckTypeEnum
 } from '../../api';
 import { useSelector } from 'react-redux';
 import { JobApiClient } from '../../services/apiClient';
@@ -91,26 +90,6 @@ const CheckCategoriesView = ({
     shouldExtend();
   }, []);
 
-  // const getExtendCheckCategoryModelWithDeletedChecks = () => {
-  //   const checkResultCopy = [...checkResultsOverview];
-  //   const deletedChecksArray = checkResultCopy.filter(
-  //     (obj1) =>
-  //       category.checks &&
-  //       !category.checks.find((obj2) => obj1.checkName === obj2.check_name && (showAdvanced || obj2.standard || obj2.configured)) &&
-  //       obj1.checkCategory === category.category
-  //   );
-  //   console.log(checkResultCopy, deletedChecksArray)
-  //   const deletedCheckModels: CheckModel[] = deletedChecksArray.map((x) => ({
-  //     check_name: x.checkName,
-  //     check_hash: x.checkHash,
-  //     run_checks_job_template: {
-  //       checkType: checkTypes as CheckSearchFiltersCheckTypeEnum
-  //     }
-  //   }));
-  //   return deletedCheckModels ?? [];
-  // };
-  // console.log(category)
-
   return (
     <Fragment>
       <tr>
@@ -176,7 +155,7 @@ const CheckCategoriesView = ({
       </tr>
       {category.checks &&
         isExtended &&
-          category.checks.filter((check) => showAdvanced || check.standard || check.configured || isAlreadyDeleted)
+          category.checks.filter((check) => showAdvanced || check.standard || check.configured || isAlreadyDeleted || isFiltered)
           .map((check, index) => (
           <CheckListItem
             check={check}
