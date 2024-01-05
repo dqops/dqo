@@ -23,7 +23,8 @@ import {
   SensorReadoutsListModel,
   CheckModel,
   CheckSearchFiltersCheckTypeEnum,
-  TableIncidentGroupingSpec
+  TableIncidentGroupingSpec,
+  CheckTemplate
 } from '../../api';
 import { Dispatch } from 'redux';
 import { AxiosResponse } from 'axios';
@@ -34,6 +35,7 @@ import {
   SensorReadoutsApi,
   TableApiClient
 } from '../../services/apiClient';
+import { IFilterTemplate } from '../../shared/constants';
 
 export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
@@ -971,3 +973,30 @@ export const closeCheck = (
   activeTab,
   data: checkName
 });
+
+export const setMulticheckFilters = (
+  checkType: CheckTypes,
+  activeTab: string,
+  multiCheckFilters: IFilterTemplate,
+ // timeScale: 'daily' | 'monthly' | 'advanced'
+) => ({
+  type: SOURCE_ACTION.SET_MULTICHECK_FILTERS,
+  // data: {[timeScale ?? '']: multiCheckFilters},
+  data: multiCheckFilters,
+  activeTab,
+  checkType,
+//  timeScale
+})
+
+export const setMultiCheckSearchedChecks = (
+  checkType: CheckTypes,
+  activeTab: string,
+  multiCheckSearchedChecks: CheckTemplate[],
+  timeScale?: 'daily' | 'monthly' | 'advanced'
+) => ({
+  type: SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
+  data: multiCheckSearchedChecks,
+  activeTab,
+  checkType,
+  timeScale 
+})

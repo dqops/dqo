@@ -59,17 +59,17 @@ export default function MultiChecksTable({
 
   const goToCheckDefinition = useCallback(
     (table: string, column?: string) => {
-      if (!filterParameters.checkCategory || !filterParameters.checkName)
+      if (!filterParameters?.checkCategory || !filterParameters?.checkName)
         return;
 
       const commonParams = getCommonParams(filterParameters, table);
       const additionalParams = getAdditionalParams(filterParameters, column);
 
       const url = getUrl(filterParameters, commonParams, additionalParams, column);
-      const value = getValue(filterParameters.checkTypes, commonParams, column);
+      const value = getValue(filterParameters?.checkTypes, commonParams, column);
 
       dispatch(
-        addFirstLevelTab(filterParameters.checkTypes, {
+        addFirstLevelTab(filterParameters?.checkTypes, {
           url,
           value,
           state: {},
@@ -91,8 +91,8 @@ export default function MultiChecksTable({
         setAction={setAction}
         loading={loading}
       />
-      {filterParameters.checkName &&
-        filterParameters.checkCategory &&
+      {filterParameters?.checkName &&
+        filterParameters?.checkCategory &&
         checks &&
         checks.length > 0 && (
           <table className="mt-8">
@@ -100,7 +100,7 @@ export default function MultiChecksTable({
             <tbody>
               {checks?.map((check, index) => (
                 <MultiChecksTableItem
-                  checkTarget={filterParameters.checkTarget}
+                  checkTarget={filterParameters?.checkTarget}
                   check={check}
                   key={index}
                   checked={selectedData.includes(check)}

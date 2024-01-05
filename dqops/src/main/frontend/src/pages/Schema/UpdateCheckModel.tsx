@@ -50,25 +50,25 @@ export const UpdateCheckModel = ({
   const bulkActivateChecks = () => {
     onChangeLoading(true);
     const selected_tables_to_columns =
-      filterParameters.checkTarget === 'table'
+      filterParameters?.checkTarget === 'table'
         ? { ...mapTables }
         : { ...mapTableColumns };
     ConnectionApiClient.bulkActivateConnectionChecks(
-      filterParameters.connection,
-      filterParameters.checkName ?? '',
+      filterParameters?.connection,
+      filterParameters?.checkName ?? '',
       {
         check_search_filters: {
-          connection: filterParameters.connection,
-          fullTableName: filterParameters.schema + '.*',
-          checkTarget: filterParameters.checkTarget,
-          columnDataType: filterParameters.columnDataType,
-          checkName: filterParameters.checkName,
-          checkCategory: filterParameters.checkCategory,
+          connection: filterParameters?.connection,
+          fullTableName: filterParameters?.schema + '.*',
+          checkTarget: filterParameters?.checkTarget,
+          columnDataType: filterParameters?.columnDataType,
+          checkName: filterParameters?.checkName,
+          checkCategory: filterParameters?.checkCategory,
           checkType:
-            filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
+            filterParameters?.checkTypes as CheckSearchFiltersCheckTypeEnum,
           timeScale:
-            filterParameters.checkTypes !== CheckTypes.PROFILING
-              ? filterParameters.activeTab
+            filterParameters?.checkTypes !== CheckTypes.PROFILING
+              ? filterParameters?.activeTab
               : undefined
         },
         check_model_patch: updatedCheck,
@@ -83,25 +83,25 @@ export const UpdateCheckModel = ({
   const bulkDeactivateChecks = () => {
     onChangeLoading(true);
     const selected_tables_to_columns =
-      filterParameters.checkTarget === 'table'
+      filterParameters?.checkTarget === 'table'
         ? { ...mapTables }
         : { ...mapTableColumns };
     ConnectionApiClient.bulkDeactivateConnectionChecks(
-      filterParameters.connection,
-      filterParameters.checkName ?? '',
+      filterParameters?.connection,
+      filterParameters?.checkName ?? '',
       {
         check_search_filters: {
-          connection: filterParameters.connection,
-          fullTableName: filterParameters.schema + '.*',
-          checkTarget: filterParameters.checkTarget,
-          columnDataType: filterParameters.columnDataType,
-          checkName: filterParameters.checkName,
-          checkCategory: filterParameters.checkCategory,
+          connection: filterParameters?.connection,
+          fullTableName: filterParameters?.schema + '.*',
+          checkTarget: filterParameters?.checkTarget,
+          columnDataType: filterParameters?.columnDataType,
+          checkName: filterParameters?.checkName,
+          checkCategory: filterParameters?.checkCategory,
           checkType:
-            filterParameters.checkTypes as CheckSearchFiltersCheckTypeEnum,
+            filterParameters?.checkTypes as CheckSearchFiltersCheckTypeEnum,
           timeScale:
-            filterParameters.checkTypes !== CheckTypes.PROFILING
-              ? filterParameters.activeTab
+            filterParameters?.checkTypes !== CheckTypes.PROFILING
+              ? filterParameters?.activeTab
               : undefined
         },
         selected_tables_to_columns

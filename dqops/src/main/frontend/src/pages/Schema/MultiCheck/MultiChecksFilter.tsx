@@ -47,44 +47,44 @@ export default function MultiChecksFilter({
         }))
       );
     };
-    if (filterParameters.connection.length === 0) return
+    if (filterParameters?.connection.length === 0) return
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.checkTarget
+        filterParameters?.connection,
+        filterParameters?.schema,
+        filterParameters?.checkTarget
       ).then(processResult);
     } else if (
       checkTypes === CheckTypes.MONITORING &&
-      filterParameters.activeTab
+      filterParameters?.activeTab
     ) {
       SchemaApiClient.getSchemaMonitoringChecksTemplates(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.checkTarget
+        filterParameters?.connection,
+        filterParameters?.schema,
+        filterParameters?.activeTab,
+        filterParameters?.checkTarget
       ).then(processResult);
     } else if (
       checkTypes === CheckTypes.PARTITIONED &&
-      filterParameters.activeTab
+      filterParameters?.activeTab
     ) {
       SchemaApiClient.getSchemaPartitionedChecksTemplates(
-        filterParameters.connection,
-        filterParameters.schema,
-        filterParameters.activeTab,
-        filterParameters.checkTarget
+        filterParameters?.connection,
+        filterParameters?.schema,
+        filterParameters?.activeTab,
+        filterParameters?.checkTarget
       ).then(processResult);
     }
   }, [
-    filterParameters.connection,
-    filterParameters.schema,
+    filterParameters?.connection,
+    filterParameters?.schema,
     checkTypes,
-    filterParameters.checkTarget,
-    filterParameters.activeTab
+    filterParameters?.checkTarget,
+    filterParameters?.activeTab
   ]);
   const onChangeCheckOptions = () => {
     const checksCopy = checks
-      .filter((x) => x.check_category === filterParameters.checkCategory)
+      .filter((x) => x.check_category === filterParameters?.checkCategory)
       .map((x) => x.check_name);
 
     const sortedChecks = checksCopy.sort((a, b): number => {
@@ -103,21 +103,21 @@ export default function MultiChecksFilter({
   };
 
   useEffect(() => {
-    if (filterParameters.checkCategory) {
+    if (filterParameters?.checkCategory) {
       onChangeCheckOptions();
     }
-  }, [filterParameters.checkCategory, checks]);
+  }, [filterParameters?.checkCategory, checks]);
 
   useEffect(() => {
-    if (filterParameters.checkName && filterParameters.checkName) {
+    if (filterParameters?.checkName && filterParameters?.checkName) {
       const selectedCheck = checks.find(
         (x) =>
-          x.check_category === filterParameters.checkCategory &&
-          x.check_name === filterParameters.checkName
+          x.check_category === filterParameters?.checkCategory &&
+          x.check_name === filterParameters?.checkName
       );
       onChangeSelectedCheck(selectedCheck ?? {});
     }
-  }, [filterParameters.checkName]);
+  }, [filterParameters?.checkName]);
 
   return (
     <div className="flex w-full">
@@ -138,7 +138,7 @@ export default function MultiChecksFilter({
                   onChangeChecks([]);
                 setCheckNameOptions([]);
               }}
-              checked={filterParameters.checkTarget === 'table'}
+              checked={filterParameters?.checkTarget === 'table'}
             />
             <RadioButton
               label="Column"
@@ -151,14 +151,14 @@ export default function MultiChecksFilter({
                 onChangeChecks([]);
                 setCheckNameOptions([]);
               }}
-              checked={filterParameters.checkTarget === 'column'}
+              checked={filterParameters?.checkTarget === 'column'}
             />
           </div>
         </div>
           <Select
             label="Check category"
             options={sortObjects(checkCategoryOptions)}
-            value={filterParameters.checkCategory}
+            value={filterParameters?.checkCategory}
             onChange={(value) => {
               onChangeFilterParameters({ checkCategory: value });
               onChangeCheckOptions();
@@ -168,7 +168,7 @@ export default function MultiChecksFilter({
           <Select
             options={checkNameOptions}
             label="Check name"
-            value={filterParameters.checkName}
+            value={filterParameters?.checkName}
             onChange={(value) => {
               onChangeFilterParameters({ checkName: value });
               onChangeChecks([]);

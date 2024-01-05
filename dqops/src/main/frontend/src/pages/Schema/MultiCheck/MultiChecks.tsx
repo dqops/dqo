@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
-import { CheckTemplate } from '../../../api';
+import { CheckConfigurationModel, CheckTemplate } from '../../../api';
 import Tabs from '../../../components/Tabs';
 import MultiChecksTable from './MultiChecksTable/MultiChecksTable';
 import MultiChecksSearch from './MultiChecksSearch';
 import MultiChecksFilter from './MultiChecksFilter';
 import { IFilterTemplate } from '../../../shared/constants';
 import { SchemaApiClient } from '../../../services/apiClient';
-import { setMulticheckFilters, setMultiCheckSearchedChecks } from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
+import { setMultiCheckSearchedChecks, setMulticheckFilters } from '../../../redux/actions/source.actions';
+import { getFirstLevelActiveTab, getFirstLevelState } from '../../../redux/selectors';
+import { AxiosResponse } from 'axios';
 
 const tabs = [
   {
@@ -31,7 +32,9 @@ export const MultiChecks = () => {
     schema
   }: { checkTypes: CheckTypes; connection: string; schema: string } =
     useParams();
-  const { multiCheckFilters, multiCheckSearchedChecks } = useSelector((state: IRootState) => state.job || {});
+  const { multiCheckFilters, multiCheckSearchedChecks} = useSelector(getFirstLevelState(checkTypes));
+  const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
   const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   
   const dispatch = useActionDispatch()
@@ -45,13 +48,11 @@ export const MultiChecks = () => {
       ...multiCheckFilters,
       ...obj,
     };
-    dispatch(setMulticheckFilters(filterParameters));
+    dispatch(setMulticheckFilters(checkTypes, activeTab, filterParameters));
   };
   const searchChecks = () => {
     const {
-      connection,
-      schema,
-      activeTab,
+      activeTab : tab,
       tableNamePattern,
       columnNamePattern,
       columnDataType,
@@ -72,14 +73,14 @@ export const MultiChecks = () => {
         checkName,
         undefined,
         activeOffCheck ? undefined : true
-      ).then((res) => {
-        dispatch(setMultiCheckSearchedChecks(res.data));
+      ).then((res: AxiosResponse<CheckConfigurationModel[], any>) => {
+        dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, res.data));
       });
-    } else if (checkTypes === CheckTypes.MONITORING && activeTab) {
+    } else if (checkTypes === CheckTypes.MONITORING && tab) {
       SchemaApiClient.getSchemaMonitoringChecksModel(
         connection,
         schema,
-        activeTab,
+        tab,
         tableNamePattern,
         columnNamePattern,
         columnDataType,
@@ -88,14 +89,14 @@ export const MultiChecks = () => {
         checkName,
         undefined,
         activeOffCheck ? undefined : true
-      ).then((res) => {
-        dispatch(setMultiCheckSearchedChecks(res.data));
+      ).then((res: AxiosResponse<CheckConfigurationModel[], any>) => {
+        dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, res.data));
       });
-    } else if (checkTypes === CheckTypes.PARTITIONED && activeTab) {
+    } else if (checkTypes === CheckTypes.PARTITIONED && tab) {
       SchemaApiClient.getSchemaPartitionedChecksModel(
         connection,
         schema,
-        activeTab,
+        tab,
         tableNamePattern,
         columnNamePattern,
         columnDataType,
@@ -104,15 +105,15 @@ export const MultiChecks = () => {
         checkName,
         undefined,
         activeOffCheck ? undefined : true
-      ).then((res) => {
-        dispatch(setMultiCheckSearchedChecks(res.data));
+      ).then((res: AxiosResponse<CheckConfigurationModel[], any>) => {
+        dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, res.data));
       });
     }
   };
 
   useEffect(() => {
-     if (multiCheckFilters?.connection.length === 0) {
-       dispatch(setMulticheckFilters({
+     if (!multiCheckFilters?.connection) {
+       dispatch(setMulticheckFilters(checkTypes, activeTab, {
          connection,
          schema,
          activeTab: 'daily',
@@ -121,7 +122,6 @@ export const MultiChecks = () => {
         }))
       } 
     }, [connection, schema])
-    console.log(multiCheckFilters)
     
   return (
     <div className="text-sm py-4">
@@ -131,7 +131,7 @@ export const MultiChecks = () => {
             tabs={tabs}
             activeTab={(multiCheckFilters ?? {})?.activeTab}
             onChange={(value: any) => {
-              dispatch(setMulticheckFilters({
+              dispatch(setMulticheckFilters(checkTypes, activeTab,{
                 connection,
                 schema,
                 checkTarget: 'table',
@@ -148,7 +148,7 @@ export const MultiChecks = () => {
           onChangeFilterParameters={onChangemultiCheckFilters}
           checkTypes={checkTypes}
           onChangeSelectedCheck={(obj: CheckTemplate) => setSelectedCheck(obj)}
-          onChangeChecks={(checks: CheckTemplate[]) => dispatch(setMultiCheckSearchedChecks(checks))}
+          onChangeChecks={(checks: CheckTemplate[]) => dispatch(setMultiCheckSearchedChecks(checkTypes, activeTab, checks))}
         />
         <hr className="my-8 border-gray-300" />
         <MultiChecksSearch
