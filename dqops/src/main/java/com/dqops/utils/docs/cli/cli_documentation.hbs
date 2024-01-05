@@ -1,7 +1,7 @@
 # {{rootCommandName}}
 {{#each commands}}
 ___
-### **dqo {{qualifiedName}}**
+### **dqo{{#if (and (neq qualifiedName "dqo") (neq qualifiedName ""))}} {{qualifiedName}}{{/if}}**
 {{#each header}}
 {{this}}
 {{/each}}

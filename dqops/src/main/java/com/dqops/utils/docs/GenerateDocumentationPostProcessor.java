@@ -56,10 +56,7 @@ import com.dqops.utils.docs.checks.CheckDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.cli.CliCommandDocumentationGenerator;
 import com.dqops.utils.docs.cli.CliCommandDocumentationGeneratorImpl;
 import com.dqops.utils.docs.cli.CliCommandDocumentationModelFactoryImpl;
-import com.dqops.utils.docs.files.DocumentationFolder;
-import com.dqops.utils.docs.files.DocumentationFolderFactory;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
+import com.dqops.utils.docs.files.*;
 import com.dqops.utils.docs.parquetfiles.ParquetFilesDocumentationGenerator;
 import com.dqops.utils.docs.parquetfiles.ParquetFilesDocumentationGeneratorImpl;
 import com.dqops.utils.docs.parquetfiles.ParquetFilesDocumentationModelFactoryImpl;
@@ -451,5 +448,9 @@ public class GenerateDocumentationPostProcessor {
                 new DocumentationFolderPostCorrectorServiceImpl(projectRoot.toAbsolutePath().getParent());
         documentationFolderPostCorrectorService.postProcessCorrect(docsRootFolderCorrected);
         docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
+
+        DocumentationFolderPostValidatorService documentationFolderPostValidatorService =
+                new DocumentationFolderPostValidatorServiceImpl(projectRoot);
+        documentationFolderPostValidatorService.postProcessValidate(docsRootFolderCorrected);
     }
 }

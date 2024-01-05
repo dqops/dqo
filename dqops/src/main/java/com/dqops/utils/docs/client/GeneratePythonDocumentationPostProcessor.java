@@ -30,10 +30,7 @@ import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocum
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactory;
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
-import com.dqops.utils.docs.files.DocumentationFolder;
-import com.dqops.utils.docs.files.DocumentationFolderFactory;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
+import com.dqops.utils.docs.files.*;
 import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
@@ -272,5 +269,9 @@ public class GeneratePythonDocumentationPostProcessor {
                 new DocumentationFolderPostCorrectorServiceImpl(projectRoot.toAbsolutePath().getParent());
         documentationFolderPostCorrectorService.postProcessCorrect(docsRootFolderCorrected);
         docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
+
+        DocumentationFolderPostValidatorService documentationFolderPostValidatorService =
+                new DocumentationFolderPostValidatorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostValidatorService.postProcessValidate(docsRootFolderCorrected);
     }
 }

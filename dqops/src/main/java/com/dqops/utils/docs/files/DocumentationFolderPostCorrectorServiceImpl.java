@@ -51,18 +51,7 @@ public class DocumentationFolderPostCorrectorServiceImpl implements Documentatio
     /**
      * Links with '/' after filename, usually between ".md" and "#".
      */
-    private final Pattern redundantSlashPattern = Pattern.compile("]\\((.(?!\\.com))*\\.md(/)(.(?!\\.com))*\\)");
-
-    // REGEXPs to ensure correctness.
-    /**
-     * General pattern for discerning links. Matches all Markdown links without ".com".
-     */
-    private final Pattern generalInternalLink = Pattern.compile("]\\((.(?!\\.com))*\\)");
-    /**
-     * Pattern for ensuring a correct links format.
-     */
-    private final Pattern correctLinkFormat = Pattern.compile("]\\((?!\\))((\\.\\./)*([\\w\\-]+/)*[\\w\\-]+\\.md)?(#([a-zA-Z0-9]+[\\-_])*[a-zA-Z0-9]+)?\\)");
-
+    private final Pattern redundantSlashPattern = Pattern.compile("]\\(([^(\\[\\]](?!\\.com))*\\.md(/)([^(\\[\\]](?!\\.com))*\\)");
 
     private final Path projectRootDirectory;
 
