@@ -14,6 +14,7 @@ import CategoryMenu from './CategoryMenu';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import { useHistory, useParams } from 'react-router-dom';
 import Button from '../Button';
+import Checkbox from '../Checkbox';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   addFirstLevelTab,
@@ -34,6 +35,8 @@ interface TableHeaderProps {
   setCopyUI: (ui: CheckContainerModel) => void;
   onUpdate: () => void;
   isDefaultEditing?: boolean;
+  showAdvanced?: boolean;
+  setShowAdvanced: (showAdvanced: boolean) => void;
 }
 
 const TableHeader = ({
@@ -44,7 +47,9 @@ const TableHeader = ({
   copyUI,
   setCopyUI,
   onUpdate,
-  isDefaultEditing
+  isDefaultEditing,
+  showAdvanced,
+  setShowAdvanced
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -198,7 +203,7 @@ const TableHeader = ({
         state: {},
         label: `${
           timeScale === 'daily' ? 'Daily' : 'Monthly'
-        } partitioned checks`
+        } partition checks`
       })
     );
     history.push(url);
@@ -212,7 +217,13 @@ const TableHeader = ({
             colSpan={2}
             className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           >
-            <div className="flex gap-2 items-center">
+            <div className="flex gap-2 items-center font-normal text-gray-950">
+              <Checkbox
+                label="Show advanced checks"
+                labelPosition="right"
+                checked={showAdvanced}
+                onChange={(value) => setShowAdvanced(value)}
+              />
               {!mode && (
                 <>
                   <Button

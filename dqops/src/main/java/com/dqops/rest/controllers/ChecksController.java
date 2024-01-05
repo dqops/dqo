@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
+import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -245,12 +246,14 @@ public class ChecksController {
             }
         }
 
+        CheckDefinitionSpec newCheckDefinitionSpec = checkDefinitionModel.toCheckDefinitionSpec();
         if (existingUserCheckDefinitionWrapper == null) {
             CheckDefinitionWrapper checkDefinitionWrapper = userCheckDefinitionList.createAndAddNew(fullCheckName);
-            checkDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
+            checkDefinitionWrapper.setSpec(newCheckDefinitionSpec);
         }
         else {
-            existingUserCheckDefinitionWrapper.setSpec(checkDefinitionModel.toCheckDefinitionSpec());
+            CheckDefinitionSpec oldCheckDefinitionSpec = existingUserCheckDefinitionWrapper.getSpec();  // loading
+            existingUserCheckDefinitionWrapper.setSpec(newCheckDefinitionSpec);
         }
 
         userHomeContext.flush();

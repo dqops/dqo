@@ -18,6 +18,7 @@ package com.dqops.rest.controllers;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
+import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
@@ -236,13 +237,15 @@ public class RulesController {
             }
         }
 
+        RuleDefinitionSpec newRuleDefinitionSpec = ruleModel.toRuleDefinitionSpec();
         if (existingUserRuleDefinitionWrapper == null) {
             RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(fullRuleName);
-            ruleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
+            ruleDefinitionWrapper.setSpec(newRuleDefinitionSpec);
             ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
         }
         else {
-            existingUserRuleDefinitionWrapper.setSpec(ruleModel.toRuleDefinitionSpec());
+            RuleDefinitionSpec oldRuleDefinitionSpec = existingUserRuleDefinitionWrapper.getSpec(); // loading
+            existingUserRuleDefinitionWrapper.setSpec(newRuleDefinitionSpec);
             existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.makePythonModuleFileContent());
         }
 

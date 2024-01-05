@@ -69,6 +69,10 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     @JsonPropertyDescription("Help text that describes the data quality check.")
     private String helpText;
 
+    @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
     @JsonIgnore
     private String yamlParsingError;
 
@@ -141,6 +145,23 @@ public class CheckDefinitionSpec extends AbstractSpec implements InvalidYamlStat
     public void setHelpText(String helpText) {
         this.setDirtyIf(!Objects.equals(this.helpText, helpText));
         this.helpText = helpText;
+    }
+
+    /**
+     * Return true when this is a standard data quality check.
+     * @return True when it is a standard data quality check, always shown.
+     */
+    public boolean isStandard() {
+        return standard;
+    }
+
+    /**
+     * Sets the 'standard' flag to identify data quality checks that should be always shown in UI.
+     * @param standard True when it is a standard check.
+     */
+    public void setStandard(boolean standard) {
+        this.setDirtyIf(this.standard != standard);
+        this.standard = standard;
     }
 
     /**

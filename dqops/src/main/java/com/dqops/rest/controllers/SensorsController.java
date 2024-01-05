@@ -19,10 +19,7 @@ import com.dqops.connectors.ProviderType;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.basespecs.ElementWrapper;
-import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
-import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
-import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
-import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.metadata.definitions.sensors.*;
 import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -305,6 +302,7 @@ public class SensorsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
         }
 
+        SensorDefinitionSpec oldSensorDefinitionSpec = userHomeSensorDefinitionWrapper.getSpec(); // force loading
         ProviderSensorDefinitionList userProviderSensorDefinitionList = userHomeSensorDefinitionWrapper.getProviderSensors();
 
         if (sensorModel.equalsSensorDqo(dqoHomeSensorDefinitionWrapper)) {
@@ -332,6 +330,8 @@ public class SensorsController {
                     userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                     userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
                 } else if (!providerSensorModel.equalsProviderSensorDqo(dqoHomeProviderSensorDefinitionWrapper) && userHomeProviderSensorDefinitionWrapper != null) {
+                    ProviderSensorDefinitionSpec oldProviderDefinitionSpec = userHomeProviderSensorDefinitionWrapper.getSpec(); // force loading
+                    String oldSqlTemplate = userHomeProviderSensorDefinitionWrapper.getSqlTemplate(); // force loading
                     userHomeProviderSensorDefinitionWrapper.setSpec(providerSensorModel.getProviderSensorDefinitionSpec());
                     userHomeProviderSensorDefinitionWrapper.setSqlTemplate(providerSensorModel.getSqlTemplate());
                 } else if (userHomeProviderSensorDefinitionWrapper != null){

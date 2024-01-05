@@ -13007,6 +13007,12 @@ definitions:
         type: "string"
         description: "Help text that is shown in the check editor that describes the\
           \ purpose and usage of the check"
+      standard:
+        type: "boolean"
+        description: "This is a standard data quality check that is always shown on\
+          \ the data quality checks editor screen. Non-standard data quality checks\
+          \ (when the value is false) are advanced checks that are shown when the\
+          \ user decides to expand the list of checks."
       custom:
         type: "boolean"
         description: "This check has is a custom check or was customized by the user."
@@ -13072,6 +13078,12 @@ definitions:
       supports_grouping:
         type: "boolean"
         description: "The data quality check supports a custom data grouping configuration."
+      standard:
+        type: "boolean"
+        description: "This is a standard data quality check that is always shown on\
+          \ the data quality checks editor screen. Non-standard data quality checks\
+          \ (when the value is false) are advanced checks that are shown when the\
+          \ user decides to expand the list of checks."
       data_grouping_override:
         description: "Data grouping configuration for this check. When a data grouping\
           \ configuration is assigned at a check level, it overrides the data grouping\

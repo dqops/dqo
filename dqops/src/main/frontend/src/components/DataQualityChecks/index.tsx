@@ -68,7 +68,8 @@ const DataQualityChecks = ({
   );
   const [mode, setMode] = useState<string>();
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
-
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  
   const { sidebarWidth } = useTree();
   const handleChangeDataGrouping = (
     check: CheckModel,
@@ -449,6 +450,8 @@ const DataQualityChecks = ({
           setCopyUI={setCopyUI}
           onUpdate={onUpdate}
           isDefaultEditing={isDefaultEditing}
+          showAdvanced={showAdvanced}
+          setShowAdvanced={setShowAdvanced}
         />
         <tbody>
           {[
@@ -471,6 +474,7 @@ const DataQualityChecks = ({
                 (item) => item.category === category.category
               )}
               isDefaultEditing={isDefaultEditing}
+              showAdvanced={showAdvanced}
             />
           ))}
         </tbody>

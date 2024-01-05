@@ -15306,6 +15306,10 @@
           "type" : "string",
           "description" : "Help text that is shown in the check editor that describes the purpose and usage of the check"
         },
+        "standard" : {
+          "type" : "boolean",
+          "description" : "This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks."
+        },
         "custom" : {
           "type" : "boolean",
           "description" : "This check has is a custom check or was customized by the user."
@@ -15380,6 +15384,10 @@
         "supports_grouping" : {
           "type" : "boolean",
           "description" : "The data quality check supports a custom data grouping configuration."
+        },
+        "standard" : {
+          "type" : "boolean",
+          "description" : "This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks."
         },
         "data_grouping_override" : {
           "description" : "Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). ",

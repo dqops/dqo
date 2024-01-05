@@ -34,6 +34,7 @@ interface CheckCategoriesViewProps {
   copyCategory?: QualityCategoryModel;
   isDefaultEditing?: boolean;
   isFiltered?: boolean;
+  showAdvanced?: boolean
 }
 const CheckCategoriesView = ({
   mode,
@@ -46,7 +47,8 @@ const CheckCategoriesView = ({
   changeCopyUI,
   copyCategory,
   isDefaultEditing,
-  isFiltered
+  isFiltered,
+  showAdvanced
 }: CheckCategoriesViewProps) => {
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
@@ -92,7 +94,7 @@ const CheckCategoriesView = ({
     const deletedChecksArray = checkResultCopy.filter(
       (obj1) =>
         category.checks &&
-        !category.checks.find((obj2) => obj1.checkName === obj2.check_name) &&
+        !category.checks.find((obj2) => obj1.checkName === obj2.check_name && (showAdvanced || obj2.standard || obj2.configured)) &&
         obj1.checkCategory === category.category
     );
     const deletedCheckModels: CheckModel[] = deletedChecksArray.map((x) => ({
@@ -171,7 +173,7 @@ const CheckCategoriesView = ({
       {category.checks &&
         isExtended &&
         [
-          ...category.checks,
+          ...category.checks.filter((check) => showAdvanced || check.standard || check.configured),
           ...(isFiltered ? getExtendCheckCategoryModelWithDeletedChecks() : [])
         ].map((check, index) => (
           <CheckListItem

@@ -103,6 +103,14 @@ public class CheckModel implements Cloneable {
     private boolean supportsGrouping;
 
     /**
+     * This is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     */
+    @JsonPropertyDescription("This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean standard;
+
+    /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
      * Data grouping is configured in two cases:
      * (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.
