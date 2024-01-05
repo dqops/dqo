@@ -57,10 +57,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Trino port number. The default port is 8080. Supports also a ${TRINO_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--trino-database"}, description = "Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Trino database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private String database;
-
     @CommandLine.Option(names = {"--trino-user"}, description = "Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Trino user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
@@ -78,13 +74,9 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("The AWS Region where queries will be run. Supports also a ${ATHENA_REGION} configuration with a custom environment variable.")
     private String athenaRegion;
 
-    @CommandLine.Option(names = {"--athena-catalog"}, description = "The Athena Catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${ATHENA_CATALOG} configuration with a custom environment variable.")
-    @JsonPropertyDescription("The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${ATHENA_CATALOG} configuration with a custom environment variable.")
-    private String athenaCatalog;
-
-    @CommandLine.Option(names = {"--athena-database"}, description = "The Database where queries will run. Supports also a ${ATHENA_DATABASE} configuration with a custom environment variable.")
-    @JsonPropertyDescription("The database where queries will run. Supports also a ${ATHENA_DATABASE} configuration with a custom environment variable.")
-    private String athenaDatabase;
+    @CommandLine.Option(names = {"--trino-catalog"}, description = "The Trino catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.")
+    @JsonPropertyDescription("The catalog that contains the databases and the tables that will be accessed with the driver. Supports also a ${TRINO_CATALOG} configuration with a custom environment variable.")
+    private String catalog;
 
     @CommandLine.Option(names = {"--athena-work-group"}, description = "The Athena WorkGroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.")
     @JsonPropertyDescription("The workgroup in which queries will run. Supports also a ${ATHENA_WORK_GROUP} configuration with a custom environment variable.")
@@ -147,23 +139,6 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     public void setPort(String port) {
         setDirtyIf(!Objects.equals(this.port, port));
         this.port = port;
-    }
-
-    /**
-     * Returns a physical database name.
-     * @return Physical database name.
-     */
-    public String getDatabase() {
-        return database;
-    }
-
-    /**
-     * Sets a physical database name.
-     * @param database Physical database name.
-     */
-    public void setDatabase(String database) {
-        setDirtyIf(!Objects.equals(this.database, database));
-        this.database = database;
     }
 
     /**
@@ -236,37 +211,29 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the Athena's Catalog
-     * @return Athena's Catalog.
+     * Returns the catalog
+     * @return The catalog name.
      */
-    public String getAthenaCatalog() {
-        return athenaCatalog;
+    public String getCatalog() {
+        return catalog;
     }
 
     /**
-     * Sets Athena's Catalog.
-     * @param athenaCatalog Athena's Catalog.
+     * Sets the catalog name.
+     * @param catalog The catalog name.
      */
-    public void setAthenaCatalog(String athenaCatalog) {
-        setDirtyIf(!Objects.equals(this.athenaCatalog, athenaCatalog));
-        this.athenaCatalog = athenaCatalog;
+    public void setCatalog(String catalog) {
+        setDirtyIf(!Objects.equals(this.catalog, catalog));
+        this.catalog = catalog;
     }
 
     /**
-     * Returns the Athena's Database
-     * @return Athena's Database.
+     * Returns a high level container name that contian schemas.
+     * @return High level container name that contian schemas.
      */
-    public String getAthenaDatabase() {
-        return athenaDatabase;
-    }
-
-    /**
-     * Sets Athena's Database.
-     * @param athenaDatabase Athena's Database.
-     */
-    public void setAthenaDatabase(String athenaDatabase) {
-        setDirtyIf(!Objects.equals(this.athenaDatabase, athenaDatabase));
-        this.athenaDatabase = athenaDatabase;
+    @Override
+    public String getDatabase(){
+        return getCatalog();
     }
 
     /**
@@ -353,14 +320,12 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
 
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
-        cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         // cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         cloned.athenaRegion = secretValueProvider.expandValue(cloned.athenaRegion, lookupContext);
-        cloned.athenaCatalog = secretValueProvider.expandValue(cloned.athenaCatalog, lookupContext);
-        cloned.athenaDatabase = secretValueProvider.expandValue(cloned.athenaDatabase, lookupContext);
+        cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
         cloned.athenaWorkGroup = secretValueProvider.expandValue(cloned.athenaWorkGroup, lookupContext);
         cloned.athenaOutputLocation = secretValueProvider.expandValue(cloned.athenaOutputLocation, lookupContext);
         cloned.athenaProperties = secretValueProvider.expandProperties(cloned.athenaProperties, lookupContext);

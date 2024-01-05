@@ -68,7 +68,7 @@ public class TrinoConnectionSpecObjectMother {
             {{
                 setHost("localhost");
                 setPort(testContainer.getMappedPort(TRINO_PORT).toString());
-                setDatabase(testContainer.getDatabaseName());
+                setCatalog(testContainer.getDatabaseName());
                 setUser(testContainer.getUsername());
                 setTrinoEngineType(TrinoEngineType.trino);
             }});

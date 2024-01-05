@@ -118,14 +118,9 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.put("Region", region);
         }
 
-        String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaCatalog(), secretValueLookupContext);
+        String catalog = this.getSecretValueProvider().expandValue(trinoSpec.getCatalog(), secretValueLookupContext);
         if (!Strings.isNullOrEmpty(catalog)){
             dataSourceProperties.put("Catalog", catalog);
-        }
-
-        String database = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaDatabase(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(database)){
-            dataSourceProperties.put("Database", database);
         }
 
         String outputLocation = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaOutputLocation(), secretValueLookupContext);
@@ -137,7 +132,6 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
         if (!Strings.isNullOrEmpty(workgroup)){
             dataSourceProperties.put("Workgroup", workgroup);
         }
-//        connectionParameters.setProperty("CredentialsProvider","DefaultChain");
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
 

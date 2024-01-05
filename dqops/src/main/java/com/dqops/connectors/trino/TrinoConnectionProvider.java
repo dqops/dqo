@@ -133,14 +133,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             trinoSpec.setPort(terminalReader.prompt("Trino port number (--trino-port)", "${TRINO_PORT}", false));
         }
 
-        if (Strings.isNullOrEmpty(trinoSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--trino-database");
-            }
-
-            trinoSpec.setDatabase(terminalReader.prompt("Trino database name (--trino-database)", "${TRINO_DATABASE}", false));
-        }
-
         if (Strings.isNullOrEmpty(trinoSpec.getUser())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--trino-user");
@@ -149,13 +141,6 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             trinoSpec.setUser(terminalReader.prompt("Trino user name (--trino-user)", "${TRINO_USER}", false));
         }
 
-//        if (Strings.isNullOrEmpty(trinoSpec.getPassword())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--trino-password");
-//            }
-//
-//            trinoSpec.setPassword(terminalReader.prompt("Trino user password (--trino-password)", "${TRINO_PASSWORD}", false));
-//        }
     }
 
     private void promptForAthenaConnectionParameters(TrinoParametersSpec trinoSpec, boolean isHeadless, TerminalReader terminalReader) {
@@ -166,18 +151,11 @@ public class TrinoConnectionProvider extends AbstractSqlConnectionProvider {
             trinoSpec.setAthenaRegion(terminalReader.prompt(" (--athena-region)", "${ATHENA_REGION}", false));
         }
 
-        if (Strings.isNullOrEmpty(trinoSpec.getAthenaCatalog())) {
+        if (Strings.isNullOrEmpty(trinoSpec.getCatalog())) {
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--athena-catalog");
             }
-            trinoSpec.setAthenaCatalog(terminalReader.prompt(" (--athena-catalog)", "${ATHENA_CATALOG}", false));
-        }
-
-        if (Strings.isNullOrEmpty(trinoSpec.getAthenaDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--athena-database");
-            }
-            trinoSpec.setAthenaDatabase(terminalReader.prompt(" (--athena-database)", "${ATHENA_DATABASE}", false));
+            trinoSpec.setCatalog(terminalReader.prompt(" (--athena-catalog)", "${ATHENA_CATALOG}", false));
         }
 
         if (Strings.isNullOrEmpty(trinoSpec.getAthenaWorkGroup())) {

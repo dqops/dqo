@@ -1,4 +1,4 @@
-{% set macro_database_name =  connection.trino.database -%}
+{% set macro_catalog_name = connection.trino.database -%}
 {% set macro_schema_name = target_table.schema_name -%}
 {% set macro_table_name = target_table.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}
@@ -21,7 +21,7 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-    {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+    {{ quote_identifier(macro_catalog_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
