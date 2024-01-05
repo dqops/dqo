@@ -1,4 +1,4 @@
-# Configuring Slack notifications
+# Configure Slack notifications
 
 DQOps supports integration with Slack webhooks which are used to set up in-app Slack notifications. 
 

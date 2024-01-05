@@ -84,6 +84,7 @@ nav:
           - Detect empty tables: "examples/data-quality-monitoring/detect-empty-tables.md"
           - Running checks with a scheduler: "examples/data-quality-monitoring/running-checks-with-a-scheduler.md"
   - Working with DQOps:
+      - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality/daily-monitoring-of-data-quality.md"
       - Basic data statistics: "working-with-dqo/basic-data-statistics/basic-data-statistics.md"
       - Run data quality checks: "working-with-dqo/run-data-quality-checks/run-data-quality-checks.md"
       - Review the results of data quality monitoring on dashboards: "working-with-dqo/data-quality-dashboards/data-quality-dashboards.md"
