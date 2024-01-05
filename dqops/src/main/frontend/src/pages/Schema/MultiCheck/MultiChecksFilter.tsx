@@ -11,14 +11,12 @@ import { useParams } from 'react-router-dom';
 interface IMultiChecksFilter {
   filterParameters: IFilterTemplate;
   onChangeFilterParameters: (obj: Partial<IFilterTemplate>) => void;
-  onChangeSelectedCheck: (obj: CheckTemplate) => void;
   onChangeChecks: (checks: CheckTemplate[]) => void;
   timeScale: 'daily' | 'monthly'
 }
 export default function MultiChecksFilter({
   filterParameters,
   onChangeFilterParameters,
-  onChangeSelectedCheck,
   onChangeChecks,
   timeScale
 }: IMultiChecksFilter) {
@@ -53,6 +51,14 @@ export default function MultiChecksFilter({
           value: item ?? ''
         }))
       );
+      if (filterParameters?.checkName && filterParameters?.checkName) {
+      const selectedCheck = res.data.find(
+        (x) =>
+          x.check_category === filterParameters?.checkCategory &&
+          x.check_name === filterParameters?.checkName
+      );
+      onChangeFilterParameters({selectedCheck: selectedCheck});
+      }
     };
     if (checkTypes === CheckTypes.PROFILING) {
       SchemaApiClient.getSchemaProfilingChecksTemplates(
@@ -110,7 +116,7 @@ export default function MultiChecksFilter({
     if (filterParameters?.checkCategory) {
       onChangeCheckOptions();
     }
-  }, [filterParameters?.checkCategory, checks]);
+  }, [filterParameters?.checkCategory, checks, timeScale, connection, schema]);
 
   useEffect(() => {
     if (filterParameters?.checkName && filterParameters?.checkName) {
@@ -119,9 +125,9 @@ export default function MultiChecksFilter({
           x.check_category === filterParameters?.checkCategory &&
           x.check_name === filterParameters?.checkName
       );
-      onChangeSelectedCheck(selectedCheck ?? {});
+      onChangeFilterParameters({selectedCheck: selectedCheck});
     }
-  }, [filterParameters?.checkName]);
+  }, [filterParameters?.checkName, timeScale, connection, schema]);
 
   return (
     <div className="flex w-full">

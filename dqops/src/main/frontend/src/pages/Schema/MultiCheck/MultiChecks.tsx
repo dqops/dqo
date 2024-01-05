@@ -42,7 +42,6 @@ export const MultiChecks = () => {
     getFirstLevelState(checkTypes)
   );
   const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [selectedCheck, setSelectedCheck] = useState<CheckTemplate>({});
   const [timeScale, setTimeScale] = useState<'daily' | 'monthly'>('daily');
 
   const dispatch = useActionDispatch();
@@ -64,7 +63,7 @@ export const MultiChecks = () => {
     return (
       multiCheckSearchedChecks?.[
         checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale
-      ] ?? []
+      ]
     );
   }, [connection, schema, timeScale, multiCheckFilters]);
 
@@ -73,14 +72,14 @@ export const MultiChecks = () => {
       ...filterParameters,
       ...obj
     };
-    dispatch(
-      setMultiCheckSearchedChecks(
-        checkTypes,
-        activeTab,
-        [],
-        checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale
-      )
-    );
+    // dispatch(
+    //   setMultiCheckSearchedChecks(
+    //     checkTypes,
+    //     activeTab,
+    //     [],
+    //     checkTypes === CheckTypes.PROFILING ? 'advanced' : timeScale
+    //   )
+    // );
     dispatch(
       setMultiCheckFilters(
         checkTypes,
@@ -171,6 +170,7 @@ export const MultiChecks = () => {
       });
     }
   };
+  console.log(searchResults, filterParameters, multiCheckSearchedChecks)
 
   return (
     <div className="text-sm py-4">
@@ -187,7 +187,6 @@ export const MultiChecks = () => {
         <MultiChecksFilter
           filterParameters={filterParameters as IFilterTemplate}
           onChangeFilterParameters={onChangefilterParameters}
-          onChangeSelectedCheck={(obj: CheckTemplate) => setSelectedCheck(obj)}
           onChangeChecks={(checks: CheckTemplate[]) =>
             dispatch(
               setMultiCheckSearchedChecks(
@@ -212,7 +211,7 @@ export const MultiChecks = () => {
             checkTarget={filterParameters?.checkTarget}
             checks={searchResults}
             filterParameters={filterParameters as IFilterTemplate}
-            selectedCheckModel={selectedCheck.check_model ?? {}}
+            selectedCheckModel={filterParameters?.selectedCheck?.check_model ?? {}}
             searchChecks={searchChecks}
             timeScale={timeScale}
           />

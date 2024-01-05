@@ -1,4 +1,5 @@
 import {
+  CheckTemplate,
   ConnectionModelProviderTypeEnum,
   TableComparisonGroupingColumnPairModel,
   TimeWindowFilterParameters
@@ -32,6 +33,7 @@ export interface IFilterTemplate {
   checkCategory?: string | undefined;
   checkName?: string | undefined;
   activeOffCheck?: boolean;
+  selectedCheck?: CheckTemplate
 }
 
 enum CheckTypes {

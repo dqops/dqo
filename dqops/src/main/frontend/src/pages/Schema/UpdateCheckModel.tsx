@@ -155,7 +155,7 @@ export const UpdateCheckModel = ({
   }, [selectedData]);
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-300 max-w-300">
+    <Dialog open={open} handler={onClose} className="min-w-300 max-w-300 flex justify-center flex-col items-center">
       <DialogBody className="pt-10 pb-2 px-8">
         <div className="w-full flex flex-col items-center">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">

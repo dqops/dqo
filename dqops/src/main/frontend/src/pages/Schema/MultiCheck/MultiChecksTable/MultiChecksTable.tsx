@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { CheckModel, CheckTemplate } from '../../../../api';
 import { isEqual } from 'lodash';
 import { UpdateCheckModel } from '../../UpdateCheckModel';
