@@ -16530,40 +16530,40 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
+        "daily_mean_anomaly" : {
+          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyStationaryMeanCheckSpec"
+        },
+        "daily_median_anomaly" : {
+          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyStationaryMedianCheckSpec"
+        },
+        "daily_sum_anomaly" : {
+          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyDifferencingSumCheckSpec"
+        },
         "daily_mean_change" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
         },
         "daily_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
         },
         "daily_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
         },
-        "daily_mean_anomaly_stationary" : {
-          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryMeanCheckSpec"
-        },
-        "daily_mean_anomaly_stationary_30_days" : {
-          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.",
+        "daily_mean_anomaly_30_days" : {
+          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMean30DaysCheckSpec"
         },
-        "daily_median_anomaly_stationary" : {
-          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryMedianCheckSpec"
-        },
-        "daily_median_anomaly_stationary_30_days" : {
-          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.",
+        "daily_median_anomaly_30_days" : {
+          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMedian30DaysCheckSpec"
         },
-        "daily_sum_anomaly_differencing" : {
-          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyDifferencingSumCheckSpec"
-        },
-        "daily_sum_anomaly_differencing_30_days" : {
-          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.",
+        "daily_sum_anomaly_30_days" : {
+          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyDifferencingSum30DaysCheckSpec"
         },
         "daily_mean_change_1_day" : {
@@ -16579,27 +16579,27 @@
           "$ref" : "#/definitions/ColumnMeanChange30DaysCheckSpec"
         },
         "daily_median_change_1_day" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnMedianChange1DayCheckSpec"
         },
         "daily_median_change_7_days" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnMedianChange7DaysCheckSpec"
         },
         "daily_median_change_30_days" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnMedianChange30DaysCheckSpec"
         },
         "daily_sum_change_1_day" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnSumChange1DayCheckSpec"
         },
         "daily_sum_change_7_days" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnSumChange7DaysCheckSpec"
         },
         "daily_sum_change_30_days" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnSumChange30DaysCheckSpec"
         }
       }
@@ -16614,76 +16614,76 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
+        "daily_partition_mean_anomaly" : {
+          "description" : "Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyStationaryMeanCheckSpec"
+        },
+        "daily_partition_median_anomaly" : {
+          "description" : "Verifies that the median in a column is within a percentile from measurements made during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyStationaryMedianCheckSpec"
+        },
+        "daily_partition_sum_anomaly" : {
+          "description" : "Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyStationaryPartitionSumCheckSpec"
+        },
         "daily_partition_mean_change" : {
           "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout.",
           "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
         },
         "daily_partition_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
         },
         "daily_partition_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
         },
-        "daily_partition_mean_anomaly_stationary" : {
-          "description" : "Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryMeanCheckSpec"
-        },
-        "daily_partition_mean_anomaly_stationary_30_days" : {
+        "daily_partition_mean_anomaly_30_days" : {
           "description" : "Verifies that the mean value in a column is within a percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMean30DaysCheckSpec"
         },
-        "daily_partition_median_anomaly_stationary" : {
-          "description" : "Verifies that the median in a column is within a percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryMedianCheckSpec"
-        },
-        "daily_partition_median_anomaly_stationary_30_days" : {
+        "daily_partition_median_anomaly_30_days" : {
           "description" : "Verifies that the median in a column is within a percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMedian30DaysCheckSpec"
         },
-        "daily_partition_sum_anomaly_stationary" : {
-          "description" : "Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryPartitionSumCheckSpec"
-        },
-        "daily_partition_sum_anomaly_stationary_30_days" : {
+        "daily_partition_sum_anomaly_30_days" : {
           "description" : "Verifies that the sum in a column is within a percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryPartitionSum30DaysCheckSpec"
         },
         "daily_partition_mean_change_1_day" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnMeanChange1DayCheckSpec"
         },
         "daily_partition_mean_change_7_days" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnMeanChange7DaysCheckSpec"
         },
         "daily_partition_mean_change_30_days" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnMeanChange30DaysCheckSpec"
         },
         "daily_partition_median_change_1_day" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnMedianChange1DayCheckSpec"
         },
         "daily_partition_median_change_7_days" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnMedianChange7DaysCheckSpec"
         },
         "daily_partition_median_change_30_days" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnMedianChange30DaysCheckSpec"
         },
         "daily_partition_sum_change_1_day" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnSumChange1DayCheckSpec"
         },
         "daily_partition_sum_change_7_days" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnSumChange7DaysCheckSpec"
         },
         "daily_partition_sum_change_30_days" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnSumChange30DaysCheckSpec"
         }
       }
@@ -16923,15 +16923,15 @@
           }
         },
         "monthly_mean_change" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
         },
         "monthly_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
         },
         "monthly_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
         }
       }
@@ -16947,15 +16947,15 @@
           }
         },
         "monthly_partition_mean_change" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
         },
         "monthly_partition_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
         },
         "monthly_partition_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
         }
       }
@@ -16970,76 +16970,76 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
+        "profile_mean_anomaly" : {
+          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.",
+          "$ref" : "#/definitions/ColumnAnomalyStationaryMeanCheckSpec"
+        },
         "profile_mean_change" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
         },
         "profile_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
         },
         "profile_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
         },
-        "profile_mean_anomaly_stationary" : {
-          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryMeanCheckSpec"
-        },
-        "profile_mean_anomaly_stationary_30_days" : {
-          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.",
+        "profile_mean_anomaly_30_days" : {
+          "description" : "Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMean30DaysCheckSpec"
         },
         "profile_median_anomaly_stationary" : {
-          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.",
+          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMedianCheckSpec"
         },
         "profile_median_anomaly_stationary_30_days" : {
-          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.",
+          "description" : "Verifies that the median in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryMedian30DaysCheckSpec"
         },
         "profile_sum_anomaly_differencing_30_days" : {
-          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.",
+          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyDifferencingSum30DaysCheckSpec"
         },
         "profile_sum_anomaly_differencing" : {
-          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.",
+          "description" : "Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyDifferencingSumCheckSpec"
         },
         "profile_mean_change_1_day" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnMeanChange1DayCheckSpec"
         },
         "profile_mean_change_7_days" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnMeanChange7DaysCheckSpec"
         },
         "profile_mean_change_30_days" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnMeanChange30DaysCheckSpec"
         },
         "profile_median_change_1_day" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnMedianChange1DayCheckSpec"
         },
         "profile_median_change_7_days" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnMedianChange7DaysCheckSpec"
         },
         "profile_median_change_30_days" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnMedianChange30DaysCheckSpec"
         },
         "profile_sum_change_1_day" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnSumChange1DayCheckSpec"
         },
         "profile_sum_change_7_days" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from last week.",
           "$ref" : "#/definitions/ColumnSumChange7DaysCheckSpec"
         },
         "profile_sum_change_30_days" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout from last month.",
           "$ref" : "#/definitions/ColumnSumChange30DaysCheckSpec"
         }
       }
@@ -22018,28 +22018,28 @@
           "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
-        "daily_nulls_percent_anomaly_stationary" : {
-          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.",
+        "daily_nulls_percent_anomaly" : {
+          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryNullPercentCheckSpec"
         },
         "daily_nulls_percent_change" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnNullPercentChangeCheckSpec"
         },
-        "daily_nulls_percent_anomaly_stationary_30_days" : {
-          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.",
+        "daily_nulls_percent_anomaly_30_days" : {
+          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryNullPercent30DaysCheckSpec"
         },
         "daily_nulls_percent_change_1_day" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnNullPercentChange1DayCheckSpec"
         },
         "daily_nulls_percent_change_7_days" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnNullPercentChange7DaysCheckSpec"
         },
         "daily_nulls_percent_change_30_days" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnNullPercentChange30DaysCheckSpec"
         }
       }
@@ -22070,7 +22070,7 @@
           "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         },
-        "daily_partition_nulls_percent_anomaly_stationary" : {
+        "daily_partition_nulls_percent_anomaly" : {
           "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryNullPercentCheckSpec"
         },
@@ -22078,20 +22078,20 @@
           "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout.",
           "$ref" : "#/definitions/ColumnNullPercentChangeCheckSpec"
         },
-        "daily_partition_nulls_percent_anomaly_stationary_30_days" : {
+        "daily_partition_nulls_percent_anomaly_30_days" : {
           "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryNullPercent30DaysCheckSpec"
         },
         "daily_partition_nulls_percent_change_1_day" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.",
           "$ref" : "#/definitions/ColumnNullPercentChange1DayCheckSpec"
         },
         "daily_partition_nulls_percent_change_7_days" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnNullPercentChange7DaysCheckSpec"
         },
         "daily_partition_nulls_percent_change_30_days" : {
-          "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.",
+          "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnNullPercentChange30DaysCheckSpec"
         }
       }
@@ -28722,11 +28722,11 @@
           "description" : "Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
         },
-        "daily_anomaly_differencing_distinct_count" : {
+        "daily_distinct_count_anomaly" : {
           "description" : "Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyDifferencingDistinctCountCheckSpec"
         },
-        "daily_anomaly_stationary_distinct_percent" : {
+        "daily_distinct_percent_anomaly" : {
           "description" : "Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryDistinctPercentCheckSpec"
         },
@@ -28738,11 +28738,11 @@
           "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnDistinctPercentChangeCheckSpec"
         },
-        "daily_anomaly_differencing_distinct_count_30_days" : {
+        "daily_distinct_count_anomaly_30_days" : {
           "description" : "Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyDifferencingDistinctCount30DaysCheckSpec"
         },
-        "daily_anomaly_stationary_distinct_percent_30_days" : {
+        "daily_distinct_percent_anomaly_30_days" : {
           "description" : "Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec"
         },
@@ -28798,11 +28798,11 @@
           "description" : "Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
         },
-        "daily_partition_anomaly_stationary_distinct_count" : {
+        "daily_partition_distinct_count_anomaly" : {
           "description" : "Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryPartitionDistinctCountCheckSpec"
         },
-        "daily_partition_anomaly_stationary_distinct_percent" : {
+        "daily_partition_distinct_percent_anomaly" : {
           "description" : "Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryDistinctPercentCheckSpec"
         },
@@ -28814,11 +28814,11 @@
           "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnDistinctPercentChangeCheckSpec"
         },
-        "daily_partition_anomaly_stationary_distinct_count_30_days" : {
+        "daily_partition_distinct_count_anomaly_30_days" : {
           "description" : "Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryPartitionDistinctCount30DaysCheckSpec"
         },
-        "daily_partition_anomaly_stationary_distinct_percent_30_days" : {
+        "daily_partition_distinct_percent_anomaly_30_days" : {
           "description" : "Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 30 days.",
           "$ref" : "#/definitions/ColumnAnomalyStationaryDistinctPercent30DaysCheckSpec"
         },
@@ -28827,11 +28827,11 @@
           "$ref" : "#/definitions/ColumnDistinctCountChange1DayCheckSpec"
         },
         "daily_partition_distinct_count_change_7_days" : {
-          "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.",
+          "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnDistinctCountChange7DaysCheckSpec"
         },
         "daily_partition_distinct_count_change_30_days" : {
-          "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.",
+          "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnDistinctCountChange30DaysCheckSpec"
         },
         "daily_partition_distinct_percent_change_1_day" : {
@@ -28839,11 +28839,11 @@
           "$ref" : "#/definitions/ColumnDistinctPercentChange1DayCheckSpec"
         },
         "daily_partition_distinct_percent_change_7_days" : {
-          "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.",
+          "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last week.",
           "$ref" : "#/definitions/ColumnDistinctPercentChange7DaysCheckSpec"
         },
         "daily_partition_distinct_percent_change_30_days" : {
-          "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.",
+          "description" : "Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last month.",
           "$ref" : "#/definitions/ColumnDistinctPercentChange30DaysCheckSpec"
         }
       }
@@ -28962,14 +28962,6 @@
           "description" : "Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
         },
-        "monthly_anomaly_differencing_distinct_count" : {
-          "description" : "Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyDifferencingDistinctCountCheckSpec"
-        },
-        "monthly_anomaly_stationary_distinct_percent" : {
-          "description" : "Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryDistinctPercentCheckSpec"
-        },
         "monthly_distinct_count_change" : {
           "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.",
           "$ref" : "#/definitions/ColumnDistinctCountChangeCheckSpec"
@@ -29005,14 +28997,6 @@
         "monthly_partition_duplicate_percent" : {
           "description" : "Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnDuplicatePercentCheckSpec"
-        },
-        "monthly_partition_anomaly_stationary_distinct_count" : {
-          "description" : "Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryPartitionDistinctCountCheckSpec"
-        },
-        "monthly_partition_anomaly_stationary_distinct_percent" : {
-          "description" : "Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.",
-          "$ref" : "#/definitions/ColumnAnomalyStationaryDistinctPercentCheckSpec"
         },
         "monthly_partition_distinct_count_change" : {
           "description" : "Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.",

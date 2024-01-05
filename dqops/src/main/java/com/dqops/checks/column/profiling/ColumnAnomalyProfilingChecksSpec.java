@@ -41,14 +41,14 @@ import java.util.Objects;
 public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAnomalyProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_mean_anomaly_stationary", o -> o.profileMeanAnomalyStationary);
-            put("profile_mean_anomaly_stationary_30_days", o -> o.profileMeanAnomalyStationary30Days);
+            put("profile_mean_anomaly", o -> o.profileMeanAnomaly);
+            put("profile_mean_anomaly_30_days", o -> o.profileMeanAnomaly30Days);
 
-            put("profile_median_anomaly_stationary", o -> o.profileMedianAnomalyStationary);
-            put("profile_median_anomaly_stationary_30_days", o -> o.profileMedianAnomalyStationary30Days);
+            put("profile_median_anomaly", o -> o.profileMedianAnomalyStationary);
+            put("profile_median_anomaly_30_days", o -> o.profileMedianAnomalyStationary30Days);
 
-            put("profile_sum_anomaly_differencing", o -> o.profileSumAnomalyDifferencing);
-            put("profile_sum_anomaly_differencing_30_days", o -> o.profileSumAnomalyDifferencing30Days);
+            put("profile_sum_anomaly", o -> o.profileSumAnomalyDifferencing);
+            put("profile_sum_anomaly_30_days", o -> o.profileSumAnomalyDifferencing30Days);
 
             put("profile_mean_change", o -> o.profileMeanChange);
             put("profile_mean_change_1_day", o -> o.profileMeanChange1Day);
@@ -67,109 +67,108 @@ public class ColumnAnomalyProfilingChecksSpec extends AbstractCheckCategorySpec 
         }
     };
 
-    @JsonProperty("profile_mean_anomaly_stationary")
-    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnAnomalyStationaryMeanCheckSpec profileMeanAnomalyStationary;
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.")
+    private ColumnAnomalyStationaryMeanCheckSpec profileMeanAnomaly;
 
-    @JsonProperty("profile_mean_anomaly_stationary_30_days")
-    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during last 30 days.")
-    private ColumnAnomalyStationaryMean30DaysCheckSpec profileMeanAnomalyStationary30Days;
+    @JsonProperty("profile_mean_anomaly_30_days")
+    @JsonPropertyDescription("Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 30 days.")
+    private ColumnAnomalyStationaryMean30DaysCheckSpec profileMeanAnomaly30Days;
 
     @JsonProperty("profile_median_anomaly_stationary")
-    @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 90 days.")
+    @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnAnomalyStationaryMedianCheckSpec profileMedianAnomalyStationary;
 
     @JsonProperty("profile_median_anomaly_stationary_30_days")
-    @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during last 30 days.")
+    @JsonPropertyDescription("Verifies that the median in a column changes in a rate within a percentile boundary during the last 30 days.")
     private ColumnAnomalyStationaryMedian30DaysCheckSpec profileMedianAnomalyStationary30Days;
 
     @JsonProperty("profile_sum_anomaly_differencing_30_days")
-    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 30 days.")
+    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during the last 30 days.")
     private ColumnAnomalyDifferencingSum30DaysCheckSpec profileSumAnomalyDifferencing30Days;
 
     @JsonProperty("profile_sum_anomaly_differencing")
-    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during last 90 days.")
+    @JsonPropertyDescription("Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.")
     private ColumnAnomalyDifferencingSumCheckSpec profileSumAnomalyDifferencing;
     
-    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
     private ColumnMeanChangeCheckSpec profileMeanChange;
 
     @JsonProperty("profile_mean_change_1_day")
-    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.")
     private ColumnMeanChange1DayCheckSpec profileMeanChange1Day;
 
     @JsonProperty("profile_mean_change_7_days")
-    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from last week.")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.")
     private ColumnMeanChange7DaysCheckSpec profileMeanChange7Days;
 
     @JsonProperty("profile_mean_change_30_days")
-    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout from last month.")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.")
     private ColumnMeanChange30DaysCheckSpec profileMeanChange30Days;
 
-    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout.")
     private ColumnMedianChangeCheckSpec profileMedianChange;
 
     @JsonProperty("profile_median_change_1_day")
-    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from yesterday.")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.")
     private ColumnMedianChange1DayCheckSpec profileMedianChange1Day;
 
     @JsonProperty("profile_median_change_7_days")
-    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from last week.")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout from the last week.")
     private ColumnMedianChange7DaysCheckSpec profileMedianChange7Days;
 
     @JsonProperty("profile_median_change_30_days")
-    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout from last month.")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout from the last month.")
     private ColumnMedianChange30DaysCheckSpec profileMedianChange30Days;
 
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout.")
     private ColumnSumChangeCheckSpec profileSumChange;
 
     @JsonProperty("profile_sum_change_1_day")
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.")
     private ColumnSumChange1DayCheckSpec profileSumChange1Day;
 
     @JsonProperty("profile_sum_change_7_days")
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from last week.")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout from last week.")
     private ColumnSumChange7DaysCheckSpec profileSumChange7Days;
 
     @JsonProperty("profile_sum_change_30_days")
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout from last month.")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout from last month.")
     private ColumnSumChange30DaysCheckSpec profileSumChange30Days;
 
     /**
      * Returns a mean value anomaly 90 days check specification.
      * @return Mean value anomaly 90 days check specification.
      */
-    public ColumnAnomalyStationaryMeanCheckSpec getProfileMeanAnomalyStationary() {
-        return profileMeanAnomalyStationary;
+    public ColumnAnomalyStationaryMeanCheckSpec getProfileMeanAnomaly() {
+        return profileMeanAnomaly;
     }
 
     /**
      * Sets a new specification of a mean value anomaly 90 days check.
-     * @param profileMeanAnomalyStationary Mean value anomaly 90 days check specification.
+     * @param profileMeanAnomaly Mean value anomaly 90 days check specification.
      */
-    public void setProfileMeanAnomalyStationary(ColumnAnomalyStationaryMeanCheckSpec profileMeanAnomalyStationary) {
-        this.setDirtyIf(!Objects.equals(this.profileMeanAnomalyStationary, profileMeanAnomalyStationary));
-        this.profileMeanAnomalyStationary = profileMeanAnomalyStationary;
-        propagateHierarchyIdToField(profileMeanAnomalyStationary, "profile_mean_anomaly_stationary");
+    public void setProfileMeanAnomaly(ColumnAnomalyStationaryMeanCheckSpec profileMeanAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanAnomaly, profileMeanAnomaly));
+        this.profileMeanAnomaly = profileMeanAnomaly;
+        propagateHierarchyIdToField(profileMeanAnomaly, "profile_mean_anomaly_stationary");
     }
 
     /**
      * Returns a mean value anomaly 30 days check specification.
      * @return Mean value anomaly 30 days check specification.
      */
-    public ColumnAnomalyStationaryMean30DaysCheckSpec getProfileMeanAnomalyStationary30Days() {
-        return profileMeanAnomalyStationary30Days;
+    public ColumnAnomalyStationaryMean30DaysCheckSpec getProfileMeanAnomaly30Days() {
+        return profileMeanAnomaly30Days;
     }
 
     /**
      * Sets a new specification of a mean value anomaly 30 days check.
-     * @param profileMeanAnomalyStationary30Days Mean value anomaly 30 days check specification.
+     * @param profileMeanAnomaly30Days Mean value anomaly 30 days check specification.
      */
-    public void setProfileMeanAnomalyStationary30Days(ColumnAnomalyStationaryMean30DaysCheckSpec profileMeanAnomalyStationary30Days) {
-        this.setDirtyIf(!Objects.equals(this.profileMeanAnomalyStationary30Days, profileMeanAnomalyStationary30Days));
-        this.profileMeanAnomalyStationary30Days = profileMeanAnomalyStationary30Days;
-        propagateHierarchyIdToField(profileMeanAnomalyStationary30Days, "profile_mean_anomaly_stationary_30_days");
+    public void setProfileMeanAnomaly30Days(ColumnAnomalyStationaryMean30DaysCheckSpec profileMeanAnomaly30Days) {
+        this.setDirtyIf(!Objects.equals(this.profileMeanAnomaly30Days, profileMeanAnomaly30Days));
+        this.profileMeanAnomaly30Days = profileMeanAnomaly30Days;
+        propagateHierarchyIdToField(profileMeanAnomaly30Days, "profile_mean_anomaly_stationary_30_days");
     }
 
     /**

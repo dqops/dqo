@@ -45,9 +45,6 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
             put("monthly_partition_duplicate_count", o -> o.monthlyPartitionDuplicateCount);
             put("monthly_partition_duplicate_percent", o -> o.monthlyPartitionDuplicatePercent);
 
-            put("monthly_partition_anomaly_stationary_distinct_count", o -> o.monthlyPartitionAnomalyStationaryDistinctCount);
-            put("monthly_partition_anomaly_stationary_distinct_percent", o -> o.monthlyPartitionAnomalyStationaryDistinctPercent);
-
             put("monthly_partition_distinct_count_change", o -> o.monthlyPartitionDistinctCountChange);
             put("monthly_partition_distinct_percent_change", o -> o.monthlyPartitionDistinctPercentChange);
         }
@@ -64,12 +61,6 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
 
     @JsonPropertyDescription("Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnDuplicatePercentCheckSpec monthlyPartitionDuplicatePercent;
-
-    @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyStationaryPartitionDistinctCountCheckSpec monthlyPartitionAnomalyStationaryDistinctCount;
-
-    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyStationaryDistinctPercentCheckSpec monthlyPartitionAnomalyStationaryDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnDistinctCountChangeCheckSpec monthlyPartitionDistinctCountChange;
@@ -147,42 +138,6 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionDuplicatePercent, monthlyPartitionDuplicatePercent));
         this.monthlyPartitionDuplicatePercent = monthlyPartitionDuplicatePercent;
         propagateHierarchyIdToField(monthlyPartitionDuplicatePercent, "monthly_partition_duplicate_percent");
-    }
-
-    /**
-     * Returns a distinct count value anomaly check specification.
-     * @return Distinct count value anomaly check specification.
-     */
-    public ColumnAnomalyStationaryPartitionDistinctCountCheckSpec getMonthlyPartitionAnomalyStationaryDistinctCount() {
-        return monthlyPartitionAnomalyStationaryDistinctCount;
-    }
-
-    /**
-     * Sets a new specification of a distinct count value anomaly check.
-     * @param monthlyPartitionAnomalyStationaryDistinctCount Distinct count value anomaly check specification.
-     */
-    public void setMonthlyPartitionAnomalyStationaryDistinctCount(ColumnAnomalyStationaryPartitionDistinctCountCheckSpec monthlyPartitionAnomalyStationaryDistinctCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyStationaryDistinctCount, monthlyPartitionAnomalyStationaryDistinctCount));
-        this.monthlyPartitionAnomalyStationaryDistinctCount = monthlyPartitionAnomalyStationaryDistinctCount;
-        propagateHierarchyIdToField(monthlyPartitionAnomalyStationaryDistinctCount, "monthly_partition_anomaly_stationary_distinct_count");
-    }
-
-    /**
-     * Returns a distinct percent value anomaly check specification.
-     * @return Distinct percent value anomaly check specification.
-     */
-    public ColumnAnomalyStationaryDistinctPercentCheckSpec getMonthlyPartitionAnomalyStationaryDistinctPercent() {
-        return monthlyPartitionAnomalyStationaryDistinctPercent;
-    }
-
-    /**
-     * Sets a new specification of a distinct percent value anomaly check.
-     * @param monthlyPartitionAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
-     */
-    public void setMonthlyPartitionAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec monthlyPartitionAnomalyStationaryDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionAnomalyStationaryDistinctPercent, monthlyPartitionAnomalyStationaryDistinctPercent));
-        this.monthlyPartitionAnomalyStationaryDistinctPercent = monthlyPartitionAnomalyStationaryDistinctPercent;
-        propagateHierarchyIdToField(monthlyPartitionAnomalyStationaryDistinctPercent, "monthly_partition_anomaly_stationary_distinct_percent");
     }
 
     /**

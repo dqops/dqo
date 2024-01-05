@@ -45,9 +45,6 @@ public class ColumnUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCa
             put("monthly_duplicate_count", o -> o.monthlyDuplicateCount);
             put("monthly_duplicate_percent", o -> o.monthlyDuplicatePercent);
 
-            put("monthly_anomaly_differencing_distinct_count", o -> o.monthlyAnomalyDifferencingDistinctCount);
-            put("monthly_anomaly_stationary_distinct_percent", o -> o.monthlyAnomalyStationaryDistinctPercent);
-
             put("monthly_distinct_count_change", o -> o.monthlyDistinctCountChange);
             put("monthly_distinct_percent_change", o -> o.monthlyDistinctPercentChange);
         }
@@ -64,12 +61,6 @@ public class ColumnUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCa
 
     @JsonPropertyDescription("Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnDuplicatePercentCheckSpec monthlyDuplicatePercent;
-
-    @JsonPropertyDescription("Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyDifferencingDistinctCountCheckSpec monthlyAnomalyDifferencingDistinctCount;
-
-    @JsonPropertyDescription("Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.")
-    private ColumnAnomalyStationaryDistinctPercentCheckSpec monthlyAnomalyStationaryDistinctPercent;
 
     @JsonPropertyDescription("Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.")
     private ColumnDistinctCountChangeCheckSpec monthlyDistinctCountChange;
@@ -148,42 +139,6 @@ public class ColumnUniquenessMonthlyMonitoringChecksSpec extends AbstractCheckCa
         this.setDirtyIf(!Objects.equals(this.monthlyDuplicatePercent, monthlyDuplicatePercent));
         this.monthlyDuplicatePercent = monthlyDuplicatePercent;
         propagateHierarchyIdToField(monthlyDuplicatePercent, "monthly_duplicate_percent");
-    }
-
-    /**
-     * Returns a distinct count value anomaly check specification.
-     * @return Distinct count value anomaly check specification.
-     */
-    public ColumnAnomalyDifferencingDistinctCountCheckSpec getMonthlyAnomalyDifferencingDistinctCount() {
-        return monthlyAnomalyDifferencingDistinctCount;
-    }
-
-    /**
-     * Sets a new specification of a distinct count value anomaly check.
-     * @param monthlyAnomalyDifferencingDistinctCount Distinct count value anomaly check specification.
-     */
-    public void setMonthlyAnomalyDifferencingDistinctCount(ColumnAnomalyDifferencingDistinctCountCheckSpec monthlyAnomalyDifferencingDistinctCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyAnomalyDifferencingDistinctCount, monthlyAnomalyDifferencingDistinctCount));
-        this.monthlyAnomalyDifferencingDistinctCount = monthlyAnomalyDifferencingDistinctCount;
-        propagateHierarchyIdToField(monthlyAnomalyDifferencingDistinctCount, "monthly_anomaly_differencing_distinct_count");
-    }
-
-    /**
-     * Returns a distinct percent value anomaly check specification.
-     * @return Distinct percent value anomaly check specification.
-     */
-    public ColumnAnomalyStationaryDistinctPercentCheckSpec getMonthlyAnomalyStationaryDistinctPercent() {
-        return monthlyAnomalyStationaryDistinctPercent;
-    }
-
-    /**
-     * Sets a new specification of a distinct percent value anomaly check.
-     * @param monthlyAnomalyStationaryDistinctPercent Distinct percent value anomaly check specification.
-     */
-    public void setMonthlyAnomalyStationaryDistinctPercent(ColumnAnomalyStationaryDistinctPercentCheckSpec monthlyAnomalyStationaryDistinctPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyAnomalyStationaryDistinctPercent, monthlyAnomalyStationaryDistinctPercent));
-        this.monthlyAnomalyStationaryDistinctPercent = monthlyAnomalyStationaryDistinctPercent;
-        propagateHierarchyIdToField(monthlyAnomalyStationaryDistinctPercent, "monthly_anomaly_stationary_distinct_percent");
     }
 
     /**

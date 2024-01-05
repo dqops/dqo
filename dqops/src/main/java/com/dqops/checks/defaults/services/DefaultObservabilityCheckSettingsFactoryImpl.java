@@ -99,10 +99,10 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getColumn().setDatatype(columnDatatype);
 
         ColumnAnomalyDailyMonitoringChecksSpec columnAnomaly = new ColumnAnomalyDailyMonitoringChecksSpec();
-        columnAnomaly.setDailySumAnomalyDifferencing(new ColumnAnomalyDifferencingSumCheckSpec() {{
+        columnAnomaly.setDailySumAnomaly(new ColumnAnomalyDifferencingSumCheckSpec() {{
             setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
         }});
-        columnAnomaly.setDailyMeanAnomalyStationary(new ColumnAnomalyStationaryMeanCheckSpec() {{
+        columnAnomaly.setDailyMeanAnomaly(new ColumnAnomalyStationaryMeanCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         defaultSettings.getColumn().setAnomaly(columnAnomaly);
@@ -138,7 +138,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         }});
         columnNulls.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNulls.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
-        columnNulls.setDailyNullsPercentAnomalyStationary(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
+        columnNulls.setDailyNullsPercentAnomaly(new ColumnAnomalyStationaryNullPercentCheckSpec() {{
             setWarning(new AnomalyStationaryPercentileMovingAverageRule1ParametersSpec());
         }});
         columnNulls.setDailyNullsPercentChange1Day(new ColumnNullPercentChange1DayCheckSpec() {{

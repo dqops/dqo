@@ -48,13 +48,13 @@ public class ColumnAnomalyMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
+    @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since the last readout.")
     private ColumnMeanChangeCheckSpec monthlyMeanChange;
 
-    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since last readout.")
+    @JsonPropertyDescription("Verifies that the median in a column changed in a fixed rate since the last readout.")
     private ColumnMedianChangeCheckSpec monthlyMedianChange;
 
-    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since last readout.")
+    @JsonPropertyDescription("Verifies that the sum in a column changed in a fixed rate since the last readout.")
     private ColumnSumChangeCheckSpec monthlySumChange;
 
     /**
