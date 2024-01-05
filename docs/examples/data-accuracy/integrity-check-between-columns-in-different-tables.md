@@ -1,5 +1,7 @@
 # Integrity check between columns in different tables
 
+## Overview
+
 This example shows how to check the referential integrity of a column against a column in another table. 
 
 **PROBLEM**

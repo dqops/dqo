@@ -1,6 +1,6 @@
 # Data grouping
 
-## How data grouping works
+## How does data grouping work?
 
 When a new data source's metadata is imported into DQOps and the first data quality checks are activated, the checks will
 analyze the whole table. The data quality check will capture one metric (using a data quality sensor, that is an SQL query).

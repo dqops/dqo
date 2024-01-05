@@ -1,6 +1,8 @@
 # Percentage of strings matching date regex
 
-Verifies that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.
+## Overview
+
+The following example shows how to verify that the percentage of strings matching the date format regex in a column does not exceed the maximum accepted percentage.
 
 **PROBLEM**
 

@@ -1,5 +1,7 @@
 # Timezone configuration
 
+## Change the time zone settings
+
 By default, the scheduler uses the time zone of the local system. However, users are able to change the time zone 
 settings in three different ways.
 

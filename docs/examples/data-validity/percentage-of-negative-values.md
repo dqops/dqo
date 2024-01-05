@@ -1,6 +1,8 @@
 # Percentage of negative values
 
-Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.
+## Overview
+
+The following example shows how to verify that the percentage of negative values in a column does not exceed the maximum accepted percentage.
 
 **PROBLEM**
 

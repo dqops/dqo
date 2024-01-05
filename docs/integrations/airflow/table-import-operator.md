@@ -1,5 +1,7 @@
 # Table import operator
 
+## Overview
+
 The Airflow table import operator **DqopsTableImportOperator** is used to import table to connection existing in DQOps.
 When the table schema changes you can also use this operator. 
 It will update the table in DQOps application for recently added columns or updates of types in the existing columns.

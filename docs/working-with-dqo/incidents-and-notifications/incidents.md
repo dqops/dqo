@@ -1,5 +1,7 @@
 # Incidents overview
 
+## Overview
+
 With the help of DQOps, you can conveniently keep track of the issues that arise during data quality monitoring. The Incidents section aggregates
 these issues into incident and allows you to view and filter them, as well as manage their status.
 

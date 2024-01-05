@@ -1,5 +1,7 @@
 # Table status operator
 
+## Overview
+
 The Airflow table status operators are used to receive the overall data quality status of a table based on checks run in the DQOps platform
 If there are any issues with the table, the operator will inform about the scale of the issue and point towards a specific area of the data quality that needs improvement. 
 

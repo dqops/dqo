@@ -1,5 +1,7 @@
 # MySQL
 
+## Overview
+
 MySQL is an open source, easy-to-use and flexible SQL database management system developed, distributed, and supported by Oracle Corporation.
 MySQL is generally faster and more efficient than other relational database management systems (RDBMS), so it is often the preferred
 choice for applications that require high performance.

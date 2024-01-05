@@ -1,6 +1,8 @@
 # Percentage of valid UUID
 
-Verifies that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage.
+## Overview
+
+The following example shows how to verify that the percentage of valid UUID values in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**
 

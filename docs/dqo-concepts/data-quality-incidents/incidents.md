@@ -1,6 +1,6 @@
 # Data quality incidents
 
-## What is a data quality incident
+## What is a data quality incident?
 
 DQOps distinguishes **data quality issues** from **data quality incidents**. Because DQOps detects new data quality issues
 by monitoring the data sources in regular intervals, the same issues will be detected until the root cause is not fixed.

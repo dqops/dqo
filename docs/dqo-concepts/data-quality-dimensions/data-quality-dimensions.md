@@ -1,5 +1,7 @@
 # Data quality dimensions
 
+## What is the data quality dimension?
+
 Data quality dimension is a term adopted by the data quality field to identify these aspects of data that can be measured 
 and through which its quality can be quantified. While different experts have proposed different data quality dimensions
 and there is no standardization of their names or descriptions, almost all of them include some version of accuracy, completeness, 

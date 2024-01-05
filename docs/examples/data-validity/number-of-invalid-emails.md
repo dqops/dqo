@@ -1,6 +1,8 @@
 # Number of invalid emails
 
-Verifies that the number of invalid emails in a monitored column does not exceed the maximum accepted count.
+## Overview
+
+This example verifies that the number of invalid emails in a monitored column does not exceed the maximum accepted count.
 
 **PROBLEM**
 

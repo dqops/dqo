@@ -1,6 +1,8 @@
 # Number of invalid IP4 address
 
-Verifies that the number of invalid IP4 address in a column does not exceed the maximum accepted count.
+## Overview
+
+The following example shows how to verify that the number of invalid IP4 address in a column does not exceed the maximum accepted count.
 
 **PROBLEM**
 

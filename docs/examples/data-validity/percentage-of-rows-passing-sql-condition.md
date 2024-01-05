@@ -1,6 +1,8 @@
 # Percentage of passed SQL condition on table
 
-Table level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+## Overview
+
+The following example shows how to verify that a minimum percentage of rows passed a custom SQL condition (expression).
 
 **PROBLEM**
 

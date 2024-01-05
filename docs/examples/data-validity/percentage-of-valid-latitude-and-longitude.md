@@ -1,6 +1,8 @@
 # Percentage of valid latitude and longitude
 
-Verifies that the percentage of valid latitude and longitude values are above a set threshold.
+## Overview
+
+The following example shows how to verify that the percentage of valid latitude and longitude values are above a set threshold.
 
 **PROBLEM**
 

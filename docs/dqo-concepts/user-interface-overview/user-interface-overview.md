@@ -1,5 +1,7 @@
 # User interface overview
 
+## Overview
+
 The DQOps web interface is divided into three main areas.
 
 ![The DQOps user interface overview](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/user-interface-overview2.png)

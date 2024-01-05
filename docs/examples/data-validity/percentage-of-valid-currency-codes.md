@@ -1,6 +1,8 @@
 # Percentage of valid currency codes
 
-Column level check that ensures that the percentage of valid currency code strings in the monitored column does not fall below set thresholds.
+## Overview
+
+The following example shows how to verify that the percentage of valid currency code strings in the monitored column does not fall below set thresholds.
 
 **PROBLEM**
 

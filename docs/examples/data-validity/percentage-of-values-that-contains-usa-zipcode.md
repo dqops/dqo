@@ -1,6 +1,8 @@
 # Percentage of rows containing USA zipcodes
 
-Column level check that ensures that the percentage of rows containing valid USA zipcodes does not exceed set thresholds.
+## Overview
+
+The following example shows how to verify that the percentage of rows containing valid USA zipcodes does not exceed set thresholds.
 
 **PROBLEM**
 

@@ -1,4 +1,7 @@
 # Running data quality checks
+
+## Overview
+
 DQOps supports running data quality checks from the DQOps command-line shell, user interface, Python client
 and triggered directly by a call to a REST API endpoint [run_checks](../../client/operations/jobs.md#run_checks-).
 

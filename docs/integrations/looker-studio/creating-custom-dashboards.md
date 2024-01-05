@@ -1,5 +1,7 @@
 # Creating a custom dashboard
 
+## Overview
+
 With DQOps, you can use dashboards to visualize your results and simplify the detection of anomalies in your data. DQOps
 provides the tools for creating your own customized dashboard to house your data.
 

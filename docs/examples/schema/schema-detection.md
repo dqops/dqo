@@ -1,6 +1,8 @@
 # Schema detection
 
-The following examples shows how to detect changes in the schema using DQOps schema change monitoring. 
+## Overview
+
+The following example shows how to detect changes in the schema using DQOps schema change monitoring. 
 
 **PROBLEM**
 

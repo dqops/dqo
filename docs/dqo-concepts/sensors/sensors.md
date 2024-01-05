@@ -1,5 +1,7 @@
 # Sensors
 
+## What are sensors in DQOPs?
+
 In DQOps, the data quality sensor and [data quality rule](../rules/rules.md) form the [data quality check](../checks/index.md).
 
 Data quality sensor reads the value from the data source at a given point in time. Examples of these reads includes the

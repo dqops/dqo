@@ -1,6 +1,8 @@
 # Percentage of duplicates
 
-Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
+## Overview
+
+This example verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
 **PROBLEM**
 

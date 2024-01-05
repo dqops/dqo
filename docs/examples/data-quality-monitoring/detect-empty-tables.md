@@ -1,6 +1,8 @@
 # Detect empty tables
 
-The following examples shows how to detect empty tables using the default data quality checks which are activated in DQOps 
+## Overview
+
+The following example shows how to detect empty tables using the default data quality checks which are activated in DQOps 
 once new tables are imported.
 
 **PROBLEM**

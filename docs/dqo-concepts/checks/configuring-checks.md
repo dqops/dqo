@@ -1,4 +1,7 @@
 # Configuring data quality checks
+
+## Where are the data quality checks configured?
+
 Data quality checks are configured on monitored tables and columns in
 [&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../reference/yaml/TableYaml.md) YAML files.
 These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](../home-folders/dqops-user-home.md#monitored-tables)* folders

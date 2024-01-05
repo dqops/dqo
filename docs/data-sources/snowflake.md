@@ -1,5 +1,7 @@
 # Snowflake
 
+## Overview
+
 Snowflake is a cloud-based data warehouse that separates storage from compute resources and requires little maintenance.
 
 ## Prerequisite credentials

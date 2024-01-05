@@ -1,6 +1,8 @@
 # Number of rows in the table
 
-Verifies that the table is not empty and meets the size requirements.
+## Overview
+
+This example verifies that the table is not empty and meets the size requirements.
 
 **PROBLEM**
 

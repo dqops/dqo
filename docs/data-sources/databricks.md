@@ -1,5 +1,7 @@
 # Databricks
 
+## Overview
+
 Databricks is a unified, open analytics platform for building, deploying, sharing, and maintaining enterprise-grade data, analytics, and AI solutions at scale.
 
 ## Prerequisite credentials

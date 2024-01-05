@@ -1,5 +1,7 @@
 # Set up data grouping
 
+## What is data grouping in DQOps?
+
 Data group is a group of rows that were loaded from a single or different sources and aggregated into one table. 
 
 In  DQOps, data grouping in a single table can be identified by a discriminator column containing data such as location, business units,

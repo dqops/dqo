@@ -1,5 +1,7 @@
 # Review initial results and run monitoring checks
 
+## Overview
+
 After [adding your first connection, and initiating automatic monitoring](../add-data-source-connection/add-data-source-connection.md),
 we describe how to review the initial results from the basic statistics and profiling checks, as well as how to run monitoring checks. 
 

@@ -1,5 +1,7 @@
 # Schedules overview
 
+## Overview
+
 With DQOps, you can easily customize when checks are run by setting schedules. You can set schedules for an entire connection,
 table, or individual check. When you import a new table, DQOPs automatically set the schedule to run check daily at 12:00 a.m.
 

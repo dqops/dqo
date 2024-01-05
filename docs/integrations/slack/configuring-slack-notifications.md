@@ -1,5 +1,7 @@
 # Configure Slack notifications
 
+## Overview
+
 DQOps supports integration with Slack webhooks which are used to set up in-app Slack notifications. 
 
 Slack integration allows you to receive notifications whenever an issue is detected in your data and a new incident is created or modified.

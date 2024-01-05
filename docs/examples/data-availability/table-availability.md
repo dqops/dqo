@@ -1,6 +1,8 @@
 # Table availability
 
-The following examples shows how to verify the availability of a table in the database using a simple row count.
+## Overview
+
+The following example shows how to verify the availability of a table in the database using a simple row count.
 
 **PROBLEM**
 

@@ -1,6 +1,8 @@
 # Number of null values
 
-Verifies that the number of null values in a column does not exceed the maximum accepted count.
+## Overview
+
+The following example verifies that the number of null values in a column does not exceed the maximum accepted count.
 
 **PROBLEM**
 

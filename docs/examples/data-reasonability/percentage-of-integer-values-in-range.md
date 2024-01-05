@@ -1,6 +1,8 @@
 # Percentage of integer values in range
 
-Verifies that the percentage of integer values from a range in a column does not exceed the minimum accepted percentage.
+## Overview
+
+This example verifies that the percentage of integer values from a range in a column does not exceed the minimum accepted percentage.
 
 **PROBLEM**
 

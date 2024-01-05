@@ -1,5 +1,7 @@
 # Running checks with a scheduler
 
+## Overview
+
 In this example, you will learn how to set different schedules on multiple checks.
 
 **PROBLEM**

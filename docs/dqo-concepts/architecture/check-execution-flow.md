@@ -1,4 +1,7 @@
 # Data quality check execution flow
+
+## Overview
+
 DQOps runs data quality checks in several steps. The first step matches target tables and target
 checks. Table and check targeting is described in the [running checks](../running-checks/running-checks.md) article.
 

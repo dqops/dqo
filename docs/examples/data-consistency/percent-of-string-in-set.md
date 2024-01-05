@@ -1,5 +1,7 @@
 # Percent of rows with string values in set
 
+## Overview
+
 Verifies that the percentage of string values from a set in a column does not fall below the minimum accepted percentage.
 
 **PROBLEM**

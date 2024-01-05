@@ -1,5 +1,7 @@
 # Run checks example
 
+## Overview
+
 This page presents how to use the _run checks_ operator in the non-blocking DAG configuration in Airflow.
 
 Also, the example demonstrates how to control the loading data stage execution by the detection of a data quality issue.
