@@ -4,15 +4,15 @@
 ```
 column/pii/contains_email_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a valid email value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -34,7 +34,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -56,7 +56,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -78,7 +78,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -106,7 +106,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -128,7 +128,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -158,7 +158,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -180,7 +180,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -202,7 +202,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -224,7 +224,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -246,7 +246,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -282,15 +282,15 @@ ___
 ```
 column/pii/contains_ip4_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a valid IP4 value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -312,7 +312,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -334,7 +334,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -356,7 +356,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -384,7 +384,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -406,7 +406,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -437,7 +437,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -459,7 +459,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -481,7 +481,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -503,7 +503,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -525,7 +525,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 valu
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -562,15 +562,15 @@ ___
 ```
 column/pii/contains_ip6_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a valid IP6 value in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -596,7 +596,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -622,7 +622,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -648,7 +648,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -680,7 +680,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -705,7 +705,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -738,7 +738,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -761,7 +761,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -784,7 +784,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -810,7 +810,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -868,7 +868,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 valu
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -907,15 +907,15 @@ ___
 ```
 column/pii/contains_usa_phone_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percent of values that contains a USA phone number in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -939,7 +939,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -963,7 +963,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -985,7 +985,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -1013,7 +1013,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1035,7 +1035,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -1066,7 +1066,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -1088,7 +1088,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -1120,7 +1120,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -1144,7 +1144,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -1175,7 +1175,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
@@ -1212,15 +1212,15 @@ ___
 ```
 column/pii/contains_usa_zipcode_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percent of values that contain a USA ZIP code number in a column.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -1244,7 +1244,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -1268,7 +1268,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1290,7 +1290,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
@@ -1318,7 +1318,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -1340,7 +1340,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -1372,7 +1372,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -1394,7 +1394,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -1416,7 +1416,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -1440,7 +1440,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -1462,7 +1462,7 @@ Column level sensor that calculates the percent of values that contain a USA ZIP
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT

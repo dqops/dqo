@@ -1,28 +1,29 @@
-**non negative count** checks  
+**non negative count** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that there are no more than a maximum number of non-negative values in a monitored column.
 
 ___
 
-## **profile non negative count**  
-  
-**Check description**  
-Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.  
-  
+## **profile non negative count**
+
+
+**Check description**
+Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_non_negative_count|profiling| |Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_non_negative_count|profiling| |Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_non_negative_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_non_negative_count
@@ -54,9 +55,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_non_nega
               max_count: 15
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -92,7 +93,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -529,12 +530,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 39-44"
@@ -585,7 +586,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1051,24 +1052,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily non negative count**  
-  
-**Check description**  
-Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily non negative count**
+
+
+**Check description**
+Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_non_negative_count|monitoring|daily|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_non_negative_count|monitoring|daily|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_non_negative_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_non_negative_count
@@ -1101,9 +1103,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_non_negati
                 max_count: 15
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1140,7 +1142,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1577,12 +1579,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -1634,7 +1636,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2100,24 +2102,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly non negative count**  
-  
-**Check description**  
-Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly non negative count**
+
+
+**Check description**
+Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_non_negative_count|monitoring|monthly|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_non_negative_count|monitoring|monthly|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_non_negative_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_non_negative_count
@@ -2150,9 +2153,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_non_nega
                 max_count: 15
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2189,7 +2192,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2626,12 +2629,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -2683,7 +2686,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3149,24 +3152,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition non negative count**  
-  
-**Check description**  
-Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition non negative count**
+
+
+**Check description**
+Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_non_negative_count|partitioned|daily|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_non_negative_count|partitioned|daily|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_non_negative_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_non_negative_count
@@ -3199,9 +3203,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 max_count: 15
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3244,7 +3248,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3685,12 +3689,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -3748,7 +3752,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4212,24 +4216,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition non negative count**  
-  
-**Check description**  
-Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition non negative count**
+
+
+**Check description**
+Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_non_negative_count|partitioned|monthly|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_non_negative_count|partitioned|monthly|Validity|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_non_negative_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_non_negative_count
@@ -4262,9 +4267,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 max_count: 15
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4307,7 +4312,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4748,12 +4753,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -4811,7 +4816,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)
+    [non_negative_count](../../../../reference/sensors/column/numeric-column-sensors.md#non-negative-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

@@ -1,28 +1,29 @@
-**string parsable to integer percent** checks  
+**string parsable to integer percent** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that the percentage of parsable to integer strings in the monitored column does not fall below set thresholds.
 
 ___
 
-## **profile string parsable to integer percent**  
-  
-**Check description**  
-Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage.  
-  
+## **profile string parsable to integer percent**
+
+
+**Check description**
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_string_parsable_to_integer_percent|profiling| |Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_string_parsable_to_integer_percent|profiling| |Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_string_parsable_to_integer_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_string_parsable_to_integer_percent
@@ -54,9 +55,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_string_p
               min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -92,7 +93,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -538,12 +539,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 39-44"
@@ -594,7 +595,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1069,24 +1070,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily string parsable to integer percent**  
-  
-**Check description**  
-Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily string parsable to integer percent**
+
+
+**Check description**
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_string_parsable_to_integer_percent|monitoring|daily|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_string_parsable_to_integer_percent|monitoring|daily|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_string_parsable_to_integer_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_string_parsable_to_integer_percent
@@ -1119,9 +1121,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_string_par
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1158,7 +1160,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1604,12 +1606,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -1661,7 +1663,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2136,24 +2138,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly string parsable to integer percent**  
-  
-**Check description**  
-Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly string parsable to integer percent**
+
+
+**Check description**
+Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_string_parsable_to_integer_percent|monitoring|monthly|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_string_parsable_to_integer_percent|monitoring|monthly|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_string_parsable_to_integer_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_string_parsable_to_integer_percent
@@ -2186,9 +2189,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_string_p
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2225,7 +2228,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2671,12 +2674,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -2728,7 +2731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3203,24 +3206,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition string parsable to integer percent**  
-  
-**Check description**  
-Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition string parsable to integer percent**
+
+
+**Check description**
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_string_parsable_to_integer_percent|partitioned|daily|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_string_parsable_to_integer_percent|partitioned|daily|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_string_parsable_to_integer_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_string_parsable_to_integer_percent
@@ -3253,9 +3257,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3298,7 +3302,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3748,12 +3752,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -3811,7 +3815,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4284,24 +4288,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition string parsable to integer percent**  
-  
-**Check description**  
-Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition string parsable to integer percent**
+
+
+**Check description**
+Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_string_parsable_to_integer_percent|partitioned|monthly|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_string_parsable_to_integer_percent|partitioned|monthly|Validity|[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_string_parsable_to_integer_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_string_parsable_to_integer_percent
@@ -4334,9 +4339,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4379,7 +4384,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+[string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4829,12 +4834,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -4892,7 +4897,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-integer-percent)
+    [string_parsable_to_integer_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-parsable-to-integer-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

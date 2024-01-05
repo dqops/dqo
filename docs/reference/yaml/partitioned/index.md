@@ -3,7 +3,7 @@
 
 
 # partitioned
-  
+
 
 
 
@@ -11,7 +11,7 @@
 
 
 ## table
-  
+
 
 
 
@@ -19,16 +19,16 @@
 
 
 ### partitioned_checks
-  
 
 
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-|[daily](table-daily-partitioned-checks/#TableDailyPartitionedCheckCategoriesSpec)|[TableDailyPartitionedCheckCategoriesSpec](table-daily-partitioned-checks/#TableDailyPartitionedCheckCategoriesSpec)|
-|[monthly](table-monthly-partitioned-checks/#TableMonthlyPartitionedCheckCategoriesSpec)|[TableMonthlyPartitionedCheckCategoriesSpec](table-monthly-partitioned-checks/#TableMonthlyPartitionedCheckCategoriesSpec)|
+|[daily](../table-daily-partitioned-checks.md#TableDailyPartitionedCheckCategoriesSpec)|[TableDailyPartitionedCheckCategoriesSpec](../table-daily-partitioned-checks.md#TableDailyPartitionedCheckCategoriesSpec)|
+|[monthly](../table-monthly-partitioned-checks.md#TableMonthlyPartitionedCheckCategoriesSpec)|[TableMonthlyPartitionedCheckCategoriesSpec](../table-monthly-partitioned-checks.md#TableMonthlyPartitionedCheckCategoriesSpec)|
 
 
 
@@ -37,13 +37,13 @@
 
 
 
-___  
+___
 
 
 
 
 ## column
-  
+
 
 
 
@@ -51,16 +51,16 @@ ___
 
 
 ### partitioned_checks
-  
 
 
 
-**The structure of this object is described below**  
-  
+
+**The structure of this object is described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Type&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |---------------|--------------------------|
-|[daily](column-daily-partitioned-checks/#ColumnDailyPartitionedCheckCategoriesSpec)|[ColumnDailyPartitionedCheckCategoriesSpec](column-daily-partitioned-checks/#ColumnDailyPartitionedCheckCategoriesSpec)|
-|[monthly](column-monthly-partitioned-checks/#ColumnMonthlyPartitionedCheckCategoriesSpec)|[ColumnMonthlyPartitionedCheckCategoriesSpec](column-monthly-partitioned-checks/#ColumnMonthlyPartitionedCheckCategoriesSpec)|
+|[daily](../column-daily-partitioned-checks.md#ColumnDailyPartitionedCheckCategoriesSpec)|[ColumnDailyPartitionedCheckCategoriesSpec](../column-daily-partitioned-checks.md#ColumnDailyPartitionedCheckCategoriesSpec)|
+|[monthly](../column-monthly-partitioned-checks.md#ColumnMonthlyPartitionedCheckCategoriesSpec)|[ColumnMonthlyPartitionedCheckCategoriesSpec](../column-monthly-partitioned-checks.md#ColumnMonthlyPartitionedCheckCategoriesSpec)|
 
 
 
@@ -69,7 +69,7 @@ ___
 
 
 
-___  
+___
 
 
 

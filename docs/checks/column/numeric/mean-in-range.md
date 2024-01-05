@@ -1,28 +1,29 @@
-**mean in range** checks  
+**mean in range** checks
 
-**Description**  
+**Description**
 Column level check that ensures that the average (mean) of values in a monitored column is in a set range.
 
 ___
 
-## **profile mean in range**  
-  
-**Check description**  
-Verifies that the average (mean) of all values in a column is not outside the set range.  
-  
+## **profile mean in range**
+
+
+**Check description**
+Verifies that the average (mean) of all values in a column is not outside the set range.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_mean_in_range|profiling| |Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_mean_in_range|profiling| |Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_mean_in_range
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_mean_in_range
@@ -57,9 +58,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_mean_in_
               to: 20.5
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -98,7 +99,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -424,12 +425,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 42-47"
@@ -483,7 +484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+    [mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -838,24 +839,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily mean in range**  
-  
-**Check description**  
-Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily mean in range**
+
+
+**Check description**
+Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_mean_in_range|monitoring|daily|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_mean_in_range|monitoring|daily|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_mean_in_range
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_mean_in_range
@@ -891,9 +893,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_mean_in_ra
                 to: 20.5
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -933,7 +935,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1259,12 +1261,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 43-48"
@@ -1319,7 +1321,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+    [mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1674,24 +1676,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly mean in range**  
-  
-**Check description**  
-Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly mean in range**
+
+
+**Check description**
+Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_mean_in_range|monitoring|monthly|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_mean_in_range|monitoring|monthly|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_mean_in_range
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_mean_in_range
@@ -1727,9 +1730,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_mean_in_
                 to: 20.5
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1769,7 +1772,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2095,12 +2098,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 43-48"
@@ -2155,7 +2158,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+    [mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2510,24 +2513,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition mean in range**  
-  
-**Check description**  
-Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition mean in range**
+
+
+**Check description**
+Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_mean_in_range|partitioned|daily|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_mean_in_range|partitioned|daily|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_mean_in_range
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_mean_in_range
@@ -2563,9 +2567,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 to: 20.5
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2611,7 +2615,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2941,12 +2945,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 49-54"
@@ -3007,7 +3011,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+    [mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3360,24 +3364,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition mean in range**  
-  
-**Check description**  
-Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition mean in range**
+
+
+**Check description**
+Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_mean_in_range|partitioned|monthly|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/Comparison/#between-floats)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_mean_in_range|partitioned|monthly|Reasonableness|[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)|[between_floats](../../../../reference/rules/Comparison.md#between-floats)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_mean_in_range
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_mean_in_range
@@ -3413,9 +3418,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 to: 20.5
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3461,7 +3466,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+[mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3791,12 +3796,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 49-54"
@@ -3857,7 +3862,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)
+    [mean](../../../../reference/sensors/column/numeric-column-sensors.md#mean)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

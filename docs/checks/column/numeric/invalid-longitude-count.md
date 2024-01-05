@@ -1,28 +1,29 @@
-**invalid longitude count** checks  
+**invalid longitude count** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
 
 ___
 
-## **profile invalid longitude count**  
-  
-**Check description**  
-Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.  
-  
+## **profile invalid longitude count**
+
+
+**Check description**
+Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_invalid_longitude_count|profiling| |Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_invalid_longitude_count|profiling| |Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_invalid_longitude_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_invalid_longitude_count
@@ -54,9 +55,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_invalid_
               max_count: 100
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -92,7 +93,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -528,12 +529,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 39-44"
@@ -584,7 +585,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1049,24 +1050,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily invalid longitude count**  
-  
-**Check description**  
-Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily invalid longitude count**
+
+
+**Check description**
+Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_invalid_longitude_count|monitoring|daily|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_invalid_longitude_count|monitoring|daily|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_invalid_longitude_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_invalid_longitude_count
@@ -1099,9 +1101,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_invalid_lo
                 max_count: 100
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1138,7 +1140,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1574,12 +1576,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -1631,7 +1633,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2096,24 +2098,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly invalid longitude count**  
-  
-**Check description**  
-Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly invalid longitude count**
+
+
+**Check description**
+Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_invalid_longitude_count|monitoring|monthly|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_invalid_longitude_count|monitoring|monthly|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_invalid_longitude_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_invalid_longitude_count
@@ -2146,9 +2149,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_invalid_
                 max_count: 100
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2185,7 +2188,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2621,12 +2624,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -2678,7 +2681,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3143,24 +3146,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition invalid longitude count**  
-  
-**Check description**  
-Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition invalid longitude count**
+
+
+**Check description**
+Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_invalid_longitude_count|partitioned|daily|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_invalid_longitude_count|partitioned|daily|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_invalid_longitude_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_invalid_longitude_count
@@ -3193,9 +3197,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 max_count: 100
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3238,7 +3242,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3678,12 +3682,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -3741,7 +3745,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4204,24 +4208,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition invalid longitude count**  
-  
-**Check description**  
-Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition invalid longitude count**
+
+
+**Check description**
+Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_invalid_longitude_count|partitioned|monthly|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison/#max-count)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_invalid_longitude_count|partitioned|monthly|Validity|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)|[max_count](../../../../reference/rules/Comparison.md#max-count)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_invalid_longitude_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_invalid_longitude_count
@@ -4254,9 +4259,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 max_count: 100
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4299,7 +4304,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4739,12 +4744,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -4802,7 +4807,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)
+    [invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors.md#invalid-longitude-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

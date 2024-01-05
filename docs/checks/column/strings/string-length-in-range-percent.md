@@ -1,28 +1,29 @@
-**string length in range percent** checks  
+**string length in range percent** checks
 
-**Description**  
+**Description**
 Column check that calculates the percentage of strings with a length below the indicated by the user length in a column.
 
 ___
 
-## **profile string length in range percent**  
-  
-**Check description**  
-The check counts the percentage of those strings with length in the range provided by the user in the column.   
-  
+## **profile string length in range percent**
+
+
+**Check description**
+The check counts the percentage of those strings with length in the range provided by the user in the column. 
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_string_length_in_range_percent|profiling| |Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_string_length_in_range_percent|profiling| |Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_string_length_in_range_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_string_length_in_range_percent
@@ -57,9 +58,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_string_l
               min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -98,7 +99,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -655,12 +656,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 42-47"
@@ -714,7 +715,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1300,24 +1301,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily string length in range percent**  
-  
-**Check description**  
-The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily string length in range percent**
+
+
+**Check description**
+The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_string_length_in_range_percent|monitoring|daily|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_string_length_in_range_percent|monitoring|daily|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_string_length_in_range_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_string_length_in_range_percent
@@ -1353,9 +1355,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_string_len
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1395,7 +1397,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1952,12 +1954,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 43-48"
@@ -2012,7 +2014,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2598,24 +2600,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly string length in range percent**  
-  
-**Check description**  
-The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly string length in range percent**
+
+
+**Check description**
+The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_string_length_in_range_percent|monitoring|monthly|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_string_length_in_range_percent|monitoring|monthly|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_string_length_in_range_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_string_length_in_range_percent
@@ -2651,9 +2654,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_string_l
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2693,7 +2696,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3250,12 +3253,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 43-48"
@@ -3310,7 +3313,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3896,24 +3899,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition string length in range percent**  
-  
-**Check description**  
-The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition string length in range percent**
+
+
+**Check description**
+The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_string_length_in_range_percent|partitioned|daily|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_string_length_in_range_percent|partitioned|daily|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_string_length_in_range_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_string_length_in_range_percent
@@ -3949,9 +3953,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3997,7 +4001,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4558,12 +4562,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 49-54"
@@ -4624,7 +4628,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -5208,24 +5212,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition string length in range percent**  
-  
-**Check description**  
-The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition string length in range percent**
+
+
+**Check description**
+The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_string_length_in_range_percent|partitioned|monthly|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison/#min-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_string_length_in_range_percent|partitioned|monthly|Reasonableness|[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)|[min_percent](../../../../reference/rules/Comparison.md#min-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_string_length_in_range_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_string_length_in_range_percent
@@ -5261,9 +5266,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 min_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -5309,7 +5314,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+[string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -5870,12 +5875,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 49-54"
@@ -5936,7 +5941,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-in-range-percent)
+    [string_length_in_range_percent](../../../../reference/sensors/column/strings-column-sensors.md#string-length-in-range-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

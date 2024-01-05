@@ -1,28 +1,29 @@
-**nulls percent anomaly stationary** checks  
+**nulls percent anomaly stationary** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
 
 ___
 
-## **profile nulls percent anomaly stationary**  
-  
-**Check description**  
-Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.  
-  
+## **profile nulls percent anomaly stationary**
+
+
+**Check description**
+Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_nulls_percent_anomaly_stationary|profiling| |Consistency|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_nulls_percent_anomaly_stationary|profiling| |Consistency|[null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_nulls_percent_anomaly_stationary
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_nulls_percent_anomaly_stationary
@@ -54,9 +55,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_nulls_pe
               anomaly_percent: 0.1
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -92,7 +93,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)
+[null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -594,12 +595,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 39-44"
@@ -650,7 +651,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)
+    [null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1181,24 +1182,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily nulls percent anomaly stationary**  
-  
-**Check description**  
-Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.  
-  
+## **daily nulls percent anomaly stationary**
+
+
+**Check description**
+Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_nulls_percent_anomaly_stationary|monitoring|daily|Consistency|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_nulls_percent_anomaly_stationary|monitoring|daily|Consistency|[null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_nulls_percent_anomaly_stationary
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_nulls_percent_anomaly_stationary
@@ -1231,9 +1233,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_nulls_perc
                 anomaly_percent: 0.1
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1270,7 +1272,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)
+[null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1772,12 +1774,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -1829,7 +1831,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)
+    [null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2360,24 +2362,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition nulls percent anomaly stationary**  
-  
-**Check description**  
-Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.  
-  
+## **daily partition nulls percent anomaly stationary**
+
+
+**Check description**
+Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_nulls_percent_anomaly_stationary|partitioned|daily|Consistency|[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile/#anomaly-stationary-percentile-moving-average)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_nulls_percent_anomaly_stationary|partitioned|daily|Consistency|[null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)|[anomaly_stationary_percentile_moving_average](../../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_nulls_percent_anomaly_stationary
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_nulls_percent_anomaly_stationary
@@ -2410,9 +2413,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 anomaly_percent: 0.1
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2455,7 +2458,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)
+[null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2961,12 +2964,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -3024,7 +3027,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [null_percent](../../../../reference/sensors/column/nulls-column-sensors/#null-percent)
+    [null_percent](../../../../reference/sensors/column/nulls-column-sensors.md#null-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

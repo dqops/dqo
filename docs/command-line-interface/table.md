@@ -23,8 +23,8 @@ dqo> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="table import-c">`-c`</p><br/><p id="table import--connection">`--connection`</p><br/>|Connection name| ||
@@ -59,8 +59,8 @@ dqo> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<tab
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="table edit-c">`-c`</p><br/><p id="table edit--connection">`--connection`</p><br/>|Connection Name| ||
@@ -96,8 +96,8 @@ dqo> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="table add-c">`-c`</p><br/><p id="table add--connection">`--connection`</p><br/>|Connection Name| ||
@@ -133,8 +133,8 @@ dqo> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="table remove-c">`-c`</p><br/><p id="table remove--connection">`--connection`</p><br/>|Connection Name| ||
@@ -170,8 +170,8 @@ dqo> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="table update-c">`-c`</p><br/><p id="table update--connection">`--connection`</p><br/>|Connection Name| ||
@@ -208,8 +208,8 @@ dqo> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="table list-c">`-c`</p><br/><p id="table list--connection">`--connection`</p><br/>|Connection name| ||

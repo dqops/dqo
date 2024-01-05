@@ -4,15 +4,15 @@
 ```
 table/availability/table_availability
 ```
-**Description**  
+**Description**
 Table availability sensor runs a simple table scan query to detect if the table is queryable. This sensor returns 0.0 when no failure was detected or 1.0 when a failure was detected.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
@@ -31,7 +31,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
@@ -50,7 +50,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
@@ -69,7 +69,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
@@ -88,7 +88,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
@@ -107,7 +107,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
@@ -126,7 +126,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
@@ -145,7 +145,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
@@ -164,7 +164,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
     ORDER BY time_period
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
@@ -178,7 +178,7 @@ Table availability sensor runs a simple table scan query to detect if the table 
         ) AS tab_scan
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT

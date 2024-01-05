@@ -1,22 +1,6 @@
 
-## CheckDefinitionYaml  
-Custom check specification that describes a pair of a sensor name and rule name.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../CheckDefinitionYaml/#CheckDefinitionSpec)||[CheckDefinitionSpec](../CheckDefinitionYaml/#CheckDefinitionSpec)| | | |
+## CheckDefinitionSpec
+Custom data quality check specification. Provides the custom check configuration which is a pair of a sensor name and a rule name.
 
 
 
@@ -26,21 +10,8 @@ Custom check specification that describes a pair of a sensor name and rule name.
 
 
 
-___  
+**The structure of this object is described below**
 
-## CheckDefinitionSpec  
-Custom data quality check specification. Provides the custom check configuration which is a pair of a sensor name and a rule name.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |sensor_name|Sensor name. It is a folder name inside the user&#x27;s home &#x27;sensors&#x27; folder or the DQOps Home (DQOps distribution) home/sensors folder. Sample sensor name: table/volume/row_count.|string| | | |
@@ -55,5 +26,34 @@ Custom data quality check specification. Provides the custom check configuration
 
 
 
-___  
+___
+
+## CheckDefinitionYaml
+Custom check specification that describes a pair of a sensor name and rule name.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](#CheckDefinitionSpec)||[CheckDefinitionSpec](#CheckDefinitionSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
 

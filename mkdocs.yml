@@ -138,6 +138,7 @@ nav:
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE PYTHON CLIENT REFERENCE - DO NOT MODIFY MANUALLY
   - REST API Python client:
+    - 'client/index.md'
     - models:
       - 'client/models/index.md'
       - Common: 'client/models/Common.md'
@@ -154,6 +155,7 @@ nav:
       - incidents: 'client/models/incidents.md'
       - jobs: 'client/models/jobs.md'
       - log_shipping: 'client/models/log_shipping.md'
+      - models: 'client/models/models.md'
       - rules: 'client/models/rules.md'
       - schemas: 'client/models/schemas.md'
       - sensor_readouts: 'client/models/sensor_readouts.md'

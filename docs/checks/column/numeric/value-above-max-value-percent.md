@@ -1,28 +1,29 @@
-**value above max value percent** checks  
+**value above max value percent** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that the percentage of values in the monitored column with a value above the value defined by the user as a parameter does not fall below set thresholds.
 
 ___
 
-## **profile value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter.  
-  
+## **profile value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_value_above_max_value_percent|profiling| |Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_value_above_max_value_percent|profiling| |Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_value_above_max_value_percent
@@ -54,9 +55,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_value_ab
               max_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -92,7 +93,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -554,12 +555,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 39-44"
@@ -610,7 +611,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1101,24 +1102,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_value_above_max_value_percent|monitoring|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_value_above_max_value_percent|monitoring|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_value_above_max_value_percent
@@ -1151,9 +1153,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_value_abov
                 max_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1190,7 +1192,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1652,12 +1654,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -1709,7 +1711,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2200,24 +2202,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_value_above_max_value_percent|monitoring|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_value_above_max_value_percent|monitoring|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_value_above_max_value_percent
@@ -2250,9 +2253,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_value_ab
                 max_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2289,7 +2292,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2751,12 +2754,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 40-45"
@@ -2808,7 +2811,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3299,24 +3302,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_value_above_max_value_percent|partitioned|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_value_above_max_value_percent|partitioned|daily|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_value_above_max_value_percent
@@ -3349,9 +3353,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 max_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3394,7 +3398,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3860,12 +3864,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -3923,7 +3927,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4412,24 +4416,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition value above max value percent**  
-  
-**Check description**  
-The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition value above max value percent**
+
+
+**Check description**
+The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_value_above_max_value_percent|partitioned|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison/#max-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_value_above_max_value_percent|partitioned|monthly|Validity|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)|[max_percent](../../../../reference/rules/Comparison.md#max-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_value_above_max_value_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_value_above_max_value_percent
@@ -4462,9 +4467,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 max_percent: 95.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4507,7 +4512,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4973,12 +4978,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 46-51"
@@ -5036,7 +5041,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)
+    [value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors.md#value-above-max-value-percent)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

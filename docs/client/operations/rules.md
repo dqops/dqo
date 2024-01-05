@@ -1,21 +1,21 @@
-Rule management  
+Rule management
 
 
-___  
-## create_rule  
-Creates (adds) a new custom rule given the rule definition.  
+___
+## create_rule
+Creates (adds) a new custom rule given the rule definition.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/create_rule.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_rule_name|Full rule name|string|:material-check-bold:|
@@ -23,19 +23,19 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Rule model|[RuleModel](../../models/rules/#rulemodel)| |
+|Rule model|[RuleModel](../../models/rules.md#rulemodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"^
@@ -46,7 +46,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import create_rule
@@ -77,7 +77,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import create_rule
@@ -110,7 +110,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import create_rule
@@ -144,7 +144,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import create_rule
@@ -183,21 +183,21 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-___  
-## delete_rule  
-Deletes a custom rule definition  
+___
+## delete_rule
+Deletes a custom rule definition
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/delete_rule.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_rule_name|Full rule name|string|:material-check-bold:|
@@ -207,10 +207,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"
@@ -218,7 +218,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
@@ -236,7 +236,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
@@ -256,7 +256,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
@@ -277,7 +277,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
@@ -303,22 +303,22 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-___  
-## get_all_rules  
-Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.  
+___
+## get_all_rules
+Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_all_rules.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/rules  
+http://localhost:8888/api/rules
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|rule_list_model||List[[RuleListModel](../../models/rules/#rulelistmodel)]|
+|rule_list_model||List[[RuleListModel](../../models/rules.md#rulelistmodel)]|
 
 
 
@@ -327,10 +327,10 @@ http://localhost:8888/api/rules
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/rules^
 		-H "Accept: application/json"
@@ -338,7 +338,7 @@ http://localhost:8888/api/rules
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
@@ -356,7 +356,7 @@ http://localhost:8888/api/rules
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
@@ -376,7 +376,7 @@ http://localhost:8888/api/rules
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
@@ -397,7 +397,7 @@ http://localhost:8888/api/rules
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_all_rules
@@ -422,7 +422,7 @@ http://localhost:8888/api/rules
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "rule_name" : "sample_rule",
@@ -446,28 +446,28 @@ http://localhost:8888/api/rules
     ```
 
 
-___  
-## get_rule  
-Returns a rule definition  
+___
+## get_rule
+Returns a rule definition
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_model](../../models/rules/#rulemodel)||[RuleModel](../../models/rules/#rulemodel)|
+|[rule_model](../../models/rules.md#rulemodel)||[RuleModel](../../models/rules.md#rulemodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_rule_name|Full rule name|string|:material-check-bold:|
@@ -477,10 +477,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"
@@ -488,7 +488,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule
@@ -507,7 +507,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule
@@ -528,7 +528,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule
@@ -550,7 +550,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule
@@ -576,7 +576,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "rule_name" : "sample_rule",
@@ -590,22 +590,22 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 
-___  
-## get_rule_folder_tree  
-Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.  
+___
+## get_rule_folder_tree
+Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule_folder_tree.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/definitions/rules  
+http://localhost:8888/api/definitions/rules
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[rule_folder_model](../../models/rules/#rulefoldermodel)||[RuleFolderModel](../../models/rules/#rulefoldermodel)|
+|[rule_folder_model](../../models/rules.md#rulefoldermodel)||[RuleFolderModel](../../models/rules.md#rulefoldermodel)|
 
 
 
@@ -614,10 +614,10 @@ http://localhost:8888/api/definitions/rules
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/definitions/rules^
 		-H "Accept: application/json"
@@ -625,7 +625,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
@@ -643,7 +643,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
@@ -663,7 +663,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
@@ -684,7 +684,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import get_rule_folder_tree
@@ -709,7 +709,7 @@ http://localhost:8888/api/definitions/rules
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "rules" : [ {
@@ -766,21 +766,21 @@ http://localhost:8888/api/definitions/rules
     ```
 
 
-___  
-## update_rule  
-Updates an existing rule, making a custom rule definition if it is not present  
+___
+## update_rule
+Updates an existing rule, making a custom rule definition if it is not present
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/update_rule.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/rules/{fullRuleName}  
+http://localhost:8888/api/rules/{fullRuleName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_rule_name|Full rule name|string|:material-check-bold:|
@@ -788,19 +788,19 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of rule definitions|[RuleModel](../../models/rules/#rulemodel)| |
+|List of rule definitions|[RuleModel](../../models/rules.md#rulemodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
 		-H "Accept: application/json"^
@@ -811,7 +811,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import update_rule
@@ -842,7 +842,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import update_rule
@@ -875,7 +875,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import update_rule
@@ -909,7 +909,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.rules import update_rule

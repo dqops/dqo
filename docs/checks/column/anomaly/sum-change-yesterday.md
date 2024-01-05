@@ -1,28 +1,29 @@
-**sum change yesterday** checks  
+**sum change yesterday** checks
 
-**Description**  
+**Description**
 Column level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 ___
 
-## **profile sum change yesterday**  
-  
-**Check description**  
-Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.  
-  
+## **profile sum change yesterday**
+
+
+**Check description**
+Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_sum_change_yesterday|profiling| |Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_sum_change_yesterday|profiling| |Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_1_day](../../../../reference/rules/Change.md#change-percent-1-day)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_sum_change_yesterday
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_sum_change_yesterday
@@ -57,9 +58,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_sum_chan
               exact_day: false
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -98,7 +99,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -424,12 +425,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 42-47"
@@ -483,7 +484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+    [sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -838,24 +839,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily sum change yesterday**  
-  
-**Check description**  
-Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.  
-  
+## **daily sum change yesterday**
+
+
+**Check description**
+Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_sum_change_yesterday|monitoring|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_sum_change_yesterday|monitoring|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_1_day](../../../../reference/rules/Change.md#change-percent-1-day)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_sum_change_yesterday
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_sum_change_yesterday
@@ -891,9 +893,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_sum_change
                 exact_day: false
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -933,7 +935,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1259,12 +1261,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 43-48"
@@ -1319,7 +1321,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+    [sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1674,24 +1676,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition sum change yesterday**  
-  
-**Check description**  
-Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.  
-  
+## **daily partition sum change yesterday**
+
+
+**Check description**
+Verifies that the sum in a column changed in a fixed rate since last readout from yesterday.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_sum_change_yesterday|partitioned|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[change_percent_1_day](../../../../reference/rules/Change/#change-percent-1-day)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_sum_change_yesterday|partitioned|daily|Consistency|[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)|[change_percent_1_day](../../../../reference/rules/Change.md#change-percent-1-day)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_sum_change_yesterday
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_sum_change_yesterday
@@ -1727,9 +1730,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 exact_day: false
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1775,7 +1778,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+[sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2105,12 +2108,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 49-54"
@@ -2171,7 +2174,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)
+    [sum](../../../../reference/sensors/column/numeric-column-sensors.md#sum)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

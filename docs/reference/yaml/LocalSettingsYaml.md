@@ -1,24 +1,6 @@
 
-## LocalSettingsYaml  
-DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqosettings.yaml* file in the user&#x27;s DQOps home folder.
- The local settings contain the current DQOps Cloud API Key and other settings. The local settings take precedence over parameters
- passed when starting DQOps.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|api_version||string| | | |
-|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
-|[spec](../LocalSettingsYaml/#LocalSettingsSpec)||[LocalSettingsSpec](../LocalSettingsYaml/#LocalSettingsSpec)| | | |
+## LocalSettingsSpec
+Local settings specification.
 
 
 
@@ -28,21 +10,8 @@ DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqose
 
 
 
-___  
+**The structure of this object is described below**
 
-## LocalSettingsSpec  
-Local settings specification.  
-  
-
-
-
-
-
-
-
-
-**The structure of this object is described below**  
-  
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |editor_name|Editor name spec (VSC, Eclipse, Intellij)|string| | | |
@@ -59,5 +28,36 @@ Local settings specification.
 
 
 
-___  
+___
+
+## LocalSettingsYaml
+DQOps local settings that are stored in the *$DQO_USER_HOME/.localsettings.dqosettings.yaml* file in the user&#x27;s DQOps home folder.
+ The local settings contain the current DQOps Cloud API Key and other settings. The local settings take precedence over parameters
+ passed when starting DQOps.
+
+
+
+
+
+
+
+
+
+**The structure of this object is described below**
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|api_version||string| | | |
+|kind||enum|default_schedules<br/>settings<br/>default_notifications<br/>rule<br/>sensor<br/>source<br/>check<br/>dashboards<br/>default_checks<br/>table<br/>provider_sensor<br/>file_index<br/>| | |
+|[spec](#LocalSettingsSpec)||[LocalSettingsSpec](#LocalSettingsSpec)| | | |
+
+
+
+
+
+
+
+
+
+___
 

@@ -1,28 +1,29 @@
-**median change** checks  
+**median change** checks
 
-**Description**  
+**Description**
 Column level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.
 
 ___
 
-## **profile median change**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout.  
-  
+## **profile median change**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_median_change|profiling| |Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_median_change|profiling| |Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_median_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_median_change
@@ -56,9 +57,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_median_c
               max_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -96,7 +97,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -668,12 +669,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 41-46"
@@ -726,7 +727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1325,24 +1326,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily median change**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout.  
-  
+## **daily median change**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_median_change|monitoring|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_median_change|monitoring|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_median_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_median_change
@@ -1377,9 +1379,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_median_cha
                 max_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1418,7 +1420,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1990,12 +1992,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 42-47"
@@ -2049,7 +2051,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -2648,24 +2650,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly median change**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout.  
-  
+## **monthly median change**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_median_change|monitoring|monthly|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_median_change|monitoring|monthly|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_median_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_median_change
@@ -2700,9 +2703,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_median_c
                 max_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -2741,7 +2744,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -3313,12 +3316,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 42-47"
@@ -3372,7 +3375,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3971,24 +3974,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition median change**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout.  
-  
+## **daily partition median change**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_median_change|partitioned|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_median_change|partitioned|daily|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_median_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_median_change
@@ -4023,9 +4027,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
                 max_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -4070,7 +4074,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4642,12 +4646,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 48-53"
@@ -4707,7 +4711,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -5306,24 +5310,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition median change**  
-  
-**Check description**  
-Verifies that the median in a column changed in a fixed rate since last readout.  
-  
+## **monthly partition median change**
+
+
+**Check description**
+Verifies that the median in a column changed in a fixed rate since last readout.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_median_change|partitioned|monthly|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[change_percent](../../../../reference/rules/Change/#change-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_median_change|partitioned|monthly|Consistency|[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)|[change_percent](../../../../reference/rules/Change.md#change-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_median_change
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_median_change
@@ -5358,9 +5363,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
                 max_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -5405,7 +5410,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+[percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -5977,12 +5982,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 48-53"
@@ -6042,7 +6047,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)
+    [percentile](../../../../reference/sensors/column/numeric-column-sensors.md#percentile)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

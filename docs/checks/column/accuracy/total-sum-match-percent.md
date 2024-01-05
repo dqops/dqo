@@ -1,28 +1,29 @@
-**total sum match percent** checks  
+**total sum match percent** checks
 
-**Description**  
+**Description**
 Column-level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
 
 ___
 
-## **profile total sum match percent**  
-  
-**Check description**  
-Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.  
-  
+## **profile total sum match percent**
+
+
+**Check description**
+Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_total_sum_match_percent|profiling| |Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_total_sum_match_percent|profiling| |Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_total_sum_match_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_total_sum_match_percent
@@ -57,9 +58,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_total_su
               max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -98,7 +99,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)
+[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -460,24 +461,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily total sum match percent**  
-  
-**Check description**  
-Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily total sum match percent**
+
+
+**Check description**
+Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_total_sum_match_percent|monitoring|daily|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_total_sum_match_percent|monitoring|daily|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_total_sum_match_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_total_sum_match_percent
@@ -513,9 +515,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_total_sum_
                 max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -555,7 +557,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)
+[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -917,24 +919,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly total sum match percent**  
-  
-**Check description**  
-Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly total sum match percent**
+
+
+**Check description**
+Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_total_sum_match_percent|monitoring|monthly|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_total_sum_match_percent|monitoring|monthly|Accuracy|[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_total_sum_match_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_total_sum_match_percent
@@ -970,9 +973,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_total_su
                 max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1012,7 +1015,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#total-sum-match-percent)
+[total_sum_match_percent](../../../../reference/sensors/column/accuracy-column-sensors.md#total-sum-match-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"

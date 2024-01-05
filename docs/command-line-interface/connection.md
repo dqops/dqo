@@ -23,8 +23,8 @@ dqo> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection list-d">`-d`</p><br/><p id="connection list--dimension">`--dimension`</p><br/>|Dimension filter| ||
@@ -153,8 +153,8 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection add--bigquery-authentication-mode">`--bigquery-authentication-mode`</p><br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
@@ -267,8 +267,8 @@ dqo> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection remove-fw">`-fw`</p><br/><p id="connection remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -399,8 +399,8 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection update--bigquery-authentication-mode">`--bigquery-authentication-mode`</p><br/>|Bigquery authentication mode. The default value uses the current GCP application default credentials. The default GCP credentials is the Service Account of a VM in GCP cloud, a GCP JSON key file whose path is in the GOOGLE_APPLICATION_CREDENTIALS environment variable, or it is the default GCP credentials obtained on a user&#x27;s computer by running &#x27;gcloud auth application-default login&#x27; from the command line.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
@@ -514,8 +514,8 @@ dqo> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection schema list-d">`-d`</p><br/><p id="connection schema list--dimension">`--dimension`</p><br/>|Dimension filter| ||
@@ -554,8 +554,8 @@ dqo> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection table list-c">`-c`</p><br/><p id="connection table list--connection">`--connection`</p><br/>|Connection name| ||
@@ -594,8 +594,8 @@ dqo> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection table show-c">`-c`</p><br/><p id="connection table show--connection">`--connection`</p><br/>|Connection name| ||
@@ -629,8 +629,8 @@ dqo> connection edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="connection edit-c">`-c`</p><br/><p id="connection edit--connection">`--connection`</p><br/>|Connection Name| ||

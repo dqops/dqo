@@ -1,30 +1,31 @@
-**string datatype changed** checks  
+**string datatype changed** checks
 
-**Description**  
+**Description**
 Table-level check that scans all values in a string column and detects the data type of all values in a column. The actual_value returned from the sensor is one of: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
  The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
  For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 ___
 
-## **profile string datatype changed**  
-  
-**Check description**  
-Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.  
-  
+## **profile string datatype changed**
+
+
+**Check description**
+Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_string_datatype_changed|profiling| |Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_string_datatype_changed|profiling| |Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_string_datatype_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_string_datatype_changed
@@ -53,9 +54,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_string_d
             fatal: {}
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-18"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -88,7 +89,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -1677,12 +1678,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 36-41"
@@ -1730,7 +1731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3337,24 +3338,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily string datatype changed**  
-  
-**Check description**  
-Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily string datatype changed**
+
+
+**Check description**
+Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_string_datatype_changed|monitoring|daily|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_string_datatype_changed|monitoring|daily|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_string_datatype_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_string_datatype_changed
@@ -3384,9 +3386,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_string_dat
               fatal: {}
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -3420,7 +3422,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -5009,12 +5011,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 37-42"
@@ -5063,7 +5065,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -6670,24 +6672,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly string datatype changed**  
-  
-**Check description**  
-Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **monthly string datatype changed**
+
+
+**Check description**
+Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_string_datatype_changed|monitoring|monthly|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_string_datatype_changed|monitoring|monthly|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_string_datatype_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_string_datatype_changed
@@ -6717,9 +6720,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_string_d
               fatal: {}
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="13-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -6753,7 +6756,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -8342,12 +8345,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="11-21 37-42"
@@ -8396,7 +8399,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -10003,24 +10006,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition string datatype changed**  
-  
-**Check description**  
-Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition string datatype changed**
+
+
+**Check description**
+Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_string_datatype_changed|partitioned|daily|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_string_datatype_changed|partitioned|daily|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_string_datatype_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_string_datatype_changed
@@ -10050,9 +10054,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_
               fatal: {}
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -10092,7 +10096,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -11681,12 +11685,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 43-48"
@@ -11741,7 +11745,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -13348,24 +13352,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition string datatype changed**  
-  
-**Check description**  
-Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition string datatype changed**
+
+
+**Check description**
+Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_string_datatype_changed|partitioned|monthly|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison/#value-changed)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_string_datatype_changed|partitioned|monthly|Consistency|[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[value_changed](../../../../reference/rules/Comparison.md#value-changed)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_string_datatype_changed
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_string_datatype_changed
@@ -13395,9 +13400,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partitio
               fatal: {}
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="14-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -13437,7 +13442,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+[string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -15026,12 +15031,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-22 43-48"
@@ -15086,7 +15091,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors/#string-datatype-detect)
+    [string_datatype_detect](../../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

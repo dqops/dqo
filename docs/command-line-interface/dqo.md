@@ -1,7 +1,7 @@
 # dqo
 
 ___
-### **dqo **
+### **dqo**
 
 DQOps command-line entry point script
 
@@ -19,8 +19,8 @@ $ dqo [root_level_parameter] [command]
 $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="--DQO_JAVA_OPTS">`--DQO_JAVA_OPTS`</p><br/>|Configures additional JVM (Java Virtual Machine) options such as the memory limit. The default value for both the &#x27;dqops&#x27; python package and for the dqops/dqo Docker image is -XX:MaxRAMPercentage&#x3D;80.0 which sets the upper memory limit for 80% of the available RAM at the moment when the container starts. This parameter is not supported as a command line parameter, it is only supported as an environment variable. Set (and export) the environment variable DQO_JAVA_OPTS before starting DQOps.<br/>This parameter could be also configured by setting DQO_JAVA_OPTS  environment variable.| ||

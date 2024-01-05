@@ -1,21 +1,21 @@
-Data quality check definition management  
+Data quality check definition management
 
 
-___  
-## create_check  
-Creates (adds) a new custom check that is a pair of a sensor name and a rule name.  
+___
+## create_check
+Creates (adds) a new custom check that is a pair of a sensor name and a rule name.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/create_check.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_check_name|Full check name|string|:material-check-bold:|
@@ -23,19 +23,19 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Check model|[CheckDefinitionModel](../../models/checks/#checkdefinitionmodel)| |
+|Check model|[CheckDefinitionModel](../../models/checks.md#checkdefinitionmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"^
@@ -46,7 +46,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
@@ -75,7 +75,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
@@ -106,7 +106,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
@@ -138,7 +138,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import create_check
@@ -175,21 +175,21 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-___  
-## delete_check  
-Deletes a custom check definition  
+___
+## delete_check
+Deletes a custom check definition
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/delete_check.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_check_name|Full check name|string|:material-check-bold:|
@@ -199,10 +199,10 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"
@@ -210,7 +210,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import delete_check
@@ -228,7 +228,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import delete_check
@@ -248,7 +248,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import delete_check
@@ -269,7 +269,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import delete_check
@@ -295,22 +295,22 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-___  
-## get_all_checks  
-Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.  
+___
+## get_all_checks
+Returns a flat list of all checks available in DQOps, both built-in checks and user defined or customized checks.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_all_checks.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/checks  
+http://localhost:8888/api/checks
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|check_definition_list_model||List[[CheckDefinitionListModel](../../models/checks/#checkdefinitionlistmodel)]|
+|check_definition_list_model||List[[CheckDefinitionListModel](../../models/checks.md#checkdefinitionlistmodel)]|
 
 
 
@@ -319,10 +319,10 @@ http://localhost:8888/api/checks
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/checks^
 		-H "Accept: application/json"
@@ -330,7 +330,7 @@ http://localhost:8888/api/checks
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_all_checks
@@ -348,7 +348,7 @@ http://localhost:8888/api/checks
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_all_checks
@@ -368,7 +368,7 @@ http://localhost:8888/api/checks
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_all_checks
@@ -389,7 +389,7 @@ http://localhost:8888/api/checks
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_all_checks
@@ -414,7 +414,7 @@ http://localhost:8888/api/checks
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "check_name" : "sample_check",
@@ -438,28 +438,28 @@ http://localhost:8888/api/checks
     ```
 
 
-___  
-## get_check  
-Returns a check definition  
+___
+## get_check
+Returns a check definition
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_model](../../models/checks/#checkdefinitionmodel)||[CheckDefinitionModel](../../models/checks/#checkdefinitionmodel)|
+|[check_definition_model](../../models/checks.md#checkdefinitionmodel)||[CheckDefinitionModel](../../models/checks.md#checkdefinitionmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_check_name|Full check name|string|:material-check-bold:|
@@ -469,10 +469,10 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"
@@ -480,7 +480,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check
@@ -499,7 +499,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check
@@ -520,7 +520,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check
@@ -542,7 +542,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check
@@ -568,7 +568,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "check_name" : "sample_check",
@@ -582,22 +582,22 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 
-___  
-## get_check_folder_tree  
-Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.  
+___
+## get_check_folder_tree
+Returns a tree of all checks available in DQOps, both built-in checks and user defined or customized checks.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/get_check_folder_tree.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/definitions/checks  
+http://localhost:8888/api/definitions/checks
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[check_definition_folder_model](../../models/checks/#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](../../models/checks/#checkdefinitionfoldermodel)|
+|[check_definition_folder_model](../../models/checks.md#checkdefinitionfoldermodel)||[CheckDefinitionFolderModel](../../models/checks.md#checkdefinitionfoldermodel)|
 
 
 
@@ -606,10 +606,10 @@ http://localhost:8888/api/definitions/checks
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/definitions/checks^
 		-H "Accept: application/json"
@@ -617,7 +617,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check_folder_tree
@@ -635,7 +635,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check_folder_tree
@@ -655,7 +655,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check_folder_tree
@@ -676,7 +676,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import get_check_folder_tree
@@ -701,27 +701,27 @@ http://localhost:8888/api/definitions/checks
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```
 
 
-___  
-## update_check  
-Updates an existing check, making a custom check definition if it is not present  
+___
+## update_check
+Updates an existing check, making a custom check definition if it is not present
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/checks/update_check.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/checks/{fullCheckName}  
+http://localhost:8888/api/checks/{fullCheckName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |full_check_name|Full check name|string|:material-check-bold:|
@@ -729,19 +729,19 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|List of check definitions|[CheckDefinitionModel](../../models/checks/#checkdefinitionmodel)| |
+|List of check definitions|[CheckDefinitionModel](../../models/checks.md#checkdefinitionmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
 		-H "Accept: application/json"^
@@ -752,7 +752,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
@@ -781,7 +781,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
@@ -812,7 +812,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check
@@ -844,7 +844,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.checks import update_check

@@ -1,34 +1,34 @@
-Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.  
+Log shipping controller that accepts logs sent from a web application or external tools and aggregates them in the local DQOps instance logs.
 
 
-___  
-## log_debug  
-Logs an information message in the server&#x27;s logs as a debug severity log entry.  
+___
+## log_debug
+Logs an information message in the server&#x27;s logs as a debug severity log entry.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_debug.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/logs/debug  
+http://localhost:8888/api/logs/debug
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping.md#externallogentry)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/logs/debug^
 		-H "Accept: application/json"^
@@ -39,7 +39,7 @@ http://localhost:8888/api/logs/debug
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_debug
@@ -62,7 +62,7 @@ http://localhost:8888/api/logs/debug
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_debug
@@ -87,7 +87,7 @@ http://localhost:8888/api/logs/debug
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_debug
@@ -113,7 +113,7 @@ http://localhost:8888/api/logs/debug
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_debug
@@ -144,34 +144,34 @@ http://localhost:8888/api/logs/debug
 
 
 
-___  
-## log_error  
-Logs an information message in the server&#x27;s logs as an error severity log entry.  
+___
+## log_error
+Logs an information message in the server&#x27;s logs as an error severity log entry.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_error.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/logs/error  
+http://localhost:8888/api/logs/error
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping.md#externallogentry)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/logs/error^
 		-H "Accept: application/json"^
@@ -182,7 +182,7 @@ http://localhost:8888/api/logs/error
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_error
@@ -205,7 +205,7 @@ http://localhost:8888/api/logs/error
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_error
@@ -230,7 +230,7 @@ http://localhost:8888/api/logs/error
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_error
@@ -256,7 +256,7 @@ http://localhost:8888/api/logs/error
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_error
@@ -287,34 +287,34 @@ http://localhost:8888/api/logs/error
 
 
 
-___  
-## log_info  
-Logs an information message in the server&#x27;s logs as an info severity log entry.  
+___
+## log_info
+Logs an information message in the server&#x27;s logs as an info severity log entry.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_info.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/logs/info  
+http://localhost:8888/api/logs/info
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping.md#externallogentry)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/logs/info^
 		-H "Accept: application/json"^
@@ -325,7 +325,7 @@ http://localhost:8888/api/logs/info
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_info
@@ -348,7 +348,7 @@ http://localhost:8888/api/logs/info
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_info
@@ -373,7 +373,7 @@ http://localhost:8888/api/logs/info
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_info
@@ -399,7 +399,7 @@ http://localhost:8888/api/logs/info
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_info
@@ -430,34 +430,34 @@ http://localhost:8888/api/logs/info
 
 
 
-___  
-## log_warn  
-Logs an information message in the server&#x27;s logs as a warn severity log entry.  
+___
+## log_warn
+Logs an information message in the server&#x27;s logs as a warn severity log entry.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_warn.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/logs/warn  
+http://localhost:8888/api/logs/warn
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Log entry|[ExternalLogEntry](../../models/log_shipping/#externallogentry)| |
+|Log entry|[ExternalLogEntry](../../models/log_shipping.md#externallogentry)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/logs/warn^
 		-H "Accept: application/json"^
@@ -468,7 +468,7 @@ http://localhost:8888/api/logs/warn
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_warn
@@ -491,7 +491,7 @@ http://localhost:8888/api/logs/warn
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_warn
@@ -516,7 +516,7 @@ http://localhost:8888/api/logs/warn
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_warn
@@ -542,7 +542,7 @@ http://localhost:8888/api/logs/warn
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.log_shipping import log_warn

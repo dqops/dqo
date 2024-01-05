@@ -1,28 +1,29 @@
-**total row count match percent** checks  
+**total row count match percent** checks
 
-**Description**  
+**Description**
 Table-level check that ensures that there are no more than a maximum percentage of difference of row count of a tested table and of an row count of another (reference) table.
 
 ___
 
-## **profile total row count match percent**  
-  
-**Check description**  
-Verifies that the total row count of the tested table matches the total row count of another (reference) table.  
-  
+## **profile total row count match percent**
+
+
+**Check description**
+Verifies that the total row count of the tested table matches the total row count of another (reference) table.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_total_row_count_match_percent|profiling| |Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_total_row_count_match_percent|profiling| |Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_total_row_count_match_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_total_row_count_match_percent
@@ -56,9 +57,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_total_ro
           max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -93,7 +94,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)
+[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -455,24 +456,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily total row count match percent**  
-  
-**Check description**  
-Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily total row count match percent**
+
+
+**Check description**
+Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_total_row_count_match_percent|monitoring|daily|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_total_row_count_match_percent|monitoring|daily|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_total_row_count_match_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_total_row_count_match_percent
@@ -507,9 +509,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_total_row_
             max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -545,7 +547,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)
+[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -907,24 +909,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly total row count match percent**  
-  
-**Check description**  
-Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly total row count match percent**
+
+
+**Check description**
+Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_total_row_count_match_percent|monitoring|monthly|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_total_row_count_match_percent|monitoring|monthly|Accuracy|[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_total_row_count_match_percent
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_total_row_count_match_percent
@@ -959,9 +962,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_total_ro
             max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-22"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -997,7 +1000,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors/#total-row-count-match-percent)
+[total_row_count_match_percent](../../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"

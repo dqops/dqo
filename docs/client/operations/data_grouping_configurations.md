@@ -1,21 +1,21 @@
-Manages data grouping configurations on a table  
+Manages data grouping configurations on a table
 
 
-___  
-## create_table_grouping_configuration  
-Creates a new data grouping configuration on a table level  
+___
+## create_table_grouping_configuration
+Creates a new data grouping configuration on a table level
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/create_table_grouping_configuration.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -25,19 +25,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations/#datagroupingconfigurationtrimmedmodel)| |
+|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations.md#datagroupingconfigurationtrimmedmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings^
 		-H "Accept: application/json"^
@@ -48,7 +48,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
@@ -83,7 +83,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
@@ -120,7 +120,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
@@ -158,7 +158,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import create_table_grouping_configuration
@@ -201,21 +201,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
-## delete_table_grouping_configuration  
-Deletes a data grouping configuration from a table  
+___
+## delete_table_grouping_configuration
+Deletes a data grouping configuration from a table
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/delete_table_grouping_configuration.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -228,10 +228,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
 		-H "Accept: application/json"
@@ -239,7 +239,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
@@ -260,7 +260,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
@@ -283,7 +283,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
@@ -307,7 +307,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import delete_table_grouping_configuration
@@ -336,28 +336,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
-## get_table_grouping_configuration  
-Returns a model of the data grouping configuration  
+___
+## get_table_grouping_configuration
+Returns a model of the data grouping configuration
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configuration.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{groupingConfigurationName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{groupingConfigurationName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[data_grouping_configuration_model](../../models/data_grouping_configurations/#datagroupingconfigurationmodel)||[DataGroupingConfigurationModel](../../models/data_grouping_configurations/#datagroupingconfigurationmodel)|
+|[data_grouping_configuration_model](../../models/data_grouping_configurations.md#datagroupingconfigurationmodel)||[DataGroupingConfigurationModel](../../models/data_grouping_configurations.md#datagroupingconfigurationmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -370,10 +370,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
 		-H "Accept: application/json"
@@ -381,7 +381,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
@@ -403,7 +403,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
@@ -427,7 +427,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
@@ -452,7 +452,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configuration
@@ -481,7 +481,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "can_edit" : false
@@ -489,28 +489,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## get_table_grouping_configurations  
-Returns the list of data grouping configurations on a table  
+___
+## get_table_grouping_configurations
+Returns the list of data grouping configurations on a table
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/get_table_grouping_configurations.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|data_grouping_configuration_list_model||List[[DataGroupingConfigurationListModel](../../models/data_grouping_configurations/#datagroupingconfigurationlistmodel)]|
+|data_grouping_configuration_list_model||List[[DataGroupingConfigurationListModel](../../models/data_grouping_configurations.md#datagroupingconfigurationlistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -522,10 +522,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings^
 		-H "Accept: application/json"
@@ -533,7 +533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
@@ -554,7 +554,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
@@ -577,7 +577,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
@@ -601,7 +601,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import get_table_grouping_configurations
@@ -629,7 +629,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "default_data_grouping_configuration" : false,
@@ -644,21 +644,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## set_table_default_grouping_configuration  
-Sets a table&#x27;s grouping configuration as the default or disables data grouping  
+___
+## set_table_default_grouping_configuration
+Sets a table&#x27;s grouping configuration as the default or disables data grouping
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/set_table_default_grouping_configuration.py)
-  
+
 
 **PATCH**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/setdefault
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -671,10 +671,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PATCH http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/setdefault^
 		-H "Accept: application/json"
@@ -682,7 +682,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
@@ -702,7 +702,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
@@ -724,7 +724,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
@@ -747,7 +747,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import set_table_default_grouping_configuration
@@ -775,21 +775,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-___  
-## update_table_grouping_configuration  
-Updates a data grouping configuration according to the provided model  
+___
+## update_table_grouping_configuration
+Updates a data grouping configuration according to the provided model
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_grouping_configurations/update_table_grouping_configuration.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/groupings/{dataGroupingConfigurationName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -800,19 +800,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations/#datagroupingconfigurationtrimmedmodel)| |
+|Data grouping configuration simplified model|[DataGroupingConfigurationTrimmedModel](../../models/data_grouping_configurations.md#datagroupingconfigurationtrimmedmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
 		-H "Accept: application/json"^
@@ -823,7 +823,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
@@ -859,7 +859,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
@@ -897,7 +897,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration
@@ -936,7 +936,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_grouping_configurations import update_table_grouping_configuration

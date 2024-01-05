@@ -33,8 +33,8 @@ dqo> data delete [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] [-b=<begin>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="data delete-b">`-b`</p><br/><p id="data delete--begin">`--begin`</p><br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD| ||
@@ -88,8 +88,8 @@ dqo> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="data repair-cr">`-cr`</p><br/><p id="data repair--check-results">`--check-results`</p><br/>|Repair the check results| ||

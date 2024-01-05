@@ -1,28 +1,29 @@
-**column count match** checks  
+**column count match** checks
 
-**Description**  
+**Description**
 Table level comparison check compares the column count of the current (parent) table to the column count in the reference table.
 
 ___
 
-## **profile column count match**  
-  
-**Check description**  
-Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.  
-  
+## **profile column count match**
+
+
+**Check description**
+Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_count_match|profiling| |Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_column_count_match|profiling| |Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_column_count_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_column_count_match
@@ -55,9 +56,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_c
             max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="22-31"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -110,7 +111,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 
@@ -122,24 +123,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily column count match**  
-  
-**Check description**  
-Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily column count match**
+
+
+**Check description**
+Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_count_match|monitoring|daily|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_column_count_match|monitoring|daily|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_column_count_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_column_count_match
@@ -173,9 +175,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_cou
               max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -229,7 +231,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 
@@ -241,24 +243,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly column count match**  
-  
-**Check description**  
-Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.  
-  
+## **monthly column count match**
+
+
+**Check description**
+Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_count_match|monitoring|monthly|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[diff_percent](../../../../reference/rules/Comparison/#diff-percent)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_column_count_match|monitoring|monthly|Accuracy|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[diff_percent](../../../../reference/rules/Comparison.md#diff-percent)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_column_count_match
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_column_count_match
@@ -292,9 +295,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_c
               max_diff_percent: 5.0
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="22-32"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -348,7 +351,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 

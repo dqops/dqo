@@ -23,8 +23,8 @@ dqo> run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="run-fw">`-fw`</p><br/><p id="run--file-write">`--file-write`</p><br/>|Write command response to a file| ||

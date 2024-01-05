@@ -1,28 +1,29 @@
-**column count** checks  
+**column count** checks
 
-**Description**  
+**Description**
 Table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
 
 ___
 
-## **profile column count**  
-  
-**Check description**  
-Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).  
-  
+## **profile column count**
+
+
+**Check description**
+Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_column_count|profiling| |Completeness|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_column_count|profiling| |Completeness|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../../reference/rules/Comparison.md#equals-integer)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_column_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_column_count
@@ -54,9 +55,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_column_c
           expected_value: 10
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -89,7 +90,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 
@@ -101,24 +102,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **daily column count**  
-  
-**Check description**  
-Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.  
-  
+## **daily column count**
+
+
+**Check description**
+Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_column_count|monitoring|daily|Completeness|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_column_count|monitoring|daily|Completeness|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../../reference/rules/Comparison.md#equals-integer)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_column_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_column_count
@@ -151,9 +153,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_column_cou
             expected_value: 10
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -187,7 +189,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 
@@ -199,24 +201,25 @@ Please expand the database engine name section to see the SQL query rendered by 
 
 ___
 
-## **monthly column count**  
-  
-**Check description**  
-Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.  
-  
+## **monthly column count**
+
+
+**Check description**
+Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_column_count|monitoring|monthly|Completeness|[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)|[equals_integer](../../../../reference/rules/Comparison/#equals-integer)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_column_count|monitoring|monthly|Completeness|[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)|[equals_integer](../../../../reference/rules/Comparison.md#equals-integer)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_column_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_column_count
@@ -249,9 +252,9 @@ dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_column_c
             expected_value: 10
 ```
 
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -285,7 +288,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[column_count](../../../../reference/sensors/table/schema-table-sensors/#column-count)
+[column_count](../../../../reference/sensors/table/schema-table-sensors.md#column-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 

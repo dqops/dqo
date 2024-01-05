@@ -1,34 +1,34 @@
-Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.  
+Shared credentials management for managing credentials that are stored in the shared .credentials folder in the DQOps user&#x27;s home folder.
 
 
-___  
-## create_shared_credential  
-Creates (adds) a new shared credential, which creates a file in the DQOps user&#x27;s home .credentials/ folder named as the credential and with the content that is provided in this call.  
+___
+## create_shared_credential
+Creates (adds) a new shared credential, which creates a file in the DQOps user&#x27;s home .credentials/ folder named as the credential and with the content that is provided in this call.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/create_shared_credential.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/credentials  
+http://localhost:8888/api/credentials
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Shared credential model|[SharedCredentialModel](../../models/shared_credentials/#sharedcredentialmodel)| |
+|Shared credential model|[SharedCredentialModel](../../models/shared_credentials.md#sharedcredentialmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/credentials^
 		-H "Accept: application/json"^
@@ -39,7 +39,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import create_shared_credential
@@ -64,7 +64,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import create_shared_credential
@@ -91,7 +91,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import create_shared_credential
@@ -119,7 +119,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import create_shared_credential
@@ -152,21 +152,21 @@ http://localhost:8888/api/credentials
 
 
 
-___  
-## delete_shared_credential  
-Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.  
+___
+## delete_shared_credential
+Deletes a shared credential file from the DQOps user&#x27;s home .credentials/ folder.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/delete_shared_credential.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/credentials/{credentialName}  
+http://localhost:8888/api/credentials/{credentialName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |credential_name|Full shared credential name|string|:material-check-bold:|
@@ -176,10 +176,10 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
@@ -187,7 +187,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
@@ -205,7 +205,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
@@ -225,7 +225,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
@@ -246,7 +246,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import delete_shared_credential
@@ -272,21 +272,21 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-___  
-## download_shared_credential  
-Downloads a shared credential&#x27;s file  
+___
+## download_shared_credential
+Downloads a shared credential&#x27;s file
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/download_shared_credential.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/credentials/{credentialName}/download  
+http://localhost:8888/api/credentials/{credentialName}/download
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |credential_name|Shared credential file name|string|:material-check-bold:|
@@ -296,10 +296,10 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/credentials/sample_credential/download^
 		-H "Accept: application/json"
@@ -307,7 +307,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
@@ -326,7 +326,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
@@ -347,7 +347,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
@@ -369,7 +369,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import download_shared_credential
@@ -396,22 +396,22 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 
 
-___  
-## get_all_shared_credentials  
-Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..  
+___
+## get_all_shared_credentials
+Returns a list of all shared credentials that are present in the DQOps user&#x27;s home .credentials/ folder..
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_all_shared_credentials.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/credentials  
+http://localhost:8888/api/credentials
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|shared_credential_list_model||List[[SharedCredentialListModel](../../models/shared_credentials/#sharedcredentiallistmodel)]|
+|shared_credential_list_model||List[[SharedCredentialListModel](../../models/shared_credentials.md#sharedcredentiallistmodel)]|
 
 
 
@@ -420,10 +420,10 @@ http://localhost:8888/api/credentials
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/credentials^
 		-H "Accept: application/json"
@@ -431,7 +431,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
@@ -449,7 +449,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
@@ -469,7 +469,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
@@ -490,7 +490,7 @@ http://localhost:8888/api/credentials
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_all_shared_credentials
@@ -515,7 +515,7 @@ http://localhost:8888/api/credentials
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "can_edit" : false,
@@ -530,28 +530,28 @@ http://localhost:8888/api/credentials
     ```
 
 
-___  
-## get_shared_credential  
-Returns a shared credential content  
+___
+## get_shared_credential
+Returns a shared credential content
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/get_shared_credential.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/credentials/{credentialName}  
+http://localhost:8888/api/credentials/{credentialName}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[shared_credential_model](../../models/shared_credentials/#sharedcredentialmodel)||[SharedCredentialModel](../../models/shared_credentials/#sharedcredentialmodel)|
+|[shared_credential_model](../../models/shared_credentials.md#sharedcredentialmodel)||[SharedCredentialModel](../../models/shared_credentials.md#sharedcredentialmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |credential_name|Shared credential file name|string|:material-check-bold:|
@@ -561,10 +561,10 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/credentials/sample_credential^
 		-H "Accept: application/json"
@@ -572,7 +572,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
@@ -591,7 +591,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
@@ -612,7 +612,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
@@ -634,7 +634,7 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import get_shared_credential
@@ -660,7 +660,7 @@ http://localhost:8888/api/credentials/{credentialName}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "credential_name" : "sample_credential",
@@ -670,21 +670,21 @@ http://localhost:8888/api/credentials/{credentialName}
     ```
 
 
-___  
-## update_shared_credential  
-Updates an existing shared credential, replacing the credential&#x27;s file content.  
+___
+## update_shared_credential
+Updates an existing shared credential, replacing the credential&#x27;s file content.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/shared_credentials/update_shared_credential.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/credential/{credentialName}  
+http://localhost:8888/api/credential/{credentialName}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |credential_name|Credential file name that will be updated|string|:material-check-bold:|
@@ -692,19 +692,19 @@ http://localhost:8888/api/credential/{credentialName}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Shared credential model|[SharedCredentialModel](../../models/shared_credentials/#sharedcredentialmodel)| |
+|Shared credential model|[SharedCredentialModel](../../models/shared_credentials.md#sharedcredentialmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/credential/sample_credential^
 		-H "Accept: application/json"^
@@ -715,7 +715,7 @@ http://localhost:8888/api/credential/{credentialName}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import update_shared_credential
@@ -741,7 +741,7 @@ http://localhost:8888/api/credential/{credentialName}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import update_shared_credential
@@ -769,7 +769,7 @@ http://localhost:8888/api/credential/{credentialName}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import update_shared_credential
@@ -798,7 +798,7 @@ http://localhost:8888/api/credential/{credentialName}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.shared_credentials import update_shared_credential
