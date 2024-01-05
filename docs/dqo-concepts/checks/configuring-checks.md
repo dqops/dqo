@@ -3,21 +3,21 @@
 ## Where are the data quality checks configured?
 
 Data quality checks are configured on monitored tables and columns in
-[&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../reference/yaml/TableYaml.md) YAML files.
-These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](../home-folders/dqops-user-home.md#monitored-tables)* folders
+[&lt;schema_name&gt;.&lt;table_name&gt;.dqotable.yaml](../../../reference/yaml/TableYaml.md) YAML files.
+These files are placed in the *[$DQO_USER_HOME/sources/&lt;connection_name&gt;/](../../home-folders/dqops-user-home.md#monitored-tables)* folders
 in the `DQOps user home`.
-The role and layout of the `DQOps user home` folder is described on the [DQOps user home](../home-folders/dqops-user-home.md) page.
+The role and layout of the `DQOps user home` folder is described on the [DQOps user home](../../home-folders/dqops-user-home.md) page.
 
 
 ## DQOps table YAML file
-The [\*.dqotable.yaml](../../reference/yaml/TableYaml.md) files are similar to Kubernetes specification files.
+The [\*.dqotable.yaml](../../../reference/yaml/TableYaml.md) files are similar to Kubernetes specification files.
 Additionally, the first line references a YAML schema file that is used by Visual Studio Code for code completion,
-validation, and showing the documentation of checks. The concept of working with [YAML files](../../integrations/visual-studio-code/index.md)
+validation, and showing the documentation of checks. The concept of working with [YAML files](../../../integrations/visual-studio-code/index.md)
 shows the editing experience in Visual Studio Code.
 
 
 ### **Table YAML file structure**
-The following [.dqotable.yaml](../../reference/yaml/TableYaml.md) file below shows the location of the most important elements.
+The following [.dqotable.yaml](../../../reference/yaml/TableYaml.md) file below shows the location of the most important elements.
 
 ``` { .yaml .annotate linenums="1" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -50,7 +50,7 @@ spec: # (2)!
 ```
 
 1.  The type of the file is identified in the `kind` element.
-2.  The `spec` [table specification](../../reference/yaml/TableYaml.md#tablespec) object that describes the table, its columns
+2.  The `spec` [table specification](../../../reference/yaml/TableYaml.md#tablespec) object that describes the table, its columns
     and activated data quality checks.
 3.  The configuration of timestamp columns that are used for timeliness checks such as freshness, and for running partitioned checks.
 4.  The column name (*date* in this example) that contains an event timestamp that is used to measure timeliness.
@@ -62,13 +62,13 @@ spec: # (2)!
 7.  The number of recent days used to analyze the data incrementally in daily partitioned checks.
 8.  The number of recent months used to analyze the data incrementally in monthly partitioned checks. *1* means that the previous
     month is analyzed only.
-9.  The node where [profiling checks](./profiling-checks/profiling-checks.md) are configured at a table level.
-10. The node where [monitoring checks](./monitoring-checks/monitoring-checks.md) are configured at a table level.
-11. The node where daily [monitoring checks](./monitoring-checks/monitoring-checks.md) are configured at a table level.
-12. The node where monthly [monitoring checks](./monitoring-checks/monitoring-checks.md) are configured at a table level.
-13. The node where [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.
-14. The node where daily [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.
-15. The node where monthly [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.
+9.  The node where [profiling checks](../profiling-checks/profiling-checks.md) are configured at a table level.
+10. The node where [monitoring checks](../monitoring-checks/monitoring-checks.md) are configured at a table level.
+11. The node where daily [monitoring checks](../monitoring-checks/monitoring-checks.md) are configured at a table level.
+12. The node where monthly [monitoring checks](../monitoring-checks/monitoring-checks.md) are configured at a table level.
+13. The node where [partitioned checks](../partition-checks/partition-checks.md) are configured at a table level.
+14. The node where daily [partitioned checks](../partition-checks/partition-checks.md) are configured at a table level.
+15. The node where monthly [partitioned checks](../partition-checks/partition-checks.md) are configured at a table level.
 16. The node with a list of columns.
 17. One example column name. The column-level checks for this column are defined inside the node.
 
@@ -80,20 +80,20 @@ The core elements found on the *.dqotable.yaml* file are described in the table 
 |------|--------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------|
 | 2    | `apiVersion`                                                                                           | The version of the DQOps file format                                                                                                                                                                                                | dqo/v1        |
 | 3    | `kind`                                                                                                 | The file type                                                                                                                                                                                                                       | table         |
-| 4    | `spec`                                                                                                 | The main content of the file, contains the [table specification](../../reference/yaml/TableYaml.md#tablespec).                                                                                                                      |               |
+| 4    | `spec`                                                                                                 | The main content of the file, contains the [table specification](../../../reference/yaml/TableYaml.md#tablespec).                                                                                                                      |               |
 | 5    | `spec.timestamp_columns`                                                                               | The configuration of timestamp columns that are used for timeliness checks such as freshness, and for running partitioned checks.                                                                                                   |               |
 | 6    | `spec.timestamp_columns.` `event_timestamp_column`                                                     | The column name (*date* in this example) that contains an event timestamp that is used to measure timeliness. It should be a column that identifies the event or transaction timestamp.                                             |               |
 | 7    | `spec.timestamp_columns.` `partition_by_column`                                                        | The column name (*date* in this example) that will be used in partitioned checks to detect data quality issues at a date partition or for each daily or monthly time period. It can be a date, datetime or a timestamp column name. |               |
 | 8    | `spec.incremental_time_window`                                                                         | The configuration for the recent time window used to run partitioned data quality checks incrementally.                                                                                                                             |               |
 | 9    | `spec.incremental_time_window.` `daily_partitioning_recent_days`                                       | The number of recent days used to analyze the data incrementally in daily partitioned checks.                                                                                                                                       | 7             |
 | 10   | `spec.incremental_time_window.` `monthly_partitioning_recent_months`                                   | The number of recent months used to analyze the data incrementally in monthly partitioned checks. *1* means that the previous month is analyzed only.                                                                               | 1             |
-| 11   | `spec.profiling_checks`                                                                                | The node where [profiling checks](./profiling-checks/profiling-checks.md) are configured on a table level.                                                                                                                          |               |
-| 13   | `spec.monitoring_checks`                                                                               | The node where [monitoring checks](./monitoring-checks/monitoring-checks.md) are configured at a table level.                                                                                                                       |               |
-| 14   | `spec.monitoring_checks.daily`                                                                         | The node daily [monitoring checks](./monitoring-checks/monitoring-checks.md) are configured at a table level.                                                                                                                       |               |
-| 16   | `spec.monitoring_checks.monthly`                                                                       | The node monthly [monitoring checks](./monitoring-checks/monitoring-checks.md) are configured at a table level.                                                                                                                     |               |
-| 18   | `spec.partitioned_checks`                                                                              | The node where [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.                                                                                                                        |               |
-| 19   | `spec.partitioned_checks.daily`                                                                        | The node where daily [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.                                                                                                                  |               |
-| 21   | `spec.partitioned_checks.monthly`                                                                      | The node where monthly [partitioned checks](./partition-checks/partition-checks.md) are configured at a table level.                                                                                                                |               |
+| 11   | `spec.profiling_checks`                                                                                | The node where [profiling checks](../profiling-checks/profiling-checks.md) are configured on a table level.                                                                                                                          |               |
+| 13   | `spec.monitoring_checks`                                                                               | The node where [monitoring checks](../monitoring-checks/monitoring-checks.md) are configured at a table level.                                                                                                                       |               |
+| 14   | `spec.monitoring_checks.daily`                                                                         | The node daily [monitoring checks](../monitoring-checks/monitoring-checks.md) are configured at a table level.                                                                                                                       |               |
+| 16   | `spec.monitoring_checks.monthly`                                                                       | The node monthly [monitoring checks](../monitoring-checks/monitoring-checks.md) are configured at a table level.                                                                                                                     |               |
+| 18   | `spec.partitioned_checks`                                                                              | The node where [partitioned checks](../partition-checks/partition-checks.md) are configured at a table level.                                                                                                                        |               |
+| 19   | `spec.partitioned_checks.daily`                                                                        | The node where daily [partitioned checks](../partition-checks/partition-checks.md) are configured at a table level.                                                                                                                  |               |
+| 21   | `spec.partitioned_checks.monthly`                                                                      | The node where monthly [partitioned checks](../partition-checks/partition-checks.md) are configured at a table level.                                                                                                                |               |
 | 23   | `spec.columns`                                                                                         | A node that contains an array of columns for which the data quality checks are configured.                                                                                                                                          |               |
 | 24   | `spec.columns.<first_column_name>`                                                                     | An example column named *first_column_name*. The column level data quality checks for this column are configured inside this node.                                                                                                  |               |
 
@@ -105,11 +105,11 @@ The configuration of data quality checks will be shown on the example of a profi
 
 
 ### **Table-level profiling checks**
-The table [profiling checks](./profiling-checks/profiling-checks.md) are meant to capture advanced data quality
+The table [profiling checks](../profiling-checks/profiling-checks.md) are meant to capture advanced data quality
 statistics and store the most current value for each month. Their role is to track the overall quality of data,
-without affecting the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md).
+without affecting the [data quality KPIs](../../data-quality-kpis/data-quality-kpis.md).
 
-The example below shows a configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count)
+The example below shows a configuration of the [profile_row_count](../../../checks/table/volume/row-count.md#profile-row-count)
 with only a **warning** severity rule that verifies if the table's row count is at least one row.
 A warning severity issue will be raised when a result of a query similar to `SELECT COUNT(*) FROM <monitored_table>`
 will be 0, which means that the table is empty.
@@ -130,13 +130,13 @@ spec:
   ...
 ```
 
-1.  The table [profiling checks specification](../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec)
+1.  The table [profiling checks specification](../../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec)
     where the profiling checks are configured.
 2.  A *volume* category node. Other categories are sibling nodes of the *volume*.
-3.  The configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count) data quality check.
-4.  The configuration of a [data quality rule](../rules/rules.md) at a **warning** severity level. This rule will raise
+3.  The configuration of the [profile_row_count](../../../checks/table/volume/row-count.md#profile-row-count) data quality check.
+4.  The configuration of a [data quality rule](../../rules/rules.md) at a **warning** severity level. This rule will raise
     a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter. 
-5.  The rule parameter for the [min_count](../../reference/rules/Comparison.md#min-count) rule. It is the smallest
+5.  The rule parameter for the [min_count](../../../reference/rules/Comparison.md#min-count) rule. It is the smallest
     accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.
 6.  Another category node for the table schema checks.
 
@@ -144,18 +144,18 @@ The elements of the profiling checks configuration are listed in the table below
 
 | Line  | Element&nbsp;path (within the `spec` node)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Description                                                                                                                                                                                                                           |
 |-------|--------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks containerprofiling checks specification](../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                     |
+| 6     | `profiling_checks`                                                                                                             | The table-level [profiling checks containerprofiling checks specification](../../../reference/yaml/profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec) where the profiling checks are configured.                     |
 | 7     | `profiling_checks.volume`                                                                                                      | A *volume* category node. Similar data quality checks are grouped in caregories. Other categories are sibling nodes of this node.                                                                                                     |
-| 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node,check becomes activated. |
-| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](../rules/rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.        |
-| 10    | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.    |
+| 8     | `profiling_checks.volume.` `profile_row_count`                                                                                 | The configuration of the [profile_row_count](../../../checks/table/volume/row-count.md#profile-row-count) data quality check. When a node with the name of the data quality check is added to the category node,check becomes activated. |
+| 9     | `profiling_checks.volume.` `profile_row_count.warning`                                                                         | The configuration of a [data quality rule](../../rules/rules.md) at a **warning** severity level. This rule will raise  a **warning** severity level data quality issue if the *sensor readout* does not meet the rule parameter.        |
+| 10    | `profiling_checks.volume.` `profile_row_count.warning.min_count`                                                               | The rule parameter for the [min_count](../../../reference/rules/Comparison.md#min-count) rule. It is the smallest accepted row count (the *sensor readout* captured by the data quality check's sensor) that will make the rule pass.    |
 | 11    | `profiling_checks.schema`                                                                                                      | Yet another check category node.                                                                                                                                                                                                      |   
 
 
 ### **Table-level monitoring checks**
-The [monitoring checks](./monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
+The [monitoring checks](../monitoring-checks/monitoring-checks.md) are the primary type of data quality checks
 used in DQOps for continuous monitoring of the data quality of the data source. 
-The data quality issues raised by these checks are decreasing the [data quality KPI](../data-quality-kpis/data-quality-kpis.md). 
+The data quality issues raised by these checks are decreasing the [data quality KPI](../../data-quality-kpis/data-quality-kpis.md). 
 
 The monitoring checks are configured in the `spec.monitoring_checks` node and are divided into *daily* and *monthly* monitoring checks.
 The daily monitoring checks keep only the most current check result for the day when the check was executed. Running the same check
@@ -165,8 +165,8 @@ followed by the monthly monitoring check, that store only one value for each cal
 The following example shows a table YAML file with the row count check configured both at a daily and monthly periods.
 Please notice that the names of the checks are different, because all data quality check names are unique in DQOps.
 
-The daily monitoring check variant is [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count) and
-the monthly monitoring check variant is [monthly_row_count](../../checks/table/volume/row-count.md#monthly-row-count).
+The daily monitoring check variant is [daily_row_count](../../../checks/table/volume/row-count.md#daily-row-count) and
+the monthly monitoring check variant is [monthly_row_count](../../../checks/table/volume/row-count.md#monthly-row-count).
 
 ``` { .yaml .annotate linenums="1" hl_lines="7 12" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -188,16 +188,16 @@ spec:
   ...
 ```
 
-1.  The table [monitoring checks specification](../../reference/yaml/TableYaml.md#tablemonitoringchecksspec)
+1.  The table [monitoring checks specification](../../../reference/yaml/TableYaml.md#tablemonitoringchecksspec)
     where the monitoring checks are configured.
 2.  The **daily** monitoring checks container.
-3.  The configuration of the [daily_row_count](../../checks/table/volume/row-count.md#daily-row-count) data quality check.
+3.  The configuration of the [daily_row_count](../../../checks/table/volume/row-count.md#daily-row-count) data quality check.
 4.  The **monthly** monitoring checks container.
-5.  The configuration of the [monthly_row_count](../../checks/table/volume/row-count.md#monthly-row-count) data quality check.
+5.  The configuration of the [monthly_row_count](../../../checks/table/volume/row-count.md#monthly-row-count) data quality check.
 
 
 ### **Table-level partitioned checks**
-Table [partitioned checks](./partition-checks/partition-checks.md) allow analyzing even petabyte scale
+Table [partitioned checks](../partition-checks/partition-checks.md) allow analyzing even petabyte scale
 tables that are constantly growing, because new data are appended to new partitions. 
 Running data quality checks as queries on such big tables is time consuming, and can generate high charges
 when the data is hosted in the cloud.
@@ -248,12 +248,12 @@ spec:
     is the column named `date` from the tested table.
 2.  The number of recent days queried when running the **daily** partitioned checks.
 3.  The number of recent months queried when running the **monthly** partitioned checks.
-4.  The table [partitioned checks specification](../../reference/yaml/TableYaml.md#tablepartitionedchecksrootspec)
+4.  The table [partitioned checks specification](../../../reference/yaml/TableYaml.md#tablepartitionedchecksrootspec)
     where the partition(ed) checks are configured.
 5.  The **daily** partitioned checks container.
-6.  The configuration of the [daily_partition_row_count](../../checks/table/volume/row-count.md#daily-partition-row-count) data quality check.
+6.  The configuration of the [daily_partition_row_count](../../../checks/table/volume/row-count.md#daily-partition-row-count) data quality check.
 7.  The **monthly** partitioned checks container.
-8.  The configuration of the [monthly_partition_row_count](../../checks/table/volume/row-count.md#monthly-partition-row-count) data quality check.
+8.  The configuration of the [monthly_partition_row_count](../../../checks/table/volume/row-count.md#monthly-partition-row-count) data quality check.
 
 The `incremental_time_window` section configures how the incremental data quality check execution work on partitioned data.
 DQOps generates SQL queries from the Jinja2 sensor templates by adding a **WHERE** clause that applies a query filter
@@ -309,12 +309,12 @@ will make the **warning** rule ineffective, raising only **error** severity issu
 
 ## Checks without rules
 Data quality checks without any rules are a special case in DQOps.
-These checks will only capture the *sensor result* from the [sensor](../sensors/sensors.md) and store
-it in both the [sensor_readouts](../../reference/parquetfiles/sensor_readouts.md), and the
-check results [check_results](../../reference/parquetfiles/check_results.md) parquet tables.
+These checks will only capture the *sensor result* from the [sensor](../../sensors/sensors.md) and store
+it in both the [sensor_readouts](../../../reference/parquetfiles/sensor_readouts.md), and the
+check results [check_results](../../../reference/parquetfiles/check_results.md) parquet tables.
 
 The issue severity level for these checks will be always *valid*, storing the value 0 in the `severity` column
-in the [check_results](../../reference/parquetfiles/check_results.md) parquet table.
+in the [check_results](../../../reference/parquetfiles/check_results.md) parquet table.
 Checks without any rules enabled will also not be included in the data quality KPI, because their `include_in_kpi`
 flag will be *false*. The flag `include_in_sla` will be also *false*.
 
@@ -337,11 +337,11 @@ spec:
 
 
 ## Rules without parameters
-Some data quality [rules](../rules/rules.md) do not have any parameters (thresholds).
+Some data quality [rules](../../rules/rules.md) do not have any parameters (thresholds).
 Configuring these rules uses the same YAML/JSON trick to set the value of the rule to a JSON `{}` object,
 enabling the rule at the given severity level.
 
-The following example shows the [daily_column_count_changed](../../checks/table/schema/column-count-changed.md#daily-column-count-changed)
+The following example shows the [daily_column_count_changed](../../../checks/table/schema/column-count-changed.md#daily-column-count-changed)
 check that compares the column count captured today to the yesterday's (or any earlier, known most recent row count),
 detecting if the column count on the table has recently changed. A **warning** severity issue is raised
 on the day when the column count change was detected.
@@ -359,11 +359,11 @@ spec:
 ```
 
 ## Checks with sensor's parameters
-Some data quality [sensors](../sensors/sensors.md) are parametrized. The parameters are used
+Some data quality [sensors](../../sensors/sensors.md) are parametrized. The parameters are used
 in the SQL template and will be rendered in the SQL query that is generated from the sensor.
 
 The following example shows how to use the
-[daily_string_value_in_set_percent](../../checks/column/strings/string-value-in-set-percent.md#daily-string-value-in-set-percent)
+[daily_string_value_in_set_percent](../../../checks/column/strings/string-value-in-set-percent.md#daily-string-value-in-set-percent)
 check that uses a `expected_values` parameter that is an array of strings which are the valid values expected in the column.
 This check counts the percentage of rows that have one of the expected values stored in the *country* column.
 
@@ -397,7 +397,7 @@ when no parameters are specified.
 
 ## Configuring columns
 The list of columns is stored in the `spec.columns` node in the *.dqotable.yaml* file.
-The `spec.columns` node is a dictionary of [column specifications](../../reference/yaml/TableYaml.md#columnspec),
+The `spec.columns` node is a dictionary of [column specifications](../../../reference/yaml/TableYaml.md#columnspec),
 the keys are the column names.
 
 Columns are added to the *.dqotable.yaml* when a table's metadata is imported into DQOps.
@@ -427,13 +427,13 @@ spec:
     to decide if some data type specific data quality checks could be activated on the column.
 4.  The data type of the column, it is a physical data type introspected from the monitored table.
 
-The node for each column contains a [type snapshot](../../reference/yaml/TableYaml.md#columntypesnapshotspec) object
+The node for each column contains a [type snapshot](../../../reference/yaml/TableYaml.md#columntypesnapshotspec) object
 that is used by DQOps in the following cases:
 
 - The default [data quality checks](#default-data-quality-checks) are activated depending on the column's data type.
   Numeric anomaly checks are activated only on numeric columns such as the *cumulative_confirmed* column in the example above.
 
-- The data quality [sensors](../sensors/sensors.md) may use the column's data type to decide if an additional type casting
+- The data quality [sensors](../../sensors/sensors.md) may use the column's data type to decide if an additional type casting
   must be generated in the SQL query that will capture the metrics for the data quality check.
 
 DQOps does not require that each column has the `type_snapshot` node defined. All the data quality checks will work
@@ -441,7 +441,7 @@ without knowing the column's data type.
 
 
 ### **Column profiling checks**
-[Profiling checks](./profiling-checks/profiling-checks.md) are configured on columns the same way as on tables.
+[Profiling checks](../profiling-checks/profiling-checks.md) are configured on columns the same way as on tables.
 Only a different set of data quality checks is available, because column-level checks must be executed on a column.
 The column name is included in the generated SQL query rendered from a sensor's template.
 
@@ -475,19 +475,19 @@ spec:
         nullable: true
 ```
 
-1.  The container of the column-level [profiling checks](./profiling-checks/profiling-checks.md).
-2.  [profile_nulls_count](../../checks/column/nulls/nulls-count.md#profile-nulls-count) check without any rules,
+1.  The container of the column-level [profiling checks](../profiling-checks/profiling-checks.md).
+2.  [profile_nulls_count](../../../checks/column/nulls/nulls-count.md#profile-nulls-count) check without any rules,
     the check will only capture the number of rows with a null value in the *cumulative_confirmed* column.
-3.  [profile_nulls_percent](../../checks/column/nulls/nulls-percent.md#profile-nulls-percent) check that measures a percentage
+3.  [profile_nulls_percent](../../../checks/column/nulls/nulls-percent.md#profile-nulls-percent) check that measures a percentage
     of rows with null values, instead of returning the number of rows. The check is configured to raise a **warning** severity
     issue when any null rows were detected (the percentage of null values is above 0%). An **error** severity issue is raised
     when the percentage of rows with null values exceeds 1%.
-4.  [profile_column_exists](../../checks/column/schema/column-exists.md#profile-column-exists) check that verifies that the
+4.  [profile_column_exists](../../../checks/column/schema/column-exists.md#profile-column-exists) check that verifies that the
     column is present in the table by reading the metadata of the table. 
 5.  The *expected_value* rule parameter's value is 1, which means that DQOps requires that the column was found.
 
 ### **Column monitoring checks**
-Column-level [monitoring checks](./monitoring-checks/monitoring-checks.md) are also configured in a very similar way.
+Column-level [monitoring checks](../monitoring-checks/monitoring-checks.md) are also configured in a very similar way.
 
 The following example shows using the daily monitoring variants of the profiling checks shown in the previous example.
 
@@ -520,16 +520,16 @@ spec:
         nullable: true
 ```
 
-1.  The container of the column-level [monitoring checks](./monitoring-checks/monitoring-checks.md).
+1.  The container of the column-level [monitoring checks](../monitoring-checks/monitoring-checks.md).
 2.  The container of the daily monitoring checks.
 
-When the [scheduling](../../working-with-dqo/schedules/index.md) is enabled, these checks will be executed daily,
+When the [scheduling](../../../working-with-dqo/schedules/index.md) is enabled, these checks will be executed daily,
 detecting if any rows with null values were identified (measuring the completeness of the *cumulative_confirmed* column).
 Also, DQOps will retrieve the table schema from the data source and verify if the column is still found in the table's metadata. 
 
 
 ### **Column partitioned checks**
-Configuring column-level [partitioned checks](./partition-checks/partition-checks.md) is also
+Configuring column-level [partitioned checks](../partition-checks/partition-checks.md) is also
 not different from configuring them on a table level.
 
 The following example shows using the completeness checks on a partition level. Please also notice that
@@ -561,7 +561,7 @@ spec:
 ```
 
 1.  The selection of the column that will be used for date partitioning in the **GROUP BY** SQL clause.
-2.  The container of the column-level [partitioned checks](./partition-checks/partition-checks.md).
+2.  The container of the column-level [partitioned checks](../partition-checks/partition-checks.md).
 
 
 ### **Calculated columns**
@@ -645,7 +645,7 @@ We want to replace all usages of the column reference with an SQL expression tha
 
 When the *date* column is casted to a *DATE* type, we can use it as a partitioning column for partitioned checks
 or run date specific data quality checks such as 
-the [daily-date-values-in-future-percent](../../checks/column/datetime/date-values-in-future-percent.md#daily-date-values-in-future-percent)
+the [daily-date-values-in-future-percent](../../../checks/column/datetime/date-values-in-future-percent.md#daily-date-values-in-future-percent)
 check that detects if any dates are in the future.
 
 The next example shows how to apply additional transformations such as type casting on a column that is present in the table.
@@ -738,16 +738,16 @@ spec:
 ### **Table stage**
 The tables can be grouped into stages, allowing to detect data quality issues for different stages, such as
 landing zones, staging, cleansing, data marts, or other stage names specific to the environment.
-Dividing tables by stage allows to calculate the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md)
+Dividing tables by stage allows to calculate the [data quality KPIs](../../data-quality-kpis/data-quality-kpis.md)
 for each stage.
 
 DQOps does not enforce any naming convention for stages. The stages are free-form string values assigned to
 a table in the *.dqotable.yaml* file.
 
 The value of the `stage` field that was configured on the table at the time of running the check is saved in the
-[sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) and the
-[check_results](../../reference/parquetfiles/check_results.md) parquet tables. 
-The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps are designed
+[sensor_readouts](../../../reference/parquetfiles/sensor_readouts.md) and the
+[check_results](../../../reference/parquetfiles/check_results.md) parquet tables. 
+The [data quality dashboards](../../data-quality-dashboards/data-quality-dashboards.md) in DQOps are designed
 to allow filtering by the stage, using the `stage` value from the tables mentioned above.
 
 The following example shows how the `stage` field is configured.
@@ -777,13 +777,13 @@ in DQOps by assigning numerical priorities to all tables that are initially impo
 
 When the tables are assigned to priorities (1, 2, 3, ...), an agile data quality project should focus on improving the
 data quality of the priority `1` tables first. When a satisfactory level of data quality, measured using
-the [data quality KPIs](../data-quality-kpis/data-quality-kpis.md) is achieved, the tables from the next priority
+the [data quality KPIs](../../data-quality-kpis/data-quality-kpis.md) is achieved, the tables from the next priority
 level are assigned to improve in the next interation.
 
 The value of the `priority` field that was configured on the table at the time of running the check is saved in the
-[sensor_readouts](../../reference/parquetfiles/sensor_readouts.md) and the
-[check_results](../../reference/parquetfiles/check_results.md) parquet tables.
-The [data quality dashboards](../data-quality-dashboards/data-quality-dashboards.md) in DQOps use a filter for the table priorities,
+[sensor_readouts](../../../reference/parquetfiles/sensor_readouts.md) and the
+[check_results](../../../reference/parquetfiles/check_results.md) parquet tables.
+The [data quality dashboards](../../data-quality-dashboards/data-quality-dashboards.md) in DQOps use a filter for the table priorities,
 allowing to separate data quality issues between high priority tables that should be already cleansed and lower priority tables
 that are still in the data cleansing process.
 
@@ -814,7 +814,7 @@ Please download the eBook to learn more about the concept.
 
 ### **Labels**
 Tables and columns can be tagged with labels. The labels are used by DQOps for targeting data quality checks
-when the [checks are run](../running-checks/running-checks.md).
+when the [checks are run](../../running-checks/running-checks.md).
 
 Labels are defined in a `labels` section below the `spec` node (for a table-level label)
 or below the column's node for column-level labels. The labels are defined as a list of strings values.
@@ -843,13 +843,13 @@ spec:
 
 
 ## Default data quality checks
-DQOps maintains a configuration of the [default data quality checks](../home-folders/dqops-user-home.md#shared-settings)
+DQOps maintains a configuration of the [default data quality checks](../../home-folders/dqops-user-home.md#shared-settings)
 that are applied on the tables and columns when the tables are imported into DQOps.
 
 We are using a table from the freely available Google BigQuery public datasets.
 The table below is *bigquery-public-data.covid19_open_data.covid19_open_data*, but the example shows only one column, the *cumulative_confirmed*.
 This column is numeric, which allowed to activate some numeric anomaly checks, 
-such as the [daily_sum_anomaly_differencing](../../checks/column/anomaly/sum-anomaly-differencing.md#daily-sum-anomaly-differencing)
+such as the [daily_sum_anomaly_differencing](../../../checks/column/anomaly/sum-anomaly-differencing.md#daily-sum-anomaly-differencing)
 check that will compare the sum of values per day and raise a warning if the change since yesterday is greater than 10%.
 
 ??? info "Click to see a full *.dqotable.yaml* file with all default data observability checks activated"
@@ -940,8 +940,8 @@ check that will compare the sum of values per day and raise a warning if the cha
 
 ### **List of default observability checks**
 The default observability checks are configured in the
-*[$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml](../../reference/yaml/DefaultObservabilityChecksYaml.md)* file
-in the [DQOps user home](../home-folders/dqops-user-home.md).
+*[$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml](../../../reference/yaml/DefaultObservabilityChecksYaml.md)* file
+in the [DQOps user home](../../home-folders/dqops-user-home.md).
 
 The easiest way to change the default configuration is by using the *Default checks* editor in the *Configuration* section
 of the DQOps user interface.
@@ -956,40 +956,40 @@ The following table shows a list of default data quality checks and describes th
 
 | Target | Check name                                                              | Description                                                                                                                                        |
 |--------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../../checks/table/volume/row-count.md)             | Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                                                 |
-| table  | [profile column count](../../checks/table/schema/column-count.md)       | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| column | [profile nulls count](../../checks/column/nulls/nulls-count.md)         | Detects empty values in a column. Raises a warning when any null values were found.                                                                |
-| column | [profile not_nulls count](../../checks/column/nulls/not-nulls-count.md) | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).                    |
-| column | [profile nulls percent](../../checks/column/nulls/nulls-percent.md)     | Measures the percentage of null values in a column. This check is used to profile the data source before a valid threshold is applied in the rule. |
+| table  | [profile row count](../../../checks/table/volume/row-count.md)             | Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                                                 |
+| table  | [profile column count](../../../checks/table/schema/column-count.md)       | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
+| column | [profile nulls count](../../../checks/column/nulls/nulls-count.md)         | Detects empty values in a column. Raises a warning when any null values were found.                                                                |
+| column | [profile not_nulls count](../../../checks/column/nulls/not-nulls-count.md) | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).                    |
+| column | [profile nulls percent](../../../checks/column/nulls/nulls-percent.md)     | Measures the percentage of null values in a column. This check is used to profile the data source before a valid threshold is applied in the rule. |
 
 **Daily monitoring checks type**
 
 | Target | Check name                                                                                              | Description                                                                                                                                 |
 |--------|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [daily row count](../../checks/table/volume/row-count.md)                                               | Detects empty tables. Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                    |
-| table  | [daily row count change](../../checks/table/volume/row-count-change.md)                                 | Ensures that the row count changed by a fixed rate since the last readout.                                                                  |
-| table  | [daily row count anomaly differencing](../../checks/table/volume/row-count-anomaly-differencing.md)     | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                |
-| table  | [daily table availability](../../checks/table/availability/table-availability.md)                       | Verifies that a table exists, can be accessed, and queried without errors.                                                                  |
-| table  | [daily column count changed](../../checks/table/schema/column-count-changed.md)                         | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                            |
-| table  | [daily column list changed](../../checks/table/schema/column-list-changed.md)                           | Detects if the list of columns has changed since the last time the check was run.                                                           |
-| table  | [daily column list or order changed](../../checks/table/schema/column-list-or-order-changed.md)         | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                            |
-| table  | [daily column types changed](../../checks/table/schema/column-types-changed.md)                         | Detects if the column names or column types have changed since the last time the check was run.                                             |
-| column | [daily nulls count](../../checks/column/nulls/nulls-count.md)                                           | Monitors the table for partially incomplete columns, having any nulls (the max_count of nulls is 0).                                        |
-| column | [daily not_nulls count](../../checks/column/nulls/not-nulls-count.md)      | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).             |
-| column | [daily nulls percent](../../checks/column/nulls/nulls-percent.md)                                       | Ensures that there are no more than a set percentage of null values in the monitored column.                                                |
-| column | [daily nulls percent anomaly stationary](../../checks/column/nulls/nulls-percent-anomaly-stationary.md) | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
-| column | [daily nulls percent change yesterday](../../checks/column/nulls/nulls-percent-change-yesterday.md)     | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |
-| column | [daily not nulls percent](../../checks/column/nulls/not-nulls-percent.md)                               | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
-| column | [daily string datatype changed](../../checks/column/datatype/string-datatype-changed.md)                | Scans all values in a string column and detects the data type of all values in a column.                                                    |
-| column | [daily mean anomaly stationary](../../checks/column/anomaly/mean-anomaly-stationary.md)                 | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
-| column | [daily sum anomaly differencing](../../checks/column/anomaly/sum-anomaly-differencing.md)               | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
-| column | [daily column exists](../../checks/column/schema/column-exists.md)                                      | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                     |
-| column | [daily column type changed](../../checks/column/schema/column-type-changed.md)                          | Detects if the data type of the column has changed since the last time it was retrieved.                                                    |
+| table  | [daily row count](../../../checks/table/volume/row-count.md)                                               | Detects empty tables. Counts the number of rows in a table. Raises a warning data quality issue when the table is empty.                    |
+| table  | [daily row count change](../../../checks/table/volume/row-count-change.md)                                 | Ensures that the row count changed by a fixed rate since the last readout.                                                                  |
+| table  | [daily row count anomaly differencing](../../../checks/table/volume/row-count-anomaly-differencing.md)     | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                |
+| table  | [daily table availability](../../../checks/table/availability/table-availability.md)                       | Verifies that a table exists, can be accessed, and queried without errors.                                                                  |
+| table  | [daily column count changed](../../../checks/table/schema/column-count-changed.md)                         | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                            |
+| table  | [daily column list changed](../../../checks/table/schema/column-list-changed.md)                           | Detects if the list of columns has changed since the last time the check was run.                                                           |
+| table  | [daily column list or order changed](../../../checks/table/schema/column-list-or-order-changed.md)         | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                            |
+| table  | [daily column types changed](../../../checks/table/schema/column-types-changed.md)                         | Detects if the column names or column types have changed since the last time the check was run.                                             |
+| column | [daily nulls count](../../../checks/column/nulls/nulls-count.md)                                           | Monitors the table for partially incomplete columns, having any nulls (the max_count of nulls is 0).                                        |
+| column | [daily not_nulls count](../../../checks/column/nulls/not-nulls-count.md)      | Detects empty columns. Counts the number of not null values and raises a warning if no values are found (min_count is below 1).             |
+| column | [daily nulls percent](../../../checks/column/nulls/nulls-percent.md)                                       | Ensures that there are no more than a set percentage of null values in the monitored column.                                                |
+| column | [daily nulls percent anomaly stationary](../../../checks/column/nulls/nulls-percent-anomaly-stationary.md) | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
+| column | [daily nulls percent change yesterday](../../../checks/column/nulls/nulls-percent-change-yesterday.md)     | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |
+| column | [daily not nulls percent](../../../checks/column/nulls/not-nulls-percent.md)                               | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
+| column | [daily string datatype changed](../../../checks/column/datatype/string-datatype-changed.md)                | Scans all values in a string column and detects the data type of all values in a column.                                                    |
+| column | [daily mean anomaly stationary](../../../checks/column/anomaly/mean-anomaly-stationary.md)                 | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
+| column | [daily sum anomaly differencing](../../../checks/column/anomaly/sum-anomaly-differencing.md)               | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
+| column | [daily column exists](../../../checks/column/schema/column-exists.md)                                      | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                     |
+| column | [daily column type changed](../../../checks/column/schema/column-type-changed.md)                          | Detects if the data type of the column has changed since the last time it was retrieved.                                                    |
 
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](../data-quality-dashboards/data-quality-dashboards.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../integrations/webhooks/index.md).
-- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- DQOps has multiple built-in data quality dashboards for displaying data quality KPI. [Learn more about different types of dashboards](../../data-quality-dashboards/data-quality-dashboards.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) and [notifications](../../../integrations/webhooks/index.md).
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../../working-with-dqo/basic-data-statistics/basic-data-statistics.md).

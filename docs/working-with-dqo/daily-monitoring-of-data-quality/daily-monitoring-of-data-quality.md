@@ -64,7 +64,7 @@ in the tree view on the left.
 ![Navigate to default check configuration](https://dqops.com/docs/images/examples/detect-empty-tables-check-default-check-configuration.png)
 
 The screen on the right will display the current configuration of checks, which can be modified. 
-You can switch between the Table and Column checks using the tabs. For more information check the description of the [check editor screen](../../../dqo-concepts/user-interface-overview/user-interface-overview/#Check-editor).
+You can switch between the Table and Column checks using the tabs. For more information check the description of the [check editor screen](../../../dqo-concepts/user-interface-overview/user-interface-overview.md#Check-editor).
 
 After making the necessary modifications, click on the **Save** button to save the changes. The new default checks configuration will be 
 set on every newly imported table. 

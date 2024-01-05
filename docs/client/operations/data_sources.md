@@ -1,28 +1,28 @@
-Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).  
+Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).
 
 
-___  
-## get_remote_data_source_schemas  
-Introspects a list of schemas inside a remote data source, identified by an already imported connection.  
+___
+## get_remote_data_source_schemas
+Introspects a list of schemas inside a remote data source, identified by an already imported connection.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/get_remote_data_source_schemas.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/datasource/connections/{connectionName}/schemas  
+http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|schema_remote_model||List[[SchemaRemoteModel](../../models/data_sources/#schemaremotemodel)]|
+|schema_remote_model||List[[SchemaRemoteModel](../../models/data_sources.md#schemaremotemodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -32,10 +32,10 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas^
 		-H "Accept: application/json"
@@ -43,7 +43,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
@@ -62,7 +62,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
@@ -83,7 +83,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
@@ -105,7 +105,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_schemas
@@ -131,7 +131,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "alreadyImported" : false
@@ -143,28 +143,28 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
 
-___  
-## get_remote_data_source_tables  
-Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.  
+___
+## get_remote_data_source_tables
+Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/get_remote_data_source_tables.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schemaName}/tables  
+http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schemaName}/tables
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|remote_table_list_model||List[[RemoteTableListModel](../../models/data_sources/#remotetablelistmodel)]|
+|remote_table_list_model||List[[RemoteTableListModel](../../models/data_sources.md#remotetablelistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -175,10 +175,10 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas/sample_schema/tables^
 		-H "Accept: application/json"
@@ -186,7 +186,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
@@ -206,7 +206,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
@@ -228,7 +228,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
@@ -251,7 +251,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import get_remote_data_source_tables
@@ -278,7 +278,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "alreadyImported" : false
@@ -290,28 +290,28 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
 
-___  
-## test_connection  
-Checks if the given remote connection could be opened and the credentials are valid  
+___
+## test_connection
+Checks if the given remote connection could be opened and the credentials are valid
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/test_connection.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/datasource/testconnection  
+http://localhost:8888/api/datasource/testconnection
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[connection_test_model](../../models/data_sources/#connectiontestmodel)||[ConnectionTestModel](../../models/data_sources/#connectiontestmodel)|
+|[connection_test_model](../../models/data_sources.md#connectiontestmodel)||[ConnectionTestModel](../../models/data_sources.md#connectiontestmodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |verify_name_uniqueness|Verify if the connection name is unique, the default value is true|boolean| |
@@ -319,19 +319,19 @@ http://localhost:8888/api/datasource/testconnection
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|Basic connection model|[ConnectionModel](../../models/Common/#connectionmodel)| |
+|Basic connection model|[ConnectionModel](../../models/Common.md#connectionmodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/datasource/testconnection^
 		-H "Accept: application/json"^
@@ -342,7 +342,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import test_connection
@@ -416,7 +416,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import test_connection
@@ -492,7 +492,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import test_connection
@@ -569,7 +569,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.data_sources import test_connection
@@ -650,7 +650,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     { }
     ```

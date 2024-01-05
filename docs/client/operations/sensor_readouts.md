@@ -1,35 +1,35 @@
-Returns the complete sensor readouts of executed checks on tables and columns.  
+Returns the complete sensor readouts of executed checks on tables and columns.
 
 
-___  
-## get_column_monitoring_sensor_readouts  
-Returns a complete view of the sensor readouts for recent column level monitoring executions for the monitoring at a requested time scale  
+___
+## get_column_monitoring_sensor_readouts
+Returns a complete view of the sensor readouts for recent column level monitoring executions for the monitoring at a requested time scale
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_column_monitoring_sensor_readouts.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/{timeScale}/readouts
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts/#sensorreadoutslistmodel)]|
+|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts.md#sensorreadoutslistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
+|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -43,10 +43,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/readouts^
 		-H "Accept: application/json"
@@ -54,7 +54,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
@@ -77,7 +77,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
@@ -102,7 +102,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
@@ -128,7 +128,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_monitoring_sensor_readouts
@@ -158,7 +158,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -170,35 +170,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## get_column_partitioned_sensor_readouts  
-Returns a view of the sensor readouts for recent column level partitioned checks executions for a requested time scale  
+___
+## get_column_partitioned_sensor_readouts
+Returns a view of the sensor readouts for recent column level partitioned checks executions for a requested time scale
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_column_partitioned_sensor_readouts.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/partitioned/{timeScale}/readouts
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts/#sensorreadoutslistmodel)]|
+|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts.md#sensorreadoutslistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
 |column_name|Column name|string|:material-check-bold:|
-|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
+|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -212,10 +212,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/readouts^
 		-H "Accept: application/json"
@@ -223,7 +223,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
@@ -246,7 +246,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
@@ -271,7 +271,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
@@ -297,7 +297,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_partitioned_sensor_readouts
@@ -327,7 +327,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -339,28 +339,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## get_column_profiling_sensor_readouts  
-Returns sensor results of the recent check executions for all column level data quality profiling checks on a column  
+___
+## get_column_profiling_sensor_readouts
+Returns sensor results of the recent check executions for all column level data quality profiling checks on a column
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_column_profiling_sensor_readouts.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/profiling/readouts
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts/#sensorreadoutslistmodel)]|
+|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts.md#sensorreadoutslistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -380,10 +380,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/readouts^
 		-H "Accept: application/json"
@@ -391,7 +391,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
@@ -413,7 +413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
@@ -437,7 +437,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
@@ -462,7 +462,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_column_profiling_sensor_readouts
@@ -491,7 +491,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -503,34 +503,34 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## get_table_monitoring_sensor_readouts  
-Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale  
+___
+## get_table_monitoring_sensor_readouts
+Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_table_monitoring_sensor_readouts.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/monitoring/{timeScale}/readouts
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts/#sensorreadoutslistmodel)]|
+|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts.md#sensorreadoutslistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
+|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -544,10 +544,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/readouts^
 		-H "Accept: application/json"
@@ -555,7 +555,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
@@ -577,7 +577,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
@@ -601,7 +601,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
@@ -626,7 +626,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_monitoring_sensor_readouts
@@ -655,7 +655,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -667,34 +667,34 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## get_table_partitioned_sensor_readouts  
-Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale  
+___
+## get_table_partitioned_sensor_readouts
+Returns a complete view of sensor readouts for recent table level partitioned checks executions for a requested time scale
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_table_partitioned_sensor_readouts.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioned/{timeScale}/readouts
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts/#sensorreadoutslistmodel)]|
+|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts.md#sensorreadoutslistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
 |schema_name|Schema name|string|:material-check-bold:|
 |table_name|Table name|string|:material-check-bold:|
-|[time_scale](../../models/Common/#checktimescale)|Time scale|[CheckTimeScale](../../models/Common/#checktimescale)|:material-check-bold:|
+|[time_scale](../../models/Common.md#checktimescale)|Time scale|[CheckTimeScale](../../models/Common.md#checktimescale)|:material-check-bold:|
 |data_group|Data group|string| |
 |month_start|Month start boundary|string| |
 |month_end|Month end boundary|string| |
@@ -708,10 +708,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/readouts^
 		-H "Accept: application/json"
@@ -719,7 +719,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
@@ -741,7 +741,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
@@ -765,7 +765,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
@@ -790,7 +790,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_partitioned_sensor_readouts
@@ -819,7 +819,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]
@@ -831,28 +831,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 
-___  
-## get_table_profiling_sensor_readouts  
-Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table  
+___
+## get_table_profiling_sensor_readouts
+Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/sensor_readouts/get_table_profiling_sensor_readouts.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts  
+http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tables/{tableName}/profiling/readouts
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts/#sensorreadoutslistmodel)]|
+|sensor_readouts_list_model||List[[SensorReadoutsListModel](../../models/sensor_readouts.md#sensorreadoutslistmodel)]|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |connection_name|Connection name|string|:material-check-bold:|
@@ -871,10 +871,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/readouts^
 		-H "Accept: application/json"
@@ -882,7 +882,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
@@ -903,7 +903,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
@@ -926,7 +926,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
@@ -950,7 +950,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.sensor_readouts import get_table_profiling_sensor_readouts
@@ -978,7 +978,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "sensorReadoutEntries" : [ ]

@@ -1,30 +1,31 @@
-**expected strings in use count** checks  
+**expected strings in use count** checks
 
-**Description**  
+**Description**
 Column-level check that counts unique values in a string column and counts how many values out of a list of expected string values were found in the column.
  The check raises a data quality issue when the threshold of maximum number of missing values was exceeded (too many expected values were not found in the column).
  This check is useful for analysing columns with a low number of unique values, such as status codes, to detect that all status codes are in use in any row.
 
 ___
 
-## **profile expected strings in use count**  
-  
-**Check description**  
-Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).  
-  
+## **profile expected strings in use count**
+
+
+**Check description**
+Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|profile_expected_strings_in_use_count|profiling| |Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|profile_expected_strings_in_use_count|profiling| |Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison.md#max-missing)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=profile_expected_strings_in_use_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=profile_expected_strings_in_use_count
@@ -42,37 +43,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=profile_expected_strings_in_use_count
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      profiling_checks:
-        strings:
-          profile_expected_strings_in_use_count:
-            parameters:
-              expected_values:
-              - USD
-              - GBP
-              - EUR
-            warning:
-              max_missing: 1
-            error:
-              max_missing: 1
-            fatal:
-              max_missing: 2
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-26"
+
+```yaml hl_lines="10-23"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -94,17 +73,11 @@ spec:
               max_missing: 2
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -838,22 +811,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 44-49"
+    ```yaml hl_lines="8-18 35-40"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -884,12 +854,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                   max_missing: 2
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -899,7 +863,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1662,24 +1626,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily expected strings in use count**  
-  
-**Check description**  
-Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.  
-  
+## **daily expected strings in use count**
+
+
+**Check description**
+Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_expected_strings_in_use_count|monitoring|daily|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_expected_strings_in_use_count|monitoring|daily|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison.md#max-missing)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_expected_strings_in_use_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_expected_strings_in_use_count
@@ -1697,38 +1662,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_expected_strings_in_use_count
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        daily:
-          strings:
-            daily_expected_strings_in_use_count:
-              parameters:
-                expected_values:
-                - USD
-                - GBP
-                - EUR
-              warning:
-                max_missing: 1
-              error:
-                max_missing: 1
-              fatal:
-                max_missing: 2
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-27"
+
+```yaml hl_lines="10-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -1751,17 +1693,11 @@ spec:
                 max_missing: 2
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2495,22 +2431,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 45-50"
+    ```yaml hl_lines="8-18 36-41"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -2542,12 +2475,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_missing: 2
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -2557,7 +2484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -3320,24 +3247,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly expected strings in use count**  
-  
-**Check description**  
-Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.  
-  
+## **monthly expected strings in use count**
+
+
+**Check description**
+Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_expected_strings_in_use_count|monitoring|monthly|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_expected_strings_in_use_count|monitoring|monthly|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison.md#max-missing)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_expected_strings_in_use_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_expected_strings_in_use_count
@@ -3355,38 +3283,15 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_expected_strings_in_use_count
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      monitoring_checks:
-        monthly:
-          strings:
-            monthly_expected_strings_in_use_count:
-              parameters:
-                expected_values:
-                - USD
-                - GBP
-                - EUR
-              warning:
-                max_missing: 1
-              error:
-                max_missing: 1
-              fatal:
-                max_missing: 2
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="13-27"
+
+```yaml hl_lines="10-24"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
@@ -3409,17 +3314,11 @@ spec:
                 max_missing: 2
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
 
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -4153,22 +4052,19 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="11-21 45-50"
+    ```yaml hl_lines="8-18 36-41"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
       incremental_time_window:
         daily_partitioning_recent_days: 7
         monthly_partitioning_recent_months: 1
@@ -4200,12 +4096,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_missing: 2
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         country:
           labels:
           - column used as the first grouping key
@@ -4215,7 +4105,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -4978,24 +4868,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **daily partition expected strings in use count**  
-  
-**Check description**  
-Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.  
-  
+## **daily partition expected strings in use count**
+
+
+**Check description**
+Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_expected_strings_in_use_count|partitioned|daily|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_expected_strings_in_use_count|partitioned|daily|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison.md#max-missing)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_expected_strings_in_use_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_expected_strings_in_use_count
@@ -5013,38 +4904,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_expected_strings_in_use_count
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        daily:
-          strings:
-            daily_partition_expected_strings_in_use_count:
-              parameters:
-                expected_values:
-                - USD
-                - GBP
-                - EUR
-              warning:
-                max_missing: 1
-              error:
-                max_missing: 1
-              fatal:
-                max_missing: 2
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="14-28"
+
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -5068,12 +4937,6 @@ spec:
                 max_missing: 2
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -5083,7 +4946,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -5821,22 +5684,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-22 51-56"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -5869,12 +5730,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_missing: 2
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -5889,7 +5744,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -6650,24 +6505,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition expected strings in use count**  
-  
-**Check description**  
-Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.  
-  
+## **monthly partition expected strings in use count**
+
+
+**Check description**
+Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_expected_strings_in_use_count|partitioned|monthly|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison/#max-missing)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_expected_strings_in_use_count|partitioned|monthly|Reasonableness|[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)|[max_missing](../../../../reference/rules/Comparison.md#max-missing)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_expected_strings_in_use_count
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_expected_strings_in_use_count
@@ -6685,38 +6541,16 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_expected_strings_in_use_count
 ```
 
-**Check structure (YAML)**
-
-```yaml
-      partitioned_checks:
-        monthly:
-          strings:
-            monthly_partition_expected_strings_in_use_count:
-              parameters:
-                expected_values:
-                - USD
-                - GBP
-                - EUR
-              warning:
-                max_missing: 1
-              error:
-                max_missing: 1
-              fatal:
-                max_missing: 2
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
 
-```yaml hl_lines="14-28"
+
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
   timestamp_columns:
-    event_timestamp_column: col_event_timestamp
-    ingestion_timestamp_column: col_inserted_at
     partition_by_column: date_column
   incremental_time_window:
     daily_partitioning_recent_days: 7
@@ -6740,12 +6574,6 @@ spec:
                 max_missing: 2
       labels:
       - This is the column that is analyzed for data quality issues
-    col_event_timestamp:
-      labels:
-      - optional column that stores the timestamp when the event/transaction happened
-    col_inserted_at:
-      labels:
-      - optional column that stores the timestamp when row was ingested
     date_column:
       labels:
       - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -6755,7 +6583,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+[expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -7493,22 +7321,20 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="12-22 51-56"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
       timestamp_columns:
-        event_timestamp_column: col_event_timestamp
-        ingestion_timestamp_column: col_inserted_at
         partition_by_column: date_column
       incremental_time_window:
         daily_partitioning_recent_days: 7
@@ -7541,12 +7367,6 @@ Expand the *Configure with data grouping* section to see additional examples for
                     max_missing: 2
           labels:
           - This is the column that is analyzed for data quality issues
-        col_event_timestamp:
-          labels:
-          - optional column that stores the timestamp when the event/transaction happened
-        col_inserted_at:
-          labels:
-          - optional column that stores the timestamp when row was ingested
         date_column:
           labels:
           - "date or datetime column used as a daily or monthly partitioning key, dates\
@@ -7561,7 +7381,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors/#expected-strings-in-use-count)
+    [expected_strings_in_use_count](../../../../reference/sensors/column/strings-column-sensors.md#expected-strings-in-use-count)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"

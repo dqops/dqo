@@ -21,8 +21,8 @@ dqo> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="rule edit-f">`-f`</p><br/><p id="rule edit--ext">`--ext`</p><br/>|File type| |PYTHON<br/>YAML<br/>|

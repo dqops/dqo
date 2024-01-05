@@ -4,11 +4,11 @@
 ```
 column/datetime/date_match_format_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>DD.MM.YYYY<br/>DD-MM-YYYY<br/>|
@@ -16,9 +16,9 @@ Column level sensor that calculates the percentage of values that does fit a giv
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -53,7 +53,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -88,7 +88,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -122,7 +122,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -162,7 +162,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -197,7 +197,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -239,7 +239,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -275,7 +275,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -311,7 +311,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -346,7 +346,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -381,7 +381,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -429,15 +429,15 @@ ___
 ```
 column/datetime/date_values_in_future_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
 
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -484,7 +484,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -531,7 +531,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -578,7 +578,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -631,7 +631,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -678,7 +678,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -732,7 +732,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -779,7 +779,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
@@ -825,7 +825,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -872,7 +872,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -919,7 +919,7 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_order_by() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     
@@ -979,11 +979,11 @@ ___
 ```
 column/datetime/value_in_range_date_percent
 ```
-**Description**  
+**Description**
 Column level sensor that calculates the percent of non-negative values in a column.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Lower bound range variable.|date| ||
@@ -992,9 +992,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
 
 
 
-**SQL Template (Jinja2)**  
+**SQL Template (Jinja2)**
 === "BigQuery"
-      
+
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
@@ -1026,7 +1026,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "Databricks"
-      
+
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     
@@ -1058,7 +1058,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "MySQL"
-      
+
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     
@@ -1090,7 +1090,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "Oracle"
-      
+
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     
@@ -1128,7 +1128,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "PostgreSQL"
-      
+
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
@@ -1160,7 +1160,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "Presto"
-      
+
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     
@@ -1199,7 +1199,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "Redshift"
-      
+
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
@@ -1231,7 +1231,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "Snowflake"
-      
+
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
@@ -1263,7 +1263,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "Spark"
-      
+
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     
@@ -1295,7 +1295,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_order_by() -}}
     ```
 === "SQL Server"
-      
+
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
@@ -1343,7 +1343,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- render_ordering_column_names() -}}
     ```
 === "Trino"
-      
+
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     

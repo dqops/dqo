@@ -30,10 +30,7 @@ import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocum
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactory;
 import com.dqops.utils.docs.client.operations.examples.python.PythonExampleDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.client.operations.examples.serialization.PythonSerializerImpl;
-import com.dqops.utils.docs.files.DocumentationFolder;
-import com.dqops.utils.docs.files.DocumentationFolderFactory;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorService;
-import com.dqops.utils.docs.files.DocumentationFolderPostCorrectorServiceImpl;
+import com.dqops.utils.docs.files.*;
 import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.google.common.base.CaseFormat;
@@ -143,13 +140,13 @@ public class GeneratePythonDocumentationPostProcessor {
                 // Model use is restricted to a single controller.
                 String modelOccurrence = modelOccurrences.stream().findFirst().get();
                 modelDestination = baseModelDestination
-                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence))
-                        .resolve("#" + modelName);
+                        .resolve(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, modelOccurrence)
+                                + ".md" + "#" + modelName);
             } else {
                 // Model is used in several places.
                 modelDestination = baseModelDestination
-                        .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER)
-                        .resolve("#" + modelName);
+                        .resolve(ModelsDocumentationModelFactoryImpl.SHARED_MODELS_IDENTIFIER
+                                + ".md" + "#" + modelName);
             }
 
             linkageStore.put(modelName, modelDestination);
@@ -268,8 +265,13 @@ public class GeneratePythonDocumentationPostProcessor {
         DocumentationFolder docsRootFolder = DocumentationFolderFactory.loadCurrentFiles(docPath);
         DocumentationFolder docsRootFolderCorrected = DocumentationFolderFactory.loadCurrentFiles(docPath);
 
-        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService = new DocumentationFolderPostCorrectorServiceImpl();
-        documentationFolderPostCorrectorService.postProcessCorrect(projectRoot.toAbsolutePath(), docsRootFolderCorrected);
+        DocumentationFolderPostCorrectorService documentationFolderPostCorrectorService =
+                new DocumentationFolderPostCorrectorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostCorrectorService.postProcessCorrect(docsRootFolderCorrected);
         docsRootFolderCorrected.writeModifiedFiles(docsRootFolder);
+
+        DocumentationFolderPostValidatorService documentationFolderPostValidatorService =
+                new DocumentationFolderPostValidatorServiceImpl(projectRoot.toAbsolutePath().getParent());
+        documentationFolderPostValidatorService.postProcessValidate(docsRootFolderCorrected);
     }
 }

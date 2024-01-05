@@ -23,8 +23,8 @@ dqo> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings editor set-fw">`-fw`</p><br/><p id="settings editor set--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -58,8 +58,8 @@ dqo> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings editor remove-fw">`-fw`</p><br/><p id="settings editor remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -91,8 +91,8 @@ dqo> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings editor show-fw">`-fw`</p><br/><p id="settings editor show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -124,8 +124,8 @@ dqo> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings init-fw">`-fw`</p><br/><p id="settings init--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -157,8 +157,8 @@ dqo> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings remove-fw">`-fw`</p><br/><p id="settings remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -190,8 +190,8 @@ dqo> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings apikey set-fw">`-fw`</p><br/><p id="settings apikey set--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -223,8 +223,8 @@ dqo> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings apikey remove-fw">`-fw`</p><br/><p id="settings apikey remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -256,8 +256,8 @@ dqo> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings apikey show-fw">`-fw`</p><br/><p id="settings apikey show--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -289,8 +289,8 @@ dqo> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings timezone set-fw">`-fw`</p><br/><p id="settings timezone set--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -322,8 +322,8 @@ dqo> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings timezone remove-fw">`-fw`</p><br/><p id="settings timezone remove--file-write">`--file-write`</p><br/>|Write command response to a file| ||
@@ -355,8 +355,8 @@ dqo> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="settings timezone show-fw">`-fw`</p><br/><p id="settings timezone show--file-write">`--file-write`</p><br/>|Write command response to a file| ||

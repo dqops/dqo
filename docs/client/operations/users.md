@@ -1,23 +1,23 @@
-User management service  
+User management service
 
 
-___  
-## change_caller_password  
-Changes the password of the calling user. When the user is identified by the DQOps local API key, it is the user whose email is stored in the DQOps API Key.  
+___
+## change_caller_password
+Changes the password of the calling user. When the user is identified by the DQOps local API key, it is the user whose email is stored in the DQOps API Key.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_caller_password.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/mypassword  
+http://localhost:8888/api/mypassword
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
 |New Password|string| |
@@ -25,10 +25,10 @@ http://localhost:8888/api/mypassword
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/mypassword^
 		-H "Accept: application/json"^
@@ -39,7 +39,7 @@ http://localhost:8888/api/mypassword
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
@@ -59,7 +59,7 @@ http://localhost:8888/api/mypassword
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
@@ -81,7 +81,7 @@ http://localhost:8888/api/mypassword
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
@@ -104,7 +104,7 @@ http://localhost:8888/api/mypassword
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
@@ -132,21 +132,21 @@ http://localhost:8888/api/mypassword
 
 
 
-___  
-## change_user_password  
-Changes the password of a user identified by the email.  
+___
+## change_user_password
+Changes the password of a user identified by the email.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_user_password.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/users/{email}/password  
+http://localhost:8888/api/users/{email}/password
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |email|User&#x27;s email|string|:material-check-bold:|
@@ -154,8 +154,8 @@ http://localhost:8888/api/users/{email}/password
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
 |New Password|string| |
@@ -163,10 +163,10 @@ http://localhost:8888/api/users/{email}/password
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password^
 		-H "Accept: application/json"^
@@ -177,7 +177,7 @@ http://localhost:8888/api/users/{email}/password
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
@@ -198,7 +198,7 @@ http://localhost:8888/api/users/{email}/password
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
@@ -221,7 +221,7 @@ http://localhost:8888/api/users/{email}/password
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
@@ -245,7 +245,7 @@ http://localhost:8888/api/users/{email}/password
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
@@ -274,34 +274,34 @@ http://localhost:8888/api/users/{email}/password
 
 
 
-___  
-## create_user  
-Creates (adds) a new user to a multi-user account.  
+___
+## create_user
+Creates (adds) a new user to a multi-user account.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/create_user.py)
-  
+
 
 **POST**
 ```
-http://localhost:8888/api/users  
+http://localhost:8888/api/users
 ```
 
 
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|[DqoCloudUserModel](../../models/users/#dqocloudusermodel)| |
+|User model|[DqoCloudUserModel](../../models/users.md#dqocloudusermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X POST http://localhost:8888/api/users^
 		-H "Accept: application/json"^
@@ -312,7 +312,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
@@ -336,7 +336,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
@@ -362,7 +362,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
@@ -389,7 +389,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import create_user
@@ -421,21 +421,21 @@ http://localhost:8888/api/users
 
 
 
-___  
-## delete_user  
-Deletes a user from a multi-user account.  
+___
+## delete_user
+Deletes a user from a multi-user account.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/delete_user.py)
-  
+
 
 **DELETE**
 ```
-http://localhost:8888/api/users/{email}  
+http://localhost:8888/api/users/{email}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |email|User&#x27;s email|string|:material-check-bold:|
@@ -445,10 +445,10 @@ http://localhost:8888/api/users/{email}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com^
 		-H "Accept: application/json"
@@ -456,7 +456,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
@@ -474,7 +474,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
@@ -494,7 +494,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
@@ -515,7 +515,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
@@ -541,22 +541,22 @@ http://localhost:8888/api/users/{email}
 
 
 
-___  
-## get_all_users  
-Returns a list of all users.  
+___
+## get_all_users
+Returns a list of all users.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_all_users.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/users  
+http://localhost:8888/api/users
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|dqo_cloud_user_model||List[[DqoCloudUserModel](../../models/users/#dqocloudusermodel)]|
+|dqo_cloud_user_model||List[[DqoCloudUserModel](../../models/users.md#dqocloudusermodel)]|
 
 
 
@@ -565,10 +565,10 @@ http://localhost:8888/api/users
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/users^
 		-H "Accept: application/json"
@@ -576,7 +576,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_all_users
@@ -594,7 +594,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_all_users
@@ -614,7 +614,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_all_users
@@ -635,7 +635,7 @@ http://localhost:8888/api/users
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_all_users
@@ -660,7 +660,7 @@ http://localhost:8888/api/users
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     [ {
 	  "email" : "sample_user@mail.com",
@@ -675,28 +675,28 @@ http://localhost:8888/api/users
     ```
 
 
-___  
-## get_user  
-Returns the user model that describes the role of a user identified by an email  
+___
+## get_user
+Returns the user model that describes the role of a user identified by an email
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_user.py)
-  
+
 
 **GET**
 ```
-http://localhost:8888/api/users/{email}  
+http://localhost:8888/api/users/{email}
 ```
 
-**Return value**  
-  
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|[dqo_cloud_user_model](../../models/users/#dqocloudusermodel)||[DqoCloudUserModel](../../models/users/#dqocloudusermodel)|
+|[dqo_cloud_user_model](../../models/users.md#dqocloudusermodel)||[DqoCloudUserModel](../../models/users.md#dqocloudusermodel)|
 
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |email|User&#x27;s email|string|:material-check-bold:|
@@ -706,10 +706,10 @@ http://localhost:8888/api/users/{email}
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl http://localhost:8888/api/users/sample_user@mail.com^
 		-H "Accept: application/json"
@@ -717,7 +717,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_user
@@ -736,7 +736,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_user
@@ -757,7 +757,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_user
@@ -779,7 +779,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import get_user
@@ -805,7 +805,7 @@ http://localhost:8888/api/users/{email}
 
 
 
-??? "Return value sample"  
+??? "Return value sample"
     ```js
     {
 	  "email" : "sample_user@mail.com",
@@ -814,21 +814,21 @@ http://localhost:8888/api/users/{email}
     ```
 
 
-___  
-## update_user  
-Updates a user in a multi-user account. The user&#x27;s email cannot be changed.  
+___
+## update_user
+Updates a user in a multi-user account. The user&#x27;s email cannot be changed.
 [Source code](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/update_user.py)
-  
+
 
 **PUT**
 ```
-http://localhost:8888/api/users/{email}  
+http://localhost:8888/api/users/{email}
 ```
 
 
 
-**Parameters of this method are described below**  
-  
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 |email|User&#x27;s email|string|:material-check-bold:|
@@ -836,19 +836,19 @@ http://localhost:8888/api/users/{email}
 
 
 
-**Request body**  
-  
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
-|User model|[DqoCloudUserModel](../../models/users/#dqocloudusermodel)| |
+|User model|[DqoCloudUserModel](../../models/users.md#dqocloudusermodel)| |
 
 
 
 
-**Usage examples**  
+**Usage examples**
 
 === "curl"
-      
+
     ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com^
 		-H "Accept: application/json"^
@@ -859,7 +859,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
@@ -884,7 +884,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
@@ -911,7 +911,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python auth sync client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user
@@ -939,7 +939,7 @@ http://localhost:8888/api/users/{email}
     ```
 
 === "Python auth async client"
-      
+
     ```python
     from dqops import client
 	from dqops.client.api.users import update_user

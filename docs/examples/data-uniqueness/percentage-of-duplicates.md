@@ -16,7 +16,7 @@ The `unique_key` column contains unique key data. We want to verify the percent 
 **SOLUTION**
 
 We will verify the data of `bigquery-public-data.austin_311.311_service_requests` using monitoring
-[duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check.
+[duplicate_percent](../../../checks/column/uniqueness/duplicate-percent.md) column check.
 Our goal is to verify if the percentage of duplicated values in `unique_key` column does not exceed set thresholds.
 
 In this example, we will set three maximum percentage thresholds levels for the check:
@@ -25,7 +25,7 @@ In this example, we will set three maximum percentage thresholds levels for the 
 - error: 2.0%
 - fatal: 5.0%
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
 
 **VALUE**
 
@@ -49,9 +49,9 @@ The `unique_key` column of interest contains unique values.
 
 ## Running the checks in the example and evaluating the results using the user interface
 
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
 
-To execute the check prepared in the example using the [user interface](../../dqo-concepts/user-interface-overview/user-interface-overview.md):
+To execute the check prepared in the example using the [user interface](../../../dqo-concepts/user-interface-overview/user-interface-overview.md):
 
 ![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-duplicate-percent-checks1.png)
 
@@ -62,12 +62,12 @@ To execute the check prepared in the example using the [user interface](../../dq
 
 2. Select the table or column mentioned in the example description from the **tree view** on the left.
 
-    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../data-sources/index.md).
+    On the tree view you can find the tables that you have imported. Here is more about [adding connection and importing tables](../../../data-sources/index.md).
 
 
 3. Select the **Daily checks** tab.
 
-    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../dqo-concepts/user-interface-overview/user-interface-overview/#check-editor).
+    This tab displays a list of data quality checks in the check editor. Learn more about [navigating the check editor](../../../../dqo-concepts/user-interface-overview/user-interface-overview.md#check-editor).
 
 
 4. Run the activated check using the **Run check** button.
@@ -95,7 +95,7 @@ To execute the check prepared in the example using the [user interface](../../dq
 
     Synchronization ensures that the locally stored results are synced with your DQOps Cloud account, allowing you to view them on the dashboards.
 
-7. To review the results on the [data quality dashboards](../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
+7. To review the results on the [data quality dashboards](../../../working-with-dqo/data-quality-dashboards/data-quality-dashboards.md)
     go to the Data Quality Dashboards section and select the dashboard from the tree view on the left. 
  
     Below you can see the results displayed on the **Highest issue severity per column and day** dashboard located in Highest issue severity group.
@@ -145,9 +145,9 @@ After importing new tables, DQOps sets the schedule for 12:00 P.M. (noon) every 
 Once a schedule is set up for a particular connection, it will execute all the checks that have been configured across
 all tables associated with that connection.
 
-You can [read more about scheduling here](../../working-with-dqo/schedules/index.md).
+You can [read more about scheduling here](../../../working-with-dqo/schedules/index.md).
 
-You might also want to check the [Running checks with a scheduler](../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
+You might also want to check the [Running checks with a scheduler](../../data-quality-monitoring/running-checks-with-a-scheduler.md) example.
 
 ## YAML configuration file
 
@@ -161,7 +161,7 @@ In this example, we have set three maximum percentage thresholds levels for the 
 
 The highlighted fragments in the YAML file below represent the segment where the monitoring `daily_duplicate_percent` check is configured.
 
-If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/checks/index.md).
+If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../../dqo-concepts/checks/index.md).
 
 ```yaml hl_lines="8-21"
 apiVersion: dqo/v1
@@ -197,7 +197,7 @@ spec:
 
 ## Running the checks in the example and evaluating the results using DQOps Shell
 
-A detailed explanation of [how to run the example is described here](../../#running-the-use-cases).
+A detailed explanation of [how to run the example is described here](../../index.md#running-the-use-cases).
 
 To execute the check prepared in the example, run the following command in DQOps Shell:
 
@@ -262,14 +262,14 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the uniqueness of data in a column.
-By using the [duplicate_percent](../../checks/column/uniqueness/duplicate-percent.md) column check, we can monitor that
+By using the [duplicate_percent](../../../checks/column/uniqueness/duplicate-percent.md) column check, we can monitor that
 the percentage of duplicate values in a column does not exceed the maximum accepted percentage. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 
-- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../working-with-dqo/installation/run-dqo-as-docker-container.md).
-- For details on the [profile_duplicate_percent check used in this example, go to the check details section](../../checks/column/uniqueness/duplicate-percent.md).
-- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md). 
-- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
-- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
+- You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../../working-with-dqo/installation/install-dqo-using-pip.md) or [run DQOps as a Docker container](../../../working-with-dqo/installation/run-dqo-as-docker-container.md).
+- For details on the [profile_duplicate_percent check used in this example, go to the check details section](../../../checks/column/uniqueness/duplicate-percent.md).
+- DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../../working-with-dqo/incidents-and-notifications/incidents.md) and [Slack notifications](../../../integrations/slack/configuring-slack-notifications.md). 
+- The data in the table often comes from different data sources and vendors or is loaded by different data pipelines. Learn how [data grouping in DQOps](../../../working-with-dqo/set-up-data-grouping/set-up-data-grouping.md) can help you to calculate separate data quality KPI scores for different groups of rows.
+- DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](../../../working-with-dqo/basic-data-statistics/basic-data-statistics.md). 
 

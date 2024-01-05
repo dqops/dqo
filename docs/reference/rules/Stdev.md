@@ -6,12 +6,12 @@ ___
 ```
 stdev/change_multiply_moving_stdev_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of increments on a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
@@ -175,12 +175,12 @@ ___
 ```
 stdev/change_multiply_moving_stdev_60_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of increments on a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
@@ -344,12 +344,12 @@ ___
 ```
 stdev/change_multiply_moving_stdev_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of increments on a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
@@ -513,12 +513,12 @@ ___
 ```
 stdev/change_multiply_moving_stdev_within_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of increments on a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
@@ -662,12 +662,12 @@ ___
 ```
 stdev/change_multiply_moving_stdev_within_60_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of increments on a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
@@ -811,12 +811,12 @@ ___
 ```
 stdev/change_multiply_moving_stdev_within_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of increments on a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
@@ -960,12 +960,12 @@ ___
 ```
 stdev/multiply_moving_stdev_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
@@ -1125,12 +1125,12 @@ ___
 ```
 stdev/multiply_moving_stdev_60_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
@@ -1290,12 +1290,12 @@ ___
 ```
 stdev/multiply_moving_stdev_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev_above|How many multiples of the estimated standard deviation the current sensor readout could be above the moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||
@@ -1455,12 +1455,12 @@ ___
 ```
 stdev/multiply_moving_stdev_within_30_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 30 time periods (days, etc.) time window, but at least 10 readouts must exist to run the calculation.|double| ||
@@ -1600,12 +1600,12 @@ ___
 ```
 stdev/multiply_moving_stdev_within_60_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 60 time periods (days, etc.) time window, but at least 20 readouts must exist to run the calculation.|double| ||
@@ -1745,12 +1745,12 @@ ___
 ```
 stdev/multiply_moving_stdev_within_7_days
 ```
-**Description**  
+**Description**
 Data quality rule that verifies if a data quality sensor readout value
  doesn&#x27;t excessively deviate from the moving average of a time window.
 
-**Parameters**  
-  
+**Parameters**
+
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
 |multiply_stdev|How many multiples of the estimated standard deviation within the moving average the current sensor readout could be, with regards to the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 7 time periods (days, etc.) time window, but at least 3 readouts must exist to run the calculation.|double| ||

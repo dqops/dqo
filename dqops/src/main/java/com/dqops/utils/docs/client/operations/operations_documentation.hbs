@@ -1,19 +1,19 @@
-{{superiorDescription}}{{#with "  "}}{{.}}{{/with}}
+{{superiorDescription}}
 
 {{#each operationObjects}}
-___{{#with "  "}}{{.}}{{/with}}
-## {{operationPythonName}}{{#with "  "}}{{.}}{{/with}}
-{{operationDescription}}{{#with "  "}}{{.}}{{/with}}
+___
+## {{operationPythonName}}
+{{operationDescription}}
 [Source code]({{clientSourceUrl}})
-{{#with "  "}}{{.}}{{/with}}
+
 
 **{{apiCallMethod}}**
 ```
-{{apiCallUrl}}{{#with "  "}}{{.}}{{/with}}
+{{apiCallUrl}}
 ```
 {{#if returnValueField}}
-**Return value**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Return value**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 {{#with returnValueField}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|
@@ -21,8 +21,8 @@ ___{{#with "  "}}{{.}}{{/with}}
 {{/if}}
 
 {{#if parametersFields}}
-**Parameters of this method are described below**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Parameters of this method are described below**
+
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------|---------------------------------|-----------|-----------------|
 {{#each parametersFields}}|{{render-type typeModel yamlFieldName}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
@@ -30,8 +30,8 @@ ___{{#with "  "}}{{.}}{{/with}}
 {{/if}}
 
 {{#if requestBodyField}}
-**Request body**{{#with "  "}}{{.}}{{/with}}
-{{#with "  "}}{{.}}{{/with}}
+**Request body**
+
 |&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Required&nbsp;|
 |---------------------------------|-----------|-----------------|
 {{#with requestBodyField}}|{{helpText}}|{{render-type typeModel}}|{{checkmark required}}|
@@ -39,10 +39,10 @@ ___{{#with "  "}}{{.}}{{/with}}
 {{/if}}
 
 {{#if usageExamples}}
-**Usage examples**{{#with "  "}}{{.}}{{/with}}
+**Usage examples**
 {{#each usageExamples}}
 === "{{{executionMethod.navbarHeader}}}"
-    {{#with "  "}}{{.}}{{/with}}
+
     ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
@@ -50,7 +50,7 @@ ___{{#with "  "}}{{.}}{{/with}}
 {{/if}}
 
 {{#if returnValueSample}}
-??? "Return value sample"{{#with "  "}}{{.}}{{/with}}
+??? "Return value sample"
     ```js
     {{{returnValueSample}}}
     ```

@@ -23,8 +23,8 @@ dqo> sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="sensor edit-f">`-f`</p><br/><p id="sensor edit--ext">`--ext`</p><br/>|File type| |JINJA2<br/>YAML<br/>|

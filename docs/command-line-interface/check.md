@@ -45,8 +45,8 @@ dqo> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="check run-cat">`-cat`</p><br/><p id="check run--category">`--category`</p><br/>|Check category name (volume, nulls, numeric, etc.)| ||
@@ -110,8 +110,8 @@ dqo> check activate [-hno] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="check activate-cat">`-cat`</p><br/><p id="check activate--category">`--category`</p><br/>|Check category name (standard, nulls, numeric, etc.)| ||
@@ -162,8 +162,8 @@ dqo> check deactivate [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 
 ```
 
-**Options**  
-  
+**Options**
+
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
 |<p id="check deactivate-cat">`-cat`</p><br/><p id="check deactivate--category">`--category`</p><br/>|Check category name (standard, nulls, numeric, etc.)| ||

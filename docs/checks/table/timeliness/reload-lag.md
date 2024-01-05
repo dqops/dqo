@@ -1,6 +1,6 @@
-**reload lag** checks  
+**reload lag** checks
 
-**Description**  
+**Description**
 Table-level check that calculates maximum difference in days between ingestion timestamp and event timestamp rows.
  This check should be executed only as a partitioned check because this check finds the longest delay between the time that the row was created
  in the data source and the timestamp when the row was loaded into its daily or monthly partition.
@@ -9,24 +9,25 @@ Table-level check that calculates maximum difference in days between ingestion t
 
 ___
 
-## **daily partition reload lag**  
-  
-**Check description**  
-Daily partitioned check calculating the longest time a row waited to be load  
-  
+## **daily partition reload lag**
+
+
+**Check description**
+Daily partitioned check calculating the longest time a row waited to be load
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|daily_partition_reload_lag|partitioned|daily|Timeliness|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|daily_partition_reload_lag|partitioned|daily|Timeliness|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=daily_partition_reload_lag
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=daily_partition_reload_lag
@@ -44,24 +45,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=daily_partition_reload_lag
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    daily:
-      timeliness:
-        daily_partition_reload_lag:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -101,7 +87,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)
+[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -861,12 +847,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-20 43-48"
@@ -921,7 +907,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)
+    [partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
@@ -1704,24 +1690,25 @@ Expand the *Configure with data grouping* section to see additional examples for
 
 ___
 
-## **monthly partition reload lag**  
-  
-**Check description**  
-Monthly partitioned check calculating the longest time a row waited to be load  
-  
+## **monthly partition reload lag**
+
+
+**Check description**
+Monthly partitioned check calculating the longest time a row waited to be load
+
 |Check name|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|
 |----------|----------|----------|-----------------|-----------------|------------|
-|monthly_partition_reload_lag|partitioned|monthly|Timeliness|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/Comparison/#max-days)|
-  
-**Activate check (Shell)**  
-Activate this data quality using the [check activate](../../../../command-line-interface/check/#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
+|monthly_partition_reload_lag|partitioned|monthly|Timeliness|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)|[max_days](../../../../reference/rules/Comparison.md#max-days)|
+
+**Activate check (Shell)**
+Activate this data quality using the [check activate](../../../../command-line-interface/check.md#dqo-check-activate) CLI command, providing the connection name, check name, and all other filters.
 
 ```
 dqo> check activate -c=connection_name -ch=monthly_partition_reload_lag
 ```
 
-**Run check (Shell)**  
-Run this data quality check using the [check run](../../../../command-line-interface/check/#dqo-check-run) CLI command by providing the check name and all other targeting filters.
+**Run check (Shell)**
+Run this data quality check using the [check run](../../../../command-line-interface/check.md#dqo-check-run) CLI command by providing the check name and all other targeting filters.
 
 ```
 dqo> check run -ch=monthly_partition_reload_lag
@@ -1739,24 +1726,9 @@ It is additionally feasible to run this check on a specific table. In order to d
 dqo> check run -c=connection_name -t=schema_name.table_name -ch=monthly_partition_reload_lag
 ```
 
-**Check structure (YAML)**
-
-```yaml
-  partitioned_checks:
-    monthly:
-      timeliness:
-        monthly_partition_reload_lag:
-          warning:
-            max_days: 1.0
-          error:
-            max_days: 2.0
-          fatal:
-            max_days: 1.0
-```
-
-**Sample configuration (YAML)**  
+**Sample configuration (YAML)**
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
-  
+
 
 ```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -1796,7 +1768,7 @@ spec:
 ```
 
 Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)
+[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)
 [sensor](../../../dqo-concepts/sensors/sensors.md).
 
 ??? example "BigQuery"
@@ -2556,12 +2528,12 @@ Please expand the database engine name section to see the SQL query rendered by 
         ORDER BY time_period, time_period_utc
         ```
 
-  
+
 Expand the *Configure with data grouping* section to see additional examples for configuring this data quality checks to use data grouping (GROUP BY).
 
 ??? info "Configuration with data grouping"
-      
-    **Sample configuration with data grouping enabled (YAML)**  
+
+    **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
     ```yaml hl_lines="12-20 43-48"
@@ -2616,7 +2588,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     ```
 
     Please expand the database engine name section to see the SQL query rendered by a Jinja2 template for the
-    [partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)
+    [partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors.md#partition-reload-lag)
     [sensor](../../../dqo-concepts/sensors/sensors.md).
 
     ??? example "BigQuery"
