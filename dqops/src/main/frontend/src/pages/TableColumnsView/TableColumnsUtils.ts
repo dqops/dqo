@@ -12,8 +12,8 @@ export const renderValue = (value: any) => {
 };
 
 export const cutString = (text: string) => {
-  if (text.length > 22 && isNaN(Number(text))) {
-    return text.slice(0, 22) + '...';
+  if (text.length > 19 && isNaN(Number(text))) {
+    return text.slice(0, 19) + '...';
   } else {
     return text;
   }
