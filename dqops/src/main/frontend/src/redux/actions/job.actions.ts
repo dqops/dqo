@@ -20,14 +20,12 @@ import { JobApiClient } from '../../services/apiClient';
 import { JOB_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
-  CheckTemplate,
   DqoJobQueueIncrementalSnapshotModel,
   DqoJobQueueInitialSnapshotModel,
   DqoUserProfileModel,
   ImportTablesQueueJobParameters
 } from '../../api';
 import { JOB_CHANGES_RETRY_INTERVAL } from '../../shared/config';
-import { IFilterTemplate } from '../../shared/constants';
 
 export const getJobsRequest = () => ({
   type: JOB_ACTION.GET_JOBS
@@ -139,17 +137,3 @@ export const setUserProfile = (userProfile : DqoUserProfileModel) => ({
   type: JOB_ACTION.SET_USER_PROFILE,
   userProfile
 });
-
-export const setMulticheckFilters = (
-  multiCheckFilters: IFilterTemplate
-) => ({
-  type: JOB_ACTION.SET_MULTICHECK_FILTERS,
-  multiCheckFilters
-})
-
-export const setMultiCheckSearchedChecks = (
-  multiCheckSearchedChecks: CheckTemplate[]
-) => ({
-  type: JOB_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
-  multiCheckSearchedChecks
-})

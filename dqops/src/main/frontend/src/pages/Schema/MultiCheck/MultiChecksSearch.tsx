@@ -21,7 +21,7 @@ export default function MultiChecksSearch({
       <div className="w-1/4">
         <div className="max-w-120">
           <Input
-            value={filterParameters.tableNamePattern}
+            value={filterParameters?.tableNamePattern}
             label="Table name"
             placeholder="Enter table name pattern"
             onChange={(e) =>
@@ -33,7 +33,7 @@ export default function MultiChecksSearch({
       <div className="w-1/4 px-10">
         <div className="max-w-120">
           <Input
-            value={filterParameters.columnNamePattern}
+            value={filterParameters?.columnNamePattern}
             label="Column name"
             placeholder="Enter column name pattern"
             onChange={(e) =>
@@ -41,32 +41,32 @@ export default function MultiChecksSearch({
                 columnNamePattern: e.target.value
               })
             }
-            disabled={filterParameters.checkTarget === 'table'}
+            disabled={filterParameters?.checkTarget === 'table'}
           />
         </div>
       </div>
       <div className="w-1/4 px-10">
         <div className="max-w-120">
           <Input
-            value={filterParameters.columnDataType}
+            value={filterParameters?.columnDataType}
             label="Column data type"
             placeholder="Enter data type"
             onChange={(e) =>
               onChangeFilterParameters({ columnDataType: e.target.value })
             }
-            disabled={filterParameters.checkTarget === 'table'}
+            disabled={filterParameters?.checkTarget === 'table'}
           />
         </div>
       </div>
       <div className="w-1/4 flex items-center gap-x-8 justify-end">
         <Checkbox
-          checked={filterParameters.activeOffCheck}
-          onChange={() =>  onChangeFilterParameters({ activeOffCheck: !filterParameters.activeOffCheck })}
+          checked={filterParameters?.activeOffCheck}
+          onChange={() =>  onChangeFilterParameters({ activeOffCheck: !filterParameters?.activeOffCheck })}
           label={"Include also inactive checks"}
         />
         <Button
           label="Search"
-          color={filterParameters.checkName ? 'primary' : 'secondary'}
+          color={filterParameters?.checkName ? 'primary' : 'secondary'}
           onClick={searchChecks}
         />
       </div>
