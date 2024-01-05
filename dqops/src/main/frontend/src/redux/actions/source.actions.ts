@@ -974,28 +974,26 @@ export const closeCheck = (
   data: checkName
 });
 
-export const setMulticheckFilters = (
+export const setMultiCheckFilters = (
   checkType: CheckTypes,
   activeTab: string,
   multiCheckFilters: IFilterTemplate,
- // timeScale: 'daily' | 'monthly' | 'advanced'
+  timeScale: 'daily' | 'monthly' | 'advanced'
 ) => ({
   type: SOURCE_ACTION.SET_MULTICHECK_FILTERS,
-  // data: {[timeScale ?? '']: multiCheckFilters},
-  data: multiCheckFilters,
+  data: {[timeScale]: multiCheckFilters},
   activeTab,
   checkType,
-//  timeScale
 })
 
 export const setMultiCheckSearchedChecks = (
   checkType: CheckTypes,
   activeTab: string,
   multiCheckSearchedChecks: CheckTemplate[],
-  timeScale?: 'daily' | 'monthly' | 'advanced'
+  timeScale: 'daily' | 'monthly' | 'advanced'
 ) => ({
   type: SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS,
-  data: multiCheckSearchedChecks,
+  data: {[timeScale]: multiCheckSearchedChecks},
   activeTab,
   checkType,
   timeScale 

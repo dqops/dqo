@@ -83,27 +83,9 @@ const setActiveTabState = (
   action: Action,
   data: Record<string, unknown>
 ) => {
-  console.log(state, action, data)
   const newState = state ? structuredClone(state) : state;
   const activeTab = action?.activeTab || newState[action.checkType]?.activeTab;
-//   console.log(newState, activeTab)
-//   console.log({...newState,
-//     [action.checkType]: {
-//       ...newState[action.checkType],
-//       tabs:
-//         newState[action.checkType]?.tabs?.map((item) =>
-//           item.value === activeTab
-//             ? {
-//                 ...item,
-//                 state: {
-//                   ...item.state,
-//                   ...data
-//                 }
-//               }
-//             : item
-//         ) || []
-//     }
-// })
+  
   return {
     ...newState,
     [action.checkType]: {
@@ -1362,14 +1344,29 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     }
     case SOURCE_ACTION.SET_MULTICHECK_FILTERS: {
-      console.log(action)
-        return setActiveTabState(state, action, {
-          multiCheckFilters: action.data
-        })
-    }
-    case SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {
+      const firstState =
+      state[action.checkType]?.tabs.find(
+        (item) => item.value === action.activeTab
+      )?.state || {};
+
+      const checksState: Record<string, any> =
+      firstState.multiCheckFilters || ({} as any);
+
       return setActiveTabState(state, action, {
-        multiCheckSearchedChecks: action.data
+        multiCheckFilters: {...checksState, ...action.data}
+      })
+    }
+    case SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {      
+      const firstState =
+      state[action.checkType]?.tabs.find(
+        (item) => item.value === action.activeTab
+      )?.state || {};
+
+      const checksState: Record<string, any> =
+      firstState.multiCheckSearchedChecks || ({} as any);
+
+      return setActiveTabState(state, action, {
+        multiCheckSearchedChecks: {...checksState, ...action.data}
       })
     }
     default:
