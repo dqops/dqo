@@ -28,44 +28,27 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality check readout is between begin and end values, defined as min_count and max_count.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinCountRuleWarningParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class CountBetweenRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<CountBetweenRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Long minCount = 0L;
+    @JsonPropertyDescription("Minimum accepted count (inclusive), leave empty when the limit is not assigned.")
+    @SampleValues(values = "10")
+    private Long minCount;
+
+    @JsonPropertyDescription("Maximum accepted count (inclusive), leave empty when the limit is not assigned.")
+    @SampleValues(values = "20")
+    private Long maxCount;
 
     /**
-     * Default constructor, the minimum accepted value is 0.
-     */
-    public MinCountRuleWarningParametersSpec() {
-    }
-
-    /**
-     * Creates a rule with a given value.
-     * @param minCount Minimum accepted value.
-     */
-    public MinCountRuleWarningParametersSpec(Long minCount) {
-        this.minCount = minCount;
-    }
-
-    /**
-     * Creates a rule with a given value.
-     * @param minCount Minimum accepted value.
-     */
-    public MinCountRuleWarningParametersSpec(int minCount) {
-        this.minCount = (long)minCount;
-    }
-
-    /**
-     * Minimum value for a data quality check readout, for example a minimum row count.
+     * Returns a minimum value for a data quality check readout, for example a minimum row count.
      * @return Minimum value for a data quality check readout.
      */
     public Long getMinCount() {
@@ -73,12 +56,29 @@ public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpe
     }
 
     /**
-     * Changes the minimum value (threshold) for a data quality readout.
-     * @param minCount Minimum value.
+     * Sets a minimum data quality check readout that is accepted, for example a minimum row count.
+     * @param minCount Minimum value that is accepted.
      */
     public void setMinCount(Long minCount) {
-        this.setDirtyIf(!Objects.equals(this.minCount, minCount));
+		this.setDirtyIf(!Objects.equals(this.minCount, minCount));
         this.minCount = minCount;
+    }
+
+    /**
+     * Returns a maximum value for a data quality check readout, for example a maximum row count.
+     * @return Maximum value for a data quality check readout.
+     */
+    public Long getMaxCount() {
+        return maxCount;
+    }
+
+    /**
+     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
+     * @param maxCount Maximum value that is accepted.
+     */
+    public void setMaxCount(Long maxCount) {
+        this.setDirtyIf(!Objects.equals(this.maxCount, maxCount));
+        this.maxCount = maxCount;
     }
 
     /**
@@ -98,6 +98,6 @@ public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpe
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/min_count";
+        return "comparison/count_between";
     }
 }

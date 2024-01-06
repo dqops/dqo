@@ -19,14 +19,9 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenIntsRuleParametersSpec:
-    from_: int
-    to: int
-
-    def __getattr__(self, name):
-        if name == "from":
-            return self.from_ if hasattr(self, 'from_') else None
-        return object.__getattribute__(self, name)
+class CountBetweenRuleParametersSpec:
+    min_count: int
+    max_count: int
 
 
 class HistoricDataPoint:
@@ -44,7 +39,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BetweenIntsRuleParametersSpec
+    parameters: CountBetweenRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -71,8 +66,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = getattr(rule_parameters.parameters, "from") if hasattr(rule_parameters.parameters, 'from') else None
-    upper_bound = rule_parameters.parameters.to if hasattr(rule_parameters.parameters, 'to') else None
+    lower_bound = rule_parameters.parameters.min_count if hasattr(rule_parameters.parameters, 'min_count') else None
+    upper_bound = rule_parameters.parameters.max_count if hasattr(rule_parameters.parameters, 'max_count') else None
     passed = (lower_bound if lower_bound is not None else rule_parameters.actual_value) <= rule_parameters.actual_value <= (upper_bound if upper_bound is not None else rule_parameters.actual_value)
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

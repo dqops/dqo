@@ -16578,15 +16578,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinCountRuleWarningParametersSpec"
+        $ref: "#/definitions/CountBetweenRuleParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ nulls in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinCountRule0ParametersSpec"
+        $ref: "#/definitions/CountBetweenRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinCountRuleFatalParametersSpec"
+        $ref: "#/definitions/CountBetweenRuleParametersSpec"
   ColumnDistinctPercentAnomalyStationaryCheckSpec:
     type: "object"
     properties:
@@ -28104,6 +28104,19 @@ definitions:
         type: "string"
         description: "Optional error message when the status is not \"SUCCESS\""
     description: "Connection test status result"
+  CountBetweenRuleParametersSpec:
+    type: "object"
+    properties:
+      min_count:
+        type: "integer"
+        format: "int64"
+        description: "Minimum accepted count (inclusive), leave empty when the limit\
+          \ is not assigned."
+      max_count:
+        type: "integer"
+        format: "int64"
+        description: "Maximum accepted count (inclusive), leave empty when the limit\
+          \ is not assigned."
   CustomCheckSpec:
     type: "object"
     properties:
@@ -29536,14 +29549,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinCountRule0ParametersSpec:
-    type: "object"
-    properties:
-      min_count:
-        type: "integer"
-        format: "int64"
-        description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
   MinCountRule1ParametersSpec:
     type: "object"
