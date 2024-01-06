@@ -166,7 +166,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnStringsProfilingChecksSpec col21stringChecksSpec = new ColumnStringsProfilingChecksSpec();
         ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
-        MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec countRule0ParametersSpec = new MaxCountRule0ErrorParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
         MaxCountRule100ParametersSpec countRule0ParametersSpec1 = new MaxCountRule100ParametersSpec();
         countRule0ParametersSpec1.setMaxCount(100L);

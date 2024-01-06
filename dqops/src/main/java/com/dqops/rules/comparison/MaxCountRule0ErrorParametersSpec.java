@@ -15,6 +15,7 @@
  */
 package com.dqops.rules.comparison;
 
+import com.dqops.metadata.fields.SampleValues;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.AbstractRuleParametersSpec;
@@ -33,21 +34,22 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxCountRule10ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MaxCountRule10ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxCountRule0ErrorParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxCountRule0ErrorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    public MaxCountRule10ParametersSpec() {
+    public MaxCountRule0ErrorParametersSpec() {
     }
 
-    public MaxCountRule10ParametersSpec(Long maxCount) {
+    public MaxCountRule0ErrorParametersSpec(Long maxCount) {
         this.maxCount = maxCount;
     }
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
-    private Long maxCount = 10L;
+    @SampleValues(values = { "10" })
+    private Long maxCount = 0L;
 
     /**
      * Returns a maximum value for a data quality check readout, for example a maximum row count.
@@ -86,10 +88,10 @@ public class MaxCountRule10ParametersSpec extends AbstractRuleParametersSpec {
         return "comparison/max_count";
     }
 
-    public static class MaxCountRule10ParametersSpecSampleFactory implements SampleValueFactory<MaxCountRule10ParametersSpec> {
+    public static class MaxCountRule10ParametersSpecSampleFactory implements SampleValueFactory<MaxCountRule0ErrorParametersSpec> {
         @Override
-        public MaxCountRule10ParametersSpec createSample() {
-            return new MaxCountRule10ParametersSpec();
+        public MaxCountRule0ErrorParametersSpec createSample() {
+            return new MaxCountRule0ErrorParametersSpec();
         }
     }
 }

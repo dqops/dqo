@@ -288,7 +288,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
         MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
@@ -323,7 +323,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
         MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
@@ -361,7 +361,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
-        MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ErrorParametersSpec maxCountRule2 = new MaxCountRule0ErrorParametersSpec();
         maxCountRule2.setMaxCount(20L);
         MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);

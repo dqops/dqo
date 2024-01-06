@@ -65,7 +65,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalker;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
@@ -115,7 +115,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnNullsProfilingChecksSpec columnNullsProfilingChecksSpec = new ColumnNullsProfilingChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
-        columnNullsCountCheckSpec.setError(new MaxCountRule10ParametersSpec());
+        columnNullsCountCheckSpec.setError(new MaxCountRule0ErrorParametersSpec());
         columnNullsProfilingChecksSpec.setProfileNullsCount(columnNullsCountCheckSpec);
         columnProfilingCheckCategoriesSpec.setNulls(columnNullsProfilingChecksSpec);
         columnSpec.setProfilingChecks(columnProfilingCheckCategoriesSpec);

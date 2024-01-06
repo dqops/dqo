@@ -17009,7 +17009,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ nulls in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -17651,7 +17651,7 @@ definitions:
       error:
         description: "Default alerting threshold for a set number of rows with invalid\
           \ latitude value in a column that raises a data quality alert"
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -17712,7 +17712,7 @@ definitions:
       error:
         description: "Default alerting threshold for a set number of rows with invalid\
           \ longitude value in a column that raises a data quality alert"
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -18860,7 +18860,7 @@ definitions:
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -18982,7 +18982,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ non-negative values in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -19531,7 +19531,7 @@ definitions:
       error:
         description: "Default alerting threshold for a set number of rows with null\
           \ values in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -22689,7 +22689,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows failing\
           \ the custom SQL condition (expression) that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue when\
           \ a given number of rows failed the custom SQL condition (expression). A\
@@ -23096,7 +23096,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ empty strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23218,7 +23218,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid emails in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23279,7 +23279,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid IP4 address in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23340,7 +23340,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid IP6 address in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23401,7 +23401,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid uuid in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23463,7 +23463,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows with\
           \ strings with a length above the indicated by the user length in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23587,7 +23587,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows with\
           \ strings with a length below the indicated by the user length in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24140,7 +24140,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ not matching date regex in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24201,7 +24201,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ not matching regex in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24263,7 +24263,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows with\
           \ a null placeholder strings in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24511,7 +24511,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows with\
           \ surrounded by whitespace strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24948,7 +24948,7 @@ definitions:
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ whitespace strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -27388,7 +27388,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values with a value above the indicated by the user value in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -27512,7 +27512,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values with a value below the indicated by the user value in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -29350,6 +29350,14 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Count of open (new) data quality incidents."
+  MaxCountRule0ErrorParametersSpec:
+    type: "object"
+    properties:
+      max_count:
+        type: "integer"
+        format: "int64"
+        description: "Maximum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
   MaxCountRule0WarningParametersSpec:
     type: "object"
     properties:
@@ -29359,14 +29367,6 @@ definitions:
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
   MaxCountRule100ParametersSpec:
-    type: "object"
-    properties:
-      max_count:
-        type: "integer"
-        format: "int64"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxCountRule10ParametersSpec:
     type: "object"
     properties:
       max_count:
@@ -33852,7 +33852,7 @@ definitions:
         description: "Default alerting threshold for a maximum number of rows failing\
           \ the custom SQL condition (expression) that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MaxCountRule10ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue when\
           \ a given number of rows failed the custom SQL condition (expression). A\

@@ -21,7 +21,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.sensors.column.uniqueness.ColumnUniquenessDuplicateCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnDuplicateCountCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessDuplicateCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule100ParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessDuplicateCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDuplicateCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -60,7 +60,7 @@ public class ColumnDuplicateCountCheckSpec
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec error;
+    private MaxCountRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -112,7 +112,7 @@ public class ColumnDuplicateCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule10ParametersSpec getError() {
+    public MaxCountRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -120,7 +120,7 @@ public class ColumnDuplicateCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule10ParametersSpec error) {
+    public void setError(MaxCountRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
