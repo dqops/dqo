@@ -502,6 +502,7 @@ const DataQualityChecks = ({
               )}
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
+              isFiltered= {isFiltered}
             />
           ))}
           {isFiltered !== true &&
