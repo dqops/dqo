@@ -8,3 +8,4 @@ spec:
     is one of values from a list of expected values or the column value is null. Verifies
     that the percentage of rows having a valid column value does not exceed the minimum
     accepted percentage.
+  standard: true

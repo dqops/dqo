@@ -8,3 +8,4 @@ spec:
     a table and total sum of a column of another table does not exceed the set number.
     Stores the most recent captured value for each day when the data quality check
     was evaluated.
+  standard: true

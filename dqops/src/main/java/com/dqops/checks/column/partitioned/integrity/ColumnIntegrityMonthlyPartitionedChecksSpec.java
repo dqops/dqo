@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,51 +41,51 @@ import java.util.Objects;
 public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_foreign_key_not_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
-            put("monthly_partition_foreign_key_match_percent", o -> o.monthlyPartitionForeignKeyMatchPercent);
+            put("monthly_partition_lookup_key_not_found", o -> o.monthlyPartitionLookupKeyNotFound);
+            put("monthly_partition_lookup_key_found_percent", o -> o.monthlyPartitionLookupKeyFoundPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyPartitionForeignKeyNotMatchCount;
+    private ColumnIntegrityLookupKeyNotFoundCountCheckSpec monthlyPartitionLookupKeyNotFound;
 
     @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionForeignKeyMatchPercent;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionLookupKeyFoundPercent;
 
     /**
      * Returns an integrity value not match count check.
      * @return Integrity value not match count check.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getMonthlyPartitionForeignKeyNotMatchCount() {
-        return monthlyPartitionForeignKeyNotMatchCount;
+    public ColumnIntegrityLookupKeyNotFoundCountCheckSpec getMonthlyPartitionLookupKeyNotFound() {
+        return monthlyPartitionLookupKeyNotFound;
     }
 
     /**
      * Sets a new definition of an integrity value not match count check.
-     * @param monthlyPartitionForeignKeyNotMatchCount Integrity value not match count check.
+     * @param monthlyPartitionLookupKeyNotFound Integrity value not match count check.
      */
-    public void setMonthlyPartitionForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyPartitionForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyNotMatchCount, monthlyPartitionForeignKeyNotMatchCount));
-        this.monthlyPartitionForeignKeyNotMatchCount = monthlyPartitionForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_foreign_key_not_match_count");
+    public void setMonthlyPartitionLookupKeyNotFound(ColumnIntegrityLookupKeyNotFoundCountCheckSpec monthlyPartitionLookupKeyNotFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionLookupKeyNotFound, monthlyPartitionLookupKeyNotFound));
+        this.monthlyPartitionLookupKeyNotFound = monthlyPartitionLookupKeyNotFound;
+        propagateHierarchyIdToField(monthlyPartitionLookupKeyNotFound, "monthly_partition_lookup_key_not_found");
     }
 
     /**
      * Returns an integrity value match percent check.
      * @return Integrity value match percent check.
      */
-    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getMonthlyPartitionForeignKeyMatchPercent() {
-        return monthlyPartitionForeignKeyMatchPercent;
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getMonthlyPartitionLookupKeyFoundPercent() {
+        return monthlyPartitionLookupKeyFoundPercent;
     }
 
     /**
      * Sets a new definition of an integrity value match percent check.
-     * @param monthlyPartitionForeignKeyMatchPercent Integrity value match percent check.
+     * @param monthlyPartitionLookupKeyFoundPercent Integrity value match percent check.
      */
-    public void setMonthlyPartitionForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionForeignKeyMatchPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyMatchPercent, monthlyPartitionForeignKeyMatchPercent));
-        this.monthlyPartitionForeignKeyMatchPercent = monthlyPartitionForeignKeyMatchPercent;
-        propagateHierarchyIdToField(monthlyPartitionForeignKeyMatchPercent, "monthly_partition_foreign_key_match_percent");
+    public void setMonthlyPartitionLookupKeyFoundPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionLookupKeyFoundPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionLookupKeyFoundPercent, monthlyPartitionLookupKeyFoundPercent));
+        this.monthlyPartitionLookupKeyFoundPercent = monthlyPartitionLookupKeyFoundPercent;
+        propagateHierarchyIdToField(monthlyPartitionLookupKeyFoundPercent, "monthly_partition_lookup_key_found_percent");
     }
 
     /**

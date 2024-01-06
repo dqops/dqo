@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/max_percent
   help_text: Verifies that the percentage of rows that contains valid emails in a
     column does not exceed the minimum accepted percentage.
+  standard: true

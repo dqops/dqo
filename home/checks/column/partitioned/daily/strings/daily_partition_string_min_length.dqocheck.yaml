@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the length of string in a column does not fall below the
     minimum accepted length. Creates a separate data quality check (and an alert)
     for each daily partition.
+  standard: true

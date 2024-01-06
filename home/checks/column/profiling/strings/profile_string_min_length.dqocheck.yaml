@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/min_value
   help_text: Verifies that the length of string in a column does not fall below the
     minimum accepted length.
+  standard: true

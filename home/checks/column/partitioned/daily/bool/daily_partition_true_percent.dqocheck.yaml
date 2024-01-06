@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the percentage of true values in a column does not exceed
     the minimum accepted percentage. Creates a separate data quality check (and an
     alert) for each daily partition.
+  standard: true

@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/equals_1
   help_text: Checks the metadata of the monitored table and verifies if the column
     exists.
+  standard: true

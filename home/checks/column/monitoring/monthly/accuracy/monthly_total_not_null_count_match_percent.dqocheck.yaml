@@ -8,3 +8,4 @@ spec:
     a column in a table and total not null count of a column of another table does
     not exceed the set number. Stores the most recent row count for each month when
     the data quality check was evaluated.
+  standard: true

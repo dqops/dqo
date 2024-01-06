@@ -20,5 +20,3 @@ spec:
       \ is a time window of 30 periods (days, etc.), but at least 10 readouts must\
       \ exist to run the calculation."
     data_type: double
-    sample_values:
-    - 0.1

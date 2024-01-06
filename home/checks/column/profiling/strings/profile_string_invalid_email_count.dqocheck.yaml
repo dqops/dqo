@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/max_count
   help_text: Verifies that the number of invalid emails in a column does not exceed
     the maximum accepted count.
+  standard: true

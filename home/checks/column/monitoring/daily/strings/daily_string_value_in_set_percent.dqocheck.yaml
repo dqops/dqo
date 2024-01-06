@@ -9,3 +9,4 @@ spec:
     that the percentage of rows having a valid column value does not exceed the minimum
     accepted percentage. Stores the most recent captured value for each day when the
     data quality check was evaluated.
+  standard: true

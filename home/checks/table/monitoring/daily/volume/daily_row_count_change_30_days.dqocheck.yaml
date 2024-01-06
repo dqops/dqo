@@ -5,5 +5,5 @@ spec:
   sensor_name: table/volume/row_count
   rule_name: change/change_percent_30_days
   help_text: Verifies that the total row count of the tested table has changed by
-    a fixed rate since the last readout from last month. Allows for exact match to
-    readouts from 30 days ago or past readouts lookup.
+    a fixed rate since the last readout from the last month. Allows for exact match
+    to readouts from 30 days ago or past readouts lookup.

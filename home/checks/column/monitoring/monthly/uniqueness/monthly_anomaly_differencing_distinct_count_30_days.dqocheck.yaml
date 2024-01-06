@@ -1,8 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/uniqueness/distinct_count
-  rule_name: percentile/anomaly_differencing_percentile_moving_average_30_days
-  help_text: Verifies that the distinct count in a monitored column is within a two-tailed
-    percentile from measurements made during the last 30 days.

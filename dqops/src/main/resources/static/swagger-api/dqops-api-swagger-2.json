@@ -19255,11 +19255,11 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "daily_foreign_key_not_match_count" : {
+        "daily_lookup_key_not_found" : {
           "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
+          "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
-        "daily_foreign_key_match_percent" : {
+        "daily_lookup_key_found_percent" : {
           "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
@@ -19275,11 +19275,11 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "daily_partition_foreign_key_not_match_count" : {
+        "daily_partition_lookup_key_not_found" : {
           "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
+          "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
-        "daily_partition_foreign_key_match_percent" : {
+        "daily_partition_lookup_key_found_percent" : {
           "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
@@ -19324,7 +19324,7 @@
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
         "parameters" : {
-          "description" : "Data quality check parameters",
+          "description" : "Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec"
         },
         "warning" : {
@@ -19358,7 +19358,24 @@
         }
       }
     },
-    "ColumnIntegrityForeignKeyNotMatchCountCheckSpec" : {
+    "ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        },
+        "foreign_table" : {
+          "type" : "string",
+          "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
+        },
+        "foreign_column" : {
+          "type" : "string",
+          "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+        }
+      }
+    },
+    "ColumnIntegrityLookupKeyNotFoundCountCheckSpec" : {
       "type" : "object",
       "properties" : {
         "schedule_override" : {
@@ -19397,7 +19414,7 @@
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
         "parameters" : {
-          "description" : "Data quality check parameters",
+          "description" : "Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec"
         },
         "warning" : {
@@ -19406,28 +19423,11 @@
         },
         "error" : {
           "description" : "Default alerting threshold for a maximum number of rows with values not matching values in another table column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxCountRule10ParametersSpec"
+          "$ref" : "#/definitions/MaxCountRule0ParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule15ParametersSpec"
-        }
-      }
-    },
-    "ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        },
-        "foreign_table" : {
-          "type" : "string",
-          "description" : "This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String."
-        },
-        "foreign_column" : {
-          "type" : "string",
-          "description" : "This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String."
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
         }
       }
     },
@@ -19441,11 +19441,11 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "monthly_foreign_key_not_match_count" : {
+        "monthly_lookup_key_not_found" : {
           "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
+          "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
-        "monthly_foreign_key_match_percent" : {
+        "monthly_lookup_key_found_percent" : {
           "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
@@ -19461,11 +19461,11 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "monthly_partition_foreign_key_not_match_count" : {
+        "monthly_partition_lookup_key_not_found" : {
           "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
+          "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
-        "monthly_partition_foreign_key_match_percent" : {
+        "monthly_partition_lookup_key_found_percent" : {
           "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
@@ -19481,11 +19481,11 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "profile_foreign_key_not_match_count" : {
+        "profile_lookup_key_not_found" : {
           "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.",
-          "$ref" : "#/definitions/ColumnIntegrityForeignKeyNotMatchCountCheckSpec"
+          "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
-        "profile_foreign_key_match_percent" : {
+        "profile_lookup_key_found_percent" : {
           "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }

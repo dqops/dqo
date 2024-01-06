@@ -10,3 +10,4 @@ spec:
     \ not empty. When the data grouping is configured, this check will count rows\
     \ using a GROUP BY clause and verify that each data grouping has an expected minimum\
     \ number of rows."
+  standard: true

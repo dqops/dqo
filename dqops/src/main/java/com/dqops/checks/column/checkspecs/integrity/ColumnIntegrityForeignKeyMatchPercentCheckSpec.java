@@ -46,7 +46,7 @@ public class ColumnIntegrityForeignKeyMatchPercentCheckSpec
         }
     };
 
-    @JsonPropertyDescription("Data quality check parameters")
+    @JsonPropertyDescription("Data quality check parameters with the name of the foreign table and the column where the lookup is performed by running an outer join SQL query")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec parameters = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();

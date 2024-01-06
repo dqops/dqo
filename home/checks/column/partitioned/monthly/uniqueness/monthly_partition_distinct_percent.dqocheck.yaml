@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the percentage of distinct values in a column does not
     fall below the minimum accepted percent. Creates a separate data quality check
     (and an alert) for each monthly partition.
+  standard: true
