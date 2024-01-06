@@ -40,10 +40,10 @@ import java.util.Objects;
 public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_negative_count", o -> o.dailyNegativeCount);
-            put("daily_negative_percent", o -> o.dailyNegativePercent);
-            put("daily_non_negative_count", o -> o.dailyNonNegativeCount);
-            put("daily_non_negative_percent", o -> o.dailyNonNegativePercent);
+            put("daily_negative_values", o -> o.dailyNegativeValues);
+            put("daily_negative_values_percent", o -> o.dailyNegativeValuesPercent);
+            put("daily_non_negative_values", o -> o.dailyNonNegativeValues);
+            put("daily_non_negative_values_percent", o -> o.dailyNonNegativeValuesPercent);
             put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
             put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
             put("daily_values_in_range_numeric_percent", o -> o.dailyValuesInRangeNumericPercent);
@@ -52,11 +52,12 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
             put("daily_value_below_min_value_percent", o -> o.dailyValueBelowMinValuePercent);
             put("daily_value_above_max_value_count", o -> o.dailyValueAboveMaxValueCount);
             put("daily_value_above_max_value_percent", o -> o.dailyValueAboveMaxValuePercent);
-            put("daily_max_in_range", o -> o.dailyMaxInRange);
             put("daily_min_in_range", o -> o.dailyMinInRange);
+            put("daily_max_in_range", o -> o.dailyMaxInRange);
+            put("daily_sum_in_range", o -> o.dailySumInRange);
             put("daily_mean_in_range", o -> o.dailyMeanInRange);
-            put("daily_percentile_in_range", o -> o.dailyPercentileInRange);
             put("daily_median_in_range", o -> o.dailyMedianInRange);
+            put("daily_percentile_in_range", o -> o.dailyPercentileInRange);
             put("daily_percentile_10_in_range", o -> o.dailyPercentile_10InRange);
             put("daily_percentile_25_in_range", o -> o.dailyPercentile_25InRange);
             put("daily_percentile_75_in_range", o -> o.dailyPercentile_75InRange);
@@ -65,26 +66,24 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
             put("daily_population_stddev_in_range", o -> o.dailyPopulationStddevInRange);
             put("daily_sample_variance_in_range", o -> o.dailySampleVarianceInRange);
             put("daily_population_variance_in_range", o -> o.dailyPopulationVarianceInRange);
-            put("daily_sum_in_range", o -> o.dailySumInRange);
-            put("daily_invalid_latitude_count", o -> o.dailyInvalidLatitudeCount);
+            put("daily_invalid_latitude", o -> o.dailyInvalidLatitude);
             put("daily_valid_latitude_percent", o -> o.dailyValidLatitudePercent);
-            put("daily_invalid_longitude_count", o -> o.dailyInvalidLongitudeCount);
+            put("daily_invalid_longitude", o -> o.dailyInvalidLongitude);
             put("daily_valid_longitude_percent", o -> o.dailyValidLongitudePercent);
-
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNegativeCountCheckSpec dailyNegativeCount;
+    private ColumnNegativeCountCheckSpec dailyNegativeValues;
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNegativePercentCheckSpec dailyNegativePercent;
+    private ColumnNegativePercentCheckSpec dailyNegativeValuesPercent;
 
     @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNonNegativeCountCheckSpec dailyNonNegativeCount;
+    private ColumnNonNegativeCountCheckSpec dailyNonNegativeValues;
 
     @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNonNegativePercentCheckSpec dailyNonNegativePercent;
+    private ColumnNonNegativePercentCheckSpec dailyNonNegativeValuesPercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
@@ -110,20 +109,23 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValueAboveMaxValuePercentCheckSpec dailyValueAboveMaxValuePercent;
 
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnMinInRangeCheckSpec dailyMinInRange;
+
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec dailyMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnMinInRangeCheckSpec dailyMinInRange;
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnSumInRangeCheckSpec dailySumInRange;
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec dailyMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnPercentileInRangeCheckSpec dailyPercentileInRange;
-
     @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMedianInRangeCheckSpec dailyMedianInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnPercentileInRangeCheckSpec dailyPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPercentile10InRangeCheckSpec dailyPercentile_10InRange;
@@ -149,17 +151,14 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnPopulationVarianceInRangeCheckSpec dailyPopulationVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnSumInRangeCheckSpec dailySumInRange;
-
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnInvalidLatitudeCountCheckSpec dailyInvalidLatitudeCount;
+    private ColumnInvalidLatitudeCountCheckSpec dailyInvalidLatitude;
 
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValidLatitudePercentCheckSpec dailyValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnInvalidLongitudeCountCheckSpec dailyInvalidLongitudeCount;
+    private ColumnInvalidLongitudeCountCheckSpec dailyInvalidLongitude;
 
     @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec dailyValidLongitudePercent;
@@ -168,72 +167,72 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
      * Returns a negative values count check specification.
      * @return Negative values count check specification.
      */
-    public ColumnNegativeCountCheckSpec getDailyNegativeCount() {
-        return dailyNegativeCount;
+    public ColumnNegativeCountCheckSpec getDailyNegativeValues() {
+        return dailyNegativeValues;
     }
 
     /**
      * Sets a new specification of a negative values count check.
-     * @param dailyNegativeCount Negative values count check specification.
+     * @param dailyNegativeValues Negative values count check specification.
      */
-    public void setDailyNegativeCount(ColumnNegativeCountCheckSpec dailyNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyNegativeCount, dailyNegativeCount));
-        this.dailyNegativeCount = dailyNegativeCount;
-        propagateHierarchyIdToField(dailyNegativeCount, "daily_negative_count");
+    public void setDailyNegativeValues(ColumnNegativeCountCheckSpec dailyNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.dailyNegativeValues, dailyNegativeValues));
+        this.dailyNegativeValues = dailyNegativeValues;
+        propagateHierarchyIdToField(dailyNegativeValues, "daily_negative_values");
     }
 
     /**
      * Returns a negative values percentage check specification.
      * @return Negative values percentage check specification.
      */
-    public ColumnNegativePercentCheckSpec getDailyNegativePercent() {
-        return dailyNegativePercent;
+    public ColumnNegativePercentCheckSpec getDailyNegativeValuesPercent() {
+        return dailyNegativeValuesPercent;
     }
 
     /**
      * Sets a new specification of a negative values percentage check.
-     * @param dailyNegativePercent Negative values percentage check specification.
+     * @param dailyNegativeValuesPercent Negative values percentage check specification.
      */
-    public void setDailyNegativePercent(ColumnNegativePercentCheckSpec dailyNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNegativePercent, dailyNegativePercent));
-        this.dailyNegativePercent = dailyNegativePercent;
-        propagateHierarchyIdToField(dailyNegativePercent, "daily_negative_percent");
+    public void setDailyNegativeValuesPercent(ColumnNegativePercentCheckSpec dailyNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNegativeValuesPercent, dailyNegativeValuesPercent));
+        this.dailyNegativeValuesPercent = dailyNegativeValuesPercent;
+        propagateHierarchyIdToField(dailyNegativeValuesPercent, "daily_negative_values_percent");
     }
 
     /**
      * Returns a non-negative values count check specification.
      * @return Non-negative values count check specification.
      */
-    public ColumnNonNegativeCountCheckSpec getDailyNonNegativeCount() {
-        return dailyNonNegativeCount;
+    public ColumnNonNegativeCountCheckSpec getDailyNonNegativeValues() {
+        return dailyNonNegativeValues;
     }
 
     /**
      * Sets a new specification of a non-negative values count check.
-     * @param dailyNonNegativeCount Non-negative values count check specification.
+     * @param dailyNonNegativeValues Non-negative values count check specification.
      */
-    public void setDailyNonNegativeCount(ColumnNonNegativeCountCheckSpec dailyNonNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeCount, dailyNonNegativeCount));
-        this.dailyNonNegativeCount = dailyNonNegativeCount;
-        propagateHierarchyIdToField(dailyNonNegativeCount, "daily_non_negative_count");
+    public void setDailyNonNegativeValues(ColumnNonNegativeCountCheckSpec dailyNonNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeValues, dailyNonNegativeValues));
+        this.dailyNonNegativeValues = dailyNonNegativeValues;
+        propagateHierarchyIdToField(dailyNonNegativeValues, "daily_non_negative_values");
     }
 
     /**
      * Returns a non-negative values percentage check specification.
      * @return Non-negative values percentage check specification.
      */
-    public ColumnNonNegativePercentCheckSpec getDailyNonNegativePercent() {
-        return dailyNonNegativePercent;
+    public ColumnNonNegativePercentCheckSpec getDailyNonNegativeValuesPercent() {
+        return dailyNonNegativeValuesPercent;
     }
 
     /**
      * Sets a new specification of a non-negative values percentage check.
-     * @param dailyNonNegativePercent Non-negative values percentage check specification.
+     * @param dailyNonNegativeValuesPercent Non-negative values percentage check specification.
      */
-    public void setDailyNonNegativePercent(ColumnNonNegativePercentCheckSpec dailyNonNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNonNegativePercent, dailyNonNegativePercent));
-        this.dailyNonNegativePercent = dailyNonNegativePercent;
-        propagateHierarchyIdToField(dailyNonNegativePercent, "daily_non_negative_percent");
+    public void setDailyNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec dailyNonNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeValuesPercent, dailyNonNegativeValuesPercent));
+        this.dailyNonNegativeValuesPercent = dailyNonNegativeValuesPercent;
+        propagateHierarchyIdToField(dailyNonNegativeValuesPercent, "daily_non_negative_values_percent");
     }
 
     /**
@@ -381,6 +380,24 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     }
 
     /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getDailyMinInRange() {
+        return dailyMinInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param dailyMinInRange Min in range check specification.
+     */
+    public void setDailyMinInRange(ColumnMinInRangeCheckSpec dailyMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyMinInRange, dailyMinInRange));
+        this.dailyMinInRange = dailyMinInRange;
+        propagateHierarchyIdToField(dailyMinInRange, "daily_min_in_range");
+    }
+
+    /**
      * Returns a max in range check specification.
      * @return Max in range check specification.
      */
@@ -399,21 +416,21 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     }
 
     /**
-     * Returns a min in range check specification.
-     * @return Min in range check specification.
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
      */
-    public ColumnMinInRangeCheckSpec getDailyMinInRange() {
-        return dailyMinInRange;
+    public ColumnSumInRangeCheckSpec getDailySumInRange() {
+        return dailySumInRange;
     }
 
     /**
-     * Sets a new specification of a min in range check.
-     * @param dailyMinInRange Min in range check specification.
+     * Sets a new specification of a sum in range check.
+     * @param dailySumInRange Sum in range check specification.
      */
-    public void setDailyMinInRange(ColumnMinInRangeCheckSpec dailyMinInRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyMinInRange, dailyMinInRange));
-        this.dailyMinInRange = dailyMinInRange;
-        propagateHierarchyIdToField(dailyMinInRange, "daily_min_in_range");
+    public void setDailySumInRange(ColumnSumInRangeCheckSpec dailySumInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailySumInRange, dailySumInRange));
+        this.dailySumInRange = dailySumInRange;
+        propagateHierarchyIdToField(dailySumInRange, "daily_sum_in_range");
     }
 
     /**
@@ -435,24 +452,6 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     }
 
     /**
-     * Returns a percentile in range check specification.
-     * @return Percentile in range check specification.
-     */
-    public ColumnPercentileInRangeCheckSpec getDailyPercentileInRange() {
-        return dailyPercentileInRange;
-    }
-
-    /**
-     * Sets a new specification of a percentile in range check.
-     * @param dailyPercentileInRange Percentile in range check specification.
-     */
-    public void setDailyPercentileInRange(ColumnPercentileInRangeCheckSpec dailyPercentileInRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPercentileInRange, dailyPercentileInRange));
-        this.dailyPercentileInRange = dailyPercentileInRange;
-        propagateHierarchyIdToField(dailyPercentileInRange, "daily_percentile_in_range");
-    }
-
-    /**
      * Returns a median in range check specification.
      * @return median in range check specification.
      */
@@ -468,6 +467,24 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.dailyMedianInRange, dailyMedianInRange));
         this.dailyMedianInRange = dailyMedianInRange;
         propagateHierarchyIdToField(dailyMedianInRange, "daily_median_in_range");
+    }
+
+    /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getDailyPercentileInRange() {
+        return dailyPercentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param dailyPercentileInRange Percentile in range check specification.
+     */
+    public void setDailyPercentileInRange(ColumnPercentileInRangeCheckSpec dailyPercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPercentileInRange, dailyPercentileInRange));
+        this.dailyPercentileInRange = dailyPercentileInRange;
+        propagateHierarchyIdToField(dailyPercentileInRange, "daily_percentile_in_range");
     }
 
     /**
@@ -615,39 +632,21 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     }
 
     /**
-     * Returns a sum in range check specification.
-     * @return Sum in range check specification.
-     */
-    public ColumnSumInRangeCheckSpec getDailySumInRange() {
-        return dailySumInRange;
-    }
-
-    /**
-     * Sets a new specification of a sum in range check.
-     * @param dailySumInRange Sum in range check specification.
-     */
-    public void setDailySumInRange(ColumnSumInRangeCheckSpec dailySumInRange) {
-        this.setDirtyIf(!Objects.equals(this.dailySumInRange, dailySumInRange));
-        this.dailySumInRange = dailySumInRange;
-        propagateHierarchyIdToField(dailySumInRange, "daily_sum_in_range");
-    }
-
-    /**
      * Returns an invalid latitude count check specification.
      * @return Invalid latitude count check specification.
      */
-    public ColumnInvalidLatitudeCountCheckSpec getDailyInvalidLatitudeCount() {
-        return dailyInvalidLatitudeCount;
+    public ColumnInvalidLatitudeCountCheckSpec getDailyInvalidLatitude() {
+        return dailyInvalidLatitude;
     }
 
     /**
      * Sets a new specification of an invalid latitude count check.
-     * @param dailyInvalidLatitudeCount Invalid latitude count check specification.
+     * @param dailyInvalidLatitude Invalid latitude count check specification.
      */
-    public void setDailyInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec dailyInvalidLatitudeCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyInvalidLatitudeCount, dailyInvalidLatitudeCount));
-        this.dailyInvalidLatitudeCount = dailyInvalidLatitudeCount;
-        propagateHierarchyIdToField(dailyInvalidLatitudeCount, "daily_invalid_latitude_count");
+    public void setDailyInvalidLatitude(ColumnInvalidLatitudeCountCheckSpec dailyInvalidLatitude) {
+        this.setDirtyIf(!Objects.equals(this.dailyInvalidLatitude, dailyInvalidLatitude));
+        this.dailyInvalidLatitude = dailyInvalidLatitude;
+        propagateHierarchyIdToField(dailyInvalidLatitude, "daily_invalid_latitude");
     }
 
     /**
@@ -672,18 +671,18 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
      * Returns an invalid longitude count check specification.
      * @return Invalid longitude count check specification.
      */
-    public ColumnInvalidLongitudeCountCheckSpec getDailyInvalidLongitudeCount() {
-        return dailyInvalidLongitudeCount;
+    public ColumnInvalidLongitudeCountCheckSpec getDailyInvalidLongitude() {
+        return dailyInvalidLongitude;
     }
 
     /**
      * Sets a new specification of an invalid longitude count check.
-     * @param dailyInvalidLongitudeCount Invalid longitude count check specification.
+     * @param dailyInvalidLongitude Invalid longitude count check specification.
      */
-    public void setDailyInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec dailyInvalidLongitudeCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyInvalidLongitudeCount, dailyInvalidLongitudeCount));
-        this.dailyInvalidLongitudeCount = dailyInvalidLongitudeCount;
-        propagateHierarchyIdToField(dailyInvalidLongitudeCount, "daily_invalid_longitude_count");
+    public void setDailyInvalidLongitude(ColumnInvalidLongitudeCountCheckSpec dailyInvalidLongitude) {
+        this.setDirtyIf(!Objects.equals(this.dailyInvalidLongitude, dailyInvalidLongitude));
+        this.dailyInvalidLongitude = dailyInvalidLongitude;
+        propagateHierarchyIdToField(dailyInvalidLongitude, "daily_invalid_longitude");
     }
 
     /**

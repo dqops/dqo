@@ -183,7 +183,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         ColumnNumericDailyMonitoringChecksSpec col23numericChecksSpec = new ColumnNumericDailyMonitoringChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
+        col23numericChecksSpec.setDailyNegativeValues(columnNegativeCountCheckSpec);
         MaxCountRule0WarningParametersSpec col23max1 = new MaxCountRule0WarningParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);

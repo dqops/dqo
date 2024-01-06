@@ -40,10 +40,10 @@ import java.util.Objects;
 public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_negative_count", o -> o.monthlyPartitionNegativeCount);
-            put("monthly_partition_negative_percent", o -> o.monthlyPartitionNegativePercent);
-            put("monthly_partition_non_negative_count", o -> o.monthlyPartitionNonNegativeCount);
-            put("monthly_partition_non_negative_percent", o -> o.monthlyPartitionNonNegativePercent);
+            put("monthly_partition_negative_values", o -> o.monthlyPartitionNegativeValues);
+            put("monthly_partition_negative_percent", o -> o.monthlyPartitionNegativeValuesPercent);
+            put("monthly_partition_non_negative_values", o -> o.monthlyPartitionNonNegativeValues);
+            put("monthly_partition_non_negative_percent", o -> o.monthlyPartitionNonNegativeValuesPercent);
             put("monthly_partition_expected_numbers_in_use_count", o -> o.monthlyPartitionExpectedNumbersInUseCount);
             put("monthly_partition_number_value_in_set_percent", o -> o.monthlyPartitionNumberValueInSetPercent);
             put("monthly_partition_values_in_range_numeric_percent", o -> o.monthlyPartitionValuesInRangeNumericPercent);
@@ -52,11 +52,12 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_value_below_min_value_percent", o -> o.monthlyPartitionValueBelowMinValuePercent);
             put("monthly_partition_value_above_max_value_count", o -> o.monthlyPartitionValueAboveMaxValueCount);
             put("monthly_partition_value_above_max_value_percent", o -> o.monthlyPartitionValueAboveMaxValuePercent);
-            put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
+            put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
+            put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
             put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
-            put("monthly_partition_percentile_in_range", o -> o.monthlyPartitionPercentileInRange);
             put("monthly_partition_median_in_range", o -> o.monthlyPartitionMedianInRange);
+            put("monthly_partition_percentile_in_range", o -> o.monthlyPartitionPercentileInRange);
             put("monthly_partition_percentile_10_in_range", o -> o.monthlyPartitionPercentile_10InRange);
             put("monthly_partition_percentile_25_in_range", o -> o.monthlyPartitionPercentile_25InRange);
             put("monthly_partition_percentile_75_in_range", o -> o.monthlyPartitionPercentile_75InRange);
@@ -65,26 +66,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_population_stddev_in_range", o -> o.monthlyPartitionPopulationStddevInRange);
             put("monthly_partition_sample_variance_in_range", o -> o.monthlyPartitionSampleVarianceInRange);
             put("monthly_partition_population_variance_in_range", o -> o.monthlyPartitionPopulationVarianceInRange);
-            put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
-            put("monthly_partition_invalid_latitude_count", o -> o.monthlyPartitionInvalidLatitudeCount);
+            put("monthly_partition_invalid_latitude", o -> o.monthlyPartitionInvalidLatitude);
             put("monthly_partition_valid_latitude_percent", o -> o.monthlyPartitionValidLatitudePercent);
-            put("monthly_partition_invalid_longitude_count", o -> o.monthlyPartitionInvalidLongitudeCount);
+            put("monthly_partition_invalid_longitude", o -> o.monthlyPartitionInvalidLongitude);
             put("monthly_partition_valid_longitude_percent", o -> o.monthlyPartitionValidLongitudePercent);
-
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNegativeCountCheckSpec monthlyPartitionNegativeCount;
+    private ColumnNegativeCountCheckSpec monthlyPartitionNegativeValues;
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNegativePercentCheckSpec monthlyPartitionNegativePercent;
+    private ColumnNegativePercentCheckSpec monthlyPartitionNegativeValuesPercent;
 
     @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeCount;
+    private ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeValues;
 
     @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativePercent;
+    private ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativeValuesPercent;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnExpectedNumbersInUseCountCheckSpec monthlyPartitionExpectedNumbersInUseCount;
@@ -110,20 +109,23 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValueAboveMaxValuePercentCheckSpec monthlyPartitionValueAboveMaxValuePercent;
 
+    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMinInRangeCheckSpec monthlyPartitionMinInRange;
+
     @JsonPropertyDescription("Verifies that the maximal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMaxInRangeCheckSpec monthlyPartitionMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnMinInRangeCheckSpec monthlyPartitionMinInRange;
+    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
-
     @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnMedianInRangeCheckSpec monthlyPartitionMedianInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPercentile10InRangeCheckSpec monthlyPartitionPercentile_10InRange;
@@ -149,17 +151,14 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPopulationVarianceInRangeCheckSpec monthlyPartitionPopulationVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
-
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitudeCount;
+    private ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitude;
 
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValidLatitudePercentCheckSpec monthlyPartitionValidLatitudePercent;
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitudeCount;
+    private ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitude;
 
     @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValidLongitudePercentCheckSpec monthlyPartitionValidLongitudePercent;
@@ -168,72 +167,72 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns a negative values count check specification.
      * @return Negative values count check specification.
      */
-    public ColumnNegativeCountCheckSpec getMonthlyPartitionNegativeCount() {
-        return monthlyPartitionNegativeCount;
+    public ColumnNegativeCountCheckSpec getMonthlyPartitionNegativeValues() {
+        return monthlyPartitionNegativeValues;
     }
 
     /**
      * Sets a new specification of a negative values count check.
-     * @param monthlyPartitionNegativeCount Negative values count check specification.
+     * @param monthlyPartitionNegativeValues Negative values count check specification.
      */
-    public void setMonthlyPartitionNegativeCount(ColumnNegativeCountCheckSpec monthlyPartitionNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNegativeCount, monthlyPartitionNegativeCount));
-        this.monthlyPartitionNegativeCount = monthlyPartitionNegativeCount;
-        propagateHierarchyIdToField(monthlyPartitionNegativeCount, "monthly_partition_negative_count");
+    public void setMonthlyPartitionNegativeValues(ColumnNegativeCountCheckSpec monthlyPartitionNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNegativeValues, monthlyPartitionNegativeValues));
+        this.monthlyPartitionNegativeValues = monthlyPartitionNegativeValues;
+        propagateHierarchyIdToField(monthlyPartitionNegativeValues, "monthly_partition_negative_values");
     }
 
     /**
      * Returns a negative values percentage check specification.
      * @return Negative values percentage check specification.
      */
-    public ColumnNegativePercentCheckSpec getMonthlyPartitionNegativePercent() {
-        return monthlyPartitionNegativePercent;
+    public ColumnNegativePercentCheckSpec getMonthlyPartitionNegativeValuesPercent() {
+        return monthlyPartitionNegativeValuesPercent;
     }
 
     /**
      * Sets a new specification of a negative values percentage check.
-     * @param monthlyPartitionNegativePercent Negative values percentage check specification.
+     * @param monthlyPartitionNegativeValuesPercent Negative values percentage check specification.
      */
-    public void setMonthlyPartitionNegativePercent(ColumnNegativePercentCheckSpec monthlyPartitionNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNegativePercent, monthlyPartitionNegativePercent));
-        this.monthlyPartitionNegativePercent = monthlyPartitionNegativePercent;
-        propagateHierarchyIdToField(monthlyPartitionNegativePercent, "monthly_partition_negative_percent");
+    public void setMonthlyPartitionNegativeValuesPercent(ColumnNegativePercentCheckSpec monthlyPartitionNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNegativeValuesPercent, monthlyPartitionNegativeValuesPercent));
+        this.monthlyPartitionNegativeValuesPercent = monthlyPartitionNegativeValuesPercent;
+        propagateHierarchyIdToField(monthlyPartitionNegativeValuesPercent, "monthly_partition_negative_values_percent");
     }
 
     /**
      * Returns a non-negative values count check specification.
      * @return Non-negative values count check specification.
      */
-    public ColumnNonNegativeCountCheckSpec getMonthlyPartitionNonNegativeCount() {
-        return monthlyPartitionNonNegativeCount;
+    public ColumnNonNegativeCountCheckSpec getMonthlyPartitionNonNegativeValues() {
+        return monthlyPartitionNonNegativeValues;
     }
 
     /**
      * Sets a new specification of a maximum non-negative values count check.
-     * @param monthlyPartitionNonNegativeCount Non-negative values count check specification.
+     * @param monthlyPartitionNonNegativeValues Non-negative values count check specification.
      */
-    public void setMonthlyPartitionNonNegativeCount(ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNonNegativeCount, monthlyPartitionNonNegativeCount));
-        this.monthlyPartitionNonNegativeCount = monthlyPartitionNonNegativeCount;
-        propagateHierarchyIdToField(monthlyPartitionNonNegativeCount, "monthly_partition_non_negative_count");
+    public void setMonthlyPartitionNonNegativeValues(ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNonNegativeValues, monthlyPartitionNonNegativeValues));
+        this.monthlyPartitionNonNegativeValues = monthlyPartitionNonNegativeValues;
+        propagateHierarchyIdToField(monthlyPartitionNonNegativeValues, "monthly_partition_non_negative_values");
     }
 
     /**
      * Returns a non-negative values percentage check specification.
      * @return Non-negative values percentage check specification.
      */
-    public ColumnNonNegativePercentCheckSpec getMonthlyPartitionNonNegativePercent() {
-        return monthlyPartitionNonNegativePercent;
+    public ColumnNonNegativePercentCheckSpec getMonthlyPartitionNonNegativeValuesPercent() {
+        return monthlyPartitionNonNegativeValuesPercent;
     }
 
     /**
      * Sets a new specification of a non-negative values percentage check.
-     * @param monthlyPartitionNonNegativePercent Non-negative values percentage check specification.
+     * @param monthlyPartitionNonNegativeValuesPercent Non-negative values percentage check specification.
      */
-    public void setMonthlyPartitionNonNegativePercent(ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNonNegativePercent, monthlyPartitionNonNegativePercent));
-        this.monthlyPartitionNonNegativePercent = monthlyPartitionNonNegativePercent;
-        propagateHierarchyIdToField(monthlyPartitionNonNegativePercent, "monthly_partition_non_negative_percent");
+    public void setMonthlyPartitionNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNonNegativeValuesPercent, monthlyPartitionNonNegativeValuesPercent));
+        this.monthlyPartitionNonNegativeValuesPercent = monthlyPartitionNonNegativeValuesPercent;
+        propagateHierarchyIdToField(monthlyPartitionNonNegativeValuesPercent, "monthly_partition_non_negative_values_percent");
     }
 
     /**
@@ -382,6 +381,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
+     * Returns a min in range check specification.
+     * @return Min in range check specification.
+     */
+    public ColumnMinInRangeCheckSpec getMonthlyPartitionMinInRange() {
+        return monthlyPartitionMinInRange;
+    }
+
+    /**
+     * Sets a new specification of a min in range check.
+     * @param monthlyPartitionMinInRange Min in range check specification.
+     */
+    public void setMonthlyPartitionMinInRange(ColumnMinInRangeCheckSpec monthlyPartitionMinInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinInRange, monthlyPartitionMinInRange));
+        this.monthlyPartitionMinInRange = monthlyPartitionMinInRange;
+        propagateHierarchyIdToField(monthlyPartitionMinInRange, "monthly_partition_min_in_range");
+    }
+
+    /**
      * Returns a max in range check specification.
      * @return Max in range check specification.
      */
@@ -400,21 +417,21 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a min in range check specification.
-     * @return Min in range check specification.
+     * Returns a sum in range check specification.
+     * @return Sum in range check specification.
      */
-    public ColumnMinInRangeCheckSpec getMonthlyPartitionMinInRange() {
-        return monthlyPartitionMinInRange;
+    public ColumnSumInRangeCheckSpec getMonthlyPartitionSumInRange() {
+        return monthlyPartitionSumInRange;
     }
 
     /**
-     * Sets a new specification of a min in range check.
-     * @param monthlyPartitionMinInRange Min in range check specification.
+     * Sets a new specification of a sum in range check.
+     * @param monthlyPartitionSumInRange Sum in range check specification.
      */
-    public void setMonthlyPartitionMinInRange(ColumnMinInRangeCheckSpec monthlyPartitionMinInRange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMinInRange, monthlyPartitionMinInRange));
-        this.monthlyPartitionMinInRange = monthlyPartitionMinInRange;
-        propagateHierarchyIdToField(monthlyPartitionMinInRange, "monthly_partition_min_in_range");
+    public void setMonthlyPartitionSumInRange(ColumnSumInRangeCheckSpec monthlyPartitionSumInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumInRange, monthlyPartitionSumInRange));
+        this.monthlyPartitionSumInRange = monthlyPartitionSumInRange;
+        propagateHierarchyIdToField(monthlyPartitionSumInRange, "monthly_partition_sum_in_range");
     }
 
     /**
@@ -436,24 +453,6 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a percentile in range check specification.
-     * @return Percentile in range check specification.
-     */
-    public ColumnPercentileInRangeCheckSpec getMonthlyPartitionPercentileInRange() {
-        return monthlyPartitionPercentileInRange;
-    }
-
-    /**
-     * Sets a new specification of a percentile in range check.
-     * @param monthlyPartitionPercentileInRange percentile in range check specification.
-     */
-    public void setMonthlyPartitionPercentileInRange(ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentileInRange, monthlyPartitionPercentileInRange));
-        this.monthlyPartitionPercentileInRange = monthlyPartitionPercentileInRange;
-        propagateHierarchyIdToField(monthlyPartitionPercentileInRange, "monthly_partition_percentile_in_range");
-    }
-
-    /**
      * Returns a median in range check specification.
      * @return median in range check specification.
      */
@@ -469,6 +468,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionMedianInRange, monthlyPartitionMedianInRange));
         this.monthlyPartitionMedianInRange = monthlyPartitionMedianInRange;
         propagateHierarchyIdToField(monthlyPartitionMedianInRange, "monthly_partition_median_in_range");
+    }
+
+    /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getMonthlyPartitionPercentileInRange() {
+        return monthlyPartitionPercentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param monthlyPartitionPercentileInRange percentile in range check specification.
+     */
+    public void setMonthlyPartitionPercentileInRange(ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentileInRange, monthlyPartitionPercentileInRange));
+        this.monthlyPartitionPercentileInRange = monthlyPartitionPercentileInRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentileInRange, "monthly_partition_percentile_in_range");
     }
 
     /**
@@ -616,39 +633,21 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a sum in range check specification.
-     * @return Sum in range check specification.
-     */
-    public ColumnSumInRangeCheckSpec getMonthlyPartitionSumInRange() {
-        return monthlyPartitionSumInRange;
-    }
-
-    /**
-     * Sets a new specification of a sum in range check.
-     * @param monthlyPartitionSumInRange Sum in range check specification.
-     */
-    public void setMonthlyPartitionSumInRange(ColumnSumInRangeCheckSpec monthlyPartitionSumInRange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumInRange, monthlyPartitionSumInRange));
-        this.monthlyPartitionSumInRange = monthlyPartitionSumInRange;
-        propagateHierarchyIdToField(monthlyPartitionSumInRange, "monthly_partition_sum_in_range");
-    }
-
-    /**
      * Returns an invalid latitude count check specification.
      * @return invalid latitude count check specification.
      */
-    public ColumnInvalidLatitudeCountCheckSpec getMonthlyPartitionInvalidLatitudeCount() {
-        return monthlyPartitionInvalidLatitudeCount;
+    public ColumnInvalidLatitudeCountCheckSpec getMonthlyPartitionInvalidLatitude() {
+        return monthlyPartitionInvalidLatitude;
     }
 
     /**
      * Sets a new specification of an invalid latitude count check.
-     * @param monthlyPartitionInvalidLatitudeCount invalid latitude count check specification.
+     * @param monthlyPartitionInvalidLatitude invalid latitude count check specification.
      */
-    public void setMonthlyPartitionInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitudeCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLatitudeCount, monthlyPartitionInvalidLatitudeCount));
-        this.monthlyPartitionInvalidLatitudeCount = monthlyPartitionInvalidLatitudeCount;
-        propagateHierarchyIdToField(monthlyPartitionInvalidLatitudeCount, "monthly_partition_invalid_latitude_count");
+    public void setMonthlyPartitionInvalidLatitude(ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitude) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLatitude, monthlyPartitionInvalidLatitude));
+        this.monthlyPartitionInvalidLatitude = monthlyPartitionInvalidLatitude;
+        propagateHierarchyIdToField(monthlyPartitionInvalidLatitude, "monthly_partition_invalid_latitude");
     }
 
     /**
@@ -673,18 +672,18 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
      * Returns an invalid longitude count check specification.
      * @return invalid longitude count check specification.
      */
-    public ColumnInvalidLongitudeCountCheckSpec getMonthlyPartitionInvalidLongitudeCount() {
-        return monthlyPartitionInvalidLongitudeCount;
+    public ColumnInvalidLongitudeCountCheckSpec getMonthlyPartitionInvalidLongitude() {
+        return monthlyPartitionInvalidLongitude;
     }
 
     /**
      * Sets a new specification of an invalid longitude count check.
-     * @param monthlyPartitionInvalidLongitudeCount invalid longitude count check specification.
+     * @param monthlyPartitionInvalidLongitude invalid longitude count check specification.
      */
-    public void setMonthlyPartitionInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitudeCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLongitudeCount, monthlyPartitionInvalidLongitudeCount));
-        this.monthlyPartitionInvalidLongitudeCount = monthlyPartitionInvalidLongitudeCount;
-        propagateHierarchyIdToField(monthlyPartitionInvalidLongitudeCount, "monthly_partition_invalid_longitude_count");
+    public void setMonthlyPartitionInvalidLongitude(ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitude) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLongitude, monthlyPartitionInvalidLongitude));
+        this.monthlyPartitionInvalidLongitude = monthlyPartitionInvalidLongitude;
+        propagateHierarchyIdToField(monthlyPartitionInvalidLongitude, "monthly_partition_invalid_longitude");
     }
 
     /**

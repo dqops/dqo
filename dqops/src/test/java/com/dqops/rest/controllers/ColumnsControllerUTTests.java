@@ -372,7 +372,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         negativeChecksSpec.setFatal(maxCountRule3);
         
         ColumnNumericMonthlyPartitionedChecksSpec negativeMonthlyPartitionedChecks = new ColumnNumericMonthlyPartitionedChecksSpec();
-        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeCount(negativeChecksSpec);
+        negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeValues(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
         monthlyPartitionedCheck.setNumeric(negativeMonthlyPartitionedChecks);
         ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();

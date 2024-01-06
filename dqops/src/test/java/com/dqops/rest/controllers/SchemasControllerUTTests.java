@@ -163,7 +163,7 @@ public class SchemasControllerUTTests extends BaseTest {
         ColumnNumericProfilingChecksSpec col23numericChecksSpec = new ColumnNumericProfilingChecksSpec();
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
-        col23numericChecksSpec.setProfileNegativeCount(columnNegativeCountCheckSpec);
+        col23numericChecksSpec.setProfileNegativeValues(columnNegativeCountCheckSpec);
         MaxCountRule0WarningParametersSpec col23max1 = new MaxCountRule0WarningParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);

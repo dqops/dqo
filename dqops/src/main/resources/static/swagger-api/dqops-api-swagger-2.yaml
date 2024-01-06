@@ -19992,22 +19992,22 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_negative_count:
+      daily_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativeCountCheckSpec"
-      daily_negative_percent:
+      daily_negative_values_percent:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      daily_non_negative_count:
+      daily_non_negative_values:
         description: "Verifies that the number of non-negative values in a column\
           \ does not exceed the maximum accepted count. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      daily_non_negative_percent:
+      daily_non_negative_values_percent:
         description: "Verifies that the percentage of non-negative values in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
@@ -20055,31 +20055,36 @@ definitions:
           \ is above the value defined by the user as a parameter. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
-      daily_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
-          \ set range. Stores the most recent captured value for each day when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       daily_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range. Stores the most recent captured value for each day when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
+      daily_max_in_range:
+        description: "Verifies that the maximal value in a column is not outside the\
+          \ set range. Stores the most recent captured value for each day when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
+      daily_sum_in_range:
+        description: "Verifies that the sum of all values in a column is not outside\
+          \ the set range. Stores the most recent captured value for each day when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
       daily_mean_in_range:
         description: "Verifies that the average (mean) of all values in a column is\
           \ not outside the set range. Stores the most recent captured value for each\
           \ day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
-      daily_percentile_in_range:
-        description: "Verifies that the percentile of all values in a column is not\
-          \ outside the set range. Stores the most recent captured value for each\
-          \ day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       daily_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
           \ the set range. Stores the most recent row count for each month when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
+      daily_percentile_in_range:
+        description: "Verifies that the percentile of all values in a column is not\
+          \ outside the set range. Stores the most recent captured value for each\
+          \ day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       daily_percentile_10_in_range:
         description: "Verifies that the percentile 10 of all values in a column is\
           \ not outside the set range. Stores the most recent captured value for each\
@@ -20120,12 +20125,7 @@ definitions:
           \ is not outside the set range. Stores the most recent captured value for\
           \ each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
-      daily_sum_in_range:
-        description: "Verifies that the sum of all values in a column is not outside\
-          \ the set range. Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
-      daily_invalid_latitude_count:
+      daily_invalid_latitude:
         description: "Verifies that the number of invalid latitude values in a column\
           \ does not exceed the maximum accepted count. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
@@ -20135,7 +20135,7 @@ definitions:
           \ does not fall below the minimum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValidLatitudePercentCheckSpec"
-      daily_invalid_longitude_count:
+      daily_invalid_longitude:
         description: "Verifies that the number of invalid longitude values in a column\
           \ does not exceed the maximum accepted count. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
@@ -20157,22 +20157,22 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_negative_count:
+      daily_partition_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnNegativeCountCheckSpec"
-      daily_partition_negative_percent:
+      daily_partition_negative_values_percent:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      daily_partition_non_negative_count:
+      daily_partition_non_negative_values:
         description: "Verifies that the number of non-negative values in a column\
           \ does not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      daily_partition_non_negative_percent:
+      daily_partition_non_negative_values_percent:
         description: "Verifies that the percentage of non-negative values in a column\
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
@@ -20220,31 +20220,36 @@ definitions:
           \ is above the value defined by the user as a parameter. Creates a separate\
           \ data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
-      daily_partition_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
-          \ set range. Creates a separate data quality check (and an alert) for each\
-          \ daily partition."
-        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       daily_partition_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range. Creates a separate data quality check (and an alert) for each\
           \ daily partition."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
+      daily_partition_max_in_range:
+        description: "Verifies that the maximal value in a column is not outside the\
+          \ set range. Creates a separate data quality check (and an alert) for each\
+          \ daily partition."
+        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
+      daily_partition_sum_in_range:
+        description: "Verifies that the sum of all values in a column is not outside\
+          \ the set range. Creates a separate data quality check (and an alert) for\
+          \ each daily partition."
+        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
       daily_partition_mean_in_range:
         description: "Verifies that the average (mean) of all values in a column is\
           \ not outside the set range. Creates a separate data quality check (and\
           \ an alert) for each daily partition."
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
-      daily_partition_percentile_in_range:
-        description: "Verifies that the percentile of all values in a column is not\
-          \ outside the set range. Creates a separate data quality check (and an alert)\
-          \ for each daily partition."
-        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       daily_partition_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
           \ the set range. Creates a separate data quality check (and an alert) for\
           \ each daily partition."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
+      daily_partition_percentile_in_range:
+        description: "Verifies that the percentile of all values in a column is not\
+          \ outside the set range. Creates a separate data quality check (and an alert)\
+          \ for each daily partition."
+        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       daily_partition_percentile_10_in_range:
         description: "Verifies that the percentile 10 of all values in a column is\
           \ not outside the set range. Creates a separate data quality check (and\
@@ -20285,12 +20290,7 @@ definitions:
           \ is not outside the set range. Creates a separate data quality check (and\
           \ an alert) for each daily partition."
         $ref: "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
-      daily_partition_sum_in_range:
-        description: "Verifies that the sum of all values in a column is not outside\
-          \ the set range. Creates a separate data quality check (and an alert) for\
-          \ each daily partition."
-        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
-      daily_partition_invalid_latitude_count:
+      daily_partition_invalid_latitude:
         description: "Verifies that the number of invalid latitude values in a column\
           \ does not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each daily partition."
@@ -20300,7 +20300,7 @@ definitions:
           \ does not fall below the minimum accepted percentage. Creates a separate\
           \ data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnValidLatitudePercentCheckSpec"
-      daily_partition_invalid_longitude_count:
+      daily_partition_invalid_longitude:
         description: "Verifies that the number of invalid longitude values in a column\
           \ does not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each daily partition."
@@ -20381,22 +20381,22 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_negative_count:
+      monthly_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Stores the most recent row count\
           \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativeCountCheckSpec"
-      monthly_negative_percent:
+      monthly_negative_values_percent:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      monthly_non_negative_count:
+      monthly_non_negative_values:
         description: "Verifies that the number of non-negative values in a column\
           \ does not exceed the maximum accepted count. Stores the most recent row\
           \ count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      monthly_non_negative_percent:
+      monthly_non_negative_values_percent:
         description: "Verifies that the percentage of non-negative values in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ row count for each month when the data quality check was evaluated."
@@ -20444,31 +20444,36 @@ definitions:
           \ is above the value defined by the user as a parameter. Stores the most\
           \ recent row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
-      monthly_max_in_range:
-        description: "Verifies that the maximal value in a column does not exceed\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       monthly_min_in_range:
         description: "Verifies that the minimal value in a column does not exceed\
           \ the set range. Stores the most recent row count for each month when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
+      monthly_max_in_range:
+        description: "Verifies that the maximal value in a column does not exceed\
+          \ the set range. Stores the most recent row count for each month when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
+      monthly_sum_in_range:
+        description: "Verifies that the sum of all values in a column does not exceed\
+          \ the set range. Stores the most recent row count for each month when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
       monthly_mean_in_range:
         description: "Verifies that the average (mean) of all values in a column does\
           \ not exceed the set range. Stores the most recent row count for each month\
           \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
-      monthly_percentile_in_range:
-        description: "Verifies that the percentile of all values in a column is not\
-          \ outside the set range. Stores the most recent row count for each month\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       monthly_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
           \ the set range. Stores the most recent row count for each month when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
+      monthly_percentile_in_range:
+        description: "Verifies that the percentile of all values in a column is not\
+          \ outside the set range. Stores the most recent row count for each month\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       monthly_percentile_10_in_range:
         description: "Verifies that the percentile 10 of all values in a column is\
           \ not outside the set range. Stores the most recent row count for each month\
@@ -20509,12 +20514,7 @@ definitions:
           \ is not outside the set range. Stores the most recent row count for each\
           \ month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
-      monthly_sum_in_range:
-        description: "Verifies that the sum of all values in a column does not exceed\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
-      monthly_invalid_latitude_count:
+      monthly_invalid_latitude:
         description: "Verifies that the number of invalid latitude values in a column\
           \ does not exceed the maximum accepted count. Stores the most recent row\
           \ count for each month when the data quality check was evaluated."
@@ -20524,7 +20524,7 @@ definitions:
           \ does not fall below the minimum accepted percentage. Stores the most recent\
           \ row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValidLatitudePercentCheckSpec"
-      monthly_invalid_longitude_count:
+      monthly_invalid_longitude:
         description: "Verifies that the number of invalid longitude values in a column\
           \ does not exceed the maximum accepted count. Stores the most recent row\
           \ count for each month when the data quality check was evaluated."
@@ -20545,22 +20545,22 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_negative_count:
+      monthly_partition_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnNegativeCountCheckSpec"
-      monthly_partition_negative_percent:
+      monthly_partition_negative_values_percent:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      monthly_partition_non_negative_count:
+      monthly_partition_non_negative_values:
         description: "Verifies that the number of non-negative values in a column\
           \ does not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      monthly_partition_non_negative_percent:
+      monthly_partition_non_negative_values_percent:
         description: "Verifies that the percentage of non-negative values in a column\
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
@@ -20608,31 +20608,36 @@ definitions:
           \ is above the value defined by the user as a parameter. Creates a separate\
           \ data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
-      monthly_partition_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
-          \ set range. Creates a separate data quality check (and an alert) for each\
-          \ monthly partition."
-        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       monthly_partition_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range. Creates a separate data quality check (and an alert) for each\
           \ monthly partition."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
+      monthly_partition_max_in_range:
+        description: "Verifies that the maximal value in a column is not outside the\
+          \ set range. Creates a separate data quality check (and an alert) for each\
+          \ monthly partition."
+        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
+      monthly_partition_sum_in_range:
+        description: "Verifies that the sum of all values in a column is not outside\
+          \ the set range. Creates a separate data quality check (and an alert) for\
+          \ each monthly partition."
+        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
       monthly_partition_mean_in_range:
         description: "Verifies that the average (mean) of all values in a column is\
           \ not outside the set range. Creates a separate data quality check (and\
           \ an alert) for each monthly partition."
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
-      monthly_partition_percentile_in_range:
-        description: "Verifies that the percentile of all values in a column is not\
-          \ outside the set range. Creates a separate data quality check (and an alert)\
-          \ for each monthly partition."
-        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       monthly_partition_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
           \ the set range. Creates a separate data quality check (and an alert) for\
           \ each monthly partition."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
+      monthly_partition_percentile_in_range:
+        description: "Verifies that the percentile of all values in a column is not\
+          \ outside the set range. Creates a separate data quality check (and an alert)\
+          \ for each monthly partition."
+        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       monthly_partition_percentile_10_in_range:
         description: "Verifies that the percentile 10 of all values in a column is\
           \ not outside the set range. Creates a separate data quality check (and\
@@ -20673,12 +20678,7 @@ definitions:
           \ is not outside the set range. Creates a separate data quality check (and\
           \ an alert) for each monthly partition."
         $ref: "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
-      monthly_partition_sum_in_range:
-        description: "Verifies that the sum of all values in a column is not outside\
-          \ the set range. Creates a separate data quality check (and an alert) for\
-          \ each monthly partition."
-        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
-      monthly_partition_invalid_latitude_count:
+      monthly_partition_invalid_latitude:
         description: "Verifies that the number of invalid latitude values in a column\
           \ does not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each monthly partition."
@@ -20688,7 +20688,7 @@ definitions:
           \ does not fall below the minimum accepted percentage. Creates a separate\
           \ data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnValidLatitudePercentCheckSpec"
-      monthly_partition_invalid_longitude_count:
+      monthly_partition_invalid_longitude:
         description: "Verifies that the number of invalid longitude values in a column\
           \ does not exceed the maximum accepted count. Creates a separate data quality\
           \ check (and an alert) for each monthly partition."
@@ -20821,19 +20821,19 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      profile_negative_count:
+      profile_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnNegativeCountCheckSpec"
-      profile_negative_percent:
+      profile_negative_values_percent:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      profile_non_negative_count:
+      profile_non_negative_values:
         description: "Verifies that the number of non-negative values in a column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      profile_non_negative_percent:
+      profile_non_negative_values_percent:
         description: "Verifies that the percentage of non-negative values in a column\
           \ does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
@@ -20872,26 +20872,30 @@ definitions:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter."
         $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
-      profile_max_in_range:
-        description: "Verifies that the maximal value in a column is not outside the\
-          \ set range."
-        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       profile_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
+      profile_max_in_range:
+        description: "Verifies that the maximal value in a column is not outside the\
+          \ set range."
+        $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
+      profile_sum_in_range:
+        description: "Verifies that the sum of all values in a column is not outside\
+          \ the set range."
+        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
       profile_mean_in_range:
         description: "Verifies that the average (mean) of all values in a column is\
           \ not outside the set range."
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
-      profile_percentile_in_range:
-        description: "Verifies that the percentile of all values in a column is not\
-          \ outside the set range."
-        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       profile_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
           \ the set range."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
+      profile_percentile_in_range:
+        description: "Verifies that the percentile of all values in a column is not\
+          \ outside the set range."
+        $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       profile_percentile_10_in_range:
         description: "Verifies that the percentile 10 of all values in a column is\
           \ not outside the set range."
@@ -20924,11 +20928,7 @@ definitions:
         description: "Verifies that the population variance of all values in a column\
           \ is not outside the set range."
         $ref: "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
-      profile_sum_in_range:
-        description: "Verifies that the sum of all values in a column is not outside\
-          \ the set range."
-        $ref: "#/definitions/ColumnSumInRangeCheckSpec"
-      profile_invalid_latitude_count:
+      profile_invalid_latitude:
         description: "Verifies that the number of invalid latitude values in a column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidLatitudeCountCheckSpec"
@@ -20936,7 +20936,7 @@ definitions:
         description: "Verifies that the percentage of valid latitude values in a column\
           \ does not fall below the minimum accepted percentage."
         $ref: "#/definitions/ColumnValidLatitudePercentCheckSpec"
-      profile_invalid_longitude_count:
+      profile_invalid_longitude:
         description: "Verifies that the number of invalid longitude values in a column\
           \ does not exceed the maximum accepted count."
         $ref: "#/definitions/ColumnInvalidLongitudeCountCheckSpec"
