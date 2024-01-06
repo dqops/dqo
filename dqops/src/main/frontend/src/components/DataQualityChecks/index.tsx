@@ -71,7 +71,7 @@ const DataQualityChecks = ({
   );
   const [mode, setMode] = useState<string>();
   const [copyUI, setCopyUI] = useState<CheckContainerModel>();
-  const [showAdvanced, setShowAdvanced] = useState<boolean>(false);
+  const [showAdvanced, setShowAdvanced] = useState<boolean>(isFiltered === true);
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   
@@ -481,6 +481,7 @@ const DataQualityChecks = ({
           isDefaultEditing={isDefaultEditing}
           showAdvanced={showAdvanced}
           setShowAdvanced={setShowAdvanced}
+          isFiltered = {isFiltered}
         />
         <tbody>
           {
@@ -502,6 +503,7 @@ const DataQualityChecks = ({
               )}
               isDefaultEditing={isDefaultEditing}
               showAdvanced={showAdvanced}
+              isFiltered= {isFiltered}
             />
           ))}
           {isFiltered !== true &&

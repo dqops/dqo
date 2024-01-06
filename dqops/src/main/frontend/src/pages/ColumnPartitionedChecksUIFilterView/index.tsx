@@ -26,7 +26,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
     checkName: string
   } = useParams();
 
-  const { partitionedUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
+  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -45,7 +45,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
       tableName,
       columnName,
       timePartitioned,
-      partitionedUIFilter
+      partitionedChecksUIFilter
     );
 
     await dispatch(
@@ -84,7 +84,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
         <DataQualityChecks
           onUpdate={() => {}}
           className="max-h-checks-1"
-          checksUI={partitionedUIFilter}
+          checksUI={partitionedChecksUIFilter}
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
