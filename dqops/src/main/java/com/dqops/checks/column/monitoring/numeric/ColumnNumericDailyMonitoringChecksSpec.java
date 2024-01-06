@@ -40,18 +40,16 @@ import java.util.Objects;
 public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_number_below_min_value", o -> o.dailyNumberBelowMinValue);
+            put("daily_number_above_max_value", o -> o.dailyNumberAboveMaxValue);
             put("daily_negative_values", o -> o.dailyNegativeValues);
             put("daily_negative_values_percent", o -> o.dailyNegativeValuesPercent);
-            put("daily_non_negative_values", o -> o.dailyNonNegativeValues);
-            put("daily_non_negative_values_percent", o -> o.dailyNonNegativeValuesPercent);
             put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
             put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
-            put("daily_values_in_range_numeric_percent", o -> o.dailyValuesInRangeNumericPercent);
-            put("daily_values_in_range_integers_percent", o -> o.dailyValuesInRangeIntegersPercent);
-            put("daily_value_below_min_value_count", o -> o.dailyValueBelowMinValueCount);
-            put("daily_value_below_min_value_percent", o -> o.dailyValueBelowMinValuePercent);
-            put("daily_value_above_max_value_count", o -> o.dailyValueAboveMaxValueCount);
-            put("daily_value_above_max_value_percent", o -> o.dailyValueAboveMaxValuePercent);
+            put("daily_number_below_min_value_percent", o -> o.dailyNumberBelowMinValuePercent);
+            put("daily_number_above_max_value_percent", o -> o.dailyNumberAboveMaxValuePercent);
+            put("daily_number_in_range_percent", o -> o.dailyNumberInRangePercent);
+            put("daily_integer_in_range_percent", o -> o.dailyIntegerInRangePercent);
             put("daily_min_in_range", o -> o.dailyMinInRange);
             put("daily_max_in_range", o -> o.dailyMaxInRange);
             put("daily_sum_in_range", o -> o.dailySumInRange);
@@ -70,8 +68,16 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
             put("daily_valid_latitude_percent", o -> o.dailyValidLatitudePercent);
             put("daily_invalid_longitude", o -> o.dailyInvalidLongitude);
             put("daily_valid_longitude_percent", o -> o.dailyValidLongitudePercent);
+            put("daily_non_negative_values", o -> o.dailyNonNegativeValues);
+            put("daily_non_negative_values_percent", o -> o.dailyNonNegativeValuesPercent);
         }
     };
+
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNumberBelowMinValueCheckSpec dailyNumberBelowMinValue;
+
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNumberAboveMaxValueCheckSpec dailyNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNegativeCountCheckSpec dailyNegativeValues;
@@ -79,35 +85,23 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec dailyNegativeValuesPercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNonNegativeCountCheckSpec dailyNonNegativeValues;
-
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNonNegativePercentCheckSpec dailyNonNegativeValuesPercent;
-
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnValuesInRangeNumericPercentCheckSpec dailyValuesInRangeNumericPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnValuesInRangeIntegersPercentCheckSpec dailyValuesInRangeIntegersPercent;
-
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnValueBelowMinValueCountCheckSpec dailyValueBelowMinValueCount;
-
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnValueBelowMinValuePercentCheckSpec dailyValueBelowMinValuePercent;
-
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnValueAboveMaxValueCountCheckSpec dailyValueAboveMaxValueCount;
+    private ColumnNumberBelowMinValuePercentCheckSpec dailyNumberBelowMinValuePercent;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnValueAboveMaxValuePercentCheckSpec dailyValueAboveMaxValuePercent;
+    private ColumnNumberAboveMaxValuePercentCheckSpec dailyNumberAboveMaxValuePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNumberInRangePercentCheckSpec dailyNumberInRangePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnIntegerInRangePercentCheckSpec dailyIntegerInRangePercent;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec dailyMinInRange;
@@ -163,6 +157,49 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec dailyValidLongitudePercent;
 
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNonNegativeCountCheckSpec dailyNonNegativeValues;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnNonNegativePercentCheckSpec dailyNonNegativeValuesPercent;
+
+
+    /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnNumberBelowMinValueCheckSpec getDailyNumberBelowMinValue() {
+        return dailyNumberBelowMinValue;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param dailyNumberBelowMinValue Numeric value below min value count check.
+     */
+    public void setDailyNumberBelowMinValue(ColumnNumberBelowMinValueCheckSpec dailyNumberBelowMinValue) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberBelowMinValue, dailyNumberBelowMinValue));
+        this.dailyNumberBelowMinValue = dailyNumberBelowMinValue;
+        propagateHierarchyIdToField(dailyNumberBelowMinValue, "daily_number_below_min_value");
+    }
+
+    /**
+     * Returns a numeric value above max value count check.
+     * @return Numeric value above max value count check.
+     */
+    public ColumnNumberAboveMaxValueCheckSpec getDailyNumberAboveMaxValue() {
+        return dailyNumberAboveMaxValue;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value count check.
+     * @param dailyNumberAboveMaxValue Numeric value above max value count check.
+     */
+    public void setDailyNumberAboveMaxValue(ColumnNumberAboveMaxValueCheckSpec dailyNumberAboveMaxValue) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberAboveMaxValue, dailyNumberAboveMaxValue));
+        this.dailyNumberAboveMaxValue = dailyNumberAboveMaxValue;
+        propagateHierarchyIdToField(dailyNumberAboveMaxValue, "daily_number_above_max_value");
+    }
+
     /**
      * Returns a negative values count check specification.
      * @return Negative values count check specification.
@@ -197,42 +234,6 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.dailyNegativeValuesPercent, dailyNegativeValuesPercent));
         this.dailyNegativeValuesPercent = dailyNegativeValuesPercent;
         propagateHierarchyIdToField(dailyNegativeValuesPercent, "daily_negative_values_percent");
-    }
-
-    /**
-     * Returns a non-negative values count check specification.
-     * @return Non-negative values count check specification.
-     */
-    public ColumnNonNegativeCountCheckSpec getDailyNonNegativeValues() {
-        return dailyNonNegativeValues;
-    }
-
-    /**
-     * Sets a new specification of a non-negative values count check.
-     * @param dailyNonNegativeValues Non-negative values count check specification.
-     */
-    public void setDailyNonNegativeValues(ColumnNonNegativeCountCheckSpec dailyNonNegativeValues) {
-        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeValues, dailyNonNegativeValues));
-        this.dailyNonNegativeValues = dailyNonNegativeValues;
-        propagateHierarchyIdToField(dailyNonNegativeValues, "daily_non_negative_values");
-    }
-
-    /**
-     * Returns a non-negative values percentage check specification.
-     * @return Non-negative values percentage check specification.
-     */
-    public ColumnNonNegativePercentCheckSpec getDailyNonNegativeValuesPercent() {
-        return dailyNonNegativeValuesPercent;
-    }
-
-    /**
-     * Sets a new specification of a non-negative values percentage check.
-     * @param dailyNonNegativeValuesPercent Non-negative values percentage check specification.
-     */
-    public void setDailyNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec dailyNonNegativeValuesPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeValuesPercent, dailyNonNegativeValuesPercent));
-        this.dailyNonNegativeValuesPercent = dailyNonNegativeValuesPercent;
-        propagateHierarchyIdToField(dailyNonNegativeValuesPercent, "daily_non_negative_values_percent");
     }
 
     /**
@@ -272,111 +273,75 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     }
 
     /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnValuesInRangeNumericPercentCheckSpec getDailyValuesInRangeNumericPercent() {
-        return dailyValuesInRangeNumericPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set percent check.
-     * @param dailyValuesInRangeNumericPercent Numbers in set percent check.
-     */
-    public void setDailyValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec dailyValuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValuesInRangeNumericPercent, dailyValuesInRangeNumericPercent));
-        this.dailyValuesInRangeNumericPercent = dailyValuesInRangeNumericPercent;
-        propagateHierarchyIdToField(dailyValuesInRangeNumericPercent, "daily_values_in_range_numeric_percent");
-    }
-
-    /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnValuesInRangeIntegersPercentCheckSpec getDailyValuesInRangeIntegersPercent() {
-        return dailyValuesInRangeIntegersPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set percent check.
-     * @param dailyValuesInRangeIntegersPercent Numbers in set percent check specification.
-     */
-    public void setDailyValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec dailyValuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValuesInRangeIntegersPercent, dailyValuesInRangeIntegersPercent));
-        this.dailyValuesInRangeIntegersPercent = dailyValuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(dailyValuesInRangeIntegersPercent, "daily_values_in_range_integers_percent");
-    }
-
-    /**
-     * Returns a numeric value below min value count check.
-     * @return Numeric value below min value count check.
-     */
-    public ColumnValueBelowMinValueCountCheckSpec getDailyValueBelowMinValueCount() {
-        return dailyValueBelowMinValueCount;
-    }
-
-    /**
-     * Sets a new definition of a numeric value below min value count check.
-     * @param dailyValueBelowMinValueCount Numeric value below min value count check.
-     */
-    public void setDailyValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec dailyValueBelowMinValueCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyValueBelowMinValueCount, dailyValueBelowMinValueCount));
-        this.dailyValueBelowMinValueCount = dailyValueBelowMinValueCount;
-        propagateHierarchyIdToField(dailyValueBelowMinValueCount, "daily_value_below_min_value_count");
-    }
-
-    /**
      * Returns a numeric value below min value percent check.
      * @return Numeric value below min value percent check.
      */
-    public ColumnValueBelowMinValuePercentCheckSpec getDailyValueBelowMinValuePercent() {
-        return dailyValueBelowMinValuePercent;
+    public ColumnNumberBelowMinValuePercentCheckSpec getDailyNumberBelowMinValuePercent() {
+        return dailyNumberBelowMinValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value below min value percent check.
-     * @param dailyValueBelowMinValuePercent Numeric value below min value percent check.
+     * @param dailyNumberBelowMinValuePercent Numeric value below min value percent check.
      */
-    public void setDailyValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec dailyValueBelowMinValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValueBelowMinValuePercent, dailyValueBelowMinValuePercent));
-        this.dailyValueBelowMinValuePercent = dailyValueBelowMinValuePercent;
-        propagateHierarchyIdToField(dailyValueBelowMinValuePercent, "daily_value_below_min_value_percent");
-    }
-
-    /**
-     * Returns a numeric value above max value count check.
-     * @return Numeric value above max value count check.
-     */
-    public ColumnValueAboveMaxValueCountCheckSpec getDailyValueAboveMaxValueCount() {
-        return dailyValueAboveMaxValueCount;
-    }
-
-    /**
-     * Sets a new definition of a numeric value above max value count check.
-     * @param dailyValueAboveMaxValueCount Numeric value above max value count check.
-     */
-    public void setDailyValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec dailyValueAboveMaxValueCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyValueAboveMaxValueCount, dailyValueAboveMaxValueCount));
-        this.dailyValueAboveMaxValueCount = dailyValueAboveMaxValueCount;
-        propagateHierarchyIdToField(dailyValueAboveMaxValueCount, "daily_value_above_max_value_count");
+    public void setDailyNumberBelowMinValuePercent(ColumnNumberBelowMinValuePercentCheckSpec dailyNumberBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberBelowMinValuePercent, dailyNumberBelowMinValuePercent));
+        this.dailyNumberBelowMinValuePercent = dailyNumberBelowMinValuePercent;
+        propagateHierarchyIdToField(dailyNumberBelowMinValuePercent, "daily_number_below_min_value_percent");
     }
 
     /**
      * Returns a numeric value above max value percent check.
      * @return Numeric value above max value percent check.
      */
-    public ColumnValueAboveMaxValuePercentCheckSpec getDailyValueAboveMaxValuePercent() {
-        return dailyValueAboveMaxValuePercent;
+    public ColumnNumberAboveMaxValuePercentCheckSpec getDailyNumberAboveMaxValuePercent() {
+        return dailyNumberAboveMaxValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value above max value percent check.
-     * @param dailyValueAboveMaxValuePercent Numeric value above max value percent check.
+     * @param dailyNumberAboveMaxValuePercent Numeric value above max value percent check.
      */
-    public void setDailyValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec dailyValueAboveMaxValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyValueAboveMaxValuePercent, dailyValueAboveMaxValuePercent));
-        this.dailyValueAboveMaxValuePercent = dailyValueAboveMaxValuePercent;
-        propagateHierarchyIdToField(dailyValueAboveMaxValuePercent, "daily_value_above_max_value_percent");
+    public void setDailyNumberAboveMaxValuePercent(ColumnNumberAboveMaxValuePercentCheckSpec dailyNumberAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberAboveMaxValuePercent, dailyNumberAboveMaxValuePercent));
+        this.dailyNumberAboveMaxValuePercent = dailyNumberAboveMaxValuePercent;
+        propagateHierarchyIdToField(dailyNumberAboveMaxValuePercent, "daily_number_above_max_value_percent");
+    }
+
+    /**
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
+     */
+    public ColumnNumberInRangePercentCheckSpec getDailyNumberInRangePercent() {
+        return dailyNumberInRangePercent;
+    }
+
+    /**
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyNumberInRangePercent Numbers in set percent check.
+     */
+    public void setDailyNumberInRangePercent(ColumnNumberInRangePercentCheckSpec dailyNumberInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberInRangePercent, dailyNumberInRangePercent));
+        this.dailyNumberInRangePercent = dailyNumberInRangePercent;
+        propagateHierarchyIdToField(dailyNumberInRangePercent, "daily_number_in_range_percent");
+    }
+
+    /**
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
+     */
+    public ColumnIntegerInRangePercentCheckSpec getDailyIntegerInRangePercent() {
+        return dailyIntegerInRangePercent;
+    }
+
+    /**
+     * Sets a new specification of a numbers in set percent check.
+     * @param dailyIntegerInRangePercent Numbers in set percent check specification.
+     */
+    public void setDailyIntegerInRangePercent(ColumnIntegerInRangePercentCheckSpec dailyIntegerInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyIntegerInRangePercent, dailyIntegerInRangePercent));
+        this.dailyIntegerInRangePercent = dailyIntegerInRangePercent;
+        propagateHierarchyIdToField(dailyIntegerInRangePercent, "daily_integer_in_range_percent");
     }
 
     /**
@@ -702,6 +667,43 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
         this.dailyValidLongitudePercent = dailyValidLongitudePercent;
         propagateHierarchyIdToField(dailyValidLongitudePercent, "daily_valid_longitude_percent");
     }
+
+    /**
+     * Returns a non-negative values count check specification.
+     * @return Non-negative values count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getDailyNonNegativeValues() {
+        return dailyNonNegativeValues;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values count check.
+     * @param dailyNonNegativeValues Non-negative values count check specification.
+     */
+    public void setDailyNonNegativeValues(ColumnNonNegativeCountCheckSpec dailyNonNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeValues, dailyNonNegativeValues));
+        this.dailyNonNegativeValues = dailyNonNegativeValues;
+        propagateHierarchyIdToField(dailyNonNegativeValues, "daily_non_negative_values");
+    }
+
+    /**
+     * Returns a non-negative values percentage check specification.
+     * @return Non-negative values percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getDailyNonNegativeValuesPercent() {
+        return dailyNonNegativeValuesPercent;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values percentage check.
+     * @param dailyNonNegativeValuesPercent Non-negative values percentage check specification.
+     */
+    public void setDailyNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec dailyNonNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNonNegativeValuesPercent, dailyNonNegativeValuesPercent));
+        this.dailyNonNegativeValuesPercent = dailyNonNegativeValuesPercent;
+        propagateHierarchyIdToField(dailyNonNegativeValuesPercent, "daily_non_negative_values_percent");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

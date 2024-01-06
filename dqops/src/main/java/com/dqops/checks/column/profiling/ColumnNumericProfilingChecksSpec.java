@@ -40,18 +40,16 @@ import java.util.Objects;
 public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("profile_number_below_min_value", o -> o.profileNumberBelowMinValue);
+            put("profile_number_above_max_value", o -> o.profileNumberAboveMaxValue);
             put("profile_negative_values", o -> o.profileNegativeValues);
             put("profile_negative_values_percent", o -> o.profileNegativeValuesPercent);
-            put("profile_non_negative_values", o -> o.profileNonNegativeValues);
-            put("profile_non_negative_values_percent", o -> o.profileNonNegativeValuesPercent);
             put("profile_expected_numbers_in_use_count", o -> o.profileExpectedNumbersInUseCount);
             put("profile_number_value_in_set_percent", o -> o.profileNumberValueInSetPercent);
-            put("profile_values_in_range_numeric_percent", o -> o.profileValuesInRangeNumericPercent);
-            put("profile_values_in_range_integers_percent", o -> o.profileValuesInRangeIntegersPercent);
-            put("profile_value_below_min_value_count", o -> o.profileValueBelowMinValueCount);
-            put("profile_value_below_min_value_percent", o -> o.profileValueBelowMinValuePercent);
-            put("profile_value_above_max_value_count", o -> o.profileValueAboveMaxValueCount);
-            put("profile_value_above_max_value_percent", o -> o.profileValueAboveMaxValuePercent);
+            put("profile_number_below_min_value_percent", o -> o.profileNumberBelowMinValuePercent);
+            put("profile_number_above_max_value_percent", o -> o.profileNumberAboveMaxValuePercent);
+            put("profile_number_in_range_percent", o -> o.profileNumberInRangePercent);
+            put("profile_integer_in_range_percent", o -> o.profileIntegerInRangePercent);
             put("profile_min_in_range", o -> o.profileMinInRange);
             put("profile_max_in_range", o -> o.profileMaxInRange);
             put("profile_sum_in_range", o -> o.profileSumInRange);
@@ -70,8 +68,16 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_valid_latitude_percent", o -> o.profileValidLatitudePercent);
             put("profile_invalid_longitude", o -> o.profileInvalidLongitude);
             put("profile_valid_longitude_percent", o -> o.profileValidLongitudePercent);
+            put("profile_non_negative_values", o -> o.profileNonNegativeValues);
+            put("profile_non_negative_values_percent", o -> o.profileNonNegativeValuesPercent);
         }
     };
+
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter.")
+    private ColumnNumberBelowMinValueCheckSpec profileNumberBelowMinValue;
+
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter.")
+    private ColumnNumberAboveMaxValueCheckSpec profileNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
     private ColumnNegativeCountCheckSpec profileNegativeValues;
@@ -79,35 +85,23 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnNegativePercentCheckSpec profileNegativeValuesPercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.")
-    private ColumnNonNegativeCountCheckSpec profileNonNegativeValues;
-
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.")
-    private ColumnNonNegativePercentCheckSpec profileNonNegativeValuesPercent;
-
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
     private ColumnExpectedNumbersInUseCountCheckSpec profileExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
     private ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnValuesInRangeNumericPercentCheckSpec profileValuesInRangeNumericPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
-    private ColumnValuesInRangeIntegersPercentCheckSpec profileValuesInRangeIntegersPercent;
-
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter.")
-    private ColumnValueBelowMinValueCountCheckSpec profileValueBelowMinValueCount;
-
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter.")
-    private ColumnValueBelowMinValuePercentCheckSpec profileValueBelowMinValuePercent;
-
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter.")
-    private ColumnValueAboveMaxValueCountCheckSpec profileValueAboveMaxValueCount;
+    private ColumnNumberBelowMinValuePercentCheckSpec profileNumberBelowMinValuePercent;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter.")
-    private ColumnValueAboveMaxValuePercentCheckSpec profileValueAboveMaxValuePercent;
+    private ColumnNumberAboveMaxValuePercentCheckSpec profileNumberAboveMaxValuePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnNumberInRangePercentCheckSpec profileNumberInRangePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")
+    private ColumnIntegerInRangePercentCheckSpec profileIntegerInRangePercent;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column is not outside the set range.")
     private ColumnMinInRangeCheckSpec profileMinInRange;
@@ -163,6 +157,48 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.")
     private ColumnValidLongitudePercentCheckSpec profileValidLongitudePercent;
 
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.")
+    private ColumnNonNegativeCountCheckSpec profileNonNegativeValues;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.")
+    private ColumnNonNegativePercentCheckSpec profileNonNegativeValuesPercent;
+
+    /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnNumberBelowMinValueCheckSpec getProfileNumberBelowMinValue() {
+        return profileNumberBelowMinValue;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param profileNumberBelowMinValue Numeric value below min value count check.
+     */
+    public void setProfileNumberBelowMinValue(ColumnNumberBelowMinValueCheckSpec profileNumberBelowMinValue) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberBelowMinValue, profileNumberBelowMinValue));
+        this.profileNumberBelowMinValue = profileNumberBelowMinValue;
+        propagateHierarchyIdToField(profileNumberBelowMinValue, "profile_number_below_min_value");
+    }
+
+    /**
+     * Returns a numeric value above max value count check.
+     * @return Numeric value above max value count check.
+     */
+    public ColumnNumberAboveMaxValueCheckSpec getProfileNumberAboveMaxValue() {
+        return profileNumberAboveMaxValue;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value count check.
+     * @param profileNumberAboveMaxValue Numeric value above max value count check.
+     */
+    public void setProfileNumberAboveMaxValue(ColumnNumberAboveMaxValueCheckSpec profileNumberAboveMaxValue) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberAboveMaxValue, profileNumberAboveMaxValue));
+        this.profileNumberAboveMaxValue = profileNumberAboveMaxValue;
+        propagateHierarchyIdToField(profileNumberAboveMaxValue, "profile_number_above_max_value");
+    }
+
     /**
      * Returns a negative count check specification.
      * @return Negative count check specification.
@@ -197,42 +233,6 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.profileNegativeValuesPercent, profileNegativeValuesPercent));
         this.profileNegativeValuesPercent = profileNegativeValuesPercent;
         propagateHierarchyIdToField(profileNegativeValuesPercent, "profile_negative_values_percent");
-    }
-
-    /**
-     * Returns a non-negative count check specification.
-     * @return Non-negative count check specification.
-     */
-    public ColumnNonNegativeCountCheckSpec getProfileNonNegativeValues() {
-        return profileNonNegativeValues;
-    }
-
-    /**
-     * Sets a new specification of a non-negative count check.
-     * @param profileNonNegativeValues Non-negative count check specification.
-     */
-    public void setProfileNonNegativeValues(ColumnNonNegativeCountCheckSpec profileNonNegativeValues) {
-        this.setDirtyIf(!Objects.equals(this.profileNonNegativeValues, profileNonNegativeValues));
-        this.profileNonNegativeValues = profileNonNegativeValues;
-        propagateHierarchyIdToField(profileNonNegativeValues, "profile_non_negative_values");
-    }
-
-    /**
-     * Returns a negative percentage check specification.
-     * @return Negative percentage check specification.
-     */
-    public ColumnNonNegativePercentCheckSpec getProfileNonNegativeValuesPercent() {
-        return profileNonNegativeValuesPercent;
-    }
-
-    /**
-     * Sets a new specification of a negative percentage check.
-     * @param profileNonNegativeValuesPercent Negative percentage check specification.
-     */
-    public void setProfileNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec profileNonNegativeValuesPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileNonNegativeValuesPercent, profileNonNegativeValuesPercent));
-        this.profileNonNegativeValuesPercent = profileNonNegativeValuesPercent;
-        propagateHierarchyIdToField(profileNonNegativeValuesPercent, "profile_non_negative_values_percent");
     }
 
     /**
@@ -272,111 +272,75 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnValuesInRangeNumericPercentCheckSpec getProfileValuesInRangeNumericPercent() {
-        return profileValuesInRangeNumericPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set percent check.
-     * @param profileValuesInRangeNumericPercent Numbers in set percent check specification.
-     */
-    public void setProfileValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec profileValuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileValuesInRangeNumericPercent, profileValuesInRangeNumericPercent));
-        this.profileValuesInRangeNumericPercent = profileValuesInRangeNumericPercent;
-        propagateHierarchyIdToField(profileValuesInRangeNumericPercent, "profile_values_in_range_numeric_percent");
-    }
-
-    /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnValuesInRangeIntegersPercentCheckSpec getProfileValuesInRangeIntegersPercent() {
-        return profileValuesInRangeIntegersPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set percent check.
-     * @param profileValuesInRangeIntegersPercent Numbers in set percent check specification.
-     */
-    public void setProfileValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec profileValuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileValuesInRangeIntegersPercent, profileValuesInRangeIntegersPercent));
-        this.profileValuesInRangeIntegersPercent = profileValuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(profileValuesInRangeIntegersPercent, "profile_values_in_range_integers_percent");
-    }
-
-    /**
-     * Returns a numeric value below min value count check.
-     * @return Numeric value below min value count check.
-     */
-    public ColumnValueBelowMinValueCountCheckSpec getProfileValueBelowMinValueCount() {
-        return profileValueBelowMinValueCount;
-    }
-
-    /**
-     * Sets a new definition of a numeric value below min value count check.
-     * @param profileValueBelowMinValueCount Numeric value below min value count check.
-     */
-    public void setProfileValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec profileValueBelowMinValueCount) {
-        this.setDirtyIf(!Objects.equals(this.profileValueBelowMinValueCount, profileValueBelowMinValueCount));
-        this.profileValueBelowMinValueCount = profileValueBelowMinValueCount;
-        propagateHierarchyIdToField(profileValueBelowMinValueCount, "profile_value_below_min_value_count");
-    }
-
-    /**
      * Returns a numeric value below min value percent check.
      * @return Numeric value below min value percent check.
      */
-    public ColumnValueBelowMinValuePercentCheckSpec getProfileValueBelowMinValuePercent() {
-        return profileValueBelowMinValuePercent;
+    public ColumnNumberBelowMinValuePercentCheckSpec getProfileNumberBelowMinValuePercent() {
+        return profileNumberBelowMinValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value below min value percent check.
-     * @param profileValueBelowMinValuePercent Numeric value below min value percent check.
+     * @param profileNumberBelowMinValuePercent Numeric value below min value percent check.
      */
-    public void setProfileValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec profileValueBelowMinValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileValueBelowMinValuePercent, profileValueBelowMinValuePercent));
-        this.profileValueBelowMinValuePercent = profileValueBelowMinValuePercent;
-        propagateHierarchyIdToField(profileValueBelowMinValuePercent, "profile_value_below_min_value_percent");
-    }
-
-    /**
-     * Returns a numeric value above max value count check.
-     * @return Numeric value above max value count check.
-     */
-    public ColumnValueAboveMaxValueCountCheckSpec getProfileValueAboveMaxValueCount() {
-        return profileValueAboveMaxValueCount;
-    }
-
-    /**
-     * Sets a new definition of a numeric value above max value count check.
-     * @param profileValueAboveMaxValueCount Numeric value above max value count check.
-     */
-    public void setProfileValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec profileValueAboveMaxValueCount) {
-        this.setDirtyIf(!Objects.equals(this.profileValueAboveMaxValueCount, profileValueAboveMaxValueCount));
-        this.profileValueAboveMaxValueCount = profileValueAboveMaxValueCount;
-        propagateHierarchyIdToField(profileValueAboveMaxValueCount, "profile_value_above_max_value_count");
+    public void setProfileNumberBelowMinValuePercent(ColumnNumberBelowMinValuePercentCheckSpec profileNumberBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberBelowMinValuePercent, profileNumberBelowMinValuePercent));
+        this.profileNumberBelowMinValuePercent = profileNumberBelowMinValuePercent;
+        propagateHierarchyIdToField(profileNumberBelowMinValuePercent, "profile_number_below_min_value_percent");
     }
 
     /**
      * Returns a numeric value above max value percent check.
      * @return Numeric value above max value percent check.
      */
-    public ColumnValueAboveMaxValuePercentCheckSpec getProfileValueAboveMaxValuePercent() {
-        return profileValueAboveMaxValuePercent;
+    public ColumnNumberAboveMaxValuePercentCheckSpec getProfileNumberAboveMaxValuePercent() {
+        return profileNumberAboveMaxValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value above max value percent check.
-     * @param profileValueAboveMaxValuePercent Numeric value above max value percent check.
+     * @param profileNumberAboveMaxValuePercent Numeric value above max value percent check.
      */
-    public void setProfileValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec profileValueAboveMaxValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileValueAboveMaxValuePercent, profileValueAboveMaxValuePercent));
-        this.profileValueAboveMaxValuePercent = profileValueAboveMaxValuePercent;
-        propagateHierarchyIdToField(profileValueAboveMaxValuePercent, "profile_value_above_max_value_percent");
+    public void setProfileNumberAboveMaxValuePercent(ColumnNumberAboveMaxValuePercentCheckSpec profileNumberAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberAboveMaxValuePercent, profileNumberAboveMaxValuePercent));
+        this.profileNumberAboveMaxValuePercent = profileNumberAboveMaxValuePercent;
+        propagateHierarchyIdToField(profileNumberAboveMaxValuePercent, "profile_number_above_max_value_percent");
+    }
+
+    /**
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
+     */
+    public ColumnNumberInRangePercentCheckSpec getProfileNumberInRangePercent() {
+        return profileNumberInRangePercent;
+    }
+
+    /**
+     * Sets a new specification of a numbers in set percent check.
+     * @param profileNumberInRangePercent Numbers in set percent check specification.
+     */
+    public void setProfileNumberInRangePercent(ColumnNumberInRangePercentCheckSpec profileNumberInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberInRangePercent, profileNumberInRangePercent));
+        this.profileNumberInRangePercent = profileNumberInRangePercent;
+        propagateHierarchyIdToField(profileNumberInRangePercent, "profile_number_in_range_percent");
+    }
+
+    /**
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
+     */
+    public ColumnIntegerInRangePercentCheckSpec getProfileIntegerInRangePercent() {
+        return profileIntegerInRangePercent;
+    }
+
+    /**
+     * Sets a new specification of a numbers in set percent check.
+     * @param profileIntegerInRangePercent Numbers in set percent check specification.
+     */
+    public void setProfileIntegerInRangePercent(ColumnIntegerInRangePercentCheckSpec profileIntegerInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileIntegerInRangePercent, profileIntegerInRangePercent));
+        this.profileIntegerInRangePercent = profileIntegerInRangePercent;
+        propagateHierarchyIdToField(profileIntegerInRangePercent, "profile_integer_in_range_percent");
     }
 
     /**
@@ -702,6 +666,43 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
         this.profileValidLongitudePercent = profileValidLongitudePercent;
         propagateHierarchyIdToField(profileValidLongitudePercent, "profile_valid_longitude_percent");
     }
+
+    /**
+     * Returns a non-negative count check specification.
+     * @return Non-negative count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getProfileNonNegativeValues() {
+        return profileNonNegativeValues;
+    }
+
+    /**
+     * Sets a new specification of a non-negative count check.
+     * @param profileNonNegativeValues Non-negative count check specification.
+     */
+    public void setProfileNonNegativeValues(ColumnNonNegativeCountCheckSpec profileNonNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.profileNonNegativeValues, profileNonNegativeValues));
+        this.profileNonNegativeValues = profileNonNegativeValues;
+        propagateHierarchyIdToField(profileNonNegativeValues, "profile_non_negative_values");
+    }
+
+    /**
+     * Returns a negative percentage check specification.
+     * @return Negative percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getProfileNonNegativeValuesPercent() {
+        return profileNonNegativeValuesPercent;
+    }
+
+    /**
+     * Sets a new specification of a negative percentage check.
+     * @param profileNonNegativeValuesPercent Negative percentage check specification.
+     */
+    public void setProfileNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec profileNonNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNonNegativeValuesPercent, profileNonNegativeValuesPercent));
+        this.profileNonNegativeValuesPercent = profileNonNegativeValuesPercent;
+        propagateHierarchyIdToField(profileNonNegativeValuesPercent, "profile_non_negative_values_percent");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

@@ -40,18 +40,16 @@ import java.util.Objects;
 public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_number_below_min_value", o -> o.monthlyNumberBelowMinValue);
+            put("monthly_number_above_max_value", o -> o.monthlyNumberAboveMaxValue);
             put("monthly_negative_values", o -> o.monthlyNegativeValues);
             put("monthly_negative_values_percent", o -> o.monthlyNegativeValuesPercent);
-            put("monthly_non_negative_values", o -> o.monthlyNonNegativeValues);
-            put("monthly_non_negative_values_percent", o -> o.monthlyNonNegativeValuesPercent);
             put("monthly_expected_numbers_in_use_count", o -> o.monthlyExpectedNumbersInUseCount);
             put("monthly_number_value_in_set_percent", o -> o.monthlyNumberValueInSetPercent);
-            put("monthly_values_in_range_numeric_percent", o -> o.monthlyValuesInRangeNumericPercent);
-            put("monthly_values_in_range_integers_percent", o -> o.monthlyValuesInRangeIntegersPercent);
-            put("monthly_value_below_min_value_count", o -> o.monthlyValueBelowMinValueCount);
-            put("monthly_value_below_min_value_percent", o -> o.monthlyValueBelowMinValuePercent);
-            put("monthly_value_above_max_value_count", o -> o.monthlyValueAboveMaxValueCount);
-            put("monthly_value_above_max_value_percent", o -> o.monthlyValueAboveMaxValuePercent);
+            put("monthly_number_below_min_value_percent", o -> o.monthlyNumberBelowMinValuePercent);
+            put("monthly_number_above_max_value_percent", o -> o.monthlyNumberAboveMaxValuePercent);
+            put("monthly_number_in_range_percent", o -> o.monthlyNumberInRangePercent);
+            put("monthly_integer_in_range_percent", o -> o.monthlyIntegerInRangePercent);
             put("monthly_min_in_range", o -> o.monthlyMinInRange);
             put("monthly_max_in_range", o -> o.monthlyMaxInRange);
             put("monthly_sum_in_range", o -> o.monthlySumInRange);
@@ -70,8 +68,16 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
             put("monthly_valid_latitude_percent", o -> o.monthlyValidLatitudePercent);
             put("monthly_invalid_longitude", o -> o.monthlyInvalidLongitude);
             put("monthly_valid_longitude_percent", o -> o.monthlyValidLongitudePercent);
+            put("monthly_non_negative_values", o -> o.monthlyNonNegativeValues);
+            put("monthly_non_negative_values_percent", o -> o.monthlyNonNegativeValuesPercent);
         }
     };
+
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNumberBelowMinValueCheckSpec monthlyNumberBelowMinValue;
+
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNumberAboveMaxValueCheckSpec monthlyNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNegativeCountCheckSpec monthlyNegativeValues;
@@ -79,35 +85,23 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec monthlyNegativeValuesPercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnNonNegativeCountCheckSpec monthlyNonNegativeValues;
-
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnNonNegativePercentCheckSpec monthlyNonNegativeValuesPercent;
-
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnValuesInRangeNumericPercentCheckSpec monthlyValuesInRangeNumericPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnValuesInRangeIntegersPercentCheckSpec monthlyValuesInRangeIntegersPercent;
-
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnValueBelowMinValueCountCheckSpec monthlyValueBelowMinValueCount;
-
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnValueBelowMinValuePercentCheckSpec monthlyValueBelowMinValuePercent;
-
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnValueAboveMaxValueCountCheckSpec monthlyValueAboveMaxValueCount;
+    private ColumnNumberBelowMinValuePercentCheckSpec monthlyNumberBelowMinValuePercent;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnValueAboveMaxValuePercentCheckSpec monthlyValueAboveMaxValuePercent;
+    private ColumnNumberAboveMaxValuePercentCheckSpec monthlyNumberAboveMaxValuePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNumberInRangePercentCheckSpec monthlyNumberInRangePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnIntegerInRangePercentCheckSpec monthlyIntegerInRangePercent;
 
     @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec monthlyMinInRange;
@@ -163,6 +157,49 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec monthlyValidLongitudePercent;
 
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNonNegativeCountCheckSpec monthlyNonNegativeValues;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNonNegativePercentCheckSpec monthlyNonNegativeValuesPercent;
+
+
+    /**
+     * Returns a numeric value below min value count check.
+     * @return Numeric value below min value count check.
+     */
+    public ColumnNumberBelowMinValueCheckSpec getMonthlyNumberBelowMinValue() {
+        return monthlyNumberBelowMinValue;
+    }
+
+    /**
+     * Sets a new definition of a numeric value below min value count check.
+     * @param monthlyNumberBelowMinValue Numeric value below min value count check.
+     */
+    public void setMonthlyNumberBelowMinValue(ColumnNumberBelowMinValueCheckSpec monthlyNumberBelowMinValue) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberBelowMinValue, monthlyNumberBelowMinValue));
+        this.monthlyNumberBelowMinValue = monthlyNumberBelowMinValue;
+        propagateHierarchyIdToField(monthlyNumberBelowMinValue, "monthly_number_below_min_value");
+    }
+
+    /**
+     * Returns a numeric value above max value count check.
+     * @return Numeric value above max value count check.
+     */
+    public ColumnNumberAboveMaxValueCheckSpec getMonthlyNumberAboveMaxValue() {
+        return monthlyNumberAboveMaxValue;
+    }
+
+    /**
+     * Sets a new definition of a numeric value above max value count check.
+     * @param monthlyNumberAboveMaxValue Numeric value above max value count check.
+     */
+    public void setMonthlyNumberAboveMaxValue(ColumnNumberAboveMaxValueCheckSpec monthlyNumberAboveMaxValue) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberAboveMaxValue, monthlyNumberAboveMaxValue));
+        this.monthlyNumberAboveMaxValue = monthlyNumberAboveMaxValue;
+        propagateHierarchyIdToField(monthlyNumberAboveMaxValue, "monthly_number_above_max_value");
+    }
+
     /**
      * Returns a negative values count check specification.
      * @return Negative values count check specification.
@@ -197,43 +234,6 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.monthlyNegativeValuesPercent, monthlyNegativeValuesPercent));
         this.monthlyNegativeValuesPercent = monthlyNegativeValuesPercent;
         propagateHierarchyIdToField(monthlyNegativeValuesPercent, "monthly_negative_values_percent");
-    }
-
-    /**
-     * Returns a non-negative values count check specification.
-     * @return Non-negative values count check specification.
-     */
-    public ColumnNonNegativeCountCheckSpec getMonthlyNonNegativeValues() {
-        return monthlyNonNegativeValues;
-    }
-
-    /**
-     * Sets a new specification of a non-negative values count check.
-     * @param monthlyNonNegativeValues Non-negative values count check specification.
-     */
-    public void setMonthlyNonNegativeValues(ColumnNonNegativeCountCheckSpec monthlyNonNegativeValues) {
-        this.setDirtyIf(!Objects.equals(this.monthlyNonNegativeValues, monthlyNonNegativeValues));
-        this.monthlyNonNegativeValues = monthlyNonNegativeValues;
-        propagateHierarchyIdToField(monthlyNonNegativeValues, "monthly_non_negative_values");
-    }
-
-
-    /**
-     * Returns a non-negative values percentage check specification.
-     * @return Non-negative values percentage check specification.
-     */
-    public ColumnNonNegativePercentCheckSpec getMonthlyNonNegativeValuesPercent() {
-        return monthlyNonNegativeValuesPercent;
-    }
-
-    /**
-     * Sets a new specification of a non-negative values percentage check.
-     * @param monthlyNonNegativeValuesPercent Non-negative values percentage check specification.
-     */
-    public void setMonthlyNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec monthlyNonNegativeValuesPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyNonNegativeValuesPercent, monthlyNonNegativeValuesPercent));
-        this.monthlyNonNegativeValuesPercent = monthlyNonNegativeValuesPercent;
-        propagateHierarchyIdToField(monthlyNonNegativeValuesPercent, "monthly_non_negative_values_percent");
     }
 
     /**
@@ -273,111 +273,75 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     }
 
     /**
-     * Returns a numbers in set percent check specification.
-     * @return numbers in set percent check specification.
-     */
-    public ColumnValuesInRangeNumericPercentCheckSpec getMonthlyValuesInRangeNumericPercent() {
-        return monthlyValuesInRangeNumericPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set percent check.
-     * @param monthlyValuesInRangeNumericPercent Numbers in set percent check specification.
-     */
-    public void setMonthlyValuesInRangeNumericPercent(ColumnValuesInRangeNumericPercentCheckSpec monthlyValuesInRangeNumericPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValuesInRangeNumericPercent, monthlyValuesInRangeNumericPercent));
-        this.monthlyValuesInRangeNumericPercent = monthlyValuesInRangeNumericPercent;
-        propagateHierarchyIdToField(monthlyValuesInRangeNumericPercent, "monthly_values_in_range_numeric_percent");
-    }
-
-    /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnValuesInRangeIntegersPercentCheckSpec getMonthlyValuesInRangeIntegersPercent() {
-        return monthlyValuesInRangeIntegersPercent;
-    }
-
-    /**
-     * Sets a new definition of a numbers in set percent check.
-     * @param monthlyValuesInRangeIntegersPercent Numbers in set percent check specification.
-     */
-    public void setMonthlyValuesInRangeIntegersPercent(ColumnValuesInRangeIntegersPercentCheckSpec monthlyValuesInRangeIntegersPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValuesInRangeIntegersPercent, monthlyValuesInRangeIntegersPercent));
-        this.monthlyValuesInRangeIntegersPercent = monthlyValuesInRangeIntegersPercent;
-        propagateHierarchyIdToField(monthlyValuesInRangeIntegersPercent, "monthly_values_in_range_integers_percent");
-    }
-
-    /**
-     * Returns a numeric value below min value count check.
-     * @return Numeric value below min value count check.
-     */
-    public ColumnValueBelowMinValueCountCheckSpec getMonthlyValueBelowMinValueCount() {
-        return monthlyValueBelowMinValueCount;
-    }
-
-    /**
-     * Sets a new definition of a numeric value below min value count check.
-     * @param monthlyValueBelowMinValueCount Numeric value below min value count check.
-     */
-    public void setMonthlyValueBelowMinValueCount(ColumnValueBelowMinValueCountCheckSpec monthlyValueBelowMinValueCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValueBelowMinValueCount, monthlyValueBelowMinValueCount));
-        this.monthlyValueBelowMinValueCount = monthlyValueBelowMinValueCount;
-        propagateHierarchyIdToField(monthlyValueBelowMinValueCount, "monthly_value_below_min_value_count");
-    }
-
-    /**
      * Returns a numeric value below min value percent check.
      * @return Numeric value below min value percent check.
      */
-    public ColumnValueBelowMinValuePercentCheckSpec getMonthlyValueBelowMinValuePercent() {
-        return monthlyValueBelowMinValuePercent;
+    public ColumnNumberBelowMinValuePercentCheckSpec getMonthlyNumberBelowMinValuePercent() {
+        return monthlyNumberBelowMinValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value below min value percent check.
-     * @param monthlyValueBelowMinValuePercent Numeric value below min value percent check.
+     * @param monthlyNumberBelowMinValuePercent Numeric value below min value percent check.
      */
-    public void setMonthlyValueBelowMinValuePercent(ColumnValueBelowMinValuePercentCheckSpec monthlyValueBelowMinValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValueBelowMinValuePercent, monthlyValueBelowMinValuePercent));
-        this.monthlyValueBelowMinValuePercent = monthlyValueBelowMinValuePercent;
-        propagateHierarchyIdToField(monthlyValueBelowMinValuePercent, "monthly_value_below_min_value_percent");
-    }
-
-    /**
-     * Returns a numeric value above max value count check.
-     * @return Numeric value above max value count check.
-     */
-    public ColumnValueAboveMaxValueCountCheckSpec getMonthlyValueAboveMaxValueCount() {
-        return monthlyValueAboveMaxValueCount;
-    }
-
-    /**
-     * Sets a new definition of a numeric value above max value count check.
-     * @param monthlyValueAboveMaxValueCount Numeric value above max value count check.
-     */
-    public void setMonthlyValueAboveMaxValueCount(ColumnValueAboveMaxValueCountCheckSpec monthlyValueAboveMaxValueCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValueAboveMaxValueCount, monthlyValueAboveMaxValueCount));
-        this.monthlyValueAboveMaxValueCount = monthlyValueAboveMaxValueCount;
-        propagateHierarchyIdToField(monthlyValueAboveMaxValueCount, "monthly_value_above_max_value_count");
+    public void setMonthlyNumberBelowMinValuePercent(ColumnNumberBelowMinValuePercentCheckSpec monthlyNumberBelowMinValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberBelowMinValuePercent, monthlyNumberBelowMinValuePercent));
+        this.monthlyNumberBelowMinValuePercent = monthlyNumberBelowMinValuePercent;
+        propagateHierarchyIdToField(monthlyNumberBelowMinValuePercent, "monthly_number_below_min_value_percent");
     }
 
     /**
      * Returns a numeric value above max value percent check.
      * @return Numeric value above max value percent check.
      */
-    public ColumnValueAboveMaxValuePercentCheckSpec getMonthlyValueAboveMaxValuePercent() {
-        return monthlyValueAboveMaxValuePercent;
+    public ColumnNumberAboveMaxValuePercentCheckSpec getMonthlyNumberAboveMaxValuePercent() {
+        return monthlyNumberAboveMaxValuePercent;
     }
 
     /**
      * Sets a new definition of a numeric value above max value percent check.
-     * @param monthlyValueAboveMaxValuePercent Numeric value above max value percent check.
+     * @param monthlyNumberAboveMaxValuePercent Numeric value above max value percent check.
      */
-    public void setMonthlyValueAboveMaxValuePercent(ColumnValueAboveMaxValuePercentCheckSpec monthlyValueAboveMaxValuePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyValueAboveMaxValuePercent, monthlyValueAboveMaxValuePercent));
-        this.monthlyValueAboveMaxValuePercent = monthlyValueAboveMaxValuePercent;
-        propagateHierarchyIdToField(monthlyValueAboveMaxValuePercent, "monthly_value_above_max_value_percent");
+    public void setMonthlyNumberAboveMaxValuePercent(ColumnNumberAboveMaxValuePercentCheckSpec monthlyNumberAboveMaxValuePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberAboveMaxValuePercent, monthlyNumberAboveMaxValuePercent));
+        this.monthlyNumberAboveMaxValuePercent = monthlyNumberAboveMaxValuePercent;
+        propagateHierarchyIdToField(monthlyNumberAboveMaxValuePercent, "monthly_number_above_max_value_percent");
+    }
+
+    /**
+     * Returns a numbers in set percent check specification.
+     * @return numbers in set percent check specification.
+     */
+    public ColumnNumberInRangePercentCheckSpec getMonthlyNumberInRangePercent() {
+        return monthlyNumberInRangePercent;
+    }
+
+    /**
+     * Sets a new specification of a numbers in set percent check.
+     * @param monthlyNumberInRangePercent Numbers in set percent check specification.
+     */
+    public void setMonthlyNumberInRangePercent(ColumnNumberInRangePercentCheckSpec monthlyNumberInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberInRangePercent, monthlyNumberInRangePercent));
+        this.monthlyNumberInRangePercent = monthlyNumberInRangePercent;
+        propagateHierarchyIdToField(monthlyNumberInRangePercent, "monthly_number_in_range_percent");
+    }
+
+    /**
+     * Returns a numbers in set percent check specification.
+     * @return Numbers in set percent check specification.
+     */
+    public ColumnIntegerInRangePercentCheckSpec getMonthlyIntegerInRangePercent() {
+        return monthlyIntegerInRangePercent;
+    }
+
+    /**
+     * Sets a new definition of a numbers in set percent check.
+     * @param monthlyIntegerInRangePercent Numbers in set percent check specification.
+     */
+    public void setMonthlyIntegerInRangePercent(ColumnIntegerInRangePercentCheckSpec monthlyIntegerInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyIntegerInRangePercent, monthlyIntegerInRangePercent));
+        this.monthlyIntegerInRangePercent = monthlyIntegerInRangePercent;
+        propagateHierarchyIdToField(monthlyIntegerInRangePercent, "monthly_integer_in_range_percent");
     }
 
     /**
@@ -704,6 +668,43 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         this.monthlyValidLongitudePercent = monthlyValidLongitudePercent;
         propagateHierarchyIdToField(monthlyValidLongitudePercent, "monthly_valid_longitude_percent");
     }
+
+    /**
+     * Returns a non-negative values count check specification.
+     * @return Non-negative values count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getMonthlyNonNegativeValues() {
+        return monthlyNonNegativeValues;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values count check.
+     * @param monthlyNonNegativeValues Non-negative values count check specification.
+     */
+    public void setMonthlyNonNegativeValues(ColumnNonNegativeCountCheckSpec monthlyNonNegativeValues) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNonNegativeValues, monthlyNonNegativeValues));
+        this.monthlyNonNegativeValues = monthlyNonNegativeValues;
+        propagateHierarchyIdToField(monthlyNonNegativeValues, "monthly_non_negative_values");
+    }
+
+    /**
+     * Returns a non-negative values percentage check specification.
+     * @return Non-negative values percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getMonthlyNonNegativeValuesPercent() {
+        return monthlyNonNegativeValuesPercent;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values percentage check.
+     * @param monthlyNonNegativeValuesPercent Non-negative values percentage check specification.
+     */
+    public void setMonthlyNonNegativeValuesPercent(ColumnNonNegativePercentCheckSpec monthlyNonNegativeValuesPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNonNegativeValuesPercent, monthlyNonNegativeValuesPercent));
+        this.monthlyNonNegativeValuesPercent = monthlyNonNegativeValuesPercent;
+        propagateHierarchyIdToField(monthlyNonNegativeValuesPercent, "monthly_non_negative_values_percent");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

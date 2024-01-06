@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the number of values in a column that does not match values
     in another table column does not exceed the set count. Stores the most recent
     captured value for each day when the data quality check was evaluated.
+  standard: true

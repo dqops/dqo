@@ -17327,6 +17327,67 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnIntegerInRangePercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericIntegerInRangePercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of values from range\
+          \ in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnIntegrityDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -19913,6 +19974,315 @@ definitions:
         description: "Configuration of the profiler that measures the percentage of\
           \ not null values."
         $ref: "#/definitions/ColumnNullsNotNullsPercentStatisticsCollectorSpec"
+  ColumnNumberAboveMaxValueCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericNumberAboveMaxValueCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ values with a value above the indicated by the user value in a column\
+          \ that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnNumberAboveMaxValuePercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ values with a value above the indicated by the user value in a column\
+          \ that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+  ColumnNumberBelowMinValueCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericNumberBelowMinValueCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ values with a value below the indicated by the user value in a column\
+          \ that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnNumberBelowMinValuePercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericNumberBelowMinValuePercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ values with a value below the indicated by the user value in a column\
+          \ that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+  ColumnNumberInRangePercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericNumberInRangePercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule0ParametersSpec"
+      error:
+        description: "Default alerting threshold for set percentage of values from\
+          \ range in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MinPercentRule2ParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule5ParametersSpec"
   ColumnNumberValueInSetPercentCheckSpec:
     type: "object"
     properties:
@@ -19992,6 +20362,16 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_number_below_min_value:
+        description: "The check counts the number of values in the column that is\
+          \ below the value defined by the user as a parameter. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
+      daily_number_above_max_value:
+        description: "The check counts the number of values in the column that is\
+          \ above the value defined by the user as a parameter. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       daily_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Stores the most recent captured\
@@ -20002,16 +20382,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      daily_non_negative_values:
-        description: "Verifies that the number of non-negative values in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      daily_non_negative_values_percent:
-        description: "Verifies that the percentage of non-negative values in a column\
-          \ does not exceed the maximum accepted percentage. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
       daily_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -20025,36 +20395,26 @@ definitions:
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      daily_values_in_range_numeric_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValuesInRangeNumericPercentCheckSpec"
-      daily_values_in_range_integers_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValuesInRangeIntegersPercentCheckSpec"
-      daily_value_below_min_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ below the value defined by the user as a parameter. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueBelowMinValueCountCheckSpec"
-      daily_value_below_min_value_percent:
+      daily_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueBelowMinValuePercentCheckSpec"
-      daily_value_above_max_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ above the value defined by the user as a parameter. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueAboveMaxValueCountCheckSpec"
-      daily_value_above_max_value_percent:
+        $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
+      daily_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
+        $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
+      daily_number_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberInRangePercentCheckSpec"
+      daily_integer_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       daily_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range. Stores the most recent captured value for each day when the\
@@ -20146,6 +20506,16 @@ definitions:
           \ most recent captured value for each day when the data quality check was\
           \ evaluated."
         $ref: "#/definitions/ColumnValidLongitudePercentCheckSpec"
+      daily_non_negative_values:
+        description: "Verifies that the number of non-negative values in a column\
+          \ does not exceed the maximum accepted count. Stores the most recent captured\
+          \ value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
+      daily_non_negative_values_percent:
+        description: "Verifies that the percentage of non-negative values in a column\
+          \ does not exceed the maximum accepted percentage. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
   ColumnNumericDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -20157,6 +20527,16 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_number_below_min_value:
+        description: "The check counts the number of values in the column that is\
+          \ below the value defined by the user as a parameter. Creates a separate\
+          \ data quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
+      daily_partition_number_above_max_value:
+        description: "The check counts the number of values in the column that is\
+          \ above the value defined by the user as a parameter. Creates a separate\
+          \ data quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       daily_partition_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Creates a separate data quality\
@@ -20167,16 +20547,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      daily_partition_non_negative_values:
-        description: "Verifies that the number of non-negative values in a column\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      daily_partition_non_negative_values_percent:
-        description: "Verifies that the percentage of non-negative values in a column\
-          \ does not exceed the maximum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
       daily_partition_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -20190,36 +20560,26 @@ definitions:
           \ does not exceed the minimum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      daily_partition_values_in_range_numeric_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnValuesInRangeNumericPercentCheckSpec"
-      daily_partition_values_in_range_integers_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnValuesInRangeIntegersPercentCheckSpec"
-      daily_partition_value_below_min_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ below the value defined by the user as a parameter. Creates a separate\
-          \ data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnValueBelowMinValueCountCheckSpec"
-      daily_partition_value_below_min_value_percent:
+      daily_partition_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Creates a separate\
           \ data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnValueBelowMinValuePercentCheckSpec"
-      daily_partition_value_above_max_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ above the value defined by the user as a parameter. Creates a separate\
-          \ data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnValueAboveMaxValueCountCheckSpec"
-      daily_partition_value_above_max_value_percent:
+        $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
+      daily_partition_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter. Creates a separate\
           \ data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
+        $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
+      daily_partition_number_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnNumberInRangePercentCheckSpec"
+      daily_partition_integer_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       daily_partition_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range. Creates a separate data quality check (and an alert) for each\
@@ -20310,6 +20670,16 @@ definitions:
           \ column does not fall below the minimum accepted percentage. Creates a\
           \ separate data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnValidLongitudePercentCheckSpec"
+      daily_partition_non_negative_values:
+        description: "Verifies that the number of non-negative values in a column\
+          \ does not exceed the maximum accepted count. Creates a separate data quality\
+          \ check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
+      daily_partition_non_negative_values_percent:
+        description: "Verifies that the percentage of non-negative values in a column\
+          \ does not exceed the maximum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
   ColumnNumericExpectedNumbersInUseCountSensorParametersSpec:
     type: "object"
     properties:
@@ -20324,6 +20694,21 @@ definitions:
         items:
           type: "integer"
           format: "int64"
+  ColumnNumericIntegerInRangePercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      min_value:
+        type: "integer"
+        format: "int64"
+        description: "Minimal value range variable."
+      max_value:
+        type: "integer"
+        format: "int64"
+        description: "Maximal value range variable."
   ColumnNumericInvalidLatitudeCountSensorParametersSpec:
     type: "object"
     properties:
@@ -20381,6 +20766,16 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_number_below_min_value:
+        description: "The check counts the number of values in the column that is\
+          \ below the value defined by the user as a parameter. Stores the most recent\
+          \ row count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
+      monthly_number_above_max_value:
+        description: "The check counts the number of values in the column that is\
+          \ above the value defined by the user as a parameter. Stores the most recent\
+          \ row count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       monthly_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Stores the most recent row count\
@@ -20391,16 +20786,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      monthly_non_negative_values:
-        description: "Verifies that the number of non-negative values in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      monthly_non_negative_values_percent:
-        description: "Verifies that the percentage of non-negative values in a column\
-          \ does not exceed the maximum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
       monthly_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -20414,36 +20799,26 @@ definitions:
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      monthly_values_in_range_numeric_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValuesInRangeNumericPercentCheckSpec"
-      monthly_values_in_range_integers_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValuesInRangeIntegersPercentCheckSpec"
-      monthly_value_below_min_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ below the value defined by the user as a parameter. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueBelowMinValueCountCheckSpec"
-      monthly_value_below_min_value_percent:
+      monthly_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Stores the most\
           \ recent row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueBelowMinValuePercentCheckSpec"
-      monthly_value_above_max_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ above the value defined by the user as a parameter. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueAboveMaxValueCountCheckSpec"
-      monthly_value_above_max_value_percent:
+        $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
+      monthly_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter. Stores the most\
           \ recent row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
+        $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
+      monthly_number_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ row count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberInRangePercentCheckSpec"
+      monthly_integer_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ row count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       monthly_min_in_range:
         description: "Verifies that the minimal value in a column does not exceed\
           \ the set range. Stores the most recent row count for each month when the\
@@ -20534,6 +20909,16 @@ definitions:
           \ column does not fall below the minimum accepted percentage. Stores the\
           \ most recent row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValidLongitudePercentCheckSpec"
+      monthly_non_negative_values:
+        description: "Verifies that the number of non-negative values in a column\
+          \ does not exceed the maximum accepted count. Stores the most recent row\
+          \ count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
+      monthly_non_negative_values_percent:
+        description: "Verifies that the percentage of non-negative values in a column\
+          \ does not exceed the maximum accepted percentage. Stores the most recent\
+          \ row count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
   ColumnNumericMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -20545,6 +20930,16 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_number_below_min_value:
+        description: "The check counts the number of values in the column that is\
+          \ below the value defined by the user as a parameter. Creates a separate\
+          \ data quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
+      monthly_partition_number_above_max_value:
+        description: "The check counts the number of values in the column that is\
+          \ above the value defined by the user as a parameter. Creates a separate\
+          \ data quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       monthly_partition_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count. Creates a separate data quality\
@@ -20555,16 +20950,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      monthly_partition_non_negative_values:
-        description: "Verifies that the number of non-negative values in a column\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      monthly_partition_non_negative_values_percent:
-        description: "Verifies that the percentage of non-negative values in a column\
-          \ does not exceed the maximum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
       monthly_partition_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -20578,36 +20963,26 @@ definitions:
           \ does not exceed the minimum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      monthly_partition_values_in_range_numeric_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnValuesInRangeNumericPercentCheckSpec"
-      monthly_partition_values_in_range_integers_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnValuesInRangeIntegersPercentCheckSpec"
-      monthly_partition_value_below_min_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ below the value defined by the user as a parameter. Creates a separate\
-          \ data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnValueBelowMinValueCountCheckSpec"
-      monthly_partition_value_below_min_value_percent:
+      monthly_partition_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Creates a separate\
           \ data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnValueBelowMinValuePercentCheckSpec"
-      monthly_partition_value_above_max_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ above the value defined by the user as a parameter. Creates a separate\
-          \ data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnValueAboveMaxValueCountCheckSpec"
-      monthly_partition_value_above_max_value_percent:
+        $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
+      monthly_partition_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter. Creates a separate\
           \ data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
+        $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
+      monthly_partition_number_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnNumberInRangePercentCheckSpec"
+      monthly_partition_integer_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       monthly_partition_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range. Creates a separate data quality check (and an alert) for each\
@@ -20698,6 +21073,16 @@ definitions:
           \ column does not fall below the minimum accepted percentage. Creates a\
           \ separate data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnValidLongitudePercentCheckSpec"
+      monthly_partition_non_negative_values:
+        description: "Verifies that the number of non-negative values in a column\
+          \ does not exceed the maximum accepted count. Creates a separate data quality\
+          \ check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
+      monthly_partition_non_negative_values_percent:
+        description: "Verifies that the percentage of non-negative values in a column\
+          \ does not exceed the maximum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
   ColumnNumericNegativeCountSensorParametersSpec:
     type: "object"
     properties:
@@ -20726,6 +21111,73 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnNumericNumberAboveMaxValueCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      max_value:
+        type: "integer"
+        format: "int32"
+        description: "This field can be used to define custom value. In order to define\
+          \ custom value, user should write correct value as an integer. If value\
+          \ is not defined by user then default value is 0"
+  ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      max_value:
+        type: "integer"
+        format: "int32"
+        description: "This field can be used to define custom value. In order to define\
+          \ custom value, user should write correct value as an integer. If value\
+          \ is not defined by user then default value is 0"
+  ColumnNumericNumberBelowMinValueCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      min_value:
+        type: "integer"
+        format: "int32"
+        description: "This field can be used to define custom value. In order to define\
+          \ custom value, user should write correct value as an integer. If value\
+          \ is not defined by user then default value is 0"
+  ColumnNumericNumberBelowMinValuePercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      min_value:
+        type: "integer"
+        format: "int32"
+        description: "This field can be used to define custom value. In order to define\
+          \ custom value, user should write correct value as an integer. If value\
+          \ is not defined by user then default value is 0"
+  ColumnNumericNumberInRangePercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      min_value:
+        type: "number"
+        format: "double"
+        description: "Minimal value range variable."
+      max_value:
+        type: "number"
+        format: "double"
+        description: "Maximal value range variable."
   ColumnNumericNumberValueInSetPercentSensorParametersSpec:
     type: "object"
     properties:
@@ -20821,6 +21273,14 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
+      profile_number_below_min_value:
+        description: "The check counts the number of values in the column that is\
+          \ below the value defined by the user as a parameter."
+        $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
+      profile_number_above_max_value:
+        description: "The check counts the number of values in the column that is\
+          \ above the value defined by the user as a parameter."
+        $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       profile_negative_values:
         description: "Verifies that the number of negative values in a column does\
           \ not exceed the maximum accepted count."
@@ -20829,14 +21289,6 @@ definitions:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      profile_non_negative_values:
-        description: "Verifies that the number of non-negative values in a column\
-          \ does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
-      profile_non_negative_values_percent:
-        description: "Verifies that the percentage of non-negative values in a column\
-          \ does not exceed the maximum accepted percentage."
-        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
       profile_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -20848,30 +21300,22 @@ definitions:
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage."
         $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      profile_values_in_range_numeric_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnValuesInRangeNumericPercentCheckSpec"
-      profile_values_in_range_integers_percent:
-        description: "Verifies that the percentage of values from range in a column\
-          \ does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnValuesInRangeIntegersPercentCheckSpec"
-      profile_value_below_min_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ below the value defined by the user as a parameter."
-        $ref: "#/definitions/ColumnValueBelowMinValueCountCheckSpec"
-      profile_value_below_min_value_percent:
+      profile_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter."
-        $ref: "#/definitions/ColumnValueBelowMinValuePercentCheckSpec"
-      profile_value_above_max_value_count:
-        description: "The check counts the number of values in the column that is\
-          \ above the value defined by the user as a parameter."
-        $ref: "#/definitions/ColumnValueAboveMaxValueCountCheckSpec"
-      profile_value_above_max_value_percent:
+        $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
+      profile_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter."
-        $ref: "#/definitions/ColumnValueAboveMaxValuePercentCheckSpec"
+        $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
+      profile_number_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage."
+        $ref: "#/definitions/ColumnNumberInRangePercentCheckSpec"
+      profile_integer_in_range_percent:
+        description: "Verifies that the percentage of values from range in a column\
+          \ does not exceed the minimum accepted percentage."
+        $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       profile_min_in_range:
         description: "Verifies that the minimal value in a column is not outside the\
           \ set range."
@@ -20944,6 +21388,14 @@ definitions:
         description: "Verifies that the percentage of valid longitude values in a\
           \ column does not fall below the minimum accepted percentage."
         $ref: "#/definitions/ColumnValidLongitudePercentCheckSpec"
+      profile_non_negative_values:
+        description: "Verifies that the number of non-negative values in a column\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
+      profile_non_negative_values_percent:
+        description: "Verifies that the percentage of non-negative values in a column\
+          \ does not exceed the maximum accepted percentage."
+        $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
   ColumnNumericSampleStddevSensorParametersSpec:
     type: "object"
     properties:
@@ -20979,88 +21431,6 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnNumericValueAboveMaxValueCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      max_value:
-        type: "integer"
-        format: "int32"
-        description: "This field can be used to define custom value. In order to define\
-          \ custom value, user should write correct value as an integer. If value\
-          \ is not defined by user then default value is 0"
-  ColumnNumericValueAboveMaxValuePercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      max_value:
-        type: "integer"
-        format: "int32"
-        description: "This field can be used to define custom value. In order to define\
-          \ custom value, user should write correct value as an integer. If value\
-          \ is not defined by user then default value is 0"
-  ColumnNumericValueBelowMinValueCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      min_value:
-        type: "integer"
-        format: "int32"
-        description: "This field can be used to define custom value. In order to define\
-          \ custom value, user should write correct value as an integer. If value\
-          \ is not defined by user then default value is 0"
-  ColumnNumericValueBelowMinValuePercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      min_value:
-        type: "integer"
-        format: "int32"
-        description: "This field can be used to define custom value. In order to define\
-          \ custom value, user should write correct value as an integer. If value\
-          \ is not defined by user then default value is 0"
-  ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      min_value:
-        type: "integer"
-        format: "int64"
-        description: "Minimal value range variable."
-      max_value:
-        type: "integer"
-        format: "int64"
-        description: "Maximal value range variable."
-  ColumnNumericValuesInRangeNumericPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      min_value:
-        type: "number"
-        format: "double"
-        description: "Minimal value range variable."
-      max_value:
-        type: "number"
-        format: "double"
-        description: "Maximal value range variable."
   ColumnPartitionedChecksRootSpec:
     type: "object"
     properties:
@@ -27331,376 +27701,6 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnValueAboveMaxValueCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNumericValueAboveMaxValueCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ values with a value above the indicated by the user value in a column\
-          \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnValueAboveMaxValuePercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNumericValueAboveMaxValuePercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ values with a value above the indicated by the user value in a column\
-          \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
-  ColumnValueBelowMinValueCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNumericValueBelowMinValueCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ values with a value below the indicated by the user value in a column\
-          \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnValueBelowMinValuePercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNumericValueBelowMinValuePercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule100ParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ values with a value below the indicated by the user value in a column\
-          \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule99ParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule95ParametersSpec"
-  ColumnValuesInRangeIntegersPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNumericValuesInRangeIntegersPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
-      error:
-        description: "Default alerting threshold for a set number of values from range\
-          \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnValuesInRangeNumericPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnNumericValuesInRangeNumericPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule0ParametersSpec"
-      error:
-        description: "Default alerting threshold for set percentage of values from\
-          \ range in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule2ParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule5ParametersSpec"
   CommentSpec:
     type: "object"
     properties:

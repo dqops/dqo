@@ -3,7 +3,7 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/uniqueness/distinct_count
-  rule_name: comparison/min_count
+  rule_name: comparison/count_between
   help_text: Verifies that the number of distinct values in a column does not fall
     below the minimum accepted count. Creates a separate data quality check (and an
     alert) for each monthly partition.

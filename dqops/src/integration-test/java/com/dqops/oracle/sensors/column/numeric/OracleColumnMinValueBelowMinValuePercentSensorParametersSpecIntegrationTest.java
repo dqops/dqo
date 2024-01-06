@@ -16,7 +16,7 @@
 package com.dqops.oracle.sensors.column.numeric;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.numeric.ColumnValueBelowMinValuePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.numeric.ColumnNumberBelowMinValuePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.numeric.ColumnNumericValueBelowMinValuePercentSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericNumberBelowMinValuePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,9 +39,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class OracleColumnMinValueBelowMinValuePercentSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
-    private ColumnNumericValueBelowMinValuePercentSensorParametersSpec sut;
+    private ColumnNumericNumberBelowMinValuePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnValueBelowMinValuePercentCheckSpec checkSpec;
+    private ColumnNumberBelowMinValuePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class OracleColumnMinValueBelowMinValuePercentSensorParametersSpecIntegra
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericValueBelowMinValuePercentSensorParametersSpec();
-        this.checkSpec = new ColumnValueBelowMinValuePercentCheckSpec();
+        this.sut = new ColumnNumericNumberBelowMinValuePercentSensorParametersSpec();
+        this.checkSpec = new ColumnNumberBelowMinValuePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

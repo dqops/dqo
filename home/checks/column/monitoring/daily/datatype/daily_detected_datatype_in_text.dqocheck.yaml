@@ -10,3 +10,4 @@ spec:
     \ Raises a data quality issue when the detected data type does not match the expected\
     \ data type. Stores the most recent captured value for each day when the data\
     \ quality check was evaluated."
+  standard: true

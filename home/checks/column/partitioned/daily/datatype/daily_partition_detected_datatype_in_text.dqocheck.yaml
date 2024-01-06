@@ -10,3 +10,4 @@ spec:
     \ Raises a data quality issue when the detected data type does not match the expected\
     \ data type. Creates a separate data quality check (and an alert) for each daily\
     \ partition."
+  standard: true

@@ -6,3 +6,4 @@ spec:
   rule_name: percentile/anomaly_stationary_percentile_moving_average
   help_text: Verifies that the sum in a column is within a percentile from measurements
     made during the last 90 days.
+  standard: true

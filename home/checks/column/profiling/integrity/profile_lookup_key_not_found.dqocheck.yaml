@@ -6,3 +6,4 @@ spec:
   rule_name: comparison/max_count
   help_text: Verifies that the number of values in a column that does not match values
     in another table column does not exceed the set count.
+  standard: true
