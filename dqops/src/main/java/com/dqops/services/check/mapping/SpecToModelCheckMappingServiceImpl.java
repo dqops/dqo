@@ -373,9 +373,12 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 AbstractCheckSpec<?,?,?,?> checkSpecObject = (AbstractCheckSpec<?,?,?,?>)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
 
                 CheckListModel checkModel = createCheckBasicModel(checkFieldInfo, checkSpecObject, executionContext, providerType, checkType, checkTimeScale);
-                checkModel.setConfigured(checkIsConfigured);
-                checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
-                checkContainerListModel.getChecks().add(checkModel);
+                if ((checkIsConfigured || checkSpecObject.isStandard()) &&
+                        !Objects.equals(categoryFieldInfo.getYamlFieldName(), AbstractComparisonCheckCategorySpecMap.TIMELINESS_CATEGORY_NAME)) {
+                    checkModel.setConfigured(checkIsConfigured);
+                    checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
+                    checkContainerListModel.getChecks().add(checkModel);
+                }
             }
         }
 
