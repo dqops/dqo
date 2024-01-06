@@ -11,7 +11,6 @@ import qs from "query-string";
 
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
-import { checkIfTabCouldExist } from '../../utils';
 import { useTree } from '../../contexts/treeContext';
 
 interface ConnectionLayoutProps {

@@ -13,7 +13,8 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import ConnectionLayout from '../../components/ConnectionLayout';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../redux/selectors';
 import ColumnNavigation from '../../components/ColumnNavigation';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
@@ -40,7 +41,7 @@ const ColumnView = () => {
     schema: schemaName,
     table: tableName,
     column: columnName,
-    tab: activeTab,
+    tab,
     checkTypes
   }: {
     connection: string;
@@ -80,6 +81,7 @@ const ColumnView = () => {
 
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
+  const activeTab = getSecondLevelTab(checkTypes, tab);
 
   const onChangeTab = (tab: string) => {
     dispatch(
