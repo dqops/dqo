@@ -16,7 +16,7 @@
 package com.dqops.spark.sensors.column.strings;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnExpectedStringsInTopValuesCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedStringsInTopValuesCountCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -31,7 +31,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec;
+import com.dqops.sensors.column.acceptedvalues.ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec;
 import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

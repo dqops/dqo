@@ -19,6 +19,9 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedStringsInTopValuesCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedStringsInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnStringValueInSetPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.strings.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -62,9 +65,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_string_parsable_to_integer_percent", o -> o.profileStringParsableToIntegerPercent);
             put("profile_string_parsable_to_float_percent", o -> o.profileStringParsableToFloatPercent);
 
-            put("profile_expected_strings_in_use_count", o -> o.profileExpectedStringsInUseCount);
-            put("profile_string_value_in_set_percent", o -> o.profileStringValueInSetPercent);
-
             put("profile_string_valid_dates_percent", o -> o.profileStringValidDatesPercent);
             put("profile_string_valid_country_code_percent", o -> o.profileStringValidCountryCodePercent);
             put("profile_string_valid_currency_code_percent", o -> o.profileStringValidCurrencyCodePercent);
@@ -79,8 +79,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_string_not_match_date_regex_count", o -> o.profileStringNotMatchDateRegexCount);
             put("profile_string_match_date_regex_percent", o -> o.profileStringMatchDateRegexPercent);
             put("profile_string_match_name_regex_percent", o -> o.profileStringMatchNameRegexPercent);
-
-            put("profile_expected_strings_in_top_values_count", o -> o.profileExpectedStringsInTopValuesCount);
         }
     };
 
@@ -141,12 +139,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage.")
     private ColumnStringParsableToFloatPercentCheckSpec profileStringParsableToFloatPercent;
 
-    @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
-    private ColumnExpectedStringsInUseCountCheckSpec profileExpectedStringsInUseCount;
-
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
-    private ColumnStringValueInSetPercentCheckSpec profileStringValueInSetPercent;
-
     @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage.")
     private ColumnStringValidDatesPercentCheckSpec profileStringValidDatesPercent;
 
@@ -186,8 +178,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of strings matching the name regex in a column does not fall below the minimum accepted percentage.")
     private ColumnStringMatchNameRegexPercentCheckSpec profileStringMatchNameRegexPercent;
 
-    @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values.")
-    private ColumnExpectedStringsInTopValuesCountCheckSpec profileExpectedStringsInTopValuesCount;
 
     /**
      * Returns a maximum string length below check.
@@ -532,42 +522,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
     }
 
     /**
-     * Returns a minimum string parsable to float percent check.
-     * @return Minimum string parsable to float percent check.
-     */
-    public ColumnExpectedStringsInUseCountCheckSpec getProfileExpectedStringsInUseCount() {
-        return profileExpectedStringsInUseCount;
-    }
-
-    /**
-     * Sets a new definition of a string in set count check.
-     * @param profileExpectedStringsInUseCount String in set count check.
-     */
-    public void setProfileExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec profileExpectedStringsInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.profileExpectedStringsInUseCount, profileExpectedStringsInUseCount));
-        this.profileExpectedStringsInUseCount = profileExpectedStringsInUseCount;
-        propagateHierarchyIdToField(profileExpectedStringsInUseCount, "profile_expected_strings_in_use_count");
-    }
-
-    /**
-     * Returns a minimum string valid usa zip code percent check.
-     * @return Minimum string valid usa zip code percent check.
-     */
-    public ColumnStringValueInSetPercentCheckSpec getProfileStringValueInSetPercent() {
-        return profileStringValueInSetPercent;
-    }
-
-    /**
-     * Sets a new definition of a strings in set percent check.
-     * @param profileStringValueInSetPercent Strings in set percent check.
-     */
-    public void setProfileStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec profileStringValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringValueInSetPercent, profileStringValueInSetPercent));
-        this.profileStringValueInSetPercent = profileStringValueInSetPercent;
-        propagateHierarchyIdToField(profileStringValueInSetPercent, "profile_string_value_in_set_percent");
-    }
-
-    /**
      * Returns a minimum string valid USA phone percent check.
      * @return Minimum string valid USA phone percent check.
      */
@@ -801,23 +755,6 @@ public class ColumnStringsProfilingChecksSpec extends AbstractCheckCategorySpec 
         propagateHierarchyIdToField(profileStringMatchNameRegexPercent, "profile_string_match_name_regex_percent");
     }
 
-    /**
-     * Returns a count of expected values in most popular values set count check.
-     * @return Most popular values count check.
-     */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getProfileExpectedStringsInTopValuesCount() {
-        return profileExpectedStringsInTopValuesCount;
-    }
-
-    /**
-     * Sets a new definition of a most popular values count check.
-     * @param profileExpectedStringsInTopValuesCount Most popular values count check.
-     */
-    public void setProfileExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec profileExpectedStringsInTopValuesCount) {
-        this.setDirtyIf(!Objects.equals(this.profileExpectedStringsInTopValuesCount, profileExpectedStringsInTopValuesCount));
-        this.profileExpectedStringsInTopValuesCount = profileExpectedStringsInTopValuesCount;
-        propagateHierarchyIdToField(profileExpectedStringsInTopValuesCount, "profile_expected_strings_in_top_values_count");
-    }
 
     /**
      * Returns the child map on the spec class with all fields.

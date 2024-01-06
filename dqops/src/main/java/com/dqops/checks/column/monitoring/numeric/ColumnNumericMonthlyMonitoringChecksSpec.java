@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedNumbersInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnNumberValueInSetPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,8 +46,6 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
             put("monthly_number_above_max_value", o -> o.monthlyNumberAboveMaxValue);
             put("monthly_negative_values", o -> o.monthlyNegativeValues);
             put("monthly_negative_values_percent", o -> o.monthlyNegativeValuesPercent);
-            put("monthly_expected_numbers_in_use_count", o -> o.monthlyExpectedNumbersInUseCount);
-            put("monthly_number_value_in_set_percent", o -> o.monthlyNumberValueInSetPercent);
             put("monthly_number_below_min_value_percent", o -> o.monthlyNumberBelowMinValuePercent);
             put("monthly_number_above_max_value_percent", o -> o.monthlyNumberAboveMaxValuePercent);
             put("monthly_number_in_range_percent", o -> o.monthlyNumberInRangePercent);
@@ -73,94 +73,88 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberBelowMinValueCheckSpec monthlyNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberAboveMaxValueCheckSpec monthlyNumberAboveMaxValue;
 
-    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNegativeCountCheckSpec monthlyNegativeValues;
 
-    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec monthlyNegativeValuesPercent;
 
-    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount;
-
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent;
-
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberBelowMinValuePercentCheckSpec monthlyNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberAboveMaxValuePercentCheckSpec monthlyNumberAboveMaxValuePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberInRangePercentCheckSpec monthlyNumberInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnIntegerInRangePercentCheckSpec monthlyIntegerInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the minimal value in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMinInRangeCheckSpec monthlyMinInRange;
 
-    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the maximal value in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMaxInRangeCheckSpec monthlyMaxInRange;
 
-    @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSumInRangeCheckSpec monthlySumInRange;
 
-    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec monthlyMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMedianInRangeCheckSpec monthlyMedianInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentileInRangeCheckSpec monthlyPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile10InRangeCheckSpec monthlyPercentile_10InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile25InRangeCheckSpec monthlyPercentile_25InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile75InRangeCheckSpec monthlyPercentile_75InRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPercentile90InRangeCheckSpec monthlyPercentile_90InRange;
 
-    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec monthlySampleStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the population standard deviation of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPopulationStddevInRangeCheckSpec monthlyPopulationStddevInRange;
 
-    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the sample variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnSampleVarianceInRangeCheckSpec monthlySampleVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the population variance of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnPopulationVarianceInRangeCheckSpec monthlyPopulationVarianceInRange;
 
-    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnInvalidLatitudeCountCheckSpec monthlyInvalidLatitude;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnValidLatitudePercentCheckSpec monthlyValidLatitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnInvalidLongitudeCountCheckSpec monthlyInvalidLongitude;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnValidLongitudePercentCheckSpec monthlyValidLongitudePercent;
 
-    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNonNegativeCountCheckSpec monthlyNonNegativeValues;
 
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNonNegativePercentCheckSpec monthlyNonNegativeValuesPercent;
 
 
@@ -234,42 +228,6 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.monthlyNegativeValuesPercent, monthlyNegativeValuesPercent));
         this.monthlyNegativeValuesPercent = monthlyNegativeValuesPercent;
         propagateHierarchyIdToField(monthlyNegativeValuesPercent, "monthly_negative_values_percent");
-    }
-
-    /**
-     * Returns a numbers found count check specification.
-     * @return Minimum Numbers found count check specification.
-     */
-    public ColumnExpectedNumbersInUseCountCheckSpec getMonthlyExpectedNumbersInUseCount() {
-        return monthlyExpectedNumbersInUseCount;
-    }
-
-    /**
-     * Sets a new specification of a numbers found count check.
-     * @param monthlyExpectedNumbersInUseCount Numbers found count check specification.
-     */
-    public void setMonthlyExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyExpectedNumbersInUseCount, monthlyExpectedNumbersInUseCount));
-        this.monthlyExpectedNumbersInUseCount = monthlyExpectedNumbersInUseCount;
-        propagateHierarchyIdToField(monthlyExpectedNumbersInUseCount, "monthly_expected_numbers_in_use_count");
-    }
-
-    /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnNumberValueInSetPercentCheckSpec getMonthlyNumberValueInSetPercent() {
-        return monthlyNumberValueInSetPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum Numbers in set percent check.
-     * @param monthlyNumberValueInSetPercent Minimum Numbers in set percent check.
-     */
-    public void setMonthlyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyNumberValueInSetPercent, monthlyNumberValueInSetPercent));
-        this.monthlyNumberValueInSetPercent = monthlyNumberValueInSetPercent;
-        propagateHierarchyIdToField(monthlyNumberValueInSetPercent, "monthly_number_value_in_set_percent");
     }
 
     /**

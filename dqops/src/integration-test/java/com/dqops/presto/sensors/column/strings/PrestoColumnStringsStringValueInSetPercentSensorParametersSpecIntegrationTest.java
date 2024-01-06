@@ -17,7 +17,7 @@ package com.dqops.presto.sensors.column.strings;
 
 import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnStringValueInSetPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnStringValueInSetPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsStringValueInSetPercentSensorParametersSpec;
+import com.dqops.sensors.column.acceptedvalues.ColumnStringsStringValueInSetPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedNumbersInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnNumberValueInSetPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,8 +46,6 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_number_above_max_value", o -> o.dailyPartitionNumberAboveMaxValue);
             put("daily_partition_negative_values", o -> o.dailyPartitionNegativeValues);
             put("daily_partition_negative_values_percent", o -> o.dailyPartitionNegativeValuesPercent);
-            put("daily_partition_expected_numbers_in_use_count", o -> o.dailyPartitionExpectedNumbersInUseCount);
-            put("daily_partition_number_value_in_set_percent", o -> o.dailyPartitionNumberValueInSetPercent);
             put("daily_partition_number_below_min_value_percent", o -> o.dailyPartitionNumberBelowMinValuePercent);
             put("daily_partition_number_above_max_value_percent", o -> o.dailyPartitionNumberAboveMaxValuePercent);
             put("daily_partition_number_in_range_percent", o -> o.dailyPartitionNumberInRangePercent);
@@ -84,12 +84,6 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNegativePercentCheckSpec dailyPartitionNegativeValuesPercent;
-
-    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount;
-
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNumberBelowMinValuePercentCheckSpec dailyPartitionNumberBelowMinValuePercent;
@@ -234,42 +228,6 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionNegativeValuesPercent, dailyPartitionNegativeValuesPercent));
         this.dailyPartitionNegativeValuesPercent = dailyPartitionNegativeValuesPercent;
         propagateHierarchyIdToField(dailyPartitionNegativeValuesPercent, "daily_partition_negative_values_percent");
-    }
-
-    /**
-     * Returns a numbers in set count check specification.
-     * @return Numbers in set count check specification.
-     */
-    public ColumnExpectedNumbersInUseCountCheckSpec getDailyPartitionExpectedNumbersInUseCount() {
-        return dailyPartitionExpectedNumbersInUseCount;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set count check.
-     * @param dailyPartitionExpectedNumbersInUseCount Numbers in set count check specification.
-     */
-    public void setDailyPartitionExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedNumbersInUseCount, dailyPartitionExpectedNumbersInUseCount));
-        this.dailyPartitionExpectedNumbersInUseCount = dailyPartitionExpectedNumbersInUseCount;
-        propagateHierarchyIdToField(dailyPartitionExpectedNumbersInUseCount, "daily_partition_expected_numbers_in_use_count");
-    }
-
-    /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnNumberValueInSetPercentCheckSpec getDailyPartitionNumberValueInSetPercent() {
-        return dailyPartitionNumberValueInSetPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers found percent check.
-     * @param dailyPartitionNumberValueInSetPercent Numbers found percent check specification.
-     */
-    public void setDailyPartitionNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumberValueInSetPercent, dailyPartitionNumberValueInSetPercent));
-        this.dailyPartitionNumberValueInSetPercent = dailyPartitionNumberValueInSetPercent;
-        propagateHierarchyIdToField(dailyPartitionNumberValueInSetPercent, "daily_partition_number_value_in_set_percent");
     }
 
     /**

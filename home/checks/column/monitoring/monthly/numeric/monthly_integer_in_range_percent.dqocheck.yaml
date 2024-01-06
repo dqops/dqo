@@ -5,5 +5,5 @@ spec:
   sensor_name: column/numeric/integer_in_range_percent
   rule_name: comparison/min_percent
   help_text: Verifies that the percentage of values from range in a column does not
-    exceed the minimum accepted percentage. Stores the most recent row count for each
+    exceed the minimum accepted percentage. Stores the most recent value for each
     month when the data quality check was evaluated.

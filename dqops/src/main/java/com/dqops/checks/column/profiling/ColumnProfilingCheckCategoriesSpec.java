@@ -48,6 +48,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
 			put("uniqueness", o -> o.uniqueness);
+            put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
@@ -80,6 +81,11 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessProfilingChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Configuration of accepted values checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAcceptedValuesProfilingChecksSpec acceptedValues;
 
     @JsonPropertyDescription("Configuration of datetime checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -201,6 +207,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the accepted values check configuration on a column level.
+     * @return Accepted values check configuration.
+     */
+    public ColumnAcceptedValuesProfilingChecksSpec getAcceptedValues() {
+        return acceptedValues;
+    }
+
+    /**
+     * Sets the accepted values check configuration on a column level.
+     * @param acceptedValues New accepted values checks configuration.
+     */
+    public void setAcceptedValues(ColumnAcceptedValuesProfilingChecksSpec acceptedValues) {
+        this.setDirtyIf(!Objects.equals(this.acceptedValues, acceptedValues));
+        this.acceptedValues = acceptedValues;
+        this.propagateHierarchyIdToField(acceptedValues, "accepted_values");
     }
 
     /**

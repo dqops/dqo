@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
@@ -64,6 +65,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
+            put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
@@ -95,6 +97,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessDailyPartitionedChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Configuration of accepted values checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAcceptedValuesDailyPartitionedChecksSpec acceptedValues;
 
     @JsonPropertyDescription("Daily partitioned checks of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -211,6 +218,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the accepted values check configuration on a column level.
+     * @return Accepted values check configuration.
+     */
+    public ColumnAcceptedValuesDailyPartitionedChecksSpec getAcceptedValues() {
+        return acceptedValues;
+    }
+
+    /**
+     * Sets the accepted values check configuration on a column level.
+     * @param acceptedValues New accepted values checks configuration.
+     */
+    public void setAcceptedValues(ColumnAcceptedValuesDailyPartitionedChecksSpec acceptedValues) {
+        this.setDirtyIf(!Objects.equals(this.acceptedValues, acceptedValues));
+        this.acceptedValues = acceptedValues;
+        this.propagateHierarchyIdToField(acceptedValues, "accepted_values");
     }
 
     /**

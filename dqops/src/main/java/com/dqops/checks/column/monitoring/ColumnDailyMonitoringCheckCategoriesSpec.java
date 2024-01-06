@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.acceptedvalues.ColumnAcceptedValuesDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.accuracy.ColumnAccuracyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.bool.ColumnBoolDailyMonitoringChecksSpec;
@@ -65,6 +66,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
+            put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
@@ -97,6 +99,11 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessDailyMonitoringChecksSpec uniqueness;
+
+    @JsonPropertyDescription("Configuration of accepted values checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAcceptedValuesDailyMonitoringChecksSpec acceptedValues;
 
     @JsonPropertyDescription("Daily monitoring checks of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -218,6 +225,24 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
+    }
+
+    /**
+     * Returns the accepted values check configuration on a column level.
+     * @return Accepted values check configuration.
+     */
+    public ColumnAcceptedValuesDailyMonitoringChecksSpec getAcceptedValues() {
+        return acceptedValues;
+    }
+
+    /**
+     * Sets the accepted values check configuration on a column level.
+     * @param acceptedValues New accepted values checks configuration.
+     */
+    public void setAcceptedValues(ColumnAcceptedValuesDailyMonitoringChecksSpec acceptedValues) {
+        this.setDirtyIf(!Objects.equals(this.acceptedValues, acceptedValues));
+        this.acceptedValues = acceptedValues;
+        this.propagateHierarchyIdToField(acceptedValues, "accepted_values");
     }
 
     /**

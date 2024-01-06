@@ -7,3 +7,4 @@ spec:
   help_text: The check counts the number of values in the column that is above the
     value defined by the user as a parameter. Creates a separate data quality check
     (and an alert) for each daily partition.
+  standard: true

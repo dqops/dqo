@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedNumbersInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnNumberValueInSetPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,8 +46,6 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
             put("daily_number_above_max_value", o -> o.dailyNumberAboveMaxValue);
             put("daily_negative_values", o -> o.dailyNegativeValues);
             put("daily_negative_values_percent", o -> o.dailyNegativeValuesPercent);
-            put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
-            put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
             put("daily_number_below_min_value_percent", o -> o.dailyNumberBelowMinValuePercent);
             put("daily_number_above_max_value_percent", o -> o.dailyNumberAboveMaxValuePercent);
             put("daily_number_in_range_percent", o -> o.dailyNumberInRangePercent);
@@ -85,12 +85,6 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec dailyNegativeValuesPercent;
 
-    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
-
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent;
-
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnNumberBelowMinValuePercentCheckSpec dailyNumberBelowMinValuePercent;
 
@@ -115,7 +109,7 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec dailyMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnMedianInRangeCheckSpec dailyMedianInRange;
 
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
@@ -234,42 +228,6 @@ public class ColumnNumericDailyMonitoringChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.dailyNegativeValuesPercent, dailyNegativeValuesPercent));
         this.dailyNegativeValuesPercent = dailyNegativeValuesPercent;
         propagateHierarchyIdToField(dailyNegativeValuesPercent, "daily_negative_values_percent");
-    }
-
-    /**
-     * Returns a numbers found count check specification.
-     * @return Numbers found count check specification.
-     */
-    public ColumnExpectedNumbersInUseCountCheckSpec getDailyExpectedNumbersInUseCount() {
-        return dailyExpectedNumbersInUseCount;
-    }
-
-    /**
-     * Sets a new specification of a numbers found count check.
-     * @param dailyExpectedNumbersInUseCount Numbers found count check.
-     */
-    public void setDailyExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyExpectedNumbersInUseCount, dailyExpectedNumbersInUseCount));
-        this.dailyExpectedNumbersInUseCount = dailyExpectedNumbersInUseCount;
-        propagateHierarchyIdToField(dailyExpectedNumbersInUseCount, "daily_expected_numbers_in_use_count");
-    }
-
-    /**
-     * Returns a numbers valid percent check specification.
-     * @return Numbers valid percent check specification.
-     */
-    public ColumnNumberValueInSetPercentCheckSpec getDailyNumberValueInSetPercent() {
-        return dailyNumberValueInSetPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers valid percent check.
-     * @param dailyNumberValueInSetPercent Number valid percent check specification.
-     */
-    public void setDailyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNumberValueInSetPercent, dailyNumberValueInSetPercent));
-        this.dailyNumberValueInSetPercent = dailyNumberValueInSetPercent;
-        propagateHierarchyIdToField(dailyNumberValueInSetPercent, "daily_number_value_in_set_percent");
     }
 
     /**

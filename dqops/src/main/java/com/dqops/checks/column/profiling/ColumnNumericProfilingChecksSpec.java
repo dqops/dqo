@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedNumbersInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnNumberValueInSetPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,8 +46,6 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
             put("profile_number_above_max_value", o -> o.profileNumberAboveMaxValue);
             put("profile_negative_values", o -> o.profileNegativeValues);
             put("profile_negative_values_percent", o -> o.profileNegativeValuesPercent);
-            put("profile_expected_numbers_in_use_count", o -> o.profileExpectedNumbersInUseCount);
-            put("profile_number_value_in_set_percent", o -> o.profileNumberValueInSetPercent);
             put("profile_number_below_min_value_percent", o -> o.profileNumberBelowMinValuePercent);
             put("profile_number_above_max_value_percent", o -> o.profileNumberAboveMaxValuePercent);
             put("profile_number_in_range_percent", o -> o.profileNumberInRangePercent);
@@ -84,12 +84,6 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnNegativePercentCheckSpec profileNegativeValuesPercent;
-
-    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
-    private ColumnExpectedNumbersInUseCountCheckSpec profileExpectedNumbersInUseCount;
-
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
-    private ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter.")
     private ColumnNumberBelowMinValuePercentCheckSpec profileNumberBelowMinValuePercent;
@@ -233,42 +227,6 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.profileNegativeValuesPercent, profileNegativeValuesPercent));
         this.profileNegativeValuesPercent = profileNegativeValuesPercent;
         propagateHierarchyIdToField(profileNegativeValuesPercent, "profile_negative_values_percent");
-    }
-
-    /**
-     * Returns a numbers in set count check specification.
-     * @return Numbers in set count check specification.
-     */
-    public ColumnExpectedNumbersInUseCountCheckSpec getProfileExpectedNumbersInUseCount() {
-        return profileExpectedNumbersInUseCount;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set count check specification.
-     * @param profileExpectedNumbersInUseCount Numbers in set count check specification.
-     */
-    public void setProfileExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec profileExpectedNumbersInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.profileExpectedNumbersInUseCount, profileExpectedNumbersInUseCount));
-        this.profileExpectedNumbersInUseCount = profileExpectedNumbersInUseCount;
-        propagateHierarchyIdToField(profileExpectedNumbersInUseCount, "profile_expected_numbers_in_use_count");
-    }
-
-    /**
-     * Returns a numbers valid percent check specification.
-     * @return Numbers valid percent check specification.
-     */
-    public ColumnNumberValueInSetPercentCheckSpec getProfileNumberValueInSetPercent() {
-        return profileNumberValueInSetPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers valid percent check specification.
-     * @param profileNumberValueInSetPercent Numbers valid percent check specification.
-     */
-    public void setProfileNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileNumberValueInSetPercent, profileNumberValueInSetPercent));
-        this.profileNumberValueInSetPercent = profileNumberValueInSetPercent;
-        propagateHierarchyIdToField(profileNumberValueInSetPercent, "profile_number_value_in_set_percent");
     }
 
     /**

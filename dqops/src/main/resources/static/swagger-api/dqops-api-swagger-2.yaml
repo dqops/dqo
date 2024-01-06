@@ -13667,6 +13667,211 @@ definitions:
         format: "int32"
         description: "The total number of results that were collected."
     description: "Returns the result with the summary of the statistics collected."
+  ColumnAcceptedValuesDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_string_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
+      daily_number_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
+      daily_expected_strings_in_use_count:
+        description: "Verifies that the expected string values were found in the column.\
+          \ Raises a data quality issue when too many expected values were not found\
+          \ (were missing). Stores the most recent captured value for each day when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
+      daily_expected_strings_in_top_values_count:
+        description: "Verifies that the top X most popular column values contain all\
+          \ values from a list of expected values. Stores the most recent captured\
+          \ value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+      daily_expected_numbers_in_use_count:
+        description: "Verifies that the expected numeric values were found in the\
+          \ column. Raises a data quality issue when too many expected values were\
+          \ not found (were missing). Stores the most recent captured value for each\
+          \ day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+  ColumnAcceptedValuesDailyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_string_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
+      daily_partition_number_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
+      daily_partition_expected_strings_in_use_count:
+        description: "Verifies that the expected string values were found in the column.\
+          \ Raises a data quality issue when too many expected values were not found\
+          \ (were missing). Creates a separate data quality check (and an alert) for\
+          \ each daily partition."
+        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
+      daily_partition_expected_strings_in_top_values_count:
+        description: "Verifies that the top X most popular column values contain all\
+          \ values from a list of expected values. Creates a separate data quality\
+          \ check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+      daily_partition_expected_numbers_in_use_count:
+        description: "Verifies that the expected numeric values were found in the\
+          \ column. Raises a data quality issue when too many expected values were\
+          \ not found (were missing). Creates a separate data quality check (and an\
+          \ alert) for each daily partition."
+        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+  ColumnAcceptedValuesMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_string_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ captured value for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
+      monthly_number_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Stores the most recent\
+          \ captured value for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
+      monthly_expected_strings_in_use_count:
+        description: "Verifies that the expected string values were found in the column.\
+          \ Raises a data quality issue when too many expected values were not found\
+          \ (were missing). Stores the most recent captured value for each month when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
+      monthly_expected_strings_in_top_values_count:
+        description: "Verifies that the top X most popular column values contain all\
+          \ values from a list of expected values. Stores the most recent captured\
+          \ value for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+      monthly_expected_numbers_in_use_count:
+        description: "Verifies that the expected numeric values were found in the\
+          \ column. Raises a data quality issue when too many expected values were\
+          \ not found (were missing). Stores the most recent captured value for each\
+          \ month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+  ColumnAcceptedValuesMonthlyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_string_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
+      monthly_partition_number_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage. Creates a separate data\
+          \ quality check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
+      monthly_partition_expected_strings_in_use_count:
+        description: "Verifies that the expected string values were found in the column.\
+          \ Raises a data quality issue when too many expected values were not found\
+          \ (were missing). Creates a separate data quality check (and an alert) for\
+          \ each monthly partition."
+        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
+      monthly_partition_expected_strings_in_top_values_count:
+        description: "Verifies that the top X most popular column values contain all\
+          \ values from a list of expected values. Creates a separate data quality\
+          \ check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+      monthly_partition_expected_numbers_in_use_count:
+        description: "Verifies that the expected numeric values were found in the\
+          \ column. Raises a data quality issue when too many expected values were\
+          \ not found (were missing). Creates a separate data quality check (and an\
+          \ alert) for each monthly partition."
+        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+  ColumnAcceptedValuesProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_string_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage."
+        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
+      profile_number_value_in_set_percent:
+        description: "The check measures the percentage of rows whose value in a tested\
+          \ column is one of values from a list of expected values or the column value\
+          \ is null. Verifies that the percentage of rows having a valid column value\
+          \ does not exceed the minimum accepted percentage."
+        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
+      profile_expected_strings_in_use_count:
+        description: "Verifies that the expected string values were found in the column.\
+          \ Raises a data quality issue when too many expected values were not found\
+          \ (were missing)."
+        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
+      profile_expected_strings_in_top_values_count:
+        description: "Verifies that the top X most popular column values contain all\
+          \ values from a list of expected values."
+        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+      profile_expected_numbers_in_use_count:
+        description: "Verifies that the expected numeric values were found in the\
+          \ column. Raises a data quality issue when too many expected values were\
+          \ not found (were missing)."
+        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
   ColumnAccuracyDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -15444,6 +15649,9 @@ definitions:
       uniqueness:
         description: "Daily monitoring checks of uniqueness in the column"
         $ref: "#/definitions/ColumnUniquenessDailyMonitoringChecksSpec"
+      accepted_values:
+        description: "Configuration of accepted values checks on a column level."
+        $ref: "#/definitions/ColumnAcceptedValuesDailyMonitoringChecksSpec"
       datetime:
         description: "Daily monitoring checks of datetime in the column"
         $ref: "#/definitions/ColumnDatetimeDailyMonitoringChecksSpec"
@@ -15500,6 +15708,9 @@ definitions:
       uniqueness:
         description: "Daily partitioned checks of uniqueness in the column"
         $ref: "#/definitions/ColumnUniquenessDailyPartitionedChecksSpec"
+      accepted_values:
+        description: "Configuration of accepted values checks on a column level."
+        $ref: "#/definitions/ColumnAcceptedValuesDailyPartitionedChecksSpec"
       datetime:
         description: "Daily partitioned checks of datetime in the column"
         $ref: "#/definitions/ColumnDatetimeDailyPartitionedChecksSpec"
@@ -18776,6 +18987,9 @@ definitions:
       uniqueness:
         description: "Monthly monitoring checks of uniqueness in the column"
         $ref: "#/definitions/ColumnUniquenessMonthlyMonitoringChecksSpec"
+      accepted_values:
+        description: "Configuration of accepted values checks on a column level."
+        $ref: "#/definitions/ColumnAcceptedValuesMonthlyMonitoringChecksSpec"
       datetime:
         description: "Monthly monitoring checks of datetime in the column"
         $ref: "#/definitions/ColumnDatetimeMonthlyMonitoringChecksSpec"
@@ -18832,6 +19046,9 @@ definitions:
       uniqueness:
         description: "Monthly partitioned checks of uniqueness values in the column"
         $ref: "#/definitions/ColumnUniquenessMonthlyPartitionedChecksSpec"
+      accepted_values:
+        description: "Configuration of accepted values checks on a column level."
+        $ref: "#/definitions/ColumnAcceptedValuesMonthlyPartitionedChecksSpec"
       datetime:
         description: "Monthly partitioned checks of datetime values in the column"
         $ref: "#/definitions/ColumnDatetimeMonthlyPartitionedChecksSpec"
@@ -20382,19 +20599,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      daily_expected_numbers_in_use_count:
-        description: "Verifies that the expected numeric values were found in the\
-          \ column. Raises a data quality issue when too many expected values were\
-          \ not found (were missing). Stores the most recent captured value for each\
-          \ day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
-      daily_number_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
       daily_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Stores the most\
@@ -20437,8 +20641,8 @@ definitions:
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
       daily_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
+          \ the set range. Stores the most recent value for each month when the data\
+          \ quality check was evaluated."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
       daily_percentile_in_range:
         description: "Verifies that the percentile of all values in a column is not\
@@ -20547,19 +20751,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      daily_partition_expected_numbers_in_use_count:
-        description: "Verifies that the expected numeric values were found in the\
-          \ column. Raises a data quality issue when too many expected values were\
-          \ not found (were missing). Creates a separate data quality check (and an\
-          \ alert) for each daily partition."
-        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
-      daily_partition_number_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
       daily_partition_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Creates a separate\
@@ -20769,155 +20960,142 @@ definitions:
       monthly_number_below_min_value:
         description: "The check counts the number of values in the column that is\
           \ below the value defined by the user as a parameter. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
       monthly_number_above_max_value:
         description: "The check counts the number of values in the column that is\
           \ above the value defined by the user as a parameter. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       monthly_negative_values:
         description: "Verifies that the number of negative values in a column does\
-          \ not exceed the maximum accepted count. Stores the most recent row count\
-          \ for each month when the data quality check was evaluated."
+          \ not exceed the maximum accepted count. Stores the most recent value for\
+          \ each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativeCountCheckSpec"
       monthly_negative_values_percent:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      monthly_expected_numbers_in_use_count:
-        description: "Verifies that the expected numeric values were found in the\
-          \ column. Raises a data quality issue when too many expected values were\
-          \ not found (were missing). Stores the most recent row count for each month\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
-      monthly_number_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
       monthly_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Stores the most\
-          \ recent row count for each month when the data quality check was evaluated."
+          \ recent value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
       monthly_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is above the value defined by the user as a parameter. Stores the most\
-          \ recent row count for each month when the data quality check was evaluated."
+          \ recent value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
       monthly_number_in_range_percent:
         description: "Verifies that the percentage of values from range in a column\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberInRangePercentCheckSpec"
       monthly_integer_in_range_percent:
         description: "Verifies that the percentage of values from range in a column\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnIntegerInRangePercentCheckSpec"
       monthly_min_in_range:
         description: "Verifies that the minimal value in a column does not exceed\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
+          \ the set range. Stores the most recent value for each month when the data\
+          \ quality check was evaluated."
         $ref: "#/definitions/ColumnMinInRangeCheckSpec"
       monthly_max_in_range:
         description: "Verifies that the maximal value in a column does not exceed\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
+          \ the set range. Stores the most recent value for each month when the data\
+          \ quality check was evaluated."
         $ref: "#/definitions/ColumnMaxInRangeCheckSpec"
       monthly_sum_in_range:
         description: "Verifies that the sum of all values in a column does not exceed\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
+          \ the set range. Stores the most recent value for each month when the data\
+          \ quality check was evaluated."
         $ref: "#/definitions/ColumnSumInRangeCheckSpec"
       monthly_mean_in_range:
         description: "Verifies that the average (mean) of all values in a column does\
-          \ not exceed the set range. Stores the most recent row count for each month\
+          \ not exceed the set range. Stores the most recent value for each month\
           \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnMeanInRangeCheckSpec"
       monthly_median_in_range:
         description: "Verifies that the median of all values in a column is not outside\
-          \ the set range. Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
+          \ the set range. Stores the most recent value for each month when the data\
+          \ quality check was evaluated."
         $ref: "#/definitions/ColumnMedianInRangeCheckSpec"
       monthly_percentile_in_range:
         description: "Verifies that the percentile of all values in a column is not\
-          \ outside the set range. Stores the most recent row count for each month\
-          \ when the data quality check was evaluated."
+          \ outside the set range. Stores the most recent value for each month when\
+          \ the data quality check was evaluated."
         $ref: "#/definitions/ColumnPercentileInRangeCheckSpec"
       monthly_percentile_10_in_range:
         description: "Verifies that the percentile 10 of all values in a column is\
-          \ not outside the set range. Stores the most recent row count for each month\
+          \ not outside the set range. Stores the most recent value for each month\
           \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPercentile10InRangeCheckSpec"
       monthly_percentile_25_in_range:
         description: "Verifies that the percentile 25 of all values in a column is\
-          \ not outside the set range. Stores the most recent row count for each month\
+          \ not outside the set range. Stores the most recent value for each month\
           \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPercentile25InRangeCheckSpec"
       monthly_percentile_75_in_range:
         description: "Verifies that the percentile 75 of all values in a column is\
-          \ not outside the set range. Stores the most recent row count for each month\
+          \ not outside the set range. Stores the most recent value for each month\
           \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPercentile75InRangeCheckSpec"
       monthly_percentile_90_in_range:
         description: "Verifies that the percentile 90 of all values in a column is\
-          \ not outside the set range. Stores the most recent row count for each month\
+          \ not outside the set range. Stores the most recent value for each month\
           \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPercentile90InRangeCheckSpec"
       monthly_sample_stddev_in_range:
         description: "Verifies that the sample standard deviation of all values in\
-          \ a column is not outside the set range. Stores the most recent row count\
-          \ for each month when the data quality check was evaluated."
+          \ a column is not outside the set range. Stores the most recent value for\
+          \ each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSampleStddevInRangeCheckSpec"
       monthly_population_stddev_in_range:
         description: "Verifies that the population standard deviation of all values\
-          \ in a column is not outside the set range. Stores the most recent row count\
+          \ in a column is not outside the set range. Stores the most recent value\
           \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPopulationStddevInRangeCheckSpec"
       monthly_sample_variance_in_range:
         description: "Verifies that the sample variance of all values in a column\
-          \ is not outside the set range. Stores the most recent row count for each\
-          \ month when the data quality check was evaluated."
+          \ is not outside the set range. Stores the most recent value for each month\
+          \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnSampleVarianceInRangeCheckSpec"
       monthly_population_variance_in_range:
         description: "Verifies that the population variance of all values in a column\
-          \ is not outside the set range. Stores the most recent row count for each\
-          \ month when the data quality check was evaluated."
+          \ is not outside the set range. Stores the most recent value for each month\
+          \ when the data quality check was evaluated."
         $ref: "#/definitions/ColumnPopulationVarianceInRangeCheckSpec"
       monthly_invalid_latitude:
         description: "Verifies that the number of invalid latitude values in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
+          \ does not exceed the maximum accepted count. Stores the most recent value\
+          \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnInvalidLatitudeCountCheckSpec"
       monthly_valid_latitude_percent:
         description: "Verifies that the percentage of valid latitude values in a column\
           \ does not fall below the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValidLatitudePercentCheckSpec"
       monthly_invalid_longitude:
         description: "Verifies that the number of invalid longitude values in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
+          \ does not exceed the maximum accepted count. Stores the most recent value\
+          \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnInvalidLongitudeCountCheckSpec"
       monthly_valid_longitude_percent:
         description: "Verifies that the percentage of valid longitude values in a\
           \ column does not fall below the minimum accepted percentage. Stores the\
-          \ most recent row count for each month when the data quality check was evaluated."
+          \ most recent value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnValidLongitudePercentCheckSpec"
       monthly_non_negative_values:
         description: "Verifies that the number of non-negative values in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
+          \ does not exceed the maximum accepted count. Stores the most recent value\
+          \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNonNegativeCountCheckSpec"
       monthly_non_negative_values_percent:
         description: "Verifies that the percentage of non-negative values in a column\
           \ does not exceed the maximum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
+          \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNonNegativePercentCheckSpec"
   ColumnNumericMonthlyPartitionedChecksSpec:
     type: "object"
@@ -20950,19 +21128,6 @@ definitions:
           \ does not exceed the maximum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      monthly_partition_expected_numbers_in_use_count:
-        description: "Verifies that the expected numeric values were found in the\
-          \ column. Raises a data quality issue when too many expected values were\
-          \ not found (were missing). Creates a separate data quality check (and an\
-          \ alert) for each monthly partition."
-        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
-      monthly_partition_number_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
       monthly_partition_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter. Creates a separate\
@@ -21289,17 +21454,6 @@ definitions:
         description: "Verifies that the percentage of negative values in a column\
           \ does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
-      profile_expected_numbers_in_use_count:
-        description: "Verifies that the expected numeric values were found in the\
-          \ column. Raises a data quality issue when too many expected values were\
-          \ not found (were missing)."
-        $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
-      profile_number_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
       profile_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
           \ is below the value defined by the user as a parameter."
@@ -22420,6 +22574,9 @@ definitions:
       uniqueness:
         description: "Configuration of uniqueness checks on a column level."
         $ref: "#/definitions/ColumnUniquenessProfilingChecksSpec"
+      accepted_values:
+        description: "Configuration of accepted values checks on a column level."
+        $ref: "#/definitions/ColumnAcceptedValuesProfilingChecksSpec"
       datetime:
         description: "Configuration of datetime checks on a column level."
         $ref: "#/definitions/ColumnDatetimeProfilingChecksSpec"
@@ -25494,19 +25651,6 @@ definitions:
           \ most recent captured value for each day when the data quality check was\
           \ evaluated."
         $ref: "#/definitions/ColumnStringParsableToFloatPercentCheckSpec"
-      daily_expected_strings_in_use_count:
-        description: "Verifies that the expected string values were found in the column.\
-          \ Raises a data quality issue when too many expected values were not found\
-          \ (were missing). Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      daily_string_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
       daily_string_valid_dates_percent:
         description: "Verifies that the percentage of valid dates in a column does\
           \ not fall below the minimum accepted percentage. Stores the most recent\
@@ -25577,11 +25721,6 @@ definitions:
           \ Stores the most recent captured value for each day when the data quality\
           \ check was evaluated."
         $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
-      daily_expected_strings_in_top_values_count:
-        description: "Verifies that the top X most popular column values contain all\
-          \ values from a list of expected values. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
   ColumnStringsDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -25688,19 +25827,6 @@ definitions:
           \ a column does not fall below the minimum accepted percentage. Creates\
           \ a separate data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnStringParsableToFloatPercentCheckSpec"
-      daily_partition_expected_strings_in_use_count:
-        description: "Verifies that the expected string values were found in the column.\
-          \ Raises a data quality issue when too many expected values were not found\
-          \ (were missing). Creates a separate data quality check (and an alert) for\
-          \ each daily partition."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      daily_partition_string_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
       daily_partition_string_valid_dates_percent:
         description: "Verifies that the percentage of valid dates in a column does\
           \ not fall below the minimum accepted percentage. Creates a separate data\
@@ -25766,11 +25892,6 @@ definitions:
           \ regex in a column does not fall below the minimum accepted percentage.\
           \ Creates a separate data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
-      daily_partition_expected_strings_in_top_values_count:
-        description: "Verifies that the top X most popular column values contain all\
-          \ values from a list of expected values. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
   ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec:
     type: "object"
     properties:
@@ -25913,19 +26034,6 @@ definitions:
           \ a column does not exceed the minimum accepted percentage. Stores the most\
           \ recent row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnStringParsableToFloatPercentCheckSpec"
-      monthly_expected_strings_in_use_count:
-        description: "Verifies that the expected string values were found in the column.\
-          \ Raises a data quality issue when too many expected values were not found\
-          \ (were missing). Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      monthly_string_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Stores the most recent\
-          \ row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
       monthly_string_valid_country_code_percent:
         description: "Verifies that the percentage of valid country code in a column\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
@@ -25988,11 +26096,6 @@ definitions:
           \ in a column does not exceed the maximum accepted percentage. Stores the\
           \ most recent row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
-      monthly_expected_strings_in_top_values_count:
-        description: "Verifies that the top X most popular column values contain all\
-          \ values from a list of expected values. Stores the most recent row count\
-          \ for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
   ColumnStringsMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -26099,19 +26202,6 @@ definitions:
           \ a column does not fall below the minimum accepted percentage. Creates\
           \ a separate data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnStringParsableToFloatPercentCheckSpec"
-      monthly_partition_expected_strings_in_use_count:
-        description: "Verifies that the expected string values were found in the column.\
-          \ Raises a data quality issue when too many expected values were not found\
-          \ (were missing). Creates a separate data quality check (and an alert) for\
-          \ each monthly partition."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      monthly_partition_string_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
       monthly_partition_string_valid_dates_percent:
         description: "Verifies that the percentage of valid dates in a column does\
           \ not fall below the minimum accepted percentage. Creates a separate data\
@@ -26180,11 +26270,6 @@ definitions:
           \ Creates a separate data quality check (and an alert) for each monthly\
           \ partition."
         $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
-      monthly_partition_expected_strings_in_top_values_count:
-        description: "Verifies that the top X most popular column values contain all\
-          \ values from a list of expected values. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
   ColumnStringsProfilingChecksSpec:
     type: "object"
     properties:
@@ -26272,17 +26357,6 @@ definitions:
         description: "Verifies that the percentage of parsable to float string in\
           \ a column does not fall below the minimum accepted percentage."
         $ref: "#/definitions/ColumnStringParsableToFloatPercentCheckSpec"
-      profile_expected_strings_in_use_count:
-        description: "Verifies that the expected string values were found in the column.\
-          \ Raises a data quality issue when too many expected values were not found\
-          \ (were missing)."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      profile_string_value_in_set_percent:
-        description: "The check measures the percentage of rows whose value in a tested\
-          \ column is one of values from a list of expected values or the column value\
-          \ is null. Verifies that the percentage of rows having a valid column value\
-          \ does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
       profile_string_valid_dates_percent:
         description: "Verifies that the percentage of valid dates in a column does\
           \ not fall below the minimum accepted percentage."
@@ -26335,10 +26409,6 @@ definitions:
         description: "Verifies that the percentage of strings matching the name regex\
           \ in a column does not fall below the minimum accepted percentage."
         $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
-      profile_expected_strings_in_top_values_count:
-        description: "Verifies that the top X most popular column values contain all\
-          \ values from a list of expected values."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
   ColumnStringsStatisticsCollectorsSpec:
     type: "object"
     properties:

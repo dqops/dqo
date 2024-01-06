@@ -30,7 +30,7 @@ import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.rules.averages.PercentMovingAverageRuleParametersSpec;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
-import com.dqops.sensors.column.numeric.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
+import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import com.dqops.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
 import com.dqops.sensors.column.strings.StringsBuiltInDateFormats;
 import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;

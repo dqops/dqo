@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedNumbersInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnNumberValueInSetPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,8 +46,6 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_number_above_max_value", o -> o.monthlyPartitionNumberAboveMaxValue);
             put("monthly_partition_negative_values", o -> o.monthlyPartitionNegativeValues);
             put("monthly_partition_negative_percent", o -> o.monthlyPartitionNegativeValuesPercent);
-            put("monthly_partition_expected_numbers_in_use_count", o -> o.monthlyPartitionExpectedNumbersInUseCount);
-            put("monthly_partition_number_value_in_set_percent", o -> o.monthlyPartitionNumberValueInSetPercent);
             put("monthly_partition_number_below_min_value_percent", o -> o.monthlyPartitionNumberBelowMinValuePercent);
             put("monthly_partition_number_above_max_value_percent", o -> o.monthlyPartitionNumberAboveMaxValuePercent);
             put("monthly_partition_number_in_range_percent", o -> o.monthlyPartitionNumberInRangePercent);
@@ -84,12 +84,6 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNegativePercentCheckSpec monthlyPartitionNegativeValuesPercent;
-
-    @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnExpectedNumbersInUseCountCheckSpec monthlyPartitionExpectedNumbersInUseCount;
-
-    @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNumberValueInSetPercentCheckSpec monthlyPartitionNumberValueInSetPercent;
 
     @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNumberBelowMinValuePercentCheckSpec monthlyPartitionNumberBelowMinValuePercent;
@@ -233,42 +227,6 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionNegativeValuesPercent, monthlyPartitionNegativeValuesPercent));
         this.monthlyPartitionNegativeValuesPercent = monthlyPartitionNegativeValuesPercent;
         propagateHierarchyIdToField(monthlyPartitionNegativeValuesPercent, "monthly_partition_negative_values_percent");
-    }
-
-    /**
-     * Returns a numbers in set count check specification.
-     * @return Numbers in set count check specification.
-     */
-    public ColumnExpectedNumbersInUseCountCheckSpec getMonthlyPartitionExpectedNumbersInUseCount() {
-        return monthlyPartitionExpectedNumbersInUseCount;
-    }
-
-    /**
-     * Sets a new specification of a numbers in set count check.
-     * @param monthlyPartitionExpectedNumbersInUseCount Numbers in set count check specification.
-     */
-    public void setMonthlyPartitionExpectedNumbersInUseCount(ColumnExpectedNumbersInUseCountCheckSpec monthlyPartitionExpectedNumbersInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedNumbersInUseCount, monthlyPartitionExpectedNumbersInUseCount));
-        this.monthlyPartitionExpectedNumbersInUseCount = monthlyPartitionExpectedNumbersInUseCount;
-        propagateHierarchyIdToField(monthlyPartitionExpectedNumbersInUseCount, "monthly_partition_expected_numbers_in_use_count");
-    }
-
-    /**
-     * Returns a numbers in set percent check specification.
-     * @return Numbers in set percent check specification.
-     */
-    public ColumnNumberValueInSetPercentCheckSpec getMonthlyPartitionNumberValueInSetPercent() {
-        return monthlyPartitionNumberValueInSetPercent;
-    }
-
-    /**
-     * Sets a new specification of a numbers valid percent check .
-     * @param monthlyPartitionNumberValueInSetPercent Minimum Numbers valid percent check.
-     */
-    public void setMonthlyPartitionNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec monthlyPartitionNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNumberValueInSetPercent, monthlyPartitionNumberValueInSetPercent));
-        this.monthlyPartitionNumberValueInSetPercent = monthlyPartitionNumberValueInSetPercent;
-        propagateHierarchyIdToField(monthlyPartitionNumberValueInSetPercent, "monthly_partition_number_value_in_set_percent");
     }
 
     /**

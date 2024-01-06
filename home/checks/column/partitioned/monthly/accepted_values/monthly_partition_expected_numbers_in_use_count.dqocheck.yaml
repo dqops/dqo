@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/acceptedvalues/expected_numbers_in_use_count
+  rule_name: comparison/max_missing
+  help_text: Verifies that the expected numeric values were found in the column. Raises
+    a data quality issue when too many expected values were not found (were missing).
+    Creates a separate data quality check (and an alert) for each monthly partition.

@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.strings;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.strings.ColumnExpectedStringsInUseCountCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedStringsInUseCountCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -33,7 +33,7 @@ import com.dqops.metadata.timeseries.TimeSeriesMode;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.strings.ColumnStringsExpectedStringsInUseCountSensorParametersSpec;
+import com.dqops.sensors.column.acceptedvalues.ColumnStringsExpectedStringsInUseCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
