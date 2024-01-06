@@ -168,7 +168,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
         MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
-        MaxCountRule15ParametersSpec countRule0ParametersSpec1 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec countRule0ParametersSpec1 = new MaxCountRule100ParametersSpec();
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
@@ -184,7 +184,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
         col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
-        MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec col23max1 = new MaxCountRule0WarningParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
 

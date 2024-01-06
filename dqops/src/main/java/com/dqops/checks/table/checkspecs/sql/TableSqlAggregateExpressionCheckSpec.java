@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxValueRuleParametersSpec;
+import com.dqops.rules.comparison.BetweenFloatsRuleParametersSpec;
 import com.dqops.sensors.table.sql.TableSqlAggregatedExpressionSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<TableSqlAggregatedExpressionSensorParametersSpec,
-        MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
+        BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlAggregateExpressionCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,17 +52,17 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
     @JsonPropertyDescription("Default alerting threshold for warnings raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec warning;
+    private BetweenFloatsRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec error;
+    private BetweenFloatsRuleParametersSpec error;
 
     @JsonPropertyDescription("Default alerting threshold for fatal data quality issues raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxValueRuleParametersSpec fatal;
+    private BetweenFloatsRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -89,7 +89,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getWarning() {
+    public BetweenFloatsRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -97,7 +97,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxValueRuleParametersSpec warning) {
+    public void setWarning(BetweenFloatsRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -109,7 +109,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxValueRuleParametersSpec getError() {
+    public BetweenFloatsRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -117,7 +117,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxValueRuleParametersSpec error) {
+    public void setError(BetweenFloatsRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -129,7 +129,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxValueRuleParametersSpec getFatal() {
+    public BetweenFloatsRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +137,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxValueRuleParametersSpec fatal) {
+    public void setFatal(BetweenFloatsRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

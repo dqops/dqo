@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNullsCountCheckSpec
-        extends AbstractCheckSpec<ColumnNullsNullsCountSensorParametersSpec, MaxCountRule1ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule100ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNullsNullsCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,7 +54,7 @@ public class ColumnNullsCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule1ParametersSpec warning;
+    private MaxCountRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a set number of rows with null values in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class ColumnNullsCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule1ParametersSpec getWarning() {
+    public MaxCountRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnNullsCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule1ParametersSpec warning) {
+    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");

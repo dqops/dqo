@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
 import com.dqops.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableSqlConditionFailedCountCheckSpec
-        extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule15ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -55,7 +55,7 @@ public class TableSqlConditionFailedCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule15ParametersSpec warning;
+    private MaxCountRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -65,7 +65,7 @@ public class TableSqlConditionFailedCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a given number of rows failed the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private MaxCountRule100ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -92,7 +92,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule15ParametersSpec getWarning() {
+    public MaxCountRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -100,7 +100,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule15ParametersSpec warning) {
+    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -132,7 +132,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public MaxCountRule100ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -140,7 +140,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxCountRule100ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

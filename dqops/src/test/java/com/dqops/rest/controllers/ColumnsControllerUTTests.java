@@ -70,7 +70,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 public class ColumnsControllerUTTests extends BaseTest {
@@ -287,7 +286,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule1ParametersSpec maxCountRule1 = new MaxCountRule1ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
         MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
         maxCountRule2.setMaxCount(20L);
@@ -322,7 +321,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule1ParametersSpec maxCountRule1 = new MaxCountRule1ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
         MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
         maxCountRule2.setMaxCount(20L);
@@ -360,11 +359,11 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        MaxCountRule0ParametersSpec maxCountRule1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule0WarningParametersSpec maxCountRule1 = new MaxCountRule0WarningParametersSpec();
         maxCountRule1.setMaxCount(10L);
         MaxCountRule10ParametersSpec maxCountRule2 = new MaxCountRule10ParametersSpec();
         maxCountRule2.setMaxCount(20L);
-        MaxCountRule15ParametersSpec maxCountRule3 = new MaxCountRule15ParametersSpec();
+        MaxCountRule100ParametersSpec maxCountRule3 = new MaxCountRule100ParametersSpec();
         maxCountRule3.setMaxCount(30L);
         
         ColumnNegativeCountCheckSpec negativeChecksSpec = new ColumnNegativeCountCheckSpec();

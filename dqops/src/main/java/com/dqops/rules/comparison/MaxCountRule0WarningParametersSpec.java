@@ -32,16 +32,16 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MaxCountRule0ParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MaxCountRule0ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxCountRule0WarningParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxCountRule0WarningParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    public MaxCountRule0ParametersSpec() {
+    public MaxCountRule0WarningParametersSpec() {
     }
 
-    public MaxCountRule0ParametersSpec(long maxCount) {
+    public MaxCountRule0WarningParametersSpec(long maxCount) {
         this.maxCount = maxCount;
     }
 

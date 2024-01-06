@@ -167,7 +167,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         ColumnNullsProfilingChecksSpec columnNulls = new ColumnNullsProfilingChecksSpec();
         columnNulls.setProfileNullsCount(new ColumnNullsCountCheckSpec() {{
-            setWarning(new MaxCountRule1ParametersSpec());
+            setWarning(new MaxCountRule0WarningParametersSpec());
         }});
         columnNulls.setProfileNotNullsCount(new ColumnNotNullsCountCheckSpec() {{
             setWarning(new MinCountRule1ParametersSpec());

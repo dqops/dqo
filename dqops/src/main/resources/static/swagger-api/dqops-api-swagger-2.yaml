@@ -17005,7 +17005,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ nulls in a column that raises a data quality error (alert)."
@@ -17013,7 +17013,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnDuplicatePercentCheckSpec:
     type: "object"
     properties:
@@ -17523,12 +17523,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values not matching values in another table column that raises a data\
           \ quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -17647,7 +17647,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule1ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with invalid\
           \ latitude value in a column that raises a data quality alert"
@@ -17708,7 +17708,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule1ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with invalid\
           \ longitude value in a column that raises a data quality alert"
@@ -18856,7 +18856,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
@@ -18864,7 +18864,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnNegativePercentCheckSpec:
     type: "object"
     properties:
@@ -18978,7 +18978,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ non-negative values in a column that raises a data quality error (alert)."
@@ -18986,7 +18986,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnNonNegativePercentCheckSpec:
     type: "object"
     properties:
@@ -19527,7 +19527,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule1ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with null\
           \ values in a column that raises a data quality error (alert)."
@@ -22684,7 +22684,7 @@ definitions:
         description: "Alerting threshold that raises a data quality warning when a\
           \ given number of rows failed the custom SQL condition (expression). The\
           \ warning is considered as a passed data quality check."
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows failing\
           \ the custom SQL condition (expression) that raises a data quality error\
@@ -22695,7 +22695,7 @@ definitions:
           \ a given number of rows failed the custom SQL condition (expression). A\
           \ fatal issue indicates a serious data quality problem that should result\
           \ in stopping the data pipelines."
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnSqlConditionFailedCountSensorParametersSpec:
     type: "object"
     properties:
@@ -23092,7 +23092,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ empty strings in a column that raises a data quality error (alert)."
@@ -23100,7 +23100,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringEmptyPercentCheckSpec:
     type: "object"
     properties:
@@ -23214,7 +23214,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid emails in a column that raises a data quality error (alert)."
@@ -23222,7 +23222,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringInvalidIp4AddressCountCheckSpec:
     type: "object"
     properties:
@@ -23275,7 +23275,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid IP4 address in a column that raises a data quality error (alert)."
@@ -23283,7 +23283,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringInvalidIp6AddressCountCheckSpec:
     type: "object"
     properties:
@@ -23336,7 +23336,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid IP6 address in a column that raises a data quality error (alert)."
@@ -23344,7 +23344,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringInvalidUuidCountCheckSpec:
     type: "object"
     properties:
@@ -23397,7 +23397,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ invalid uuid in a column that raises a data quality error (alert)."
@@ -23405,7 +23405,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringLengthAboveMaxLengthCountCheckSpec:
     type: "object"
     properties:
@@ -23458,7 +23458,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ strings with a length above the indicated by the user length in a column\
@@ -23467,7 +23467,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringLengthAboveMaxLengthPercentCheckSpec:
     type: "object"
     properties:
@@ -23582,7 +23582,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ strings with a length below the indicated by the user length in a column\
@@ -23591,7 +23591,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringLengthBelowMinLengthPercentCheckSpec:
     type: "object"
     properties:
@@ -24136,7 +24136,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ not matching date regex in a column that raises a data quality error (alert)."
@@ -24144,7 +24144,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringNotMatchRegexCountCheckSpec:
     type: "object"
     properties:
@@ -24197,7 +24197,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ not matching regex in a column that raises a data quality error (alert)."
@@ -24205,7 +24205,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringNullPlaceholderCountCheckSpec:
     type: "object"
     properties:
@@ -24258,7 +24258,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ a null placeholder strings in a column that raises a data quality error\
@@ -24267,7 +24267,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringNullPlaceholderPercentCheckSpec:
     type: "object"
     properties:
@@ -24506,7 +24506,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ surrounded by whitespace strings in a column that raises a data quality\
@@ -24515,7 +24515,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringSurroundedByWhitespacePercentCheckSpec:
     type: "object"
     properties:
@@ -24944,7 +24944,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ whitespace strings in a column that raises a data quality error (alert)."
@@ -24952,7 +24952,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringWhitespacePercentCheckSpec:
     type: "object"
     properties:
@@ -27383,7 +27383,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values with a value above the indicated by the user value in a column\
@@ -27392,7 +27392,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnValueAboveMaxValuePercentCheckSpec:
     type: "object"
     properties:
@@ -27507,7 +27507,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ values with a value below the indicated by the user value in a column\
@@ -27516,7 +27516,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnValueBelowMinValuePercentCheckSpec:
     type: "object"
     properties:
@@ -29350,7 +29350,7 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Count of open (new) data quality incidents."
-  MaxCountRule0ParametersSpec:
+  MaxCountRule0WarningParametersSpec:
     type: "object"
     properties:
       max_count:
@@ -29367,22 +29367,6 @@ definitions:
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
   MaxCountRule10ParametersSpec:
-    type: "object"
-    properties:
-      max_count:
-        type: "integer"
-        format: "int64"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxCountRule15ParametersSpec:
-    type: "object"
-    properties:
-      max_count:
-        type: "integer"
-        format: "int64"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxCountRule1ParametersSpec:
     type: "object"
     properties:
       max_count:
@@ -33787,15 +33771,15 @@ definitions:
       warning:
         description: "Default alerting threshold for warnings raised when the aggregated\
           \ value is above the maximum accepted value."
-        $ref: "#/definitions/MaxValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       error:
         description: "Default alerting threshold for errors raised when the aggregated\
           \ value is above the maximum accepted value."
-        $ref: "#/definitions/MaxValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
       fatal:
         description: "Default alerting threshold for fatal data quality issues raised\
           \ when the aggregated value is above the maximum accepted value."
-        $ref: "#/definitions/MaxValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
   TableSqlAggregatedExpressionSensorParametersSpec:
     type: "object"
     properties:
@@ -33863,7 +33847,7 @@ definitions:
         description: "Alerting threshold that raises a data quality warning when a\
           \ given number of rows failed the custom SQL condition (expression). The\
           \ warning is considered as a passed data quality check."
-        $ref: "#/definitions/MaxCountRule15ParametersSpec"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows failing\
           \ the custom SQL condition (expression) that raises a data quality error\
@@ -33874,7 +33858,7 @@ definitions:
           \ a given number of rows failed the custom SQL condition (expression). A\
           \ fatal issue indicates a serious data quality problem that should result\
           \ in stopping the data pipelines."
-        $ref: "#/definitions/MaxCountRule0ParametersSpec"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   TableSqlConditionFailedCountSensorParametersSpec:
     type: "object"
     properties:

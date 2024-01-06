@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
 import com.dqops.sensors.column.integrity.ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnIntegrityLookupKeyNotFoundCountCheckSpec
-        extends AbstractCheckSpec<ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule100ParametersSpec> {
+        extends AbstractCheckSpec<ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityLookupKeyNotFoundCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +54,12 @@ public class ColumnIntegrityLookupKeyNotFoundCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec warning;
+    private MaxCountRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with values not matching values in another table column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private MaxCountRule0WarningParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class ColumnIntegrityLookupKeyNotFoundCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getWarning() {
+    public MaxCountRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnIntegrityLookupKeyNotFoundCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule0ParametersSpec warning) {
+    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnIntegrityLookupKeyNotFoundCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public MaxCountRule0WarningParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnIntegrityLookupKeyNotFoundCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(MaxCountRule0WarningParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

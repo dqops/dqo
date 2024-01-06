@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MaxCountRule0ParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
+import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule10ParametersSpec;
-import com.dqops.rules.comparison.MaxCountRule15ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericValueAboveMaxValueCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnValueAboveMaxValueCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericValueAboveMaxValueCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule15ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericValueAboveMaxValueCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnValueAboveMaxValueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,7 +54,7 @@ public class ColumnValueAboveMaxValueCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec warning;
+    private MaxCountRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with values with a value above the indicated by the user value in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -64,7 +64,7 @@ public class ColumnValueAboveMaxValueCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule15ParametersSpec fatal;
+    private MaxCountRule100ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -91,7 +91,7 @@ public class ColumnValueAboveMaxValueCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getWarning() {
+    public MaxCountRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnValueAboveMaxValueCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule0ParametersSpec warning) {
+    public void setWarning(MaxCountRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -131,7 +131,7 @@ public class ColumnValueAboveMaxValueCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule15ParametersSpec getFatal() {
+    public MaxCountRule100ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -139,7 +139,7 @@ public class ColumnValueAboveMaxValueCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule15ParametersSpec fatal) {
+    public void setFatal(MaxCountRule100ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");
