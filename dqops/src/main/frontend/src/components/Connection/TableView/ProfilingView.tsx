@@ -63,9 +63,8 @@ const ProfilingView = () => {
   );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const secondLevelTab = getSecondLevelTab(checkTypes, tab);
-  
-  const [activeTab, setActiveTab] = useState(secondLevelTab);
+  const activeTab = getSecondLevelTab(checkTypes, tab);
+
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
@@ -224,7 +223,6 @@ const ProfilingView = () => {
         tab
       )
     );
-    setActiveTab(tab);
   };
 
   useEffect(() => {
