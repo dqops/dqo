@@ -93,7 +93,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getTable().setVolume(tableVolume);
 
         ColumnDatatypeDailyMonitoringChecksSpec columnDatatype = new ColumnDatatypeDailyMonitoringChecksSpec();
-        columnDatatype.setDailyStringDatatypeChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
+        columnDatatype.setDailyDetectedDatatypeInTextChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
         defaultSettings.getColumn().setDatatype(columnDatatype);

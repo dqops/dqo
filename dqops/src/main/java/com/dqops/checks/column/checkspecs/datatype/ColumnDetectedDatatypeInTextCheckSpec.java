@@ -39,8 +39,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDatatypeStringDatatypeDetectedCheckSpec extends AbstractCheckSpec<ColumnDatatypeStringDatatypeDetectSensorParametersSpec, DatatypeEqualsRuleParametersSpec, DatatypeEqualsRuleParametersSpec, DatatypeEqualsRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeStringDatatypeDetectedCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnDetectedDatatypeInTextCheckSpec extends
+        AbstractCheckSpec<ColumnDatatypeStringDatatypeDetectSensorParametersSpec, DatatypeEqualsRuleParametersSpec, DatatypeEqualsRuleParametersSpec, DatatypeEqualsRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnDetectedDatatypeInTextCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -173,6 +174,6 @@ public class ColumnDatatypeStringDatatypeDetectedCheckSpec extends AbstractCheck
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Consistency;
     }
 }

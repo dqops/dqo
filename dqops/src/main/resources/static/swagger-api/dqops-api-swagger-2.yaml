@@ -15544,15 +15544,15 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_string_datatype_detected:
+      daily_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
           \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
           \ mixed data types. Raises a data quality issue when the detected data type\
           \ does not match the expected data type. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectedCheckSpec"
-      daily_string_datatype_changed:
+        $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
+      daily_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed since the last verification. The sensor returns the detected\
           \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps,\
@@ -15570,15 +15570,15 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_string_datatype_detected:
+      daily_partition_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
           \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
           \ mixed data types. Raises a data quality issue when the detected data type\
           \ does not match the expected data type. Creates a separate data quality\
           \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectedCheckSpec"
-      daily_partition_string_datatype_changed:
+        $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
+      daily_partition_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed when compared to an earlier not empty partition. The sensor\
           \ returns the detected type of column data: 1 - integers, 2 - floats, 3\
@@ -15596,15 +15596,15 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_string_datatype_detected:
+      monthly_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
           \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
           \ mixed data types. Raises a data quality issue when the detected data type\
           \ does not match the expected data type. Stores the most recent row count\
           \ for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectedCheckSpec"
-      monthly_string_datatype_changed:
+        $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
+      monthly_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed since the last verification. The sensor returns the detected\
           \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps,\
@@ -15622,15 +15622,15 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_string_datatype_detected:
+      monthly_partition_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
           \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
           \ mixed data types. Raises a data quality issue when the detected data type\
           \ does not match the expected data type. Creates a separate data quality\
           \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectedCheckSpec"
-      monthly_partition_string_datatype_changed:
+        $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
+      monthly_partition_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed when compared to an earlier not empty partition. The sensor\
           \ returns the detected type of column data: 1 - integers, 2 - floats, 3\
@@ -15649,14 +15649,14 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      profile_string_datatype_detected:
+      profile_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
           \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
           \ mixed data types. Raises a data quality issue when the detected data type\
           \ does not match the expected data type."
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectedCheckSpec"
-      profile_string_datatype_changed:
+        $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
+      profile_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed since the last verification. The sensor returns the detected\
           \ data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps,\
@@ -15741,72 +15741,6 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnDatatypeStringDatatypeDetectedCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "The sensor parameters for a sensor that returns a value that\
-          \ identifies the detected type of column data: 1 - integers, 2 - floats,\
-          \ 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types."
-        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check, detects that the data type\
-          \ of values stored in a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
-      error:
-        description: "Default alerting threshold for a row count that raises a data\
-          \ quality error (alert), detects that the data type of values stored in\
-          \ a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem, detects that the data type of\
-          \ values stored in a column matches an expected data type code (1..7)."
-        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
   ColumnDateValuesInFuturePercentCheckSpec:
     type: "object"
     properties:
@@ -16160,6 +16094,72 @@ definitions:
         type: "string"
         format: "date"
         description: "Upper bound range variable."
+  ColumnDetectedDatatypeInTextCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "The sensor parameters for a sensor that returns a value that\
+          \ identifies the detected type of column data: 1 - integers, 2 - floats,\
+          \ 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types."
+        $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check, detects that the data type\
+          \ of values stored in a column matches an expected data type code (1..7)."
+        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+      error:
+        description: "Default alerting threshold for a row count that raises a data\
+          \ quality error (alert), detects that the data type of values stored in\
+          \ a column matches an expected data type code (1..7)."
+        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem, detects that the data type of\
+          \ values stored in a column matches an expected data type code (1..7)."
+        $ref: "#/definitions/DatatypeEqualsRuleParametersSpec"
   ColumnDistinctCountAnomalyDifferencingCheckSpec:
     type: "object"
     properties:

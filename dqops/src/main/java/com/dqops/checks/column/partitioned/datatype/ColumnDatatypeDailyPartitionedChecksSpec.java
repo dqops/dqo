@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeDetectedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,51 +41,51 @@ import java.util.Objects;
 public class ColumnDatatypeDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatatypeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_string_datatype_detected", o -> o.dailyPartitionStringDatatypeDetected);
-            put("daily_partition_string_datatype_changed", o -> o.dailyPartitionStringDatatypeChanged);
+            put("daily_partition_detected_datatype_in_text", o -> o.dailyPartitionDetectedDatatypeInText);
+            put("daily_partition_detected_datatype_in_text_changed", o -> o.dailyPartitionDetectedDatatypeInTextChanged);
         }
     };
 
     @JsonPropertyDescription("Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnDatatypeStringDatatypeDetectedCheckSpec dailyPartitionStringDatatypeDetected;
+    private ColumnDetectedDatatypeInTextCheckSpec dailyPartitionDetectedDatatypeInText;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged;
+    private ColumnDatatypeStringDatatypeChangedCheckSpec dailyPartitionDetectedDatatypeInTextChanged;
 
     /**
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeDetectedCheckSpec getDailyPartitionStringDatatypeDetected() {
-        return dailyPartitionStringDatatypeDetected;
+    public ColumnDetectedDatatypeInTextCheckSpec getDailyPartitionDetectedDatatypeInText() {
+        return dailyPartitionDetectedDatatypeInText;
     }
 
     /**
      * Sets a new definition of a datatype changed check.
-     * @param dailyPartitionStringDatatypeDetected Datatype changed check.
+     * @param dailyPartitionDetectedDatatypeInText Datatype changed check.
      */
-    public void setDailyPartitionStringDatatypeDetected(ColumnDatatypeStringDatatypeDetectedCheckSpec dailyPartitionStringDatatypeDetected) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeDetected, dailyPartitionStringDatatypeDetected));
-        this.dailyPartitionStringDatatypeDetected = dailyPartitionStringDatatypeDetected;
-        propagateHierarchyIdToField(dailyPartitionStringDatatypeDetected, "daily_partition_string_datatype_detected");
+    public void setDailyPartitionDetectedDatatypeInText(ColumnDetectedDatatypeInTextCheckSpec dailyPartitionDetectedDatatypeInText) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDetectedDatatypeInText, dailyPartitionDetectedDatatypeInText));
+        this.dailyPartitionDetectedDatatypeInText = dailyPartitionDetectedDatatypeInText;
+        propagateHierarchyIdToField(dailyPartitionDetectedDatatypeInText, "daily_partition_detected_datatype_in_text");
     }
 
     /**
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getDailyPartitionStringDatatypeChanged() {
-        return dailyPartitionStringDatatypeChanged;
+    public ColumnDatatypeStringDatatypeChangedCheckSpec getDailyPartitionDetectedDatatypeInTextChanged() {
+        return dailyPartitionDetectedDatatypeInTextChanged;
     }
 
     /**
      * Sets a new definition of a datatype changed check.
-     * @param dailyPartitionStringDatatypeChanged Datatype changed check.
+     * @param dailyPartitionDetectedDatatypeInTextChanged Datatype changed check.
      */
-    public void setDailyPartitionStringDatatypeChanged(ColumnDatatypeStringDatatypeChangedCheckSpec dailyPartitionStringDatatypeChanged) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringDatatypeChanged, dailyPartitionStringDatatypeChanged));
-        this.dailyPartitionStringDatatypeChanged = dailyPartitionStringDatatypeChanged;
-        propagateHierarchyIdToField(dailyPartitionStringDatatypeChanged, "daily_partition_string_datatype_changed");
+    public void setDailyPartitionDetectedDatatypeInTextChanged(ColumnDatatypeStringDatatypeChangedCheckSpec dailyPartitionDetectedDatatypeInTextChanged) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDetectedDatatypeInTextChanged, dailyPartitionDetectedDatatypeInTextChanged));
+        this.dailyPartitionDetectedDatatypeInTextChanged = dailyPartitionDetectedDatatypeInTextChanged;
+        propagateHierarchyIdToField(dailyPartitionDetectedDatatypeInTextChanged, "daily_partition_detected_datatype_in_text_changed");
     }
 
     /**
