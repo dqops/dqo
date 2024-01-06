@@ -49,14 +49,12 @@ public class AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec exten
             " The default is a time window of 90 periods (days, etc.), but at least 30 readouts must exist" +
             " to run the calculation. You can change the default value by modifying prediction_time_window parameter" +
             "in Definitions section.")
-    @SampleValues(values = "0.1")
-    private Double anomalyPercent;
+    private Double anomalyPercent = 1.0;
 
     /**
      * Default constructor.
      */
     public AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec() {
-        this.anomalyPercent = 1.0;
     }
 
     /**
