@@ -11,7 +11,8 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useHistory, useParams } from 'react-router-dom';
 import {
   getFirstLevelActiveTab,
-  getFirstLevelState
+  getFirstLevelState,
+  getSecondLevelTab
 } from '../../../redux/selectors';
 import { CheckTypes, ROUTES } from '../../../shared/routes';
 import TableProfilingChecks from '../../../pages/TableProfilingChecks';
@@ -27,45 +28,21 @@ import {
 } from '../../../api';
 
 import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
-import { addFirstLevelTab } from '../../../redux/actions/source.actions';
+import { addFirstLevelTab, setActiveFirstLevelUrl } from '../../../redux/actions/source.actions';
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
-import { checkIfTabCouldExist } from '../../../utils';
 import TablePreview from './TablePreview';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
+import { TABLE_LEVEL_TABS } from '../../../shared/constants';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
   spec: DataGroupingConfigurationSpec;
 }
-
-const tabs = [
-  {
-    label: 'Basic data statistics',
-    value: 'statistics'
-  },
-  {
-    label: 'Table preview',
-    value: 'preview'
-  },
-  {
-    label: 'Profiling checks',
-    value: 'advanced'
-  },
-  {
-    label: 'Table quality status',
-    value: 'table-quality-status'
-  },
-  {
-    label: 'Table comparisons',
-    value: 'table-comparisons'
-  }
-];
-
 const ProfilingView = () => {
   const {
     checkTypes,
@@ -86,11 +63,9 @@ const ProfilingView = () => {
   );
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const [activeTab, setActiveTab] = useState(
-    checkIfTabCouldExist(checkTypes, '/' + checkTypes + '/' + tab)
-      ? tab
-      : 'statistics'
-  );
+  const secondLevelTab = getSecondLevelTab(checkTypes, tab);
+  
+  const [activeTab, setActiveTab] = useState(secondLevelTab);
   const [nameOfDataStream, setNameOfDataStream] = useState<string>('');
   const [levels, setLevels] = useState<DataGroupingConfigurationSpec>({});
   const [selected, setSelected] = useState<number>(0);
@@ -124,12 +99,6 @@ const ProfilingView = () => {
       fetchColumns();
     }
   }, [connectionName, schemaName, tableName, activeTab]);
-
-  useEffect(() => {
-    if (tab !== activeTab) {
-      setActiveTab(tab);
-    }
-  }, [tab]);
 
   useEffect(() => {
     dispatch(
@@ -239,6 +208,13 @@ const ProfilingView = () => {
   };
 
   const onChangeTab = (tab: string) => {
+    dispatch(
+      setActiveFirstLevelUrl(
+        checkTypes,
+        firstLevelActiveTab,
+        ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab)
+      )
+    );
     history.push(
       ROUTES.TABLE_LEVEL_PAGE(
         checkTypes,
@@ -277,7 +253,7 @@ const ProfilingView = () => {
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={tab} onChange={onChangeTab} />
       </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
