@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
+import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import com.dqops.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class ColumnSqlMonthlyPartitionedChecksSpec extends AbstractCheckCategory
             put("monthly_partition_sql_condition_passed_percent_on_column", o -> o.monthlyPartitionSqlConditionPassedPercentOnColumn);
             put("monthly_partition_sql_condition_failed_count_on_column", o -> o.monthlyPartitionSqlConditionFailedCountOnColumn);
 
-            put("monthly_partition_sql_aggregate_expr_column", o -> o.monthlyPartitionSqlAggregateExprColumn);
+            put("monthly_partition_sql_aggregate_expression_on_column", o -> o.monthlyPartitionSqlAggregateExpressionOnColumn);
         }
     };
 
@@ -56,7 +56,7 @@ public class ColumnSqlMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     private ColumnSqlConditionFailedCountCheckSpec monthlyPartitionSqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnSqlAggregateExprCheckSpec monthlyPartitionSqlAggregateExprColumn;
+    private ColumnSqlAggregateExpressionCheckSpec monthlyPartitionSqlAggregateExpressionOnColumn;
 
     /**
      * Returns a check specification.
@@ -98,18 +98,18 @@ public class ColumnSqlMonthlyPartitionedChecksSpec extends AbstractCheckCategory
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregateExprCheckSpec getMonthlyPartitionSqlAggregateExprColumn() {
-        return monthlyPartitionSqlAggregateExprColumn;
+    public ColumnSqlAggregateExpressionCheckSpec getMonthlyPartitionSqlAggregateExpressionOnColumn() {
+        return monthlyPartitionSqlAggregateExpressionOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlyPartitionSqlAggregateExprColumn Check specification.
+     * @param monthlyPartitionSqlAggregateExpressionOnColumn Check specification.
      */
-    public void setMonthlyPartitionSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec monthlyPartitionSqlAggregateExprColumn) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregateExprColumn, monthlyPartitionSqlAggregateExprColumn));
-        this.monthlyPartitionSqlAggregateExprColumn = monthlyPartitionSqlAggregateExprColumn;
-        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExprColumn, "monthly_partition_sql_aggregate_expr_column");
+    public void setMonthlyPartitionSqlAggregateExpressionOnColumn(ColumnSqlAggregateExpressionCheckSpec monthlyPartitionSqlAggregateExpressionOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionSqlAggregateExpressionOnColumn, monthlyPartitionSqlAggregateExpressionOnColumn));
+        this.monthlyPartitionSqlAggregateExpressionOnColumn = monthlyPartitionSqlAggregateExpressionOnColumn;
+        propagateHierarchyIdToField(monthlyPartitionSqlAggregateExpressionOnColumn, "monthly_partition_sql_aggregate_expression_on_column");
     }
 
     /**

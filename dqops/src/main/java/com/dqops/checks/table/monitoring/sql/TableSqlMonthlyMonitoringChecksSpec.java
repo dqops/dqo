@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
+import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class TableSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategorySp
             put("monthly_sql_condition_passed_percent_on_table", o -> o.monthlySqlConditionPassedPercentOnTable);
             put("monthly_sql_condition_failed_count_on_table", o -> o.monthlySqlConditionFailedCountOnTable);
 
-            put("monthly_sql_aggregate_expr_table", o -> o.monthlySqlAggregateExprTable);
+            put("monthly_sql_aggregate_expression_on_table", o -> o.monthlySqlAggregateExpressionOnTable);
         }
     };
 
@@ -56,7 +56,7 @@ public class TableSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategorySp
     private TableSqlConditionFailedCountCheckSpec monthlySqlConditionFailedCountOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private TableSqlAggregateExprCheckSpec monthlySqlAggregateExprTable;
+    private TableSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnTable;
 
     /**
      * Returns a check specification.
@@ -106,18 +106,18 @@ public class TableSqlMonthlyMonitoringChecksSpec extends AbstractCheckCategorySp
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregateExprCheckSpec getMonthlySqlAggregateExprTable() {
-        return monthlySqlAggregateExprTable;
+    public TableSqlAggregateExpressionCheckSpec getMonthlySqlAggregateExpressionOnTable() {
+        return monthlySqlAggregateExpressionOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param monthlySqlAggregateExprTable Check specification.
+     * @param monthlySqlAggregateExpressionOnTable Check specification.
      */
-    public void setMonthlySqlAggregateExprTable(TableSqlAggregateExprCheckSpec monthlySqlAggregateExprTable) {
-        this.setDirtyIf(!Objects.equals(this.monthlySqlAggregateExprTable, monthlySqlAggregateExprTable));
-        this.monthlySqlAggregateExprTable = monthlySqlAggregateExprTable;
-        propagateHierarchyIdToField(monthlySqlAggregateExprTable, "monthly_sql_aggregate_expr_table");
+    public void setMonthlySqlAggregateExpressionOnTable(TableSqlAggregateExpressionCheckSpec monthlySqlAggregateExpressionOnTable) {
+        this.setDirtyIf(!Objects.equals(this.monthlySqlAggregateExpressionOnTable, monthlySqlAggregateExpressionOnTable));
+        this.monthlySqlAggregateExpressionOnTable = monthlySqlAggregateExpressionOnTable;
+        propagateHierarchyIdToField(monthlySqlAggregateExpressionOnTable, "monthly_sql_aggregate_expression_on_table");
     }
 
     /**

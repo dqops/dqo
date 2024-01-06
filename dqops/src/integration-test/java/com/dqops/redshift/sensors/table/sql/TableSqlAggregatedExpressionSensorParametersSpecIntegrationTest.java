@@ -16,7 +16,7 @@
 package com.dqops.redshift.sensors.table.sql;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
+import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private TableSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlAggregateExprCheckSpec checkSpec;
+    private TableSqlAggregateExpressionCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -48,7 +48,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.redshift);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlAggregatedExpressionSensorParametersSpec();
-        this.checkSpec = new TableSqlAggregateExprCheckSpec();
+        this.checkSpec = new TableSqlAggregateExpressionCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -17,7 +17,7 @@ package com.dqops.spark.sensors.column.sql;
 
 import com.dqops.spark.BaseSparkIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
+import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class SparkColumnSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseSparkIntegrationTest {
     private ColumnSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSqlAggregateExprCheckSpec checkSpec;
+    private ColumnSqlAggregateExpressionCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,7 +49,7 @@ public class SparkColumnSqlAggregatedExpressionSensorParametersSpecIntegrationTe
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnSqlAggregatedExpressionSensorParametersSpec();
-		this.checkSpec = new ColumnSqlAggregateExprCheckSpec();
+		this.checkSpec = new ColumnSqlAggregateExpressionCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

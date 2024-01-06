@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
+import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class TableSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpec
             put("daily_sql_condition_passed_percent_on_table", o -> o.dailySqlConditionPassedPercentOnTable);
             put("daily_sql_condition_failed_count_on_table", o -> o.dailySqlConditionFailedCountOnTable);
 
-            put("daily_sql_aggregate_expr_table", o -> o.dailySqlAggregateExprTable);
+            put("daily_sql_aggregate_expression_on_table", o -> o.dailySqlAggregateExpressionOnTable);
         }
     };
 
@@ -56,7 +56,7 @@ public class TableSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpec
     private TableSqlConditionFailedCountCheckSpec dailySqlConditionFailedCountOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private TableSqlAggregateExprCheckSpec dailySqlAggregateExprTable;
+    private TableSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnTable;
 
     /**
      * Returns a check specification.
@@ -106,18 +106,18 @@ public class TableSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpec
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregateExprCheckSpec getDailySqlAggregateExprTable() {
-        return dailySqlAggregateExprTable;
+    public TableSqlAggregateExpressionCheckSpec getDailySqlAggregateExpressionOnTable() {
+        return dailySqlAggregateExpressionOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailySqlAggregateExprTable Check specification.
+     * @param dailySqlAggregateExpressionOnTable Check specification.
      */
-    public void setDailySqlAggregateExprTable(TableSqlAggregateExprCheckSpec dailySqlAggregateExprTable) {
-        this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExprTable, dailySqlAggregateExprTable));
-        this.dailySqlAggregateExprTable = dailySqlAggregateExprTable;
-        propagateHierarchyIdToField(dailySqlAggregateExprTable, "daily_sql_aggregate_expr_table");
+    public void setDailySqlAggregateExpressionOnTable(TableSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnTable) {
+        this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExpressionOnTable, dailySqlAggregateExpressionOnTable));
+        this.dailySqlAggregateExpressionOnTable = dailySqlAggregateExpressionOnTable;
+        propagateHierarchyIdToField(dailySqlAggregateExpressionOnTable, "daily_sql_aggregate_expression_on_table");
     }
 
     /**

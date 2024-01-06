@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
+import com.dqops.checks.table.checkspecs.sql.TableSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class TableSqlProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_sql_condition_passed_percent_on_table", o -> o.profileSqlConditionPassedPercentOnTable);
             put("profile_sql_condition_failed_count_on_table", o -> o.profileSqlConditionFailedCountOnTable);
 
-            put("profile_sql_aggregate_expr_table", o -> o.profileSqlAggregateExprTable);
+            put("profile_sql_aggregate_expression_on_table", o -> o.profileSqlAggregateExpressionOnTable);
         }
     };
 
@@ -56,7 +56,7 @@ public class TableSqlProfilingChecksSpec extends AbstractCheckCategorySpec {
     private TableSqlConditionFailedCountCheckSpec profileSqlConditionFailedCountOnTable;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.")
-    private TableSqlAggregateExprCheckSpec profileSqlAggregateExprTable;
+    private TableSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnTable;
 
     /**
      * Returns a check specification.
@@ -98,18 +98,18 @@ public class TableSqlProfilingChecksSpec extends AbstractCheckCategorySpec {
      * Returns a check specification.
      * @return New check specification.
      */
-    public TableSqlAggregateExprCheckSpec getProfileSqlAggregateExprTable() {
-        return profileSqlAggregateExprTable;
+    public TableSqlAggregateExpressionCheckSpec getProfileSqlAggregateExpressionOnTable() {
+        return profileSqlAggregateExpressionOnTable;
     }
 
     /**
      * Sets a new check specification.
-     * @param profileSqlAggregateExprTable Check specification.
+     * @param profileSqlAggregateExpressionOnTable Check specification.
      */
-    public void setProfileSqlAggregateExprTable(TableSqlAggregateExprCheckSpec profileSqlAggregateExprTable) {
-        this.setDirtyIf(!Objects.equals(this.profileSqlAggregateExprTable, profileSqlAggregateExprTable));
-        this.profileSqlAggregateExprTable = profileSqlAggregateExprTable;
-        propagateHierarchyIdToField(profileSqlAggregateExprTable, "profile_sql_aggregate_expr_table");
+    public void setProfileSqlAggregateExpressionOnTable(TableSqlAggregateExpressionCheckSpec profileSqlAggregateExpressionOnTable) {
+        this.setDirtyIf(!Objects.equals(this.profileSqlAggregateExpressionOnTable, profileSqlAggregateExpressionOnTable));
+        this.profileSqlAggregateExpressionOnTable = profileSqlAggregateExpressionOnTable;
+        propagateHierarchyIdToField(profileSqlAggregateExpressionOnTable, "profile_sql_aggregate_expression_on_table");
     }
 
     /**

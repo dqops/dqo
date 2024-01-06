@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.sql;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
+import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnSqlAggregatedExpressionSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnSqlAggregateExprCheckSpec checkSpec;
+    private ColumnSqlAggregateExpressionCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -54,7 +54,7 @@ public class ColumnSqlAggregatedExpressionSensorParametersSpecBigQueryTests exte
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnSqlAggregateExprCheckSpec();
+        this.checkSpec = new ColumnSqlAggregateExpressionCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

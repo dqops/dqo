@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
+import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import com.dqops.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class ColumnSqlDailyPartitionedChecksSpec extends AbstractCheckCategorySp
             put("daily_partition_sql_condition_passed_percent_on_column", o -> o.dailyPartitionSqlConditionPassedPercentOnColumn);
             put("daily_partition_sql_condition_failed_count_on_column", o -> o.dailyPartitionSqlConditionFailedCountOnColumn);
 
-            put("daily_partition_sql_aggregate_expr_column", o -> o.dailyPartitionSqlAggregateExprColumn);
+            put("daily_partition_sql_aggregate_expression_on_column", o -> o.dailyPartitionSqlAggregateExpressionOnColumn);
         }
     };
 
@@ -56,7 +56,7 @@ public class ColumnSqlDailyPartitionedChecksSpec extends AbstractCheckCategorySp
     private ColumnSqlConditionFailedCountCheckSpec dailyPartitionSqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprColumn;
+    private ColumnSqlAggregateExpressionCheckSpec dailyPartitionSqlAggregateExpressionOnColumn;
 
     /**
      * Returns a check specification.
@@ -98,18 +98,18 @@ public class ColumnSqlDailyPartitionedChecksSpec extends AbstractCheckCategorySp
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregateExprCheckSpec getDailyPartitionSqlAggregateExprColumn() {
-        return dailyPartitionSqlAggregateExprColumn;
+    public ColumnSqlAggregateExpressionCheckSpec getDailyPartitionSqlAggregateExpressionOnColumn() {
+        return dailyPartitionSqlAggregateExpressionOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailyPartitionSqlAggregateExprColumn Check specification.
+     * @param dailyPartitionSqlAggregateExpressionOnColumn Check specification.
      */
-    public void setDailyPartitionSqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec dailyPartitionSqlAggregateExprColumn) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExprColumn, dailyPartitionSqlAggregateExprColumn));
-        this.dailyPartitionSqlAggregateExprColumn = dailyPartitionSqlAggregateExprColumn;
-        propagateHierarchyIdToField(dailyPartitionSqlAggregateExprColumn, "daily_partition_sql_aggregate_expr_column");
+    public void setDailyPartitionSqlAggregateExpressionOnColumn(ColumnSqlAggregateExpressionCheckSpec dailyPartitionSqlAggregateExpressionOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionSqlAggregateExpressionOnColumn, dailyPartitionSqlAggregateExpressionOnColumn));
+        this.dailyPartitionSqlAggregateExpressionOnColumn = dailyPartitionSqlAggregateExpressionOnColumn;
+        propagateHierarchyIdToField(dailyPartitionSqlAggregateExpressionOnColumn, "daily_partition_sql_aggregate_expression_on_column");
     }
 
     /**

@@ -24192,7 +24192,7 @@
         }
       }
     },
-    "ColumnSqlAggregateExprCheckSpec" : {
+    "ColumnSqlAggregateExpressionCheckSpec" : {
       "type" : "object",
       "properties" : {
         "schedule_override" : {
@@ -24417,9 +24417,9 @@
           "description" : "Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
         },
-        "daily_sql_aggregate_expr_column" : {
+        "daily_sql_aggregate_expression_on_column" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
     },
@@ -24441,9 +24441,9 @@
           "description" : "Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
         },
-        "daily_partition_sql_aggregate_expr_column" : {
+        "daily_partition_sql_aggregate_expression_on_column" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
     },
@@ -24465,9 +24465,9 @@
           "description" : "Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
         },
-        "monthly_sql_aggregate_expr_column" : {
+        "monthly_sql_aggregate_expression_on_column" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
     },
@@ -24489,9 +24489,9 @@
           "description" : "Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
         },
-        "monthly_partition_sql_aggregate_expr_column" : {
+        "monthly_partition_sql_aggregate_expression_on_column" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
     },
@@ -24513,9 +24513,9 @@
           "description" : "Verifies that a number of rows failed a custom SQL condition(expression) does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
         },
-        "profile_sql_aggregate_expr_column" : {
+        "profile_sql_aggregate_expression_on_column" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.",
-          "$ref" : "#/definitions/ColumnSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
         }
       }
     },
@@ -34950,7 +34950,7 @@
         }
       }
     },
-    "TableSqlAggregateExprCheckSpec" : {
+    "TableSqlAggregateExpressionCheckSpec" : {
       "type" : "object",
       "properties" : {
         "schedule_override" : {
@@ -35175,9 +35175,9 @@
           "description" : "Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/TableSqlConditionFailedCountCheckSpec"
         },
-        "daily_sql_aggregate_expr_table" : {
+        "daily_sql_aggregate_expression_on_table" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/TableSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "min_sql_condition_passed_percent_on_table" : {
           "$ref" : "#/definitions/TableSqlConditionPassedPercentCheckSpec"
@@ -35202,9 +35202,9 @@
           "description" : "Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/TableSqlConditionFailedCountCheckSpec"
         },
-        "daily_partition_sql_aggregate_expr_table" : {
+        "daily_partition_sql_aggregate_expression_on_table" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/TableSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "min_sql_condition_passed_percent_on_table" : {
           "$ref" : "#/definitions/TableSqlConditionPassedPercentCheckSpec"
@@ -35229,9 +35229,9 @@
           "description" : "Verifies that a set number of rows failed a custom SQL condition (expression). Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/TableSqlConditionFailedCountCheckSpec"
         },
-        "monthly_sql_aggregate_expr_table" : {
+        "monthly_sql_aggregate_expression_on_table" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/TableSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "min_sql_condition_passed_percent_on_table" : {
           "$ref" : "#/definitions/TableSqlConditionPassedPercentCheckSpec"
@@ -35256,9 +35256,9 @@
           "description" : "Verifies that a set number of rows failed a custom SQL condition (expression). Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/TableSqlConditionFailedCountCheckSpec"
         },
-        "monthly_partition_sql_aggregate_expr_table" : {
+        "monthly_partition_sql_aggregate_expression_on_table" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/TableSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         },
         "min_sql_condition_passed_percent_on_table" : {
           "$ref" : "#/definitions/TableSqlConditionPassedPercentCheckSpec"
@@ -35283,9 +35283,9 @@
           "description" : "Verifies that a set number of rows failed a custom SQL condition (expression).",
           "$ref" : "#/definitions/TableSqlConditionFailedCountCheckSpec"
         },
-        "profile_sql_aggregate_expr_table" : {
+        "profile_sql_aggregate_expression_on_table" : {
           "description" : "Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.",
-          "$ref" : "#/definitions/TableSqlAggregateExprCheckSpec"
+          "$ref" : "#/definitions/TableSqlAggregateExpressionCheckSpec"
         }
       }
     },

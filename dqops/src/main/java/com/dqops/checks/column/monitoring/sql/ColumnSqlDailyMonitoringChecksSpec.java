@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
+import com.dqops.checks.column.checkspecs.sql.ColumnSqlAggregateExpressionCheckSpec;
 import com.dqops.checks.column.checkspecs.sql.ColumnSqlConditionFailedCountCheckSpec;
 import com.dqops.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class ColumnSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
             put("daily_sql_condition_passed_percent_on_column", o -> o.dailySqlConditionPassedPercentOnColumn);
             put("daily_sql_condition_failed_count_on_column", o -> o.dailySqlConditionFailedCountOnColumn);
 
-            put("daily_sql_aggregate_expr_column", o -> o.dailySqlAggregateExprColumn);
+            put("daily_sql_aggregate_expression_on_column", o -> o.dailySqlAggregateExpressionOnColumn);
         }
     };
 
@@ -56,7 +56,7 @@ public class ColumnSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
     private ColumnSqlConditionFailedCountCheckSpec dailySqlConditionFailedCountOnColumn;
 
     @JsonPropertyDescription("Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnSqlAggregateExprCheckSpec dailySqlAggregateExprColumn;
+    private ColumnSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnColumn;
 
     /**
      * Returns a check specification.
@@ -98,18 +98,18 @@ public class ColumnSqlDailyMonitoringChecksSpec extends AbstractCheckCategorySpe
      * Returns a check specification.
      * @return New check specification.
      */
-    public ColumnSqlAggregateExprCheckSpec getDailySqlAggregateExprColumn() {
-        return dailySqlAggregateExprColumn;
+    public ColumnSqlAggregateExpressionCheckSpec getDailySqlAggregateExpressionOnColumn() {
+        return dailySqlAggregateExpressionOnColumn;
     }
 
     /**
      * Sets a new check specification.
-     * @param dailySqlAggregateExprColumn Check specification.
+     * @param dailySqlAggregateExpressionOnColumn Check specification.
      */
-    public void setDailySqlAggregateExprColumn(ColumnSqlAggregateExprCheckSpec dailySqlAggregateExprColumn) {
-        this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExprColumn, dailySqlAggregateExprColumn));
-        this.dailySqlAggregateExprColumn = dailySqlAggregateExprColumn;
-        propagateHierarchyIdToField(dailySqlAggregateExprColumn, "daily_sql_aggregate_expr_column");
+    public void setDailySqlAggregateExpressionOnColumn(ColumnSqlAggregateExpressionCheckSpec dailySqlAggregateExpressionOnColumn) {
+        this.setDirtyIf(!Objects.equals(this.dailySqlAggregateExpressionOnColumn, dailySqlAggregateExpressionOnColumn));
+        this.dailySqlAggregateExpressionOnColumn = dailySqlAggregateExpressionOnColumn;
+        propagateHierarchyIdToField(dailySqlAggregateExpressionOnColumn, "daily_sql_aggregate_expression_on_column");
     }
 
     /**
