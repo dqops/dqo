@@ -751,7 +751,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_TABLE_MONITORING_CHECKS_MODEL_FILTER_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        monitoringUIFilter: action.data,
+        monitoringChecksUIFilter: action.data,
         isUpdatedMonitoringUIFilter: false,
         error: null
       });
