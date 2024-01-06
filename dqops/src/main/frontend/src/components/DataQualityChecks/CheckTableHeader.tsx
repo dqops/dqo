@@ -37,6 +37,7 @@ interface TableHeaderProps {
   isDefaultEditing?: boolean;
   showAdvanced?: boolean;
   setShowAdvanced: (showAdvanced: boolean) => void;
+  isFiltered?: boolean
 }
 
 const TableHeader = ({
@@ -49,7 +50,8 @@ const TableHeader = ({
   onUpdate,
   isDefaultEditing,
   showAdvanced,
-  setShowAdvanced
+  setShowAdvanced,
+  isFiltered
 }: TableHeaderProps) => {
   const { job_dictionary_state } = useSelector(
     (state: IRootState) => state.job || {}
@@ -218,12 +220,14 @@ const TableHeader = ({
             className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           >
             <div className="flex gap-2 items-center font-normal text-gray-950">
+              {isFiltered !== true ? 
               <Checkbox
                 label="Show advanced checks"
                 labelPosition="right"
                 checked={showAdvanced}
                 onChange={(value) => setShowAdvanced(value)}
-              />
+              /> 
+              : null}
               {!mode && (
                 <>
                   <Button
