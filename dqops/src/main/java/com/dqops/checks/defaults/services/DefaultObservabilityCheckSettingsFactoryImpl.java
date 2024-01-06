@@ -22,6 +22,8 @@ import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeC
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.uniqueness.ColumnDistinctCountAnomalyDifferencingCheckSpec;
+import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
@@ -145,6 +147,12 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
             setWarning(new ChangePercent1DayRule10ParametersSpec());
         }});
         defaultSettings.getColumn().setNulls(columnNulls);
+
+        ColumnUniquenessDailyMonitoringChecksSpec columnUniqueness = new ColumnUniquenessDailyMonitoringChecksSpec();
+        columnUniqueness.setDailyDistinctCountAnomaly(new ColumnDistinctCountAnomalyDifferencingCheckSpec() {{
+            setWarning(new AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec());
+        }});
+        defaultSettings.getColumn().setUniqueness(columnUniqueness);
 
         return defaultSettings;
     }

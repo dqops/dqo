@@ -924,6 +924,10 @@ check that will compare the sum of values per day and raise a warning if the cha
                   warning:
                     max_percent: 10.0
                     exact_day: false
+              uniqueness:
+                daily_distinct_count_anomaly:
+                  warning:
+                    anomaly_percent: 1.0 
               datatype:
                 daily_detected_datatype_in_text_changed:
                   warning: {}
@@ -961,6 +965,10 @@ check that will compare the sum of values per day and raise a warning if the cha
                   warning:
                     max_percent: 10.0
                     exact_day: false
+              uniqueness:
+                daily_distinct_count_anomaly:
+                  warning:
+                    anomaly_percent: 1.0 
               anomaly:
                 daily_mean_anomaly:
                   warning:
@@ -1017,6 +1025,7 @@ The following table shows a list of default data quality checks and describes th
 | column | [daily not nulls percent](../../../checks/column/nulls/not-nulls-percent.md)                                           | Ensures that there are no more than a set percentage of not null values in the monitored column.                                            |
 | column | [daily nulls percent anomaly](../../../checks/column/nulls/nulls-percent-anomaly.md)                                   | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. |
 | column | [daily nulls percent change 1_day](../../../checks/column/nulls/nulls-percent-change-1-day.md)                         | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                      |
+| column | [daily_distinct_count_anomaly](../../../checks/column/uniqueness/distinct-count-anomaly.md) | Detects anomalies in the count of distinct values in the column.                                                                            |    
 | column | [daily detected datatype_in_text changed](../../../checks/column/datatype/string-detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                    |
 | column | [daily mean anomaly](../../../checks/column/anomaly/mean-anomaly.md)                                                   | Ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.         |
 | column | [daily sum anomaly](../../../checks/column/anomaly/sum-anomaly.md)                                                     | Ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.                |
