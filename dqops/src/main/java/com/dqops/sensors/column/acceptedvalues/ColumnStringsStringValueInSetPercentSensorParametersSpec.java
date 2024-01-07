@@ -82,6 +82,6 @@ public class ColumnStringsStringValueInSetPercentSensorParametersSpec extends Ab
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/acceptedvalues/string_value_in_set_percent";
+        return "column/accepted_values/string_value_in_set_percent";
     }
 }

@@ -105,6 +105,6 @@ public class ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec ex
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/acceptedvalues/expected_strings_in_top_values_count";
+        return "column/accepted_values/expected_strings_in_top_values_count";
     }
 }

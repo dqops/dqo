@@ -2,7 +2,7 @@
 apiVersion: dqo/v1
 kind: check
 spec:
-  sensor_name: column/acceptedvalues/expected_strings_in_use_count
+  sensor_name: column/accepted_values/expected_strings_in_use_count
   rule_name: comparison/max_missing
   help_text: Verifies that the expected string values were found in the column. Raises
     a data quality issue when too many expected values were not found (were missing).

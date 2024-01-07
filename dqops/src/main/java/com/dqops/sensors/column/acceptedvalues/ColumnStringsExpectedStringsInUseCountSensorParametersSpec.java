@@ -82,6 +82,6 @@ public class ColumnStringsExpectedStringsInUseCountSensorParametersSpec extends 
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/acceptedvalues/expected_strings_in_use_count";
+        return "column/accepted_values/expected_strings_in_use_count";
     }
 }
