@@ -114,7 +114,7 @@ const CheckCategoriesView = ({
                 { 
                   category.category === 'pii' ? 
                     category.category.toUpperCase() :
-                      (category.category === 'sql') ? "Custom SQL" :
+                      (category.category === 'custom_sql') ? "Custom SQL" :
                        category.category?.replace(/_/g, ' ').replace(/^\w/, (c) => c.toUpperCase())
                 }
               </div>

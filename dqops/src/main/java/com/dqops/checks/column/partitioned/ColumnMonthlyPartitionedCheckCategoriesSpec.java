@@ -22,7 +22,6 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyMonthlyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.blanks.ColumnBlanksDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.blanks.ColumnBlanksMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonMonthlyPartitionedChecksSpecMap;
@@ -31,10 +30,9 @@ import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartiti
 import com.dqops.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.patterns.ColumnPatternsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.patterns.ColumnPatternsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.customsql.ColumnCustomSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessMonthlyPartitionedChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -74,7 +72,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
@@ -132,7 +130,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonPropertyDescription("Monthly partitioned checks using custom SQL expressions and conditions on the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlMonthlyPartitionedChecksSpec sql;
+    private ColumnCustomSqlMonthlyPartitionedChecksSpec customSql;
 
     @JsonPropertyDescription("Monthly partitioned checks for booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -330,18 +328,18 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Returns a container of custom SQL checks on a column.
      * @return Custom SQL checks.
      */
-    public ColumnSqlMonthlyPartitionedChecksSpec getSql() {
-        return sql;
+    public ColumnCustomSqlMonthlyPartitionedChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom SQL checks.
-     * @param sql Custom SQL checks container.
+     * @param customSql Custom SQL checks container.
      */
-    public void setSql(ColumnSqlMonthlyPartitionedChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(ColumnCustomSqlMonthlyPartitionedChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

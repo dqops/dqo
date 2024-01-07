@@ -24,8 +24,8 @@ import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.sql.TableSqlDailyMonitoringChecksSpec;
-import com.dqops.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
+import com.dqops.checks.table.monitoring.customsql.TableCustomSqlDailyMonitoringChecksSpec;
+import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
@@ -104,11 +104,11 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         tableSpec.setMonitoringChecks(new TableMonitoringChecksSpec());
         tableSpec.getMonitoringChecks().setDaily(new TableDailyMonitoringCheckCategoriesSpec());
-        tableSpec.getMonitoringChecks().getDaily().setSql(new TableSqlDailyMonitoringChecksSpec());
+        tableSpec.getMonitoringChecks().getDaily().setCustomSql(new TableCustomSqlDailyMonitoringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule100ErrorParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");
-        tableSpec.getMonitoringChecks().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
+        tableSpec.getMonitoringChecks().getDaily().getCustomSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
 
         // Column level checks
         ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));

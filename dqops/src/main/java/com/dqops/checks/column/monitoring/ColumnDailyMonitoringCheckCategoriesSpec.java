@@ -33,11 +33,9 @@ import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringCh
 import com.dqops.checks.column.monitoring.patterns.ColumnPatternsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.pii.ColumnPiiDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.sql.ColumnSqlDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.customsql.ColumnCustomSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.strings.ColumnStringsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
-import com.dqops.checks.column.partitioned.patterns.ColumnPatternsDailyPartitionedChecksSpec;
-import com.dqops.checks.column.profiling.ColumnBlanksProfilingChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
@@ -75,7 +73,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
@@ -134,7 +132,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonPropertyDescription("Daily monitoring checks of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlDailyMonitoringChecksSpec sql;
+    private ColumnCustomSqlDailyMonitoringChecksSpec customSql;
 
     @JsonPropertyDescription("Daily monitoring checks of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -337,18 +335,18 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
      * Returns the container of custom SQL checks that use custom SQL expressions in checks.
      * @return Custom SQL checks.
      */
-    public ColumnSqlDailyMonitoringChecksSpec getSql() {
-        return sql;
+    public ColumnCustomSqlDailyMonitoringChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom SQL checks.
-     * @param sql Custom SQL checks.
+     * @param customSql Custom SQL checks.
      */
-    public void setSql(ColumnSqlDailyMonitoringChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(ColumnCustomSqlDailyMonitoringChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

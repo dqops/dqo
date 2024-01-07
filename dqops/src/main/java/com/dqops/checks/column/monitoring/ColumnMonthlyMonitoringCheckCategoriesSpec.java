@@ -22,7 +22,6 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.acceptedvalues.ColumnAcceptedValuesMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.accuracy.ColumnAccuracyMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.blanks.ColumnBlanksDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.blanks.ColumnBlanksMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.bool.ColumnBoolMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.comparison.ColumnComparisonMonthlyMonitoringChecksSpecMap;
@@ -31,11 +30,10 @@ import com.dqops.checks.column.monitoring.datetime.ColumnDatetimeMonthlyMonitori
 import com.dqops.checks.column.monitoring.integrity.ColumnIntegrityMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.patterns.ColumnPatternsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.patterns.ColumnPatternsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.pii.ColumnPiiMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaMonthlyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.sql.ColumnSqlMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.customsql.ColumnCustomSqlMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.strings.ColumnStringsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessMonthlyMonitoringChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -75,7 +73,7 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
@@ -134,7 +132,7 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     @JsonPropertyDescription("Monthly monitoring checks of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlMonthlyMonitoringChecksSpec sql;
+    private ColumnCustomSqlMonthlyMonitoringChecksSpec customSql;
 
     @JsonPropertyDescription("Monthly monitoring checks of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -338,18 +336,18 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
      * Returns a container of custom SQL checks.
      * @return Custom SQL checks.
      */
-    public ColumnSqlMonthlyMonitoringChecksSpec getSql() {
-        return sql;
+    public ColumnCustomSqlMonthlyMonitoringChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container with custom SQL checks.
-     * @param sql Custom SQL checks.
+     * @param customSql Custom SQL checks.
      */
-    public void setSql(ColumnSqlMonthlyMonitoringChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(ColumnCustomSqlMonthlyMonitoringChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

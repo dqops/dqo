@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: table/custom_sql/sql_condition_failed_count
+  rule_name: comparison/max_count
+  help_text: Verifies that a set number of rows failed a custom SQL condition (expression).
+    Stores the most recent captured value for each day when the data quality check
+    was evaluated.

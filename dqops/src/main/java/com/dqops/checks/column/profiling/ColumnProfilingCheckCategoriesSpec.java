@@ -53,7 +53,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
@@ -112,7 +112,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonPropertyDescription("Configuration of SQL checks that use custom SQL aggregated expressions and SQL conditions in data quality checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlProfilingChecksSpec sql;
+    private ColumnCustomSqlProfilingChecksSpec customSql;
 
     @JsonPropertyDescription("Configuration of booleans checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -315,18 +315,18 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the configuration of custom SQL checks.
      * @return Configuration of custom sql checks.
      */
-    public ColumnSqlProfilingChecksSpec getSql() {
-        return sql;
+    public ColumnCustomSqlProfilingChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to the configuration of custom SQL checks.
-     * @param sql Custom sql checks.
+     * @param customSql Custom sql checks.
      */
-    public void setSql(ColumnSqlProfilingChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        this.propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(ColumnCustomSqlProfilingChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        this.propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

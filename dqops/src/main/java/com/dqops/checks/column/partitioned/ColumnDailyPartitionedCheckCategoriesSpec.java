@@ -19,7 +19,6 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.monitoring.blanks.ColumnBlanksDailyMonitoringChecksSpec;
 import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
@@ -33,10 +32,9 @@ import com.dqops.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChec
 import com.dqops.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.patterns.ColumnPatternsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.sql.ColumnSqlDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.customsql.ColumnCustomSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
-import com.dqops.checks.column.profiling.ColumnPatternsProfilingChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
@@ -74,7 +72,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
-            put("sql", o -> o.sql);
+            put("custom_sql", o -> o.customSql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
@@ -132,7 +130,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonPropertyDescription("Daily partitioned checks using custom SQL expressions evaluated on the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnSqlDailyPartitionedChecksSpec sql;
+    private ColumnCustomSqlDailyPartitionedChecksSpec customSql;
 
     @JsonPropertyDescription("Daily partitioned checks for booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -330,18 +328,18 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Returns a container of custom SQL checks on a column.
      * @return Custom SQL checks.
      */
-    public ColumnSqlDailyPartitionedChecksSpec getSql() {
-        return sql;
+    public ColumnCustomSqlDailyPartitionedChecksSpec getCustomSql() {
+        return customSql;
     }
 
     /**
      * Sets a reference to a container of custom SQL checks.
-     * @param sql Custom SQL checks.
+     * @param customSql Custom SQL checks.
      */
-    public void setSql(ColumnSqlDailyPartitionedChecksSpec sql) {
-        this.setDirtyIf(!Objects.equals(this.sql, sql));
-        this.sql = sql;
-        propagateHierarchyIdToField(sql, "sql");
+    public void setCustomSql(ColumnCustomSqlDailyPartitionedChecksSpec customSql) {
+        this.setDirtyIf(!Objects.equals(this.customSql, customSql));
+        this.customSql = customSql;
+        propagateHierarchyIdToField(customSql, "custom_sql");
     }
 
     /**

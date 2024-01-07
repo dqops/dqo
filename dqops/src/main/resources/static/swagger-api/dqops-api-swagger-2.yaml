@@ -16251,6 +16251,133 @@ definitions:
       \ the results of the most recently executed data quality checks on the column.\
       \ Verify the value of the current_severity to see if there are any data quality\
       \ issues on the column."
+  ColumnCustomSqlDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_sql_condition_passed_percent_on_column:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Stores the most recent captured value for each\
+          \ day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
+      daily_sql_condition_failed_count_on_column:
+        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
+          \ does not exceed the maximum accepted count. Stores the most recent captured\
+          \ value for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
+      daily_sql_aggregate_expression_on_column:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Stores the most recent captured value\
+          \ for each day when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+  ColumnCustomSqlDailyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_sql_condition_passed_percent_on_column:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Creates a separate data quality check (and an\
+          \ alert) for each daily partition."
+        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
+      daily_partition_sql_condition_failed_count_on_column:
+        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
+          \ does not exceed the maximum accepted count. Creates a separate data quality\
+          \ check (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
+      daily_partition_sql_aggregate_expression_on_column:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Creates a separate data quality check\
+          \ (and an alert) for each daily partition."
+        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+  ColumnCustomSqlMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_sql_condition_passed_percent_on_column:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Stores the most recent row count for each month\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
+      monthly_sql_condition_failed_count_on_column:
+        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
+          \ does not exceed the maximum accepted count. Stores the most recent row\
+          \ count for each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
+      monthly_sql_aggregate_expression_on_column:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Stores the most recent row count for\
+          \ each month when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+  ColumnCustomSqlMonthlyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_sql_condition_passed_percent_on_column:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression). Creates a separate data quality check (and an\
+          \ alert) for each monthly partition."
+        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
+      monthly_partition_sql_condition_failed_count_on_column:
+        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
+          \ does not exceed the maximum accepted count. Creates a separate data quality\
+          \ check (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
+      monthly_partition_sql_aggregate_expression_on_column:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Creates a separate data quality check\
+          \ (and an alert) for each monthly partition."
+        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
+  ColumnCustomSqlProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_sql_condition_passed_percent_on_column:
+        description: "Verifies that a minimum percentage of rows passed a custom SQL\
+          \ condition (expression)."
+        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
+      profile_sql_condition_failed_count_on_column:
+        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
+      profile_sql_aggregate_expression_on_column:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range."
+        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
   ColumnDailyMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
@@ -16289,9 +16416,9 @@ definitions:
         description: "Daily monitoring checks of Personal Identifiable Information\
           \ (PII) in the column"
         $ref: "#/definitions/ColumnPiiDailyMonitoringChecksSpec"
-      sql:
+      custom_sql:
         description: "Daily monitoring checks of custom SQL checks in the column"
-        $ref: "#/definitions/ColumnSqlDailyMonitoringChecksSpec"
+        $ref: "#/definitions/ColumnCustomSqlDailyMonitoringChecksSpec"
       bool:
         description: "Daily monitoring checks of booleans in the column"
         $ref: "#/definitions/ColumnBoolDailyMonitoringChecksSpec"
@@ -16355,10 +16482,10 @@ definitions:
         description: "Daily partitioned checks of Personal Identifiable Information\
           \ (PII) in the column"
         $ref: "#/definitions/ColumnPiiDailyPartitionedChecksSpec"
-      sql:
+      custom_sql:
         description: "Daily partitioned checks using custom SQL expressions evaluated\
           \ on the column"
-        $ref: "#/definitions/ColumnSqlDailyPartitionedChecksSpec"
+        $ref: "#/definitions/ColumnCustomSqlDailyPartitionedChecksSpec"
       bool:
         description: "Daily partitioned checks for booleans in the column"
         $ref: "#/definitions/ColumnBoolDailyPartitionedChecksSpec"
@@ -19885,9 +20012,9 @@ definitions:
         description: "Monthly monitoring checks of Personal Identifiable Information\
           \ (PII) in the column"
         $ref: "#/definitions/ColumnPiiMonthlyMonitoringChecksSpec"
-      sql:
+      custom_sql:
         description: "Monthly monitoring checks of custom SQL checks in the column"
-        $ref: "#/definitions/ColumnSqlMonthlyMonitoringChecksSpec"
+        $ref: "#/definitions/ColumnCustomSqlMonthlyMonitoringChecksSpec"
       bool:
         description: "Monthly monitoring checks of booleans in the column"
         $ref: "#/definitions/ColumnBoolMonthlyMonitoringChecksSpec"
@@ -19951,10 +20078,10 @@ definitions:
         description: "Monthly partitioned checks of Personal Identifiable Information\
           \ (PII) in the column"
         $ref: "#/definitions/ColumnPiiMonthlyPartitionedChecksSpec"
-      sql:
+      custom_sql:
         description: "Monthly partitioned checks using custom SQL expressions and\
           \ conditions on the column"
-        $ref: "#/definitions/ColumnSqlMonthlyPartitionedChecksSpec"
+        $ref: "#/definitions/ColumnCustomSqlMonthlyPartitionedChecksSpec"
       bool:
         description: "Monthly partitioned checks for booleans in the column"
         $ref: "#/definitions/ColumnBoolMonthlyPartitionedChecksSpec"
@@ -23846,10 +23973,10 @@ definitions:
         description: "Configuration of Personal Identifiable Information (PII) checks\
           \ on a column level."
         $ref: "#/definitions/ColumnPiiProfilingChecksSpec"
-      sql:
+      custom_sql:
         description: "Configuration of SQL checks that use custom SQL aggregated expressions\
           \ and SQL conditions in data quality checks."
-        $ref: "#/definitions/ColumnSqlProfilingChecksSpec"
+        $ref: "#/definitions/ColumnCustomSqlProfilingChecksSpec"
       bool:
         description: "Configuration of booleans checks on a column level."
         $ref: "#/definitions/ColumnBoolProfilingChecksSpec"
@@ -24578,133 +24705,6 @@ definitions:
           \ is evaluated for each row. The expression can use {table} and {column}\
           \ placeholder that are replaced with a full table name and the analyzed\
           \ column name."
-  ColumnSqlDailyMonitoringChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      daily_sql_condition_passed_percent_on_column:
-        description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Stores the most recent captured value for each\
-          \ day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      daily_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
-      daily_sql_aggregate_expression_on_column:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent captured value\
-          \ for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
-  ColumnSqlDailyPartitionedChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_sql_condition_passed_percent_on_column:
-        description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Creates a separate data quality check (and an\
-          \ alert) for each daily partition."
-        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      daily_partition_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
-      daily_partition_sql_aggregate_expression_on_column:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
-  ColumnSqlMonthlyMonitoringChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      monthly_sql_condition_passed_percent_on_column:
-        description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Stores the most recent row count for each month\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      monthly_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
-      monthly_sql_aggregate_expression_on_column:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent row count for\
-          \ each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
-  ColumnSqlMonthlyPartitionedChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_sql_condition_passed_percent_on_column:
-        description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression). Creates a separate data quality check (and an\
-          \ alert) for each monthly partition."
-        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      monthly_partition_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
-      monthly_partition_sql_aggregate_expression_on_column:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
-  ColumnSqlProfilingChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      profile_sql_condition_passed_percent_on_column:
-        description: "Verifies that a minimum percentage of rows passed a custom SQL\
-          \ condition (expression)."
-        $ref: "#/definitions/ColumnSqlConditionPassedPercentCheckSpec"
-      profile_sql_condition_failed_count_on_column:
-        description: "Verifies that a number of rows failed a custom SQL condition(expression)\
-          \ does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnSqlConditionFailedCountCheckSpec"
-      profile_sql_aggregate_expression_on_column:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range."
-        $ref: "#/definitions/ColumnSqlAggregateExpressionCheckSpec"
   ColumnStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:
@@ -32220,6 +32220,141 @@ definitions:
       \ quality issues on the table. The values of severity levels are: 0 - all data\
       \ quality checks passed, 1 - a warning was detected, 2 - an error was detected,\
       \ 3 - a fatal data quality issue was detected."
+  TableCustomSqlDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_sql_condition_passed_percent_on_table:
+        description: "Verifies that a set percentage of rows passed a custom SQL condition\
+          \ (expression). Stores the most recent captured value for each day when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+      daily_sql_condition_failed_count_on_table:
+        description: "Verifies that a set number of rows failed a custom SQL condition\
+          \ (expression). Stores the most recent captured value for each day when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
+      daily_sql_aggregate_expression_on_table:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Stores the most recent captured value\
+          \ for each day when the data quality check was evaluated."
+        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      min_sql_condition_passed_percent_on_table:
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+  TableCustomSqlDailyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_sql_condition_passed_percent_on_table:
+        description: "Verifies that a set percentage of rows passed a custom SQL condition\
+          \ (expression). Creates a separate data quality check (and an alert) for\
+          \ each daily partition."
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+      daily_partition_sql_condition_failed_count_on_table:
+        description: "Verifies that a set number of rows failed a custom SQL condition\
+          \ (expression). Creates a separate data quality check (and an alert) for\
+          \ each daily partition."
+        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
+      daily_partition_sql_aggregate_expression_on_table:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Creates a separate data quality check\
+          \ (and an alert) for each daily partition."
+        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      min_sql_condition_passed_percent_on_table:
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+  TableCustomSqlMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_sql_condition_passed_percent_on_table:
+        description: "Verifies that a set percentage of rows passed a custom SQL condition\
+          \ (expression). Stores the most recent row count for each month when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+      monthly_sql_condition_failed_count_on_table:
+        description: "Verifies that a set number of rows failed a custom SQL condition\
+          \ (expression). Stores the most recent row count for each month when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
+      monthly_sql_aggregate_expression_on_table:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Stores the most recent row count for\
+          \ each month when the data quality check was evaluated."
+        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      min_sql_condition_passed_percent_on_table:
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+  TableCustomSqlMonthlyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_sql_condition_passed_percent_on_table:
+        description: "Verifies that a set percentage of rows passed a custom SQL condition\
+          \ (expression). Creates a separate data quality check (and an alert) for\
+          \ each monthly partition."
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+      monthly_partition_sql_condition_failed_count_on_table:
+        description: "Verifies that a set number of rows failed a custom SQL condition\
+          \ (expression). Creates a separate data quality check (and an alert) for\
+          \ each monthly partition."
+        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
+      monthly_partition_sql_aggregate_expression_on_table:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range. Creates a separate data quality check\
+          \ (and an alert) for each monthly partition."
+        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
+      min_sql_condition_passed_percent_on_table:
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+  TableCustomSqlProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_sql_condition_passed_percent_on_table:
+        description: "Verifies that a set percentage of rows passed a custom SQL condition\
+          \ (expression)."
+        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
+      profile_sql_condition_failed_count_on_table:
+        description: "Verifies that a set number of rows failed a custom SQL condition\
+          \ (expression)."
+        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
+      profile_sql_aggregate_expression_on_table:
+        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
+          \ etc.) is not outside the set range."
+        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
   TableDailyMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
@@ -32238,9 +32373,9 @@ definitions:
       accuracy:
         description: "Daily monitoring accuracy checks"
         $ref: "#/definitions/TableAccuracyDailyMonitoringChecksSpec"
-      sql:
+      custom_sql:
         description: "Daily monitoring custom SQL checks"
-        $ref: "#/definitions/TableSqlDailyMonitoringChecksSpec"
+        $ref: "#/definitions/TableCustomSqlDailyMonitoringChecksSpec"
       availability:
         description: "Daily monitoring table availability checks"
         $ref: "#/definitions/TableAvailabilityDailyMonitoringChecksSpec"
@@ -32270,10 +32405,10 @@ definitions:
       timeliness:
         description: "Daily partitioned timeliness checks"
         $ref: "#/definitions/TableTimelinessDailyPartitionedChecksSpec"
-      sql:
+      custom_sql:
         description: "Custom SQL daily partitioned data quality checks that verify\
           \ the quality of every day of data separately"
-        $ref: "#/definitions/TableSqlDailyPartitionedChecksSpec"
+        $ref: "#/definitions/TableCustomSqlDailyPartitionedChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -32667,9 +32802,9 @@ definitions:
       accuracy:
         description: "Monthly monitoring accuracy checks"
         $ref: "#/definitions/TableAccuracyMonthlyMonitoringChecksSpec"
-      sql:
+      custom_sql:
         description: "Monthly monitoring of custom SQL checks"
-        $ref: "#/definitions/TableSqlMonthlyMonitoringChecksSpec"
+        $ref: "#/definitions/TableCustomSqlMonthlyMonitoringChecksSpec"
       availability:
         description: "Daily partitioned availability checks"
         $ref: "#/definitions/TableAvailabilityMonthlyMonitoringChecksSpec"
@@ -32699,10 +32834,10 @@ definitions:
       timeliness:
         description: "Monthly partitioned timeliness checks"
         $ref: "#/definitions/TableTimelinessMonthlyPartitionedChecksSpec"
-      sql:
+      custom_sql:
         description: "Custom SQL monthly partitioned data quality checks that verify\
           \ the quality of every month of data separately"
-        $ref: "#/definitions/TableSqlMonthlyPartitionedChecksSpec"
+        $ref: "#/definitions/TableCustomSqlMonthlyPartitionedChecksSpec"
       comparisons:
         type: "object"
         description: "Dictionary of configuration of checks for table comparisons.\
@@ -32851,10 +32986,10 @@ definitions:
         description: "Configuration of accuracy checks on a table level. Accuracy\
           \ checks compare the tested table with another reference table."
         $ref: "#/definitions/TableAccuracyProfilingChecksSpec"
-      sql:
+      custom_sql:
         description: "Configuration of data quality checks that are evaluating custom\
           \ SQL conditions and aggregated expressions."
-        $ref: "#/definitions/TableSqlProfilingChecksSpec"
+        $ref: "#/definitions/TableCustomSqlProfilingChecksSpec"
       availability:
         description: "Configuration of the table availability data quality checks\
           \ on a table level."
@@ -34116,141 +34251,6 @@ definitions:
         description: "SQL condition (expression) that returns true or false. The condition\
           \ is evaluated for each row. The expression can use {table} placeholder\
           \ that is replaced with a full table name."
-  TableSqlDailyMonitoringChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      daily_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      daily_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
-      daily_sql_aggregate_expression_on_table:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent captured value\
-          \ for each day when the data quality check was evaluated."
-        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-  TableSqlDailyPartitionedChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each daily partition."
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      daily_partition_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each daily partition."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
-      daily_partition_sql_aggregate_expression_on_table:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each daily partition."
-        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-  TableSqlMonthlyMonitoringChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      monthly_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      monthly_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Stores the most recent row count for each month when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
-      monthly_sql_aggregate_expression_on_table:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Stores the most recent row count for\
-          \ each month when the data quality check was evaluated."
-        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-  TableSqlMonthlyPartitionedChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each monthly partition."
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      monthly_partition_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression). Creates a separate data quality check (and an alert) for\
-          \ each monthly partition."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
-      monthly_partition_sql_aggregate_expression_on_table:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range. Creates a separate data quality check\
-          \ (and an alert) for each monthly partition."
-        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
-      min_sql_condition_passed_percent_on_table:
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-  TableSqlProfilingChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      profile_sql_condition_passed_percent_on_table:
-        description: "Verifies that a set percentage of rows passed a custom SQL condition\
-          \ (expression)."
-        $ref: "#/definitions/TableSqlConditionPassedPercentCheckSpec"
-      profile_sql_condition_failed_count_on_table:
-        description: "Verifies that a set number of rows failed a custom SQL condition\
-          \ (expression)."
-        $ref: "#/definitions/TableSqlConditionFailedCountCheckSpec"
-      profile_sql_aggregate_expression_on_table:
-        description: "Verifies that a custom aggregated SQL expression (MIN, MAX,\
-          \ etc.) is not outside the set range."
-        $ref: "#/definitions/TableSqlAggregateExpressionCheckSpec"
   TableStatisticsCollectorsRootCategoriesSpec:
     type: "object"
     properties:
