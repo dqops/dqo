@@ -398,6 +398,10 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
         if (this.schema != null && !this.schema.isDefault()) {
             this.getColumnCheckCategories(targetColumn).setSchema(this.schema.deepClone());
         }
+
+        if (this.getCustom() != null && !this.getCustom().isEmpty()) {
+            this.getColumnCheckCategories(targetColumn).setCustom(this.getCustom().deepClone());
+        }
     }
 
     /**
