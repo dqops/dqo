@@ -40,140 +40,140 @@ import java.util.Objects;
 public class ColumnBlanksProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBlanksProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_string_empty_count", o -> o.profileStringEmptyCount);
-            put("profile_string_whitespace_count", o -> o.profileStringWhitespaceCount);
-            put("profile_string_null_placeholder_count", o -> o.profileStringNullPlaceholderCount);
-            put("profile_string_empty_percent", o -> o.profileStringEmptyPercent);
-            put("profile_string_whitespace_percent", o -> o.profileStringWhitespacePercent);
-            put("profile_string_null_placeholder_percent", o -> o.profileStringNullPlaceholderPercent);
+            put("profile_empty_text_found", o -> o.profileEmptyTextFound);
+            put("profile_whitespace_text_found", o -> o.profileWhitespaceTextFound);
+            put("profile_null_placeholder_text_found", o -> o.profileNullPlaceholderTextFound);
+            put("profile_empty_text_percent", o -> o.profileEmptyTextPercent);
+            put("profile_whitespace_text_percent", o -> o.profileWhitespaceTextPercent);
+            put("profile_null_placeholder_text_percent", o -> o.profileNullPlaceholderTextPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
-    private ColumnBlanksEmptyTextFoundCheckSpec profileStringEmptyCount;
+    private ColumnBlanksEmptyTextFoundCheckSpec profileEmptyTextFound;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.")
-    private ColumnBlanksWhitespaceTextFoundCheckSpec profileStringWhitespaceCount;
+    private ColumnBlanksWhitespaceTextFoundCheckSpec profileWhitespaceTextFound;
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.")
-    private ColumnBlanksNullPlaceholderTextFoundCheckSpec profileStringNullPlaceholderCount;
+    private ColumnBlanksNullPlaceholderTextFoundCheckSpec profileNullPlaceholderTextFound;
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.")
-    private ColumnBlanksEmptyTextPercentCheckSpec profileStringEmptyPercent;
+    private ColumnBlanksEmptyTextPercentCheckSpec profileEmptyTextPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.")
-    private ColumnBlanksWhitespaceTextPercentCheckSpec profileStringWhitespacePercent;
+    private ColumnBlanksWhitespaceTextPercentCheckSpec profileWhitespaceTextPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.")
-    private ColumnBlanksNullPlaceholderTextPercentCheckSpec profileStringNullPlaceholderPercent;
+    private ColumnBlanksNullPlaceholderTextPercentCheckSpec profileNullPlaceholderTextPercent;
 
 
     /**
      * Returns a maximum string empty percent check.
      * @return Maximum string empty percent check.
      */
-    public ColumnBlanksEmptyTextFoundCheckSpec getProfileStringEmptyCount() {
-        return profileStringEmptyCount;
+    public ColumnBlanksEmptyTextFoundCheckSpec getProfileEmptyTextFound() {
+        return profileEmptyTextFound;
     }
 
     /**
      * Sets a new definition of a string empty count check.
-     * @param profileStringEmptyCount String empty count check.
+     * @param profileEmptyTextFound String empty count check.
      */
-    public void setProfileStringEmptyCount(ColumnBlanksEmptyTextFoundCheckSpec profileStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.profileStringEmptyCount, profileStringEmptyCount));
-        this.profileStringEmptyCount = profileStringEmptyCount;
-        propagateHierarchyIdToField(profileStringEmptyCount, "profile_string_empty_count");
+    public void setProfileEmptyTextFound(ColumnBlanksEmptyTextFoundCheckSpec profileEmptyTextFound) {
+        this.setDirtyIf(!Objects.equals(this.profileEmptyTextFound, profileEmptyTextFound));
+        this.profileEmptyTextFound = profileEmptyTextFound;
+        propagateHierarchyIdToField(profileEmptyTextFound, "profile_empty_text_found");
     }
 
     /**
      * Returns a maximum string whitespace count check.
      * @return Maximum string whitespace count check.
      */
-    public ColumnBlanksWhitespaceTextFoundCheckSpec getProfileStringWhitespaceCount() {
-        return profileStringWhitespaceCount;
+    public ColumnBlanksWhitespaceTextFoundCheckSpec getProfileWhitespaceTextFound() {
+        return profileWhitespaceTextFound;
     }
 
     /**
      * Sets a new definition of a string whitespace count check.
-     * @param profileStringWhitespaceCount String whitespace count check.
+     * @param profileWhitespaceTextFound String whitespace count check.
      */
-    public void setProfileStringWhitespaceCount(ColumnBlanksWhitespaceTextFoundCheckSpec profileStringWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.profileStringWhitespaceCount, profileStringWhitespaceCount));
-        this.profileStringWhitespaceCount = profileStringWhitespaceCount;
-        propagateHierarchyIdToField(profileStringWhitespaceCount, "profile_string_whitespace_count");
+    public void setProfileWhitespaceTextFound(ColumnBlanksWhitespaceTextFoundCheckSpec profileWhitespaceTextFound) {
+        this.setDirtyIf(!Objects.equals(this.profileWhitespaceTextFound, profileWhitespaceTextFound));
+        this.profileWhitespaceTextFound = profileWhitespaceTextFound;
+        propagateHierarchyIdToField(profileWhitespaceTextFound, "profile_whitespace_text_found");
     }
 
     /**
      * Returns a maximum string null placeholder percent check.
      * @return Maximum string null placeholder percent check.
      */
-    public ColumnBlanksNullPlaceholderTextFoundCheckSpec getProfileStringNullPlaceholderCount() {
-        return profileStringNullPlaceholderCount;
+    public ColumnBlanksNullPlaceholderTextFoundCheckSpec getProfileNullPlaceholderTextFound() {
+        return profileNullPlaceholderTextFound;
     }
 
     /**
      * Sets a new definition of a string null placeholder count check.
-     * @param profileStringNullPlaceholderCount String null placeholder count check.
+     * @param profileNullPlaceholderTextFound String null placeholder count check.
      */
-    public void setProfileStringNullPlaceholderCount(ColumnBlanksNullPlaceholderTextFoundCheckSpec profileStringNullPlaceholderCount) {
-        this.setDirtyIf(!Objects.equals(this.profileStringNullPlaceholderCount, profileStringNullPlaceholderCount));
-        this.profileStringNullPlaceholderCount = profileStringNullPlaceholderCount;
-        propagateHierarchyIdToField(profileStringNullPlaceholderCount, "profile_string_null_placeholder_count");
+    public void setProfileNullPlaceholderTextFound(ColumnBlanksNullPlaceholderTextFoundCheckSpec profileNullPlaceholderTextFound) {
+        this.setDirtyIf(!Objects.equals(this.profileNullPlaceholderTextFound, profileNullPlaceholderTextFound));
+        this.profileNullPlaceholderTextFound = profileNullPlaceholderTextFound;
+        propagateHierarchyIdToField(profileNullPlaceholderTextFound, "profile_null_placeholder_text_found");
     }
 
     /**
      * Returns a max string empty count check.
      * @return Max string empty count check.
      */
-    public ColumnBlanksEmptyTextPercentCheckSpec getProfileStringEmptyPercent() {
-        return profileStringEmptyPercent;
+    public ColumnBlanksEmptyTextPercentCheckSpec getProfileEmptyTextPercent() {
+        return profileEmptyTextPercent;
     }
 
     /**
      * Sets a new definition of a string empty percent check.
-     * @param profileStringEmptyPercent String empty percent check.
+     * @param profileEmptyTextPercent String empty percent check.
      */
-    public void setProfileStringEmptyPercent(ColumnBlanksEmptyTextPercentCheckSpec profileStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringEmptyPercent, profileStringEmptyPercent));
-        this.profileStringEmptyPercent = profileStringEmptyPercent;
-        propagateHierarchyIdToField(profileStringEmptyPercent, "profile_string_empty_percent");
+    public void setProfileEmptyTextPercent(ColumnBlanksEmptyTextPercentCheckSpec profileEmptyTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileEmptyTextPercent, profileEmptyTextPercent));
+        this.profileEmptyTextPercent = profileEmptyTextPercent;
+        propagateHierarchyIdToField(profileEmptyTextPercent, "profile_empty_text_percent");
     }
 
     /**
      * Returns a maximum string whitespace percent check.
      * @return Maximum string whitespace percent check.
      */
-    public ColumnBlanksWhitespaceTextPercentCheckSpec getProfileStringWhitespacePercent() {
-        return profileStringWhitespacePercent;
+    public ColumnBlanksWhitespaceTextPercentCheckSpec getProfileWhitespaceTextPercent() {
+        return profileWhitespaceTextPercent;
     }
 
     /**
      * Sets a new definition of a string whitespace percent check.
-     * @param profileStringWhitespacePercent String whitespace percent check.
+     * @param profileWhitespaceTextPercent String whitespace percent check.
      */
-    public void setProfileStringWhitespacePercent(ColumnBlanksWhitespaceTextPercentCheckSpec profileStringWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringWhitespacePercent, profileStringWhitespacePercent));
-        this.profileStringWhitespacePercent = profileStringWhitespacePercent;
-        propagateHierarchyIdToField(profileStringWhitespacePercent, "profile_string_whitespace_percent");
+    public void setProfileWhitespaceTextPercent(ColumnBlanksWhitespaceTextPercentCheckSpec profileWhitespaceTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileWhitespaceTextPercent, profileWhitespaceTextPercent));
+        this.profileWhitespaceTextPercent = profileWhitespaceTextPercent;
+        propagateHierarchyIdToField(profileWhitespaceTextPercent, "profile_whitespace_text_percent");
     }
 
     /**
      * Returns a minimum string boolean placeholder percent check.
      * @return Minimum string boolean placeholder percent check.
      */
-    public ColumnBlanksNullPlaceholderTextPercentCheckSpec getProfileStringNullPlaceholderPercent() {
-        return profileStringNullPlaceholderPercent;
+    public ColumnBlanksNullPlaceholderTextPercentCheckSpec getProfileNullPlaceholderTextPercent() {
+        return profileNullPlaceholderTextPercent;
     }
 
     /**
      * Sets a new definition of a string null placeholder percent check.
-     * @param profileStringNullPlaceholderPercent String null placeholder percent check.
+     * @param profileNullPlaceholderTextPercent String null placeholder percent check.
      */
-    public void setProfileStringNullPlaceholderPercent(ColumnBlanksNullPlaceholderTextPercentCheckSpec profileStringNullPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringNullPlaceholderPercent, profileStringNullPlaceholderPercent));
-        this.profileStringNullPlaceholderPercent = profileStringNullPlaceholderPercent;
-        propagateHierarchyIdToField(profileStringNullPlaceholderPercent, "profile_string_null_placeholder_percent");
+    public void setProfileNullPlaceholderTextPercent(ColumnBlanksNullPlaceholderTextPercentCheckSpec profileNullPlaceholderTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNullPlaceholderTextPercent, profileNullPlaceholderTextPercent));
+        this.profileNullPlaceholderTextPercent = profileNullPlaceholderTextPercent;
+        propagateHierarchyIdToField(profileNullPlaceholderTextPercent, "profile_null_placeholder_text_percent");
     }
 
 

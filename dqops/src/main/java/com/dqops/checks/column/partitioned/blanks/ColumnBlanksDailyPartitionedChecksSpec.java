@@ -40,140 +40,140 @@ import java.util.Objects;
 public class ColumnBlanksDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBlanksDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_string_empty_count", o -> o.dailyPartitionStringEmptyCount);
-            put("daily_partition_string_whitespace_count", o -> o.dailyPartitionStringWhitespaceCount);
-            put("daily_partition_string_null_placeholder_count", o -> o.dailyPartitionStringNullPlaceholderCount);
-            put("daily_partition_string_empty_percent", o -> o.dailyPartitionStringEmptyPercent);
-            put("daily_partition_string_whitespace_percent", o -> o.dailyPartitionStringWhitespacePercent);
-            put("daily_partition_string_null_placeholder_percent", o -> o.dailyPartitionStringNullPlaceholderPercent);
+            put("daily_partition_empty_text_found", o -> o.dailyPartitionEmptyTextFound);
+            put("daily_partition_whitespace_text_found", o -> o.dailyPartitionWhitespaceTextFound);
+            put("daily_partition_null_placeholder_text_found", o -> o.dailyPartitionNullPlaceholderTextFound);
+            put("daily_partition_empty_text_percent", o -> o.dailyPartitionEmptyTextPercent);
+            put("daily_partition_whitespace_text_percent", o -> o.dailyPartitionWhitespaceTextPercent);
+            put("daily_partition_null_placeholder_text_percent", o -> o.dailyPartitionNullPlaceholderTextPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnBlanksEmptyTextFoundCheckSpec dailyPartitionStringEmptyCount;
+    private ColumnBlanksEmptyTextFoundCheckSpec dailyPartitionEmptyTextFound;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnBlanksWhitespaceTextFoundCheckSpec dailyPartitionStringWhitespaceCount;
+    private ColumnBlanksWhitespaceTextFoundCheckSpec dailyPartitionWhitespaceTextFound;
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnBlanksNullPlaceholderTextFoundCheckSpec dailyPartitionStringNullPlaceholderCount;
+    private ColumnBlanksNullPlaceholderTextFoundCheckSpec dailyPartitionNullPlaceholderTextFound;
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnBlanksEmptyTextPercentCheckSpec dailyPartitionStringEmptyPercent;
+    private ColumnBlanksEmptyTextPercentCheckSpec dailyPartitionEmptyTextPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnBlanksWhitespaceTextPercentCheckSpec dailyPartitionStringWhitespacePercent;
+    private ColumnBlanksWhitespaceTextPercentCheckSpec dailyPartitionWhitespaceTextPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyPartitionStringNullPlaceholderPercent;
+    private ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyPartitionNullPlaceholderTextPercent;
 
 
     /**
      * Returns a max string empty count check.
      * @return Max string empty count check.
      */
-    public ColumnBlanksEmptyTextFoundCheckSpec getDailyPartitionStringEmptyCount() {
-        return dailyPartitionStringEmptyCount;
+    public ColumnBlanksEmptyTextFoundCheckSpec getDailyPartitionEmptyTextFound() {
+        return dailyPartitionEmptyTextFound;
     }
 
     /**
      * Sets a new definition of a max string empty count check.
-     * @param dailyPartitionStringEmptyCount Max string empty count check.
+     * @param dailyPartitionEmptyTextFound Max string empty count check.
      */
-    public void setDailyPartitionStringEmptyCount(ColumnBlanksEmptyTextFoundCheckSpec dailyPartitionStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringEmptyCount, dailyPartitionStringEmptyCount));
-        this.dailyPartitionStringEmptyCount = dailyPartitionStringEmptyCount;
-        propagateHierarchyIdToField(dailyPartitionStringEmptyCount, "daily_partition_string_empty_count");
+    public void setDailyPartitionEmptyTextFound(ColumnBlanksEmptyTextFoundCheckSpec dailyPartitionEmptyTextFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionEmptyTextFound, dailyPartitionEmptyTextFound));
+        this.dailyPartitionEmptyTextFound = dailyPartitionEmptyTextFound;
+        propagateHierarchyIdToField(dailyPartitionEmptyTextFound, "daily_partition_empty_text_found");
     }
 
     /**
      * Returns a maximum string whitespace count check.
      * @return Maximum string whitespace count check.
      */
-    public ColumnBlanksWhitespaceTextFoundCheckSpec getDailyPartitionStringWhitespaceCount() {
-        return dailyPartitionStringWhitespaceCount;
+    public ColumnBlanksWhitespaceTextFoundCheckSpec getDailyPartitionWhitespaceTextFound() {
+        return dailyPartitionWhitespaceTextFound;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace count check.
-     * @param dailyPartitionStringWhitespaceCount Maximum string whitespace count check.
+     * @param dailyPartitionWhitespaceTextFound Maximum string whitespace count check.
      */
-    public void setDailyPartitionStringWhitespaceCount(ColumnBlanksWhitespaceTextFoundCheckSpec dailyPartitionStringWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringWhitespaceCount, dailyPartitionStringWhitespaceCount));
-        this.dailyPartitionStringWhitespaceCount = dailyPartitionStringWhitespaceCount;
-        propagateHierarchyIdToField(dailyPartitionStringWhitespaceCount, "daily_partition_string_whitespace_count");
+    public void setDailyPartitionWhitespaceTextFound(ColumnBlanksWhitespaceTextFoundCheckSpec dailyPartitionWhitespaceTextFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionWhitespaceTextFound, dailyPartitionWhitespaceTextFound));
+        this.dailyPartitionWhitespaceTextFound = dailyPartitionWhitespaceTextFound;
+        propagateHierarchyIdToField(dailyPartitionWhitespaceTextFound, "daily_partition_whitespace_text_found");
     }
 
     /**
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnBlanksNullPlaceholderTextFoundCheckSpec getDailyPartitionStringNullPlaceholderCount() {
-        return dailyPartitionStringNullPlaceholderCount;
+    public ColumnBlanksNullPlaceholderTextFoundCheckSpec getDailyPartitionNullPlaceholderTextFound() {
+        return dailyPartitionNullPlaceholderTextFound;
     }
 
     /**
      * Sets a new definition of a maximum string null placeholder count check.
-     * @param dailyPartitionStringNullPlaceholderCount Maximum string null placeholder count check.
+     * @param dailyPartitionNullPlaceholderTextFound Maximum string null placeholder count check.
      */
-    public void setDailyPartitionStringNullPlaceholderCount(ColumnBlanksNullPlaceholderTextFoundCheckSpec dailyPartitionStringNullPlaceholderCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringNullPlaceholderCount, dailyPartitionStringNullPlaceholderCount));
-        this.dailyPartitionStringNullPlaceholderCount = dailyPartitionStringNullPlaceholderCount;
-        propagateHierarchyIdToField(dailyPartitionStringNullPlaceholderCount, "daily_partition_string_null_placeholder_count");
+    public void setDailyPartitionNullPlaceholderTextFound(ColumnBlanksNullPlaceholderTextFoundCheckSpec dailyPartitionNullPlaceholderTextFound) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullPlaceholderTextFound, dailyPartitionNullPlaceholderTextFound));
+        this.dailyPartitionNullPlaceholderTextFound = dailyPartitionNullPlaceholderTextFound;
+        propagateHierarchyIdToField(dailyPartitionNullPlaceholderTextFound, "daily_partition_null_placeholder_text_found");
     }
 
     /**
      * Returns a maximum empty string percentage check.
      * @return Maximum empty string percentage check.
      */
-    public ColumnBlanksEmptyTextPercentCheckSpec getDailyPartitionStringEmptyPercent() {
-        return dailyPartitionStringEmptyPercent;
+    public ColumnBlanksEmptyTextPercentCheckSpec getDailyPartitionEmptyTextPercent() {
+        return dailyPartitionEmptyTextPercent;
     }
 
     /**
      * Sets a new definition of a maximum empty string percentage check.
-     * @param dailyPartitionStringEmptyPercent Maximum empty string percentage check.
+     * @param dailyPartitionEmptyTextPercent Maximum empty string percentage check.
      */
-    public void setDailyPartitionStringEmptyPercent(ColumnBlanksEmptyTextPercentCheckSpec dailyPartitionStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringEmptyPercent, dailyPartitionStringEmptyPercent));
-        this.dailyPartitionStringEmptyPercent = dailyPartitionStringEmptyPercent;
-        propagateHierarchyIdToField(dailyPartitionStringEmptyPercent, "daily_partition_string_empty_percent");
+    public void setDailyPartitionEmptyTextPercent(ColumnBlanksEmptyTextPercentCheckSpec dailyPartitionEmptyTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionEmptyTextPercent, dailyPartitionEmptyTextPercent));
+        this.dailyPartitionEmptyTextPercent = dailyPartitionEmptyTextPercent;
+        propagateHierarchyIdToField(dailyPartitionEmptyTextPercent, "daily_partition_empty_text_percent");
     }
 
     /**
      * Returns a maximum string whitespace percent check.
      * @return Maximum string whitespace percent check.
      */
-    public ColumnBlanksWhitespaceTextPercentCheckSpec getDailyPartitionStringWhitespacePercent() {
-        return dailyPartitionStringWhitespacePercent;
+    public ColumnBlanksWhitespaceTextPercentCheckSpec getDailyPartitionWhitespaceTextPercent() {
+        return dailyPartitionWhitespaceTextPercent;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace percent check.
-     * @param dailyPartitionStringWhitespacePercent Maximum string whitespace percent check.
+     * @param dailyPartitionWhitespaceTextPercent Maximum string whitespace percent check.
      */
-    public void setDailyPartitionStringWhitespacePercent(ColumnBlanksWhitespaceTextPercentCheckSpec dailyPartitionStringWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringWhitespacePercent, dailyPartitionStringWhitespacePercent));
-        this.dailyPartitionStringWhitespacePercent = dailyPartitionStringWhitespacePercent;
-        propagateHierarchyIdToField(dailyPartitionStringWhitespacePercent, "daily_partition_string_whitespace_percent");
+    public void setDailyPartitionWhitespaceTextPercent(ColumnBlanksWhitespaceTextPercentCheckSpec dailyPartitionWhitespaceTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionWhitespaceTextPercent, dailyPartitionWhitespaceTextPercent));
+        this.dailyPartitionWhitespaceTextPercent = dailyPartitionWhitespaceTextPercent;
+        propagateHierarchyIdToField(dailyPartitionWhitespaceTextPercent, "daily_partition_whitespace_text_percent");
     }
 
     /**
      * Returns a maximum string null placeholder percent check.
      * @return Maximum string null placeholder percent check.
      */
-    public ColumnBlanksNullPlaceholderTextPercentCheckSpec getDailyPartitionStringNullPlaceholderPercent() {
-        return dailyPartitionStringNullPlaceholderPercent;
+    public ColumnBlanksNullPlaceholderTextPercentCheckSpec getDailyPartitionNullPlaceholderTextPercent() {
+        return dailyPartitionNullPlaceholderTextPercent;
     }
 
     /**
      * Sets a new definition of a maximum string null placeholder percent check.
-     * @param dailyPartitionStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     * @param dailyPartitionNullPlaceholderTextPercent Maximum string null placeholder percent check.
      */
-    public void setDailyPartitionStringNullPlaceholderPercent(ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyPartitionStringNullPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringNullPlaceholderPercent, dailyPartitionStringNullPlaceholderPercent));
-        this.dailyPartitionStringNullPlaceholderPercent = dailyPartitionStringNullPlaceholderPercent;
-        propagateHierarchyIdToField(dailyPartitionStringNullPlaceholderPercent, "daily_partition_string_null_placeholder_percent");
+    public void setDailyPartitionNullPlaceholderTextPercent(ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyPartitionNullPlaceholderTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullPlaceholderTextPercent, dailyPartitionNullPlaceholderTextPercent));
+        this.dailyPartitionNullPlaceholderTextPercent = dailyPartitionNullPlaceholderTextPercent;
+        propagateHierarchyIdToField(dailyPartitionNullPlaceholderTextPercent, "daily_partition_null_placeholder_text_percent");
     }
 
 

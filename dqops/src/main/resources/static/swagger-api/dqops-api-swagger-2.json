@@ -16912,27 +16912,27 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "daily_string_empty_count" : {
+        "daily_empty_text_found" : {
           "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
-        "daily_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "daily_string_whitespace_count" : {
+        "daily_whitespace_text_found" : {
           "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
-        "daily_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "daily_string_null_placeholder_count" : {
+        "daily_null_placeholder_text_found" : {
           "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
-        "daily_string_null_placeholder_percent" : {
+        "daily_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
@@ -16948,27 +16948,27 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "daily_partition_string_empty_count" : {
+        "daily_partition_empty_text_found" : {
           "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
-        "daily_partition_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "daily_partition_string_whitespace_count" : {
+        "daily_partition_whitespace_text_found" : {
           "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
-        "daily_partition_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "daily_partition_string_null_placeholder_count" : {
+        "daily_partition_null_placeholder_text_found" : {
           "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
-        "daily_partition_string_null_placeholder_percent" : {
+        "daily_partition_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_partition_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_partition_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
@@ -17114,27 +17114,27 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "monthly_string_empty_count" : {
+        "monthly_empty_text_found" : {
           "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
-        "monthly_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "monthly_string_whitespace_count" : {
+        "monthly_whitespace_text_found" : {
           "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
-        "monthly_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "monthly_string_null_placeholder_count" : {
+        "monthly_null_placeholder_text_found" : {
           "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
-        "monthly_string_null_placeholder_percent" : {
+        "monthly_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
@@ -17150,27 +17150,27 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "monthly_partition_string_empty_count" : {
+        "monthly_partition_empty_text_found" : {
           "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
-        "monthly_partition_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "monthly_partition_string_whitespace_count" : {
+        "monthly_partition_whitespace_text_found" : {
           "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
-        "monthly_partition_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "monthly_partition_string_null_placeholder_count" : {
+        "monthly_partition_null_placeholder_text_found" : {
           "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
-        "monthly_partition_string_null_placeholder_percent" : {
+        "monthly_partition_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_partition_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_partition_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
@@ -17298,27 +17298,27 @@
             "$ref" : "#/definitions/CustomCheckSpec"
           }
         },
-        "profile_string_empty_count" : {
+        "profile_empty_text_found" : {
           "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
-        "profile_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "profile_string_whitespace_count" : {
+        "profile_whitespace_text_found" : {
           "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
-        "profile_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "profile_string_null_placeholder_count" : {
+        "profile_null_placeholder_text_found" : {
           "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
-        "profile_string_null_placeholder_percent" : {
+        "profile_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "profile_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "profile_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }

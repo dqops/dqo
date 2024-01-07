@@ -40,140 +40,140 @@ import java.util.Objects;
 public class ColumnBlanksMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBlanksMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_string_empty_count", o -> o.monthlyStringEmptyCount);
-            put("monthly_string_whitespace_count", o -> o.monthlyStringWhitespaceCount);
-            put("monthly_string_null_placeholder_count", o -> o.monthlyStringNullPlaceholderCount);
-            put("monthly_string_empty_percent", o -> o.monthlyStringEmptyPercent);
-            put("monthly_string_whitespace_percent", o -> o.monthlyStringWhitespacePercent);
-            put("monthly_string_null_placeholder_percent", o -> o.monthlyStringNullPlaceholderPercent);
+            put("monthly_empty_text_found", o -> o.monthlyEmptyTextFound);
+            put("monthly_whitespace_text_found", o -> o.monthlyWhitespaceTextFound);
+            put("monthly_null_placeholder_text_found", o -> o.monthlyNullPlaceholderTextFound);
+            put("monthly_empty_text_percent", o -> o.monthlyEmptyTextPercent);
+            put("monthly_whitespace_text_percent", o -> o.monthlyWhitespaceTextPercent);
+            put("monthly_null_placeholder_text_percent", o -> o.monthlyNullPlaceholderTextPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnBlanksEmptyTextFoundCheckSpec monthlyStringEmptyCount;
+    private ColumnBlanksEmptyTextFoundCheckSpec monthlyEmptyTextFound;
 
     @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnBlanksWhitespaceTextFoundCheckSpec monthlyStringWhitespaceCount;
+    private ColumnBlanksWhitespaceTextFoundCheckSpec monthlyWhitespaceTextFound;
 
     @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnBlanksNullPlaceholderTextFoundCheckSpec monthlyStringNullPlaceholderCount;
+    private ColumnBlanksNullPlaceholderTextFoundCheckSpec monthlyNullPlaceholderTextFound;
 
     @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnBlanksEmptyTextPercentCheckSpec monthlyStringEmptyPercent;
+    private ColumnBlanksEmptyTextPercentCheckSpec monthlyEmptyTextPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnBlanksWhitespaceTextPercentCheckSpec monthlyStringWhitespacePercent;
+    private ColumnBlanksWhitespaceTextPercentCheckSpec monthlyWhitespaceTextPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyStringNullPlaceholderPercent;
+    private ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyNullPlaceholderTextPercent;
 
 
     /**
      * Returns a max string empty count check.
      * @return Max string empty count check.
      */
-    public ColumnBlanksEmptyTextFoundCheckSpec getMonthlyStringEmptyCount() {
-        return monthlyStringEmptyCount;
+    public ColumnBlanksEmptyTextFoundCheckSpec getMonthlyEmptyTextFound() {
+        return monthlyEmptyTextFound;
     }
 
     /**
      * Sets a new definition of a max string empty count check.
-     * @param monthlyStringEmptyCount Max string empty count check.
+     * @param monthlyEmptyTextFound Max string empty count check.
      */
-    public void setMonthlyStringEmptyCount(ColumnBlanksEmptyTextFoundCheckSpec monthlyStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringEmptyCount, monthlyStringEmptyCount));
-        this.monthlyStringEmptyCount = monthlyStringEmptyCount;
-        propagateHierarchyIdToField(monthlyStringEmptyCount, "monthly_string_empty_count");
+    public void setMonthlyEmptyTextFound(ColumnBlanksEmptyTextFoundCheckSpec monthlyEmptyTextFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyEmptyTextFound, monthlyEmptyTextFound));
+        this.monthlyEmptyTextFound = monthlyEmptyTextFound;
+        propagateHierarchyIdToField(monthlyEmptyTextFound, "monthly_empty_text_found");
     }
 
     /**
      * Returns a maximum string whitespace count check.
      * @return Maximum string whitespace count check.
      */
-    public ColumnBlanksWhitespaceTextFoundCheckSpec getMonthlyStringWhitespaceCount() {
-        return monthlyStringWhitespaceCount;
+    public ColumnBlanksWhitespaceTextFoundCheckSpec getMonthlyWhitespaceTextFound() {
+        return monthlyWhitespaceTextFound;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace count check.
-     * @param monthlyStringWhitespaceCount Maximum string whitespace count check.
+     * @param monthlyWhitespaceTextFound Maximum string whitespace count check.
      */
-    public void setMonthlyStringWhitespaceCount(ColumnBlanksWhitespaceTextFoundCheckSpec monthlyStringWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringWhitespaceCount, monthlyStringWhitespaceCount));
-        this.monthlyStringWhitespaceCount = monthlyStringWhitespaceCount;
-        propagateHierarchyIdToField(monthlyStringWhitespaceCount, "monthly_string_whitespace_count");
+    public void setMonthlyWhitespaceTextFound(ColumnBlanksWhitespaceTextFoundCheckSpec monthlyWhitespaceTextFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyWhitespaceTextFound, monthlyWhitespaceTextFound));
+        this.monthlyWhitespaceTextFound = monthlyWhitespaceTextFound;
+        propagateHierarchyIdToField(monthlyWhitespaceTextFound, "monthly_whitespace_text_found");
     }
 
     /**
      * Returns a maximum string null placeholder count check.
      * @return Maximum string null placeholder count check.
      */
-    public ColumnBlanksNullPlaceholderTextFoundCheckSpec getMonthlyStringNullPlaceholderCount() {
-        return monthlyStringNullPlaceholderCount;
+    public ColumnBlanksNullPlaceholderTextFoundCheckSpec getMonthlyNullPlaceholderTextFound() {
+        return monthlyNullPlaceholderTextFound;
     }
 
     /**
      * Sets a new definition of a maximum string null placeholder count check.
-     * @param monthlyStringNullPlaceholderCount Maximum string null placeholder count check.
+     * @param monthlyNullPlaceholderTextFound Maximum string null placeholder count check.
      */
-    public void setMonthlyStringNullPlaceholderCount(ColumnBlanksNullPlaceholderTextFoundCheckSpec monthlyStringNullPlaceholderCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringNullPlaceholderCount, monthlyStringNullPlaceholderCount));
-        this.monthlyStringNullPlaceholderCount = monthlyStringNullPlaceholderCount;
-        propagateHierarchyIdToField(monthlyStringNullPlaceholderCount, "monthly_string_null_placeholder_count");
+    public void setMonthlyNullPlaceholderTextFound(ColumnBlanksNullPlaceholderTextFoundCheckSpec monthlyNullPlaceholderTextFound) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNullPlaceholderTextFound, monthlyNullPlaceholderTextFound));
+        this.monthlyNullPlaceholderTextFound = monthlyNullPlaceholderTextFound;
+        propagateHierarchyIdToField(monthlyNullPlaceholderTextFound, "monthly_null_placeholder_text_found");
     }
 
     /**
      * Returns a maximum string empty percent check.
      * @return Maximum string empty percent check.
      */
-    public ColumnBlanksEmptyTextPercentCheckSpec getMonthlyStringEmptyPercent() {
-        return monthlyStringEmptyPercent;
+    public ColumnBlanksEmptyTextPercentCheckSpec getMonthlyEmptyTextPercent() {
+        return monthlyEmptyTextPercent;
     }
 
     /**
      * Sets a new definition of a maximum string empty percent check.
-     * @param monthlyStringEmptyPercent Maximum string empty percent check.
+     * @param monthlyEmptyTextPercent Maximum string empty percent check.
      */
-    public void setMonthlyStringEmptyPercent(ColumnBlanksEmptyTextPercentCheckSpec monthlyStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringEmptyPercent, monthlyStringEmptyPercent));
-        this.monthlyStringEmptyPercent = monthlyStringEmptyPercent;
-        propagateHierarchyIdToField(monthlyStringEmptyPercent, "monthly_string_empty_percent");
+    public void setMonthlyEmptyTextPercent(ColumnBlanksEmptyTextPercentCheckSpec monthlyEmptyTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyEmptyTextPercent, monthlyEmptyTextPercent));
+        this.monthlyEmptyTextPercent = monthlyEmptyTextPercent;
+        propagateHierarchyIdToField(monthlyEmptyTextPercent, "monthly_empty_text_percent");
     }
 
     /**
      * Returns a maximum string whitespace percent check.
      * @return Maximum string whitespace percent check.
      */
-    public ColumnBlanksWhitespaceTextPercentCheckSpec getMonthlyStringWhitespacePercent() {
-        return monthlyStringWhitespacePercent;
+    public ColumnBlanksWhitespaceTextPercentCheckSpec getMonthlyWhitespaceTextPercent() {
+        return monthlyWhitespaceTextPercent;
     }
 
     /**
      * Sets a new definition of a maximum string whitespace percent check.
-     * @param monthlyStringWhitespacePercent Maximum string whitespace percent check.
+     * @param monthlyWhitespaceTextPercent Maximum string whitespace percent check.
      */
-    public void setMonthlyStringWhitespacePercent(ColumnBlanksWhitespaceTextPercentCheckSpec monthlyStringWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringWhitespacePercent, monthlyStringWhitespacePercent));
-        this.monthlyStringWhitespacePercent = monthlyStringWhitespacePercent;
-        propagateHierarchyIdToField(monthlyStringWhitespacePercent, "monthly_string_whitespace_percent");
+    public void setMonthlyWhitespaceTextPercent(ColumnBlanksWhitespaceTextPercentCheckSpec monthlyWhitespaceTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyWhitespaceTextPercent, monthlyWhitespaceTextPercent));
+        this.monthlyWhitespaceTextPercent = monthlyWhitespaceTextPercent;
+        propagateHierarchyIdToField(monthlyWhitespaceTextPercent, "monthly_whitespace_text_percent");
     }
 
     /**
      * Returns a maximum string null placeholder percent check.
      * @return Maximum string null placeholder percent check.
      */
-    public ColumnBlanksNullPlaceholderTextPercentCheckSpec getMonthlyStringNullPlaceholderPercent() {
-        return monthlyStringNullPlaceholderPercent;
+    public ColumnBlanksNullPlaceholderTextPercentCheckSpec getMonthlyNullPlaceholderTextPercent() {
+        return monthlyNullPlaceholderTextPercent;
     }
 
     /**
      * Sets a new definition of a maximum string null placeholder percent check.
-     * @param monthlyStringNullPlaceholderPercent Maximum string null placeholder percent check.
+     * @param monthlyNullPlaceholderTextPercent Maximum string null placeholder percent check.
      */
-    public void setMonthlyStringNullPlaceholderPercent(ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyStringNullPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringNullPlaceholderPercent, monthlyStringNullPlaceholderPercent));
-        this.monthlyStringNullPlaceholderPercent = monthlyStringNullPlaceholderPercent;
-        propagateHierarchyIdToField(monthlyStringNullPlaceholderPercent, "monthly_string_null_placeholder_percent");
+    public void setMonthlyNullPlaceholderTextPercent(ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyNullPlaceholderTextPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNullPlaceholderTextPercent, monthlyNullPlaceholderTextPercent));
+        this.monthlyNullPlaceholderTextPercent = monthlyNullPlaceholderTextPercent;
+        propagateHierarchyIdToField(monthlyNullPlaceholderTextPercent, "monthly_null_placeholder_text_percent");
     }
 
 
