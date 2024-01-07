@@ -336,24 +336,26 @@ public class ChecksController {
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListDqoHome = new ArrayList<>(dqoHome.getChecks().toList());
-        checkDefinitionWrapperListDqoHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
-        Set<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
+        checkDefinitionWrapperListDqoHome.sort(Comparator.comparing((CheckDefinitionWrapper rw) -> !rw.getSpec().isStandard())
+                        .thenComparing(rw -> rw.getCheckName()));
+        List<String> builtInCheckNames = checkDefinitionWrapperListDqoHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toList());
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
         List<CheckDefinitionWrapper> checkDefinitionWrapperListUserHome = new ArrayList<>(userHome.getChecks().toList());
-        checkDefinitionWrapperListUserHome.sort(Comparator.comparing(rw -> rw.getCheckName()));
-        Set<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toSet());
+        checkDefinitionWrapperListUserHome.sort(Comparator.comparing((CheckDefinitionWrapper rw) -> !rw.getSpec().isStandard())
+                .thenComparing(rw -> rw.getCheckName()));
+        List<String> customCheckNames = checkDefinitionWrapperListUserHome.stream().map(rw -> rw.getCheckName()).collect(Collectors.toList());
         boolean canEditDefinitions = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-
-        for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
-            String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
-            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions, checkDefinitionWrapperUserHome.getSpec().getYamlParsingError());
-        }
 
         for (CheckDefinitionWrapper checkDefinitionWrapperDqoHome : checkDefinitionWrapperListDqoHome) {
             String checkNameDqoHome = checkDefinitionWrapperDqoHome.getCheckName();
             checkDefinitionFolderModel.addCheck(checkNameDqoHome, customCheckNames.contains(checkNameDqoHome), true, canEditDefinitions, checkDefinitionWrapperDqoHome.getSpec().getYamlParsingError());
+        }
+
+        for (CheckDefinitionWrapper checkDefinitionWrapperUserHome : checkDefinitionWrapperListUserHome) {
+            String checkNameUserHome = checkDefinitionWrapperUserHome.getCheckName();
+            checkDefinitionFolderModel.addCheck(checkNameUserHome, true, builtInCheckNames.contains(checkNameUserHome), canEditDefinitions, checkDefinitionWrapperUserHome.getSpec().getYamlParsingError());
         }
 
         checkDefinitionFolderModel.addFolderIfMissing("table/profiling/custom");

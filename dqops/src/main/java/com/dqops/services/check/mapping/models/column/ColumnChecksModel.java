@@ -27,6 +27,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -47,5 +48,5 @@ public class ColumnChecksModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     @JsonPropertyDescription("Mapping of check type and timescale to check container on this column.")
-    private Map<CheckContainerTypeModel, CheckContainerModel> checkContainers = new HashMap<>();
+    private Map<CheckContainerTypeModel, CheckContainerModel> checkContainers = new LinkedHashMap<>();
 }

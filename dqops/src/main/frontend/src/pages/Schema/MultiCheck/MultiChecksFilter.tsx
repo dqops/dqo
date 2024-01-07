@@ -93,19 +93,12 @@ export default function MultiChecksFilter({
     timeScale
   ]);
   const onChangeCheckOptions = () => {
-    const checksCopy = checks
+    const checksForCategory = checks
       .filter((x) => x.check_category === filterParameters?.checkCategory)
       .map((x) => x.check_name);
 
-    const sortedChecks = checksCopy.sort((a, b): number => {
-      if (a && b) {
-        return a?.localeCompare(b);
-      }
-      return 0;
-    });
-
     setCheckNameOptions(
-      sortedChecks.map((item) => ({
+      checksForCategory.map((item) => ({
         label: item ?? '',
         value: item ?? ''
       }))

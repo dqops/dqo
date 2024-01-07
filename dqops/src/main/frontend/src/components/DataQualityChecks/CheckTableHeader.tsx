@@ -306,7 +306,18 @@ const TableHeader = ({
           </td>
         ) : (
           <>
-            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
+            <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400">
+              <div className="flex gap-2 items-center font-normal text-gray-950">
+                {isFiltered !== true ? 
+                <Checkbox
+                  label="Show advanced checks"
+                  labelPosition="right"
+                  checked={showAdvanced}
+                  onChange={(value) => setShowAdvanced(value)}
+                /> 
+                : null}
+              </div>
+            </td>
             <td className="text-left whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400" />
           </>
         )}

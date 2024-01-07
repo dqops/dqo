@@ -239,7 +239,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
             }
         }
 
-        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
+        List<AbstractMap.SimpleEntry<CheckContainerTypeModel, CheckContainerModel>> checkModelsMapEntries = checkContainers.entrySet().stream()
                 .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
                         checkContainerPair.getKey(),
                         this.specToModelCheckMappingService.createModel(
@@ -256,7 +256,10 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
                                 uiCheckContainerModelPair.getValue(),
                                 checkSearchFilters)
                 )).filter(prunedPair -> prunedPair.getValue() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toList());
+
+        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = new LinkedHashMap<>(); // to preserve order
+        checkModelsMapEntries.forEach(mapEntry -> checkContainerModels.put(mapEntry.getKey(), mapEntry.getValue()));
 
         tableChecksModel.setCheckContainers(checkContainerModels);
         return tableChecksModel;
@@ -332,7 +335,7 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
         boolean findAlsoNotConfiguredChecks = checkSearchFilters.getCheckConfigured() == null || !checkSearchFilters.getCheckConfigured();
 
 
-        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
+        Map<CheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new LinkedHashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.profiling) {
                 AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null, false, findAlsoNotConfiguredChecks);
@@ -352,24 +355,27 @@ public class AllChecksModelFactoryImpl implements AllChecksModelFactory {
             }
         }
 
-        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
+        List<AbstractMap.SimpleEntry<CheckContainerTypeModel, CheckContainerModel>> checkModelsMapEntries = checkContainers.entrySet().stream()
                 .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
                         checkContainerPair.getKey(),
                         this.specToModelCheckMappingService.createModel(
-                            checkContainerPair.getValue(),
-                            checkSearchFilters,
-                            connectionSpec,
-                            tableSpec,
-                            executionContext,
-                            connectionSpec.getProviderType(),
-                            canManageChecks)
+                                checkContainerPair.getValue(),
+                                checkSearchFilters,
+                                connectionSpec,
+                                tableSpec,
+                                executionContext,
+                                connectionSpec.getProviderType(),
+                                canManageChecks)
                 )).map(uiCheckContainerModelPair -> new AbstractMap.SimpleEntry<>(
                         uiCheckContainerModelPair.getKey(),
                         pruneCheckContainerModel(
-                            uiCheckContainerModelPair.getValue(),
-                            checkSearchFilters)
+                                uiCheckContainerModelPair.getValue(),
+                                checkSearchFilters)
                 )).filter(prunedPair -> prunedPair.getValue() != null)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .collect(Collectors.toList());
+
+        Map<CheckContainerTypeModel, CheckContainerModel> checkContainerModels = new LinkedHashMap<>(); // to preserve order
+        checkModelsMapEntries.forEach(mapEntry -> checkContainerModels.put(mapEntry.getKey(), mapEntry.getValue()));
 
         columnChecksModel.setCheckContainers(checkContainerModels);
         return columnChecksModel;
