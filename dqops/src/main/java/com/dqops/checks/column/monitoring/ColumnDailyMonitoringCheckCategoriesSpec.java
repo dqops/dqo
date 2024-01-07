@@ -30,11 +30,13 @@ import com.dqops.checks.column.monitoring.datetime.ColumnDatetimeDailyMonitoring
 import com.dqops.checks.column.monitoring.integrity.ColumnIntegrityDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.patterns.ColumnPatternsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.pii.ColumnPiiDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.sql.ColumnSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.strings.ColumnStringsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
+import com.dqops.checks.column.partitioned.patterns.ColumnPatternsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.profiling.ColumnBlanksProfilingChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -68,6 +70,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
             put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("patterns", o -> o.patterns);
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
@@ -102,6 +105,11 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyMonitoringChecksSpec strings;
+
+    @JsonPropertyDescription("Daily monitoring checks of pattern matching on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsDailyMonitoringChecksSpec patterns;
 
     @JsonPropertyDescription("Daily monitoring checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -233,6 +241,24 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsDailyMonitoringChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsDailyMonitoringChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**

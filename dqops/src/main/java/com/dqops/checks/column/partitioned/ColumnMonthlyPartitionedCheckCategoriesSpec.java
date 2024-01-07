@@ -31,6 +31,8 @@ import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartiti
 import com.dqops.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.patterns.ColumnPatternsDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.patterns.ColumnPatternsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.sql.ColumnSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsMonthlyPartitionedChecksSpec;
@@ -67,6 +69,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("patterns", o -> o.patterns);
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
@@ -100,6 +103,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyPartitionedChecksSpec strings;
+
+    @JsonPropertyDescription("Monthly partitioned pattern match checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsMonthlyPartitionedChecksSpec patterns;
 
     @JsonPropertyDescription("Monthly partitioned checks of uniqueness values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -226,6 +234,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsMonthlyPartitionedChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsMonthlyPartitionedChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**

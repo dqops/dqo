@@ -9,3 +9,4 @@ spec:
     that the percentage of rows having a valid column value does not exceed the minimum
     accepted percentage. Creates a separate data quality check (and an alert) for
     each monthly partition.
+  standard: true

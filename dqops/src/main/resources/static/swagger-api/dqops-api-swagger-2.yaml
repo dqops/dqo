@@ -16273,6 +16273,9 @@ definitions:
       strings:
         description: "Daily monitoring checks of strings in the column"
         $ref: "#/definitions/ColumnStringsDailyMonitoringChecksSpec"
+      patterns:
+        description: "Daily monitoring checks of pattern matching on a column level."
+        $ref: "#/definitions/ColumnPatternsDailyMonitoringChecksSpec"
       uniqueness:
         description: "Daily monitoring checks of uniqueness in the column"
         $ref: "#/definitions/ColumnUniquenessDailyMonitoringChecksSpec"
@@ -16336,6 +16339,9 @@ definitions:
       strings:
         description: "Daily partitioned checks of strings in the column"
         $ref: "#/definitions/ColumnStringsDailyPartitionedChecksSpec"
+      patterns:
+        description: "Daily partitioned pattern match checks on a column level."
+        $ref: "#/definitions/ColumnPatternsDailyPartitionedChecksSpec"
       uniqueness:
         description: "Daily partitioned checks of uniqueness in the column"
         $ref: "#/definitions/ColumnUniquenessDailyPartitionedChecksSpec"
@@ -18498,6 +18504,189 @@ definitions:
         description: "Verifies that the percentage of values in a column that matches\
           \ values in another table column does not exceed the set count."
         $ref: "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
+  ColumnInvalidEmailFormatFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsInvalidEmailFormatCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ invalid emails in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnInvalidIp4AddressFormatFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ invalid IP4 address in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnInvalidIp6AddressFormatFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ invalid IP6 address in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnInvalidLatitudeCountCheckSpec:
     type: "object"
     properties:
@@ -18615,6 +18804,67 @@ definitions:
       error:
         description: "Default alerting threshold for a set number of rows with invalid\
           \ longitude value in a column that raises a data quality alert"
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnInvalidUuidFormatFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsInvalidUuidFormatCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ invalid uuid in a column that raises a data quality error (alert)."
         $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
@@ -19619,6 +19869,9 @@ definitions:
       strings:
         description: "Monthly monitoring checks of strings in the column"
         $ref: "#/definitions/ColumnStringsMonthlyMonitoringChecksSpec"
+      patterns:
+        description: "Monthly monitoring checks of pattern matching on a column level."
+        $ref: "#/definitions/ColumnPatternsMonthlyMonitoringChecksSpec"
       uniqueness:
         description: "Monthly monitoring checks of uniqueness in the column"
         $ref: "#/definitions/ColumnUniquenessMonthlyMonitoringChecksSpec"
@@ -19682,6 +19935,9 @@ definitions:
       strings:
         description: "Monthly partitioned checks of strings values in the column"
         $ref: "#/definitions/ColumnStringsMonthlyPartitionedChecksSpec"
+      patterns:
+        description: "Monthly partitioned pattern match checks on a column level."
+        $ref: "#/definitions/ColumnPatternsMonthlyPartitionedChecksSpec"
       uniqueness:
         description: "Monthly partitioned checks of uniqueness values in the column"
         $ref: "#/definitions/ColumnUniquenessMonthlyPartitionedChecksSpec"
@@ -22235,6 +22491,366 @@ definitions:
         description: "Configuration of monthly partitioned data quality checks evaluated\
           \ at a column level."
         $ref: "#/definitions/ColumnMonthlyPartitionedCheckCategoriesSpec"
+  ColumnPatternsDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_text_not_matching_regex_found:
+        description: "Verifies that the number of text values not matching the custom\
+          \ regular expression pattern does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingRegexFoundCheckSpec"
+      daily_texts_matching_regex_percent:
+        description: "Verifies that the percentage of strings matching the custom\
+          \ regular expression pattern does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextsMatchingRegexPercentCheckSpec"
+      daily_invalid_email_format_found:
+        description: "Verifies that the number of invalid emails in a text column\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      daily_text_not_matching_date_pattern_found:
+        description: "Verifies that the number of texts not matching the date format\
+          \ regular expression does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingDatePatternFoundCheckSpec"
+      daily_text_matching_date_pattern_percent:
+        description: "Verifies that the percentage of texts matching the date format\
+          \ regular expression in a column does not fall below the minimum accepted\
+          \ percentage."
+        $ref: "#/definitions/ColumnTextMatchingDatePatternPercentCheckSpec"
+      daily_text_matching_name_pattern_percent:
+        description: "Verifies that the percentage of texts matching the name regular\
+          \ expression does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextMatchingNamePatternPercentCheckSpec"
+      daily_invalid_uuid_format_found:
+        description: "Verifies that the number of invalid UUIDs in a text column does\
+          \ not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidUuidFormatFoundCheckSpec"
+      daily_valid_uuid_format_percent:
+        description: "Verifies that the percentage of valid UUID in a text column\
+          \ does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnValidUuidFormatPercentCheckSpec"
+      daily_invalid_ip4_address_format_found:
+        description: "Verifies that the number of invalid IP4 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp4AddressFormatFoundCheckSpec"
+      daily_invalid_ip6_address_format_found:
+        description: "Verifies that the number of invalid IP6 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+  ColumnPatternsDailyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_text_not_matching_regex_found:
+        description: "Verifies that the number of text values not matching the custom\
+          \ regular expression pattern does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingRegexFoundCheckSpec"
+      daily_partition_texts_matching_regex_percent:
+        description: "Verifies that the percentage of strings matching the custom\
+          \ regular expression pattern does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextsMatchingRegexPercentCheckSpec"
+      daily_partition_invalid_email_format_found:
+        description: "Verifies that the number of invalid emails in a text column\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      daily_partition_text_not_matching_date_pattern_found:
+        description: "Verifies that the number of texts not matching the date format\
+          \ regular expression does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingDatePatternFoundCheckSpec"
+      daily_partition_text_matching_date_pattern_percent:
+        description: "Verifies that the percentage of texts matching the date format\
+          \ regular expression in a column does not fall below the minimum accepted\
+          \ percentage."
+        $ref: "#/definitions/ColumnTextMatchingDatePatternPercentCheckSpec"
+      daily_partition_text_matching_name_pattern_percent:
+        description: "Verifies that the percentage of texts matching the name regular\
+          \ expression does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextMatchingNamePatternPercentCheckSpec"
+      daily_partition_invalid_uuid_format_found:
+        description: "Verifies that the number of invalid UUIDs in a text column does\
+          \ not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidUuidFormatFoundCheckSpec"
+      daily_partition_valid_uuid_format_percent:
+        description: "Verifies that the percentage of valid UUID in a text column\
+          \ does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnValidUuidFormatPercentCheckSpec"
+      daily_partition_invalid_ip4_address_format_found:
+        description: "Verifies that the number of invalid IP4 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp4AddressFormatFoundCheckSpec"
+      daily_partition_invalid_ip6_address_format_found:
+        description: "Verifies that the number of invalid IP6 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+  ColumnPatternsInvalidEmailFormatCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnPatternsInvalidIp4AddressFormatCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnPatternsInvalidUuidFormatCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnPatternsMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_text_not_matching_regex_found:
+        description: "Verifies that the number of text values not matching the custom\
+          \ regular expression pattern does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingRegexFoundCheckSpec"
+      monthly_texts_matching_regex_percent:
+        description: "Verifies that the percentage of strings matching the custom\
+          \ regular expression pattern does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextsMatchingRegexPercentCheckSpec"
+      monthly_invalid_email_format_found:
+        description: "Verifies that the number of invalid emails in a text column\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      monthly_text_not_matching_date_pattern_found:
+        description: "Verifies that the number of texts not matching the date format\
+          \ regular expression does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingDatePatternFoundCheckSpec"
+      monthly_text_matching_date_pattern_percent:
+        description: "Verifies that the percentage of texts matching the date format\
+          \ regular expression in a column does not fall below the minimum accepted\
+          \ percentage."
+        $ref: "#/definitions/ColumnTextMatchingDatePatternPercentCheckSpec"
+      monthly_text_matching_name_pattern_percent:
+        description: "Verifies that the percentage of texts matching the name regular\
+          \ expression does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextMatchingNamePatternPercentCheckSpec"
+      monthly_invalid_uuid_format_found:
+        description: "Verifies that the number of invalid UUIDs in a text column does\
+          \ not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidUuidFormatFoundCheckSpec"
+      monthly_valid_uuid_format_percent:
+        description: "Verifies that the percentage of valid UUID in a text column\
+          \ does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnValidUuidFormatPercentCheckSpec"
+      monthly_invalid_ip4_address_format_found:
+        description: "Verifies that the number of invalid IP4 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp4AddressFormatFoundCheckSpec"
+      monthly_invalid_ip6_address_format_found:
+        description: "Verifies that the number of invalid IP6 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+  ColumnPatternsMonthlyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_text_not_matching_regex_found:
+        description: "Verifies that the number of text values not matching the custom\
+          \ regular expression pattern does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingRegexFoundCheckSpec"
+      monthly_partition_texts_matching_regex_percent:
+        description: "Verifies that the percentage of strings matching the custom\
+          \ regular expression pattern does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextsMatchingRegexPercentCheckSpec"
+      monthly_partition_invalid_email_format_found:
+        description: "Verifies that the number of invalid emails in a text column\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      monthly_partition_text_not_matching_date_pattern_found:
+        description: "Verifies that the number of texts not matching the date format\
+          \ regular expression does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingDatePatternFoundCheckSpec"
+      monthly_partition_text_matching_date_pattern_percent:
+        description: "Verifies that the percentage of texts matching the date format\
+          \ regular expression in a column does not fall below the minimum accepted\
+          \ percentage."
+        $ref: "#/definitions/ColumnTextMatchingDatePatternPercentCheckSpec"
+      monthly_partition_text_matching_name_pattern_percent:
+        description: "Verifies that the percentage of texts matching the name regular\
+          \ expression does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextMatchingNamePatternPercentCheckSpec"
+      monthly_partition_invalid_uuid_format_found:
+        description: "Verifies that the number of invalid UUIDs in a text column does\
+          \ not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidUuidFormatFoundCheckSpec"
+      monthly_partition_valid_uuid_format_percent:
+        description: "Verifies that the percentage of valid UUID in a text column\
+          \ does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnValidUuidFormatPercentCheckSpec"
+      monthly_partition_invalid_ip4_address_format_found:
+        description: "Verifies that the number of invalid IP4 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp4AddressFormatFoundCheckSpec"
+      monthly_partition_invalid_ip6_address_format_found:
+        description: "Verifies that the number of invalid IP6 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+  ColumnPatternsProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_text_not_matching_regex_found:
+        description: "Verifies that the number of text values not matching the custom\
+          \ regular expression pattern does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingRegexFoundCheckSpec"
+      profile_texts_matching_regex_percent:
+        description: "Verifies that the percentage of strings matching the custom\
+          \ regular expression pattern does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextsMatchingRegexPercentCheckSpec"
+      profile_invalid_email_format_found:
+        description: "Verifies that the number of invalid emails in a text column\
+          \ does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidEmailFormatFoundCheckSpec"
+      profile_text_not_matching_date_pattern_found:
+        description: "Verifies that the number of texts not matching the date format\
+          \ regular expression does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnTextNotMatchingDatePatternFoundCheckSpec"
+      profile_text_matching_date_pattern_percent:
+        description: "Verifies that the percentage of texts matching the date format\
+          \ regular expression in a column does not fall below the minimum accepted\
+          \ percentage."
+        $ref: "#/definitions/ColumnTextMatchingDatePatternPercentCheckSpec"
+      profile_text_matching_name_pattern_percent:
+        description: "Verifies that the percentage of texts matching the name regular\
+          \ expression does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnTextMatchingNamePatternPercentCheckSpec"
+      profile_invalid_uuid_format_found:
+        description: "Verifies that the number of invalid UUIDs in a text column does\
+          \ not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidUuidFormatFoundCheckSpec"
+      profile_valid_uuid_format_percent:
+        description: "Verifies that the percentage of valid UUID in a text column\
+          \ does not fall below the minimum accepted percentage."
+        $ref: "#/definitions/ColumnValidUuidFormatPercentCheckSpec"
+      profile_invalid_ip4_address_format_found:
+        description: "Verifies that the number of invalid IP4 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp4AddressFormatFoundCheckSpec"
+      profile_invalid_ip6_address_format_found:
+        description: "Verifies that the number of invalid IP6 addresses in a text\
+          \ column does not exceed the maximum accepted count."
+        $ref: "#/definitions/ColumnInvalidIp6AddressFormatFoundCheckSpec"
+  ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      date_formats:
+        type: "string"
+        description: "Desired date format. Sensor will try to parse the column records\
+          \ and cast the data using this format."
+        enum:
+        - "YYYY-MM-DD"
+        - "MM/DD/YYYY"
+        - "DD/MM/YYYY"
+        - "YYYY/MM/DD"
+        - "Month D, YYYY"
+  ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      date_formats:
+        type: "string"
+        description: "Desired date format. Sensor will try to parse the column records\
+          \ and cast the data using this format."
+        enum:
+        - "YYYY-MM-DD"
+        - "MM/DD/YYYY"
+        - "DD/MM/YYYY"
+        - "YYYY/MM/DD"
+        - "Month D, YYYY"
+  ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      regex:
+        type: "string"
+        description: "This field can be used to define custom regex. In order to define\
+          \ custom regex, user should write correct regex as a string. If regex is\
+          \ not defined by user then default regex is null"
+  ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      regex:
+        type: "string"
+        description: "This field can be used to define custom regex. In order to define\
+          \ custom regex, user should write correct regex as a string. If regex is\
+          \ not defined by user then default regex is null"
+  ColumnPatternsValidUuidFormatPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
   ColumnPercentile10InRangeCheckSpec:
     type: "object"
     properties:
@@ -23214,6 +23830,9 @@ definitions:
       strings:
         description: "Configuration of strings checks on a column level."
         $ref: "#/definitions/ColumnStringsProfilingChecksSpec"
+      patterns:
+        description: "Configuration of pattern match checks on a column level."
+        $ref: "#/definitions/ColumnPatternsProfilingChecksSpec"
       uniqueness:
         description: "Configuration of uniqueness checks on a column level."
         $ref: "#/definitions/ColumnUniquenessProfilingChecksSpec"
@@ -24210,250 +24829,6 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnStringInvalidEmailCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringInvalidEmailCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ invalid emails in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnStringInvalidIp4AddressCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringInvalidIp4AddressCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ invalid IP4 address in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnStringInvalidIp6AddressCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ invalid IP6 address in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnStringInvalidUuidCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringInvalidUuidCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ invalid uuid in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringLengthAboveMaxLengthCountCheckSpec:
     type: "object"
     properties:
@@ -24764,191 +25139,6 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnStringMatchDateRegexPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringMatchDateRegexPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum percentage of rows\
-          \ with matching date regex in a column that raises a data quality error\
-          \ (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnStringMatchNameRegexPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringMatchNameRegexPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum percentage of rows\
-          \ with matching name regex in a column that raises a data quality error\
-          \ (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnStringMatchRegexPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringMatchRegexPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a minimum percentage of rows\
-          \ with matching regex in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnStringMaxLengthCheckSpec:
     type: "object"
     properties:
@@ -25132,128 +25322,6 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinValueRuleParametersSpec"
-  ColumnStringNotMatchDateRegexCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ not matching date regex in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnStringNotMatchRegexCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringNotMatchRegexCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ not matching regex in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
   ColumnStringParsableToFloatPercentCheckSpec:
     type: "object"
     properties:
@@ -25687,67 +25755,6 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnStringValidUuidPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnStringsStringValidUuidPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a minimum percentage of rows\
-          \ with a valid UUID in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnStringsDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -25843,61 +25850,6 @@ definitions:
           \ does not fall below the minimum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnStringValidCurrencyCodePercentCheckSpec"
-      daily_string_invalid_email_count:
-        description: "Verifies that the number of invalid emails in a column does\
-          \ not exceed the maximum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidEmailCountCheckSpec"
-      daily_string_invalid_uuid_count:
-        description: "Verifies that the number of invalid UUID in a column does not\
-          \ exceed the maximum accepted count. Stores the most recent captured value\
-          \ for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidUuidCountCheckSpec"
-      daily_string_valid_uuid_percent:
-        description: "Verifies that the percentage of valid UUID in a column does\
-          \ not fall below the minimum accepted percentage. Stores the most recent\
-          \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringValidUuidPercentCheckSpec"
-      daily_string_invalid_ip4_address_count:
-        description: "Verifies that the number of invalid IP4 address in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidIp4AddressCountCheckSpec"
-      daily_string_invalid_ip6_address_count:
-        description: "Verifies that the number of invalid IP6 address in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidIp6AddressCountCheckSpec"
-      daily_string_not_match_regex_count:
-        description: "Verifies that the number of strings not matching the custom\
-          \ regex in a column does not exceed the maximum accepted count. Stores the\
-          \ most recent captured value for each day when the data quality check was\
-          \ evaluated."
-        $ref: "#/definitions/ColumnStringNotMatchRegexCountCheckSpec"
-      daily_string_match_regex_percent:
-        description: "Verifies that the percentage of strings matching the custom\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Stores the most recent captured value for each day when the data quality\
-          \ check was evaluated."
-        $ref: "#/definitions/ColumnStringMatchRegexPercentCheckSpec"
-      daily_string_not_match_date_regex_count:
-        description: "Verifies that the number of strings not matching the date format\
-          \ regex in a column does not exceed the maximum accepted count. Stores the\
-          \ most recent captured value for each day when the data quality check was\
-          \ evaluated."
-        $ref: "#/definitions/ColumnStringNotMatchDateRegexCountCheckSpec"
-      daily_string_match_date_regex_percent:
-        description: "Verifies that the percentage of strings matching the date format\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Stores the most recent captured value for each day when the data quality\
-          \ check was evaluated."
-        $ref: "#/definitions/ColumnStringMatchDateRegexPercentCheckSpec"
-      daily_string_match_name_regex_percent:
-        description: "Verifies that the percentage of strings matching the name format\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Stores the most recent captured value for each day when the data quality\
-          \ check was evaluated."
-        $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
   ColumnStringsDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -25989,56 +25941,6 @@ definitions:
           \ does not fall below the minimum accepted percentage. Creates a separate\
           \ data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnStringValidCurrencyCodePercentCheckSpec"
-      daily_partition_string_invalid_email_count:
-        description: "Verifies that the number of invalid emails in a column does\
-          \ not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringInvalidEmailCountCheckSpec"
-      daily_partition_string_invalid_uuid_count:
-        description: "Verifies that the number of invalid UUID in a column does not\
-          \ exceed the maximum accepted count. Creates a separate data quality check\
-          \ (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringInvalidUuidCountCheckSpec"
-      daily_partition_valid_uuid_percent:
-        description: "Verifies that the percentage of valid UUID in a column does\
-          \ not fall below the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringValidUuidPercentCheckSpec"
-      daily_partition_string_invalid_ip4_address_count:
-        description: "Verifies that the number of invalid IP4 address in a column\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringInvalidIp4AddressCountCheckSpec"
-      daily_partition_string_invalid_ip6_address_count:
-        description: "Verifies that the number of invalid IP6 address in a column\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringInvalidIp6AddressCountCheckSpec"
-      daily_partition_string_not_match_regex_count:
-        description: "Verifies that the number of strings not matching the custom\
-          \ regex in a column does not exceed the maximum accepted count. Creates\
-          \ a separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringNotMatchRegexCountCheckSpec"
-      daily_partition_string_match_regex_percent:
-        description: "Verifies that the percentage of strings matching the custom\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Creates a separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringMatchRegexPercentCheckSpec"
-      daily_partition_string_not_match_date_regex_count:
-        description: "Verifies that the number of strings not matching the date format\
-          \ regex in a column does not exceed the maximum accepted count. Creates\
-          \ a separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringNotMatchDateRegexCountCheckSpec"
-      daily_partition_string_match_date_regex_percent:
-        description: "Verifies that the percentage of strings matching the date format\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Creates a separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringMatchDateRegexPercentCheckSpec"
-      daily_partition_string_match_name_regex_percent:
-        description: "Verifies that the percentage of strings matching the name format\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Creates a separate data quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
   ColumnStringsExpectedTextValuesInUseCountSensorParametersSpec:
     type: "object"
     properties:
@@ -26161,58 +26063,6 @@ definitions:
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ row count for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnStringValidCurrencyCodePercentCheckSpec"
-      monthly_string_invalid_email_count:
-        description: "Verifies that the number of invalid emails in a column does\
-          \ not exceed the maximum accepted count. Stores the most recent row count\
-          \ for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidEmailCountCheckSpec"
-      monthly_string_invalid_uuid_count:
-        description: "Verifies that the number of invalid UUID in a column does not\
-          \ exceed the maximum accepted count. Stores the most recent row count for\
-          \ each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidUuidCountCheckSpec"
-      monthly_string_valid_uuid_percent:
-        description: "Verifies that the percentage of valid UUID in a column does\
-          \ not exceed the minimum accepted percentage. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringValidUuidPercentCheckSpec"
-      monthly_string_invalid_ip4_address_count:
-        description: "Verifies that the number of invalid IP4 address in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidIp4AddressCountCheckSpec"
-      monthly_string_invalid_ip6_address_count:
-        description: "Verifies that the number of invalid IP6 address in a column\
-          \ does not exceed the maximum accepted count. Stores the most recent row\
-          \ count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringInvalidIp6AddressCountCheckSpec"
-      monthly_string_not_match_regex_count:
-        description: "Verifies that the number of strings not matching the custom\
-          \ regex in a column does not exceed the maximum accepted count. Stores the\
-          \ most recent row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringNotMatchRegexCountCheckSpec"
-      monthly_string_match_regex_percent:
-        description: "Verifies that the percentage of strings matching the custom\
-          \ regex in a column does not exceed the minimum accepted percentage. Stores\
-          \ the most recent row count for each month when the data quality check was\
-          \ evaluated."
-        $ref: "#/definitions/ColumnStringMatchRegexPercentCheckSpec"
-      monthly_string_not_match_date_regex_count:
-        description: "Verifies that the number of strings not matching the date format\
-          \ regex in a column does not exceed the maximum accepted count. Stores the\
-          \ most recent row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringNotMatchDateRegexCountCheckSpec"
-      monthly_string_match_date_regex_percent:
-        description: "Verifies that the percentage of strings matching the date format\
-          \ regex in a column does not exceed the maximum accepted percentage. Stores\
-          \ the most recent row count for each month when the data quality check was\
-          \ evaluated."
-        $ref: "#/definitions/ColumnStringMatchDateRegexPercentCheckSpec"
-      monthly_string_match_name_regex_percent:
-        description: "Verifies that the percentage of strings matching the name regex\
-          \ in a column does not exceed the maximum accepted percentage. Stores the\
-          \ most recent row count for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
   ColumnStringsMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -26304,59 +26154,6 @@ definitions:
           \ does not fall below the minimum accepted percentage. Creates a separate\
           \ data quality check (and an alert) for each monthly partition."
         $ref: "#/definitions/ColumnStringValidCurrencyCodePercentCheckSpec"
-      monthly_partition_string_invalid_email_count:
-        description: "Verifies that the number of invalid emails in a column does\
-          \ not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringInvalidEmailCountCheckSpec"
-      monthly_partition_string_invalid_uuid_count:
-        description: "Verifies that the number of invalid UUID in a column does not\
-          \ exceed the maximum accepted count. Creates a separate data quality check\
-          \ (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringInvalidUuidCountCheckSpec"
-      monthly_partition_valid_uuid_percent:
-        description: "Verifies that the percentage of valid UUID in a column does\
-          \ not fall below the minimum accepted percentage. Creates a separate data\
-          \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringValidUuidPercentCheckSpec"
-      monthly_partition_string_invalid_ip4_address_count:
-        description: "Verifies that the number of invalid IP4 address in a column\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringInvalidIp4AddressCountCheckSpec"
-      monthly_partition_string_invalid_ip6_address_count:
-        description: "Verifies that the number of invalid IP6 address in a column\
-          \ does not exceed the maximum accepted count. Creates a separate data quality\
-          \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringInvalidIp6AddressCountCheckSpec"
-      monthly_partition_string_not_match_regex_count:
-        description: "Verifies that the number of strings not matching the custom\
-          \ regex in a column does not exceed the maximum accepted count. Creates\
-          \ a separate data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringNotMatchRegexCountCheckSpec"
-      monthly_partition_string_match_regex_percent:
-        description: "Verifies that the percentage of strings matching the custom\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Creates a separate data quality check (and an alert) for each monthly\
-          \ partition."
-        $ref: "#/definitions/ColumnStringMatchRegexPercentCheckSpec"
-      monthly_partition_string_not_match_date_regex_count:
-        description: "Verifies that the number of strings not matching the date format\
-          \ regex in a column does not exceed the maximum accepted count. Creates\
-          \ a separate data quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringNotMatchDateRegexCountCheckSpec"
-      monthly_partition_string_match_date_regex_percent:
-        description: "Verifies that the percentage of strings matching the date format\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Creates a separate data quality check (and an alert) for each monthly\
-          \ partition."
-        $ref: "#/definitions/ColumnStringMatchDateRegexPercentCheckSpec"
-      monthly_partition_string_match_name_regex_percent:
-        description: "Verifies that the percentage of strings matching the name format\
-          \ regex in a column does not fall below the minimum accepted percentage.\
-          \ Creates a separate data quality check (and an alert) for each monthly\
-          \ partition."
-        $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
   ColumnStringsProfilingChecksSpec:
     type: "object"
     properties:
@@ -26432,46 +26229,6 @@ definitions:
         description: "Verifies that the percentage of valid currency code in a column\
           \ does not fall below the minimum accepted percentage."
         $ref: "#/definitions/ColumnStringValidCurrencyCodePercentCheckSpec"
-      profile_string_invalid_email_count:
-        description: "Verifies that the number of invalid emails in a column does\
-          \ not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnStringInvalidEmailCountCheckSpec"
-      profile_string_invalid_uuid_count:
-        description: "Verifies that the number of invalid UUID in a column does not\
-          \ exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnStringInvalidUuidCountCheckSpec"
-      profile_string_valid_uuid_percent:
-        description: "Verifies that the percentage of valid UUID in a column does\
-          \ not fall below the minimum accepted percentage."
-        $ref: "#/definitions/ColumnStringValidUuidPercentCheckSpec"
-      profile_string_invalid_ip4_address_count:
-        description: "Verifies that the number of invalid IP4 address in a column\
-          \ does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnStringInvalidIp4AddressCountCheckSpec"
-      profile_string_invalid_ip6_address_count:
-        description: "Verifies that the number of invalid IP6 address in a column\
-          \ does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnStringInvalidIp6AddressCountCheckSpec"
-      profile_string_not_match_regex_count:
-        description: "Verifies that the number of strings not matching the custom\
-          \ regex in a column does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnStringNotMatchRegexCountCheckSpec"
-      profile_string_match_regex_percent:
-        description: "Verifies that the percentage of strings matching the custom\
-          \ regex in a column does not fall below the minimum accepted percentage."
-        $ref: "#/definitions/ColumnStringMatchRegexPercentCheckSpec"
-      profile_string_not_match_date_regex_count:
-        description: "Verifies that the number of strings not matching the date format\
-          \ regex in a column does not exceed the maximum accepted count."
-        $ref: "#/definitions/ColumnStringNotMatchDateRegexCountCheckSpec"
-      profile_string_match_date_regex_percent:
-        description: "Verifies that the percentage of strings matching the date format\
-          \ regex in a column does not fall below the minimum accepted percentage."
-        $ref: "#/definitions/ColumnStringMatchDateRegexPercentCheckSpec"
-      profile_string_match_name_regex_percent:
-        description: "Verifies that the percentage of strings matching the name regex\
-          \ in a column does not fall below the minimum accepted percentage."
-        $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
   ColumnStringsStatisticsCollectorsSpec:
     type: "object"
     properties:
@@ -26505,34 +26262,6 @@ definitions:
       parameters:
         description: "Profiler parameters"
         $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
-  ColumnStringsStringInvalidEmailCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnStringsStringInvalidIp4AddressCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnStringsStringInvalidUuidCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
   ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec:
     type: "object"
     properties:
@@ -26600,42 +26329,6 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Sets a maximal string length."
-  ColumnStringsStringMatchDateRegexPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      date_formats:
-        type: "string"
-        description: "Desired date format. Sensor will try to parse the column records\
-          \ and cast the data using this format."
-        enum:
-        - "YYYY-MM-DD"
-        - "MM/DD/YYYY"
-        - "DD/MM/YYYY"
-        - "YYYY/MM/DD"
-        - "Month D, YYYY"
-  ColumnStringsStringMatchNameRegexPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnStringsStringMatchRegexPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      regex:
-        type: "string"
-        description: "This field can be used to define custom regex. In order to define\
-          \ custom regex, user should write correct regex as a string. If regex is\
-          \ not defined by user then default regex is null"
   ColumnStringsStringMaxLengthSensorParametersSpec:
     type: "object"
     properties:
@@ -26687,35 +26380,6 @@ definitions:
       parameters:
         description: "Profiler parameters"
         $ref: "#/definitions/ColumnStringsStringMinLengthSensorParametersSpec"
-  ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      date_formats:
-        type: "string"
-        description: "Desired date format. Sensor will try to parse the column records\
-          \ and cast the data using this format."
-        enum:
-        - "YYYY-MM-DD"
-        - "MM/DD/YYYY"
-        - "DD/MM/YYYY"
-        - "YYYY/MM/DD"
-        - "Month D, YYYY"
-  ColumnStringsStringNotMatchRegexCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      regex:
-        type: "string"
-        description: "This field can be used to define custom regex. In order to define\
-          \ custom regex, user should write correct regex as a string. If regex is\
-          \ not defined by user then default regex is null"
   ColumnStringsStringParsableToFloatPercentSensorParametersSpec:
     type: "object"
     properties:
@@ -26759,13 +26423,6 @@ definitions:
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
   ColumnStringsStringValidDatePercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnStringsStringValidUuidPercentSensorParametersSpec:
     type: "object"
     properties:
       filter:
@@ -27266,6 +26923,313 @@ definitions:
           \ values in a column (from the set of expected values). Raises a data quality\
           \ issue with at a fatal severity level when the percentage of valid rows\
           \ is below the minimum percentage threshold."
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnTextMatchingDatePatternPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum percentage of rows\
+          \ with matching date regex in a column that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnTextMatchingNamePatternPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsTextMatchingNamePatternPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum percentage of rows\
+          \ with matching name regex in a column that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnTextNotMatchingDatePatternFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ not matching date regex in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnTextNotMatchingRegexFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsTextNotMatchingRegexCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ not matching regex in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnTextsMatchingRegexPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsTextsMatchingRegexPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a minimum percentage of rows\
+          \ with matching regex in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnTruePercentCheckSpec:
     type: "object"
@@ -27841,6 +27805,67 @@ definitions:
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ valid longitude value in a column that raises a data quality alert"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnValidUuidFormatPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnPatternsValidUuidFormatPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a minimum percentage of rows\
+          \ with a valid UUID in a column that raises a data quality error (alert)."
         $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\

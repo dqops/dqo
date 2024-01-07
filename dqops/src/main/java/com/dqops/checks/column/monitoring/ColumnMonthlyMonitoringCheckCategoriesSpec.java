@@ -31,6 +31,8 @@ import com.dqops.checks.column.monitoring.datetime.ColumnDatetimeMonthlyMonitori
 import com.dqops.checks.column.monitoring.integrity.ColumnIntegrityMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.patterns.ColumnPatternsDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.patterns.ColumnPatternsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.pii.ColumnPiiMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.schema.ColumnSchemaMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.sql.ColumnSqlMonthlyMonitoringChecksSpec;
@@ -68,6 +70,7 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
             put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("patterns", o -> o.patterns);
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
@@ -102,6 +105,11 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyMonitoringChecksSpec strings;
+
+    @JsonPropertyDescription("Monthly monitoring checks of pattern matching on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsMonthlyMonitoringChecksSpec patterns;
 
     @JsonPropertyDescription("Monthly monitoring checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -234,6 +242,24 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsMonthlyMonitoringChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsMonthlyMonitoringChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**

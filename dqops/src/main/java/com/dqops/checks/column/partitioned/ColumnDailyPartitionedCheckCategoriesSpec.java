@@ -31,10 +31,12 @@ import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeDailyPartition
 import com.dqops.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.nulls.ColumnNullsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.numeric.ColumnNumericDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.patterns.ColumnPatternsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.sql.ColumnSqlDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
+import com.dqops.checks.column.profiling.ColumnPatternsProfilingChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
@@ -67,6 +69,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
+            put("patterns", o -> o.patterns);
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("datetime", o -> o.datetime);
@@ -100,6 +103,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyPartitionedChecksSpec strings;
+
+    @JsonPropertyDescription("Daily partitioned pattern match checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnPatternsDailyPartitionedChecksSpec patterns;
 
     @JsonPropertyDescription("Daily partitioned checks of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -226,6 +234,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         propagateHierarchyIdToField(strings, "strings");
+    }
+
+    /**
+     * Returns the pattern match check configuration on a column level.
+     * @return Pattern match check configuration.
+     */
+    public ColumnPatternsDailyPartitionedChecksSpec getPatterns() {
+        return patterns;
+    }
+
+    /**
+     * Sets the pattern match check configuration on a column level.
+     * @param patterns New pattern match checks configuration.
+     */
+    public void setPatterns(ColumnPatternsDailyPartitionedChecksSpec patterns) {
+        this.setDirtyIf(!Objects.equals(this.patterns, patterns));
+        this.patterns = patterns;
+        this.propagateHierarchyIdToField(patterns, "patterns");
     }
 
     /**
