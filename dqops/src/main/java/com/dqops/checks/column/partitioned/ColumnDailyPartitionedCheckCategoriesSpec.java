@@ -19,9 +19,11 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.blanks.ColumnBlanksDailyMonitoringChecksSpec;
 import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.blanks.ColumnBlanksDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonDailyPartitionedChecksSpecMap;
 import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeDailyPartitionedChecksSpec;
@@ -62,6 +64,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
@@ -83,7 +86,12 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyPartitionedChecksSpec nulls;
 
-    @JsonPropertyDescription("Daily partitioned checks of numeric in the column")
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksDailyPartitionedChecksSpec blanks;
+
+    @JsonPropertyDescription("Daily partitioned checks of numeric values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericDailyPartitionedChecksSpec numeric;
@@ -164,6 +172,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksDailyPartitionedChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksDailyPartitionedChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
     }
 
     /**

@@ -45,6 +45,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
 			put("uniqueness", o -> o.uniqueness);
@@ -62,12 +63,17 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         }
     };
 
-    @JsonPropertyDescription("Configuration of column level checks that verify nulls and blanks.")
+    @JsonPropertyDescription("Configuration of column level checks that detect null values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsProfilingChecksSpec nulls;
 
-    @JsonPropertyDescription("Configuration of column level checks that verify negative values.")
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksProfilingChecksSpec blanks;
+
+    @JsonPropertyDescription("Configuration of column level checks that verify numeric values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericProfilingChecksSpec numeric;
@@ -153,6 +159,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksProfilingChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksProfilingChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
     }
 
     /**

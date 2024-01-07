@@ -16884,6 +16884,576 @@
         }
       }
     },
+    "ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnBlanksDailyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_string_empty_count" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "daily_string_empty_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_string_whitespace_count" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "daily_string_whitespace_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_string_null_placeholder_count" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "daily_string_null_placeholder_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        }
+      }
+    },
+    "ColumnBlanksDailyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_partition_string_empty_count" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "daily_partition_string_empty_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_partition_string_whitespace_count" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "daily_partition_string_whitespace_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_partition_string_null_placeholder_count" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "daily_partition_string_null_placeholder_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        }
+      }
+    },
+    "ColumnBlanksEmptyTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnBlanksEmptyTextFoundCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextCountSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
+        }
+      }
+    },
+    "ColumnBlanksEmptyTextPercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxPercentRule1ParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxPercentRule2ParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
+        }
+      }
+    },
+    "ColumnBlanksEmptyTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnBlanksMonthlyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_string_empty_count" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "monthly_string_empty_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_string_whitespace_count" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "monthly_string_whitespace_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_string_null_placeholder_count" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "monthly_string_null_placeholder_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        }
+      }
+    },
+    "ColumnBlanksMonthlyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_partition_string_empty_count" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "monthly_partition_string_empty_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_partition_string_whitespace_count" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "monthly_partition_string_whitespace_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_partition_string_null_placeholder_count" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "monthly_partition_string_null_placeholder_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        }
+      }
+    },
+    "ColumnBlanksNullPlaceholderTextFoundCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with a null placeholder strings in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
+        }
+      }
+    },
+    "ColumnBlanksNullPlaceholderTextPercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxPercentRule1ParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum percentage of rows with a null placeholder strings in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxPercentRule2ParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
+        }
+      }
+    },
+    "ColumnBlanksProfilingChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "profile_string_empty_count" : {
+          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "profile_string_empty_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "profile_string_whitespace_count" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "profile_string_whitespace_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "profile_string_null_placeholder_count" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "profile_string_null_placeholder_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        }
+      }
+    },
+    "ColumnBlanksWhitespaceTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnBlanksWhitespaceTextFoundCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextCountSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with whitespace strings in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
+        }
+      }
+    },
+    "ColumnBlanksWhitespaceTextPercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MaxPercentRule1ParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum number of rows with whitespace strings in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MaxPercentRule2ParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
+        }
+      }
+    },
+    "ColumnBlanksWhitespaceTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
     "ColumnBoolDailyMonitoringChecksSpec" : {
       "type" : "object",
       "properties" : {
@@ -17666,8 +18236,12 @@
           "description" : "Daily monitoring checks of nulls in the column",
           "$ref" : "#/definitions/ColumnNullsDailyMonitoringChecksSpec"
         },
+        "blanks" : {
+          "description" : "Configuration of column level checks that detect blank and whitespace values.",
+          "$ref" : "#/definitions/ColumnBlanksDailyMonitoringChecksSpec"
+        },
         "numeric" : {
-          "description" : "Daily monitoring checks of numeric in the column",
+          "description" : "Daily monitoring checks of numeric values in the column",
           "$ref" : "#/definitions/ColumnNumericDailyMonitoringChecksSpec"
         },
         "strings" : {
@@ -17741,8 +18315,12 @@
           "description" : "Daily partitioned checks of nulls in the column",
           "$ref" : "#/definitions/ColumnNullsDailyPartitionedChecksSpec"
         },
+        "blanks" : {
+          "description" : "Configuration of column level checks that detect blank and whitespace values.",
+          "$ref" : "#/definitions/ColumnBlanksDailyPartitionedChecksSpec"
+        },
         "numeric" : {
-          "description" : "Daily partitioned checks of numeric in the column",
+          "description" : "Daily partitioned checks of numeric values in the column",
           "$ref" : "#/definitions/ColumnNumericDailyPartitionedChecksSpec"
         },
         "strings" : {
@@ -20764,8 +21342,12 @@
           "description" : "Monthly monitoring checks of nulls in the column",
           "$ref" : "#/definitions/ColumnNullsMonthlyMonitoringChecksSpec"
         },
+        "blanks" : {
+          "description" : "Configuration of column level checks that detect blank and whitespace values.",
+          "$ref" : "#/definitions/ColumnBlanksMonthlyMonitoringChecksSpec"
+        },
         "numeric" : {
-          "description" : "Monthly monitoring checks of numeric in the column",
+          "description" : "Monthly monitoring checks of numeric values in the column",
           "$ref" : "#/definitions/ColumnNumericMonthlyMonitoringChecksSpec"
         },
         "strings" : {
@@ -20838,6 +21420,10 @@
         "nulls" : {
           "description" : "Monthly partitioned checks of nulls values in the column",
           "$ref" : "#/definitions/ColumnNullsMonthlyPartitionedChecksSpec"
+        },
+        "blanks" : {
+          "description" : "Configuration of column level checks that detect blank and whitespace values.",
+          "$ref" : "#/definitions/ColumnBlanksMonthlyPartitionedChecksSpec"
         },
         "numeric" : {
           "description" : "Monthly partitioned checks of numeric values in the column",
@@ -24146,11 +24732,15 @@
           }
         },
         "nulls" : {
-          "description" : "Configuration of column level checks that verify nulls and blanks.",
+          "description" : "Configuration of column level checks that detect null values.",
           "$ref" : "#/definitions/ColumnNullsProfilingChecksSpec"
         },
+        "blanks" : {
+          "description" : "Configuration of column level checks that detect blank and whitespace values.",
+          "$ref" : "#/definitions/ColumnBlanksProfilingChecksSpec"
+        },
         "numeric" : {
-          "description" : "Configuration of column level checks that verify negative values.",
+          "description" : "Configuration of column level checks that verify numeric values.",
           "$ref" : "#/definitions/ColumnNumericProfilingChecksSpec"
         },
         "strings" : {
@@ -25126,118 +25716,6 @@
         }
       }
     },
-    "ColumnStringEmptyCountCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnStringsStringEmptyCountSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
-        }
-      }
-    },
-    "ColumnStringEmptyPercentCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnStringsStringEmptyPercentSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule1ParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum number of rows with empty strings in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule2ParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
     "ColumnStringInvalidEmailCountCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -26190,118 +26668,6 @@
         }
       }
     },
-    "ColumnStringNullPlaceholderCountCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnStringsStringNullPlaceholderCountSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum number of rows with a null placeholder strings in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
-        }
-      }
-    },
-    "ColumnStringNullPlaceholderPercentCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnStringsStringNullPlaceholderPercentSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule1ParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum percentage of rows with a null placeholder strings in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule2ParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
     "ColumnStringParsableToFloatPercentCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -26806,118 +27172,6 @@
         }
       }
     },
-    "ColumnStringWhitespaceCountCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnStringsStringWhitespaceCountSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxCountRule0WarningParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum number of rows with whitespace strings in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxCountRule0ErrorParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxCountRule100ParametersSpec"
-        }
-      }
-    },
-    "ColumnStringWhitespacePercentCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnStringsStringWhitespacePercentSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule1ParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum number of rows with whitespace strings in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule2ParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
     "ColumnStringsDailyMonitoringChecksSpec" : {
       "type" : "object",
       "properties" : {
@@ -26960,22 +27214,6 @@
           "description" : "The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnStringLengthInRangePercentCheckSpec"
         },
-        "daily_string_empty_count" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringEmptyCountCheckSpec"
-        },
-        "daily_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringEmptyPercentCheckSpec"
-        },
-        "daily_string_whitespace_count" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringWhitespaceCountCheckSpec"
-        },
-        "daily_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringWhitespacePercentCheckSpec"
-        },
         "daily_string_surrounded_by_whitespace_count" : {
           "description" : "Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespaceCountCheckSpec"
@@ -26983,14 +27221,6 @@
         "daily_string_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespacePercentCheckSpec"
-        },
-        "daily_string_null_placeholder_count" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderCountCheckSpec"
-        },
-        "daily_string_null_placeholder_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderPercentCheckSpec"
         },
         "daily_string_boolean_placeholder_percent" : {
           "description" : "Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
@@ -27100,22 +27330,6 @@
           "description" : "The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnStringLengthInRangePercentCheckSpec"
         },
-        "daily_partition_string_empty_count" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnStringEmptyCountCheckSpec"
-        },
-        "daily_partition_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnStringEmptyPercentCheckSpec"
-        },
-        "daily_partition_string_whitespace_count" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnStringWhitespaceCountCheckSpec"
-        },
-        "daily_partition_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnStringWhitespacePercentCheckSpec"
-        },
         "daily_partition_string_surrounded_by_whitespace_count" : {
           "description" : "Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespaceCountCheckSpec"
@@ -27123,14 +27337,6 @@
         "daily_partition_string_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespacePercentCheckSpec"
-        },
-        "daily_partition_string_null_placeholder_count" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderCountCheckSpec"
-        },
-        "daily_partition_string_null_placeholder_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderPercentCheckSpec"
         },
         "daily_partition_string_boolean_placeholder_percent" : {
           "description" : "Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.",
@@ -27277,25 +27483,9 @@
           "description" : "The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnStringLengthInRangePercentCheckSpec"
         },
-        "monthly_string_empty_count" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringEmptyCountCheckSpec"
-        },
-        "monthly_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringEmptyPercentCheckSpec"
-        },
         "monthly_string_valid_dates_percent" : {
           "description" : "Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnStringValidDatesPercentCheckSpec"
-        },
-        "monthly_string_whitespace_count" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringWhitespaceCountCheckSpec"
-        },
-        "monthly_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringWhitespacePercentCheckSpec"
         },
         "monthly_string_surrounded_by_whitespace_count" : {
           "description" : "Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
@@ -27304,14 +27494,6 @@
         "monthly_string_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespacePercentCheckSpec"
-        },
-        "monthly_string_null_placeholder_count" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderCountCheckSpec"
-        },
-        "monthly_string_null_placeholder_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderPercentCheckSpec"
         },
         "monthly_string_boolean_placeholder_percent" : {
           "description" : "Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.",
@@ -27417,22 +27599,6 @@
           "description" : "The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnStringLengthInRangePercentCheckSpec"
         },
-        "monthly_partition_string_empty_count" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnStringEmptyCountCheckSpec"
-        },
-        "monthly_partition_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnStringEmptyPercentCheckSpec"
-        },
-        "monthly_partition_string_whitespace_count" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnStringWhitespaceCountCheckSpec"
-        },
-        "monthly_partition_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnStringWhitespacePercentCheckSpec"
-        },
         "monthly_partition_string_surrounded_by_whitespace_count" : {
           "description" : "Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespaceCountCheckSpec"
@@ -27440,14 +27606,6 @@
         "monthly_partition_string_surrounded_by_whitespace_percent" : {
           "description" : "Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
           "$ref" : "#/definitions/ColumnStringSurroundedByWhitespacePercentCheckSpec"
-        },
-        "monthly_partition_string_null_placeholder_count" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderCountCheckSpec"
-        },
-        "monthly_partition_string_null_placeholder_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderPercentCheckSpec"
         },
         "monthly_partition_string_boolean_placeholder_percent" : {
           "description" : "Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.",
@@ -27557,38 +27715,6 @@
           "description" : "The check counts the percentage of those strings with length in the range provided by the user in the column. ",
           "$ref" : "#/definitions/ColumnStringLengthInRangePercentCheckSpec"
         },
-        "profile_string_empty_count" : {
-          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnStringEmptyCountCheckSpec"
-        },
-        "profile_string_empty_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnStringEmptyPercentCheckSpec"
-        },
-        "profile_string_whitespace_count" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnStringWhitespaceCountCheckSpec"
-        },
-        "profile_string_whitespace_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
-          "$ref" : "#/definitions/ColumnStringWhitespacePercentCheckSpec"
-        },
-        "profile_string_surrounded_by_whitespace_count" : {
-          "description" : "Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnStringSurroundedByWhitespaceCountCheckSpec"
-        },
-        "profile_string_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnStringSurroundedByWhitespacePercentCheckSpec"
-        },
-        "profile_string_null_placeholder_count" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderCountCheckSpec"
-        },
-        "profile_string_null_placeholder_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnStringNullPlaceholderPercentCheckSpec"
-        },
         "profile_string_boolean_placeholder_percent" : {
           "description" : "Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage.",
           "$ref" : "#/definitions/ColumnStringBooleanPlaceholderPercentCheckSpec"
@@ -27600,6 +27726,14 @@
         "profile_string_parsable_to_float_percent" : {
           "description" : "Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage.",
           "$ref" : "#/definitions/ColumnStringParsableToFloatPercentCheckSpec"
+        },
+        "profile_string_surrounded_by_whitespace_count" : {
+          "description" : "Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnStringSurroundedByWhitespaceCountCheckSpec"
+        },
+        "profile_string_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnStringSurroundedByWhitespacePercentCheckSpec"
         },
         "profile_string_valid_dates_percent" : {
           "description" : "Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage.",
@@ -27695,24 +27829,6 @@
         "parameters" : {
           "description" : "Profiler parameters",
           "$ref" : "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
-        }
-      }
-    },
-    "ColumnStringsStringEmptyCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnStringsStringEmptyPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },
@@ -27956,24 +28072,6 @@
         }
       }
     },
-    "ColumnStringsStringNullPlaceholderCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnStringsStringNullPlaceholderPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
     "ColumnStringsStringParsableToFloatPercentSensorParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -28059,24 +28157,6 @@
           "items" : {
             "type" : "string"
           }
-        }
-      }
-    },
-    "ColumnStringsStringWhitespaceCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnStringsStringWhitespacePercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },

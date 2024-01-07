@@ -19,9 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedStringsInTopValuesCountCheckSpec;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnExpectedStringsInUseCountCheckSpec;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnStringValueInSetPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.*;
 import com.dqops.checks.column.checkspecs.strings.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -52,15 +50,8 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_length_above_max_length_percent", o -> o.monthlyPartitionStringLengthAboveMaxLengthPercent);
             put("monthly_partition_string_length_in_range_percent", o -> o.monthlyPartitionStringLengthInRangePercent);
 
-            put("monthly_partition_string_empty_count", o -> o.monthlyPartitionStringEmptyCount);
-            put("monthly_partition_string_empty_percent", o -> o.monthlyPartitionStringEmptyPercent);
-            put("monthly_partition_string_whitespace_count", o -> o.monthlyPartitionStringWhitespaceCount);
-            put("monthly_partition_string_whitespace_percent", o -> o.monthlyPartitionStringWhitespacePercent);
             put("monthly_partition_string_surrounded_by_whitespace_count", o -> o.monthlyPartitionStringSurroundedByWhitespaceCount);
             put("monthly_partition_string_surrounded_by_whitespace_percent", o -> o.monthlyPartitionStringSurroundedByWhitespacePercent);
-
-            put("monthly_partition_string_null_placeholder_count", o -> o.monthlyPartitionStringNullPlaceholderCount);
-            put("monthly_partition_string_null_placeholder_percent", o -> o.monthlyPartitionStringNullPlaceholderPercent);
             put("monthly_partition_string_boolean_placeholder_percent", o -> o.monthlyPartitionStringBooleanPlaceholderPercent);
             put("monthly_partition_string_parsable_to_integer_percent", o -> o.monthlyPartitionStringParsableToIntegerPercent);
             put("monthly_partition_string_parsable_to_float_percent", o -> o.monthlyPartitionStringParsableToFloatPercent);
@@ -106,29 +97,11 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringLengthInRangePercentCheckSpec monthlyPartitionStringLengthInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringEmptyPercentCheckSpec monthlyPartitionStringEmptyPercent;
-
-    @JsonPropertyDescription("Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringWhitespaceCountCheckSpec monthlyPartitionStringWhitespaceCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringWhitespacePercentCheckSpec monthlyPartitionStringWhitespacePercent;
-
     @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringSurroundedByWhitespaceCountCheckSpec monthlyPartitionStringSurroundedByWhitespaceCount;
 
     @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringSurroundedByWhitespacePercentCheckSpec monthlyPartitionStringSurroundedByWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringNullPlaceholderCountCheckSpec monthlyPartitionStringNullPlaceholderCount;
-
-    @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringNullPlaceholderPercentCheckSpec monthlyPartitionStringNullPlaceholderPercent;
 
     @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnStringBooleanPlaceholderPercentCheckSpec monthlyPartitionStringBooleanPlaceholderPercent;
@@ -323,79 +296,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         propagateHierarchyIdToField(monthlyPartitionStringLengthInRangePercent, "monthly_partition_string_length_in_range_percent");
     }
 
-
-    /**
-     * Returns a max string empty count check.
-     * @return Max string empty count check.
-     */
-    public ColumnStringEmptyCountCheckSpec getMonthlyPartitionStringEmptyCount() {
-        return monthlyPartitionStringEmptyCount;
-    }
-
-    /**
-     * Sets a new definition of a max string empty count check.
-     * @param monthlyPartitionStringEmptyCount Max string empty count check.
-     */
-    public void setMonthlyPartitionStringEmptyCount(ColumnStringEmptyCountCheckSpec monthlyPartitionStringEmptyCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringEmptyCount, monthlyPartitionStringEmptyCount));
-        this.monthlyPartitionStringEmptyCount = monthlyPartitionStringEmptyCount;
-        propagateHierarchyIdToField(monthlyPartitionStringEmptyCount, "monthly_partition_string_empty_count");
-    }
-
-    /**
-     * Returns a maximum empty string percentage check.
-     * @return Maximum empty string percentage check.
-     */
-    public ColumnStringEmptyPercentCheckSpec getMonthlyPartitionStringEmptyPercent() {
-        return monthlyPartitionStringEmptyPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum empty string percentage check.
-     * @param monthlyPartitionStringEmptyPercent Maximum empty string percentage check.
-     */
-    public void setMonthlyPartitionStringEmptyPercent(ColumnStringEmptyPercentCheckSpec monthlyPartitionStringEmptyPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringEmptyPercent, monthlyPartitionStringEmptyPercent));
-        this.monthlyPartitionStringEmptyPercent = monthlyPartitionStringEmptyPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringEmptyPercent, "monthly_partition_string_empty_percent");
-    }
-
-    /**
-     * Returns a maximum string whitespace count check.
-     * @return Maximum string whitespace count check.
-     */
-    public ColumnStringWhitespaceCountCheckSpec getMonthlyPartitionStringWhitespaceCount() {
-        return monthlyPartitionStringWhitespaceCount;
-    }
-
-    /**
-     * Sets a new definition of a maximum string whitespace count check.
-     * @param monthlyPartitionStringWhitespaceCount Maximum string whitespace count check.
-     */
-    public void setMonthlyPartitionStringWhitespaceCount(ColumnStringWhitespaceCountCheckSpec monthlyPartitionStringWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringWhitespaceCount, monthlyPartitionStringWhitespaceCount));
-        this.monthlyPartitionStringWhitespaceCount = monthlyPartitionStringWhitespaceCount;
-        propagateHierarchyIdToField(monthlyPartitionStringWhitespaceCount, "monthly_partition_string_whitespace_count");
-    }
-
-    /**
-     * Returns a maximum string whitespace percent check.
-     * @return Maximum string whitespace percent check.
-     */
-    public ColumnStringWhitespacePercentCheckSpec getMonthlyPartitionStringWhitespacePercent() {
-        return monthlyPartitionStringWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string whitespace percent check.
-     * @param monthlyPartitionStringWhitespacePercent Maximum string whitespace percent check.
-     */
-    public void setMonthlyPartitionStringWhitespacePercent(ColumnStringWhitespacePercentCheckSpec monthlyPartitionStringWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringWhitespacePercent, monthlyPartitionStringWhitespacePercent));
-        this.monthlyPartitionStringWhitespacePercent = monthlyPartitionStringWhitespacePercent;
-        propagateHierarchyIdToField(monthlyPartitionStringWhitespacePercent, "monthly_partition_string_whitespace_percent");
-    }
-
     /**
      * Returns a maximum string surrounded by whitespace count check.
      *
@@ -434,42 +334,6 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringSurroundedByWhitespacePercent, monthlyPartitionStringSurroundedByWhitespacePercent));
         this.monthlyPartitionStringSurroundedByWhitespacePercent = monthlyPartitionStringSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(monthlyPartitionStringSurroundedByWhitespacePercent, "monthly_partition_string_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnStringNullPlaceholderCountCheckSpec getMonthlyPartitionStringNullPlaceholderCount() {
-        return monthlyPartitionStringNullPlaceholderCount;
-    }
-
-    /**
-     * Sets a new definition of a maximum string null placeholder count check.
-     * @param monthlyPartitionStringNullPlaceholderCount Maximum string null placeholder count check.
-     */
-    public void setMonthlyPartitionStringNullPlaceholderCount(ColumnStringNullPlaceholderCountCheckSpec monthlyPartitionStringNullPlaceholderCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringNullPlaceholderCount, monthlyPartitionStringNullPlaceholderCount));
-        this.monthlyPartitionStringNullPlaceholderCount = monthlyPartitionStringNullPlaceholderCount;
-        propagateHierarchyIdToField(monthlyPartitionStringNullPlaceholderCount, "monthly_partition_string_null_placeholder_count");
-    }
-
-    /**
-     * Returns a maximum string null placeholder percent check.
-     * @return Maximum string null placeholder percent check.
-     */
-    public ColumnStringNullPlaceholderPercentCheckSpec getMonthlyPartitionStringNullPlaceholderPercent() {
-        return monthlyPartitionStringNullPlaceholderPercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string null placeholder percent check.
-     * @param monthlyPartitionStringNullPlaceholderPercent Maximum string null placeholder percent check.
-     */
-    public void setMonthlyPartitionStringNullPlaceholderPercent(ColumnStringNullPlaceholderPercentCheckSpec monthlyPartitionStringNullPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringNullPlaceholderPercent, monthlyPartitionStringNullPlaceholderPercent));
-        this.monthlyPartitionStringNullPlaceholderPercent = monthlyPartitionStringNullPlaceholderPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringNullPlaceholderPercent, "monthly_partition_string_null_placeholder_percent");
     }
 
     /**

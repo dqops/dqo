@@ -22,6 +22,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.acceptedvalues.ColumnAcceptedValuesDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.accuracy.ColumnAccuracyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.blanks.ColumnBlanksDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.bool.ColumnBoolDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.comparison.ColumnComparisonDailyMonitoringChecksSpecMap;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
@@ -34,6 +35,7 @@ import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChec
 import com.dqops.checks.column.monitoring.sql.ColumnSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.strings.ColumnStringsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.uniqueness.ColumnUniquenessDailyMonitoringChecksSpec;
+import com.dqops.checks.column.profiling.ColumnBlanksProfilingChecksSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
@@ -63,6 +65,7 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDailyMonitoringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
@@ -85,7 +88,12 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyMonitoringChecksSpec nulls;
 
-    @JsonPropertyDescription("Daily monitoring checks of numeric in the column")
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksDailyMonitoringChecksSpec blanks;
+
+    @JsonPropertyDescription("Daily monitoring checks of numeric values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericDailyMonitoringChecksSpec numeric;
@@ -171,6 +179,24 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
 		this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksDailyMonitoringChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksDailyMonitoringChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
     }
 
     /**

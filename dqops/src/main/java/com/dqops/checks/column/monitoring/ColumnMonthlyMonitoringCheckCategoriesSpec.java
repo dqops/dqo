@@ -22,6 +22,8 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.acceptedvalues.ColumnAcceptedValuesMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.accuracy.ColumnAccuracyMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.blanks.ColumnBlanksDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.blanks.ColumnBlanksMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.bool.ColumnBoolMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.comparison.ColumnComparisonMonthlyMonitoringChecksSpecMap;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeMonthlyMonitoringChecksSpec;
@@ -63,6 +65,7 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnMonthlyMonitoringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
+            put("blanks", o -> o.blanks);
             put("numeric", o -> o.numeric);
             put("strings", o -> o.strings);
             put("uniqueness", o -> o.uniqueness);
@@ -85,7 +88,12 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyMonitoringChecksSpec nulls;
 
-    @JsonPropertyDescription("Monthly monitoring checks of numeric in the column")
+    @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnBlanksMonthlyMonitoringChecksSpec blanks;
+
+    @JsonPropertyDescription("Monthly monitoring checks of numeric values in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyMonitoringChecksSpec numeric;
@@ -172,6 +180,24 @@ public class ColumnMonthlyMonitoringCheckCategoriesSpec extends AbstractRootChec
 		this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
 		this.propagateHierarchyIdToField(nulls, "nulls");
+    }
+
+    /**
+     * Returns the blanks check configuration on a column level.
+     * @return Blanks check configuration.
+     */
+    public ColumnBlanksMonthlyMonitoringChecksSpec getBlanks() {
+        return blanks;
+    }
+
+    /**
+     * Sets the blanks check configuration on a column level.
+     * @param blanks New blanks checks configuration.
+     */
+    public void setBlanks(ColumnBlanksMonthlyMonitoringChecksSpec blanks) {
+        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
+        this.blanks = blanks;
+        this.propagateHierarchyIdToField(blanks, "blanks");
     }
 
     /**
