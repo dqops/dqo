@@ -154,7 +154,7 @@ public class CheckCliServiceImplTests extends BaseTest {
         TableVolumeProfilingChecksSpec t1volumeChecksSpec = new TableVolumeProfilingChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule1ParametersSpec t1rowCountErrorSpec = new MinCountRule1ParametersSpec();
-        MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
+        MinCountRule100FatalParametersSpec t1rowCountFatalSpec = new MinCountRule100FatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);

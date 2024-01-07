@@ -20,8 +20,8 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule100ParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
 import com.dqops.sensors.column.strings.ColumnStringsStringParsableToFloatPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringParsableToFloatPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSpec<ColumnStringsStringParsableToFloatPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringParsableToFloatPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,12 +53,12 @@ public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSp
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private MinPercentRule100WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to float strings in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
+    private MinPercentRule100ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -90,7 +90,7 @@ public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSp
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public MinPercentRule100WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +98,7 @@ public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSp
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(MinPercentRule100WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -110,7 +110,7 @@ public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSp
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule99ParametersSpec getError() {
+    public MinPercentRule100ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +118,7 @@ public class ColumnStringParsableToFloatPercentCheckSpec extends AbstractCheckSp
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule99ParametersSpec error) {
+    public void setError(MinPercentRule100ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

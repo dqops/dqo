@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnExpectedNumbersInUseCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericExpectedNumbersInUseCountSensorParametersSpec, MaxMissingRule0ParametersSpec, MaxMissingRule1ParametersSpec, MaxMissingRule2ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericExpectedNumbersInUseCountSensorParametersSpec, MaxMissingRule0WarningParametersSpec, MaxMissingRule0ErrorParametersSpec, MaxMissingRule2ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnExpectedNumbersInUseCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +54,12 @@ public class ColumnExpectedNumbersInUseCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxMissingRule0ParametersSpec warning;
+    private MaxMissingRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality error when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxMissingRule1ParametersSpec error;
+    private MaxMissingRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality fatal issue when too many expected values were not found in the column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class ColumnExpectedNumbersInUseCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxMissingRule0ParametersSpec getWarning() {
+    public MaxMissingRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnExpectedNumbersInUseCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxMissingRule0ParametersSpec warning) {
+    public void setWarning(MaxMissingRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnExpectedNumbersInUseCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxMissingRule1ParametersSpec getError() {
+    public MaxMissingRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnExpectedNumbersInUseCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxMissingRule1ParametersSpec error) {
+    public void setError(MaxMissingRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

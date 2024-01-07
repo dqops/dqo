@@ -20,7 +20,6 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.acceptedvalues.*;
-import com.dqops.checks.column.checkspecs.strings.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,25 +40,25 @@ import java.util.Objects;
 public class ColumnAcceptedValuesDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAcceptedValuesDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_string_value_in_set_percent", o -> o.dailyPartitionStringValueInSetPercent);
+            put("daily_partition_text_found_in_set_percent", o -> o.dailyPartitionTextFoundInSetPercent);
             put("daily_partition_expected_numbers_in_use_count", o -> o.dailyPartitionExpectedNumbersInUseCount);
-            put("daily_partition_expected_strings_in_use_count", o -> o.dailyPartitionExpectedStringsInUseCount);
-            put("daily_partition_expected_strings_in_top_values_count", o -> o.dailyPartitionExpectedStringsInTopValuesCount);
-            put("daily_partition_number_value_in_set_percent", o -> o.dailyPartitionNumberValueInSetPercent);
+            put("daily_partition_expected_text_values_in_use_count", o -> o.dailyPartitionExpectedTextValuesInUseCount);
+            put("daily_partition_expected_texts_in_top_values_count", o -> o.dailyPartitionExpectedTextsInTopValuesCount);
+            put("daily_partition_number_found_in_set_percent", o -> o.dailyPartitionNumberFoundInSetPercent);
         }
     };
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnStringValueInSetPercentCheckSpec dailyPartitionStringValueInSetPercent;
+    private ColumnTextFoundInSetPercentCheckSpec dailyPartitionTextFoundInSetPercent;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent;
+    private ColumnNumberFoundInSetPercentCheckSpec dailyPartitionNumberFoundInSetPercent;
 
     @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnExpectedStringsInUseCountCheckSpec dailyPartitionExpectedStringsInUseCount;
+    private ColumnExpectedTextValuesInUseCountCheckSpec dailyPartitionExpectedTextValuesInUseCount;
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnExpectedStringsInTopValuesCountCheckSpec dailyPartitionExpectedStringsInTopValuesCount;
+    private ColumnExpectedTextsInTopValuesCountCheckSpec dailyPartitionExpectedTextsInTopValuesCount;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount;
@@ -69,72 +68,72 @@ public class ColumnAcceptedValuesDailyPartitionedChecksSpec extends AbstractChec
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringValueInSetPercentCheckSpec getDailyPartitionStringValueInSetPercent() {
-        return dailyPartitionStringValueInSetPercent;
+    public ColumnTextFoundInSetPercentCheckSpec getDailyPartitionTextFoundInSetPercent() {
+        return dailyPartitionTextFoundInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param dailyPartitionStringValueInSetPercent Minimum strings in set percent check.
+     * @param dailyPartitionTextFoundInSetPercent Minimum strings in set percent check.
      */
-    public void setDailyPartitionStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec dailyPartitionStringValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionStringValueInSetPercent, dailyPartitionStringValueInSetPercent));
-        this.dailyPartitionStringValueInSetPercent = dailyPartitionStringValueInSetPercent;
-        propagateHierarchyIdToField(dailyPartitionStringValueInSetPercent, "daily_partition_string_value_in_set_percent");
+    public void setDailyPartitionTextFoundInSetPercent(ColumnTextFoundInSetPercentCheckSpec dailyPartitionTextFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextFoundInSetPercent, dailyPartitionTextFoundInSetPercent));
+        this.dailyPartitionTextFoundInSetPercent = dailyPartitionTextFoundInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionTextFoundInSetPercent, "daily_partition_text_found_in_set_percent");
     }
 
     /**
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getDailyPartitionNumberValueInSetPercent() {
-        return dailyPartitionNumberValueInSetPercent;
+    public ColumnNumberFoundInSetPercentCheckSpec getDailyPartitionNumberFoundInSetPercent() {
+        return dailyPartitionNumberFoundInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers found percent check.
-     * @param dailyPartitionNumberValueInSetPercent Numbers found percent check specification.
+     * @param dailyPartitionNumberFoundInSetPercent Numbers found percent check specification.
      */
-    public void setDailyPartitionNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyPartitionNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumberValueInSetPercent, dailyPartitionNumberValueInSetPercent));
-        this.dailyPartitionNumberValueInSetPercent = dailyPartitionNumberValueInSetPercent;
-        propagateHierarchyIdToField(dailyPartitionNumberValueInSetPercent, "daily_partition_number_value_in_set_percent");
+    public void setDailyPartitionNumberFoundInSetPercent(ColumnNumberFoundInSetPercentCheckSpec dailyPartitionNumberFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNumberFoundInSetPercent, dailyPartitionNumberFoundInSetPercent));
+        this.dailyPartitionNumberFoundInSetPercent = dailyPartitionNumberFoundInSetPercent;
+        propagateHierarchyIdToField(dailyPartitionNumberFoundInSetPercent, "daily_partition_number_found_in_set_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getDailyPartitionExpectedStringsInUseCount() {
-        return dailyPartitionExpectedStringsInUseCount;
+    public ColumnExpectedTextValuesInUseCountCheckSpec getDailyPartitionExpectedTextValuesInUseCount() {
+        return dailyPartitionExpectedTextValuesInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param dailyPartitionExpectedStringsInUseCount Minimum strings in set count check.
+     * @param dailyPartitionExpectedTextValuesInUseCount Minimum strings in set count check.
      */
-    public void setDailyPartitionExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyPartitionExpectedStringsInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedStringsInUseCount, dailyPartitionExpectedStringsInUseCount));
-        this.dailyPartitionExpectedStringsInUseCount = dailyPartitionExpectedStringsInUseCount;
-        propagateHierarchyIdToField(dailyPartitionExpectedStringsInUseCount, "daily_partition_expected_strings_in_use_count");
+    public void setDailyPartitionExpectedTextValuesInUseCount(ColumnExpectedTextValuesInUseCountCheckSpec dailyPartitionExpectedTextValuesInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedTextValuesInUseCount, dailyPartitionExpectedTextValuesInUseCount));
+        this.dailyPartitionExpectedTextValuesInUseCount = dailyPartitionExpectedTextValuesInUseCount;
+        propagateHierarchyIdToField(dailyPartitionExpectedTextValuesInUseCount, "daily_partition_expected_text_values_in_use_count");
     }
 
     /**
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getDailyPartitionExpectedStringsInTopValuesCount() {
-        return dailyPartitionExpectedStringsInTopValuesCount;
+    public ColumnExpectedTextsInTopValuesCountCheckSpec getDailyPartitionExpectedTextsInTopValuesCount() {
+        return dailyPartitionExpectedTextsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param dailyPartitionExpectedStringsInTopValuesCount Most popular values count check.
+     * @param dailyPartitionExpectedTextsInTopValuesCount Most popular values count check.
      */
-    public void setDailyPartitionExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec dailyPartitionExpectedStringsInTopValuesCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedStringsInTopValuesCount, dailyPartitionExpectedStringsInTopValuesCount));
-        this.dailyPartitionExpectedStringsInTopValuesCount = dailyPartitionExpectedStringsInTopValuesCount;
-        propagateHierarchyIdToField(dailyPartitionExpectedStringsInTopValuesCount, "daily_partition_expected_strings_in_top_values_count");
+    public void setDailyPartitionExpectedTextsInTopValuesCount(ColumnExpectedTextsInTopValuesCountCheckSpec dailyPartitionExpectedTextsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedTextsInTopValuesCount, dailyPartitionExpectedTextsInTopValuesCount));
+        this.dailyPartitionExpectedTextsInTopValuesCount = dailyPartitionExpectedTextsInTopValuesCount;
+        propagateHierarchyIdToField(dailyPartitionExpectedTextsInTopValuesCount, "daily_partition_expected_texts_in_top_values_count");
     }
 
     /**

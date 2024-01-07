@@ -1,9 +1,0 @@
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
-apiVersion: dqo/v1
-kind: check
-spec:
-  sensor_name: column/accepted_values/expected_strings_in_top_values_count
-  rule_name: comparison/max_missing
-  help_text: Verifies that the top X most popular column values contain all values
-    from a list of expected values. Creates a separate data quality check (and an
-    alert) for each daily partition.

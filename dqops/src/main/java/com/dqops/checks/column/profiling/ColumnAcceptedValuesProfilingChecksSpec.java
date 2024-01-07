@@ -20,7 +20,6 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.acceptedvalues.*;
-import com.dqops.checks.column.checkspecs.strings.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,25 +40,25 @@ import java.util.Objects;
 public class ColumnAcceptedValuesProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAcceptedValuesProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_string_value_in_set_percent", o -> o.profileStringValueInSetPercent);
-            put("profile_number_value_in_set_percent", o -> o.profileNumberValueInSetPercent);
-            put("profile_expected_strings_in_use_count", o -> o.profileExpectedStringsInUseCount);
-            put("profile_expected_strings_in_top_values_count", o -> o.profileExpectedStringsInTopValuesCount);
+            put("profile_text_found_in_set_percent", o -> o.profileTextFoundInSetPercent);
+            put("profile_number_found_in_set_percent", o -> o.profileNumberFoundInSetPercent);
+            put("profile_expected_text_values_in_use_count", o -> o.profileExpectedTextValuesInUseCount);
+            put("profile_expected_texts_in_top_values_count", o -> o.profileExpectedTextsInTopValuesCount);
             put("profile_expected_numbers_in_use_count", o -> o.profileExpectedNumbersInUseCount);
         }
     };
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
-    private ColumnStringValueInSetPercentCheckSpec profileStringValueInSetPercent;
+    private ColumnTextFoundInSetPercentCheckSpec profileTextFoundInSetPercent;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.")
-    private ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent;
+    private ColumnNumberFoundInSetPercentCheckSpec profileNumberFoundInSetPercent;
 
     @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
-    private ColumnExpectedStringsInUseCountCheckSpec profileExpectedStringsInUseCount;
+    private ColumnExpectedTextValuesInUseCountCheckSpec profileExpectedTextValuesInUseCount;
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values.")
-    private ColumnExpectedStringsInTopValuesCountCheckSpec profileExpectedStringsInTopValuesCount;
+    private ColumnExpectedTextsInTopValuesCountCheckSpec profileExpectedTextsInTopValuesCount;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).")
     private ColumnExpectedNumbersInUseCountCheckSpec profileExpectedNumbersInUseCount;
@@ -69,72 +68,72 @@ public class ColumnAcceptedValuesProfilingChecksSpec extends AbstractCheckCatego
      * Returns a minimum string valid usa zip code percent check.
      * @return Minimum string valid usa zip code percent check.
      */
-    public ColumnStringValueInSetPercentCheckSpec getProfileStringValueInSetPercent() {
-        return profileStringValueInSetPercent;
+    public ColumnTextFoundInSetPercentCheckSpec getProfileTextFoundInSetPercent() {
+        return profileTextFoundInSetPercent;
     }
 
     /**
      * Sets a new definition of a strings in set percent check.
-     * @param profileStringValueInSetPercent Strings in set percent check.
+     * @param profileTextFoundInSetPercent Strings in set percent check.
      */
-    public void setProfileStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec profileStringValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileStringValueInSetPercent, profileStringValueInSetPercent));
-        this.profileStringValueInSetPercent = profileStringValueInSetPercent;
-        propagateHierarchyIdToField(profileStringValueInSetPercent, "profile_string_value_in_set_percent");
+    public void setProfileTextFoundInSetPercent(ColumnTextFoundInSetPercentCheckSpec profileTextFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextFoundInSetPercent, profileTextFoundInSetPercent));
+        this.profileTextFoundInSetPercent = profileTextFoundInSetPercent;
+        propagateHierarchyIdToField(profileTextFoundInSetPercent, "profile_text_found_in_set_percent");
     }
 
     /**
      * Returns a numbers valid percent check specification.
      * @return Numbers valid percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getProfileNumberValueInSetPercent() {
-        return profileNumberValueInSetPercent;
+    public ColumnNumberFoundInSetPercentCheckSpec getProfileNumberFoundInSetPercent() {
+        return profileNumberFoundInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers valid percent check specification.
-     * @param profileNumberValueInSetPercent Numbers valid percent check specification.
+     * @param profileNumberFoundInSetPercent Numbers valid percent check specification.
      */
-    public void setProfileNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec profileNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileNumberValueInSetPercent, profileNumberValueInSetPercent));
-        this.profileNumberValueInSetPercent = profileNumberValueInSetPercent;
-        propagateHierarchyIdToField(profileNumberValueInSetPercent, "profile_number_value_in_set_percent");
+    public void setProfileNumberFoundInSetPercent(ColumnNumberFoundInSetPercentCheckSpec profileNumberFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileNumberFoundInSetPercent, profileNumberFoundInSetPercent));
+        this.profileNumberFoundInSetPercent = profileNumberFoundInSetPercent;
+        propagateHierarchyIdToField(profileNumberFoundInSetPercent, "profile_number_found_in_set_percent");
     }
 
     /**
      * Returns a minimum string parsable to float percent check.
      * @return Minimum string parsable to float percent check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getProfileExpectedStringsInUseCount() {
-        return profileExpectedStringsInUseCount;
+    public ColumnExpectedTextValuesInUseCountCheckSpec getProfileExpectedTextValuesInUseCount() {
+        return profileExpectedTextValuesInUseCount;
     }
 
     /**
      * Sets a new definition of a string in set count check.
-     * @param profileExpectedStringsInUseCount String in set count check.
+     * @param profileExpectedTextValuesInUseCount String in set count check.
      */
-    public void setProfileExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec profileExpectedStringsInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.profileExpectedStringsInUseCount, profileExpectedStringsInUseCount));
-        this.profileExpectedStringsInUseCount = profileExpectedStringsInUseCount;
-        propagateHierarchyIdToField(profileExpectedStringsInUseCount, "profile_expected_strings_in_use_count");
+    public void setProfileExpectedTextValuesInUseCount(ColumnExpectedTextValuesInUseCountCheckSpec profileExpectedTextValuesInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.profileExpectedTextValuesInUseCount, profileExpectedTextValuesInUseCount));
+        this.profileExpectedTextValuesInUseCount = profileExpectedTextValuesInUseCount;
+        propagateHierarchyIdToField(profileExpectedTextValuesInUseCount, "profile_expected_text_values_in_use_count");
     }
 
     /**
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getProfileExpectedStringsInTopValuesCount() {
-        return profileExpectedStringsInTopValuesCount;
+    public ColumnExpectedTextsInTopValuesCountCheckSpec getProfileExpectedTextsInTopValuesCount() {
+        return profileExpectedTextsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param profileExpectedStringsInTopValuesCount Most popular values count check.
+     * @param profileExpectedTextsInTopValuesCount Most popular values count check.
      */
-    public void setProfileExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec profileExpectedStringsInTopValuesCount) {
-        this.setDirtyIf(!Objects.equals(this.profileExpectedStringsInTopValuesCount, profileExpectedStringsInTopValuesCount));
-        this.profileExpectedStringsInTopValuesCount = profileExpectedStringsInTopValuesCount;
-        propagateHierarchyIdToField(profileExpectedStringsInTopValuesCount, "profile_expected_strings_in_top_values_count");
+    public void setProfileExpectedTextsInTopValuesCount(ColumnExpectedTextsInTopValuesCountCheckSpec profileExpectedTextsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.profileExpectedTextsInTopValuesCount, profileExpectedTextsInTopValuesCount));
+        this.profileExpectedTextsInTopValuesCount = profileExpectedTextsInTopValuesCount;
+        propagateHierarchyIdToField(profileExpectedTextsInTopValuesCount, "profile_expected_texts_in_top_values_count");
     }
 
     /**

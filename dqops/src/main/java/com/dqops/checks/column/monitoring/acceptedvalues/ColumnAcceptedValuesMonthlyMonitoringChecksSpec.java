@@ -40,25 +40,25 @@ import java.util.Objects;
 public class ColumnAcceptedValuesMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAcceptedValuesMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_string_value_in_set_percent", o -> o.monthlyStringValueInSetPercent);
-            put("monthly_number_value_in_set_percent", o -> o.monthlyNumberValueInSetPercent);
-            put("monthly_expected_strings_in_use_count", o -> o.monthlyExpectedStringsInUseCount);
-            put("monthly_expected_strings_in_top_values_count", o -> o.monthlyExpectedStringsInTopValuesCount);
+            put("monthly_text_found_in_set_percent", o -> o.monthlyTextFoundInSetPercent);
+            put("monthly_number_found_in_set_percent", o -> o.monthlyNumberFoundInSetPercent);
+            put("monthly_expected_text_values_in_use_count", o -> o.monthlyExpectedTextValuesInUseCount);
+            put("monthly_expected_texts_in_top_values_count", o -> o.monthlyExpectedTextsInTopValuesCount);
             put("monthly_expected_numbers_in_use_count", o -> o.monthlyExpectedNumbersInUseCount);
         }
     };
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnStringValueInSetPercentCheckSpec monthlyStringValueInSetPercent;
+    private ColumnTextFoundInSetPercentCheckSpec monthlyTextFoundInSetPercent;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent;
+    private ColumnNumberFoundInSetPercentCheckSpec monthlyNumberFoundInSetPercent;
 
     @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnExpectedStringsInUseCountCheckSpec monthlyExpectedStringsInUseCount;
+    private ColumnExpectedTextValuesInUseCountCheckSpec monthlyExpectedTextValuesInUseCount;
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount;
+    private ColumnExpectedTextsInTopValuesCountCheckSpec monthlyExpectedTextsInTopValuesCount;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount;
@@ -68,72 +68,72 @@ public class ColumnAcceptedValuesMonthlyMonitoringChecksSpec extends AbstractChe
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringValueInSetPercentCheckSpec getMonthlyStringValueInSetPercent() {
-        return monthlyStringValueInSetPercent;
+    public ColumnTextFoundInSetPercentCheckSpec getMonthlyTextFoundInSetPercent() {
+        return monthlyTextFoundInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param monthlyStringValueInSetPercent Minimum strings in set percent check.
+     * @param monthlyTextFoundInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyStringValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringValueInSetPercent, monthlyStringValueInSetPercent));
-        this.monthlyStringValueInSetPercent = monthlyStringValueInSetPercent;
-        propagateHierarchyIdToField(monthlyStringValueInSetPercent, "monthly_string_value_in_set_percent");
+    public void setMonthlyTextFoundInSetPercent(ColumnTextFoundInSetPercentCheckSpec monthlyTextFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextFoundInSetPercent, monthlyTextFoundInSetPercent));
+        this.monthlyTextFoundInSetPercent = monthlyTextFoundInSetPercent;
+        propagateHierarchyIdToField(monthlyTextFoundInSetPercent, "monthly_text_found_in_set_percent");
     }
 
     /**
      * Returns a numbers valid percent check specification.
      * @return Numbers valid percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getMonthlyNumberValueInSetPercent() {
-        return monthlyNumberValueInSetPercent;
+    public ColumnNumberFoundInSetPercentCheckSpec getMonthlyNumberFoundInSetPercent() {
+        return monthlyNumberFoundInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers valid percent check.
-     * @param monthlyNumberValueInSetPercent Number valid percent check specification.
+     * @param monthlyNumberFoundInSetPercent Number valid percent check specification.
      */
-    public void setMonthlyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec monthlyNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyNumberValueInSetPercent, monthlyNumberValueInSetPercent));
-        this.monthlyNumberValueInSetPercent = monthlyNumberValueInSetPercent;
-        propagateHierarchyIdToField(monthlyNumberValueInSetPercent, "monthly_number_value_in_set_percent");
+    public void setMonthlyNumberFoundInSetPercent(ColumnNumberFoundInSetPercentCheckSpec monthlyNumberFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyNumberFoundInSetPercent, monthlyNumberFoundInSetPercent));
+        this.monthlyNumberFoundInSetPercent = monthlyNumberFoundInSetPercent;
+        propagateHierarchyIdToField(monthlyNumberFoundInSetPercent, "monthly_number_found_in_set_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyExpectedStringsInUseCount() {
-        return monthlyExpectedStringsInUseCount;
+    public ColumnExpectedTextValuesInUseCountCheckSpec getMonthlyExpectedTextValuesInUseCount() {
+        return monthlyExpectedTextValuesInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyExpectedStringsInUseCount Minimum strings in set count check.
+     * @param monthlyExpectedTextValuesInUseCount Minimum strings in set count check.
      */
-    public void setMonthlyExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec monthlyExpectedStringsInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInUseCount, monthlyExpectedStringsInUseCount));
-        this.monthlyExpectedStringsInUseCount = monthlyExpectedStringsInUseCount;
-        propagateHierarchyIdToField(monthlyExpectedStringsInUseCount, "monthly_expected_strings_in_use_count");
+    public void setMonthlyExpectedTextValuesInUseCount(ColumnExpectedTextValuesInUseCountCheckSpec monthlyExpectedTextValuesInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedTextValuesInUseCount, monthlyExpectedTextValuesInUseCount));
+        this.monthlyExpectedTextValuesInUseCount = monthlyExpectedTextValuesInUseCount;
+        propagateHierarchyIdToField(monthlyExpectedTextValuesInUseCount, "monthly_expected_text_values_in_use_count");
     }
 
     /**
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getMonthlyExpectedStringsInTopValuesCount() {
-        return monthlyExpectedStringsInTopValuesCount;
+    public ColumnExpectedTextsInTopValuesCountCheckSpec getMonthlyExpectedTextsInTopValuesCount() {
+        return monthlyExpectedTextsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param monthlyExpectedStringsInTopValuesCount Most popular values count check.
+     * @param monthlyExpectedTextsInTopValuesCount Most popular values count check.
      */
-    public void setMonthlyExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec monthlyExpectedStringsInTopValuesCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyExpectedStringsInTopValuesCount, monthlyExpectedStringsInTopValuesCount));
-        this.monthlyExpectedStringsInTopValuesCount = monthlyExpectedStringsInTopValuesCount;
-        propagateHierarchyIdToField(monthlyExpectedStringsInTopValuesCount, "monthly_expected_strings_in_top_values_count");
+    public void setMonthlyExpectedTextsInTopValuesCount(ColumnExpectedTextsInTopValuesCountCheckSpec monthlyExpectedTextsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyExpectedTextsInTopValuesCount, monthlyExpectedTextsInTopValuesCount));
+        this.monthlyExpectedTextsInTopValuesCount = monthlyExpectedTextsInTopValuesCount;
+        propagateHierarchyIdToField(monthlyExpectedTextsInTopValuesCount, "monthly_expected_texts_in_top_values_count");
     }
 
     /**

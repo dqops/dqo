@@ -44,7 +44,6 @@ public class MaxMissingRule2ParametersSpec extends AbstractRuleParametersSpec {
     };
 
     @JsonPropertyDescription("The maximum number of values from the expected_values list that were not found in the column (inclusive).")
-    @SampleValues(values = "2")
     private Long maxMissing = 2L;
 
     /**

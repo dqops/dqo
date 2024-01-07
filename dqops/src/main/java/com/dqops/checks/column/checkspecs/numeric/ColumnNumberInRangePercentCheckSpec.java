@@ -19,8 +19,8 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinPercentRule0ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule2ParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule0WarningParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule5ParametersSpec;
 import com.dqops.sensors.column.numeric.ColumnNumericNumberInRangePercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnNumberInRangePercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericNumberInRangePercentSensorParametersSpec, MinPercentRule0ParametersSpec, MinPercentRule2ParametersSpec, MinPercentRule5ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericNumberInRangePercentSensorParametersSpec, MinPercentRule0WarningParametersSpec, MinPercentRule0ErrorParametersSpec, MinPercentRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnNumberInRangePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +54,12 @@ public class ColumnNumberInRangePercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule0ParametersSpec warning;
+    private MinPercentRule0WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule2ParametersSpec error;
+    private MinPercentRule0ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class ColumnNumberInRangePercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule0ParametersSpec getWarning() {
+    public MinPercentRule0WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class ColumnNumberInRangePercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule0ParametersSpec warning) {
+    public void setWarning(MinPercentRule0WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class ColumnNumberInRangePercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule2ParametersSpec getError() {
+    public MinPercentRule0ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class ColumnNumberInRangePercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule2ParametersSpec error) {
+    public void setError(MinPercentRule0ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

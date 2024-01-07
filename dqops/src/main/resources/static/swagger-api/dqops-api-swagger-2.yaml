@@ -13678,31 +13678,31 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_string_value_in_set_percent:
+      daily_text_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
-      daily_number_value_in_set_percent:
+        $ref: "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
+      daily_number_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      daily_expected_strings_in_use_count:
+        $ref: "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
+      daily_expected_text_values_in_use_count:
         description: "Verifies that the expected string values were found in the column.\
           \ Raises a data quality issue when too many expected values were not found\
           \ (were missing). Stores the most recent captured value for each day when\
           \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      daily_expected_strings_in_top_values_count:
+        $ref: "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
+      daily_expected_texts_in_top_values_count:
         description: "Verifies that the top X most popular column values contain all\
           \ values from a list of expected values. Stores the most recent captured\
           \ value for each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+        $ref: "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
       daily_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -13720,31 +13720,31 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_string_value_in_set_percent:
+      daily_partition_text_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
-      daily_partition_number_value_in_set_percent:
+        $ref: "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
+      daily_partition_number_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      daily_partition_expected_strings_in_use_count:
+        $ref: "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
+      daily_partition_expected_text_values_in_use_count:
         description: "Verifies that the expected string values were found in the column.\
           \ Raises a data quality issue when too many expected values were not found\
           \ (were missing). Creates a separate data quality check (and an alert) for\
           \ each daily partition."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      daily_partition_expected_strings_in_top_values_count:
+        $ref: "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
+      daily_partition_expected_texts_in_top_values_count:
         description: "Verifies that the top X most popular column values contain all\
           \ values from a list of expected values. Creates a separate data quality\
           \ check (and an alert) for each daily partition."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+        $ref: "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
       daily_partition_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -13762,31 +13762,31 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_string_value_in_set_percent:
+      monthly_text_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ captured value for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
-      monthly_number_value_in_set_percent:
+        $ref: "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
+      monthly_number_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Stores the most recent\
           \ captured value for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      monthly_expected_strings_in_use_count:
+        $ref: "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
+      monthly_expected_text_values_in_use_count:
         description: "Verifies that the expected string values were found in the column.\
           \ Raises a data quality issue when too many expected values were not found\
           \ (were missing). Stores the most recent captured value for each month when\
           \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      monthly_expected_strings_in_top_values_count:
+        $ref: "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
+      monthly_expected_texts_in_top_values_count:
         description: "Verifies that the top X most popular column values contain all\
           \ values from a list of expected values. Stores the most recent captured\
           \ value for each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+        $ref: "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
       monthly_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -13804,31 +13804,31 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_string_value_in_set_percent:
+      monthly_partition_text_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
-      monthly_partition_number_value_in_set_percent:
+        $ref: "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
+      monthly_partition_number_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage. Creates a separate data\
           \ quality check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      monthly_partition_expected_strings_in_use_count:
+        $ref: "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
+      monthly_partition_expected_text_values_in_use_count:
         description: "Verifies that the expected string values were found in the column.\
           \ Raises a data quality issue when too many expected values were not found\
           \ (were missing). Creates a separate data quality check (and an alert) for\
           \ each monthly partition."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      monthly_partition_expected_strings_in_top_values_count:
+        $ref: "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
+      monthly_partition_expected_texts_in_top_values_count:
         description: "Verifies that the top X most popular column values contain all\
           \ values from a list of expected values. Creates a separate data quality\
           \ check (and an alert) for each monthly partition."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+        $ref: "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
       monthly_partition_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
@@ -13846,32 +13846,46 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      profile_string_value_in_set_percent:
+      profile_text_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnStringValueInSetPercentCheckSpec"
-      profile_number_value_in_set_percent:
+        $ref: "#/definitions/ColumnTextFoundInSetPercentCheckSpec"
+      profile_number_found_in_set_percent:
         description: "The check measures the percentage of rows whose value in a tested\
           \ column is one of values from a list of expected values or the column value\
           \ is null. Verifies that the percentage of rows having a valid column value\
           \ does not exceed the minimum accepted percentage."
-        $ref: "#/definitions/ColumnNumberValueInSetPercentCheckSpec"
-      profile_expected_strings_in_use_count:
+        $ref: "#/definitions/ColumnNumberFoundInSetPercentCheckSpec"
+      profile_expected_text_values_in_use_count:
         description: "Verifies that the expected string values were found in the column.\
           \ Raises a data quality issue when too many expected values were not found\
           \ (were missing)."
-        $ref: "#/definitions/ColumnExpectedStringsInUseCountCheckSpec"
-      profile_expected_strings_in_top_values_count:
+        $ref: "#/definitions/ColumnExpectedTextValuesInUseCountCheckSpec"
+      profile_expected_texts_in_top_values_count:
         description: "Verifies that the top X most popular column values contain all\
           \ values from a list of expected values."
-        $ref: "#/definitions/ColumnExpectedStringsInTopValuesCountCheckSpec"
+        $ref: "#/definitions/ColumnExpectedTextsInTopValuesCountCheckSpec"
       profile_expected_numbers_in_use_count:
         description: "Verifies that the expected numeric values were found in the\
           \ column. Raises a data quality issue when too many expected values were\
           \ not found (were missing)."
         $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+  ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      expected_values:
+        type: "array"
+        description: "A list of expected values that must be present in a string column,\
+          \ only values from this list are accepted and rows having these values in\
+          \ the tested column are counted as valid rows."
+        items:
+          type: "string"
   ColumnAccuracyDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -14883,11 +14897,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ empty strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -15095,12 +15109,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with a null placeholder strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -15260,11 +15274,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ whitespace strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -16621,11 +16635,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of date values\
           \ in future in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -16735,12 +16749,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with matching date format in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -16897,12 +16911,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of date values\
           \ in the range defined by the user in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -17772,11 +17786,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with unique value in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -17894,11 +17908,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ nulls in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -17956,16 +17970,16 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning when too\
           \ many expected values were not found in the column."
-        $ref: "#/definitions/MaxMissingRule0ParametersSpec"
+        $ref: "#/definitions/MaxMissingRule0WarningParametersSpec"
       error:
         description: "Alerting threshold that raises a data quality error when too\
           \ many expected values were not found in the column."
-        $ref: "#/definitions/MaxMissingRule1ParametersSpec"
+        $ref: "#/definitions/MaxMissingRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a data quality fatal issue when\
           \ too many expected values were not found in the column."
         $ref: "#/definitions/MaxMissingRule2ParametersSpec"
-  ColumnExpectedStringsInTopValuesCountCheckSpec:
+  ColumnExpectedTextValuesInUseCountCheckSpec:
     type: "object"
     properties:
       schedule_override:
@@ -18013,86 +18027,86 @@ definitions:
           \ on the parent table."
       parameters:
         description: "Data quality check parameters that specify a list of expected\
-          \ most popular string values that should be found in the column. The second\
+          \ text values that must be present in the column."
+        $ref: "#/definitions/ColumnStringsExpectedTextValuesInUseCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning when too\
+          \ many expected values were not found in the column."
+        $ref: "#/definitions/MaxMissingRule0WarningParametersSpec"
+      error:
+        description: "Alerting threshold that raises a data quality error when too\
+          \ many expected values were not found in the column."
+        $ref: "#/definitions/MaxMissingRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a data quality fatal issue when\
+          \ too many expected values were not found in the column."
+        $ref: "#/definitions/MaxMissingRule2ParametersSpec"
+  ColumnExpectedTextsInTopValuesCountCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters that specify a list of expected\
+          \ most popular text values that should be found in the column. The second\
           \ parameter is 'top', which is the limit of the most popular column values\
           \ to find in the tested column."
-        $ref: "#/definitions/ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec"
+        $ref: "#/definitions/ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning when too\
           \ many expected values were not found among the TOP most popular values\
           \ in the tested column."
-        $ref: "#/definitions/MaxMissingRule0ParametersSpec"
+        $ref: "#/definitions/MaxMissingRule0WarningParametersSpec"
       error:
         description: "Alerting threshold that raises a data quality error when too\
           \ many expected values were not found among the TOP most popular values\
           \ in the tested column."
-        $ref: "#/definitions/MaxMissingRule1ParametersSpec"
+        $ref: "#/definitions/MaxMissingRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a data quality fatal issue when\
           \ too many expected values were not found among the TOP most popular values\
           \ in the tested column."
-        $ref: "#/definitions/MaxMissingRule2ParametersSpec"
-  ColumnExpectedStringsInUseCountCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters that specify a list of expected\
-          \ string values that must be present in the column."
-        $ref: "#/definitions/ColumnStringsExpectedStringsInUseCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning when too\
-          \ many expected values were not found in the column."
-        $ref: "#/definitions/MaxMissingRule0ParametersSpec"
-      error:
-        description: "Alerting threshold that raises a data quality error when too\
-          \ many expected values were not found in the column."
-        $ref: "#/definitions/MaxMissingRule1ParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a data quality fatal issue when\
-          \ too many expected values were not found in the column."
         $ref: "#/definitions/MaxMissingRule2ParametersSpec"
   ColumnFalsePercentCheckSpec:
     type: "object"
@@ -18146,11 +18160,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of false value\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -18207,11 +18221,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set number of values from range\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -18314,12 +18328,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with values matching values in another table column that raises a data\
           \ quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -19820,11 +19834,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ negative value in a column that raises a data quality alert"
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -20064,11 +20078,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ null values in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -20739,11 +20753,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ null values in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -21064,6 +21078,74 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxPercentRule95ParametersSpec"
+  ColumnNumberFoundInSetPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters that specify a list of expected\
+          \ values that are compared to the values in the tested numeric column."
+        $ref: "#/definitions/ColumnNumericNumberFoundInSetPercentSensorParametersSpec"
+      warning:
+        description: "Default alerting threshold for a percentage of rows with valid\
+          \ values in a column (from the set of expected values). Raises a data quality\
+          \ issue with at a warning severity level when the percentage of valid rows\
+          \ is below the minimum percentage threshold."
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a percentage of rows with valid\
+          \ values in a column (from the set of expected values). Raises a data quality\
+          \ issue with at an error severity level when the percentage of valid rows\
+          \ is below the minimum percentage threshold"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Default alerting threshold for a percentage of rows with valid\
+          \ values in a column (from the set of expected values). Raises a data quality\
+          \ issue with at a fatal severity level when the percentage of valid rows\
+          \ is below the minimum percentage threshold"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnNumberInRangePercentCheckSpec:
     type: "object"
     properties:
@@ -21116,83 +21198,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule0ParametersSpec"
+        $ref: "#/definitions/MinPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for set percentage of values from\
           \ range in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule2ParametersSpec"
+        $ref: "#/definitions/MinPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule5ParametersSpec"
-  ColumnNumberValueInSetPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters that specify a list of expected\
-          \ values that are compared to the values in the tested numeric column."
-        $ref: "#/definitions/ColumnNumericNumberValueInSetPercentSensorParametersSpec"
-      warning:
-        description: "Default alerting threshold for a percentage of rows with valid\
-          \ values in a column (from the set of expected values). Raises a data quality\
-          \ issue with at a warning severity level when the percentage of valid rows\
-          \ is below the minimum percentage threshold."
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
-      error:
-        description: "Default alerting threshold for a percentage of rows with valid\
-          \ values in a column (from the set of expected values). Raises a data quality\
-          \ issue with at an error severity level when the percentage of valid rows\
-          \ is below the minimum percentage threshold"
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
-      fatal:
-        description: "Default alerting threshold for a percentage of rows with valid\
-          \ values in a column (from the set of expected values). Raises a data quality\
-          \ issue with at a fatal severity level when the percentage of valid rows\
-          \ is below the minimum percentage threshold"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnNumericDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -21953,6 +21967,21 @@ definitions:
         description: "This field can be used to define custom value. In order to define\
           \ custom value, user should write correct value as an integer. If value\
           \ is not defined by user then default value is 0"
+  ColumnNumericNumberFoundInSetPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      expected_values:
+        type: "array"
+        description: "A list of expected values that must be present in a numeric\
+          \ column, only values from this list are accepted and rows having these\
+          \ values in the tested column are counted as valid rows."
+        items:
+          type: "integer"
+          format: "int64"
   ColumnNumericNumberInRangePercentSensorParametersSpec:
     type: "object"
     properties:
@@ -21968,21 +21997,6 @@ definitions:
         type: "number"
         format: "double"
         description: "Maximal value range variable."
-  ColumnNumericNumberValueInSetPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      expected_values:
-        type: "array"
-        description: "A list of expected values that must be present in a numeric\
-          \ column, only values from this list are accepted and rows having these\
-          \ values in the tested column are counted as valid rows."
-        items:
-          type: "integer"
-          format: "int64"
   ColumnNumericPercentile10SensorParametersSpec:
     type: "object"
     properties:
@@ -22578,12 +22592,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ that contains email values in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -22647,12 +22661,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ that contains IP4 values in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -22716,12 +22730,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ that contains IP6 values in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -22785,12 +22799,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for the minimum percentage of rows\
           \ that contains a USA phone number in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -22854,12 +22868,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for the minimum percentage of rows\
           \ that contains a USA zip code number in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -23920,12 +23934,12 @@ definitions:
         description: "Alerting threshold that raises a data quality warning when a\
           \ minimum acceptable percentage of rows did not pass the custom SQL condition\
           \ (expression). The warning is considered as a passed data quality check."
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum acceptable percentage\
           \ of rows passing the custom SQL condition (expression) that raises a data\
           \ quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue when\
           \ a minimum acceptable percentage of rows did not pass the custom SQL condition\
@@ -24186,12 +24200,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with a boolean placeholder strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24740,12 +24754,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with strings with a length in the range indicated by the user in a column\
           \ that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24802,12 +24816,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with matching date regex in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24864,12 +24878,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with matching name regex in a column that raises a data quality error\
           \ (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -24926,11 +24940,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with matching regex in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25292,12 +25306,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with a parsable to float strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25354,12 +25368,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with a parsable to integer strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25478,12 +25492,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule1ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ surrounded by whitespace strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule2ParametersSpec"
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25540,12 +25554,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with a valid country code strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25602,12 +25616,12 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum percentage of rows\
           \ with a valid currency code strings in a column that raises a data quality\
           \ error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25664,11 +25678,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ nulls in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -25725,82 +25739,14 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum percentage of rows\
           \ with a valid UUID in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnStringValueInSetPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters that specify a list of expected\
-          \ values that are compared to the values in the tested string column."
-        $ref: "#/definitions/ColumnStringsStringValueInSetPercentSensorParametersSpec"
-      warning:
-        description: "Default alerting threshold for a percentage of rows with valid\
-          \ values in a column (from the set of expected values). Raises a data quality\
-          \ issue with at a warning severity level when the percentage of valid rows\
-          \ is below the minimum percentage threshold."
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
-      error:
-        description: "Default alerting threshold for a percentage of rows with valid\
-          \ values in a column (from the set of expected values). Raises a data quality\
-          \ issue with at an error severity level when the percentage of valid rows\
-          \ is below the minimum percentage threshold."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
-      fatal:
-        description: "Default alerting threshold for a percentage of rows with valid\
-          \ values in a column (from the set of expected values). Raises a data quality\
-          \ issue with at a fatal severity level when the percentage of valid rows\
-          \ is below the minimum percentage threshold."
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnStringsDailyMonitoringChecksSpec:
     type: "object"
@@ -26093,7 +26039,20 @@ definitions:
           \ regex in a column does not fall below the minimum accepted percentage.\
           \ Creates a separate data quality check (and an alert) for each daily partition."
         $ref: "#/definitions/ColumnStringMatchNameRegexPercentCheckSpec"
-  ColumnStringsExpectedStringsInTopValuesCountSensorParametersSpec:
+  ColumnStringsExpectedTextValuesInUseCountSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      expected_values:
+        type: "array"
+        description: "List of expected string values that should be found in the tested\
+          \ column."
+        items:
+          type: "string"
+  ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec:
     type: "object"
     properties:
       filter:
@@ -26111,19 +26070,6 @@ definitions:
         format: "int64"
         description: "The number of the most popular values (with the highest distinct\
           \ count) that are analyzed to find the expected values."
-  ColumnStringsExpectedStringsInUseCountSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      expected_values:
-        type: "array"
-        description: "List of expected string values that should be found in the tested\
-          \ column."
-        items:
-          type: "string"
   ColumnStringsMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -26826,20 +26772,6 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnStringsStringValueInSetPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      expected_values:
-        type: "array"
-        description: "A list of expected values that must be present in a string column,\
-          \ only values from this list are accepted and rows having these values in\
-          \ the tested column are counted as valid rows."
-        items:
-          type: "string"
   ColumnSumAnomalyDifferencingCheckSpec:
     type: "object"
     properties:
@@ -27267,6 +27199,74 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
+  ColumnTextFoundInSetPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that could be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters that specify a list of expected\
+          \ values that are compared to the values in the tested text column."
+        $ref: "#/definitions/ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec"
+      warning:
+        description: "Default alerting threshold for a percentage of rows with valid\
+          \ values in a column (from the set of expected values). Raises a data quality\
+          \ issue with at a warning severity level when the percentage of valid rows\
+          \ is below the minimum percentage threshold."
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a percentage of rows with valid\
+          \ values in a column (from the set of expected values). Raises a data quality\
+          \ issue with at an error severity level when the percentage of valid rows\
+          \ is below the minimum percentage threshold."
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Default alerting threshold for a percentage of rows with valid\
+          \ values in a column (from the set of expected values). Raises a data quality\
+          \ issue with at a fatal severity level when the percentage of valid rows\
+          \ is below the minimum percentage threshold."
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
   ColumnTruePercentCheckSpec:
     type: "object"
     properties:
@@ -27319,11 +27319,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of true value\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -27776,11 +27776,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ valid latitude value in a column that raises a data quality alert"
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -27837,11 +27837,11 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of rows with\
           \ valid longitude value in a column that raises a data quality alert"
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
@@ -29607,7 +29607,7 @@ definitions:
         description: "Maximum number of consecutive days with check failures. A check\
           \ is failed when a sensor query fails due to a connection error, missing\
           \ or corrupted table."
-  MaxMissingRule0ParametersSpec:
+  MaxMissingRule0ErrorParametersSpec:
     type: "object"
     properties:
       max_missing:
@@ -29615,7 +29615,7 @@ definitions:
         format: "int64"
         description: "The maximum number of values from the expected_values list that\
           \ were not found in the column (inclusive)."
-  MaxMissingRule1ParametersSpec:
+  MaxMissingRule0WarningParametersSpec:
     type: "object"
     properties:
       max_missing:
@@ -29631,7 +29631,15 @@ definitions:
         format: "int64"
         description: "The maximum number of values from the expected_values list that\
           \ were not found in the column (inclusive)."
-  MaxPercentRule0ParametersSpec:
+  MaxPercentRule0ErrorParametersSpec:
+    type: "object"
+    properties:
+      max_percent:
+        type: "number"
+        format: "double"
+        description: "Maximum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
+  MaxPercentRule0WarningParametersSpec:
     type: "object"
     properties:
       max_percent:
@@ -29640,22 +29648,6 @@ definitions:
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
   MaxPercentRule100ParametersSpec:
-    type: "object"
-    properties:
-      max_percent:
-        type: "number"
-        format: "double"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxPercentRule1ParametersSpec:
-    type: "object"
-    properties:
-      max_percent:
-        type: "number"
-        format: "double"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MaxPercentRule2ParametersSpec:
     type: "object"
     properties:
       max_percent:
@@ -29695,6 +29687,22 @@ definitions:
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
+  MinCountRule0WarningParametersSpec:
+    type: "object"
+    properties:
+      min_count:
+        type: "integer"
+        format: "int64"
+        description: "Minimum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
+  MinCountRule100FatalParametersSpec:
+    type: "object"
+    properties:
+      min_count:
+        type: "integer"
+        format: "int64"
+        description: "Minimum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
   MinCountRule1ParametersSpec:
     type: "object"
     properties:
@@ -29703,23 +29711,7 @@ definitions:
         format: "int64"
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MinCountRuleFatalParametersSpec:
-    type: "object"
-    properties:
-      min_count:
-        type: "integer"
-        format: "int64"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinCountRuleWarningParametersSpec:
-    type: "object"
-    properties:
-      min_count:
-        type: "integer"
-        format: "int64"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinPercentRule0ParametersSpec:
+  MinPercentRule0ErrorParametersSpec:
     type: "object"
     properties:
       min_percent:
@@ -29727,7 +29719,7 @@ definitions:
         format: "double"
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MinPercentRule100ParametersSpec:
+  MinPercentRule0WarningParametersSpec:
     type: "object"
     properties:
       min_percent:
@@ -29735,7 +29727,15 @@ definitions:
         format: "double"
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MinPercentRule2ParametersSpec:
+  MinPercentRule100ErrorParametersSpec:
+    type: "object"
+    properties:
+      min_percent:
+        type: "number"
+        format: "double"
+        description: "Minimum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
+  MinPercentRule100WarningParametersSpec:
     type: "object"
     properties:
       min_percent:
@@ -29752,14 +29752,6 @@ definitions:
         description: "Minimum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
   MinPercentRule95ParametersSpec:
-    type: "object"
-    properties:
-      min_percent:
-        type: "number"
-        format: "double"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinPercentRule99ParametersSpec:
     type: "object"
     properties:
       min_percent:
@@ -33271,7 +33263,7 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinCountRuleWarningParametersSpec"
+        $ref: "#/definitions/MinCountRule0WarningParametersSpec"
       error:
         description: "Default alerting threshold for a row count that raises a data\
           \ quality error (alert)"
@@ -33279,7 +33271,7 @@ definitions:
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinCountRuleFatalParametersSpec"
+        $ref: "#/definitions/MinCountRule100FatalParametersSpec"
   TableSchemaColumnCountChangedCheckSpec:
     type: "object"
     properties:
@@ -34075,12 +34067,12 @@ definitions:
         description: "Alerting threshold that raises a data quality warning when a\
           \ minimum acceptable percentage of rows did not pass the custom SQL condition\
           \ (expression). The warning is considered as a passed data quality check."
-        $ref: "#/definitions/MinPercentRule100ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
       error:
         description: "Default alerting threshold for a minimum acceptable percentage\
           \ of rows passing the custom SQL condition (expression) that raises a data\
           \ quality error (alert)."
-        $ref: "#/definitions/MinPercentRule99ParametersSpec"
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue when\
           \ a minimum acceptable percentage of rows did not pass the custom SQL condition\

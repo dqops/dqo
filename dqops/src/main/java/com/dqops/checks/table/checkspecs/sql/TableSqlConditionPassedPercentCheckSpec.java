@@ -19,8 +19,8 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.rules.comparison.MinPercentRule100ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
 import com.dqops.sensors.table.sql.TableSqlConditionPassedPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableSqlConditionPassedPercentCheckSpec
-        extends AbstractCheckSpec<TableSqlConditionPassedPercentSensorParametersSpec, MinPercentRule100ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<TableSqlConditionPassedPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionPassedPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -54,12 +54,12 @@ public class TableSqlConditionPassedPercentCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule100ParametersSpec warning;
+    private MinPercentRule100WarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule99ParametersSpec error;
+    private MinPercentRule100ErrorParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -91,7 +91,7 @@ public class TableSqlConditionPassedPercentCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinPercentRule100ParametersSpec getWarning() {
+    public MinPercentRule100WarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -99,7 +99,7 @@ public class TableSqlConditionPassedPercentCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinPercentRule100ParametersSpec warning) {
+    public void setWarning(MinPercentRule100WarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -111,7 +111,7 @@ public class TableSqlConditionPassedPercentCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinPercentRule99ParametersSpec getError() {
+    public MinPercentRule100ErrorParametersSpec getError() {
         return this.error;
     }
 
@@ -119,7 +119,7 @@ public class TableSqlConditionPassedPercentCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinPercentRule99ParametersSpec error) {
+    public void setError(MinPercentRule100ErrorParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");

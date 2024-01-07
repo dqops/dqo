@@ -84,7 +84,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         TableVolumeDailyMonitoringChecksSpec tableVolume = new TableVolumeDailyMonitoringChecksSpec();
         tableVolume.setDailyRowCount(new TableRowCountCheckSpec() {{
-            setWarning(new MinCountRuleWarningParametersSpec());
+            setWarning(new MinCountRule0WarningParametersSpec());
         }});
         tableVolume.setDailyRowCountChange(new TableRowCountChangeCheckSpec() {{
             setWarning(new ChangePercentRule10ParametersSpec());
@@ -165,7 +165,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         DefaultProfilingObservabilityCheckSettingsSpec defaultSettings = new DefaultProfilingObservabilityCheckSettingsSpec();
         TableVolumeProfilingChecksSpec tableVolume = new TableVolumeProfilingChecksSpec();
         tableVolume.setProfileRowCount(new TableRowCountCheckSpec() {{
-            setWarning(new MinCountRuleWarningParametersSpec());
+            setWarning(new MinCountRule0WarningParametersSpec());
         }});
         defaultSettings.getTable().setVolume(tableVolume);
 

@@ -40,25 +40,25 @@ import java.util.Objects;
 public class ColumnAcceptedValuesMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAcceptedValuesMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_string_value_in_set_percent", o -> o.monthlyPartitionStringValueInSetPercent);
+            put("monthly_partition_text_found_in_set_percent", o -> o.monthlyPartitionTextFoundInSetPercent);
             put("monthly_partition_expected_numbers_in_use_count", o -> o.monthlyPartitionExpectedNumbersInUseCount);
-            put("monthly_partition_expected_strings_in_use_count", o -> o.monthlyPartitionExpectedStringsInUseCount);
-            put("monthly_partition_expected_strings_in_top_values_count", o -> o.monthlyPartitionExpectedStringsInTopValuesCount);
-            put("monthly_partition_number_value_in_set_percent", o -> o.monthlyPartitionNumberValueInSetPercent);
+            put("monthly_partition_expected_text_values_in_use_count", o -> o.monthlyPartitionExpectedTextValuesInUseCount);
+            put("monthly_partition_expected_texts_in_top_values_count", o -> o.monthlyPartitionExpectedTextsInTopValuesCount);
+            put("monthly_partition_number_found_in_set_percent", o -> o.monthlyPartitionNumberFoundInSetPercent);
         }
     };
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent;
+    private ColumnTextFoundInSetPercentCheckSpec monthlyPartitionTextFoundInSetPercent;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnNumberValueInSetPercentCheckSpec monthlyPartitionNumberValueInSetPercent;
+    private ColumnNumberFoundInSetPercentCheckSpec monthlyPartitionNumberFoundInSetPercent;
 
     @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnExpectedStringsInUseCountCheckSpec monthlyPartitionExpectedStringsInUseCount;
+    private ColumnExpectedTextValuesInUseCountCheckSpec monthlyPartitionExpectedTextValuesInUseCount;
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount;
+    private ColumnExpectedTextsInTopValuesCountCheckSpec monthlyPartitionExpectedTextsInTopValuesCount;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnExpectedNumbersInUseCountCheckSpec monthlyPartitionExpectedNumbersInUseCount;
@@ -68,72 +68,72 @@ public class ColumnAcceptedValuesMonthlyPartitionedChecksSpec extends AbstractCh
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringValueInSetPercentCheckSpec getMonthlyPartitionStringValueInSetPercent() {
-        return monthlyPartitionStringValueInSetPercent;
+    public ColumnTextFoundInSetPercentCheckSpec getMonthlyPartitionTextFoundInSetPercent() {
+        return monthlyPartitionTextFoundInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param monthlyPartitionStringValueInSetPercent Minimum strings in set percent check.
+     * @param monthlyPartitionTextFoundInSetPercent Minimum strings in set percent check.
      */
-    public void setMonthlyPartitionStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec monthlyPartitionStringValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringValueInSetPercent, monthlyPartitionStringValueInSetPercent));
-        this.monthlyPartitionStringValueInSetPercent = monthlyPartitionStringValueInSetPercent;
-        propagateHierarchyIdToField(monthlyPartitionStringValueInSetPercent, "monthly_partition_string_value_in_set_percent");
+    public void setMonthlyPartitionTextFoundInSetPercent(ColumnTextFoundInSetPercentCheckSpec monthlyPartitionTextFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextFoundInSetPercent, monthlyPartitionTextFoundInSetPercent));
+        this.monthlyPartitionTextFoundInSetPercent = monthlyPartitionTextFoundInSetPercent;
+        propagateHierarchyIdToField(monthlyPartitionTextFoundInSetPercent, "monthly_partition_text_found_in_set_percent");
     }
 
     /**
      * Returns a numbers in set percent check specification.
      * @return Numbers in set percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getMonthlyPartitionNumberValueInSetPercent() {
-        return monthlyPartitionNumberValueInSetPercent;
+    public ColumnNumberFoundInSetPercentCheckSpec getMonthlyPartitionNumberFoundInSetPercent() {
+        return monthlyPartitionNumberFoundInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers found percent check.
-     * @param monthlyPartitionNumberValueInSetPercent Numbers found percent check specification.
+     * @param monthlyPartitionNumberFoundInSetPercent Numbers found percent check specification.
      */
-    public void setMonthlyPartitionNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec monthlyPartitionNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNumberValueInSetPercent, monthlyPartitionNumberValueInSetPercent));
-        this.monthlyPartitionNumberValueInSetPercent = monthlyPartitionNumberValueInSetPercent;
-        propagateHierarchyIdToField(monthlyPartitionNumberValueInSetPercent, "monthly_partition_number_value_in_set_percent");
+    public void setMonthlyPartitionNumberFoundInSetPercent(ColumnNumberFoundInSetPercentCheckSpec monthlyPartitionNumberFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNumberFoundInSetPercent, monthlyPartitionNumberFoundInSetPercent));
+        this.monthlyPartitionNumberFoundInSetPercent = monthlyPartitionNumberFoundInSetPercent;
+        propagateHierarchyIdToField(monthlyPartitionNumberFoundInSetPercent, "monthly_partition_number_found_in_set_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getMonthlyPartitionExpectedStringsInUseCount() {
-        return monthlyPartitionExpectedStringsInUseCount;
+    public ColumnExpectedTextValuesInUseCountCheckSpec getMonthlyPartitionExpectedTextValuesInUseCount() {
+        return monthlyPartitionExpectedTextValuesInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param monthlyPartitionExpectedStringsInUseCount Minimum strings in set count check.
+     * @param monthlyPartitionExpectedTextValuesInUseCount Minimum strings in set count check.
      */
-    public void setMonthlyPartitionExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec monthlyPartitionExpectedStringsInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInUseCount, monthlyPartitionExpectedStringsInUseCount));
-        this.monthlyPartitionExpectedStringsInUseCount = monthlyPartitionExpectedStringsInUseCount;
-        propagateHierarchyIdToField(monthlyPartitionExpectedStringsInUseCount, "monthly_partition_expected_strings_in_use_count");
+    public void setMonthlyPartitionExpectedTextValuesInUseCount(ColumnExpectedTextValuesInUseCountCheckSpec monthlyPartitionExpectedTextValuesInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedTextValuesInUseCount, monthlyPartitionExpectedTextValuesInUseCount));
+        this.monthlyPartitionExpectedTextValuesInUseCount = monthlyPartitionExpectedTextValuesInUseCount;
+        propagateHierarchyIdToField(monthlyPartitionExpectedTextValuesInUseCount, "monthly_partition_expected_text_values_in_use_count");
     }
 
     /**
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getMonthlyPartitionExpectedStringsInTopValuesCount() {
-        return monthlyPartitionExpectedStringsInTopValuesCount;
+    public ColumnExpectedTextsInTopValuesCountCheckSpec getMonthlyPartitionExpectedTextsInTopValuesCount() {
+        return monthlyPartitionExpectedTextsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param monthlyPartitionExpectedStringsInTopValuesCount Most popular values count check.
+     * @param monthlyPartitionExpectedTextsInTopValuesCount Most popular values count check.
      */
-    public void setMonthlyPartitionExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec monthlyPartitionExpectedStringsInTopValuesCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedStringsInTopValuesCount, monthlyPartitionExpectedStringsInTopValuesCount));
-        this.monthlyPartitionExpectedStringsInTopValuesCount = monthlyPartitionExpectedStringsInTopValuesCount;
-        propagateHierarchyIdToField(monthlyPartitionExpectedStringsInTopValuesCount, "monthly_partition_expected_strings_in_top_values_count");
+    public void setMonthlyPartitionExpectedTextsInTopValuesCount(ColumnExpectedTextsInTopValuesCountCheckSpec monthlyPartitionExpectedTextsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionExpectedTextsInTopValuesCount, monthlyPartitionExpectedTextsInTopValuesCount));
+        this.monthlyPartitionExpectedTextsInTopValuesCount = monthlyPartitionExpectedTextsInTopValuesCount;
+        propagateHierarchyIdToField(monthlyPartitionExpectedTextsInTopValuesCount, "monthly_partition_expected_texts_in_top_values_count");
     }
 
     /**

@@ -11,3 +11,5 @@ spec:
     help_text: Minimum accepted value for the actual_value returned by the sensor
       (inclusive).
     data_type: double
+    sample_values:
+    - 2.0

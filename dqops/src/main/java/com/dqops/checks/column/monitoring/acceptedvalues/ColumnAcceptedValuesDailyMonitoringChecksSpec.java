@@ -20,7 +20,6 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.acceptedvalues.*;
-import com.dqops.checks.column.checkspecs.strings.*;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,25 +40,25 @@ import java.util.Objects;
 public class ColumnAcceptedValuesDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAcceptedValuesDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_string_value_in_set_percent", o -> o.dailyStringValueInSetPercent);
-            put("daily_number_value_in_set_percent", o -> o.dailyNumberValueInSetPercent);
-            put("daily_expected_strings_in_use_count", o -> o.dailyExpectedStringsInUseCount);
-            put("daily_expected_strings_in_top_values_count", o -> o.dailyExpectedStringsInTopValuesCount);
+            put("daily_text_found_in_set_percent", o -> o.dailyTextFoundInSetPercent);
+            put("daily_number_found_in_set_percent", o -> o.dailyNumberFoundInSetPercent);
+            put("daily_expected_text_values_in_use_count", o -> o.dailyExpectedTextValuesInUseCount);
+            put("daily_expected_texts_in_top_values_count", o -> o.dailyExpectedTextsInTopValuesCount);
             put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
         }
     };
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnStringValueInSetPercentCheckSpec dailyStringValueInSetPercent;
+    private ColumnTextFoundInSetPercentCheckSpec dailyTextFoundInSetPercent;
 
     @JsonPropertyDescription("The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent;
+    private ColumnNumberFoundInSetPercentCheckSpec dailyNumberFoundInSetPercent;
 
     @JsonPropertyDescription("Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount;
+    private ColumnExpectedTextValuesInUseCountCheckSpec dailyExpectedTextValuesInUseCount;
 
     @JsonPropertyDescription("Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount;
+    private ColumnExpectedTextsInTopValuesCountCheckSpec dailyExpectedTextsInTopValuesCount;
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
@@ -69,72 +68,72 @@ public class ColumnAcceptedValuesDailyMonitoringChecksSpec extends AbstractCheck
      * Returns a minimum strings in set percent check.
      * @return Minimum strings in set percent check.
      */
-    public ColumnStringValueInSetPercentCheckSpec getDailyStringValueInSetPercent() {
-        return dailyStringValueInSetPercent;
+    public ColumnTextFoundInSetPercentCheckSpec getDailyTextFoundInSetPercent() {
+        return dailyTextFoundInSetPercent;
     }
 
     /**
      * Sets a new definition of a minimum strings in set percent check.
-     * @param dailyStringValueInSetPercent Minimum strings in set percent check.
+     * @param dailyTextFoundInSetPercent Minimum strings in set percent check.
      */
-    public void setDailyStringValueInSetPercent(ColumnStringValueInSetPercentCheckSpec dailyStringValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringValueInSetPercent, dailyStringValueInSetPercent));
-        this.dailyStringValueInSetPercent = dailyStringValueInSetPercent;
-        propagateHierarchyIdToField(dailyStringValueInSetPercent, "daily_string_value_in_set_percent");
+    public void setDailyTextFoundInSetPercent(ColumnTextFoundInSetPercentCheckSpec dailyTextFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextFoundInSetPercent, dailyTextFoundInSetPercent));
+        this.dailyTextFoundInSetPercent = dailyTextFoundInSetPercent;
+        propagateHierarchyIdToField(dailyTextFoundInSetPercent, "daily_text_found_in_set_percent");
     }
 
     /**
      * Returns a numbers valid percent check specification.
      * @return Numbers valid percent check specification.
      */
-    public ColumnNumberValueInSetPercentCheckSpec getDailyNumberValueInSetPercent() {
-        return dailyNumberValueInSetPercent;
+    public ColumnNumberFoundInSetPercentCheckSpec getDailyNumberFoundInSetPercent() {
+        return dailyNumberFoundInSetPercent;
     }
 
     /**
      * Sets a new specification of a numbers valid percent check.
-     * @param dailyNumberValueInSetPercent Number valid percent check specification.
+     * @param dailyNumberFoundInSetPercent Number valid percent check specification.
      */
-    public void setDailyNumberValueInSetPercent(ColumnNumberValueInSetPercentCheckSpec dailyNumberValueInSetPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyNumberValueInSetPercent, dailyNumberValueInSetPercent));
-        this.dailyNumberValueInSetPercent = dailyNumberValueInSetPercent;
-        propagateHierarchyIdToField(dailyNumberValueInSetPercent, "daily_number_value_in_set_percent");
+    public void setDailyNumberFoundInSetPercent(ColumnNumberFoundInSetPercentCheckSpec dailyNumberFoundInSetPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyNumberFoundInSetPercent, dailyNumberFoundInSetPercent));
+        this.dailyNumberFoundInSetPercent = dailyNumberFoundInSetPercent;
+        propagateHierarchyIdToField(dailyNumberFoundInSetPercent, "daily_number_found_in_set_percent");
     }
 
     /**
      * Returns a minimum strings in set count check.
      * @return Minimum strings in set count check.
      */
-    public ColumnExpectedStringsInUseCountCheckSpec getDailyExpectedStringsInUseCount() {
-        return dailyExpectedStringsInUseCount;
+    public ColumnExpectedTextValuesInUseCountCheckSpec getDailyExpectedTextValuesInUseCount() {
+        return dailyExpectedTextValuesInUseCount;
     }
 
     /**
      * Sets a new definition of a minimum strings in set count check.
-     * @param dailyExpectedStringsInUseCount Minimum strings in set count check.
+     * @param dailyExpectedTextValuesInUseCount Minimum strings in set count check.
      */
-    public void setDailyExpectedStringsInUseCount(ColumnExpectedStringsInUseCountCheckSpec dailyExpectedStringsInUseCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInUseCount, dailyExpectedStringsInUseCount));
-        this.dailyExpectedStringsInUseCount = dailyExpectedStringsInUseCount;
-        propagateHierarchyIdToField(dailyExpectedStringsInUseCount, "daily_expected_strings_in_use_count");
+    public void setDailyExpectedTextValuesInUseCount(ColumnExpectedTextValuesInUseCountCheckSpec dailyExpectedTextValuesInUseCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedTextValuesInUseCount, dailyExpectedTextValuesInUseCount));
+        this.dailyExpectedTextValuesInUseCount = dailyExpectedTextValuesInUseCount;
+        propagateHierarchyIdToField(dailyExpectedTextValuesInUseCount, "daily_expected_text_values_in_use_count");
     }
 
     /**
      * Returns a count of expected values in most popular values set count check.
      * @return Most popular values count check.
      */
-    public ColumnExpectedStringsInTopValuesCountCheckSpec getDailyExpectedStringsInTopValuesCount() {
-        return dailyExpectedStringsInTopValuesCount;
+    public ColumnExpectedTextsInTopValuesCountCheckSpec getDailyExpectedTextsInTopValuesCount() {
+        return dailyExpectedTextsInTopValuesCount;
     }
 
     /**
      * Sets a new definition of a most popular values count check.
-     * @param dailyExpectedStringsInTopValuesCount Most popular values count check.
+     * @param dailyExpectedTextsInTopValuesCount Most popular values count check.
      */
-    public void setDailyExpectedStringsInTopValuesCount(ColumnExpectedStringsInTopValuesCountCheckSpec dailyExpectedStringsInTopValuesCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyExpectedStringsInTopValuesCount, dailyExpectedStringsInTopValuesCount));
-        this.dailyExpectedStringsInTopValuesCount = dailyExpectedStringsInTopValuesCount;
-        propagateHierarchyIdToField(dailyExpectedStringsInTopValuesCount, "daily_expected_strings_in_top_values_count");
+    public void setDailyExpectedTextsInTopValuesCount(ColumnExpectedTextsInTopValuesCountCheckSpec dailyExpectedTextsInTopValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyExpectedTextsInTopValuesCount, dailyExpectedTextsInTopValuesCount));
+        this.dailyExpectedTextsInTopValuesCount = dailyExpectedTextsInTopValuesCount;
+        propagateHierarchyIdToField(dailyExpectedTextsInTopValuesCount, "daily_expected_texts_in_top_values_count");
     }
 
     /**

@@ -67,7 +67,7 @@ import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
 import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
-import com.dqops.rules.comparison.MinPercentRule99ParametersSpec;
+import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.services.timezone.DefaultTimeZoneProviderObjectMother;
 import com.dqops.utils.BeanFactoryObjectMother;
@@ -106,7 +106,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         tableSpec.getMonitoringChecks().setDaily(new TableDailyMonitoringCheckCategoriesSpec());
         tableSpec.getMonitoringChecks().getDaily().setSql(new TableSqlDailyMonitoringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
-        sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));
+        sqlCheckSpec.setError(new MinPercentRule100ErrorParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");
         tableSpec.getMonitoringChecks().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
 
