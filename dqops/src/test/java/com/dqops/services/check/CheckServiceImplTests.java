@@ -298,7 +298,7 @@ public class CheckServiceImplTests extends BaseTest {
 
         BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
         bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
-        this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
+        this.sut.disableChecks(bulkCheckDeactivateParameters, adminPrincipal);
 
         ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
         userHome = executionContextSecond.getUserHomeContext().getUserHome();
@@ -329,7 +329,105 @@ public class CheckServiceImplTests extends BaseTest {
     }
 
     @Test
+    void deleteChecks_whenConnectionAndCheckGiven_deletesRequestedChecks() {
+        ExecutionContext executionContext = createHierarchyTree();
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
+            setConnection("conn");
+            setCheckName("profile_row_count");
+        }};
+
+        TableRowCountCheckSpec tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getVolume().getProfileRowCount();
+
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
+
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
+        this.sut.deleteChecks(bulkCheckDeactivateParameters, adminPrincipal);
+
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
+        Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
+        Assertions.assertTrue(checksEnabled.isEmpty());
+
+        CheckSearchFilters checkSearchFiltersDisabled = checkSearchFilters.clone();
+        checkSearchFiltersDisabled.setEnabled(false);
+        Collection<AbstractCheckSpec<?,?,?,?>> checksDisabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFiltersDisabled);
+
+        Assertions.assertNotNull(checksDisabled);
+        Assertions.assertEquals(0, checksDisabled.size());
+    }
+
+    @Test
     void disableChecks_whenSpecificTablesGiven_disablesOnlyRequestedChecks() {
+        ExecutionContext executionContext = createHierarchyTree();
+        UserHome userHome = executionContext.getUserHomeContext().getUserHome();
+        DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
+
+        CheckSearchFilters checkSearchFilters = new CheckSearchFilters(){{
+            setConnection("conn");
+            setCheckName("profile_row_count");
+        }};
+
+        TableRowCountCheckSpec tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getVolume().getProfileRowCount();
+
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertFalse(tableRowCountCheckSpec.isDisabled());
+
+        BulkCheckDeactivateParameters bulkCheckDeactivateParameters = new BulkCheckDeactivateParameters();
+        bulkCheckDeactivateParameters.setCheckSearchFilters(checkSearchFilters);
+        Map<String, List<String>> selectedTables = new HashMap<>();
+        selectedTables.put("tab1", null);
+        bulkCheckDeactivateParameters.setSelectedTablesToColumns(selectedTables);
+        this.sut.disableChecks(bulkCheckDeactivateParameters, adminPrincipal);
+
+        ExecutionContext executionContextSecond = executionContextFactory.create(adminPrincipal.getDataDomainIdentity());
+        userHome = executionContextSecond.getUserHomeContext().getUserHome();
+        Collection<AbstractCheckSpec<?,?,?,?>> checksEnabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFilters);
+        Assertions.assertEquals(1, checksEnabled.size());
+
+        CheckSearchFilters checkSearchFiltersDisabled = checkSearchFilters.clone();
+        checkSearchFiltersDisabled.setEnabled(false);
+        Collection<AbstractCheckSpec<?,?,?,?>> checksDisabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFiltersDisabled);
+
+        Assertions.assertNotNull(checksDisabled);
+        Assertions.assertEquals(1, checksDisabled.size());
+        for (AbstractCheckSpec<?,?,?,?> check: checksDisabled) {
+            Assertions.assertTrue(check.isDisabled());
+        }
+
+        tableRowCountCheckSpec = userHome
+                .getConnections().getByObjectName("conn", true)
+                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
+                .getProfilingChecks().getVolume().getProfileRowCount();
+        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
+        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
+        // Configs of the disabled check are preserved
+        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
+        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
+        Assertions.assertTrue(tableRowCountCheckSpec.isDisabled());
+    }
+
+    @Test
+    void deleteChecks_whenSpecificTablesGiven_deletesOnlyRequestedChecks() {
         ExecutionContext executionContext = createHierarchyTree();
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         DqoUserPrincipal adminPrincipal = DqoUserPrincipalObjectMother.createStandaloneAdmin();
@@ -368,22 +466,7 @@ public class CheckServiceImplTests extends BaseTest {
         Collection<AbstractCheckSpec<?,?,?,?>> checksDisabled = hierarchyNodeTreeSearcher.findChecks(userHome, checkSearchFiltersDisabled);
 
         Assertions.assertNotNull(checksDisabled);
-        Assertions.assertEquals(1, checksDisabled.size());
-        for (AbstractCheckSpec<?,?,?,?> check: checksDisabled) {
-            Assertions.assertTrue(check.isDisabled());
-        }
-
-        tableRowCountCheckSpec = userHome
-                .getConnections().getByObjectName("conn", true)
-                .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getProfilingChecks().getVolume().getProfileRowCount();
-        Assertions.assertNull(tableRowCountCheckSpec.getWarning());
-        Assertions.assertNotNull(tableRowCountCheckSpec.getError());
-        Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());
-        // Configs of the disabled check are preserved
-        Assertions.assertEquals(50L, tableRowCountCheckSpec.getError().getMinCount());
-        Assertions.assertEquals(20L, tableRowCountCheckSpec.getFatal().getMinCount());
-        Assertions.assertTrue(tableRowCountCheckSpec.isDisabled());
+        Assertions.assertEquals(0, checksDisabled.size());
     }
 
     @Test
