@@ -8,3 +8,4 @@ spec:
     minimum accepted length. Analyzes every monthly partition and creates a separate
     data quality check result with the time period value that identifies the monthly
     partition.
+  standard: true

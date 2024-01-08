@@ -213,12 +213,19 @@ public abstract class BaseDqoJobQueueImpl implements DisposableBean {
                     }
                     finally {
                         DqoQueueJobId jobId = dqoJobQueueEntry.getJobId();
-                        this.jobEntriesByJobId.remove(jobId);
+                        if (this.jobEntriesByJobId != null) {
+                            this.jobEntriesByJobId.remove(jobId);
+                        }
                         if (jobId.getJobBusinessKey() != null) {
-                            this.jobBusinessKeyToJobIdMap.remove(jobId.getJobBusinessKey());
+                            if (this.jobBusinessKeyToJobIdMap != null) {
+                                this.jobBusinessKeyToJobIdMap.remove(jobId.getJobBusinessKey());
+                            }
                         }
 
-                        this.runningJobs.remove(dqoJobQueueEntry);
+                        if (this.runningJobs != null) {
+                            this.runningJobs.remove(dqoJobQueueEntry);
+                        }
+
                         this.runningJobsCount.decrementAndGet();
                         if (dqoJobQueueEntry.getJobConcurrencyConstraints() != null) {
                                 // tell the limiter that the job has finished

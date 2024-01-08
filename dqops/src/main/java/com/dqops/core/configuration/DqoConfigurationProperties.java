@@ -37,7 +37,7 @@ public class DqoConfigurationProperties implements Cloneable {
      * Returns the location of the dqo.io home folder (installation folder). The installation folder contains
      * the default templates and libraries. The folder may be changed by changing the dqo.home configuration property
      * or setting a DQO_HOME environment variable.
-     * @return DQOps home folder poth.
+     * @return DQOps home folder path.
      */
     public String getHome() {
         return home;
