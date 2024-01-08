@@ -15,7 +15,7 @@ in the DQOps concepts section.
 To be able to display results on data quality dashboards you need to synchronize locally stored results with your DQOps Cloud account.  
 To synchronize all the data just click on the **Synchronize** button in the upper right corner of the navigation bar.
 
-## Review the total number of issues raised by the profiling and monitoring checks
+## Review the total number of issues raised by the profiling checks
 
 To see how many issues have been raised by profiling checks, you can use the **Data profiling issues count** dashboard located in the **Profiling** group.
 To access it, go to the **Data Quality Dashboard** section and select the **Profiling issues count per check** dashboard from the tree view on the left.
@@ -29,6 +29,7 @@ by clicking on the filters on top part of the dashboard, as well as clicking on 
 In our example, we ran 38 profiling checks (2 table checks and 2 checks for each of the 18 columns) and none of them failed.
 In the **Results per check** table you can see the results broken down by check name.
 
+## Review the total number of issues raised by the monitoring checks
 
 To review the issues raised by the monitoring checks, simply select the **Data quality issue count per check** dashboard
 in the **Monitoring** group.
