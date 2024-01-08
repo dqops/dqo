@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
 import { JobApiClient, TableApiClient } from '../../../services/apiClient';
@@ -6,9 +6,7 @@ import { useTree } from '../../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
-
 import {
-  DqoJobHistoryEntryModelJobTypeEnum,
   DqoJobHistoryEntryModelStatusEnum,
   TableColumnsStatisticsModel
 } from '../../../api';
@@ -65,16 +63,18 @@ const TableActionGroup = ({
   const { job_dictionary_state, userProfile } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
+  const [jobId, setJobId] = useState<number>()
+  const job = jobId ? job_dictionary_state[jobId] : undefined
+  
   const fullPath = `${connection}.${schema}.${table}`;
-
+  
   const removeTable = async () => {
     await TableApiClient.deleteTable(
       connection ?? '',
       schema ?? '',
       table ?? ''
     );
-
+    
     deleteData(fullPath);
   };
 
@@ -84,25 +84,18 @@ const TableActionGroup = ({
       await JobApiClient.collectStatisticsOnTable(undefined, false, undefined, {
         ...statistics?.collect_column_statistics_job_template,
         columnNames: selectedColumns
-      });
+      }).then((res) => setJobId(res.data.jobId?.jobId));
     } finally {
       setLoadingJob(false);
     }
   };
-
-  const filteredCollectStatisticsJobs =
-    Object.values(job_dictionary_state).filter(
-      (x) =>
-        x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
-        x.parameters?.collectStatisticsParameters
-          ?.statistics_collector_search_filters?.fullTableName ===
-          schema + '.' + table &&
-        x.parameters?.collectStatisticsParameters
-          ?.statistics_collector_search_filters?.connection === connection &&
-        (x.status === DqoJobHistoryEntryModelStatusEnum.running ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-          x.status === DqoJobHistoryEntryModelStatusEnum.waiting)
-    ).length !== 0;
+ 
+  const filteredCollectStatisticsJobs = useMemo(() => {
+    return (job && (
+      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+      job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
+    }, [job])
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">

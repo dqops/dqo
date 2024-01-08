@@ -51,6 +51,26 @@ const ColumnActionGroup = ({
     );
   };
 
+ // const [jobId, setJobId] = useState<number>()
+ // const job = jobId ? job_dictionary_state[jobId] : undefined
+ // 
+ // const removeColumn = async () => {
+ //   await ColumnApiClient.deleteColumn(
+ //     connection ?? '',
+ //     schema ?? '',
+ //     table ?? '',
+ //     column ?? ''
+ //   );
+ // };
+//
+ // const filteredCollectStatisticsJobs = useMemo(() => {
+ //   return (job && (
+ //     job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+ //     job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+ //     job.status === DqoJobHistoryEntryModelStatusEnum.waiting ))
+ //   }, [job])
+//
+
   const filteredCollectStatisticsJobs = Object.values(job_dictionary_state).filter(
     (x) =>
       x.jobType === DqoJobHistoryEntryModelJobTypeEnum.collect_statistics &&
