@@ -251,7 +251,7 @@ const ProfilingView = () => {
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <div className="border-b border-gray-300">
-        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={tab} onChange={onChangeTab} />
+        <Tabs tabs={TABLE_LEVEL_TABS[CheckTypes.PROFILING]} activeTab={activeTab} onChange={onChangeTab} />
       </div>
       {activeTab === 'statistics' && (
         <TableActionGroup
