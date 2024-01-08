@@ -115,7 +115,7 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">SQL expression for a calculated column (use an {'{'}alias{'}'} token to reference the table)</td>
+            <td className="px-4 py-2">SQL expression for a calculated column (use an {'{'}alias{'}.'} token to reference the table)</td>
             <td className="px-4 py-2">
               <Input
                 value={columnBasic?.sql_expression}
