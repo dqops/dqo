@@ -20,7 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxValueRuleParametersSpec;
-import com.dqops.sensors.column.text.ColumnStringsStringMaxLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextMaxLengthSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTextMaxLengthCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMaxLengthSensorParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnTextTextMaxLengthSensorParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec, MaxValueRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMaxLengthCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -48,7 +48,7 @@ public class ColumnTextMaxLengthCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMaxLengthSensorParametersSpec parameters = new ColumnStringsStringMaxLengthSensorParametersSpec();
+    private ColumnTextTextMaxLengthSensorParametersSpec parameters = new ColumnTextTextMaxLengthSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +70,7 @@ public class ColumnTextMaxLengthCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMaxLengthSensorParametersSpec getParameters() {
+    public ColumnTextTextMaxLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnTextMaxLengthCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMaxLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextMaxLengthSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

@@ -54,7 +54,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
         {
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
-            put("strings", o -> o.strings);
+            put("text", o -> o.text);
             put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
@@ -79,7 +79,7 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
     @JsonPropertyDescription("The default configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnTextProfilingChecksSpec strings;
+    private ColumnTextProfilingChecksSpec text;
 
     @JsonPropertyDescription("The default configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -157,18 +157,18 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
      * Returns the strings check configuration on a column level.
      * @return Strings check configuration.
      */
-    public ColumnTextProfilingChecksSpec getStrings() {
-        return strings;
+    public ColumnTextProfilingChecksSpec getText() {
+        return text;
     }
 
     /**
      * Sets the string check configuration on a column level.
-     * @param strings New string checks configuration.
+     * @param text New string checks configuration.
      */
-    public void setStrings(ColumnTextProfilingChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
+    public void setText(ColumnTextProfilingChecksSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
     }
 
     /**
@@ -351,8 +351,8 @@ public class DefaultProfilingColumnObservabilityCheckSettingsSpec extends Abstra
             this.getColumnCheckCategories(targetColumn).setNumeric(this.numeric.deepClone());
         }
 
-        if (this.strings != null && !this.strings.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setText(this.strings.deepClone());
+        if (this.text != null && !this.text.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setText(this.text.deepClone());
         }
 
         if (this.uniqueness != null && !this.uniqueness.isDefault()) {

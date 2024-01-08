@@ -18,7 +18,7 @@ package com.dqops.statistics.column.strings;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.sensors.column.text.ColumnStringsStringMinLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextMinLengthSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMinLengthStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnStringsStringMinLengthSensorParametersSpec> {
+public class ColumnStringsStringMinLengthStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnTextTextMinLengthSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMinLengthStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnStringsStringMinLengthStatisticsCollectorSpec extends Abstrac
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinLengthSensorParametersSpec parameters = new ColumnStringsStringMinLengthSensorParametersSpec();
+    private ColumnTextTextMinLengthSensorParametersSpec parameters = new ColumnTextTextMinLengthSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnStringsStringMinLengthSensorParametersSpec getParameters() {
+    public ColumnTextTextMinLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnStringsStringMinLengthStatisticsCollectorSpec extends Abstrac
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnStringsStringMinLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextMinLengthSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

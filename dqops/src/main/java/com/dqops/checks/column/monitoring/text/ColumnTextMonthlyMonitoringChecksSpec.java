@@ -40,73 +40,75 @@ import java.util.Objects;
 public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_string_max_length", o -> o.monthlyStringMaxLength);
-            put("monthly_string_min_length", o -> o.monthlyStringMinLength);
-            put("monthly_string_mean_length", o -> o.monthlyStringMeanLength);
-            put("monthly_string_length_below_min_length_count", o -> o.monthlyStringLengthBelowMinLengthCount);
-            put("monthly_string_length_below_min_length_percent", o -> o.monthlyStringLengthBelowMinLengthPercent);
-            put("monthly_string_length_above_max_length_count", o -> o.monthlyStringLengthAboveMaxLengthCount);
-            put("monthly_string_length_above_max_length_percent", o -> o.monthlyStringLengthAboveMaxLengthPercent);
-            put("monthly_string_length_in_range_percent", o -> o.monthlyStringLengthInRangePercent);
+            put("monthly_text_max_length", o -> o.monthlyTextMaxLength);
+            put("monthly_text_min_length", o -> o.monthlyTextMinLength);
+            put("monthly_text_mean_length", o -> o.monthlyTextMeanLength);
+            put("monthly_text_length_below_min_length", o -> o.monthlyTextLengthBelowMinLength);
+            put("monthly_text_length_below_min_length_percent", o -> o.monthlyTextLengthBelowMinLengthPercent);
+            put("monthly_text_length_above_max_length", o -> o.monthlyTextLengthAboveMaxLength);
+            put("monthly_text_length_above_max_length_percent", o -> o.monthlyTextLengthAboveMaxLengthPercent);
+            put("monthly_text_length_in_range_percent", o -> o.monthlyTextLengthInRangePercent);
 
-            put("monthly_string_surrounded_by_whitespace_count", o -> o.monthlyStringSurroundedByWhitespaceCount);
-            put("monthly_string_surrounded_by_whitespace_percent", o -> o.monthlyStringSurroundedByWhitespacePercent);
-            put("monthly_string_boolean_placeholder_percent", o -> o.monthlyStringBooleanPlaceholderPercent);
-            put("monthly_string_parsable_to_integer_percent", o -> o.monthlyStringParsableToIntegerPercent);
-            put("monthly_string_parsable_to_float_percent", o -> o.monthlyStringParsableToFloatPercent);
+            put("monthly_text_parsable_to_boolean_percent", o -> o.monthlyTextParsableToBooleanPercent);
+            put("monthly_text_parsable_to_integer_percent", o -> o.monthlyTextParsableToIntegerPercent);
+            put("monthly_text_parsable_to_float_percent", o -> o.monthlyTextParsableToFloatPercent);
+            put("monthly_text_parsable_to_date_percent", o -> o.monthlyTextParsableToDatePercent);
 
-            put("monthly_string_valid_dates_percent", o -> o.monthlyStringValidDatesPercent);
-            put("monthly_string_valid_country_code_percent", o -> o.monthlyStringValidCountryCodePercent);
-            put("monthly_string_valid_currency_code_percent", o -> o.monthlyStringValidCurrencyCodePercent);
+            put("monthly_text_surrounded_by_whitespace", o -> o.monthlyStringSurroundedByWhitespace);
+            put("monthly_text_surrounded_by_whitespace_percent", o -> o.monthlyStringSurroundedByWhitespacePercent);
+            put("monthly_text_valid_country_code_percent", o -> o.monthlyStringValidCountryCodePercent);
+            put("monthly_text_valid_currency_code_percent", o -> o.monthlyStringValidCurrencyCodePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextMaxLengthCheckSpec monthlyStringMaxLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the minimum accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextMinLengthCheckSpec monthlyStringMinLength;
+    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextMaxLengthCheckSpec monthlyTextMaxLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextMeanLengthCheckSpec monthlyStringMeanLength;
+    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextMinLengthCheckSpec monthlyTextMinLength;
 
-    @JsonPropertyDescription("The check counts those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextLengthBelowMinLengthCountCheckSpec monthlyStringLengthBelowMinLengthCount;
+    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextMeanLengthCheckSpec monthlyTextMeanLength;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length below the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextLengthBelowMinLengthPercentCheckSpec monthlyStringLengthBelowMinLengthPercent;
+    @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextLengthBelowMinLengthCheckSpec monthlyTextLengthBelowMinLength;
 
-    @JsonPropertyDescription("The check counts those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextLengthAboveMaxLengthCountCheckSpec monthlyStringLengthAboveMaxLengthCount;
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextLengthBelowMinLengthPercentCheckSpec monthlyTextLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextLengthAboveMaxLengthPercentCheckSpec monthlyStringLengthAboveMaxLengthPercent;
+    @JsonPropertyDescription("The check counts the number of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextLengthAboveMaxLengthCheckSpec monthlyTextLengthAboveMaxLength;
 
-    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextLengthInRangePercentCheckSpec monthlyStringLengthInRangePercent;
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextLengthAboveMaxLengthPercentCheckSpec monthlyTextLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextValidDatesPercentCheckSpec monthlyStringValidDatesPercent;
+    @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextLengthInRangePercentCheckSpec monthlyTextLengthInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCountCheckSpec monthlyStringSurroundedByWhitespaceCount;
+    @JsonPropertyDescription("Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, " +
+            "text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextParsableToBooleanPercentCheckSpec monthlyTextParsableToBooleanPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextParsableToIntegerPercentCheckSpec monthlyTextParsableToIntegerPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextParsableToFloatPercentCheckSpec monthlyTextParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextParsableToDatePercentCheckSpec monthlyTextParsableToDatePercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyStringSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyStringSurroundedByWhitespacePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextBooleanPlaceholderPercentCheckSpec monthlyStringBooleanPlaceholderPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextParsableToIntegerPercentCheckSpec monthlyStringParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnTextParsableToFloatPercentCheckSpec monthlyStringParsableToFloatPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextValidCountryCodePercentCheckSpec monthlyStringValidCountryCodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextValidCurrencyCodePercentCheckSpec monthlyStringValidCurrencyCodePercent;
 
 
@@ -114,288 +116,288 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
      */
-    public ColumnTextMaxLengthCheckSpec getMonthlyStringMaxLength() {
-        return monthlyStringMaxLength;
+    public ColumnTextMaxLengthCheckSpec getMonthlyTextMaxLength() {
+        return monthlyTextMaxLength;
     }
 
     /**
-     * Sets a new definition of a maximum string length below check.
-     * @param monthlyStringMaxLength Maximum string length below check.
+     * Sets a new definition of a maximum string length check.
+     * @param monthlyTextMaxLength Maximum string length check.
      */
-    public void setMonthlyStringMaxLength(ColumnTextMaxLengthCheckSpec monthlyStringMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringMaxLength, monthlyStringMaxLength));
-        this.monthlyStringMaxLength = monthlyStringMaxLength;
-        propagateHierarchyIdToField(monthlyStringMaxLength, "monthly_string_max_length");
+    public void setMonthlyTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextMaxLength, monthlyTextMaxLength));
+        this.monthlyTextMaxLength = monthlyTextMaxLength;
+        propagateHierarchyIdToField(monthlyTextMaxLength, "monthly_text_max_length");
     }
 
     /**
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
-    public ColumnTextMinLengthCheckSpec getMonthlyStringMinLength() {
-        return monthlyStringMinLength;
+    public ColumnTextMinLengthCheckSpec getMonthlyTextMinLength() {
+        return monthlyTextMinLength;
     }
 
     /**
-     * Sets a new definition of a minimum string length above check.
-     * @param monthlyStringMinLength Minimum string length below check.
+     * Sets a new definition of a minimum string length check.
+     * @param monthlyTextMinLength Minimum string length check.
      */
-    public void setMonthlyStringMinLength(ColumnTextMinLengthCheckSpec monthlyStringMinLength) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringMinLength, monthlyStringMinLength));
-        this.monthlyStringMinLength = monthlyStringMinLength;
-        propagateHierarchyIdToField(monthlyStringMinLength, "monthly_string_min_length");
+    public void setMonthlyTextMinLength(ColumnTextMinLengthCheckSpec monthlyTextMinLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextMinLength, monthlyTextMinLength));
+        this.monthlyTextMinLength = monthlyTextMinLength;
+        propagateHierarchyIdToField(monthlyTextMinLength, "monthly_text_min_length");
     }
 
     /**
      * Returns a mean string length between check.
      * @return Mean string length between check.
      */
-    public ColumnTextMeanLengthCheckSpec getMonthlyStringMeanLength() {
-        return monthlyStringMeanLength;
+    public ColumnTextMeanLengthCheckSpec getMonthlyTextMeanLength() {
+        return monthlyTextMeanLength;
     }
 
     /**
-     * Sets a new definition of a mean string length between check.
-     * @param monthlyStringMeanLength Mean string length between check.
+     * Sets a new definition of a mean string length check.
+     * @param monthlyTextMeanLength Mean string length check.
      */
-    public void setMonthlyStringMeanLength(ColumnTextMeanLengthCheckSpec monthlyStringMeanLength) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringMeanLength, monthlyStringMeanLength));
-        this.monthlyStringMeanLength = monthlyStringMeanLength;
-        propagateHierarchyIdToField(monthlyStringMeanLength, "monthly_string_mean_length");
+    public void setMonthlyTextMeanLength(ColumnTextMeanLengthCheckSpec monthlyTextMeanLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextMeanLength, monthlyTextMeanLength));
+        this.monthlyTextMeanLength = monthlyTextMeanLength;
+        propagateHierarchyIdToField(monthlyTextMeanLength, "monthly_text_mean_length");
     }
 
     /**
      * Returns a string length below min length count check.
      * @return String length below min length count check.
      */
-    public ColumnTextLengthBelowMinLengthCountCheckSpec getMonthlyStringLengthBelowMinLengthCount() {
-        return monthlyStringLengthBelowMinLengthCount;
+    public ColumnTextLengthBelowMinLengthCheckSpec getMonthlyTextLengthBelowMinLength() {
+        return monthlyTextLengthBelowMinLength;
     }
 
     /**
      * Sets a new definition of a string length below min length count check.
-     * @param monthlyStringLengthBelowMinLengthCount String length below min length count check.
+     * @param monthlyTextLengthBelowMinLength String length below min length count check.
      */
-    public void setMonthlyStringLengthBelowMinLengthCount(ColumnTextLengthBelowMinLengthCountCheckSpec monthlyStringLengthBelowMinLengthCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringLengthBelowMinLengthCount, monthlyStringLengthBelowMinLengthCount));
-        this.monthlyStringLengthBelowMinLengthCount = monthlyStringLengthBelowMinLengthCount;
-        propagateHierarchyIdToField(monthlyStringLengthBelowMinLengthCount, "monthly_string_length_below_min_length_count");
+    public void setMonthlyTextLengthBelowMinLength(ColumnTextLengthBelowMinLengthCheckSpec monthlyTextLengthBelowMinLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextLengthBelowMinLength, monthlyTextLengthBelowMinLength));
+        this.monthlyTextLengthBelowMinLength = monthlyTextLengthBelowMinLength;
+        propagateHierarchyIdToField(monthlyTextLengthBelowMinLength, "monthly_text_length_below_min_length");
     }
 
     /**
      * Returns a string length below min length percent check.
-     * @return Mean string length below min length percent check.
+     * @return String length below min length percent check.
      */
-    public ColumnTextLengthBelowMinLengthPercentCheckSpec getMonthlyStringLengthBelowMinLengthPercent() {
-        return monthlyStringLengthBelowMinLengthPercent;
+    public ColumnTextLengthBelowMinLengthPercentCheckSpec getMonthlyTextLengthBelowMinLengthPercent() {
+        return monthlyTextLengthBelowMinLengthPercent;
     }
 
     /**
      * Sets a new definition of a string length below min length percent check.
-     * @param monthlyStringLengthBelowMinLengthPercent String length below min length percent check.
+     * @param monthlyTextLengthBelowMinLengthPercent String length below min length percent check.
      */
-    public void setMonthlyStringLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec monthlyStringLengthBelowMinLengthPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringLengthBelowMinLengthPercent, monthlyStringLengthBelowMinLengthPercent));
-        this.monthlyStringLengthBelowMinLengthPercent = monthlyStringLengthBelowMinLengthPercent;
-        propagateHierarchyIdToField(monthlyStringLengthBelowMinLengthPercent, "monthly_string_length_below_min_length_percent");
+    public void setMonthlyTextLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec monthlyTextLengthBelowMinLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextLengthBelowMinLengthPercent, monthlyTextLengthBelowMinLengthPercent));
+        this.monthlyTextLengthBelowMinLengthPercent = monthlyTextLengthBelowMinLengthPercent;
+        propagateHierarchyIdToField(monthlyTextLengthBelowMinLengthPercent, "monthly_text_length_below_min_length_percent");
     }
 
     /**
      * Returns a string length above max length count check.
      * @return String length above max length count check.
      */
-    public ColumnTextLengthAboveMaxLengthCountCheckSpec getMonthlyStringLengthAboveMaxLengthCount() {
-        return monthlyStringLengthAboveMaxLengthCount;
+    public ColumnTextLengthAboveMaxLengthCheckSpec getMonthlyTextLengthAboveMaxLength() {
+        return monthlyTextLengthAboveMaxLength;
     }
 
     /**
      * Sets a new definition of a string length above max length count check.
-     * @param monthlyStringLengthAboveMaxLengthCount String length above max length count check.
+     * @param monthlyTextLengthAboveMaxLength String length above max length count check.
      */
-    public void setMonthlyStringLengthAboveMaxLengthCount(ColumnTextLengthAboveMaxLengthCountCheckSpec monthlyStringLengthAboveMaxLengthCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringLengthAboveMaxLengthCount, monthlyStringLengthAboveMaxLengthCount));
-        this.monthlyStringLengthAboveMaxLengthCount = monthlyStringLengthAboveMaxLengthCount;
-        propagateHierarchyIdToField(monthlyStringLengthAboveMaxLengthCount, "monthly_string_length_above_max_length_count");
+    public void setMonthlyTextLengthAboveMaxLength(ColumnTextLengthAboveMaxLengthCheckSpec monthlyTextLengthAboveMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextLengthAboveMaxLength, monthlyTextLengthAboveMaxLength));
+        this.monthlyTextLengthAboveMaxLength = monthlyTextLengthAboveMaxLength;
+        propagateHierarchyIdToField(monthlyTextLengthAboveMaxLength, "monthly_text_length_above_max_length");
     }
 
     /**
      * Returns a string length above max length percent check.
      * @return String length above max length percent check.
      */
-    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getMonthlyStringLengthAboveMaxLengthPercent() {
-        return monthlyStringLengthAboveMaxLengthPercent;
+    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getMonthlyTextLengthAboveMaxLengthPercent() {
+        return monthlyTextLengthAboveMaxLengthPercent;
     }
 
     /**
      * Sets a new definition of a string length above max length percent check.
-     * @param monthlyStringLengthAboveMaxLengthPercent String length above max length percent check.
+     * @param monthlyTextLengthAboveMaxLengthPercent String length above max length percent check.
      */
-    public void setMonthlyStringLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec monthlyStringLengthAboveMaxLengthPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringLengthAboveMaxLengthPercent, monthlyStringLengthAboveMaxLengthPercent));
-        this.monthlyStringLengthAboveMaxLengthPercent = monthlyStringLengthAboveMaxLengthPercent;
-        propagateHierarchyIdToField(monthlyStringLengthAboveMaxLengthPercent, "monthly_string_length_above_max_length_percent");
+    public void setMonthlyTextLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec monthlyTextLengthAboveMaxLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextLengthAboveMaxLengthPercent, monthlyTextLengthAboveMaxLengthPercent));
+        this.monthlyTextLengthAboveMaxLengthPercent = monthlyTextLengthAboveMaxLengthPercent;
+        propagateHierarchyIdToField(monthlyTextLengthAboveMaxLengthPercent, "monthly_text_length_above_max_length_percent");
     }
 
     /**
      * Returns a string length in range percent check.
      * @return String length in range percent check.
      */
-    public ColumnTextLengthInRangePercentCheckSpec getMonthlyStringLengthInRangePercent() {
-        return monthlyStringLengthInRangePercent;
+    public ColumnTextLengthInRangePercentCheckSpec getMonthlyTextLengthInRangePercent() {
+        return monthlyTextLengthInRangePercent;
     }
 
     /**
      * Sets a new definition of a string length in range percent check.
-     * @param monthlyStringLengthInRangePercent String length in range percent check.
+     * @param monthlyTextLengthInRangePercent String length in range percent check.
      */
-    public void setMonthlyStringLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec monthlyStringLengthInRangePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringLengthInRangePercent, monthlyStringLengthInRangePercent));
-        this.monthlyStringLengthInRangePercent = monthlyStringLengthInRangePercent;
-        propagateHierarchyIdToField(monthlyStringLengthInRangePercent, "monthly_string_length_in_range_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace count check.
-     * @return Maximum string surrounded by whitespace count check.
-     */
-    public ColumnTextSurroundedByWhitespaceCountCheckSpec getMonthlyStringSurroundedByWhitespaceCount() {
-        return monthlyStringSurroundedByWhitespaceCount;
-    }
-
-    /**
-     * Sets a new definition of a maximum string surrounded by whitespace count check.
-     * @param monthlyStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
-     */
-    public void setMonthlyStringSurroundedByWhitespaceCount(ColumnTextSurroundedByWhitespaceCountCheckSpec monthlyStringSurroundedByWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringSurroundedByWhitespaceCount, monthlyStringSurroundedByWhitespaceCount));
-        this.monthlyStringSurroundedByWhitespaceCount = monthlyStringSurroundedByWhitespaceCount;
-        propagateHierarchyIdToField(monthlyStringSurroundedByWhitespaceCount, "monthly_string_surrounded_by_whitespace_count");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace percent check.
-     * @return Maximum string surrounded by whitespace percent check.
-     */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyStringSurroundedByWhitespacePercent() {
-        return monthlyStringSurroundedByWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a maximum string surrounded by whitespace percent check.
-     * @param monthlyStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
-     */
-    public void setMonthlyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringSurroundedByWhitespacePercent, monthlyStringSurroundedByWhitespacePercent));
-        this.monthlyStringSurroundedByWhitespacePercent = monthlyStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(monthlyStringSurroundedByWhitespacePercent, "monthly_string_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum string boolean placeholder percent check.
-     * @return Minimum string boolean placeholder percent check.
-     */
-    public ColumnTextBooleanPlaceholderPercentCheckSpec getMonthlyStringBooleanPlaceholderPercent() {
-        return monthlyStringBooleanPlaceholderPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string boolean placeholder percent check.
-     * @param monthlyStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
-     */
-    public void setMonthlyStringBooleanPlaceholderPercent(ColumnTextBooleanPlaceholderPercentCheckSpec monthlyStringBooleanPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringBooleanPlaceholderPercent, monthlyStringBooleanPlaceholderPercent));
-        this.monthlyStringBooleanPlaceholderPercent = monthlyStringBooleanPlaceholderPercent;
-        propagateHierarchyIdToField(monthlyStringBooleanPlaceholderPercent, "monthly_string_boolean_placeholder_percent");
+    public void setMonthlyTextLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec monthlyTextLengthInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextLengthInRangePercent, monthlyTextLengthInRangePercent));
+        this.monthlyTextLengthInRangePercent = monthlyTextLengthInRangePercent;
+        propagateHierarchyIdToField(monthlyTextLengthInRangePercent, "monthly_text_length_in_range_percent");
     }
 
     /**
      * Returns a minimum string parsable to integer percent check.
      * @return Minimum string parsable to integer percent check.
      */
-    public ColumnTextParsableToIntegerPercentCheckSpec getMonthlyStringParsableToIntegerPercent() {
-        return monthlyStringParsableToIntegerPercent;
+    public ColumnTextParsableToBooleanPercentCheckSpec getMonthlyTextParsableToBooleanPercent() {
+        return monthlyTextParsableToBooleanPercent;
     }
 
     /**
-     * Sets a new definition of a minimum string parsable to integer percent check.
-     * @param monthlyStringParsableToIntegerPercent Minimum string parsable to integer percent check.
+     * Sets a new definition of a string boolean placeholder percent check.
+     * @param monthlyTextParsableToBooleanPercent String boolean placeholder percent check.
      */
-    public void setMonthlyStringParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec monthlyStringParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringParsableToIntegerPercent, monthlyStringParsableToIntegerPercent));
-        this.monthlyStringParsableToIntegerPercent = monthlyStringParsableToIntegerPercent;
-        propagateHierarchyIdToField(monthlyStringParsableToIntegerPercent, "monthly_string_parsable_to_integer_percent");
+    public void setMonthlyTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec monthlyTextParsableToBooleanPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextParsableToBooleanPercent, monthlyTextParsableToBooleanPercent));
+        this.monthlyTextParsableToBooleanPercent = monthlyTextParsableToBooleanPercent;
+        propagateHierarchyIdToField(monthlyTextParsableToBooleanPercent, "monthly_text_parsable_to_boolean_percent");
     }
 
     /**
-     * Returns a minimum string parsable to float percent check.
-     * @return Minimum string parsable to float percent check.
+     * Returns a maximum string surrounded by whitespace count check.
+     * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnTextParsableToFloatPercentCheckSpec getMonthlyStringParsableToFloatPercent() {
-        return monthlyStringParsableToFloatPercent;
+    public ColumnTextParsableToIntegerPercentCheckSpec getMonthlyTextParsableToIntegerPercent() {
+        return monthlyTextParsableToIntegerPercent;
     }
 
     /**
-     * Sets a new definition of a minimum string parsable to float percent check.
-     * @param monthlyStringParsableToFloatPercent Minimum string parsable to float percent check.
+     * Sets a new definition of a string parsable to integer percent check.
+     * @param monthlyTextParsableToIntegerPercent String parsable to integer percent check.
      */
-    public void setMonthlyStringParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec monthlyStringParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringParsableToFloatPercent, monthlyStringParsableToFloatPercent));
-        this.monthlyStringParsableToFloatPercent = monthlyStringParsableToFloatPercent;
-        propagateHierarchyIdToField(monthlyStringParsableToFloatPercent, "monthly_string_parsable_to_float_percent");
+    public void setMonthlyTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec monthlyTextParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextParsableToIntegerPercent, monthlyTextParsableToIntegerPercent));
+        this.monthlyTextParsableToIntegerPercent = monthlyTextParsableToIntegerPercent;
+        propagateHierarchyIdToField(monthlyTextParsableToIntegerPercent, "monthly_text_parsable_to_integer_percent");
+    }
+
+    /**
+     * Returns a maximum string surrounded by whitespace percent check.
+     * @return Maximum string surrounded by whitespace percent check.
+     */
+    public ColumnTextParsableToFloatPercentCheckSpec getMonthlyTextParsableToFloatPercent() {
+        return monthlyTextParsableToFloatPercent;
+    }
+
+    /**
+     * Sets a new definition of a string parsable to float percent check.
+     * @param monthlyTextParsableToFloatPercent String parsable to float percent check.
+     */
+    public void setMonthlyTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec monthlyTextParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextParsableToFloatPercent, monthlyTextParsableToFloatPercent));
+        this.monthlyTextParsableToFloatPercent = monthlyTextParsableToFloatPercent;
+        propagateHierarchyIdToField(monthlyTextParsableToFloatPercent, "monthly_text_parsable_to_float_percent");
+    }
+
+    /**
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
+     */
+    public ColumnTextParsableToDatePercentCheckSpec getMonthlyTextParsableToDatePercent() {
+        return monthlyTextParsableToDatePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid dates percent check.
+     * @param monthlyTextParsableToDatePercent String valid dates percent check.
+     */
+    public void setMonthlyTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec monthlyTextParsableToDatePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextParsableToDatePercent, monthlyTextParsableToDatePercent));
+        this.monthlyTextParsableToDatePercent = monthlyTextParsableToDatePercent;
+        propagateHierarchyIdToField(monthlyTextParsableToDatePercent, "monthly_text_parsable_to_date_percent");
     }
 
     /**
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextValidDatesPercentCheckSpec getMonthlyStringValidDatesPercent() {
-        return monthlyStringValidDatesPercent;
+    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyStringSurroundedByWhitespace() {
+        return monthlyStringSurroundedByWhitespace;
     }
 
     /**
-     * Sets a new definition of a minimum string valid dates percent check.
-     * @param monthlyStringValidDatesPercent Minimum string valid dates percent check.
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param monthlyStringSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setMonthlyStringValidDatesPercent(ColumnTextValidDatesPercentCheckSpec monthlyStringValidDatesPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyStringValidDatesPercent, monthlyStringValidDatesPercent));
-        this.monthlyStringValidDatesPercent = monthlyStringValidDatesPercent;
-        propagateHierarchyIdToField(monthlyStringValidDatesPercent, "monthly_string_valid_dates_percent");
+    public void setMonthlyStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyStringSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringSurroundedByWhitespace, monthlyStringSurroundedByWhitespace));
+        this.monthlyStringSurroundedByWhitespace = monthlyStringSurroundedByWhitespace;
+        propagateHierarchyIdToField(monthlyStringSurroundedByWhitespace, "monthly_text_surrounded_by_whitespace");
     }
 
     /**
-     * Returns a minimum string valid country code percent check.
-     * @return Minimum string valid country code percent check.
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyStringSurroundedByWhitespacePercent() {
+        return monthlyStringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param monthlyStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setMonthlyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringSurroundedByWhitespacePercent, monthlyStringSurroundedByWhitespacePercent));
+        this.monthlyStringSurroundedByWhitespacePercent = monthlyStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyStringSurroundedByWhitespacePercent, "monthly_text_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
      */
     public ColumnTextValidCountryCodePercentCheckSpec getMonthlyStringValidCountryCodePercent() {
         return monthlyStringValidCountryCodePercent;
     }
 
     /**
-     * Sets a new definition of a minimum string valid country code percent check.
-     * @param monthlyStringValidCountryCodePercent Minimum string valid country code percent check.
+     * Sets a new definition of a string valid country code percent check.
+     * @param monthlyStringValidCountryCodePercent String valid country code percent check.
      */
     public void setMonthlyStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyStringValidCountryCodePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyStringValidCountryCodePercent, monthlyStringValidCountryCodePercent));
         this.monthlyStringValidCountryCodePercent = monthlyStringValidCountryCodePercent;
-        propagateHierarchyIdToField(monthlyStringValidCountryCodePercent, "monthly_string_valid_country_code_percent");
+        propagateHierarchyIdToField(monthlyStringValidCountryCodePercent, "monthly_text_valid_country_code_percent");
     }
 
     /**
-     * Returns a minimum string valid currency code percent check.
-     * @return Minimum string valid currency code percent check.
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
      */
     public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyStringValidCurrencyCodePercent() {
         return monthlyStringValidCurrencyCodePercent;
     }
 
     /**
-     * Sets a new definition of a minimum string valid currency code percent check.
-     * @param monthlyStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     * Sets a new definition of a string valid currency code percent check.
+     * @param monthlyStringValidCurrencyCodePercent String valid currency code percent check.
      */
     public void setMonthlyStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyStringValidCurrencyCodePercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyStringValidCurrencyCodePercent, monthlyStringValidCurrencyCodePercent));
         this.monthlyStringValidCurrencyCodePercent = monthlyStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(monthlyStringValidCurrencyCodePercent, "monthly_string_valid_currency_code_percent");
+        propagateHierarchyIdToField(monthlyStringValidCurrencyCodePercent, "monthly_text_valid_currency_code_percent");
     }
 
 

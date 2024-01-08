@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxPercentRule95ParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule99ParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule100ParametersSpec;
-import com.dqops.sensors.column.text.ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTextLengthBelowMinLengthPercentCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec, MaxPercentRule100ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec, MaxPercentRule100ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextLengthBelowMinLengthPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +49,7 @@ public class ColumnTextLengthBelowMinLengthPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec parameters = new ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec();
+    private ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec parameters = new ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnTextLengthBelowMinLengthPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec getParameters() {
+    public ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnTextLengthBelowMinLengthPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringLengthBelowMinLengthPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextLengthBelowMinLengthPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -20,7 +20,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
-import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCountCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCheckSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
@@ -174,14 +174,14 @@ public class CheckServiceImplTests extends BaseTest {
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnTextProfilingChecksSpec col21stringChecksSpec = new ColumnTextProfilingChecksSpec();
-        ColumnTextLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnTextLengthAboveMaxLengthCountCheckSpec();
+        ColumnTextLengthAboveMaxLengthCheckSpec col21stringLengthAboveCheckSpec = new ColumnTextLengthAboveMaxLengthCheckSpec();
         MaxCountRule0ErrorParametersSpec countRule0ParametersSpec = new MaxCountRule0ErrorParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
         MaxCountRule100ParametersSpec countRule0ParametersSpec1 = new MaxCountRule100ParametersSpec();
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
-        col21stringChecksSpec.setProfileStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
+        col21stringChecksSpec.setProfileTextLengthAboveMaxLength(col21stringLengthAboveCheckSpec);
         col21categoriesSpec.setText(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 

@@ -65,7 +65,7 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
         {
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
-            put("strings", o -> o.strings);
+            put("text", o -> o.text);
             put("uniqueness", o -> o.uniqueness);
             put("datetime", o -> o.datetime);
             put("pii", o -> o.pii);
@@ -89,7 +89,7 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
     @JsonPropertyDescription("The default configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnTextDailyMonitoringChecksSpec strings;
+    private ColumnTextDailyMonitoringChecksSpec text;
 
     @JsonPropertyDescription("The default configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -167,18 +167,18 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
      * Returns the strings check configuration on a column level.
      * @return Strings check configuration.
      */
-    public ColumnTextDailyMonitoringChecksSpec getStrings() {
-        return strings;
+    public ColumnTextDailyMonitoringChecksSpec getText() {
+        return text;
     }
 
     /**
      * Sets the string check configuration on a column level.
-     * @param strings New string checks configuration.
+     * @param text New string checks configuration.
      */
-    public void setStrings(ColumnTextDailyMonitoringChecksSpec strings) {
-        this.setDirtyIf(!Objects.equals(this.strings, strings));
-        this.strings = strings;
-        this.propagateHierarchyIdToField(strings, "strings");
+    public void setText(ColumnTextDailyMonitoringChecksSpec text) {
+        this.setDirtyIf(!Objects.equals(this.text, text));
+        this.text = text;
+        this.propagateHierarchyIdToField(text, "text");
     }
 
     /**
@@ -367,8 +367,8 @@ public class DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec extends 
             this.getColumnCheckCategories(targetColumn).setNumeric(this.numeric.deepClone());
         }
 
-        if (this.strings != null && !this.strings.isDefault() && dataTypeCategory == DataTypeCategory.string) {
-            this.getColumnCheckCategories(targetColumn).setText(this.strings.deepClone());
+        if (this.text != null && !this.text.isDefault() && dataTypeCategory == DataTypeCategory.string) {
+            this.getColumnCheckCategories(targetColumn).setText(this.text.deepClone());
         }
 
         if (this.uniqueness != null && !this.uniqueness.isDefault()) {

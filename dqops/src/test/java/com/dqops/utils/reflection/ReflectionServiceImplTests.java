@@ -31,7 +31,7 @@ import com.dqops.rules.RuleTimeWindowSettingsSpec;
 import com.dqops.rules.averages.PercentMovingAverageRuleParametersSpec;
 import com.dqops.rules.comparison.MinCountRule0ParametersSpec;
 import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
-import com.dqops.sensors.column.text.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
 import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -107,7 +107,7 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void reflectClass_whenReflectingSensorParametersSpecification_thenReturnsAllRequestedFields() {
-        ClassInfo classInfo = this.sut.reflectClass(ColumnStringsStringLengthInRangePercentSensorParametersSpec.class);
+        ClassInfo classInfo = this.sut.reflectClass(ColumnTextTextLengthInRangePercentSensorParametersSpec.class);
         Assertions.assertNotNull(classInfo);
         Assertions.assertEquals(3, classInfo.getFields().size());
         Assertions.assertTrue(classInfo.getFields().stream().anyMatch(f -> Objects.equals(f.getClassFieldName(), "minLength")));

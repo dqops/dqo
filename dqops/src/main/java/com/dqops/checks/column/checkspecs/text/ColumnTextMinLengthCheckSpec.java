@@ -20,7 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MinValueRuleParametersSpec;
-import com.dqops.sensors.column.text.ColumnStringsStringMinLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextMinLengthSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTextMinLengthCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMinLengthSensorParametersSpec, MinValueRuleParametersSpec,MinValueRuleParametersSpec,MinValueRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnTextTextMinLengthSensorParametersSpec, MinValueRuleParametersSpec,MinValueRuleParametersSpec,MinValueRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMinLengthCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -48,7 +48,7 @@ public class ColumnTextMinLengthCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMinLengthSensorParametersSpec parameters = new ColumnStringsStringMinLengthSensorParametersSpec();
+    private ColumnTextTextMinLengthSensorParametersSpec parameters = new ColumnTextTextMinLengthSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -70,7 +70,7 @@ public class ColumnTextMinLengthCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMinLengthSensorParametersSpec getParameters() {
+    public ColumnTextTextMinLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +78,7 @@ public class ColumnTextMinLengthCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMinLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextMinLengthSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");

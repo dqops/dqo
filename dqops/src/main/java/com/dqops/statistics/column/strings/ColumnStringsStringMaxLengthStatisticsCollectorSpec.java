@@ -18,7 +18,7 @@ package com.dqops.statistics.column.strings;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.sensors.column.text.ColumnStringsStringMaxLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextMaxLengthSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMaxLengthStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnStringsStringMaxLengthSensorParametersSpec> {
+public class ColumnStringsStringMaxLengthStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnTextTextMaxLengthSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMaxLengthStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnStringsStringMaxLengthStatisticsCollectorSpec extends Abstrac
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMaxLengthSensorParametersSpec parameters = new ColumnStringsStringMaxLengthSensorParametersSpec();
+    private ColumnTextTextMaxLengthSensorParametersSpec parameters = new ColumnTextTextMaxLengthSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnStringsStringMaxLengthSensorParametersSpec getParameters() {
+    public ColumnTextTextMaxLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnStringsStringMaxLengthStatisticsCollectorSpec extends Abstrac
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnStringsStringMaxLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextMaxLengthSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

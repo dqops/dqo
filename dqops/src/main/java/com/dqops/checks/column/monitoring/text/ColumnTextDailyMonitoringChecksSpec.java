@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of text data quality monitoring checks on a column level that are checking at a daily level.
+ * Container of text data quality monitoring checks on a column level that are monitoring tables at a daily level.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -40,73 +40,74 @@ import java.util.Objects;
 public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_string_max_length", o -> o.dailyStringMaxLength);
-            put("daily_string_min_length", o -> o.dailyStringMinLength);
-            put("daily_string_mean_length", o -> o.dailyStringMeanLength);
-            put("daily_string_length_below_min_length_count", o -> o.dailyStringLengthBelowMinLengthCount);
-            put("daily_string_length_below_min_length_percent", o -> o.dailyStringLengthBelowMinLengthPercent);
-            put("daily_string_length_above_max_length_count", o -> o.dailyStringLengthAboveMaxLengthCount);
-            put("daily_string_length_above_max_length_percent", o -> o.dailyStringLengthAboveMaxLengthPercent);
-            put("daily_string_length_in_range_percent", o -> o.dailyStringLengthInRangePercent);
+            put("daily_text_max_length", o -> o.dailyTextMaxLength);
+            put("daily_text_min_length", o -> o.dailyTextMinLength);
+            put("daily_text_mean_length", o -> o.dailyTextMeanLength);
+            put("daily_text_length_below_min_length", o -> o.dailyTextLengthBelowMinLength);
+            put("daily_text_length_below_min_length_percent", o -> o.dailyTextLengthBelowMinLengthPercent);
+            put("daily_text_length_above_max_length", o -> o.dailyTextLengthAboveMaxLength);
+            put("daily_text_length_above_max_length_percent", o -> o.dailyTextLengthAboveMaxLengthPercent);
+            put("daily_text_length_in_range_percent", o -> o.dailyTextLengthInRangePercent);
 
-            put("daily_string_surrounded_by_whitespace_count", o -> o.dailyStringSurroundedByWhitespaceCount);
-            put("daily_string_surrounded_by_whitespace_percent", o -> o.dailyStringSurroundedByWhitespacePercent);
-            put("daily_string_boolean_placeholder_percent", o -> o.dailyStringBooleanPlaceholderPercent);
-            put("daily_string_parsable_to_integer_percent", o -> o.dailyStringParsableToIntegerPercent);
-            put("daily_string_parsable_to_float_percent", o -> o.dailyStringParsableToFloatPercent);
+            put("daily_text_parsable_to_boolean_percent", o -> o.dailyTextParsableToBooleanPercent);
+            put("daily_text_parsable_to_integer_percent", o -> o.dailyTextParsableToIntegerPercent);
+            put("daily_text_parsable_to_float_percent", o -> o.dailyTextParsableToFloatPercent);
+            put("daily_text_parsable_to_date_percent", o -> o.dailyTextParsableToDatePercent);
 
-            put("daily_string_valid_dates_percent", o -> o.dailyStringValidDatesPercent);
-            put("daily_string_valid_country_code_percent", o -> o.dailyStringValidCountryCodePercent);
-            put("daily_string_valid_currency_code_percent", o -> o.dailyStringValidCurrencyCodePercent);
+            put("daily_text_surrounded_by_whitespace", o -> o.dailyStringSurroundedByWhitespace);
+            put("daily_text_surrounded_by_whitespace_percent", o -> o.dailyStringSurroundedByWhitespacePercent);
+            put("daily_text_valid_country_code_percent", o -> o.dailyStringValidCountryCodePercent);
+            put("daily_text_valid_currency_code_percent", o -> o.dailyStringValidCurrencyCodePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the maximum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextMaxLengthCheckSpec dailyStringMaxLength;
+    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextMaxLengthCheckSpec dailyTextMaxLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not fall below the minimum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextMinLengthCheckSpec dailyStringMinLength;
+    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextMinLengthCheckSpec dailyTextMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of string in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextMeanLengthCheckSpec dailyStringMeanLength;
+    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextMeanLengthCheckSpec dailyTextMeanLength;
 
-    @JsonPropertyDescription("The check counts the number of strings in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextLengthBelowMinLengthCountCheckSpec dailyStringLengthBelowMinLengthCount;
+    @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextLengthBelowMinLengthCheckSpec dailyTextLengthBelowMinLength;
 
-    @JsonPropertyDescription("The check counts the percentage of strings in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextLengthBelowMinLengthPercentCheckSpec dailyStringLengthBelowMinLengthPercent;
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextLengthBelowMinLengthPercentCheckSpec dailyTextLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts the number of strings in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextLengthAboveMaxLengthCountCheckSpec dailyStringLengthAboveMaxLengthCount;
+    @JsonPropertyDescription("The check counts the number of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextLengthAboveMaxLengthCheckSpec dailyTextLengthAboveMaxLength;
 
-    @JsonPropertyDescription("The check counts the percentage of strings in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextLengthAboveMaxLengthPercentCheckSpec dailyStringLengthAboveMaxLengthPercent;
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextLengthAboveMaxLengthPercentCheckSpec dailyTextLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of those strings with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextLengthInRangePercentCheckSpec dailyStringLengthInRangePercent;
+    @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextLengthInRangePercentCheckSpec dailyTextLengthInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the number of strings surrounded by whitespace in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCountCheckSpec dailyStringSurroundedByWhitespaceCount;
+    @JsonPropertyDescription("Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, " +
+            "text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextParsableToBooleanPercentCheckSpec dailyTextParsableToBooleanPercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of strings surrounded by whitespace in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextParsableToIntegerPercentCheckSpec dailyTextParsableToIntegerPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextParsableToFloatPercentCheckSpec dailyTextParsableToFloatPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextParsableToDatePercentCheckSpec dailyTextParsableToDatePercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextSurroundedByWhitespaceCheckSpec dailyStringSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyStringSurroundedByWhitespacePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of boolean placeholder for strings in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextBooleanPlaceholderPercentCheckSpec dailyStringBooleanPlaceholderPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of parsable to integer string in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextParsableToIntegerPercentCheckSpec dailyStringParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of parsable to float string in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextParsableToFloatPercentCheckSpec dailyStringParsableToFloatPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid dates in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextValidDatesPercentCheckSpec dailyStringValidDatesPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country code in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTextValidCountryCodePercentCheckSpec dailyStringValidCountryCodePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of valid currency code in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTextValidCurrencyCodePercentCheckSpec dailyStringValidCurrencyCodePercent;
 
 
@@ -114,290 +115,290 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
      */
-    public ColumnTextMaxLengthCheckSpec getDailyStringMaxLength() {
-        return dailyStringMaxLength;
+    public ColumnTextMaxLengthCheckSpec getDailyTextMaxLength() {
+        return dailyTextMaxLength;
     }
 
     /**
-     * Sets a new definition of a maximum string length below check.
-     * @param dailyStringMaxLength Maximum string length below check.
+     * Sets a new definition of a maximum string length check.
+     * @param dailyTextMaxLength Maximum string length check.
      */
-    public void setDailyStringMaxLength(ColumnTextMaxLengthCheckSpec dailyStringMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringMaxLength, dailyStringMaxLength));
-        this.dailyStringMaxLength = dailyStringMaxLength;
-        propagateHierarchyIdToField(dailyStringMaxLength, "daily_string_max_length");
+    public void setDailyTextMaxLength(ColumnTextMaxLengthCheckSpec dailyTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextMaxLength, dailyTextMaxLength));
+        this.dailyTextMaxLength = dailyTextMaxLength;
+        propagateHierarchyIdToField(dailyTextMaxLength, "daily_text_max_length");
     }
 
     /**
      * Returns a minimum string length above check.
-     * @return Minimum string length below check.
+     * @return Minimum string length above check.
      */
-    public ColumnTextMinLengthCheckSpec getDailyStringMinLength() {
-        return dailyStringMinLength;
+    public ColumnTextMinLengthCheckSpec getDailyTextMinLength() {
+        return dailyTextMinLength;
     }
 
     /**
-     * Sets a new definition of a minimum string length above check.
-     * @param dailyStringMinLength Minimum string length above check.
+     * Sets a new definition of a minimum string length check.
+     * @param dailyTextMinLength Minimum string length check.
      */
-    public void setDailyStringMinLength(ColumnTextMinLengthCheckSpec dailyStringMinLength) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringMinLength, dailyStringMinLength));
-        this.dailyStringMinLength = dailyStringMinLength;
-        propagateHierarchyIdToField(dailyStringMinLength, "daily_string_min_length");
+    public void setDailyTextMinLength(ColumnTextMinLengthCheckSpec dailyTextMinLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextMinLength, dailyTextMinLength));
+        this.dailyTextMinLength = dailyTextMinLength;
+        propagateHierarchyIdToField(dailyTextMinLength, "daily_text_min_length");
     }
 
     /**
      * Returns a mean string length between check.
      * @return Mean string length between check.
      */
-    public ColumnTextMeanLengthCheckSpec getDailyStringMeanLength() {
-        return dailyStringMeanLength;
+    public ColumnTextMeanLengthCheckSpec getDailyTextMeanLength() {
+        return dailyTextMeanLength;
     }
 
     /**
-     * Sets a new definition of a mean string length between check.
-     * @param dailyStringMeanLength Mean string length between check.
+     * Sets a new definition of a mean string length check.
+     * @param dailyTextMeanLength Mean string length check.
      */
-    public void setDailyStringMeanLength(ColumnTextMeanLengthCheckSpec dailyStringMeanLength) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringMeanLength, dailyStringMeanLength));
-        this.dailyStringMeanLength = dailyStringMeanLength;
-        propagateHierarchyIdToField(dailyStringMeanLength, "daily_string_mean_length");
+    public void setDailyTextMeanLength(ColumnTextMeanLengthCheckSpec dailyTextMeanLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextMeanLength, dailyTextMeanLength));
+        this.dailyTextMeanLength = dailyTextMeanLength;
+        propagateHierarchyIdToField(dailyTextMeanLength, "daily_text_mean_length");
     }
 
     /**
      * Returns a string length below min length count check.
      * @return String length below min length count check.
      */
-    public ColumnTextLengthBelowMinLengthCountCheckSpec getDailyStringLengthBelowMinLengthCount() {
-        return dailyStringLengthBelowMinLengthCount;
+    public ColumnTextLengthBelowMinLengthCheckSpec getDailyTextLengthBelowMinLength() {
+        return dailyTextLengthBelowMinLength;
     }
 
     /**
      * Sets a new definition of a string length below min length count check.
-     * @param dailyStringLengthBelowMinLengthCount String length below min length count check.
+     * @param dailyTextLengthBelowMinLength String length below min length count check.
      */
-    public void setDailyStringLengthBelowMinLengthCount(ColumnTextLengthBelowMinLengthCountCheckSpec dailyStringLengthBelowMinLengthCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringLengthBelowMinLengthCount, dailyStringLengthBelowMinLengthCount));
-        this.dailyStringLengthBelowMinLengthCount = dailyStringLengthBelowMinLengthCount;
-        propagateHierarchyIdToField(dailyStringLengthBelowMinLengthCount, "daily_string_length_below_min_length_count");
+    public void setDailyTextLengthBelowMinLength(ColumnTextLengthBelowMinLengthCheckSpec dailyTextLengthBelowMinLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextLengthBelowMinLength, dailyTextLengthBelowMinLength));
+        this.dailyTextLengthBelowMinLength = dailyTextLengthBelowMinLength;
+        propagateHierarchyIdToField(dailyTextLengthBelowMinLength, "daily_text_length_below_min_length");
     }
 
     /**
      * Returns a string length below min length percent check.
-     * @return Mean string length below min length percent check.
+     * @return String length below min length percent check.
      */
-    public ColumnTextLengthBelowMinLengthPercentCheckSpec getDailyStringLengthBelowMinLengthPercent() {
-        return dailyStringLengthBelowMinLengthPercent;
+    public ColumnTextLengthBelowMinLengthPercentCheckSpec getDailyTextLengthBelowMinLengthPercent() {
+        return dailyTextLengthBelowMinLengthPercent;
     }
 
     /**
      * Sets a new definition of a string length below min length percent check.
-     * @param dailyStringLengthBelowMinLengthPercent String length below min length percent check.
+     * @param dailyTextLengthBelowMinLengthPercent String length below min length percent check.
      */
-    public void setDailyStringLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec dailyStringLengthBelowMinLengthPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringLengthBelowMinLengthPercent, dailyStringLengthBelowMinLengthPercent));
-        this.dailyStringLengthBelowMinLengthPercent = dailyStringLengthBelowMinLengthPercent;
-        propagateHierarchyIdToField(dailyStringLengthBelowMinLengthPercent, "daily_string_length_below_min_length_percent");
+    public void setDailyTextLengthBelowMinLengthPercent(ColumnTextLengthBelowMinLengthPercentCheckSpec dailyTextLengthBelowMinLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextLengthBelowMinLengthPercent, dailyTextLengthBelowMinLengthPercent));
+        this.dailyTextLengthBelowMinLengthPercent = dailyTextLengthBelowMinLengthPercent;
+        propagateHierarchyIdToField(dailyTextLengthBelowMinLengthPercent, "daily_text_length_below_min_length_percent");
     }
 
     /**
      * Returns a string length above max length count check.
      * @return String length above max length count check.
      */
-    public ColumnTextLengthAboveMaxLengthCountCheckSpec getDailyStringLengthAboveMaxLengthCount() {
-        return dailyStringLengthAboveMaxLengthCount;
+    public ColumnTextLengthAboveMaxLengthCheckSpec getDailyTextLengthAboveMaxLength() {
+        return dailyTextLengthAboveMaxLength;
     }
 
     /**
      * Sets a new definition of a string length above max length count check.
-     * @param dailyStringLengthAboveMaxLengthCount String length above max length count check.
+     * @param dailyTextLengthAboveMaxLength String length above max length count check.
      */
-    public void setDailyStringLengthAboveMaxLengthCount(ColumnTextLengthAboveMaxLengthCountCheckSpec dailyStringLengthAboveMaxLengthCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringLengthAboveMaxLengthCount, dailyStringLengthAboveMaxLengthCount));
-        this.dailyStringLengthAboveMaxLengthCount = dailyStringLengthAboveMaxLengthCount;
-        propagateHierarchyIdToField(dailyStringLengthAboveMaxLengthCount, "daily_string_length_above_max_length_count");
+    public void setDailyTextLengthAboveMaxLength(ColumnTextLengthAboveMaxLengthCheckSpec dailyTextLengthAboveMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextLengthAboveMaxLength, dailyTextLengthAboveMaxLength));
+        this.dailyTextLengthAboveMaxLength = dailyTextLengthAboveMaxLength;
+        propagateHierarchyIdToField(dailyTextLengthAboveMaxLength, "daily_text_length_above_max_length");
     }
 
     /**
      * Returns a string length above max length percent check.
      * @return String length above max length percent check.
      */
-    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getDailyStringLengthAboveMaxLengthPercent() {
-        return dailyStringLengthAboveMaxLengthPercent;
+    public ColumnTextLengthAboveMaxLengthPercentCheckSpec getDailyTextLengthAboveMaxLengthPercent() {
+        return dailyTextLengthAboveMaxLengthPercent;
     }
 
     /**
      * Sets a new definition of a string length above max length percent check.
-     * @param dailyStringLengthAboveMaxLengthPercent String length above max length percent check.
+     * @param dailyTextLengthAboveMaxLengthPercent String length above max length percent check.
      */
-    public void setDailyStringLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec dailyStringLengthAboveMaxLengthPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringLengthAboveMaxLengthPercent, dailyStringLengthAboveMaxLengthPercent));
-        this.dailyStringLengthAboveMaxLengthPercent = dailyStringLengthAboveMaxLengthPercent;
-        propagateHierarchyIdToField(dailyStringLengthAboveMaxLengthPercent, "daily_string_length_above_max_length_percent");
+    public void setDailyTextLengthAboveMaxLengthPercent(ColumnTextLengthAboveMaxLengthPercentCheckSpec dailyTextLengthAboveMaxLengthPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextLengthAboveMaxLengthPercent, dailyTextLengthAboveMaxLengthPercent));
+        this.dailyTextLengthAboveMaxLengthPercent = dailyTextLengthAboveMaxLengthPercent;
+        propagateHierarchyIdToField(dailyTextLengthAboveMaxLengthPercent, "daily_text_length_above_max_length_percent");
     }
 
     /**
      * Returns a string length in range percent check.
      * @return String length in range percent check.
      */
-    public ColumnTextLengthInRangePercentCheckSpec getDailyStringLengthInRangePercent() {
-        return dailyStringLengthInRangePercent;
+    public ColumnTextLengthInRangePercentCheckSpec getDailyTextLengthInRangePercent() {
+        return dailyTextLengthInRangePercent;
     }
 
     /**
      * Sets a new definition of a string length in range percent check.
-     * @param dailyStringLengthInRangePercent String length in range percent check.
+     * @param dailyTextLengthInRangePercent String length in range percent check.
      */
-    public void setDailyStringLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec dailyStringLengthInRangePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringLengthInRangePercent, dailyStringLengthInRangePercent));
-        this.dailyStringLengthInRangePercent = dailyStringLengthInRangePercent;
-        propagateHierarchyIdToField(dailyStringLengthInRangePercent, "daily_string_length_in_range_percent");
+    public void setDailyTextLengthInRangePercent(ColumnTextLengthInRangePercentCheckSpec dailyTextLengthInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextLengthInRangePercent, dailyTextLengthInRangePercent));
+        this.dailyTextLengthInRangePercent = dailyTextLengthInRangePercent;
+        propagateHierarchyIdToField(dailyTextLengthInRangePercent, "daily_text_length_in_range_percent");
+    }
+
+    /**
+     * Returns a minimum string parsable to integer percent check.
+     * @return Minimum string parsable to integer percent check.
+     */
+    public ColumnTextParsableToBooleanPercentCheckSpec getDailyTextParsableToBooleanPercent() {
+        return dailyTextParsableToBooleanPercent;
+    }
+
+    /**
+     * Sets a new definition of a string boolean placeholder percent check.
+     * @param dailyTextParsableToBooleanPercent String boolean placeholder percent check.
+     */
+    public void setDailyTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec dailyTextParsableToBooleanPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToBooleanPercent, dailyTextParsableToBooleanPercent));
+        this.dailyTextParsableToBooleanPercent = dailyTextParsableToBooleanPercent;
+        propagateHierarchyIdToField(dailyTextParsableToBooleanPercent, "daily_text_parsable_to_boolean_percent");
     }
 
     /**
      * Returns a maximum string surrounded by whitespace count check.
      * @return Maximum string surrounded by whitespace count check.
      */
-    public ColumnTextSurroundedByWhitespaceCountCheckSpec getDailyStringSurroundedByWhitespaceCount() {
-        return dailyStringSurroundedByWhitespaceCount;
+    public ColumnTextParsableToIntegerPercentCheckSpec getDailyTextParsableToIntegerPercent() {
+        return dailyTextParsableToIntegerPercent;
     }
 
     /**
-     * Sets a new definition of a maximum string surrounded by whitespace count check.
-     * @param dailyStringSurroundedByWhitespaceCount Maximum string surrounded by whitespace count check.
+     * Sets a new definition of a string parsable to integer percent check.
+     * @param dailyTextParsableToIntegerPercent String parsable to integer percent check.
      */
-    public void setDailyStringSurroundedByWhitespaceCount(ColumnTextSurroundedByWhitespaceCountCheckSpec dailyStringSurroundedByWhitespaceCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringSurroundedByWhitespaceCount, dailyStringSurroundedByWhitespaceCount));
-        this.dailyStringSurroundedByWhitespaceCount = dailyStringSurroundedByWhitespaceCount;
-        propagateHierarchyIdToField(dailyStringSurroundedByWhitespaceCount, "daily_string_surrounded_by_whitespace_count");
+    public void setDailyTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec dailyTextParsableToIntegerPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToIntegerPercent, dailyTextParsableToIntegerPercent));
+        this.dailyTextParsableToIntegerPercent = dailyTextParsableToIntegerPercent;
+        propagateHierarchyIdToField(dailyTextParsableToIntegerPercent, "daily_text_parsable_to_integer_percent");
     }
 
     /**
      * Returns a maximum string surrounded by whitespace percent check.
      * @return Maximum string surrounded by whitespace percent check.
      */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyStringSurroundedByWhitespacePercent() {
-        return dailyStringSurroundedByWhitespacePercent;
+    public ColumnTextParsableToFloatPercentCheckSpec getDailyTextParsableToFloatPercent() {
+        return dailyTextParsableToFloatPercent;
     }
 
     /**
-     * Sets a new definition of a maximum string surrounded by whitespace percent check.
-     * @param dailyStringSurroundedByWhitespacePercent Maximum string surrounded by whitespace percent check.
+     * Sets a new definition of a string parsable to float percent check.
+     * @param dailyTextParsableToFloatPercent String parsable to float percent check.
      */
-    public void setDailyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyStringSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringSurroundedByWhitespacePercent, dailyStringSurroundedByWhitespacePercent));
-        this.dailyStringSurroundedByWhitespacePercent = dailyStringSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(dailyStringSurroundedByWhitespacePercent, "daily_string_surrounded_by_whitespace_percent");
+    public void setDailyTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec dailyTextParsableToFloatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToFloatPercent, dailyTextParsableToFloatPercent));
+        this.dailyTextParsableToFloatPercent = dailyTextParsableToFloatPercent;
+        propagateHierarchyIdToField(dailyTextParsableToFloatPercent, "daily_text_parsable_to_float_percent");
     }
 
     /**
-     * Returns a minimum string boolean placeholder percent check.
-     * @return Minimum string boolean placeholder percent check.
+     * Returns a minimum string valid USA phone percent check.
+     * @return Minimum string valid USA phone percent check.
      */
-    public ColumnTextBooleanPlaceholderPercentCheckSpec getDailyStringBooleanPlaceholderPercent() {
-        return dailyStringBooleanPlaceholderPercent;
+    public ColumnTextParsableToDatePercentCheckSpec getDailyTextParsableToDatePercent() {
+        return dailyTextParsableToDatePercent;
     }
 
     /**
-     * Sets a new definition of a minimum string boolean placeholder percent check.
-     * @param dailyStringBooleanPlaceholderPercent Minimum string boolean placeholder percent check.
+     * Sets a new definition of a string valid dates percent check.
+     * @param dailyTextParsableToDatePercent String valid dates percent check.
      */
-    public void setDailyStringBooleanPlaceholderPercent(ColumnTextBooleanPlaceholderPercentCheckSpec dailyStringBooleanPlaceholderPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringBooleanPlaceholderPercent, dailyStringBooleanPlaceholderPercent));
-        this.dailyStringBooleanPlaceholderPercent = dailyStringBooleanPlaceholderPercent;
-        propagateHierarchyIdToField(dailyStringBooleanPlaceholderPercent, "daily_string_boolean_placeholder_percent");
-    }
-
-    /**
-    * Returns a minimum string parsable to integer percent check.
-    * @return Minimum string parsable to integer percent check.
-    */
-    public ColumnTextParsableToIntegerPercentCheckSpec getDailyStringParsableToIntegerPercent() {
-        return dailyStringParsableToIntegerPercent;
-    }
-
-    /**
-    * Sets a new definition of a minimum string parsable to integer percent check.
-    * @param dailyStringParsableToIntegerPercent Minimum string parsable to integer percent check.
-    */
-    public void setDailyStringParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec dailyStringParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringParsableToIntegerPercent, dailyStringParsableToIntegerPercent));
-        this.dailyStringParsableToIntegerPercent = dailyStringParsableToIntegerPercent;
-        propagateHierarchyIdToField(dailyStringParsableToIntegerPercent, "daily_string_parsable_to_integer_percent");
-    }
-
-    /**
-     * Returns a minimum string parsable to float percent check.
-     * @return Minimum string parsable to float percent check.
-     */
-    public ColumnTextParsableToFloatPercentCheckSpec getDailyStringParsableToFloatPercent() {
-        return dailyStringParsableToFloatPercent;
-    }
-
-    /**
-     * Sets a new definition of a minimum string parsable to float percent check.
-     * @param dailyStringParsableToFloatPercent Minimum string parsable to float percent check.
-     */
-    public void setDailyStringParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec dailyStringParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringParsableToFloatPercent, dailyStringParsableToFloatPercent));
-        this.dailyStringParsableToFloatPercent = dailyStringParsableToFloatPercent;
-        propagateHierarchyIdToField(dailyStringParsableToFloatPercent, "daily_string_parsable_to_float_percent");
+    public void setDailyTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec dailyTextParsableToDatePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToDatePercent, dailyTextParsableToDatePercent));
+        this.dailyTextParsableToDatePercent = dailyTextParsableToDatePercent;
+        propagateHierarchyIdToField(dailyTextParsableToDatePercent, "daily_text_parsable_to_date_percent");
     }
 
     /**
      * Returns a minimum string valid dates percent check.
      * @return Minimum string valid dates percent check.
      */
-    public ColumnTextValidDatesPercentCheckSpec getDailyStringValidDatesPercent() {
-        return dailyStringValidDatesPercent;
+    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyStringSurroundedByWhitespace() {
+        return dailyStringSurroundedByWhitespace;
     }
 
     /**
-     * Sets a new definition of a minimum string valid dates percent check.
-     * @param dailyStringValidDatesPercent Minimum string valid dates percent check.
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param dailyStringSurroundedByWhitespace String surrounded by whitespace count check.
      */
-    public void setDailyStringValidDatesPercent(ColumnTextValidDatesPercentCheckSpec dailyStringValidDatesPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyStringValidDatesPercent, dailyStringValidDatesPercent));
-        this.dailyStringValidDatesPercent = dailyStringValidDatesPercent;
-        propagateHierarchyIdToField(dailyStringValidDatesPercent, "daily_string_valid_dates_percent");
+    public void setDailyStringSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyStringSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringSurroundedByWhitespace, dailyStringSurroundedByWhitespace));
+        this.dailyStringSurroundedByWhitespace = dailyStringSurroundedByWhitespace;
+        propagateHierarchyIdToField(dailyStringSurroundedByWhitespace, "daily_text_surrounded_by_whitespace");
     }
 
     /**
-     * Returns a minimum string valid country code percent check.
-     * @return Minimum string valid country code percent check.
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyStringSurroundedByWhitespacePercent() {
+        return dailyStringSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param dailyStringSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setDailyStringSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyStringSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringSurroundedByWhitespacePercent, dailyStringSurroundedByWhitespacePercent));
+        this.dailyStringSurroundedByWhitespacePercent = dailyStringSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyStringSurroundedByWhitespacePercent, "daily_text_surrounded_by_whitespace_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
      */
     public ColumnTextValidCountryCodePercentCheckSpec getDailyStringValidCountryCodePercent() {
         return dailyStringValidCountryCodePercent;
     }
 
     /**
-     * Sets a new definition of a minimum string valid country code percent check.
-     * @param dailyStringValidCountryCodePercent Minimum string valid country code percent check.
+     * Sets a new definition of a string valid country code percent check.
+     * @param dailyStringValidCountryCodePercent String valid country code percent check.
      */
     public void setDailyStringValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyStringValidCountryCodePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyStringValidCountryCodePercent, dailyStringValidCountryCodePercent));
         this.dailyStringValidCountryCodePercent = dailyStringValidCountryCodePercent;
-        propagateHierarchyIdToField(dailyStringValidCountryCodePercent, "daily_string_valid_country_code_percent");
+        propagateHierarchyIdToField(dailyStringValidCountryCodePercent, "daily_text_valid_country_code_percent");
     }
 
     /**
-     * Returns a minimum string valid currency code percent check.
-     * @return Minimum string valid currency code percent check.
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
      */
     public ColumnTextValidCurrencyCodePercentCheckSpec getDailyStringValidCurrencyCodePercent() {
         return dailyStringValidCurrencyCodePercent;
     }
 
     /**
-     * Sets a new definition of a minimum string valid currency code percent check.
-     * @param dailyStringValidCurrencyCodePercent Minimum string valid currency code percent check.
+     * Sets a new definition of a string valid currency code percent check.
+     * @param dailyStringValidCurrencyCodePercent String valid currency code percent check.
      */
     public void setDailyStringValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyStringValidCurrencyCodePercent) {
         this.setDirtyIf(!Objects.equals(this.dailyStringValidCurrencyCodePercent, dailyStringValidCurrencyCodePercent));
         this.dailyStringValidCurrencyCodePercent = dailyStringValidCurrencyCodePercent;
-        propagateHierarchyIdToField(dailyStringValidCurrencyCodePercent, "daily_string_valid_currency_code_percent");
+        propagateHierarchyIdToField(dailyStringValidCurrencyCodePercent, "daily_text_valid_currency_code_percent");
     }
-
+    
 
     /**
      * Returns the child map on the spec class with all fields.

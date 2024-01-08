@@ -18,7 +18,7 @@ package com.dqops.statistics.column.strings;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.sensors.column.text.ColumnStringsStringMeanLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextMeanLengthSensorParametersSpec;
 import com.dqops.statistics.AbstractStatisticsCollectorSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -36,7 +36,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMeanLengthStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnStringsStringMeanLengthSensorParametersSpec> {
+public class ColumnStringsStringMeanLengthStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnTextTextMeanLengthSensorParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMeanLengthStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
@@ -45,14 +45,14 @@ public class ColumnStringsStringMeanLengthStatisticsCollectorSpec extends Abstra
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMeanLengthSensorParametersSpec parameters = new ColumnStringsStringMeanLengthSensorParametersSpec();
+    private ColumnTextTextMeanLengthSensorParametersSpec parameters = new ColumnTextTextMeanLengthSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnStringsStringMeanLengthSensorParametersSpec getParameters() {
+    public ColumnTextTextMeanLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnStringsStringMeanLengthStatisticsCollectorSpec extends Abstra
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnStringsStringMeanLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextMeanLengthSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

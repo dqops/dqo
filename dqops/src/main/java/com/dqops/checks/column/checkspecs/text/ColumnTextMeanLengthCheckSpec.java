@@ -20,7 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.BetweenFloatsRuleParametersSpec;
-import com.dqops.sensors.column.text.ColumnStringsStringMeanLengthSensorParametersSpec;
+import com.dqops.sensors.column.text.ColumnTextTextMeanLengthSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTextMeanLengthCheckSpec
-        extends AbstractCheckSpec<ColumnStringsStringMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnTextTextMeanLengthSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMeanLengthCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -47,7 +47,7 @@ public class ColumnTextMeanLengthCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsStringMeanLengthSensorParametersSpec parameters = new ColumnStringsStringMeanLengthSensorParametersSpec();
+    private ColumnTextTextMeanLengthSensorParametersSpec parameters = new ColumnTextTextMeanLengthSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnTextMeanLengthCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnStringsStringMeanLengthSensorParametersSpec getParameters() {
+    public ColumnTextTextMeanLengthSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnTextMeanLengthCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnStringsStringMeanLengthSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextTextMeanLengthSensorParametersSpec parameters) {
 		this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
 		this.propagateHierarchyIdToField(parameters, "parameters");
