@@ -88,7 +88,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_length_above_max_length_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_length_above_max_length_count", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -101,7 +101,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -133,7 +133,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -163,7 +163,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -193,7 +193,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -230,7 +230,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -262,7 +262,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -296,7 +296,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -340,7 +340,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -378,7 +378,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END
@@ -416,7 +416,7 @@ public class ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpecBigQuery
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(%s) >= 0
+                        WHEN LENGTH(%s) > 100
                             THEN 1
                         ELSE 0
                     END

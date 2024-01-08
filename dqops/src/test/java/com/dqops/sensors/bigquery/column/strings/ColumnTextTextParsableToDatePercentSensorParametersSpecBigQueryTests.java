@@ -88,7 +88,7 @@ public class ColumnTextTextParsableToDatePercentSensorParametersSpecBigQueryTest
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_valid_date_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_parsable_to_date_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

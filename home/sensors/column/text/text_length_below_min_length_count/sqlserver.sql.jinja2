@@ -2,7 +2,7 @@
 SELECT
     SUM(
         CASE
-            WHEN LEN({{ lib.render_target_column('analyzed_table')}}) <= {{(parameters.min_length)}}
+            WHEN LEN({{ lib.render_target_column('analyzed_table')}}) < {{(parameters.min_length)}}
                 THEN 1
             ELSE 0
         END

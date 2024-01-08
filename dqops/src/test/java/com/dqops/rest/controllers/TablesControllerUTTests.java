@@ -328,7 +328,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -346,9 +346,9 @@ public class TablesControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(6, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(5, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
 
@@ -367,9 +367,9 @@ public class TablesControllerUTTests extends BaseTest {
         CheckContainerListModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         if (timePartition == CheckTimeScale.daily) {
-            Assertions.assertEquals(3, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         } else {
-            Assertions.assertEquals(3, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
+            Assertions.assertEquals(2, CheckContainerListModelUtility.getCheckCategoryNames(result).size());
         }
     }
     

@@ -45,7 +45,7 @@
 SELECT
     SUM(
         CASE
-            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) <= {{(parameters.min_length)}}
+            WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) < {{(parameters.min_length)}}
                 THEN 1
             ELSE 0
         END

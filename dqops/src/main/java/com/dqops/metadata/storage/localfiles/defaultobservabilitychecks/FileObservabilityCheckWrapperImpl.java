@@ -40,7 +40,7 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
     @Override
     public DefaultObservabilityChecksSpec getSpec() {
         DefaultObservabilityChecksSpec spec = super.getSpec();
-        if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
+        if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -98,6 +98,8 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
             case ADDED:
                 this.settingsFolderNode.addChildFile(fileNameWithExt, newFileContent);
                 this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.settingsFolderNode.getChildFileByFileName(fileNameWithExt);
                 if (modifiedFileNode != null) {
@@ -108,6 +110,7 @@ public class FileObservabilityCheckWrapperImpl extends DefaultObservabilityCheck
                 }
                 this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
                 this.settingsFolderNode.deleteChildFile(fileNameWithExt);
                 break;

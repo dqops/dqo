@@ -174,6 +174,8 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                 if (this.getSqlTemplate() != null) {
 					this.sensorDefinitionFolderNode.addChildFile(templateFileNameWithExt, new FileContent(this.getSqlTemplate()));
                 }
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.sensorDefinitionFolderNode.getChildFileByFileName(specFileNameWithExt);
                 modifiedFileNode.changeContent(newSpecFileContent);
@@ -194,6 +196,7 @@ public class FileProviderSensorDefinitionWrapperImpl extends ProviderSensorDefin
                     }
                 }
                 break;
+
             case TO_BE_DELETED:
 				this.sensorDefinitionFolderNode.deleteChildFile(specFileNameWithExt);
                 FileTreeNode sqlTemplateToDelete = this.sensorDefinitionFolderNode.getChildFileByFileName(templateFileNameWithExt);

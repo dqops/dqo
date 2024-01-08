@@ -88,7 +88,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_length_in_range_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_length_in_range_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -139,7 +139,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -172,7 +172,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -205,7 +205,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -245,7 +245,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -280,7 +280,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -317,7 +317,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -364,7 +364,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -405,7 +405,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)
@@ -446,7 +446,7 @@ public class ColumnTextTextLengthInRangePercentSensorParametersSpecBigQueryTests
                     ELSE
                         100.0 * SUM(
                             CASE
-                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                WHEN LENGTH( %1$s ) BETWEEN 5 AND 100 THEN 1
                                 ELSE 0
                             END
                     ) / COUNT(%1$s)

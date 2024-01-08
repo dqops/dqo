@@ -88,7 +88,7 @@ public class ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpecBigQ
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_surrounded_by_whitespace_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_surrounded_by_whitespace_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

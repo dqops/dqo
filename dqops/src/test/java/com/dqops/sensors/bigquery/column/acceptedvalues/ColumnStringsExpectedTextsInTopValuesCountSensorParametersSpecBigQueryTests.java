@@ -90,7 +90,7 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpecBigQu
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/expected_strings_in_top_values_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accepted_values/expected_texts_in_top_values_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

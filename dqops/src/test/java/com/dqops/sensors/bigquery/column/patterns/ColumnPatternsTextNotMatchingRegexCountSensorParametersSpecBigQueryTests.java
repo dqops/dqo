@@ -88,7 +88,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_not_match_regex_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/text_not_matching_regex_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

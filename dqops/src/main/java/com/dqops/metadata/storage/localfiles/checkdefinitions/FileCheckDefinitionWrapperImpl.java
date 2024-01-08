@@ -148,11 +148,14 @@ public class FileCheckDefinitionWrapperImpl extends CheckDefinitionWrapperImpl {
             case ADDED:
 				this.customCheckFolderNode.addChildFile(specFileNameWithExt, newSpecFileContent);
 				this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.customCheckFolderNode.getChildFileByFileName(specFileNameWithExt);
                 modifiedFileNode.changeContent(newSpecFileContent);
 				this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.customCheckFolderNode.deleteChildFile(specFileNameWithExt);
                 break;

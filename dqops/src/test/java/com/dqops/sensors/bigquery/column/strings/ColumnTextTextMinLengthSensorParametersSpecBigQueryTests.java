@@ -88,7 +88,7 @@ public class ColumnTextTextMinLengthSensorParametersSpecBigQueryTests extends Ba
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_min_length", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_min_length", this.sut.getSensorDefinitionName());
     }
 
     @Test

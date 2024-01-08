@@ -40,7 +40,7 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
     @Override
     public IncidentWebhookNotificationsSpec getSpec() {
         IncidentWebhookNotificationsSpec spec = super.getSpec();
-        if (spec == null && this.getStatus() == InstanceStatus.NOT_TOUCHED) {
+        if (spec == null && this.getStatus() == InstanceStatus.LOAD_IN_PROGRESS) {
             FileTreeNode fileNode = this.settingsFolderNode.getChildFileByFileName(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
             if (fileNode != null) {
                 FileContent fileContent = fileNode.getContent();
@@ -100,6 +100,8 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
             case ADDED:
                 this.settingsFolderNode.addChildFile(fileNameWithExt, newFileContent);
                 this.getSpec().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.settingsFolderNode.getChildFileByFileName(fileNameWithExt);
                 if (modifiedFileNode != null) {
@@ -110,6 +112,7 @@ public class FileDefaultIncidentWebhookNotificationsWrapperImpl extends DefaultI
                 }
                 this.getSpec().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
                 this.settingsFolderNode.deleteChildFile(fileNameWithExt);
                 break;

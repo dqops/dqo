@@ -89,7 +89,7 @@ public class TableSqlConditionPassedPercentSensorParametersSpecBigQueryTests ext
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/sql/sql_condition_passed_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/custom_sql/sql_condition_passed_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

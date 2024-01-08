@@ -88,7 +88,7 @@ public class ColumnTextTextParsableToBooleanPercentSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_boolean_placeholder_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_parsable_to_boolean_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

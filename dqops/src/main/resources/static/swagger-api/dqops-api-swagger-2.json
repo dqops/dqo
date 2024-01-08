@@ -22038,15 +22038,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule100ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a set percentage of rows with non-negative value in a column that raises a data quality alert",
-          "$ref" : "#/definitions/MaxPercentRule99ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule95ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
         }
       }
     },
@@ -22963,15 +22963,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule100ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a maximum number of rows with values with a value above the indicated by the user value in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule99ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule95ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
         }
       }
     },
@@ -23075,15 +23075,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule100ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a maximum number of rows with values with a value below the indicated by the user value in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule99ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule95ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
         }
       }
     },
@@ -23187,15 +23187,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MinPercentRule0WarningParametersSpec"
+          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for set percentage of values from range in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MinPercentRule0ErrorParametersSpec"
+          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MinPercentRule5ParametersSpec"
+          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
         }
       }
     },
@@ -26996,15 +26996,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule100ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a maximum percentage of rows with strings with a length above the indicated by the user length in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule99ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule95ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
         }
       }
     },
@@ -27108,15 +27108,15 @@
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MaxPercentRule100ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0WarningParametersSpec"
         },
         "error" : {
           "description" : "Default alerting threshold for a maximum percentage of rows with strings with a length below the indicated by the user length in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MaxPercentRule99ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule0ErrorParametersSpec"
         },
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MaxPercentRule95ParametersSpec"
+          "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
         }
       }
     },
@@ -31095,37 +31095,7 @@
         }
       }
     },
-    "MaxPercentRule100ParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "max_percent" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Maximum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
     "MaxPercentRule5ParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "max_percent" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Maximum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
-    "MaxPercentRule95ParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "max_percent" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Maximum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
-    "MaxPercentRule99ParametersSpec" : {
       "type" : "object",
       "properties" : {
         "max_percent" : {
@@ -31175,26 +31145,6 @@
         }
       }
     },
-    "MinPercentRule0ErrorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "min_percent" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Minimum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
-    "MinPercentRule0WarningParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "min_percent" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Minimum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
     "MinPercentRule100ErrorParametersSpec" : {
       "type" : "object",
       "properties" : {
@@ -31206,16 +31156,6 @@
       }
     },
     "MinPercentRule100WarningParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "min_percent" : {
-          "type" : "number",
-          "format" : "double",
-          "description" : "Minimum accepted value for the actual_value returned by the sensor (inclusive)."
-        }
-      }
-    },
-    "MinPercentRule5ParametersSpec" : {
       "type" : "object",
       "properties" : {
         "min_percent" : {

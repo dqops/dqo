@@ -89,7 +89,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecBigQueryTests exten
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("table/sql/sql_aggregated_expression", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("table/custom_sql/sql_aggregated_expression", this.sut.getSensorDefinitionName());
     }
 
     @Test

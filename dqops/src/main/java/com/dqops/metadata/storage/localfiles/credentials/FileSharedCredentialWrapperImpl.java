@@ -98,11 +98,15 @@ public class FileSharedCredentialWrapperImpl extends SharedCredentialWrapperImpl
         switch (this.getStatus()) {
             case ADDED:
 				this.credentialsFolderNode.addChildFile(fileName, newFileContent);
+                this.getObject().clearDirty(true);
+                break;
+
             case MODIFIED:
                 FileTreeNode modifiedFileNode = this.credentialsFolderNode.getChildFileByFileName(fileName);
                 modifiedFileNode.changeContent(newFileContent);
 				this.getObject().clearDirty(true);
                 break;
+
             case TO_BE_DELETED:
 				this.credentialsFolderNode.deleteChildFile(fileName);
                 break;

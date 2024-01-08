@@ -89,7 +89,7 @@ public class ColumnPatternsInvalidIp6AddressFormatCountSensorParametersSpecBigQu
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_invalid_ip6_address_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/invalid_ip6_address_format_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

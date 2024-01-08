@@ -107,7 +107,7 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_match_date_regex_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/text_matching_date_patterns_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

@@ -88,7 +88,7 @@ public class ColumnBlanksWhitespaceTextCountSensorParametersSpecBigQueryTests ex
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_whitespace_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/blanks/whitespace_text_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

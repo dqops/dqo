@@ -88,7 +88,7 @@ public class ColumnPatternsInvalidEmailFormatCountSensorParametersSpecBigQueryTe
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_invalid_email_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/invalid_email_format_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

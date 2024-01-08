@@ -107,7 +107,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_not_match_date_regex_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/text_not_matching_date_pattern_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

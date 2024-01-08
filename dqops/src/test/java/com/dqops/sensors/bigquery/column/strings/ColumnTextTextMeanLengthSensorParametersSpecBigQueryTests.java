@@ -88,7 +88,7 @@ public class ColumnTextTextMeanLengthSensorParametersSpecBigQueryTests extends B
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_mean_length", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/text/text_mean_length", this.sut.getSensorDefinitionName());
     }
 
     @Test

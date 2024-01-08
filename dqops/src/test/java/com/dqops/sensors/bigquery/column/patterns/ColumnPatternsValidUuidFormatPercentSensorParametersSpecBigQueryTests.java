@@ -89,7 +89,7 @@ public class ColumnPatternsValidUuidFormatPercentSensorParametersSpecBigQueryTes
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/strings/string_valid_uuid_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/patterns/valid_uuid_format_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

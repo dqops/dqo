@@ -105,7 +105,7 @@ export default function SingleSharedCredential() {
             color='primary'
             variant='contained'/>
             </a> : null }
-        <Button label={credential_name ? 'Edit shared credential' : 'Add shared credential'}
+        <Button label={credential_name ? 'Save' : 'Add shared credential'}
          color='primary'
          variant='contained'
          className='w-55 mr-10 my-3'
